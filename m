@@ -1,242 +1,179 @@
-Return-Path: <linux-integrity+bounces-5539-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5540-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E70F5A77E2D
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Apr 2025 16:48:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6884AA78634
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Apr 2025 03:40:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 809933ADC3C
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Apr 2025 14:48:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F05B7A2919
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Apr 2025 01:39:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0512054FF;
-	Tue,  1 Apr 2025 14:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 916CE1426C;
+	Wed,  2 Apr 2025 01:40:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Azwhk30s"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f5oM2jE4"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E0992054E9;
-	Tue,  1 Apr 2025 14:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F2DFC0A
+	for <linux-integrity@vger.kernel.org>; Wed,  2 Apr 2025 01:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743518911; cv=none; b=TKjgauL8Rg539dAucTOZyRiOR2z+9E4hNlWz9iuiHxF5zVt21SHPPtrXJr9q9jqZOYlv0xOm4MZkgtc6GLyH3Q78yrqHcBwtZrvV3NPhq240RNJo//8lMHu7uhBFmsNDbNfiibgVrosrzl6/lqUxdXyMUtBdU6kv3W64CHdXDGw=
+	t=1743558010; cv=none; b=Yh8VWHYn+GUV7+fkIzIJ2TSOtCdfv4j4nXUYlsHrJITH+YJhK4P9Nwkz1nycHani6KOwHaP9unvzekt0mI5PUniW95q49jhgH0iR8ctenuJK0PPe24t3KNqR1yXuE8FAaWR+STnI85DafYfeumpxKCHeDJeBVUqWiiP77U5IAj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743518911; c=relaxed/simple;
-	bh=ovuHyCNZ5pYCTecY/TRJO813kVc7yQWXtMoCFCqHpZ0=;
+	s=arc-20240116; t=1743558010; c=relaxed/simple;
+	bh=w5QaFG3n8eTuSO1MH5JiaPPWAIOXBUCe+qkt6gTzHKo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qGMABGfMPwgiHYSHK87NhqfzJnIP9yXrw5Qi3HXgCZVlGtmAEY5A1ocT/1EMk1TXrAgodZAKtMdm2Jq/kL6NGkrWwXGsZNu+6KxxKh2zw4cr5ioLzwG2nHm9KzUsUCUejt843/dAeULjfisrsxJx0I6w0f1tRzfs6L/2Z8aIqNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Azwhk30s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB585C4CEE8;
-	Tue,  1 Apr 2025 14:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743518910;
-	bh=ovuHyCNZ5pYCTecY/TRJO813kVc7yQWXtMoCFCqHpZ0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Azwhk30suSFQ0KUGLMfweF1TaqgDnCAedCLeqEQfXm8qQx/T8QVqa/PAJo45zpYdX
-	 9FAbCHDMmxUp9NzPNnoC3byz2JeqdzUpHR/V2v8XQJbc/7PeHvF3EunLbKG/HW7bMZ
-	 OxUZ2FHRLfeWnyspMlck28gPlsUqhDewaaZQUMmtLAIw5p0ZjMwa+bwxHPlMvy6cxo
-	 CgDjqyCIfCs9BfeF3gowweMmFpGLlJk3fzWv5+yM5GUya7OrNuYL3g5L4FcOo6yCcv
-	 ojsEwd2fvaH2xYJwClzO06DQPTWslYN9RNkl8755LgUFmh/rORgnH52Mt40Teio4ZJ
-	 YQZmA0JBecUOQ==
-Date: Tue, 1 Apr 2025 17:48:25 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Borislav Petkov <bp@alien8.de>, linux-integrity@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>, Ingo Molnar <mingo@redhat.com>,
-	linux-coco@lists.linux.dev, Dov Murik <dovmurik@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Joerg Roedel <jroedel@suse.de>, x86@kernel.org,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	"H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH v5 3/4] tpm: add SNP SVSM vTPM driver
-Message-ID: <Z-v8ucw5LVhQTPjl@kernel.org>
-References: <20250331103900.92701-1-sgarzare@redhat.com>
- <20250331103900.92701-4-sgarzare@redhat.com>
- <Z-rSMi2uCvShLbLS@kernel.org>
- <lzcasqfgrdoicwqnvecqppy4ikhcv7rqxc6huvlzyltvb6cgdj@wclvoes5g4yq>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FYnEZcga+xAqVmz0GNHTV9MUlCbpqHGpHwchb9y1XWKSeB8ZMj7t4U2mucZ3Ad1bDBpqAkhY37+LeM8sd3eRbdoMYxWvlMlsM7cdO7KwhtRkhs664rdP9Rt+rbDgrzP4VYUf78q7DLfBLYCXQWJrbMS7cM/FVvLo6mFKn7hiV3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f5oM2jE4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743558007;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/k0YNeB6UyiHRw5bzlnGVGO6Th6xGTizhYj16Y2ixXU=;
+	b=f5oM2jE4CzYaX2ckqUjZTq1hyFJlWsDg4V1q8X/AWH1cK/J00VuEKATRxEN+VuHPQEOPpb
+	3flWHZxlodI2qCRm5Hkyb5YEy//EH3UkV17CUATCsxrFCRl3QgSLYg67zn7+w/gz9aPNKa
+	XttYOGiUCoM4CubLUk7ukBaluNVuZFk=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-643-puEQbBoEOPSuF9_b0uQNVQ-1; Tue, 01 Apr 2025 21:40:06 -0400
+X-MC-Unique: puEQbBoEOPSuF9_b0uQNVQ-1
+X-Mimecast-MFC-AGG-ID: puEQbBoEOPSuF9_b0uQNVQ_1743558005
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2242ce15cc3so115040885ad.1
+        for <linux-integrity@vger.kernel.org>; Tue, 01 Apr 2025 18:40:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743558005; x=1744162805;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/k0YNeB6UyiHRw5bzlnGVGO6Th6xGTizhYj16Y2ixXU=;
+        b=jG27EUxaLIvRU94Pgj1Aa2pVAbEi6mu9HzhWUGltqNCFWKtn8f3PIXW+Amsfzd0fR0
+         2AoFGq6MLV9iSpkOclKfQR5VZoMnQxRH8E31GJ3Ic2pf8vuwTTnvTZ2kPDWqtlDgPmHU
+         HEAWLVqFjXO0QcZZY09on72T1IbcflCGpBBl1DG0ZSMiGH0EB9cRT4Kv8Xa/tsvqZEtU
+         Sz8XQNMspK4FhEUX8IubTpssFbkiLaz/m2uzX4U5rbVOvccHDWntFmOfUGcuX4OlAL8K
+         9l1Wzb10aIKglwOMPQALc94lDuH8XcLwxoGllaMtZCaG7QH26PaoXtuf7IuwdFFrDrJv
+         xHOg==
+X-Forwarded-Encrypted: i=1; AJvYcCXSE36ycG4yFDMt6r7rz4st8ipdyMJ/8NbMDkvqdnDJGNe7LKPo2MYpGfG1OizTEFka0OcQNv+xdDCUtpgugkU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2wqYS2xPN8HnvZ8fq9KssFiQ/ZUns9+3Mx3rALviBEOP9f4qh
+	SPFUDukleFVCc8RU7wsrh2XgMV4yFsJ9ooj3OPVHkOtFWiSvE33pGTJqv192EvfSzLKaMvxxbMW
+	rDgFykvRgoGajRFOaFkKLFVD3qtCrG6RsU/Ut3I7DBc/5/LGDQknA6juJnvmNWANV5g==
+X-Gm-Gg: ASbGnctOFo2IeCoyEXZXS3bDiYY5noEF/5patFwXAWkzmXF6E6F66+4lJ6BFcjuCDYe
+	3wK1lvnwbyQhU3MoylSRhvKDAm7A+lR8tJcztpaSaehi++PPznpDa3bNrdSQ2XRPvXMxIfQtvg4
+	E8bpex4darrOcxRq3ecIXLZOEQZFzgedXyH5hiYYO+PF2ozCWZfyQfyRPCRIDC3yMikmyAYXaJx
+	+QACpdg/wuFjqZSibnFsy5Pb2nYWQA0Qlc60t1uc2QvbWvT0TPsH8PeEGcZGHNfEisiWTZxk72z
+	4FqJRko=
+X-Received: by 2002:a17:902:d2cd:b0:224:1eab:97b5 with SMTP id d9443c01a7336-2292f94944emr221795805ad.1.1743558005031;
+        Tue, 01 Apr 2025 18:40:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHZOUh4MmWk+aGZXLGBKMqkfsxmI8ex3akUdiud/F0qCd7uEBlf0i0UkeBJ4QOm7cMCaSHkBA==
+X-Received: by 2002:a17:902:d2cd:b0:224:1eab:97b5 with SMTP id d9443c01a7336-2292f94944emr221795595ad.1.1743558004648;
+        Tue, 01 Apr 2025 18:40:04 -0700 (PDT)
+Received: from localhost ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7397106ad9bsm9729016b3a.117.2025.04.01.18.40.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Apr 2025 18:40:03 -0700 (PDT)
+Date: Wed, 2 Apr 2025 09:38:10 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Baoquan He <bhe@redhat.com>, linux-integrity@vger.kernel.org, 
+	kexec@lists.infradead.org
+Subject: Re: [RFC PATCH] ima: add a knob to make IMA be able to be disabled
+Message-ID: <fv7h5jfb4r6d5j6jjpgyjbv75zyzqpy6tbqn3ahzuewghnvrgd@5yclg75kr3cq>
+References: <20250331061611.253919-1-bhe@redhat.com>
+ <b1eba83a9f68ed9a19100f6c0dc5aca7aff437d5.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <lzcasqfgrdoicwqnvecqppy4ikhcv7rqxc6huvlzyltvb6cgdj@wclvoes5g4yq>
+In-Reply-To: <b1eba83a9f68ed9a19100f6c0dc5aca7aff437d5.camel@linux.ibm.com>
 
-On Tue, Apr 01, 2025 at 11:08:49AM +0200, Stefano Garzarella wrote:
-> On Mon, Mar 31, 2025 at 08:34:42PM +0300, Jarkko Sakkinen wrote:
-> > On Mon, Mar 31, 2025 at 12:38:56PM +0200, Stefano Garzarella wrote:
-> > > From: Stefano Garzarella <sgarzare@redhat.com>
-> > > 
-> > > Add driver for the vTPM defined by the AMD SVSM spec [1].
-> > > 
-> > > The specification defines a protocol that a SEV-SNP guest OS can use to
-> > > discover and talk to a vTPM emulated by the Secure VM Service Module (SVSM)
-> > > in the guest context, but at a more privileged level (VMPL0).
-> > > 
-> > > The new tpm-svsm platform driver uses two functions exposed by x86/sev
-> > > to verify that the device is actually emulated by the platform and to
-> > > send commands and receive responses.
-> > > 
-> > > The device cannot be hot-plugged/unplugged as it is emulated by the
-> > > platform, so we can use module_platform_driver_probe(). The probe
-> > > function will only check whether in the current runtime configuration,
-> > > SVSM is present and provides a vTPM.
-> > > 
-> > > This device does not support interrupts and sends responses to commands
-> > > synchronously. In order to have .recv() called just after .send() in
-> > > tpm_try_transmit(), the .status() callback returns 0, and both
-> > > .req_complete_mask and .req_complete_val are set to 0.
-> > > 
-> > > [1] "Secure VM Service Module for SEV-SNP Guests"
-> > >     Publication # 58019 Revision: 1.00
-> > > 
-> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > ---
-> > > v5:
-> > > - removed cancel/status/req_* ops after rebase on master that cotains
-> > >   commit 980a573621ea ("tpm: Make chip->{status,cancel,req_canceled} opt")
-> > > v4:
-> > > - moved "asm" includes after the "linux" includes [Tom]
-> > > - allocated buffer separately [Tom/Jarkko/Jason]
-> > > v3:
-> > > - removed send_recv() ops and followed the ftpm driver implementing .status,
-> > >   .req_complete_mask, .req_complete_val, etc. [Jarkko]
-> > > - removed link to the spec because those URLs are unstable [Borislav]
-> > > ---
-> > >  drivers/char/tpm/tpm_svsm.c | 135 ++++++++++++++++++++++++++++++++++++
-> > >  drivers/char/tpm/Kconfig    |  10 +++
-> > >  drivers/char/tpm/Makefile   |   1 +
-> > >  3 files changed, 146 insertions(+)
-> > >  create mode 100644 drivers/char/tpm/tpm_svsm.c
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm_svsm.c b/drivers/char/tpm/tpm_svsm.c
-> > > new file mode 100644
-> > > index 000000000000..04c532421ff2
-> > > --- /dev/null
-> > > +++ b/drivers/char/tpm/tpm_svsm.c
-> > > @@ -0,0 +1,135 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Copyright (C) 2025 Red Hat, Inc. All Rights Reserved.
-> > > + *
-> > > + * Driver for the vTPM defined by the AMD SVSM spec [1].
-> > > + *
-> > > + * The specification defines a protocol that a SEV-SNP guest OS can use to
-> > > + * discover and talk to a vTPM emulated by the Secure VM Service Module (SVSM)
-> > > + * in the guest context, but at a more privileged level (usually VMPL0).
-> > > + *
-> > > + * [1] "Secure VM Service Module for SEV-SNP Guests"
-> > > + *     Publication # 58019 Revision: 1.00
-> > > + */
-> > > +
-> > > +#include <linux/module.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/tpm_svsm.h>
-> > > +
-> > > +#include <asm/sev.h>
-> > > +
-> > > +#include "tpm.h"
-> > > +
-> > > +struct tpm_svsm_priv {
-> > > +	void *buffer;
-> > > +	u8 locality;
-> > > +};
-> > > +
-> > > +static int tpm_svsm_send(struct tpm_chip *chip, u8 *buf, size_t len)
-> > > +{
-> > > +	struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
-> > > +	int ret;
-> > > +
-> > > +	ret = svsm_vtpm_cmd_request_fill(priv->buffer, priv->locality, buf, len);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	/*
-> > > +	 * The SVSM call uses the same buffer for the command and for the
-> > > +	 * response, so after this call, the buffer will contain the response
-> > > +	 * that can be used by .recv() op.
-> > > +	 */
-> > > +	return snp_svsm_vtpm_send_command(priv->buffer);
-> > > +}
-> > > +
-> > > +static int tpm_svsm_recv(struct tpm_chip *chip, u8 *buf, size_t len)
-> > > +{
-> > > +	struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
-> > > +
-> > > +	/*
-> > > +	 * The internal buffer contains the response after we send the command
-> > > +	 * to SVSM.
-> > > +	 */
-> > > +	return svsm_vtpm_cmd_response_parse(priv->buffer, buf, len);
-> > > +}
-> > > +
-> > > +static struct tpm_class_ops tpm_chip_ops = {
-> > > +	.flags = TPM_OPS_AUTO_STARTUP,
-> > > +	.recv = tpm_svsm_recv,
-> > > +	.send = tpm_svsm_send,
-> > > +};
-> > > +
-> > > +static int __init tpm_svsm_probe(struct platform_device *pdev)
-> > > +{
-> > > +	struct device *dev = &pdev->dev;
-> > > +	struct tpm_svsm_priv *priv;
-> > > +	struct tpm_chip *chip;
-> > > +	int err;
-> > > +
-> > > +	if (!snp_svsm_vtpm_probe())
-> > > +		return -ENODEV;
-> > > +
-> > > +	priv = devm_kmalloc(dev, sizeof(*priv), GFP_KERNEL);
-> > > +	if (!priv)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	/*
-> > > +	 * The maximum buffer supported is one page (see SVSM_VTPM_MAX_BUFFER
-> > > +	 * in tpm_svsm.h).
-> > > +	 */
-> > > +	priv->buffer = (void *)devm_get_free_pages(dev, GFP_KERNEL, 0);
-> > > +	if (!priv->buffer)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	/*
-> > > +	 * FIXME: before implementing locality we need to agree what it means
-> > > +	 * for the SNP SVSM vTPM
-> > > +	 */
-> > > +	priv->locality = 0;
-> > 
-> > I don't think we want FIXME's to mainline. Instead, don't declare the
-> > field at all if you don't use it. Just pass zero to *_request_fill().
-> > 
-> > Maybe "not have the field" is even a better reminder than a random fixme
-> > comment?
-> 
-> Yeah, I had thought the same, but then I left it that way because it was
-> there from the first RFC and I saw several FIXME in the codebase, but I
-> agree with you, I'll remove the field completely in v6.
-> 
-> That said, `struct tpm_svsm_priv` with this change will only contain the
-> pointer to the buffer, does it make sense to have that structure (maybe for
-> the future it's easier to add new fields), or do I remove it and use
-> dev_set_drvdata() to store the pointer to the buffer directly?
+On Mon, Mar 31, 2025 at 08:15:08AM -0400, Mimi Zohar wrote:
+>On Mon, 2025-03-31 at 14:16 +0800, Baoquan He wrote:
+>> It doesn't make sense to run IMA functionality in kdump kernel, and that
+>> will cost extra memory. It would be great to allow IMA to be disabled on
+>> purpose, e.g for kdump kernel.
+>>
+>> Hence add a knob here to allow people to disable IMA if needed.
+>>
+>> Signed-off-by: Baoquan He <bhe@redhat.com>
+>> ---
+>>  security/integrity/ima/ima_main.c | 21 +++++++++++++++++++++
+>>  1 file changed, 21 insertions(+)
+>>
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index 28b8b0db6f9b..5d677d1389fe 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -38,11 +38,27 @@ int ima_appraise;
+>>
+>>  int __ro_after_init ima_hash_algo = HASH_ALGO_SHA1;
+>>  static int hash_setup_done;
+>> +static int ima_disabled = 0;
+>>
+>>  static struct notifier_block ima_lsm_policy_notifier = {
+>>  	.notifier_call = ima_lsm_policy_change,
+>>  };
+>>
+>> +static int __init ima_setup(char *str)
+>> +{
+>> +	if (strncmp(str, "off", 3) == 0)
+>> +                ima_disabled = 1;
+>> +        else if (strncmp(str, "on", 2) == 0)
+>> +                ima_disabled = 0;
+>> +        else
+>> +                pr_err("invalid ima setup option: \"%s\" ", str);
+>> +
+>> +	return 1;
+>> +}
+>> +__setup("ima=", ima_setup);
+>
+>I understand your wanting to disable IMA for Kdump, but this goes way beyond
+>that.  Please don't make it generic like this.
+>
+>Please refer to ima_appraise_parse_cmdline().
 
-I'll put it like this: I would not NAK this for having a struct with
-a single field. Either way works for me. 
+Hi Mimi,
 
-> 
-> Thanks,
-> Stefano
-> 
+To save memory for kdump, it seems init_ima has been to be skipped thus
+ima=off is necessary (ima_appraise=off won't serve the purpose). Or do
+you have any specific concerns in mind?
 
-BR, Jarkko
+>
+>Mimi
+>
+>> +
+>> +
+>> +
+>>  static int __init hash_setup(char *str)
+>>  {
+>>  	struct ima_template_desc *template_desc = ima_template_desc_current();
+>> @@ -1176,6 +1192,11 @@ static int __init init_ima(void)
+>>  {
+>>  	int error;
+>>
+>> +	if (ima_disabled) {
+>> +		pr_info("IMA functionality is disabled on purpose!");
+>> +		return 0;
+>> +	}
+>> +
+>>  	ima_appraise_parse_cmdline();
+>>  	ima_init_template_list();
+>>  	hash_setup(CONFIG_IMA_DEFAULT_HASH);
+>
+>
+
+-- 
+Best regards,
+Coiby
+
 
