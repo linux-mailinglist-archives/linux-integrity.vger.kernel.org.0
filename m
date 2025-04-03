@@ -1,94 +1,54 @@
-Return-Path: <linux-integrity+bounces-5561-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5564-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E87C9A79865
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 00:42:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA3AAA79A0B
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 04:46:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0519F3B4C45
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Apr 2025 22:41:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 082F21891204
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 02:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E84391F5825;
-	Wed,  2 Apr 2025 22:41:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="HyVuhBdZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UobkpgZZ";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="HyVuhBdZ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="UobkpgZZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92B4190685;
+	Thu,  3 Apr 2025 02:46:05 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0A81EB183
-	for <linux-integrity@vger.kernel.org>; Wed,  2 Apr 2025 22:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812D22581;
+	Thu,  3 Apr 2025 02:46:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743633718; cv=none; b=gK6UwaI6e+s3P9hJIx1zcNl3Nm5exRMyMEtTlq31CNNw093+Uf6lva4ZQ1k2c/UM8x2y3vYOk2RK3T1hC3UmsCHKyM4XehPRlienXezdY+If7y5IZ0/UKsfb9KhCEkqi/S6xCzYqewVEAwCiKoUKaoNebaSPyFtfxZipeMmYxq4=
+	t=1743648365; cv=none; b=hN86QWzV8HktpMFGB7r9t6fpF2P46pFzX21LZPVIn4qeSpW/KXsarG9VSx0gXg6sGkLLsiS6g2tXd7B++EHhPjqZxGmuS90XCNEvpiueeDUlPt5kQYl1bef9rW+mWNttrGmw2qF2QW3/TWbKyzf1sFwXD3jelYL8MTUDW18xxBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743633718; c=relaxed/simple;
-	bh=iYvITRiWlX3lK8Tm3xHQxTNkeI7jpn9BK/Yv/x8vk0I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E3wlxLkJYp6X1bhe0gii2/BLbOAXnWgbj5gDLy8vtyLZqxpD5neQ/xgvbs/hcLdBVexNhMmdzJL4oG/TieqRPT56BaP4K+NE7J0A6yxho3SrY56wvw5nAb8NbvJcxL7QM+LOR8CzKIhdyOKfqsr96R8/tPkSb5RqsbD228rVySE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=HyVuhBdZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UobkpgZZ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=HyVuhBdZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=UobkpgZZ; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 5171E21190;
-	Wed,  2 Apr 2025 22:41:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1743633715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=XT7rj0/Cz/+/EEDXuYdmSpadvBB+qbjLeHy3DwPVYCg=;
-	b=HyVuhBdZkFniAFRbX/sd8L22kyyxROAxUc9iD6rh9qZ1HHEfUakcAsJhqIWpRPtLvudQ75
-	S7apAr8UNc5gcdIR9JY9UO7L6CbJsrX0ECLRPdg8Hw/Hjs6QnUty5EexLi8qrRKQ56Nv9M
-	Ci6Rh5FSUEW67lDCFLQ4rwkFFytYLwY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1743633715;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=XT7rj0/Cz/+/EEDXuYdmSpadvBB+qbjLeHy3DwPVYCg=;
-	b=UobkpgZZAl3t7bru6TKxXuPywBWtVoi42qijF4QmgQUu/xQjZnzB2wwRZCcj1OwhXIUn4l
-	2kg3Rh7O4xIRoKAA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=HyVuhBdZ;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=UobkpgZZ
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1743633715; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=XT7rj0/Cz/+/EEDXuYdmSpadvBB+qbjLeHy3DwPVYCg=;
-	b=HyVuhBdZkFniAFRbX/sd8L22kyyxROAxUc9iD6rh9qZ1HHEfUakcAsJhqIWpRPtLvudQ75
-	S7apAr8UNc5gcdIR9JY9UO7L6CbJsrX0ECLRPdg8Hw/Hjs6QnUty5EexLi8qrRKQ56Nv9M
-	Ci6Rh5FSUEW67lDCFLQ4rwkFFytYLwY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1743633715;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=XT7rj0/Cz/+/EEDXuYdmSpadvBB+qbjLeHy3DwPVYCg=;
-	b=UobkpgZZAl3t7bru6TKxXuPywBWtVoi42qijF4QmgQUu/xQjZnzB2wwRZCcj1OwhXIUn4l
-	2kg3Rh7O4xIRoKAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2C7B9137D4;
-	Wed,  2 Apr 2025 22:41:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id r62UCTO97WekOgAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Wed, 02 Apr 2025 22:41:55 +0000
-From: Petr Vorel <pvorel@suse.cz>
-To: ltp@lists.linux.it
-Cc: Petr Vorel <pvorel@suse.cz>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	linux-integrity@vger.kernel.org
-Subject: [COMMITTED][PATCH] ima_violations.sh: Fix min kernel version for test4+
-Date: Thu,  3 Apr 2025 00:41:48 +0200
-Message-ID: <20250402224148.435022-1-pvorel@suse.cz>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1743648365; c=relaxed/simple;
+	bh=wYDe+NDCryacjfJNe0gUCwkcwnMy3XpGd5T3KUopJQM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ThcyU38Ax+xsHMwPZf1QmFcmJ7DPWEBbOF3nDSAs4OwZaQd3ZBGnaSGjRM9go8KFL2wVpW4fFJeKYgUe6AVJbo6IxIBc4ROuRXBuFInBMa66T7c+5UDofyUBJhI+6H7KUG7cgCHZt/QViISkXng1qyCaYLYZTQglsGQHUTiWY8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.40.54.180])
+	by gateway (Coremail) with SMTP id _____8CxbWtg9u1nxcavAA--.31391S3;
+	Thu, 03 Apr 2025 10:45:52 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.40.54.180])
+	by front1 (Coremail) with SMTP id qMiowMBx3MRY9u1n8SFtAA--.62246S2;
+	Thu, 03 Apr 2025 10:45:44 +0800 (CST)
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+To: lee@kernel.org,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-crypto@vger.kernel.org,
+	jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	pmenzel@molgen.mpg.de,
+	Qunqin Zhao <zhaoqunqin@loongson.cn>
+Subject: [PATCH v7 0/6] Drivers for Loongson security engine
+Date: Thu,  3 Apr 2025 10:46:39 +0800
+Message-ID: <20250403024645.4427-1-zhaoqunqin@loongson.cn>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -96,86 +56,80 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 5171E21190
-X-Spam-Score: -3.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	RCVD_TLS_ALL(0.00)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+X-CM-TRANSID:qMiowMBx3MRY9u1n8SFtAA--.62246S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7KFW8GrWxJrWxAr1xWFW7Awc_yoW8ur4fpF
+	43C3yrCr4UJr47Crn3JFW8GFyfZa4fWr9xKay2qw15Wr9rAa48J3y3CFyUCa9rAF18JryI
+	qFZ5Cr4UCF1UuacCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+	Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
+	Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+	xGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
+	JVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+	vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+	x2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
+	wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
 
-Although 79eb71fae5 claims test[4-8] require kernel 6.14, it's actually for 6.15.
-2 kernel commits were part of integrity-v6.15 and merged into mainline
-as a2d4f473df11. They will be part of 6.15-rc1.
+Loongson security engine supports random number generation, hash,
+symmetric encryption and asymmetric encryption. Based on these
+encryption functions, TPM2 have been implemented in it.
 
-While at it, document these kernel commits.
+mfd is the baser driver, crypto and tpm are users.
 
-Fixes: 79eb71fae5 ("ima_violations.sh: require kernel v6.14 for minimizing violations tests")
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-Hi Mimi, all,
+v7: Addressed Huacai's comments.
 
-I'm sorry not catching this:
-https://lore.kernel.org/linux-integrity/174319448478.2953471.5705766506609559454.pr-tracker-bot@kernel.org/T/#t
+v6: mfd :MFD_LS6000SE -> MFD_LOONGSON_SE,  ls6000se.c -> loongson-se.c
 
-We got this because openSUSE Tumbleweed reached 6.14 few days ago.
-Merged as
-https://github.com/linux-test-project/ltp/commit/34e13f8a76e801b8f4c3444beed2ed358324066e
+    crypto :CRYPTO_DEV_LS6000SE_RNG -> CRYPTO_DEV_LOONGSON_RNG,
+    ls6000se-rng.c ->loongson-rng.c
 
-Kind regards,
-Petr
+    tpm: TCG_LSSE -> TCG_LOONGSON, tpm_lsse.c ->tpm_loongson.c
 
- .../kernel/security/integrity/ima/tests/ima_violations.sh   | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+v5: Registered "ls6000se-rng" device in mfd driver.
+v4: Please look at changelog in tpm and MAINTAINERS. No changes to mfd
+    and crypto.
+v3: Put the updates to the MAINTAINERS in a separate patch.
+v2: Removed misc driver. Added tpm driver.
 
-diff --git a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
-index c6b929a233..1d2f1d9447 100755
---- a/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
-+++ b/testcases/kernel/security/integrity/ima/tests/ima_violations.sh
-@@ -5,6 +5,8 @@
- # Author: Mimi Zohar <zohar@linux.ibm.com>
- #
- # Test whether ToMToU and open_writer violations invalidatethe PCR and are logged.
-+# test[4-6] test 6.15 commit 5b3cd801155f ("ima: limit the number of open-writers integrity violations")
-+# test[7-8] test 6.15 commit a414016218ca ("ima: limit the number of ToMToU integrity violations")
- 
- TST_SETUP="setup"
- TST_CLEANUP="cleanup"
-@@ -176,8 +178,8 @@ test4()
- {
- 	tst_res TINFO "verify limiting single open writer violation"
- 
--	if tst_kvcmp -lt 6.14; then
--		tst_brk TCONF "Minimizing violations requires kernel 6.14 or newer"
-+	if tst_kvcmp -lt 6.15; then
-+		tst_brk TCONF "Minimizing violations requires kernel 6.15 or newer"
- 	fi
- 
- 	local search="open_writers"
+
+Qunqin Zhao (6):
+  mfd: Add support for Loongson Security Module
+  MAINTAINERS: Add entry for Loongson Security Module driver
+  crypto: loongson - add Loongson RNG driver support
+  MAINTAINERS: Add entry for Loongson RNG driver
+  tpm: Add a driver for Loongson TPM device
+  MAINTAINERS: Add tpm_loongson.c to LOONGSON CRYPTO DRIVER entry
+
+ MAINTAINERS                            |  14 +
+ drivers/char/tpm/Kconfig               |   9 +
+ drivers/char/tpm/Makefile              |   1 +
+ drivers/char/tpm/tpm_loongson.c        | 103 +++++++
+ drivers/crypto/Kconfig                 |   1 +
+ drivers/crypto/Makefile                |   1 +
+ drivers/crypto/loongson/Kconfig        |   6 +
+ drivers/crypto/loongson/Makefile       |   2 +
+ drivers/crypto/loongson/loongson-rng.c | 190 +++++++++++++
+ drivers/mfd/Kconfig                    |  10 +
+ drivers/mfd/Makefile                   |   2 +
+ drivers/mfd/loongson-se.c              | 374 +++++++++++++++++++++++++
+ include/linux/mfd/loongson-se.h        |  75 +++++
+ 13 files changed, 788 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_loongson.c
+ create mode 100644 drivers/crypto/loongson/Kconfig
+ create mode 100644 drivers/crypto/loongson/Makefile
+ create mode 100644 drivers/crypto/loongson/loongson-rng.c
+ create mode 100644 drivers/mfd/loongson-se.c
+ create mode 100644 include/linux/mfd/loongson-se.h
+
+
+base-commit: b904243247d1acb0ebbd4978feb639441dc51fc1
 -- 
-2.49.0
+2.45.2
 
 
