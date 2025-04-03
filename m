@@ -1,222 +1,102 @@
-Return-Path: <linux-integrity+bounces-5596-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5597-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56482A7B01A
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 23:09:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205EBA7B07C
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 23:18:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76FA517299F
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 21:01:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9D2E916C20E
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 21:13:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0143A253B4B;
-	Thu,  3 Apr 2025 20:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DE22010EE;
+	Thu,  3 Apr 2025 20:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BwU/KWEL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="OCTXJd4s"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9182566E8
-	for <linux-integrity@vger.kernel.org>; Thu,  3 Apr 2025 20:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76D522010E8;
+	Thu,  3 Apr 2025 20:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743710635; cv=none; b=mcFf5Kq9HkLAqVfya97NctMXzc76RPq3E4+jv70Eh4LNMg3NhSJ5d/FNYYiEVPxf3GD55/ALCXgqDggt6kAaREn5y7NP6GEkniNmJWimtqXAwMsGDUSa+U3adXX/8DaV1tAp8PVObsKk9fPFh4rWQDzMGINrovaMwIuhoTR67tI=
+	t=1743713010; cv=none; b=Nw3++sy0rxICtSM65pF5Zcm0ijkSKMo5u4ri4yM2Ts0J2UP3QEf+LcMgwDNjyahCIK/uL1/nix2jo0CLbdlcqjvZf3n4SfPB18DBKmt7yN/ADn/iFk+CPly/6RV1TdCFxDwyq7UjSC576DJFljRyEwSRH1pB22ZomqBvfp7nYP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743710635; c=relaxed/simple;
-	bh=Qg4XXHqWpj/ejN1OHK65Sk1NUjBiMNj9t3kG92dBhVg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GerSy7Olx2PbrQLu3OEax4KiXk8LI2J9kpq35wQOlk0Edwitfh9L9Wh91O7wNpbA/D5McN+/0o7Y5nlyM0ztRGnFr6vwLT/64rrbbLY4iwgaCF2EehNCJjtbq0c4999mCbW+NRxP9CENMPuKKIIEzCsEmD142cDEQstGjCuW3so=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BwU/KWEL; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 533FhT6j007564;
-	Thu, 3 Apr 2025 20:03:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=lTs1Ww
-	ONNvstTLbDB+gWMOQsHyhJxJMCwy6FbePxvzo=; b=BwU/KWELwmSVFpvqbEHyK9
-	cfHKK315UaHFYl4jnCL+nimFLNW6TWsmTIImLE7LwVQhOiZb442yrWcKB1a/PALB
-	OqdbpCkS+jH/z8N6ZWTJWaynQXXt1WG0KlAMXD0UPnxsbV5W/Bvfk5lC4WaADYBF
-	NiXCW9O98ftX36VYy8irB5dinfMnh2kpDUzktRxaubN+3amreKc7zlBehy44UXIg
-	kTTfagwYxxr/3IAMng6FKvujbUPOUKB7BMss/FUe1cl1nSsHt+ElVOE/C/Oj9wRt
-	G4YuvDT8144iLcN9MMV9XuNMYQuFPTUCQc/3tMAUIArBeeiZIl5f52TJgaoIqbkQ
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45surq9ucy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Apr 2025 20:03:48 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 533HQDSQ004757;
-	Thu, 3 Apr 2025 20:03:47 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45puk06qvp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Apr 2025 20:03:46 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 533K3kFl2687590
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 3 Apr 2025 20:03:46 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0281D58045;
-	Thu,  3 Apr 2025 20:03:46 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 736F958054;
-	Thu,  3 Apr 2025 20:03:45 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  3 Apr 2025 20:03:45 +0000 (GMT)
-Message-ID: <65057b5256a28c3416e6b90a143d741801e68b03.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH] ima: add a knob to make IMA be able to be disabled
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Baoquan He <bhe@redhat.com>, Coiby Xu <coxu@redhat.com>
-Cc: RuiRui Yang <ruyang@redhat.com>, linux-integrity@vger.kernel.org,
-        kexec@lists.infradead.org
-Date: Thu, 03 Apr 2025 16:03:45 -0400
-In-Reply-To: <Z+0kRhCfsjdZ53rZ@MiWiFi-R3L-srv>
-References: <20250331061611.253919-1-bhe@redhat.com>
-	 <b1eba83a9f68ed9a19100f6c0dc5aca7aff437d5.camel@linux.ibm.com>
-	 <fv7h5jfb4r6d5j6jjpgyjbv75zyzqpy6tbqn3ahzuewghnvrgd@5yclg75kr3cq>
-	 <CALu+AoQrKunS5RjikkcZD7=J9vwhv1_Dw96fmO0EtyKi0MHHJg@mail.gmail.com>
-	 <d14c72bbb377c6f8f0efdbf6d725c553b3ad741c.camel@linux.ibm.com>
-	 <h3bjnvtded2hgbhya6ugb62mnlmkjpmifa6w6wwutfd3jq326r@lzpoun5pksev>
-	 <Z+0kRhCfsjdZ53rZ@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1743713010; c=relaxed/simple;
+	bh=Z6AjCiX55b2ls3ukJbErpaiU+cdMDwLkhdMXgsJVwDU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JCI9Ha/zHKh6nlRfxeNwK8Gynet+ffBSiHIpacH7MLBhhShakSvQMWdekNKWq7oVgq4EO5YtOEFUmE5cI3fsv2e5trTogDxRvVehMaempOYfWEEVwiQsTBhjzaA9bOnCeJh+Yeq5DeQviEXthvGIYCUwtxWYWFsjGkKsbS4QtM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=OCTXJd4s; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=fZj5xEBVPcFI3ae7bqQp+lq69uF7xTX+XTtVKf/jG+A=; b=OCTXJd4swL2/t46/ZwVEzf2BDl
+	HCeuiVJsGDYbPxYeHr3X5iT4vVThPE5O3SiBDtvLIbuq19ycBbDIKp3GI8s0z1g+wqMp4MBnHHh16
+	K2gtUoZ37E91iz0rOflZvhTKIarFFTxicg7s07cPt53MMjrHpJF4aHrlunXh//JdbjGHPbTuzDaxt
+	wScyyhD2w6gWgzfgHP30xlj0AgKB89SzWkYZDoEIpvErsuDtPX2JZ/22KgoFydUpI2n+8kbh/rPTt
+	lQLZhidzdTzWV7x2K90Chxfd3MhR/N3NyveVd+yLorSC0Ljm9L5ZgYiDMmQe72qY4kUHZSF8LKME4
+	O4isR4YQ==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1u0RPD-00DdeO-0u;
+	Thu, 03 Apr 2025 21:43:19 +0100
+Date: Thu, 3 Apr 2025 21:43:19 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Michal Suchanek <msuchanek@suse.de>, Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: tis: Increase the default for timeouts B and C
+Message-ID: <Z-7y5x3u6wVGFjj-@earth.li>
+References: <20250402172134.7751-1-msuchanek@suse.de>
+ <Z-13xOebA3LvQQ-8@earth.li>
+ <Z-7XQYP7_tXYR2Ik@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: BysYrzUsiqZo4DyzHP4moMvFZVdxU7jq
-X-Proofpoint-ORIG-GUID: BysYrzUsiqZo4DyzHP4moMvFZVdxU7jq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-03_09,2025-04-03_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 adultscore=0 bulkscore=0 clxscore=1015 mlxscore=0
- malwarescore=0 suspectscore=0 spamscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504030105
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <Z-7XQYP7_tXYR2Ik@kernel.org>
 
-On Wed, 2025-04-02 at 19:49 +0800, Baoquan He wrote:
-> On 04/02/25 at 04:43pm, Coiby Xu wrote:
-> > On Tue, Apr 01, 2025 at 11:30:09PM -0400, Mimi Zohar wrote:
-> > > On Wed, 2025-04-02 at 09:47 +0800, RuiRui Yang wrote:
-> > [...]
-> > > > > > that.  Please don't make it generic like this.
-> > > > > >=20
-> > > > > > Please refer to ima_appraise_parse_cmdline().
-> > > > >=20
-> > > > > Hi Mimi,
-> > > > >=20
-> > > > > To save memory for kdump, it seems init_ima has been to be skippe=
-d thus
-> > > > > ima=3Doff is necessary (ima_appraise=3Doff won't serve the purpos=
-e). Or do
-> > > > > you have any specific concerns in mind?
-> > > >=20
-> > > > I think as Mimi said see below logic enforces the IMA even with the
-> > > > cmdline disabling, see ima_appraise_parse_cmdline:
-> > > > if (sb_state) {
-> > > >                 if (!(appraisal_state & IMA_APPRAISE_ENFORCE))
-> > > >                         pr_info("Secure boot enabled: ignoring
-> > > > ima_appraise=3D%s option",
-> > > >                                 str);
-> > > >         } else {
-> > > >                 ima_appraise =3D appraisal_state;
-> > > >         }
-> >=20
-> > Thanks for pointing me to the above code! Note with the whole IMA
-> > disabled as done by this patch, the above code will not run so IMA
-> > (appraisal) won't be enforced.
-> >=20
-> > >=20
-> > > Thanks, RuiRui.
-> > >=20
-> >=20
-> > Mimi, so do I understand it correctly that your want IMA-appraisal to b=
-e
-> > always enabled as long as secure boot is enabled even if users choose t=
-o
-> > disable IMA?=C2=A0
+On Thu, Apr 03, 2025 at 09:45:21PM +0300, Jarkko Sakkinen wrote:
+>On Wed, Apr 02, 2025 at 06:45:40PM +0100, Jonathan McDowell wrote:
+>> On Wed, Apr 02, 2025 at 07:21:30PM +0200, Michal Suchanek wrote:
+>> > With some Infineon chips the timeouts in tpm_tis_send_data (both B and
+>> > C) can reach up to about 2250 ms.
+>> >
+>> > Extend the timeout duration to accommodate this.
+>>
+>> The problem here is the bump of timeout_c is going to interact poorly with
+>> the Infineon errata workaround, as now we'll wait 4s instead of 200ms to
+>> detect the stuck status change.
+>>
+>> (Also shouldn't timeout_c already end up as 750ms, as it's
+>> max(TIS_SHORT_TIMEOUT, TPM2_TIMEOUT_C), and TIS_SHORT_TIMEOUT is 750 vs 200
+>> for TPM2_TIMEOUT_C? That doesn't seem to be borne out by your logs, nor my
+>> results.)
+>
+>Just noticed that the commit did not end up having fixes etc. tags:
+>
+>https://web.git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=de9e33df7762abbfc2a1568291f2c3a3154c6a9d
+>
+>Should we forward to stable?
 
-Secure boot is not the only reason.  Based on policy IMA-appraisal and EVM
-calculate and store file hashes and HMAC's in their respective security xat=
-trs.
-Normally the usage of file hashes and HMAC's is limited to mutable files.=
-=20
-Disabling IMA-appraisal could result in not properly updating the security
-xattrs, which would result in not being able to verify the file's integrity=
- on
-reboot.
+It's a TPM bug rather than a kernel issue, so I don't think there's a 
+valid Fixes: for it, but it's certainly stable material in my mind.
 
-On systems where the RPM includes file signatures, file signatures of immut=
-able
-files can be safely restored.  Although it is possible to walk the filesyst=
-em(s)
-"fixing" the xattrs of mutable files, it defeats the purpose.  "fix" mode s=
-hould
-only be enabled in a trusted environment.
+J.
 
-> > I wonder what security issue will it bring if this promise
-> > gets broken considering other LSMs can SELinux can be disabled when
-> > secure boot is enabled?
-
-The builtin IMA policy rules are not defined in terms of SELinux labels.  I=
-f the
-initial IMA custom policy defines rules based on SELinux labels and SELinux=
- is
-not enabled, the policy will fail to be loaded.
-
-> > > Coiby, would disabling just IMA-measurement, as opposed to IMA-apprai=
-sal, save
-> > > sufficient memory for kdump?
-> >=20
-> > For disabling just IMA-measurement, do you mean not enabling any measur=
-e
-> > rules?  The more memory reserved for the kdump kernel, the less memory
-> > can be used by the 1st kernel. So from the perfective of kdump, we try
-> > to make the memory footprint as smaller as possible.
-
-Got it.
-
-> > Baoquan, do you have any statistics about the memory overhead of IMA?
->=20
-> I am getting a system to check that. I think there are two aspects of
-> IMA functionality we want to disable. One is disable the IMA-measurement
-> copying from 1st kernel to 2nd kernel, this is only needed by kexec
-> reboot; the other is IMA is not needed at all in kdump kernel, means we
-> don't want to call ima_init() to initialize
-> ima_keyring/crypto/template/digests/fs etc.=20
->=20
-> With my shallow knowledge about IMA, I don't know how to imitate
-> appraisal cmdline to disable IMA partially in kdump kernel case.
-
-The IMA policy controls how much or how little IMA measures and appraises. =
- Most
-of the memory usage is the IMA measurement list, itself, and the per file c=
-ache
-info.  (The per file cache info limits re-measuring or re-appraising files.=
-)
-
-Similarly my knowledge of kdump is very limited.  Is there a way for the ke=
-rnel
-to differentiate between kexec and kdump?  If we need a mechanism to disabl=
-e
-IMA-measurement, I'd *really* prefer it be limited to kdump.
-
-thanks,
-
-Mimi
-
->=20
-> One exmaple is 'cgroup_disable=3Dmemory' we have been doing to add into
-> kdump cmdline because mem_cgroup is not needed at all for kdump kernel.
-> We want to achieve that effect.
+-- 
+... "It only counts as a lie-in if you don't get dressed before tea time."
+     -- Steve Willison
 
