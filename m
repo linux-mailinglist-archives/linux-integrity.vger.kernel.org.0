@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-5593-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5594-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D75C3A7AF23
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 22:43:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AF5DA7AF65
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 22:50:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEA3F1894C96
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 20:38:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97A223B9173
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 20:42:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A8622FF40;
-	Thu,  3 Apr 2025 19:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D4525E834;
+	Thu,  3 Apr 2025 19:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3ekbNnb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JWUIocZr"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AA722FF2D;
-	Thu,  3 Apr 2025 19:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D92825E831;
+	Thu,  3 Apr 2025 19:20:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743707953; cv=none; b=NJ3A/xxmUVgUVZml8oqq2Q3VyMYMoVX2s5Ii0xnS4PCO86nyI4nSvekfTdMqn5mC2lwfZ/5Ciwn3ozPJCfir9RM8/ecYiXJSMLVR3n8fVvF5DVOEyObswgqHf0U8TVHd1jjEaKGF2NlO4LfWvoNbHKmrXy53wkP1xFjBS5ZTdxE=
+	t=1743708001; cv=none; b=qFpuiFHpRZgTOg7yA7VvL2sTtMYKtipZXvAyzi6Cflu6msUBfuESL6lQQuZ5E302vA70yZHj0HOfSfQNWEcC60NVPDBz4FY8eLgt2nhW9jDXnZkytF0Ut6RJKx2TsMQsW+6gNwPN4WNlNDEamhIfTG2anGnpxP5EJWuYmVQapgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743707953; c=relaxed/simple;
-	bh=mBUu4pm+sHvPxcapb9L/4VvTmLov074qVOE6ZfKbcfU=;
+	s=arc-20240116; t=1743708001; c=relaxed/simple;
+	bh=UXcfE20n6KSgPHrwAoNtAWqnWRwiV+v5zmxz4hlpppY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jJc2UKxMrsvQYnl0+E7B3leiPask3dTtyLGAYZIJ5WrQ1QYORdrDuxXxuQQ8XyyKjMHgvQt7H2Wt/Lq6D7TXSuK4/WMwI/BhtCoH2J9Uu+L/xxLVMWjx3REUP6/PWm6Q2Ugctxn6jZlz4WmMO2VnwTrNAWuN/CPAddzVxWs/YwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3ekbNnb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E736C4CEEA;
-	Thu,  3 Apr 2025 19:19:12 +0000 (UTC)
+	 MIME-Version; b=SiyR0+6a6PbswDgRMLcdRB3cgtp+yFpN0fPqfHBtqvDcGmPaSoUys4Zpyh0BgzX8cLjy9qtMZP90gxdG4CKdgRE/klOQI8oXzmzp13rzJia36pP/pDQGvQjREyK3glJdMEBko0HsgWm/72ziHiF9gEZZWGDMOL4X4F/p4uw+g4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JWUIocZr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 310BCC4CEEC;
+	Thu,  3 Apr 2025 19:20:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743707952;
-	bh=mBUu4pm+sHvPxcapb9L/4VvTmLov074qVOE6ZfKbcfU=;
+	s=k20201202; t=1743708001;
+	bh=UXcfE20n6KSgPHrwAoNtAWqnWRwiV+v5zmxz4hlpppY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C3ekbNnb+PX3PTXztbaT98GIQbJxIUcLCz87b/QJLH2t6Fjw7qGKb/S1ckEsOTXU6
-	 seoHkN46f3WGTPQpazXs3CybzO/65oG+a4kus/RlhRKAtL8MiGmwEBnzMNLj/Jvgu3
-	 4va8RpLVIlzlp8wdklYMBHzvql/+v2d1RIH64ISmxL09kCI9TIZpwDW+IbxawObMKV
-	 MUfOmcaMtroEI1jYe1jzcyscn6Nfv5U4JoNsqS7avJDvKpvLKfRH2vuBM2qHzSBpnd
-	 RoeWzI87uK/CAU6ih4R8MQnuFgsn5g1icv49s65sHwHeFmFkvNf7zr33soAS2AkSMH
-	 mbYyoWYVS+E8w==
+	b=JWUIocZrCToIfcXPQJrHlFXZh0YSzwQysTlBhbMEREs6UDwFzuA2VOdFdCzDqEfGg
+	 1WY00K+bounTtWspVfKT2hU1kRBTwoARnHIWWLv85x7d5RKrc76hX57PraAleqb5SD
+	 Lp/61gpuzbFoCpCXFOWOpFZm5g2ZZlvIWjM28WFXkYT2idJt+MFJUnw/4uy0+UoC6V
+	 TrTugmVHmNg0zJYF7gFaHBd2lRpgHQa0/P7Oe6Km5Z6fvH2FLJy2CL9LFrc6+W3oX6
+	 Lksd3GQjRRrAUvPI2WEX9NRinmM0KayikgWZqNWJd/LRLqSus1uYHTamuA+Kjk/MXD
+	 uRd+ud0nyVesA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Jonathan McDowell <noodles@meta.com>,
 	Sasha Levin <sashal@kernel.org>,
 	peterhuewe@gmx.de,
 	linux-integrity@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 23/23] tpm, tpm_tis: Workaround failed command reception on Infineon devices
-Date: Thu,  3 Apr 2025 15:18:16 -0400
-Message-Id: <20250403191816.2681439-23-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 20/20] tpm, tpm_tis: Workaround failed command reception on Infineon devices
+Date: Thu,  3 Apr 2025 15:19:13 -0400
+Message-Id: <20250403191913.2681831-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250403191816.2681439-1-sashal@kernel.org>
-References: <20250403191816.2681439-1-sashal@kernel.org>
+In-Reply-To: <20250403191913.2681831-1-sashal@kernel.org>
+References: <20250403191913.2681831-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.85
+X-stable-base: Linux 6.1.132
 Content-Transfer-Encoding: 8bit
 
 From: Jonathan McDowell <noodles@meta.com>
@@ -99,10 +99,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  3 files changed, 16 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index f6aa0dfadb93e..7ade8bd12ab26 100644
+index 5889d9edaf940..4e294a915925b 100644
 --- a/drivers/char/tpm/tpm_tis_core.c
 +++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -464,7 +464,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+@@ -433,7 +433,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
  
  		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
  					&priv->int_queue, false) < 0) {
@@ -114,7 +114,7 @@ index f6aa0dfadb93e..7ade8bd12ab26 100644
  			goto out_err;
  		}
  		status = tpm_tis_status(chip);
-@@ -481,7 +484,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+@@ -450,7 +453,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
  
  	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
  				&priv->int_queue, false) < 0) {
@@ -126,7 +126,7 @@ index f6aa0dfadb93e..7ade8bd12ab26 100644
  		goto out_err;
  	}
  	status = tpm_tis_status(chip);
-@@ -546,9 +552,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+@@ -505,9 +511,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
  		if (rc >= 0)
  			/* Data transfer done successfully */
  			break;
@@ -138,8 +138,8 @@ index f6aa0dfadb93e..7ade8bd12ab26 100644
 +		usleep_range(priv->timeout_min, priv->timeout_max);
  	}
  
- 	/* go and do it */
-@@ -1147,6 +1155,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 	rc = tpm_tis_verify_crc(priv, len, buf);
+@@ -1044,6 +1052,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
  		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
  	}
  
@@ -150,10 +150,10 @@ index f6aa0dfadb93e..7ade8bd12ab26 100644
  		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
  					ILB_REMAP_SIZE);
 diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index 13e99cf65efe4..369496a6aebf1 100644
+index 610bfadb6acf1..be72681ab8ea2 100644
 --- a/drivers/char/tpm/tpm_tis_core.h
 +++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -89,6 +89,7 @@ enum tpm_tis_flags {
+@@ -88,6 +88,7 @@ enum tpm_tis_flags {
  	TPM_TIS_INVALID_STATUS		= 1,
  	TPM_TIS_DEFAULT_CANCELLATION	= 2,
  	TPM_TIS_IRQ_TESTED		= 3,
@@ -162,10 +162,10 @@ index 13e99cf65efe4..369496a6aebf1 100644
  
  struct tpm_tis_data {
 diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 4ee9d13749adc..5f4998626a988 100644
+index df5cd4245f299..dd0784a6e07d9 100644
 --- a/include/linux/tpm.h
 +++ b/include/linux/tpm.h
-@@ -272,6 +272,7 @@ enum tpm2_cc_attrs {
+@@ -271,6 +271,7 @@ enum tpm2_cc_attrs {
  #define TPM_VID_WINBOND  0x1050
  #define TPM_VID_STM      0x104A
  #define TPM_VID_ATML     0x1114
