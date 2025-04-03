@@ -1,131 +1,179 @@
-Return-Path: <linux-integrity+bounces-5586-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5587-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E20EA7AC3A
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 21:35:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40B08A7AE08
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 22:18:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9314178C59
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 19:30:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 384583B4A7A
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Apr 2025 20:13:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C91426A0E2;
-	Thu,  3 Apr 2025 19:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 660DA19F471;
+	Thu,  3 Apr 2025 19:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sjyQtAk5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ku8658MQ"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BE526A0D5;
-	Thu,  3 Apr 2025 19:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC6219D07A;
+	Thu,  3 Apr 2025 19:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743707180; cv=none; b=CBfgCKUe5u+bHXSSreOWyv+f4KidGzCUjdyYmZUcAdRzbiug2XZDMeb4Dq+U9QE58VO1BjuvaG+kmVZmcUUJsHMNq9Dqfq4bJEQFVGZRQf1B14H1XkB/jWKdlndOMtLoEsOvxmS1aKVjtfb4g/9Vmj9PgbLND3uKzr0LCuEtnSw=
+	t=1743707712; cv=none; b=BTyN4LMycAoowO6o1THumDPIYTMEV9SbF8S4qJr3UTGgRMM7Z3AqPhpJDnJPhdssR/YLyGqxZ4Rit4hqEjgoTufKOXKyHUFefwwr6TTAzD0nk1fdaLBd82viFgrzcKAoBh4NI5Whu19xdPynZSQRnub9ghZaO8l+DEs9umpH84g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743707180; c=relaxed/simple;
-	bh=oNNjA8EC+8Tze8+EjqGh3HwWCcanNkzZDN6YsmK0UfY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lLZsd52AaE3T4lxeNFqMMSA3Y0bIB3Kh5qnibtXeeI1hnu9PpDeofy+hNlAue54VZe1n+q3QhcVXeA3Cyi0+5bA/5cUEdn9SlPO11VkNIF0dyG4bjwVt3nrzqHe0GWSvENASYsB7o4mz5lin7CgkN2AFiRh5kyHxppfJl9IQbQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sjyQtAk5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E1BC4CEE8;
-	Thu,  3 Apr 2025 19:06:19 +0000 (UTC)
+	s=arc-20240116; t=1743707712; c=relaxed/simple;
+	bh=tyXlb/gCHl/HhkC71/I7Pcv2vUXDGnOl9QgbzLBqfP4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=iFb39MAeWNKY9ZW93QMlGX3U8uFK/lR5qd8sYSdFEo4KmD15HdyoMUozMcoujXxMl4vSWg7H/EZGSZbxFSN4ldh0JxYoZnO/P/eZP+4mF1R1TQYDrVmSNoJVk5Fv6cKwYlVh+Xi6V0ncQFz4dhZxvNlGB4zEHlumNhkZU9RwX7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ku8658MQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DFDC4CEEC;
+	Thu,  3 Apr 2025 19:15:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743707180;
-	bh=oNNjA8EC+8Tze8+EjqGh3HwWCcanNkzZDN6YsmK0UfY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sjyQtAk5SiQP0qmcsCbTK/1US2OVDIxOkxm4hOmOfP+0OKZNpm5TO04oiD6fEUo9m
-	 OkUMjeL+GrFSvLDWIy2N372ogBwF4dZJ3AI/jIun8Yb4gdKlhOoyKjP7Wh0CBjRVEy
-	 M5KsJuWXiIksRZBeVoB4P2HgGDk30tM0c7rzsvfnN1hn2agZgNHXGfsd21PUa8ChX7
-	 J9RZ+eH1bo5nKmsEwzh72UNKPE96x1aBUBduolDOQ+vFdrq+1Kegyv2RKHlom7Cxgq
-	 eU5wZdzgmQJxnzJM5bR5HEENjggrvE6KIT1ObuHMsZWvXO3HCstHt13Gx3vG+FTB93
-	 4pZrzh1E3TELw==
-Date: Thu, 3 Apr 2025 22:06:15 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-coco@lists.linux.dev,
-	linux-integrity@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-	Tom Lendacky <thomas.lendacky@amd.com>,
-	Joerg Roedel <jroedel@suse.de>,
-	Dionna Glaze <dionnaglaze@google.com>,
-	Claudio Carvalho <cclaudio@linux.ibm.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v6 4/4] x86/sev: register tpm-svsm platform device
-Message-ID: <Z-7cJyB1LXi75Z0F@kernel.org>
-References: <20250403100943.120738-1-sgarzare@redhat.com>
- <20250403100943.120738-5-sgarzare@redhat.com>
+	s=k20201202; t=1743707711;
+	bh=tyXlb/gCHl/HhkC71/I7Pcv2vUXDGnOl9QgbzLBqfP4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Ku8658MQhWt74ZuCuRoNhDP5JrqFF3MxdgEV8mdxlTpQHlxNqC58oiJu0IQruLI2M
+	 dAZn/xYHj7OY1LK4zHWnVN2FvTXK6le+ATrdWOkIOnClB8LkIJbp32J2pW5e5+WfiP
+	 a5z0kb0AF2zQPXX5MgGq+OFoZGuP+O6J7dNsnF6cGSG2gMh/mEzJ2HRyGzQn0VmrCC
+	 6IGUHBkU6JSqdIdYDYzRGQ0M41ZlyFSFZL0rkmOyzdDb5qxbRI1W1NjJlVhf1nKXMi
+	 wVbrU1gmFa2sbkMbsKNNOKlB9vOPOTPaNryfwfpUAy7ZFDiPJeFuCJBs0EdfWKtdAU
+	 uvlSJbPbjO9Zg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Jonathan McDowell <noodles@meta.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	peterhuewe@gmx.de,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 43/44] tpm, tpm_tis: Workaround failed command reception on Infineon devices
+Date: Thu,  3 Apr 2025 15:13:12 -0400
+Message-Id: <20250403191313.2679091-43-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250403191313.2679091-1-sashal@kernel.org>
+References: <20250403191313.2679091-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250403100943.120738-5-sgarzare@redhat.com>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14
+Content-Transfer-Encoding: 8bit
 
-On Thu, Apr 03, 2025 at 12:09:42PM +0200, Stefano Garzarella wrote:
-> From: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> SNP platform can provide a vTPM device emulated by SVSM.
-> 
-> The "tpm-svsm" device can be handled by the platform driver added
-> by the previous commit in drivers/char/tpm/tpm_svsm.c
-> 
-> Register the device unconditionally. The support check (e.g. SVSM, cmd)
-> is in snp_svsm_vtpm_probe(), keeping all logic in one place.
-> This function is called during the driver's probe along with other
-> setup tasks like memory allocation.
-> 
-> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
-> v6:
-> - added Tom's R-b
-> v4:
-> - explained better why we register it anyway in the commit message
-> ---
->  arch/x86/coco/sev/core.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
-> index efb43c9d3d30..acbd9bc526b1 100644
-> --- a/arch/x86/coco/sev/core.c
-> +++ b/arch/x86/coco/sev/core.c
-> @@ -2689,6 +2689,11 @@ static struct platform_device sev_guest_device = {
->  	.id		= -1,
->  };
->  
-> +static struct platform_device tpm_svsm_device = {
-> +	.name		= "tpm-svsm",
-> +	.id		= -1,
-> +};
-> +
->  static int __init snp_init_platform_device(void)
->  {
->  	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-> @@ -2697,6 +2702,9 @@ static int __init snp_init_platform_device(void)
->  	if (platform_device_register(&sev_guest_device))
->  		return -ENODEV;
->  
-> +	if (platform_device_register(&tpm_svsm_device))
-> +		return -ENODEV;
-> +
->  	pr_info("SNP guest platform device initialized.\n");
->  	return 0;
->  }
-> -- 
-> 2.49.0
-> 
-> 
+From: Jonathan McDowell <noodles@meta.com>
 
+[ Upstream commit de9e33df7762abbfc2a1568291f2c3a3154c6a9d ]
+
+Some Infineon devices have a issue where the status register will get
+stuck with a quick REQUEST_USE / COMMAND_READY sequence. This is not
+simply a matter of requiring a longer timeout; the work around is to
+retry the command submission. Add appropriate logic to do this in the
+send path.
+
+This is fixed in later firmware revisions, but those are not always
+available, and cannot generally be easily updated from outside a
+firmware environment.
+
+Testing has been performed with a simple repeated loop of doing a
+TPM2_CC_GET_CAPABILITY for TPM_CAP_PROP_MANUFACTURER using the Go code
+at:
+
+  https://the.earth.li/~noodles/tpm-stuff/timeout-reproducer-simple.go
+
+It can take several hours to reproduce, and several million operations.
+
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/char/tpm/tpm_tis_core.c | 17 ++++++++++++++---
+ drivers/char/tpm/tpm_tis_core.h |  1 +
+ include/linux/tpm.h             |  1 +
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-BR, Jarkko
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index fdef214b9f6bf..4cc2ab2d16cc5 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -464,7 +464,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 
+ 		if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+ 					&priv->int_queue, false) < 0) {
+-			rc = -ETIME;
++			if (test_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags))
++				rc = -EAGAIN;
++			else
++				rc = -ETIME;
+ 			goto out_err;
+ 		}
+ 		status = tpm_tis_status(chip);
+@@ -481,7 +484,10 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 
+ 	if (wait_for_tpm_stat(chip, TPM_STS_VALID, chip->timeout_c,
+ 				&priv->int_queue, false) < 0) {
+-		rc = -ETIME;
++		if (test_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags))
++			rc = -EAGAIN;
++		else
++			rc = -ETIME;
+ 		goto out_err;
+ 	}
+ 	status = tpm_tis_status(chip);
+@@ -546,9 +552,11 @@ static int tpm_tis_send_main(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 		if (rc >= 0)
+ 			/* Data transfer done successfully */
+ 			break;
+-		else if (rc != -EIO)
++		else if (rc != -EAGAIN && rc != -EIO)
+ 			/* Data transfer failed, not recoverable */
+ 			return rc;
++
++		usleep_range(priv->timeout_min, priv->timeout_max);
+ 	}
+ 
+ 	/* go and do it */
+@@ -1144,6 +1152,9 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+ 		priv->timeout_max = TIS_TIMEOUT_MAX_ATML;
+ 	}
+ 
++	if (priv->manufacturer_id == TPM_VID_IFX)
++		set_bit(TPM_TIS_STATUS_VALID_RETRY, &priv->flags);
++
+ 	if (is_bsw()) {
+ 		priv->ilb_base_addr = ioremap(INTEL_LEGACY_BLK_BASE_ADDR,
+ 					ILB_REMAP_SIZE);
+diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+index 690ad8e9b7319..970d02c337c7f 100644
+--- a/drivers/char/tpm/tpm_tis_core.h
++++ b/drivers/char/tpm/tpm_tis_core.h
+@@ -89,6 +89,7 @@ enum tpm_tis_flags {
+ 	TPM_TIS_INVALID_STATUS		= 1,
+ 	TPM_TIS_DEFAULT_CANCELLATION	= 2,
+ 	TPM_TIS_IRQ_TESTED		= 3,
++	TPM_TIS_STATUS_VALID_RETRY	= 4,
+ };
+ 
+ struct tpm_tis_data {
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 20a40ade80308..6c3125300c009 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -335,6 +335,7 @@ enum tpm2_cc_attrs {
+ #define TPM_VID_WINBOND  0x1050
+ #define TPM_VID_STM      0x104A
+ #define TPM_VID_ATML     0x1114
++#define TPM_VID_IFX      0x15D1
+ 
+ enum tpm_chip_flags {
+ 	TPM_CHIP_FLAG_BOOTSTRAPPED		= BIT(0),
+-- 
+2.39.5
+
 
