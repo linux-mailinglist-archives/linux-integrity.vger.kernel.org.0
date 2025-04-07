@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-5628-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5629-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C6DCA7D57F
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 09:22:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F5F2A7D5A9
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 09:25:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A84DB188E0AB
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 07:19:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 160317A4E22
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 07:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C9C225784;
-	Mon,  7 Apr 2025 07:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2780222AE7B;
+	Mon,  7 Apr 2025 07:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INMZ82CW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FCq1aAlo"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3971E176AA1;
-	Mon,  7 Apr 2025 07:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E7022A4F2;
+	Mon,  7 Apr 2025 07:21:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744010258; cv=none; b=FuVaGH1PBnTgpWjGhnRqtz6Ew4F0GNYo/1oa7GvNoluIXFyEqpiKOnVzbrJ4lMCM8gI6CTnYOBKliYqaotUB//nzO85j4a5PPY/vBFP35CZ3fNhLufMh7fvzlYtVIw9qihE7P3+J4j4GvfQc+bxu1rg6V8bCZidFdyV6FOO997Y=
+	t=1744010465; cv=none; b=UE2D7dQiVcxZ5cS0pUg8dTYt7uZDY/4NEU7B83u/NNNgn99P6+HKYhrXokH2OG54u869tZCU4i2176TafUJwFxtMduRv2Mo8wMi8VCKp5EaqjGGvzOcA5CH3rOMmOsTzOcTEg4aKSBGObK/ndLWVX61UbRavW4jSRxu8+nJiBEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744010258; c=relaxed/simple;
-	bh=ZMpjbqNV5VmvNx/yWcRwPHpaDgDVafqCD1Ypnp/Awhw=;
+	s=arc-20240116; t=1744010465; c=relaxed/simple;
+	bh=zTKxNvvZtoxntBZKdgelRQVrZfzC919L3UJ4SOuheOY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZxjVAx1X9FIDRz2NZdYVi+gpjIpK2+ytrgmybAMaf/fakEY57Gi1iATacbqbE3jHZI0yLiMEJ8S6aojs5AO1f3VWQoL8Eu+RGDKJTr0DktZeXBys27L/3/f9b8ovGivzYpFgsQLE0pAsUQK/7T+Cx3p5nw/MQ6TCD8OlksVJLE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INMZ82CW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12981C4CEE8;
-	Mon,  7 Apr 2025 07:17:36 +0000 (UTC)
+	 MIME-Version; b=qRy3hfGN0SbgpIptvHhs+5pOlsZl4K2sU498as7UMp1qPonqUgjzGmVI5BAcD6pjetTjnhw18p2tVzZSA1lEfvdBw2tihhb7iVLCtNYemEeWQka1kWh4okKd6OW8rUe01WJVNYspAAm3X5JFPeiKZJEK5E92AcHRRkUPtLyfcgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FCq1aAlo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62AEC4CEDD;
+	Mon,  7 Apr 2025 07:21:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744010257;
-	bh=ZMpjbqNV5VmvNx/yWcRwPHpaDgDVafqCD1Ypnp/Awhw=;
+	s=k20201202; t=1744010464;
+	bh=zTKxNvvZtoxntBZKdgelRQVrZfzC919L3UJ4SOuheOY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=INMZ82CWGDwx835l7YQF1L/d1lSwQBKmNVJMiEdhnwGTPIEvwEJIGLd7hxvJ9DFnb
-	 nFshLFU8bbnHriaqJ3GBHX8DjYWADh9mRpLCMIpW8tyrAUVIH4IRRYdmZVDw6vIfmb
-	 mpdi4x4KEKLhfmOuPBwkoeTSdP73g7PUH8JRewv+lX0XfpcbydJk2C4Ct5NldMAgVN
-	 RqhkCO8cBt3qkL75WU5KpkesF4qqnvXnyriLhtdYCoD6qCM1KkwD3Rfdt6XHu3J/5q
-	 /E81o25eRmwOFnvq6ZqZySXCmG2CvBk2E2NLvLZ4SaeBYS9EitOfrMkvyNOFdHCsKh
-	 evd0G4BIVyqqA==
+	b=FCq1aAlo0vKB5iK30TDh0dwYwkTE9k6HIdVkmRBqOgSMPrrA0vD71QlInKossJaqm
+	 JLpclX2Wi+vFme1QPFfH6776jm9285u2ye0CGmfmxCfjznnoDHyDTLu27pJXdE00wP
+	 kvXIDuGpYun8/Rach9/O02hoGskjYIKB3e5Kg3ZpUf67Kxr3fRfK5g5beGpc7X2/0J
+	 U6r4eMwLf+JBM3vPCIyzj8Zeyw3bePvZA6+bNR7mdpq438kX4Ebbd7mo8Ok6UlfefC
+	 j6Tf0htUtJTOnMSjVxHRkLHfisJvAR4Anz9hrxNl/40y94/0q9x/7XaexjrLPNc0F/
+	 AMWc4VCctJnkA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: keyrings@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
@@ -57,12 +57,12 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-integrity@vger.kernel.org
-Subject: [PATCH v2] tpm: Mask TPM RC in tpm2_start_auth_session()
-Date: Mon,  7 Apr 2025 10:17:31 +0300
-Message-Id: <20250407071731.78915-1-jarkko@kernel.org>
+Subject: [PATCH v3] tpm: Mask TPM RC in tpm2_start_auth_session()
+Date: Mon,  7 Apr 2025 10:20:57 +0300
+Message-Id: <20250407072057.81062-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250407062642.72556-1-jarkko@kernel.org>
-References: <20250407062642.72556-1-jarkko@kernel.org>
+In-Reply-To: <20250407071731.78915-1-jarkko@kernel.org>
+References: <20250407071731.78915-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -84,15 +84,17 @@ Reported-by: Herbert Xu <herbert@gondor.apana.org.au>
 Closes: https://lore.kernel.org/linux-integrity/Z_NgdRHuTKP6JK--@gondor.apana.org.au/
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
+v3:
+- rc > 0
 v2:
 - Investigate TPM rc only after destroying tpm_buf.
 ---
- drivers/char/tpm/tpm2-sessions.c | 29 +++++++++++++++--------------
+ drivers/char/tpm/tpm2-sessions.c | 31 +++++++++++++++++--------------
  include/linux/tpm.h              |  1 +
- 2 files changed, 16 insertions(+), 14 deletions(-)
+ 2 files changed, 18 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 3f89635ba5e8..da382b86dc41 100644
+index 3f89635ba5e8..abd54fb0a45a 100644
 --- a/drivers/char/tpm/tpm2-sessions.c
 +++ b/drivers/char/tpm/tpm2-sessions.c
 @@ -40,11 +40,6 @@
@@ -138,17 +140,19 @@ index 3f89635ba5e8..da382b86dc41 100644
  	tpm2_flush_context(chip, null_key);
  
  	if (rc == TPM2_RC_SUCCESS)
-@@ -1032,6 +1024,15 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
+@@ -1032,6 +1024,17 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
  
  	tpm_buf_destroy(&buf);
  
-+	switch (rc) {
-+	case TPM2_RC_SESSION_MEMORY:
-+		rc = -ENOMEM;
-+		goto out;
-+	default:
-+		rc = -EFAULT;
-+		goto out;
++	if (rc > 0) {
++		switch (rc) {
++		case TPM2_RC_SESSION_MEMORY:
++			rc = -ENOMEM;
++			goto out;
++		default:
++			rc = -EFAULT;
++			goto out;
++		}
 +	}
 +
  	if (rc == TPM2_RC_SUCCESS) {
