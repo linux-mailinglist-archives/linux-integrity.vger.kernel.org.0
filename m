@@ -1,199 +1,285 @@
-Return-Path: <linux-integrity+bounces-5622-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5623-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5EF6A7D1C2
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 03:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD907A7D22D
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 04:39:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63C53169F40
-	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 01:34:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9195D16B734
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 02:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50F142E62D4;
-	Mon,  7 Apr 2025 01:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0A2212B39;
+	Mon,  7 Apr 2025 02:39:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NmdN5hbc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uTM/iaS9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75072F22
-	for <linux-integrity@vger.kernel.org>; Mon,  7 Apr 2025 01:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF9217BA3;
+	Mon,  7 Apr 2025 02:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743989683; cv=none; b=TO2/fsoXHXJwj//+qS0yErhUr80IfB6ip27iDL3zJtDBvl58gD/xRFwJSt50bAcmUPE00EzUh2QhmBPeE7REWu22vCOcrN5YInSjYHfPL1/JSEZhRXf7tAN4ipswswF9+PPKelHwnoE/iTTSEuoGkQUTivzP570tPJ+UJuVD+Iw=
+	t=1743993567; cv=none; b=tSlIf+rrejox4wnqBCcSgy8wO9fu9V6/GcZvuID1ZEx09yPhb7qsUu3WIP2SvzlSOFomNp1JNFR1uDGiWgj380/KzVoimAfPaiFbKah8PUaKz+i1zHY26Enj26WCzOqTGDCdx4PH4XvNrmFx/HFPndqzx5ahkxRb8KqL6Dnb8Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743989683; c=relaxed/simple;
-	bh=rkdrnHrQUuFQGYdVXkdcV12rbMUOo49rbBtzkXDd1to=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E6u7/22VJ0blgEaNLlBNMdfgPoB/bETAxNQZYNdJ0pb4A+wgkQffeGglzR+NvCjc8ldWYI6R0n5lDpnJL8BRS1km74qY+EEvBX7A7DLFIVljdiivNxZTVsV8WUTf7rei5aNyi1efvDfiHaOw9dqGb4wMkhxkZNwS/z2XXfJY6kU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NmdN5hbc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1743989679;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uvy9TMt2iMUz/JiuHPEeTKpKgTrJBeMjozXjTZWahsw=;
-	b=NmdN5hbcnSCJImJ10yxweL37PW2huBWg8ppD7KcQCnii78sNY76c/uYqSr+TOUAFnBzgQ2
-	8u6ECJyJQoeQvSozykE3OEVZNBQlWiINk8K57F7BQggIESQTf38LlV7nw2aoh0GRE6P22H
-	d3rkSLc5kClnxNhWmoseLk9HPX/LFXU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-643-qA-GdddjMC6XU4e3XoP8NA-1; Sun,
- 06 Apr 2025 21:34:36 -0400
-X-MC-Unique: qA-GdddjMC6XU4e3XoP8NA-1
-X-Mimecast-MFC-AGG-ID: qA-GdddjMC6XU4e3XoP8NA_1743989675
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9323E19560B3;
-	Mon,  7 Apr 2025 01:34:35 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.15])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 83C2E192C7C3;
-	Mon,  7 Apr 2025 01:34:33 +0000 (UTC)
-Date: Mon, 7 Apr 2025 09:34:28 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Coiby Xu <coxu@redhat.com>, RuiRui Yang <ruyang@redhat.com>,
-	linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Subject: Re: [RFC PATCH] ima: add a knob to make IMA be able to be disabled
-Message-ID: <Z/MrpIv9EWftPhbD@MiWiFi-R3L-srv>
-References: <20250331061611.253919-1-bhe@redhat.com>
- <b1eba83a9f68ed9a19100f6c0dc5aca7aff437d5.camel@linux.ibm.com>
- <fv7h5jfb4r6d5j6jjpgyjbv75zyzqpy6tbqn3ahzuewghnvrgd@5yclg75kr3cq>
- <CALu+AoQrKunS5RjikkcZD7=J9vwhv1_Dw96fmO0EtyKi0MHHJg@mail.gmail.com>
- <d14c72bbb377c6f8f0efdbf6d725c553b3ad741c.camel@linux.ibm.com>
- <h3bjnvtded2hgbhya6ugb62mnlmkjpmifa6w6wwutfd3jq326r@lzpoun5pksev>
- <Z+0kRhCfsjdZ53rZ@MiWiFi-R3L-srv>
- <65057b5256a28c3416e6b90a143d741801e68b03.camel@linux.ibm.com>
+	s=arc-20240116; t=1743993567; c=relaxed/simple;
+	bh=KQMsWCMT4TtG0LbnlHpbZgQ5ITAtVM5iwetYpYMVVqc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lk182YP13D22nBICXCFW4+HicvyaRlIFzdBZuYbQ04lQeE0ApoONBThwOY3PmakqkmoMJ1nQ3QodMEkmEHpNcQAxZLcrlI5dpGyjPIWtraG17H0a+9BtxIa/vik6KIUuakiwqhIJ+j4KarstiQYfc/AEKQtxk2AI8TwaIWIXBJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uTM/iaS9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F94C4CEE3;
+	Mon,  7 Apr 2025 02:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743993567;
+	bh=KQMsWCMT4TtG0LbnlHpbZgQ5ITAtVM5iwetYpYMVVqc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uTM/iaS9R22uVhBrylGj3xZPiDPi+88i2y338gm4Al1M8ghKJN2Zq6R/0db5kJVH9
+	 lk6IhSw10DUFfEXYOyCkNQuomq//u/bnUR6E0oLf1fjANuI24F82SzXGdO4DaBJkHl
+	 a8mArc2K5tswTyymGcEDD5r5a2Y85Rg9WAka022kORDl+QYXfX0f3SWcbWFMWsVxCp
+	 +M/R85PSx9a7/LkM3dv2U5K1Ghb6kiAxiWRmdwyVc+UeqfbMjTlvyHZz4XwjktqBBJ
+	 9GSGt2ng931SZN4Se6svz5Swq9UzYvzF5JHCOEvmT7vLa6kHw/n8ywlQZlFzWgt8WN
+	 vJOkjpcLI/2dA==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: keyrings@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	stable@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v7] KEYS: Add a list for unreferenced keys
+Date: Mon,  7 Apr 2025 05:39:18 +0300
+Message-Id: <20250407023918.29956-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <65057b5256a28c3416e6b90a143d741801e68b03.camel@linux.ibm.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 04/03/25 at 04:03pm, Mimi Zohar wrote:
-> On Wed, 2025-04-02 at 19:49 +0800, Baoquan He wrote:
-> > On 04/02/25 at 04:43pm, Coiby Xu wrote:
-> > > On Tue, Apr 01, 2025 at 11:30:09PM -0400, Mimi Zohar wrote:
-> > > > On Wed, 2025-04-02 at 09:47 +0800, RuiRui Yang wrote:
-> > > [...]
-> > > > > > > that.  Please don't make it generic like this.
-> > > > > > > 
-> > > > > > > Please refer to ima_appraise_parse_cmdline().
-> > > > > > 
-> > > > > > Hi Mimi,
-> > > > > > 
-> > > > > > To save memory for kdump, it seems init_ima has been to be skipped thus
-> > > > > > ima=off is necessary (ima_appraise=off won't serve the purpose). Or do
-> > > > > > you have any specific concerns in mind?
-> > > > > 
-> > > > > I think as Mimi said see below logic enforces the IMA even with the
-> > > > > cmdline disabling, see ima_appraise_parse_cmdline:
-> > > > > if (sb_state) {
-> > > > >                 if (!(appraisal_state & IMA_APPRAISE_ENFORCE))
-> > > > >                         pr_info("Secure boot enabled: ignoring
-> > > > > ima_appraise=%s option",
-> > > > >                                 str);
-> > > > >         } else {
-> > > > >                 ima_appraise = appraisal_state;
-> > > > >         }
-> > > 
-> > > Thanks for pointing me to the above code! Note with the whole IMA
-> > > disabled as done by this patch, the above code will not run so IMA
-> > > (appraisal) won't be enforced.
-> > > 
-> > > > 
-> > > > Thanks, RuiRui.
-> > > > 
-> > > 
-> > > Mimi, so do I understand it correctly that your want IMA-appraisal to be
-> > > always enabled as long as secure boot is enabled even if users choose to
-> > > disable IMA? 
-> 
-> Secure boot is not the only reason.  Based on policy IMA-appraisal and EVM
-> calculate and store file hashes and HMAC's in their respective security xattrs.
-> Normally the usage of file hashes and HMAC's is limited to mutable files. 
-> Disabling IMA-appraisal could result in not properly updating the security
-> xattrs, which would result in not being able to verify the file's integrity on
-> reboot.
-> 
-> On systems where the RPM includes file signatures, file signatures of immutable
-> files can be safely restored.  Although it is possible to walk the filesystem(s)
-> "fixing" the xattrs of mutable files, it defeats the purpose.  "fix" mode should
-> only be enabled in a trusted environment.
-> 
-> > > I wonder what security issue will it bring if this promise
-> > > gets broken considering other LSMs can SELinux can be disabled when
-> > > secure boot is enabled?
-> 
-> The builtin IMA policy rules are not defined in terms of SELinux labels.  If the
-> initial IMA custom policy defines rules based on SELinux labels and SELinux is
-> not enabled, the policy will fail to be loaded.
-> 
-> > > > Coiby, would disabling just IMA-measurement, as opposed to IMA-appraisal, save
-> > > > sufficient memory for kdump?
-> > > 
-> > > For disabling just IMA-measurement, do you mean not enabling any measure
-> > > rules?  The more memory reserved for the kdump kernel, the less memory
-> > > can be used by the 1st kernel. So from the perfective of kdump, we try
-> > > to make the memory footprint as smaller as possible.
-> 
-> Got it.
-> 
-> > > Baoquan, do you have any statistics about the memory overhead of IMA?
-> > 
-> > I am getting a system to check that. I think there are two aspects of
-> > IMA functionality we want to disable. One is disable the IMA-measurement
-> > copying from 1st kernel to 2nd kernel, this is only needed by kexec
-> > reboot; the other is IMA is not needed at all in kdump kernel, means we
-> > don't want to call ima_init() to initialize
-> > ima_keyring/crypto/template/digests/fs etc. 
-> > 
-> > With my shallow knowledge about IMA, I don't know how to imitate
-> > appraisal cmdline to disable IMA partially in kdump kernel case.
+From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-Thanks for detailed explanations. Just back from holiday, sorry for late
-reply.
+Add an isolated list of unreferenced keys to be queued for deletion, and
+try to pin the keys in the garbage collector before processing anything.
+Skip unpinnable keys.
 
-> 
-> The IMA policy controls how much or how little IMA measures and appraises.  Most
-> of the memory usage is the IMA measurement list, itself, and the per file cache
-> info.  (The per file cache info limits re-measuring or re-appraising files.)
+Use this list for blocking the reaping process during the teardown:
 
-In Steve Chen's kexec supporting ima patchset, kdump kernel loading
-should skip ima_kexec buffers allocating and storing via checking if
-(image->type == KEXEC_TYPE_CRASH).
-> 
-> Similarly my knowledge of kdump is very limited.  Is there a way for the kernel
-> to differentiate between kexec and kdump?  If we need a mechanism to disable
-> IMA-measurement, I'd *really* prefer it be limited to kdump.
+1. First off, the keys added to `keys_graveyard` are snapshotted, and the
+   list is flushed. This the very last step in `key_put()`.
+2. `key_put()` reaches zero. This will mark key as busy for the garbage
+   collector.
+3. `key_garbage_collector()` will try to increase refcount, which won't go
+   above zero. Whenever this happens, the key will be skipped.
 
-Yes, function is_kdump_kernel() is provided for checking if the current
-kernel is in kdump kernel.
+Cc: stable@vger.kernel.org # v6.1+
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+---
+v7:
+- Fixed multiple definitions (from rebasing, sorry).
+v6:
+- Rebase went wrong in v5.
+v5:
+- Rebased on top of v6.15-rc
+- Updated commit message to explain how spin lock and refcount
+  isolate the time window in key_put().
+v4:
+- Pin the key while processing key type teardown. Skip dead keys.
+- Revert key_gc_graveyard back key_gc_unused_keys.
+- Rewrote the commit message.
+- "unsigned long flags" declaration somehow did make to the previous
+  patch (sorry).
+v3:
+- Using spin_lock() fails since key_put() is executed inside IRQs.
+  Using spin_lock_irqsave() would neither work given the lock is
+  acquired for /proc/keys. Therefore, separate the lock for
+  graveyard and key_graveyard before reaping key_serial_tree.
+v2:
+- Rename key_gc_unused_keys as key_gc_graveyard, and re-document the
+  function.
+---
+ include/linux/key.h      |  7 ++-----
+ security/keys/gc.c       | 40 ++++++++++++++++++++++++----------------
+ security/keys/internal.h |  5 +++++
+ security/keys/key.c      |  7 +++++--
+ 4 files changed, 36 insertions(+), 23 deletions(-)
 
-As said in earlier reply, for kdump kernel, there are two things we
-should do:
-1) when loading 2nd kernel to prepare for switching, we should not
-allocate buffer and store IMA measurement list;
-2) when switched into kdump kernel, we should not call ima_init() to do
-kinds of init which is useless.
-
-My personnal opinion.
-
-Thanks
-Baoquan
+diff --git a/include/linux/key.h b/include/linux/key.h
+index ba05de8579ec..c50659184bdf 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -195,10 +195,8 @@ enum key_state {
+ struct key {
+ 	refcount_t		usage;		/* number of references */
+ 	key_serial_t		serial;		/* key serial number */
+-	union {
+-		struct list_head graveyard_link;
+-		struct rb_node	serial_node;
+-	};
++	struct list_head	graveyard_link; /* key->usage == 0 */
++	struct rb_node		serial_node;
+ #ifdef CONFIG_KEY_NOTIFICATIONS
+ 	struct watch_list	*watchers;	/* Entities watching this key for changes */
+ #endif
+@@ -236,7 +234,6 @@ struct key {
+ #define KEY_FLAG_ROOT_CAN_INVAL	7	/* set if key can be invalidated by root without permission */
+ #define KEY_FLAG_KEEP		8	/* set if key should not be removed */
+ #define KEY_FLAG_UID_KEYRING	9	/* set if key is a user or user session keyring */
+-#define KEY_FLAG_FINAL_PUT	10	/* set if final put has happened on key */
+ 
+ 	/* the key type and key description string
+ 	 * - the desc is used to match a key against search criteria
+diff --git a/security/keys/gc.c b/security/keys/gc.c
+index f27223ea4578..0a3beb68633c 100644
+--- a/security/keys/gc.c
++++ b/security/keys/gc.c
+@@ -189,6 +189,7 @@ static void key_garbage_collector(struct work_struct *work)
+ 	struct rb_node *cursor;
+ 	struct key *key;
+ 	time64_t new_timer, limit, expiry;
++	unsigned long flags;
+ 
+ 	kenter("[%lx,%x]", key_gc_flags, gc_state);
+ 
+@@ -206,21 +207,35 @@ static void key_garbage_collector(struct work_struct *work)
+ 
+ 	new_timer = TIME64_MAX;
+ 
++	spin_lock_irqsave(&key_graveyard_lock, flags);
++	list_splice_init(&key_graveyard, &graveyard);
++	spin_unlock_irqrestore(&key_graveyard_lock, flags);
++
++	list_for_each_entry(key, &graveyard, graveyard_link) {
++		spin_lock(&key_serial_lock);
++		kdebug("unrefd key %d", key->serial);
++		rb_erase(&key->serial_node, &key_serial_tree);
++		spin_unlock(&key_serial_lock);
++	}
++
+ 	/* As only this function is permitted to remove things from the key
+ 	 * serial tree, if cursor is non-NULL then it will always point to a
+ 	 * valid node in the tree - even if lock got dropped.
+ 	 */
+ 	spin_lock(&key_serial_lock);
++	key = NULL;
+ 	cursor = rb_first(&key_serial_tree);
+ 
+ continue_scanning:
++	key_put(key);
+ 	while (cursor) {
+ 		key = rb_entry(cursor, struct key, serial_node);
+ 		cursor = rb_next(cursor);
+-
+-		if (test_bit(KEY_FLAG_FINAL_PUT, &key->flags)) {
+-			smp_mb(); /* Clobber key->user after FINAL_PUT seen. */
+-			goto found_unreferenced_key;
++		/* key_get(), unless zero: */
++		if (!refcount_inc_not_zero(&key->usage)) {
++			key = NULL;
++			gc_state |= KEY_GC_REAP_AGAIN;
++			goto skip_dead_key;
+ 		}
+ 
+ 		if (unlikely(gc_state & KEY_GC_REAPING_DEAD_1)) {
+@@ -274,6 +289,7 @@ static void key_garbage_collector(struct work_struct *work)
+ 		spin_lock(&key_serial_lock);
+ 		goto continue_scanning;
+ 	}
++	key_put(key);
+ 
+ 	/* We've completed the pass.  Set the timer if we need to and queue a
+ 	 * new cycle if necessary.  We keep executing cycles until we find one
+@@ -286,6 +302,10 @@ static void key_garbage_collector(struct work_struct *work)
+ 		key_schedule_gc(new_timer);
+ 	}
+ 
++	spin_lock(&key_graveyard_lock);
++	list_splice_init(&key_graveyard, &graveyard);
++	spin_unlock(&key_graveyard_lock);
++
+ 	if (unlikely(gc_state & KEY_GC_REAPING_DEAD_2) ||
+ 	    !list_empty(&graveyard)) {
+ 		/* Make sure that all pending keyring payload destructions are
+@@ -328,18 +348,6 @@ static void key_garbage_collector(struct work_struct *work)
+ 	kleave(" [end %x]", gc_state);
+ 	return;
+ 
+-	/* We found an unreferenced key - once we've removed it from the tree,
+-	 * we can safely drop the lock.
+-	 */
+-found_unreferenced_key:
+-	kdebug("unrefd key %d", key->serial);
+-	rb_erase(&key->serial_node, &key_serial_tree);
+-	spin_unlock(&key_serial_lock);
+-
+-	list_add_tail(&key->graveyard_link, &graveyard);
+-	gc_state |= KEY_GC_REAP_AGAIN;
+-	goto maybe_resched;
+-
+ 	/* We found a restricted keyring and need to update the restriction if
+ 	 * it is associated with the dead key type.
+ 	 */
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 2cffa6dc8255..4e3d9b322390 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -63,9 +63,14 @@ struct key_user {
+ 	int			qnbytes;	/* number of bytes allocated to this user */
+ };
+ 
++extern struct list_head key_graveyard;
++extern spinlock_t key_graveyard_lock;
++
+ extern struct rb_root	key_user_tree;
+ extern spinlock_t	key_user_lock;
+ extern struct key_user	root_key_user;
++extern struct list_head	key_graveyard;
++extern spinlock_t	key_graveyard_lock;
+ 
+ extern struct key_user *key_user_lookup(kuid_t uid);
+ extern void key_user_put(struct key_user *user);
+diff --git a/security/keys/key.c b/security/keys/key.c
+index 7198cd2ac3a3..7511f2017b6b 100644
+--- a/security/keys/key.c
++++ b/security/keys/key.c
+@@ -22,6 +22,8 @@ DEFINE_SPINLOCK(key_serial_lock);
+ 
+ struct rb_root	key_user_tree; /* tree of quota records indexed by UID */
+ DEFINE_SPINLOCK(key_user_lock);
++LIST_HEAD(key_graveyard);
++DEFINE_SPINLOCK(key_graveyard_lock);
+ 
+ unsigned int key_quota_root_maxkeys = 1000000;	/* root's key count quota */
+ unsigned int key_quota_root_maxbytes = 25000000; /* root's key space quota */
+@@ -658,8 +660,9 @@ void key_put(struct key *key)
+ 				key->user->qnbytes -= key->quotalen;
+ 				spin_unlock_irqrestore(&key->user->lock, flags);
+ 			}
+-			smp_mb(); /* key->user before FINAL_PUT set. */
+-			set_bit(KEY_FLAG_FINAL_PUT, &key->flags);
++			spin_lock_irqsave(&key_graveyard_lock, flags);
++			list_add_tail(&key->graveyard_link, &key_graveyard);
++			spin_unlock_irqrestore(&key_graveyard_lock, flags);
+ 			schedule_work(&key_gc_work);
+ 		}
+ 	}
+-- 
+2.39.5
 
 
