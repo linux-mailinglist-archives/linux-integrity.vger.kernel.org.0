@@ -1,355 +1,247 @@
-Return-Path: <linux-integrity+bounces-5618-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5619-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17FD4A7CD5F
-	for <lists+linux-integrity@lfdr.de>; Sun,  6 Apr 2025 11:05:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C991A7D13D
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 02:11:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A2BE188EFD1
-	for <lists+linux-integrity@lfdr.de>; Sun,  6 Apr 2025 09:05:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4767916D50A
+	for <lists+linux-integrity@lfdr.de>; Mon,  7 Apr 2025 00:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 851D319E96A;
-	Sun,  6 Apr 2025 09:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40595EC5;
+	Mon,  7 Apr 2025 00:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IwOrasoD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SIBRtGCN"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A4019D07C;
-	Sun,  6 Apr 2025 09:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E5B191;
+	Mon,  7 Apr 2025 00:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743930327; cv=none; b=R7/6E6AX53SuEouGZWKt+g1b2uy95qKUDBngecYeSYlOswbw1NSkwVRHDWYb31ik34u8R+ZulHqiPQowJUVmagxmfXESu9zgxbnNaOxSKeBtTQa3gSQHQEFobLhvqPDsejjhkvcaOGJWCb9AYoq7V97gZzbi0uN2pj5/lXKza3c=
+	t=1743984656; cv=none; b=kKH4XQ6BDUnhAaDalEYO5kmXP+fXMIad92GMNO+Yw/uuyfRuamH6IdArx1HU/MN9+ZrusaFfMfpV5dlJT4XFVB3QnOcxgzxxwYfPHpu94hivAgX3z5Iw3Y+LwZdMFdkzPKVGTtBfp8IVAY3ySIctoBTCRXXZ+QXWGzwxb+B/MvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743930327; c=relaxed/simple;
-	bh=8HppInsbIo8ANnv0KzVr7mCU0OkTEyE/7eBNjt7qig8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bI+MNdaPw2MWkECiOgpcZ/V+cmjF7RacrQjH3fKslbhCraqq+rsP72ZWpfveGg5iRKRjHXH3VMQNdji6mRY+KtJt6YncvUbohMUeeNcU8Pb2Dhp0Wm9JE+UwIYcnAPQ7Yh5qZ71ukrFb8T2zuBEPGmVGlX1aV9qT+Xx6m1KWueg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IwOrasoD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C68C4AF09;
-	Sun,  6 Apr 2025 09:05:26 +0000 (UTC)
+	s=arc-20240116; t=1743984656; c=relaxed/simple;
+	bh=9un9VmFkdH9K3+ubLeKF5bvDTRpmsxY+GE0bjL8Hmpg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AJdAdqMpVy5HcTBt3CFKegq57898816CNM6ontAJGFBlAt2cq1bCDPG8mQubhMt0hvsfSyKDeo2+dzn8XiUYENP2BeSO9sh0fL5VmAkO/pnSZXi7IeWtsOxAM1g0Wjb9NmSWibgWwy/tbzWHzwkZbeet7r8h8AupCsTQCDRDw4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SIBRtGCN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A6E4C4CEE3;
+	Mon,  7 Apr 2025 00:10:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743930326;
-	bh=8HppInsbIo8ANnv0KzVr7mCU0OkTEyE/7eBNjt7qig8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IwOrasoDeDzS3yUBfr8g94+5gZoiu+5AgF6rMrv7SteF7Bc8nm13Y7vRz3FvVjRf2
-	 T12ORznnepbij0kgIrpYgWtUJsBMGicgVNNZ9LKjXeav94jZ9oQXVEpfI5zX1EhFtD
-	 GpjiaDs0q/V1Il+bKxV0TH9E0j27Mz75wlFtjdeLGzfHXZZ3DkdvwXjFHOukKFtgy6
-	 lmrfugunHjzDBzTyORKeQroDL0gRpCwAZrdPMvVeXtteVwzf9ODeL/tvUTIgqIL/t1
-	 k6bDIJ3pzuMmDYykjX84dtvqtMI0dLdyTTzFtQBKjdx2Qco8cTpPYoaXRsXLP5pohA
-	 0vUcscdLjHqfQ==
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ac2a9a74d9cso290417066b.1;
-        Sun, 06 Apr 2025 02:05:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUWLcmQ9o3vOXFOESGhnAPZuAlzr+v9M/GaaIWgEG5P8QmfZ+9qJ39TDL3ll8dx2Ccl7ptGMtunmkRZIrJC@vger.kernel.org, AJvYcCVXuHny/Pp79Wq58knUpmbCCRjKtXe56EWEochNIhsciImFnU8S6RwAA/ZeMa/pMMJ1SSbhWED5XOgWa6uxwRp+@vger.kernel.org, AJvYcCVmJGAO04tnBt/PnAriULN+BmGSDM/ltF1Dhy9xdzrFeqyVefkeEaK3Hn+QeDfFM/7OeI0veVKcQ50YsLo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUvJD1sgNMPqF96KWf1qSZFPVkbJ0+vLIFSzfB/JLFX7HJ/437
-	H2yNV50jrawUK4/KnKHAoJar3XUrfy+1oJ242jAWVBhxoVWAikLAZ3l8Q9+NWFfgWRxLgtWZeWb
-	GnQEasvQRxtJIZg8SLU6CEcAHzOQ=
-X-Google-Smtp-Source: AGHT+IGnNuCrgMy9P3d6NcUjmzNvarGtmG4DsB2kEka2+JK8o2USJQLfNhexkE7Myk6TQhY8RdwX6T2Run352Tj2b/I=
-X-Received: by 2002:a17:907:7207:b0:ac7:95b0:d0fb with SMTP id
- a640c23a62f3a-ac7d18ccf44mr582095566b.34.1743930325304; Sun, 06 Apr 2025
- 02:05:25 -0700 (PDT)
+	s=k20201202; t=1743984655;
+	bh=9un9VmFkdH9K3+ubLeKF5bvDTRpmsxY+GE0bjL8Hmpg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SIBRtGCNSzbEd33ko9d2X0/uxOvR8U0MQins8rNMCDytJ9wCsp9UkzDnM/T5XQhR5
+	 WgYYtjdqKCoFlQkGx+x0Jt2ZkDki9JlwQEJWwpFkbq3p2aPZ3Qbu4wYuIGdoBHc4c7
+	 dP3zkQtVYLgml/OrOQYrvfTeOw7dj8lpzA6u+Lob2fQcrXTb23Ko9sg3KdlAr/qB3J
+	 FPmY5JGLvynnlQ178BUiwpe9DoEspq3SdXw8Ausz2LgcGq44S6064bu/QWlZlq7anQ
+	 AH60SRSXr248euDum6TKPqHanXdmGSpL6aRWAYpV/wu+wCVXv3yHhU1jG0hy1RQY0e
+	 Q6uT1w+MGXYTQ==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: keyrings@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	stable@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Ignat Korchagin <ignat@cloudflare.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH v5] KEYS: Add a list for unreferenced keys
+Date: Mon,  7 Apr 2025 03:10:45 +0300
+Message-Id: <20250407001046.19189-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403024645.4427-1-zhaoqunqin@loongson.cn> <20250403024645.4427-4-zhaoqunqin@loongson.cn>
-In-Reply-To: <20250403024645.4427-4-zhaoqunqin@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sun, 6 Apr 2025 17:05:17 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H45vYe3Brgy=0_+ciTjcJ-+x3zwoeY-ym20o5PGGxvJCw@mail.gmail.com>
-X-Gm-Features: ATxdqUE_15XGhijQDn39K9ebew3z8rFKKC1Cu8MxG-GMMAfETFR9hD85GjMWF6E
-Message-ID: <CAAhV-H45vYe3Brgy=0_+ciTjcJ-+x3zwoeY-ym20o5PGGxvJCw@mail.gmail.com>
-Subject: Re: [PATCH v7 3/6] crypto: loongson - add Loongson RNG driver support
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net, 
-	peterhuewe@gmx.de, jarkko@kernel.org, linux-kernel@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca, 
-	linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de, 
-	Yinggang Gu <guyinggang@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, Qunqin,
+From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-On Thu, Apr 3, 2025 at 10:46=E2=80=AFAM Qunqin Zhao <zhaoqunqin@loongson.cn=
-> wrote:
->
-> Loongson's Random Number Generator is found inside Loongson security
-> engine.
->
-> Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
-> Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
-> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
-> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> v7: Change the lsrng_ prefix to loongson_rng_
-> v6: Replace all "ls6000se" with "loongson"
-> v2-v5: None
->
->  drivers/crypto/Kconfig                 |   1 +
->  drivers/crypto/Makefile                |   1 +
->  drivers/crypto/loongson/Kconfig        |   6 +
->  drivers/crypto/loongson/Makefile       |   2 +
->  drivers/crypto/loongson/loongson-rng.c | 190 +++++++++++++++++++++++++
->  5 files changed, 200 insertions(+)
->  create mode 100644 drivers/crypto/loongson/Kconfig
->  create mode 100644 drivers/crypto/loongson/Makefile
->  create mode 100644 drivers/crypto/loongson/loongson-rng.c
->
-> diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
-> index 19ab145f9..567ed81b0 100644
-> --- a/drivers/crypto/Kconfig
-> +++ b/drivers/crypto/Kconfig
-> @@ -855,5 +855,6 @@ config CRYPTO_DEV_SA2UL
->
->  source "drivers/crypto/aspeed/Kconfig"
->  source "drivers/crypto/starfive/Kconfig"
-> +source "drivers/crypto/loongson/Kconfig"
->
->  endif # CRYPTO_HW
-> diff --git a/drivers/crypto/Makefile b/drivers/crypto/Makefile
-> index fef18ffdb..643c3710b 100644
-> --- a/drivers/crypto/Makefile
-> +++ b/drivers/crypto/Makefile
-> @@ -50,3 +50,4 @@ obj-y +=3D hisilicon/
->  obj-$(CONFIG_CRYPTO_DEV_AMLOGIC_GXL) +=3D amlogic/
->  obj-y +=3D intel/
->  obj-y +=3D starfive/
-> +obj-y +=3D loongson/
-> diff --git a/drivers/crypto/loongson/Kconfig b/drivers/crypto/loongson/Kc=
-onfig
-> new file mode 100644
-> index 000000000..4368701ad
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/Kconfig
-> @@ -0,0 +1,6 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +config CRYPTO_DEV_LOONGSON_RNG
-> +        tristate "Support for Loongson RNG Driver"
-> +        depends on MFD_LOONGSON_SE
-> +        help
-> +          Support for Loongson RNG Driver.
-> diff --git a/drivers/crypto/loongson/Makefile b/drivers/crypto/loongson/M=
-akefile
-> new file mode 100644
-> index 000000000..b8b013c86
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_CRYPTO_DEV_LOONGSON_RNG)  +=3D loongson-rng.o
-> diff --git a/drivers/crypto/loongson/loongson-rng.c b/drivers/crypto/loon=
-gson/loongson-rng.c
-> new file mode 100644
-> index 000000000..307014992
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/loongson-rng.c
-> @@ -0,0 +1,190 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2019 HiSilicon Limited. */
-> +/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
-> +
-> +#include <linux/crypto.h>
-> +#include <linux/err.h>
-> +#include <linux/hw_random.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/list.h>
-> +#include <linux/mfd/loongson-se.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/random.h>
-> +#include <crypto/internal/rng.h>
-> +
-> +struct loongson_rng_list {
-> +       struct mutex lock;
-> +       struct list_head list;
-> +       int is_init;
-> +};
-> +
-> +struct lsrng {
-> +       bool is_used;
-> +       struct se_channel *se_ch;
-> +       struct list_head list;
-> +       struct completion rng_completion;
-> +};
-Since there are other comments that should be addressed, you can
-rename lsrng to loongson_rng to keep consistency.
+Add an isolated list of unreferenced keys to be queued for deletion, and
+try to pin the keys in the garbage collector before processing anything.
+Skip unpinnable keys.
 
-Huacai
+Use this list for blocking the reaping process during the teardown:
 
-> +
-> +struct loongson_rng_ctx {
-> +       struct lsrng *rng;
-> +};
-> +
-> +struct rng_msg {
-> +       u32 cmd;
-> +       union {
-> +               u32 len;
-> +               u32 ret;
-> +       } u;
-> +       u32 resved;
-> +       u32 out_off;
-> +       u32 pad[4];
-> +};
-> +
-> +static atomic_t rng_active_devs;
-> +static struct loongson_rng_list rng_devices;
-> +
-> +static void loongson_rng_complete(struct se_channel *ch)
-> +{
-> +       struct lsrng *rng =3D (struct lsrng *)ch->priv;
-> +
-> +       complete(&rng->rng_completion);
-> +}
-> +
-> +static int loongson_rng_generate(struct crypto_rng *tfm, const u8 *src,
-> +                         unsigned int slen, u8 *dstn, unsigned int dlen)
-> +{
-> +       struct loongson_rng_ctx *ctx =3D crypto_rng_ctx(tfm);
-> +       struct lsrng *rng =3D ctx->rng;
-> +       struct rng_msg *msg;
-> +       int err, len;
-> +
-> +       do {
-> +               len =3D min(dlen, PAGE_SIZE);
-> +               msg =3D rng->se_ch->smsg;
-> +               msg->u.len =3D len;
-> +               err =3D se_send_ch_requeset(rng->se_ch);
-> +               if (err)
-> +                       return err;
-> +
-> +               wait_for_completion_interruptible(&rng->rng_completion);
-> +
-> +               msg =3D rng->se_ch->rmsg;
-> +               if (msg->u.ret)
-> +                       return -EFAULT;
-> +
-> +               memcpy(dstn, rng->se_ch->data_buffer, len);
-> +               dlen -=3D len;
-> +               dstn +=3D len;
-> +       } while (dlen > 0);
-> +
-> +       return 0;
-> +}
-> +
-> +static int loongson_rng_init(struct crypto_tfm *tfm)
-> +{
-> +       struct loongson_rng_ctx *ctx =3D crypto_tfm_ctx(tfm);
-> +       struct lsrng *rng;
-> +       int ret =3D -EBUSY;
-> +
-> +       mutex_lock(&rng_devices.lock);
-> +       list_for_each_entry(rng, &rng_devices.list, list) {
-> +               if (!rng->is_used) {
-> +                       rng->is_used =3D true;
-> +                       ctx->rng =3D rng;
-> +                       ret =3D 0;
-> +                       break;
-> +               }
-> +       }
-> +       mutex_unlock(&rng_devices.lock);
-> +
-> +       return ret;
-> +}
-> +
-> +static void loongson_rng_exit(struct crypto_tfm *tfm)
-> +{
-> +       struct loongson_rng_ctx *ctx =3D crypto_tfm_ctx(tfm);
-> +
-> +       mutex_lock(&rng_devices.lock);
-> +       ctx->rng->is_used =3D false;
-> +       mutex_unlock(&rng_devices.lock);
-> +}
-> +
-> +static int no_seed(struct crypto_rng *tfm, const u8 *seed, unsigned int =
-slen)
-> +{
-> +       return 0;
-> +}
-> +
-> +static struct rng_alg loongson_rng_alg =3D {
-> +       .generate =3D loongson_rng_generate,
-> +       .seed =3D no_seed,
-> +       .base =3D {
-> +               .cra_name =3D "stdrng",
-> +               .cra_driver_name =3D "loongson_stdrng",
-> +               .cra_priority =3D 300,
-> +               .cra_ctxsize =3D sizeof(struct loongson_rng_ctx),
-> +               .cra_module =3D THIS_MODULE,
-> +               .cra_init =3D loongson_rng_init,
-> +               .cra_exit =3D loongson_rng_exit,
-> +       },
-> +};
-> +
-> +static void loongson_rng_add_to_list(struct lsrng *rng)
-> +{
-> +       mutex_lock(&rng_devices.lock);
-> +       list_add_tail(&rng->list, &rng_devices.list);
-> +       mutex_unlock(&rng_devices.lock);
-> +}
-> +
-> +static int loongson_rng_probe(struct platform_device *pdev)
-> +{
-> +       struct rng_msg *msg;
-> +       struct lsrng *rng;
-> +       int ret;
-> +
-> +       rng =3D devm_kzalloc(&pdev->dev, sizeof(*rng), GFP_KERNEL);
-> +       if (!rng)
-> +               return -ENOMEM;
-> +
-> +       init_completion(&rng->rng_completion);
-> +       rng->se_ch =3D se_init_ch(pdev->dev.parent, SE_CH_RNG, PAGE_SIZE,
-> +                               sizeof(struct rng_msg) * 2, rng, loongson=
-_rng_complete);
-> +       if (!rng->se_ch)
-> +               return -ENODEV;
-> +       msg =3D rng->se_ch->smsg;
-> +       msg->cmd =3D SE_CMD_RNG;
-> +       msg->out_off =3D rng->se_ch->off;
-> +
-> +       if (!rng_devices.is_init) {
-> +               ret =3D crypto_register_rng(&loongson_rng_alg);
-> +               if (ret) {
-> +                       dev_err(&pdev->dev, "failed to register crypto(%d=
-)\n", ret);
-> +                       return ret;
-> +               }
-> +               INIT_LIST_HEAD(&rng_devices.list);
-> +               mutex_init(&rng_devices.lock);
-> +               rng_devices.is_init =3D true;
-> +       }
-> +
-> +       loongson_rng_add_to_list(rng);
-> +       atomic_inc(&rng_active_devs);
-> +
-> +       return 0;
-> +}
-> +
-> +static struct platform_driver loongson_rng_driver =3D {
-> +       .probe          =3D loongson_rng_probe,
-> +       .driver         =3D {
-> +               .name   =3D "loongson-rng",
-> +       },
-> +};
-> +module_platform_driver(loongson_rng_driver);
-> +
-> +MODULE_ALIAS("platform:loongson-rng");
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Yinggang Gu <guyinggang@loongson.cn>");
-> +MODULE_AUTHOR("Qunqin Zhao <zhaoqunqin@loongson.cn>");
-> +MODULE_DESCRIPTION("Loongson random number generator driver");
-> --
-> 2.45.2
->
->
+1. First off, the keys added to `keys_graveyard` are snapshotted, and the
+   list is flushed. This the very last step in `key_put()`.
+2. `key_put()` reaches zero. This will mark key as busy for the garbage
+   collector.
+3. `key_garbage_collector()` will try to increase refcount, which won't go
+   above zero. Whenever this happens, the key will be skipped.
+
+Cc: stable@vger.kernel.org # v6.1+
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+---
+v5:
+- Rebased on top of v6.15-rc
+- Updated commit message to explain how spin lock and refcount
+  isolate the time window in key_put().
+v4:
+- Pin the key while processing key type teardown. Skip dead keys.
+- Revert key_gc_graveyard back key_gc_unused_keys.
+- Rewrote the commit message.
+- "unsigned long flags" declaration somehow did make to the previous
+  patch (sorry).
+v3:
+- Using spin_lock() fails since key_put() is executed inside IRQs.
+  Using spin_lock_irqsave() would neither work given the lock is
+  acquired for /proc/keys. Therefore, separate the lock for
+  graveyard and key_graveyard before reaping key_serial_tree.
+v2:
+- Rename key_gc_unused_keys as key_gc_graveyard, and re-document the
+  function.
+---
+ include/linux/key.h      |  7 ++-----
+ security/keys/gc.c       | 21 +++++++++++++++++++++
+ security/keys/internal.h |  2 ++
+ security/keys/key.c      | 11 ++++-------
+ 4 files changed, 29 insertions(+), 12 deletions(-)
+
+diff --git a/include/linux/key.h b/include/linux/key.h
+index ba05de8579ec..c50659184bdf 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -195,10 +195,8 @@ enum key_state {
+ struct key {
+ 	refcount_t		usage;		/* number of references */
+ 	key_serial_t		serial;		/* key serial number */
+-	union {
+-		struct list_head graveyard_link;
+-		struct rb_node	serial_node;
+-	};
++	struct list_head	graveyard_link; /* key->usage == 0 */
++	struct rb_node		serial_node;
+ #ifdef CONFIG_KEY_NOTIFICATIONS
+ 	struct watch_list	*watchers;	/* Entities watching this key for changes */
+ #endif
+@@ -236,7 +234,6 @@ struct key {
+ #define KEY_FLAG_ROOT_CAN_INVAL	7	/* set if key can be invalidated by root without permission */
+ #define KEY_FLAG_KEEP		8	/* set if key should not be removed */
+ #define KEY_FLAG_UID_KEYRING	9	/* set if key is a user or user session keyring */
+-#define KEY_FLAG_FINAL_PUT	10	/* set if final put has happened on key */
+ 
+ 	/* the key type and key description string
+ 	 * - the desc is used to match a key against search criteria
+diff --git a/security/keys/gc.c b/security/keys/gc.c
+index 4a7f32a1208b..e32534027494 100644
+--- a/security/keys/gc.c
++++ b/security/keys/gc.c
+@@ -193,6 +193,7 @@ static void key_garbage_collector(struct work_struct *work)
+ 	struct rb_node *cursor;
+ 	struct key *key;
+ 	time64_t new_timer, limit, expiry;
++	unsigned long flags;
+ 
+ 	kenter("[%lx,%x]", key_gc_flags, gc_state);
+ 
+@@ -210,17 +211,36 @@ static void key_garbage_collector(struct work_struct *work)
+ 
+ 	new_timer = TIME64_MAX;
+ 
++	spin_lock_irqsave(&key_graveyard_lock, flags);
++	list_splice_init(&key_graveyard, &graveyard);
++	spin_unlock_irqrestore(&key_graveyard_lock, flags);
++
++	list_for_each_entry(key, &graveyard, graveyard_link) {
++		spin_lock(&key_serial_lock);
++		kdebug("unrefd key %d", key->serial);
++		rb_erase(&key->serial_node, &key_serial_tree);
++		spin_unlock(&key_serial_lock);
++	}
++
+ 	/* As only this function is permitted to remove things from the key
+ 	 * serial tree, if cursor is non-NULL then it will always point to a
+ 	 * valid node in the tree - even if lock got dropped.
+ 	 */
+ 	spin_lock(&key_serial_lock);
++	key = NULL;
+ 	cursor = rb_first(&key_serial_tree);
+ 
+ continue_scanning:
++	key_put(key);
+ 	while (cursor) {
+ 		key = rb_entry(cursor, struct key, serial_node);
+ 		cursor = rb_next(cursor);
++		/* key_get(), unless zero: */
++		if (!refcount_inc_not_zero(&key->usage)) {
++			key = NULL;
++			gc_state |= KEY_GC_REAP_AGAIN;
++			goto skip_dead_key;
++		}
+ 
+ 		if (unlikely(gc_state & KEY_GC_REAPING_DEAD_1)) {
+ 			if (key->type == key_gc_dead_keytype) {
+@@ -273,6 +293,7 @@ static void key_garbage_collector(struct work_struct *work)
+ 		spin_lock(&key_serial_lock);
+ 		goto continue_scanning;
+ 	}
++	key_put(key);
+ 
+ 	/* We've completed the pass.  Set the timer if we need to and queue a
+ 	 * new cycle if necessary.  We keep executing cycles until we find one
+diff --git a/security/keys/internal.h b/security/keys/internal.h
+index 676d4ce8b431..4e3d9b322390 100644
+--- a/security/keys/internal.h
++++ b/security/keys/internal.h
+@@ -69,6 +69,8 @@ extern spinlock_t key_graveyard_lock;
+ extern struct rb_root	key_user_tree;
+ extern spinlock_t	key_user_lock;
+ extern struct key_user	root_key_user;
++extern struct list_head	key_graveyard;
++extern spinlock_t	key_graveyard_lock;
+ 
+ extern struct key_user *key_user_lookup(kuid_t uid);
+ extern void key_user_put(struct key_user *user);
+diff --git a/security/keys/key.c b/security/keys/key.c
+index 23cfa62f9c7e..7511f2017b6b 100644
+--- a/security/keys/key.c
++++ b/security/keys/key.c
+@@ -22,6 +22,8 @@ DEFINE_SPINLOCK(key_serial_lock);
+ 
+ struct rb_root	key_user_tree; /* tree of quota records indexed by UID */
+ DEFINE_SPINLOCK(key_user_lock);
++LIST_HEAD(key_graveyard);
++DEFINE_SPINLOCK(key_graveyard_lock);
+ 
+ unsigned int key_quota_root_maxkeys = 1000000;	/* root's key count quota */
+ unsigned int key_quota_root_maxbytes = 25000000; /* root's key space quota */
+@@ -658,14 +660,9 @@ void key_put(struct key *key)
+ 				key->user->qnbytes -= key->quotalen;
+ 				spin_unlock_irqrestore(&key->user->lock, flags);
+ 			}
+-			smp_mb(); /* key->user before FINAL_PUT set. */
+-			set_bit(KEY_FLAG_FINAL_PUT, &key->flags);
+-			spin_lock(&key_serial_lock);
+-			rb_erase(&key->serial_node, &key_serial_tree);
+-			spin_unlock(&key_serial_lock);
+-			spin_lock(&key_graveyard_lock);
++			spin_lock_irqsave(&key_graveyard_lock, flags);
+ 			list_add_tail(&key->graveyard_link, &key_graveyard);
+-			spin_unlock(&key_graveyard_lock);
++			spin_unlock_irqrestore(&key_graveyard_lock, flags);
+ 			schedule_work(&key_gc_work);
+ 		}
+ 	}
+-- 
+2.39.5
+
 
