@@ -1,84 +1,84 @@
-Return-Path: <linux-integrity+bounces-5660-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5661-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9EE9A7F7F6
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 10:34:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 421BDA7F7F7
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 10:34:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC809189CDED
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 08:32:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17387189DB24
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 08:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F36C263C68;
-	Tue,  8 Apr 2025 08:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE44B263F4D;
+	Tue,  8 Apr 2025 08:32:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QzYIbl3l"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ra7NiWGY"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5481925EFA3
-	for <linux-integrity@vger.kernel.org>; Tue,  8 Apr 2025 08:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 145BD264611
+	for <linux-integrity@vger.kernel.org>; Tue,  8 Apr 2025 08:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744101146; cv=none; b=KTGkR+X5t25wXzoEz1CmS45wK0oAassU8lf1suF9u7OucrIQEr/CLzZN1P84xT19cBik20/zTw/JJb7hnhyJrhEnhG5O2CLvB6pw/w0wUvd70XjMeExqT4/r/ZezVklCZYUgXltkKsbtuqHVY5YkFUsu8sEV9Z5ddYLB/0nCQg0=
+	t=1744101151; cv=none; b=GxQNFioi4wqFJw1BhqKZoHKewaZ2kC6CoLFv4mXj5IhhfuyJsaYH7Ul3p/SHAd9pev8OAFq+Ml3aG4eNqK7PImGwLLfalPmn3HNw0ff+znSkwudCb6WPNaGFnS4kPPJRFRkXn5ye8g6m9VrgIPEIt0jFMXZIvdQNctC+SZ/G6Is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744101146; c=relaxed/simple;
-	bh=WvbgwlAGGsl+4IleITMI6e4y/KHe7f57c66lAWpy3NI=;
+	s=arc-20240116; t=1744101151; c=relaxed/simple;
+	bh=U1qC/sy3KM3pFlSOrOxYv2VmI/J+Xj4HkqFlDY7nkB0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f8iY3SUCDrHb2uVTUOmCyS0w+7UirNOO7wW/KNSCOfr9gs57YzXearuv5IRegokWc3vfVFKl0uOoeREl3DWoyZR7FFKoui7j4aKQP1vkKXDmORAywskQSHWNX49QJE8rif+aHK7RLv6N/vMqvOi0JFSzlMc1s5tjxvgyi1Sq4lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QzYIbl3l; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=oybUemCMZAWjlISjzOTyUbEGP7ItA2Qc66m6wb5wxUYNghbqJyKrIUzjiOZohrFebMt0c1LRA3n32b6omYnJU9vVTe49JiBUJ/+8W9ZMTyW03DYQPMzhM+ezd8Y6sIrDZfYn51nNht2Qt44DyV8T9YAjAvkVa1nkjxTuKaHPyIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ra7NiWGY; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744101144;
+	s=mimecast20190719; t=1744101149;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QDE/YZIPCEEz/h330X/plomZy4BudCgqspAc85dgVok=;
-	b=QzYIbl3lvtm3aKVhR8N6vqyZcmVUPaBGR6S1oYXEaPRHX7m3zN89lrKRnW5kIiQCIpIv7m
-	WUfC3sdtPLnMQ0LSEw0xnHM2yDomt4jA61TGaLhNGxRh3+/eCaKDZLsfStufrVqNTk9YCp
-	Hx+fahkvYDTAMfP5iifjmk7w4j62KMs=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=0jjogm03xe8uH9FEbFpCE/wwTjsk8lbbHkAYLp5l0W8=;
+	b=Ra7NiWGY0V4yEsseV5LOEAtiUvOTi+cknemd1ClGoKoo244WO5z3bkB9TiJoyu4OpVSeJd
+	1x4Ji27kZQtk1zEEJ6gUxFUXkPvAff8AIro/Zrmcm7Go7r0ziH1D8Bi79+bS9uTJz8ujk7
+	BAMgEZqq62VPgdeRMljK2BRClxjHyrg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-450-dAgLTURlN42sOFiT6-a45Q-1; Tue, 08 Apr 2025 04:32:23 -0400
-X-MC-Unique: dAgLTURlN42sOFiT6-a45Q-1
-X-Mimecast-MFC-AGG-ID: dAgLTURlN42sOFiT6-a45Q_1744101142
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-43d51bd9b45so36341515e9.1
-        for <linux-integrity@vger.kernel.org>; Tue, 08 Apr 2025 01:32:23 -0700 (PDT)
+ us-mta-533-jWz-R_FOOCWHf4yHIUVw4w-1; Tue, 08 Apr 2025 04:32:27 -0400
+X-MC-Unique: jWz-R_FOOCWHf4yHIUVw4w-1
+X-Mimecast-MFC-AGG-ID: jWz-R_FOOCWHf4yHIUVw4w_1744101147
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-43cf172ffe1so43657795e9.3
+        for <linux-integrity@vger.kernel.org>; Tue, 08 Apr 2025 01:32:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744101142; x=1744705942;
+        d=1e100.net; s=20230601; t=1744101147; x=1744705947;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QDE/YZIPCEEz/h330X/plomZy4BudCgqspAc85dgVok=;
-        b=RtlgO5DClv3YKhBJLsrSOl0qY7yXfOvU8Ej/kSHBX++/3AU9i34HLOwTpHGErGwq3v
-         jQq/OYCh+4dFUlA/+HkMN23unKnRjFi+wkjC4O26i1eKgXwUIzEeadqsOuydwoy1gcny
-         bWEB7XmZ2vibJKqJLE5t5eo+yzIMCdeTi1cN2mvrAgHn0eohiweKX1ZX7QhNzpks4y17
-         KApF4dLNzMOnikDt7jar/5CluFA11YIzEZ5mETIqiKnlru8BXyQ5/ojz7D9YDGJV2uGo
-         uYYIm9YXpGPRU47AUpBtUIJpXEhdazAn8mP70RzRO1HLglQiVpnsFpKLJtsBsqnGh+PQ
-         WBnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXNmSo/SqfKw7ZPyDtcLHcDrkYhHikXwOO94pSieHYmx5MNlVw4LhEW0CzJAd3zz5McQo/SYDaWv5pCDQylJcg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHXjxv0lza3419KCbMoiiGj4tNxfnr+gh77k4jxdMBq96gWrHi
-	K/tHqDICTYat5Ok79ZQm07gkeCyWUaHMFD5k5Qh8c2lfUaJxItEtFSyqdR6TQC4vXEHhyXFsBcT
-	1ZFCZk14BygPuN5YaF4Ax1NudZIev3XBupWDVBKKpaW5uG28J0n8qwiAHpRVVhTCb/A==
-X-Gm-Gg: ASbGncstBi5EHnUtdBq4ItoCAk7wEV+oCxqi2QQ/qaGrA5bbQXtP5jMqC0XxiRYWDSf
-	qpIBIguWgQ3HjYe/xlJYZGT4hfws/mNWT06oG8p/mz7pzV/WO3YcSvV0ZNPylXqX2V4tKCIq0ZF
-	txip3Q2zW9JFf9DVCjRxZidNWAghKsLZLqkBe31FuXqXYbKMSy8NctFXLa8xQoBMw+DxUBCYFXJ
-	w1kDnHGwzES9AgCZBYHSelZQNDOf9TZHagU9QzpQVbUgpJT0rtYzqJEUBdC3Ru9uWlEVBMUXwmn
-	kZH6/V1dlyNoYp0wes6x1fNJOiCJySN9dwD+EHTcNGYmhZ3Ndx0Pwhc2Kp4JJJ52Qw==
-X-Received: by 2002:a05:600c:1e13:b0:439:8c80:6af4 with SMTP id 5b1f17b1804b1-43ecf8d0b48mr141342835e9.19.1744101141991;
-        Tue, 08 Apr 2025 01:32:21 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHQhp1MgrEqOjc+4MW66KZXrp62NtlwXCuZ1w3QWz8IsRQIARyOk/4wlryzdly6gRSlx08ezQ==
-X-Received: by 2002:a05:600c:1e13:b0:439:8c80:6af4 with SMTP id 5b1f17b1804b1-43ecf8d0b48mr141342355e9.19.1744101141383;
-        Tue, 08 Apr 2025 01:32:21 -0700 (PDT)
+        bh=0jjogm03xe8uH9FEbFpCE/wwTjsk8lbbHkAYLp5l0W8=;
+        b=vaj6eIufdaUq4A/0+I121cB9OZiLIL+WlJZgFoPzn3KA9kydXkOB9przgB/YtRcKPV
+         c/czuDbpyH83D8ok1ErL/UE0/FJvOVZo2UJclhYqjhOGi77GJk6oBKd2FFCUAO8YMz1H
+         RkqfHE/e2bG2mAUBN65bgzsHYg03i9ryTCczC+TNyjTaSTTOBs/X4kAswl9+ucWjmn4M
+         lwZXDj+Qr3ACen9HvpddOAZTqjpx9op9Jux39L//R4NN1v3JcDVpE0MODDLIxYCNvjTq
+         vNcq0GskG9TFlUuo4WSgezdzWVCSkPMqN/x/NW2whRcRr9BcgqB1Eo5gCCdKQOl1mEsF
+         fnsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUq5n/Ua93nxyqV8cZni0r/rXuz/Cx0wVkAOg2Khwk8eLxqR3w4MglOoK9apqUx7VuxzWrXtPAfK2/fIFj6Xpc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqmWTNyQGuQ9TPAgCDWXwiNl19xwoMd75Qd5/MnMIT3z8vZGaZ
+	goQZ9/oTASB/5WulWopW+OgNAJLW9BZNRYoIRDMwYGRdAiMKt6Q2oUplk58pBNcPThlYM+MSCia
+	vlxzJUK5Mi+06DXSGtcT9LQkOg48TI4+pqobYQLPeQAnoCjo8HofI5MWgFY6CesS9RQ==
+X-Gm-Gg: ASbGncsBSAP2GfI06tlnip36ZSyrpYb4liTCraBxxC0vT/626wYK0HB1weSyYFTcuES
+	AVo3+US4Qsnpl4hE8sG1vYnHS3Q2icQ8Gy0i9tYFC2q+IbvTkxwGVQgIpZlvQ4A1Ln/i2sSCOjl
+	LqnN4pfnxI2d0czbPk7/KqNjKNvWizIi4P0WyVdLrsZ10TUMFT17rPzELBz8dQLpigZxXIJ7CLy
+	9DFod3sojdn+j4WYo9gbfWkmrKjSOePS/Sd91dQQ8L5TRTV7FZPJJPfQNlSL5JbpWkMGjJQEOu6
+	GmwKKZsiwhDZC2tFtPaDZ72KUyRGBvB37QTwwPGemBDyD+HSZ1rGHDo/bIFQ9FI6Pw==
+X-Received: by 2002:a05:600c:3489:b0:43c:f87c:24ce with SMTP id 5b1f17b1804b1-43ecf9c77ecmr122637485e9.21.1744101146620;
+        Tue, 08 Apr 2025 01:32:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGO0mHtfU6tjdIaTwIU3mFKYSEAXTq1PTv+mq26VUWkOFRfaSqPIV+zWD9QaZteOnlwamweeA==
+X-Received: by 2002:a05:600c:3489:b0:43c:f87c:24ce with SMTP id 5b1f17b1804b1-43ecf9c77ecmr122637075e9.21.1744101146092;
+        Tue, 08 Apr 2025 01:32:26 -0700 (PDT)
 Received: from stex1.redhat.com (host-79-53-30-213.retail.telecomitalia.it. [79.53.30.213])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c3009680dsm14051923f8f.7.2025.04.08.01.32.19
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39c3020d661sm14565216f8f.66.2025.04.08.01.32.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 01:32:20 -0700 (PDT)
+        Tue, 08 Apr 2025 01:32:25 -0700 (PDT)
 From: Stefano Garzarella <sgarzare@redhat.com>
 To: Jarkko Sakkinen <jarkko@kernel.org>
 Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -99,9 +99,9 @@ Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	Peter Huewe <peterhuewe@gmx.de>,
 	James Bottomley <James.Bottomley@HansenPartnership.com>,
 	Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v2 2/4] tpm: support devices with synchronous send()
-Date: Tue,  8 Apr 2025 10:32:06 +0200
-Message-ID: <20250408083208.43512-3-sgarzare@redhat.com>
+Subject: [PATCH v2 3/4] tpm/tpm_ftpm_tee: support TPM_CHIP_FLAG_SYNC
+Date: Tue,  8 Apr 2025 10:32:07 +0200
+Message-ID: <20250408083208.43512-4-sgarzare@redhat.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250408083208.43512-1-sgarzare@redhat.com>
 References: <20250408083208.43512-1-sgarzare@redhat.com>
@@ -115,74 +115,182 @@ Content-Transfer-Encoding: 8bit
 
 From: Stefano Garzarella <sgarzare@redhat.com>
 
-Some devices do not support interrupts and provide a single synchronous
-operation to send the command and receive the response on the same buffer.
+This driver does not support interrupts, and receiving the response is
+synchronous with sending the command.
 
-Currently, these types of drivers must use an internal buffer where they
-temporarily store the response between .send() and recv() calls.
+So we can set TPM_CHIP_FLAG_SYNC to support synchronous send() and
+return responses in the same buffer used for commands. This way we
+don't need the 4KB internal buffer used to cache the response before
+.send() and .recv(). Also we don't need to implement recv() op.
 
-Introduce a new flag (TPM_CHIP_FLAG_SYNC) to support synchronous send().
-If that flag is set by the driver, tpm_try_transmit() will use the send()
-callback to send the command and receive the response on the same buffer
-synchronously. In that case send() return the number of bytes of the
-response on success, or -errno on failure.
-
-Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
 Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- include/linux/tpm.h              |  1 +
- drivers/char/tpm/tpm-interface.c | 18 +++++++++++++++---
- 2 files changed, 16 insertions(+), 3 deletions(-)
+@Jens @Sumit can you test/review this patch again since we changed the
+core a bit adding TPM_CHIP_FLAG_SYNC instead of send_recv() op?
 
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 2e38edd5838c..0e9746dc9d30 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -350,6 +350,7 @@ enum tpm_chip_flags {
- 	TPM_CHIP_FLAG_SUSPENDED			= BIT(8),
- 	TPM_CHIP_FLAG_HWRNG_DISABLED		= BIT(9),
- 	TPM_CHIP_FLAG_DISABLE			= BIT(10),
-+	TPM_CHIP_FLAG_SYNC			= BIT(11),
+Thanks,
+Stefano
+
+v2:
+- set TPM_CHIP_FLAG_SYNC and support it in the new send()
+- removed Jens' T-b
+v1:
+- added Jens' T-b
+---
+ drivers/char/tpm/tpm_ftpm_tee.h |  4 ---
+ drivers/char/tpm/tpm_ftpm_tee.c | 64 ++++++++++-----------------------
+ 2 files changed, 19 insertions(+), 49 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_ftpm_tee.h b/drivers/char/tpm/tpm_ftpm_tee.h
+index e39903b7ea07..8d5c3f0d2879 100644
+--- a/drivers/char/tpm/tpm_ftpm_tee.h
++++ b/drivers/char/tpm/tpm_ftpm_tee.h
+@@ -22,16 +22,12 @@
+  * struct ftpm_tee_private - fTPM's private data
+  * @chip:     struct tpm_chip instance registered with tpm framework.
+  * @session:  fTPM TA session identifier.
+- * @resp_len: cached response buffer length.
+- * @resp_buf: cached response buffer.
+  * @ctx:      TEE context handler.
+  * @shm:      Memory pool shared with fTPM TA in TEE.
+  */
+ struct ftpm_tee_private {
+ 	struct tpm_chip *chip;
+ 	u32 session;
+-	size_t resp_len;
+-	u8 resp_buf[MAX_RESPONSE_SIZE];
+ 	struct tee_context *ctx;
+ 	struct tee_shm *shm;
  };
+diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+index 637cc8b6599e..b9adc040ca6d 100644
+--- a/drivers/char/tpm/tpm_ftpm_tee.c
++++ b/drivers/char/tpm/tpm_ftpm_tee.c
+@@ -31,46 +31,18 @@ static const uuid_t ftpm_ta_uuid =
+ 		  0x82, 0xCB, 0x34, 0x3F, 0xB7, 0xF3, 0x78, 0x96);
  
- #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 3b6ddcdb4051..9fbe84b5a131 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -114,8 +114,17 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
- 		return rc;
+ /**
+- * ftpm_tee_tpm_op_recv() - retrieve fTPM response.
+- * @chip:	the tpm_chip description as specified in driver/char/tpm/tpm.h.
+- * @buf:	the buffer to store data.
+- * @count:	the number of bytes to read.
+- *
+- * Return:
+- *	In case of success the number of bytes received.
+- *	On failure, -errno.
+- */
+-static int ftpm_tee_tpm_op_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+-{
+-	struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
+-	size_t len;
+-
+-	len = pvt_data->resp_len;
+-	if (count < len) {
+-		dev_err(&chip->dev,
+-			"%s: Invalid size in recv: count=%zd, resp_len=%zd\n",
+-			__func__, count, len);
+-		return -EIO;
+-	}
+-
+-	memcpy(buf, pvt_data->resp_buf, len);
+-	pvt_data->resp_len = 0;
+-
+-	return len;
+-}
+-
+-/**
+- * ftpm_tee_tpm_op_send() - send TPM commands through the TEE shared memory.
++ * ftpm_tee_tpm_op_send() - send TPM commands through the TEE shared memory
++ * and retrieve the response.
+  * @chip:	the tpm_chip description as specified in driver/char/tpm/tpm.h
+- * @buf:	the buffer to send.
+- * @len:	the number of bytes to send.
++ * @buf:	the buffer to send and to store the response.
++ * @cmd_len:	the number of bytes to send.
+  * @buf_size:	the size of the buffer.
+  *
+  * Return:
+- *	In case of success, returns 0.
++ *	In case of success, returns the number of bytes received.
+  *	On failure, -errno
+  */
+-static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len,
++static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t cmd_len,
+ 				size_t buf_size)
+ {
+ 	struct ftpm_tee_private *pvt_data = dev_get_drvdata(chip->dev.parent);
+@@ -82,16 +54,15 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len,
+ 	struct tee_param command_params[4];
+ 	struct tee_shm *shm = pvt_data->shm;
+ 
+-	if (len > MAX_COMMAND_SIZE) {
++	if (cmd_len > MAX_COMMAND_SIZE) {
+ 		dev_err(&chip->dev,
+ 			"%s: len=%zd exceeds MAX_COMMAND_SIZE supported by fTPM TA\n",
+-			__func__, len);
++			__func__, cmd_len);
+ 		return -EIO;
  	}
  
--	/* A sanity check. send() should just return zero on success e.g.
--	 * not the command length.
-+	/* Synchronous devices return the response directly during the send()
-+	 * call in the same buffer.
-+	 */
-+	if (chip->flags & TPM_CHIP_FLAG_SYNC) {
-+		len = rc;
-+		rc = 0;
-+		goto out_send_sync;
-+	}
-+
-+	/* A sanity check. send() of asynchronous devices should just return
-+	 * zero on success e.g. not the command length.
- 	 */
- 	if (rc > 0) {
- 		dev_warn(&chip->dev,
-@@ -151,7 +160,10 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
- 	if (len < 0) {
- 		rc = len;
- 		dev_err(&chip->dev, "tpm_transmit: tpm_recv: error %d\n", rc);
--	} else if (len < TPM_HEADER_SIZE || len != be32_to_cpu(header->length))
-+		return rc;
-+	}
-+out_send_sync:
-+	if (len < TPM_HEADER_SIZE || len != be32_to_cpu(header->length))
- 		rc = -EFAULT;
+ 	memset(&transceive_args, 0, sizeof(transceive_args));
+ 	memset(command_params, 0, sizeof(command_params));
+-	pvt_data->resp_len = 0;
  
- 	return rc ? rc : len;
+ 	/* Invoke FTPM_OPTEE_TA_SUBMIT_COMMAND function of fTPM TA */
+ 	transceive_args = (struct tee_ioctl_invoke_arg) {
+@@ -105,7 +76,7 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len,
+ 		.attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INPUT,
+ 		.u.memref = {
+ 			.shm = shm,
+-			.size = len,
++			.size = cmd_len,
+ 			.shm_offs = 0,
+ 		},
+ 	};
+@@ -117,7 +88,7 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len,
+ 		return PTR_ERR(temp_buf);
+ 	}
+ 	memset(temp_buf, 0, (MAX_COMMAND_SIZE + MAX_RESPONSE_SIZE));
+-	memcpy(temp_buf, buf, len);
++	memcpy(temp_buf, buf, cmd_len);
+ 
+ 	command_params[1] = (struct tee_param) {
+ 		.attr = TEE_IOCTL_PARAM_ATTR_TYPE_MEMREF_INOUT,
+@@ -158,17 +129,20 @@ static int ftpm_tee_tpm_op_send(struct tpm_chip *chip, u8 *buf, size_t len,
+ 			__func__, resp_len);
+ 		return -EIO;
+ 	}
++	if (resp_len > buf_size) {
++		dev_err(&chip->dev,
++			"%s: resp_len=%zd exceeds buf_size=%zd\n",
++			__func__, resp_len, buf_size);
++		return -EIO;
++	}
+ 
+-	/* sanity checks look good, cache the response */
+-	memcpy(pvt_data->resp_buf, temp_buf, resp_len);
+-	pvt_data->resp_len = resp_len;
++	memcpy(buf, temp_buf, resp_len);
+ 
+-	return 0;
++	return resp_len;
+ }
+ 
+ static const struct tpm_class_ops ftpm_tee_tpm_ops = {
+ 	.flags = TPM_OPS_AUTO_STARTUP,
+-	.recv = ftpm_tee_tpm_op_recv,
+ 	.send = ftpm_tee_tpm_op_send,
+ };
+ 
+@@ -253,7 +227,7 @@ static int ftpm_tee_probe(struct device *dev)
+ 	}
+ 
+ 	pvt_data->chip = chip;
+-	pvt_data->chip->flags |= TPM_CHIP_FLAG_TPM2;
++	pvt_data->chip->flags |= TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_SYNC;
+ 
+ 	/* Create a character device for the fTPM */
+ 	rc = tpm_chip_register(pvt_data->chip);
 -- 
 2.49.0
 
