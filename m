@@ -1,150 +1,98 @@
-Return-Path: <linux-integrity+bounces-5666-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5667-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7D78A803D5
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 14:03:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 131C9A8057C
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 14:18:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E2FE3A28F1
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 11:55:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B70E880E59
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 12:08:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E3E526988A;
-	Tue,  8 Apr 2025 11:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LW0MlNZS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5855326B080;
+	Tue,  8 Apr 2025 12:07:26 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B121E269892
-	for <linux-integrity@vger.kernel.org>; Tue,  8 Apr 2025 11:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C6D26A1D5;
+	Tue,  8 Apr 2025 12:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744113259; cv=none; b=OK72wa33iJyBy7LQcHKd2SX3LeiFkvIDNpQpT3dSaObdDy/naUvoX/AS1NiJHvzPrA7oIscfVgrwWAgvmzxJ6b1sBPmE5HPPqxZ/XKWI/xPqwrE3MNR/5N1SPxRFYzClFHziPJxznr/NMkmqOJxh5mV7+z+AQDf/v6HzIn4JCpA=
+	t=1744114046; cv=none; b=pH72iR3dcfUOA/jHrmUGQUgKf+IYqZeyqw8GutcpH+S9P2y6P3jqdwDYKLYihqRgDfmIwlqETwwuw7byjnobADLs76yGHGBTg9vopd6uwg9b57i1rgMB1K8f5HWX5XFFCIerwZeVtiYL6VqFEuaoTIpxsDIYJwBIU65yJNjtvjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744113259; c=relaxed/simple;
-	bh=ofPYs6O/D31jfLG0JAc5s7o+o56RtFffcyvSz8UayLY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tZDEY+TstIE6t5olFuNwA3f289EHnOejhX3wEAXtuLXW0ZWirePDgdHBNowpXahQcBHtstRlaPdLsI+qz+LP8ThyvTFvClB/oI3WvPxcF+GbINI208P99s6aZ8Rtzfc//UQhBEDyBeYh9yaDYX7Jjzsukn780aJLLOeQbCDZj78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LW0MlNZS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744113256;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6P87msgsabneZYPN6rB+5xYdoyhBToIEhxgNQC92Q0c=;
-	b=LW0MlNZSfo0Aoh5GjSfQ3nq19zCKaibtI/D0T8H/gGtafmLilgI4QhwrDlaufzfFrFDZvp
-	bN6tRViYLstxIQSJ6WBnfbcxE7q3v5tpfNQQ4X5PvULP60WSatmjprkczgq8i2x4+F4903
-	QJkGf1PnGswblySXpySucnQtigeQlxo=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-588-UZagY7-vN3ahVMZzPQuy6Q-1; Tue, 08 Apr 2025 07:54:15 -0400
-X-MC-Unique: UZagY7-vN3ahVMZzPQuy6Q-1
-X-Mimecast-MFC-AGG-ID: UZagY7-vN3ahVMZzPQuy6Q_1744113254
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43efa869b19so17656495e9.2
-        for <linux-integrity@vger.kernel.org>; Tue, 08 Apr 2025 04:54:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744113254; x=1744718054;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6P87msgsabneZYPN6rB+5xYdoyhBToIEhxgNQC92Q0c=;
-        b=PQ3RY8tUs26Yl0Nksa1NgHykW6GmYP0nfMdvG99agXHxW2op6zY8HpQZAiiej2dV/y
-         /DfDu+QEkOy/nYww1i+SZYy5sHveMIXgjblwW86CvIso3LP9bxfqWXtjo6nilyn/q9j1
-         HWualSFvYXhrZt9yT7DgQQ4rAh2N8HJbQUnSgMSQ5sSdUvxDvsOVfZEOwnUzA9WaoKHw
-         Uk7++U5Wz9Xz5UByIB/xITRXuVc5kE8B+3LihGbY+6rtuyVMsUrxSsJx1MQOS8fnwAfe
-         yCln90o9nb4HQOpTlV2bbUgyzOwv3dcYVk8K3wOvly6s+mFuxOiI/KiG/9UsAGJHDZot
-         JjkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVyCdHx3Eppncub8E3Hyh7issbOSL/M5Lx3SGXnrEk/LoeyV9eKErS9o6tbWMEYebEVlkBsrfXILY8KwpVDYV0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzPioCVpEgF33oq4v5DBjfmy6zXBfh4tzHQHd0FcoeW58iKxa3
-	p1R+nEtagF6RVq/fl2FQEF53w0+04BAB+5f7qdsWZ2hD0QCsBFc1N2rSqiz9CRJVOzSq0QNxgE2
-	dTLDXytYZZLxdQgHB1WijgLz3+Wbep88uocscHB5pQY/Bv9xCqtNVtNZSW+rHojhl3w==
-X-Gm-Gg: ASbGnctl4ZLGAGHYLb2LLO9DI9NXPSSfKwbmIqCfAEjV48eOcPlGoo4ibWatjFznzkp
-	XBOaOTI3EhjvcFczEoeIZiEkwCLDmUYwyPXYuarKisMiV71P7pJ60+XWUYmZesxojLiIYCHOhU6
-	LUlvncDGNNozbo0GikYwzbFir7VAGTnrE/0yAVlfObEaAdCJ4ekaGMuD+E2o6MiUBvAtZeoRGHy
-	m1GsKB3/0QV1m4P0E07RtcS9edwNKjIS9cWiWAGrVD/vLIPpomG87APVCGEFYtbbdgh02xfH+sw
-	0mKCTGSaEjsIQQMT82jPRiD2R0nG1c2gBvjTaTGw/4b3e6FxQSH6fOJl3aYfEcwj
-X-Received: by 2002:a05:600c:444b:b0:43c:fffc:7855 with SMTP id 5b1f17b1804b1-43ecf8f2a65mr147387305e9.15.1744113254080;
-        Tue, 08 Apr 2025 04:54:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEazQZYy/ewEWuBTBgdQvEiXuTOqwdRTF+asTjWk+ZHtpNHgb+bGQ0L75gwnYyXxYjdFSFI4w==
-X-Received: by 2002:a05:600c:444b:b0:43c:fffc:7855 with SMTP id 5b1f17b1804b1-43ecf8f2a65mr147387035e9.15.1744113253632;
-        Tue, 08 Apr 2025 04:54:13 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-53-30-213.retail.telecomitalia.it. [79.53.30.213])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ec3174cf0sm164679105e9.0.2025.04.08.04.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Apr 2025 04:54:12 -0700 (PDT)
-Date: Tue, 8 Apr 2025 13:54:07 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	"H. Peter Anvin" <hpa@zytor.com>, linux-coco@lists.linux.dev, linux-integrity@vger.kernel.org, 
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org, Tom Lendacky <thomas.lendacky@amd.com>, 
-	Joerg Roedel <jroedel@suse.de>, Dionna Glaze <dionnaglaze@google.com>, 
-	Claudio Carvalho <cclaudio@linux.ibm.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v6 4/4] x86/sev: register tpm-svsm platform device
-Message-ID: <o2u7p3wb64lcc4sziunr274hyubkgmspzdjcvihbpzkw6mkvpo@sjq3vi4y2qfl>
-References: <20250403100943.120738-1-sgarzare@redhat.com>
- <20250403100943.120738-5-sgarzare@redhat.com>
- <20250408110012.GFZ_UBvOcEfEcIM4mI@fat_crate.local>
- <eqtiiphs6rtjo7nirkw7zcicew75wnl4ydenrt5vl6jdpqdgj6@2brjlyjbqhoq>
- <20250408112820.GBZ_UIVPp-LuIiVrIV@fat_crate.local>
+	s=arc-20240116; t=1744114046; c=relaxed/simple;
+	bh=4xk3N2B6Mc9xDyAGaMLZ2BFi+v4fW/GstaPpYxvbW2Y=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=n1Fp15tP18CUSPqcFa148ba5N9hN2bSl0c+iXARouyLQa/w7WfpTT3YuS6ps0EJ0g/rdOHtb+FGK4vX17xRCdnG7GlrZZDrshG902ee1nSJsfw2krsl6uiU6LtD1Qe3aRbNfkqzv0JdIP91fvAoEuOdmMyONkyrwfSqwV76fgls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8Bx32t3EfVnsye1AA--.39812S3;
+	Tue, 08 Apr 2025 20:07:19 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMAxTsVzEfVnhbB0AA--.35019S2;
+	Tue, 08 Apr 2025 20:07:17 +0800 (CST)
+Subject: Re: [PATCH v7 3/6] crypto: loongson - add Loongson RNG driver support
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: lee@kernel.org, davem@davemloft.net, peterhuewe@gmx.de,
+ jarkko@kernel.org, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-crypto@vger.kernel.org, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+ pmenzel@molgen.mpg.de, Yinggang Gu <guyinggang@loongson.cn>,
+ Huacai Chen <chenhuacai@loongson.cn>
+References: <20250403024645.4427-1-zhaoqunqin@loongson.cn>
+ <20250403024645.4427-4-zhaoqunqin@loongson.cn>
+ <Z_NOsSBRWUEToa7_@gondor.apana.org.au>
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Message-ID: <1d890c5f-2bae-1a44-d79b-ab1614b51203@loongson.cn>
+Date: Tue, 8 Apr 2025 20:06:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20250408112820.GBZ_UIVPp-LuIiVrIV@fat_crate.local>
+In-Reply-To: <Z_NOsSBRWUEToa7_@gondor.apana.org.au>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMAxTsVzEfVnhbB0AA--.35019S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUPCb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
+	AE67vIY487MxAIw28IcxkI7VAKI48JMxAqzxv262kKe7AKxVWUAVWUtwCF54CYxVCY1x02
+	62kKe7AKxVWUAVWUtwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtw
+	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+	wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjx
+	v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
+	ZEXa7IU82g43UUUUU==
 
-On Tue, Apr 08, 2025 at 01:28:20PM +0200, Borislav Petkov wrote:
->On Tue, Apr 08, 2025 at 01:08:36PM +0200, Stefano Garzarella wrote:
->> We discussed a bit on v3, but I'm open to change it:
->> https://lore.kernel.org/linux-integrity/nrn4ur66lz2ocbkkjl2bgiex3xbp552szerfhalsaefunqxf7p@ki7xf66zrf6u/
->>
->>  I tried to keep the logic of whether or not the driver is needed all in
->> the tpm_svsm_probe()/snp_svsm_vtpm_probe() (where I check for SVSM).
->>  If you prefer to move some pieces here, though, I'm open.
+
+ÔÚ 2025/4/7 ÏÂÎç12:04, Herbert Xu Ð´µÀ:
+> On Thu, Apr 03, 2025 at 10:46:42AM +0800, Qunqin Zhao wrote:
+>> Loongson's Random Number Generator is found inside Loongson security
+>> engine.
+> Is this a hardware RNG or a pseudo RNG? If it's pseudo, it should
+> provide a means of reseeding.
+
+Will provide a means of reseeding.
+
+Thanks for your comments.
+
+BR, Qunqin.
+
+> If it's a hardware RNG it should register with hwrng.
 >
->Yes please.
->
->It doesn't make a whole lotta sense right now to register a TPM platform
->driver at one place without even knowing you're running with an SVSM inside
->the guest blob or not.
->
->The usual approach is to register upon a successful detection.
-
-I see, so IIUC I can just apply the following change to this patch and 
-avoid to export snp_svsm_vtpm_probe() at all, right?
-
-diff --git a/arch/x86/coco/sev/core.c b/arch/x86/coco/sev/core.c
-index acbd9bc526b1..fa83e6c7f990 100644
---- a/arch/x86/coco/sev/core.c
-+++ b/arch/x86/coco/sev/core.c
-@@ -2702,8 +2702,10 @@ static int __init snp_init_platform_device(void)
-         if (platform_device_register(&sev_guest_device))
-                 return -ENODEV;
-  
--       if (platform_device_register(&tpm_svsm_device))
--               return -ENODEV;
-+       if (snp_svsm_vtpm_probe()) {
-+               if (platform_device_register(&tpm_svsm_device))
-+                       return -ENODEV;
-+       }
-  
-         pr_info("SNP guest platform device initialized.\n");
-         return 0;
-
-Thanks,
-Stefano
+> Cheers,
 
 
