@@ -1,133 +1,186 @@
-Return-Path: <linux-integrity+bounces-5652-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5653-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DAB5A7F35B
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 05:57:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DFBAA7F373
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 06:08:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC3A116944B
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 03:55:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 265ED172BF7
+	for <lists+linux-integrity@lfdr.de>; Tue,  8 Apr 2025 04:08:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4960725F963;
-	Tue,  8 Apr 2025 03:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14CEB202C3E;
+	Tue,  8 Apr 2025 04:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IOap76xC"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HbuQvAxe"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5530C22258E
-	for <linux-integrity@vger.kernel.org>; Tue,  8 Apr 2025 03:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606B21EEE6;
+	Tue,  8 Apr 2025 04:08:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744084495; cv=none; b=hcDrw4xIOutk1BPkDOuXhz+0hL40CGz511bHGdMOD9Z6ZNQXaz8RsKVhQa4rhOrjkzzWfAPVkJohSqeGWWW17NcTiDigP8e/XSt0evsBnuVSPJxhrUFTvS1KRejd6vfSia0ysMizQcEV0AiHDtWadRYOpMAs3tItIhgQeWFHS2Y=
+	t=1744085297; cv=none; b=NyGlWVsacckOlj2CfvDig78nTbc5S+oBsEQhAC4CexWXYAuw0vFmRWoouY8W2JfPB7OdJPwSr9e7btL/B35NlZkjWkAKPCQbp+AE7ZT8tjF4X36HN7jCtUaGzE7pdiuX95pfHg6VmloSrgRWg+zmBOH5AVZ7QZsuV8gjoNCES6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744084495; c=relaxed/simple;
-	bh=qJ8WPadlWG5MEwR/E8+wnRntvn1EurCfWzwJKqoGTJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AtBIRUQRYcaCuzrcYgJdwRVl3D81aqzk6fR2ETWCV7GwZtjHHajIrjdLWbhT3ClaHvHJ9yrFZaKtdY3XlC8YGGk828jKiJ7onvbKyLO20IjuAUILfG1Zne+8LlepqZQyhbkHBRwkxj5VUf8STABcPKq4SdgtAeBKI6wL9+zeaNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IOap76xC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744084492;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mq0fN55bc1MQ2ebWlYUs6Z/lMBo/WZPMxJYJMP8sObI=;
-	b=IOap76xCZ4n6TmksvKGwSFnoCRGpDloODeucsXyV9n5ZTGVyJP/wKQmjlLOuz9k9Ssp/Sy
-	XqYGVmjtR0QWcNUl+Kf4q1dy7HVg/u9U60kNvKWYbkJb1asFLkwLfipIx2PCWkB1o9dSdL
-	JWdL+Bsxjf4sFY3FrFvj5Al0nsXC2TA=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-571-3FKLeLlaMZiHAllzx_iVPQ-1; Mon,
- 07 Apr 2025 23:54:46 -0400
-X-MC-Unique: 3FKLeLlaMZiHAllzx_iVPQ-1
-X-Mimecast-MFC-AGG-ID: 3FKLeLlaMZiHAllzx_iVPQ_1744084484
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3E6EC1801A00;
-	Tue,  8 Apr 2025 03:54:44 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.61])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2DCF7180B486;
-	Tue,  8 Apr 2025 03:54:41 +0000 (UTC)
-Date: Tue, 8 Apr 2025 11:54:32 +0800
-From: Baoquan He <bhe@redhat.com>
-To: steven chen <chenste@linux.microsoft.com>
-Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
-	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-	eric.snowberg@oracle.com, ebiederm@xmission.com,
-	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
-	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
-	dyoung@redhat.com
-Subject: Re: [PATCH v11 7/9] ima: verify if the segment size has changed
-Message-ID: <Z/Sd+JdEbih7O48k@MiWiFi-R3L-srv>
+	s=arc-20240116; t=1744085297; c=relaxed/simple;
+	bh=DYeA2wsO6ArvCKziyYkKG8gWhY0EpSVzQ9VmIsxilR8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=r9QmL2m+d4ksBqOWc/wwccnGs2RBnUbOc4W+tAC32PgNMuMeLh8UNTSfD/Tz9aWPeagNZj0N5vJEAeYFUn0Nx/cTV3EBgznSSTqxkTk8oWVKr/TayY3GMhVx6UZL2lMly6CRDfJqvsHMi4RxTHm42S8ivyYMiQDiOMKXJqKGrIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=HbuQvAxe; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 537KcxuV029216;
+	Tue, 8 Apr 2025 04:07:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=YvB+GC
+	v95InVqLU0AIlukc3jsAEcfMFGSNvBp6QgU0E=; b=HbuQvAxeFtnI124hzczh2Q
+	T+TB4CwUzHI8HJxsgOu9mJbITu3rrCV9mnuj6+27RbUP3fu1wKWc7+Qn13VpDsIP
+	sRZcd/c6Up9HKLRnXZmCbQIY0FY4WAPB/awzoScKEWzvJdRvSKZFl6rEG+lhlzDo
+	1sWWeS4eybBI/C6vS+3dSuAH30LGw+OGzf5vWZH5wQShfQVw8dfZjDTCyIx90Z4R
+	8PCtM+z88xgp6ySPwG4eZLO3wPXGJ/mlY08iXCW8t7ufCXNJDGud+doyuqUMtz26
+	x/I0+vD7h0q6t772j+Zl9Mck5SerKQy3BEaR0bOSzmrGKBD73AdSINxKH8FWBQmA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45vnx0hcy8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Apr 2025 04:07:46 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5383Ru7I013932;
+	Tue, 8 Apr 2025 04:07:45 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 45ufungyfk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Apr 2025 04:07:45 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53847il140894916
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 8 Apr 2025 04:07:44 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8ABB558045;
+	Tue,  8 Apr 2025 04:07:44 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B006558056;
+	Tue,  8 Apr 2025 04:07:42 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.146.87])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  8 Apr 2025 04:07:42 +0000 (GMT)
+Message-ID: <a293ed27094f7fa7a36f1641a9e6b17a49e26fa0.camel@linux.ibm.com>
+Subject: Re: [PATCH v11 2/9] ima: define and call ima_alloc_kexec_file_buf()
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com
+Date: Tue, 08 Apr 2025 00:07:42 -0400
+In-Reply-To: <20250402124725.5601-3-chenste@linux.microsoft.com>
 References: <20250402124725.5601-1-chenste@linux.microsoft.com>
- <20250402124725.5601-8-chenste@linux.microsoft.com>
+	 <20250402124725.5601-3-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250402124725.5601-8-chenste@linux.microsoft.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Qq2Ty_CRuz33wUrMjLXD0GCtcegHGBk6
+X-Proofpoint-ORIG-GUID: Qq2Ty_CRuz33wUrMjLXD0GCtcegHGBk6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-08_01,2025-04-07_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 phishscore=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 mlxscore=0 adultscore=0 spamscore=0
+ bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502280000 definitions=main-2504080026
 
-On 04/02/25 at 05:47am, steven chen wrote:
-> kexec 'load' may be called multiple times. Free and realloc the buffer
-> only if the segment_size is changed from the previous kexec 'load' call.
+On Wed, 2025-04-02 at 05:47 -0700, steven chen wrote:
+> In the current implementation, the ima_dump_measurement_list() API is=20
+> called during the kexec "load" phase, where a buffer is allocated and=20
+> the measurement records are copied. Due to this, new events added after
+> kexec load but before kexec execute are not carried over to the new kerne=
+l
+> during kexec operation
 
-This is a great example demonstrating how patch is nicely split. A
-reasonable unit including reasonable code change and log.
+Repeating this here is unnecessary.
+>=20
+> To allow the buffer allocation and population to be separated into distin=
+ct
+> steps, make the function local seq_file "ima_kexec_file" to a file variab=
+le.
 
-Acked-by: Baoquan He <bhe@redhat.com>
+This change was already made in [PATCH v11 1/9] ima: rename variable the
+set_file "file" to "ima_kexec_file".  Please remove.
 
-> 
+>=20
+> Carrying the IMA measurement list across kexec requires allocating a
+> buffer and copying the measurement records.  Separate allocating the
+> buffer and copying the measurement records into separate functions in
+> order to allocate the buffer at kexec 'load' and copy the measurements
+> at kexec 'execute'.
+>=20
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
 > Signed-off-by: steven chen <chenste@linux.microsoft.com>
 > ---
->  security/integrity/ima/ima_kexec.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index 5c3b3e0b2186..ed867734ee70 100644
+>  security/integrity/ima/ima_kexec.c | 46 +++++++++++++++++++++++-------
+>  1 file changed, 35 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/=
+ima_kexec.c
+> index 650beb74346c..b12ac3619b8f 100644
 > --- a/security/integrity/ima/ima_kexec.c
 > +++ b/security/integrity/ima/ima_kexec.c
-> @@ -33,6 +33,14 @@ static void ima_free_kexec_file_buf(struct seq_file *sf)
->  
->  static int ima_alloc_kexec_file_buf(size_t segment_size)
->  {
-> +	/*
-> +	 * kexec 'load' may be called multiple times.
-> +	 * Free and realloc the buffer only if the segment_size is
-> +	 * changed from the previous kexec 'load' call.
-> +	 */
-> +	if (ima_kexec_file.buf && ima_kexec_file.size == segment_size)
-> +		goto out;
+> @@ -15,26 +15,46 @@
+>  #include "ima.h"
+> =20
+>  #ifdef CONFIG_IMA_KEXEC
+> +static struct seq_file ima_kexec_file;
 > +
->  	ima_free_kexec_file_buf(&ima_kexec_file);
->  
->  	/* segment size can't change between kexec load and execute */
-> @@ -41,6 +49,8 @@ static int ima_alloc_kexec_file_buf(size_t segment_size)
->  		return -ENOMEM;
->  
->  	ima_kexec_file.size = segment_size;
+> +static void ima_free_kexec_file_buf(struct seq_file *sf)
+> +{
+> +	vfree(sf->buf);
+> +	sf->buf =3D NULL;
+> +	sf->size =3D 0;
+> +	sf->read_pos =3D 0;
+> +	sf->count =3D 0;
+> +}
 > +
-> +out:
->  	ima_kexec_file.read_pos = 0;
->  	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
->  
-> -- 
-> 2.25.1
-> 
+> +static int ima_alloc_kexec_file_buf(size_t segment_size)
+> +{
+> +	ima_free_kexec_file_buf(&ima_kexec_file);
+
+After moving the vfree() here at this stage in the patch set, the IMA
+measurement list fails to verify when doing two consecutive "kexec -s -l"
+with/without a "kexec -s -u" in between.  Only after "ima: kexec: move IMA =
+log
+copy from kexec load to execute" the IMA measurement list verifies properly=
+ with
+the vfree() here.
+
+> +
+> +	/* segment size can't change between kexec load and execute */
+> +	ima_kexec_file.buf =3D vmalloc(segment_size);
+> +	if (!ima_kexec_file.buf)
+> +		return -ENOMEM;
+> +
+> +	ima_kexec_file.size =3D segment_size;
+> +	ima_kexec_file.read_pos =3D 0;
+> +	ima_kexec_file.count =3D sizeof(struct ima_kexec_hdr);	/* reserved spac=
+e */
+> +
+> +	return 0;
+> +}
+> +
 
 
