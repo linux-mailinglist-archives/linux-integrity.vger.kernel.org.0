@@ -1,227 +1,273 @@
-Return-Path: <linux-integrity+bounces-5731-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5732-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A628A8337C
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 23:40:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30C00A8337A
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 23:38:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF1B43BA255
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 21:38:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1277D17111C
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 21:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF26021324E;
-	Wed,  9 Apr 2025 21:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ADE22135A1;
+	Wed,  9 Apr 2025 21:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="YBST8raE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyzWVakr"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3340319CD07
-	for <linux-integrity@vger.kernel.org>; Wed,  9 Apr 2025 21:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A3121324E;
+	Wed,  9 Apr 2025 21:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744234703; cv=none; b=LFDKE7C3fIQp3GrDbIV0ujMeCyZv9Zfv8mXScgnt2+BxAgJRwiFWwIwmMDvlh5PPrQ5bgvu508DcjEVBKf/jLj4xVUc5fUD/bbPj2QA2CHHzoyFxjTTuI5d0OWTVezMvU7H5aWh+zH/PNvn99v+ugA0JRnGClylmHiBE1KcaVSk=
+	t=1744234718; cv=none; b=U782pt/fvqLjFn5kgDdfaP+vWHswBFNQtHLuVCZGM9nYzB4Gvqbh0fi1+ceVyoHjEh+xzudhAcLTPWNVN43Tpe3vK1zf83CPP7OPFrWFodc5f3mF4GwJyUXmrH6TEZF7ohxoGijvEjgV/HAs+7ONDiRCYY1Phs9gFcZdVg+beAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744234703; c=relaxed/simple;
-	bh=R82LSHj7N4tJ7gew6Nu23Tbw32/zF+eamEB3P8P9ZCE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fb+1pazooUhEhpUVX3nQrfTAlQBM8d0Nend3w/T9xPsBIFoK6nECjBO9m2x8z4tp2NtLz+bh0+7QwaLys1a2VRhZliR0OEy3GyIGFY5eoKnYJCt8or/kphjdjj5pxhUBHse+qrP6y19lU6ADcUxmIlc7EI37o5Ju4m4YsG2/FfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=YBST8raE; arc=none smtp.client-ip=66.163.188.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1744234694; bh=BKwkbEL+xqeQQJIuEtRYzG8Md9h3vjR3z9rIUD97FVM=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=YBST8raE2WSQeIwZi6kLR8YmDiF9WXaHpamfyZtwbSQnUiIcRFupgojBk4UACbUbQDiMTjWmzF/u7kSYEfI5kx1Mc3kTJSJ/EToPVIhNpycjrqOPeg9SXgsi1g6w6E+g+Iy1ZKEO7bn6EyGGp+4Js6VlBLpVoDSlRF/cy9ktrElLkaut9yq16qUZFKmuG6ITQthRH0Fd5+Rbev242spn5d4GQi/uXjKpGzyRVTTJkXqlJjBo/9KZz/GLs2P/+KqtrOG2euUGNN58ah6bwZ6pUSXCpv286aJ41rXgs/AkIBCR+OHAu6jvBxOhmQ0GhSAiQHdTvGQxQXxMmuxZaD94yg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1744234694; bh=Rw/iRMW8D02TzQ42RckUVB2t5gJ72fIbqIFXJ4Xd50Z=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=nopo1DDHdA3ijAeH6D11Ccq8WdhfhbutCdqQ5xHXyxWifAhpDgkq0m+VE0mhg2s6074tIyKfvTOE+YvvY2kUETCJwfq9jp9Eii9IgkHf7virb4I7eDy5TA9ZewqKoHhwIvxkfBXicqZGqdLR34mALYHvWwR1/hvaBd9qvecMDlbpv4t9AMvxSs2lefobAFwqdtpxD2lK0uU8Op0QnIzcmZadakT14P38cfhMZJyawJqcwfwce9xx6Mof2F3gLMwEb+UxRcOxFQOkUPygzs2LBcZMaY4W2cSqYqjfOX6SxgmoFfbA+cVSLZ+PhNEuJkZbbBWzPYbCJA9M0DEjqtJhAw==
-X-YMail-OSG: FGeAXPcVM1kdVeFnNkj7_LXN0d9YeyR9S_Vp0aEDLzrqieXrMNFYBW9fswlDdlH
- pGht3WKU7FhaMSKVwnneglu_geiKCQ4uVnyAcz2RTtwxIG4huJVxBF5Zkqd6r4mhwWcGW6ZbJVKQ
- BmO2_ochDxs1EVweEfiVKzvmAJlXHPjKvp0iecCnSnqsxJr6pzCQy.Sd4_gEuvv0U8xuqX96z5kZ
- Lh9wAKYfQUVE1sCGhxXCqTEcqv2hkpXb2EczMOJxpv39l3y5SaE_Ge6K62YiHgsH6GHmuJmMTe32
- lO__h8DgmT8U868QxnmAfCEjWqo59lVTHNflvWewPJv3sTvx_lH35XDjMM2XdFi5gT49YaHm4BLQ
- cPzWo8OeTblmlOz7dIQCVAdxHY7RZt2Lo7Uxh2pyVr90uJB5nRLhX4PfhWIOqLG.8GbDn78pe_mN
- dq_RBlXpkQrijNZQDX_v622Ekbns3txe4iI1UIEwJQoXMzndjLPOdobEQU8DtQ78tR2qlSgMKvkD
- dKVd4bh4F8AVrAsNPBtO6tM1_zU5p68D8O4dUZ82CYCVMm0_0rsPwbgVGjd0IiSykV8RhA38unA6
- B90V6Xftjtl5icVBEE_G4ESH_tDKDe7xJq0DGL2qg_xaxhoRHNmBX8QJlzJDsiGgljTIxhl0QolG
- rsTHsLHjPrykKlhd5hAs76Aa2SxTq8cDE1gjPsOXQLCGw3Lrl11tELgxRl8DllM3jIBYZDlFULN4
- HLvpSKt2dufcK_UFUNqSW_TMB.LOn2CO0BIGTnyHmW0Le94e1sEWguhQyHIB9xFDMkfikH3IdBwV
- xbIOr9zrEDSvnB5ZbYo26RlK8MvMyXaMeF03CyfSNIgSYZFJ3TZ2JR2qaeE3vZvldi6gRRjMpQCH
- m7NbvNR6XJLIsS5o0iMNWtZuwmuUotuqr1ZMS2rwMd0gGW7PHRqLK3YCTjfSwNr.PVP00McY1lG3
- GgChtxiiB9GbhTvlW1SCblbkPsjiBuWOrEQXVe9khMsXpJ1ntwfMvHcbU1O9Anx6bH5Mzkz_TKhO
- RFAuhYmlE5iCv77agB.XkVKW5pIQeK9g19H_PL1CUKc7uyStL56FtcShXhI9rn6h34RHvJt_WC9B
- qvC_U8DLkN8TwckL2gY8KHLyV8VUwxYRLmDt2qT2I4XyOLOEEUgz3n..04zswvUXs0c40pLq.nQJ
- txe9sbxbXd6z6yBwNm3trqMFSE_xHLgcZU6q7LeHPRSaPs504ZqLlqT8ciYzaRVJc4PHcAuT5X7V
- X8Kl5zRthaUDYys3SWvB6Rrfdeq41rHy0cHhJKbEx..zRvN.J7yHuZ3XmWdg1KJ2WSb.u4Ps5HMG
- qgPe8mdp08fqm2JFE0pj_O56W.0tOT6ttem.VXK5dFZ3wPIm8Ia_lfthxhC0bmF_mFtdk2WuYQXx
- 2UZ1SFRAusZRX3hQUN0LzgFyIgNp5QgqqXYa_Pklf2dOvL8sCKLNx22jCpKwzJjzHIgRvfht1EM7
- ExbQLtJvmALRNfc.mhPR38VfhA2yohpPsa.HKLbl9QpXmmtabxkghqOYL.t1WCfD1NrRYhcof2S.
- 5KbcX63BcrScN0m89uYbvAWjAN4cIUmiYa.7yEB.jhDLOc3pxWA.XYiwdh_1ydXoaU8RWFIg9I..
- CQ7PMY6sg1Bt6FnB2aJoPmfGmLZUN_c8fm.T.gSEJKgcMbt56sd6Tbh9kb.YlxWhntKKjOJ.Xgo1
- 9qFBt02hWooTJXNJE5I3RmwiOcnntISgHLl3yAuflt_qklPh4lfn8.5eyt8Lm2uEg.Si.6EmIciK
- O7gT02jU9vztonRmNV_Lw1l3t34SvlZ0aFQtTFa4ZRl3.g2mdWElg3bRTXB12y.lCBjHKZl6wNIn
- .Tqe3qUtFQJgkSOGec_kVv2rmEhd5c0wNB4jr2shNcspm7dP1kMz5vJQTAdVXqxWvrkUaeNOUgiL
- c6XmI4.1pefX5_XP_nbJZ.Wy090Mf89.pWvTcz78RwRBn7ilONImbF7C7iIcmgDgoFoqqErDtcMm
- MbN_8vvNcr9.oi2MTeqKpSGiHP4b_DET_13pyWE2zpcwtMZoFM1ynDR8MfW836qdggN67XqdvPsV
- i_TBjONMI_06MyHgVA.2THfJ4Iy.QIi_qEXYnfyZk5_hXAmBsVPgFqg5qhbQ6_bqW1BjxjVzZ5BU
- DdAezByjF5TKuNE3DSrnvEWFh_3M56nJfZveRG1iSb2voLYEQHGfqFkGiDQ05DYcEd6JILShHAQN
- ILSjwgtrb.HN_q98_6A9mJzr6W8HNre5qm1CATbaJWng1nhtwn45bhO0W5NtFQl8HXRiVPVzm3Ti
- RJuiu2QYSC4VYcp_RTm.TkO7u64V8
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 795b897d-17e4-4e70-b3de-54f3abf86b2a
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 9 Apr 2025 21:38:14 +0000
-Received: by hermes--production-gq1-6f8bfcd964-g9xd6 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ca171e99012c059d23a387c1d08bb5c4;
-          Wed, 09 Apr 2025 21:38:08 +0000 (UTC)
-Message-ID: <3da6eb0d-9781-4d9d-b6ef-f9105c231b17@schaufler-ca.com>
-Date: Wed, 9 Apr 2025 14:38:07 -0700
+	s=arc-20240116; t=1744234718; c=relaxed/simple;
+	bh=NgNEGsc/PB76G+1Qn4WHyb6dPGyxzqa2T/v4MBr0Xt0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cd/ghsYL5Sl0tLtsd5IIHKecaktG2/Y75EJ9RqiCsscl4A5xhmZmK8Y+70QBH9ALdQohYJjYjAUscSL0FBTT29YmJfUajOxvOqsgLalcW7WltdRXoQQjs3zshTyYcezA5/X1dy71i5VPSOMV8+Vks2ydYAhlsYVvaemtFaeYq+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyzWVakr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D393DC4CEE2;
+	Wed,  9 Apr 2025 21:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744234717;
+	bh=NgNEGsc/PB76G+1Qn4WHyb6dPGyxzqa2T/v4MBr0Xt0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XyzWVakrW+DjDqCchMFJ0nFlLojk9T0PbY38xcQOTu3P5BEs2/FiNlk0Skihhhnmo
+	 GmlyUdGL3Mu/VQCgdmp0NCY0ZRN/RkKlD5FHRvfQvmaKHKGXlvnfZIqrReGgWtLDRO
+	 JVN17B1h4cHNRtgT9adJp8l7JGLovJm4B/R9N2x+EMXPX/h2YsuZGoN2a7tzwpYElX
+	 0RmFTvdREGV5GJQMEMqFeKtl/5z47rcqM5FOFmV/75ztkvh72MYU7IbOPh/GVqSGgu
+	 Id8GPu0XPeuPjozeSskgrGUPPiufMqhMDoigeiR6QCqEe0jsBwJ4UDL+h+yl+Pgs5l
+	 YfQiOabfuEXxw==
+Date: Wed, 9 Apr 2025 14:38:34 -0700
+From: Kees Cook <kees@kernel.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org,
+	John Johansen <john.johansen@canonical.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Micah Morton <mortonm@chromium.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Subject: Re: [RFC PATCH 04/29] lsm: simplify ordered_lsm_init() and rename to
+ lsm_init_ordered()
+Message-ID: <202504091435.E172A67C6@keescook>
+References: <20250409185019.238841-31-paul@paul-moore.com>
+ <20250409185019.238841-35-paul@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 07/29] lsm: rework lsm_active_cnt and lsm_idlist[]
-To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Cc: John Johansen <john.johansen@canonical.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Fan Wu <wufan@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
- Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20250409185019.238841-31-paul@paul-moore.com>
- <20250409185019.238841-38-paul@paul-moore.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20250409185019.238841-38-paul@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.23590 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250409185019.238841-35-paul@paul-moore.com>
 
-On 4/9/2025 11:49 AM, Paul Moore wrote:
-> Move the LSM count and lsm_id list declarations out of a header that is
-> visible across the kernel and into a header that is limited to the LSM
-> framework.  This not only helps keep the include/linux headers smaller
-> and cleaner, it helps prevent misuse of these variables.
->
-> During the move, lsm_active_cnt was renamed to lsm_count for the sake
-> of brevity.
+On Wed, Apr 09, 2025 at 02:49:49PM -0400, Paul Moore wrote:
+> One part of a larger effort to cleanup the LSM framework initialization
+> code.
 
-lsm_count could be mistaken to be the number of LSMs compiled in
-as opposed to the number that are active. Hence lsm_active_cnt.
+Again, needs a better commit log.
 
->
+> 
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
 > ---
->  include/linux/security.h | 2 --
->  security/lsm.h           | 5 +++++
->  security/lsm_init.c      | 8 +-------
->  security/lsm_syscalls.c  | 8 +++++---
->  security/security.c      | 3 +++
->  5 files changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index cc9b54d95d22..8aac21787a9f 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -167,8 +167,6 @@ struct lsm_prop {
->  };
->  
->  extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
-> -extern u32 lsm_active_cnt;
-> -extern const struct lsm_id *lsm_idlist[];
->  
->  /* These functions are in security/commoncap.c */
->  extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
-> diff --git a/security/lsm.h b/security/lsm.h
-> index 0e1731bad4a7..af343072199d 100644
-> --- a/security/lsm.h
-> +++ b/security/lsm.h
-> @@ -7,6 +7,11 @@
->  #define _LSM_H_
->  
->  #include <linux/lsm_hooks.h>
-> +#include <linux/lsm_count.h>
-> +
-> +/* List of configured LSMs */
-> +extern unsigned int lsm_count;
-> +extern const struct lsm_id *lsm_idlist[];
->  
->  /* LSM blob configuration */
->  extern struct lsm_blob_sizes blob_sizes;
+>  security/lsm_init.c | 94 +++++++++++++++++----------------------------
+>  1 file changed, 36 insertions(+), 58 deletions(-)
+> 
 > diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index edf2f4140eaa..981ddb20f48e 100644
+> index dffa8dc2da36..407429688f1b 100644
 > --- a/security/lsm_init.c
 > +++ b/security/lsm_init.c
-> @@ -22,8 +22,8 @@ static __initdata const char *lsm_order_cmdline;
->  static __initdata const char *lsm_order_legacy;
+> @@ -32,6 +32,12 @@ static __initdata bool debug;
+>  			pr_info(__VA_ARGS__);				\
+>  	} while (0)
 >  
->  /* Ordered list of LSMs to initialize. */
-> -static __initdata struct lsm_info *lsm_order[MAX_LSM_COUNT + 1];
->  static __initdata struct lsm_info *lsm_exclusive;
-> +static __initdata struct lsm_info *lsm_order[MAX_LSM_COUNT + 1];
+> +#define lsm_order_for_each(iter)					\
+> +	for ((iter) = ordered_lsms; *(iter); (iter)++)
+> +#define lsm_early_for_each_raw(iter)					\
+> +	for ((iter) = __start_early_lsm_info;				\
+> +	     (iter) < __end_early_lsm_info; (iter)++)
+
+The longer I look at this patch the longer I think it needs to be broken
+up into a few separate patches, but they would be relatively small, like
+this one: replace iter loops with iter macros.
+
+> +
+>  static int lsm_append(const char *new, char **result);
 >  
->  static __initdata bool debug;
->  #define init_debug(...)							\
-> @@ -211,12 +211,6 @@ static void __init initialize_lsm(struct lsm_info *lsm)
->  	}
+>  /* Save user chosen LSM */
+> @@ -96,9 +102,10 @@ static bool __init exists_ordered_lsm(struct lsm_info *lsm)
+>  {
+>  	struct lsm_info **check;
+>  
+> -	for (check = ordered_lsms; *check; check++)
+> +	lsm_order_for_each(check) {
+>  		if (*check == lsm)
+>  			return true;
+> +	}
+>  
+>  	return false;
+>  }
+> @@ -279,56 +286,13 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>  	kfree(sep);
 >  }
 >  
-> -/*
-> - * Current index to use while initializing the lsm id list.
-> - */
-> -u32 lsm_active_cnt __ro_after_init;
-> -const struct lsm_id *lsm_idlist[MAX_LSM_COUNT];
+> -static void __init report_lsm_order(void)
+> -{
+> -	struct lsm_info **lsm, *early;
+> -	int first = 0;
 > -
->  /* Populate ordered LSMs list from comma-separated LSM name list. */
->  static void __init ordered_lsm_parse(const char *order, const char *origin)
->  {
-> diff --git a/security/lsm_syscalls.c b/security/lsm_syscalls.c
-> index 8440948a690c..3fb0d77ae65c 100644
-> --- a/security/lsm_syscalls.c
-> +++ b/security/lsm_syscalls.c
-> @@ -17,6 +17,8 @@
->  #include <linux/lsm_hooks.h>
->  #include <uapi/linux/lsm.h>
->  
-> +#include "lsm.h"
-> +
+> -	pr_info("initializing lsm=");
+> -
+> -	/* Report each enabled LSM name, comma separated. */
+> -	for (early = __start_early_lsm_info;
+> -	     early < __end_early_lsm_info; early++)
+> -		if (is_enabled(early))
+> -			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
+> -	for (lsm = ordered_lsms; *lsm; lsm++)
+> -		if (is_enabled(*lsm))
+> -			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
+> -
+> -	pr_cont("\n");
+> -}
+> -
 >  /**
->   * lsm_name_to_attr - map an LSM attribute name to its ID
->   * @name: name of the attribute
-> @@ -96,7 +98,7 @@ SYSCALL_DEFINE4(lsm_get_self_attr, unsigned int, attr, struct lsm_ctx __user *,
->  SYSCALL_DEFINE3(lsm_list_modules, u64 __user *, ids, u32 __user *, size,
->  		u32, flags)
+> - * lsm_early_cred - during initialization allocate a composite cred blob
+> - * @cred: the cred that needs a blob
+> - *
+> - * Allocate the cred blob for all the modules
+> + * lsm_init_ordered - Initialize the ordered LSMs
+>   */
+> -static void __init lsm_early_cred(struct cred *cred)
+> -{
+> -	int rc = lsm_cred_alloc(cred, GFP_KERNEL);
+> -
+> -	if (rc)
+> -		panic("%s: Early cred alloc failed.\n", __func__);
+> -}
+> -
+> -/**
+> - * lsm_early_task - during initialization allocate a composite task blob
+> - * @task: the task that needs a blob
+> - *
+> - * Allocate the task blob for all the modules
+> - */
+> -static void __init lsm_early_task(struct task_struct *task)
+> -{
+> -	int rc = lsm_task_alloc(task);
+> -
+> -	if (rc)
+> -		panic("%s: Early task alloc failed.\n", __func__);
+> -}
+> -
+> -static void __init ordered_lsm_init(void)
+> +static void __init lsm_init_ordered(void)
 >  {
-> -	u32 total_size = lsm_active_cnt * sizeof(*ids);
-> +	u32 total_size = lsm_count * sizeof(*ids);
->  	u32 usize;
->  	int i;
+>  	struct lsm_info **lsm;
+> +	struct lsm_info *early;
 >  
-> @@ -112,9 +114,9 @@ SYSCALL_DEFINE3(lsm_list_modules, u64 __user *, ids, u32 __user *, size,
->  	if (usize < total_size)
->  		return -E2BIG;
+>  	if (chosen_lsm_order) {
+>  		if (chosen_major_lsm) {
+> @@ -340,10 +304,23 @@ static void __init ordered_lsm_init(void)
+>  	} else
+>  		ordered_lsm_parse(builtin_lsm_order, "builtin");
 >  
-> -	for (i = 0; i < lsm_active_cnt; i++)
-> +	for (i = 0; i < lsm_count; i++)
->  		if (put_user(lsm_idlist[i]->id, ids++))
->  			return -EFAULT;
+> -	for (lsm = ordered_lsms; *lsm; lsm++)
+> +	lsm_order_for_each(lsm) {
+>  		lsm_prep_single(*lsm);
+> +	}
 >  
-> -	return lsm_active_cnt;
-> +	return lsm_count;
->  }
-> diff --git a/security/security.c b/security/security.c
-> index 8d370a4c5e74..a3e8dd640b39 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -73,6 +73,9 @@ const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
->  	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
->  };
+> -	report_lsm_order();
+> +	pr_info("initializing lsm=");
+> +	lsm_early_for_each_raw(early) {
+> +		if (is_enabled(early))
+> +			pr_cont("%s%s",
+> +				early == __start_early_lsm_info ? "" : ",",
+> +				early->name);
+> +	}
+> +	lsm_order_for_each(lsm) {
+> +		if (is_enabled(*lsm))
+> +			pr_cont("%s%s",
+> +				lsm == ordered_lsms ? "" : ",", (*lsm)->name);
+> +	}
+
+report_lsm_order()'s use of "first" needs to stay here or you don't get
+the right comma/no-comma behavior. It's not about the lsm, it's about
+whether "first" got incremented. Perhaps "count" might be a better name
+for "first".
+
+> +	pr_cont("\n");
 >  
-> +unsigned int lsm_count __ro_after_init;
-> +const struct lsm_id *lsm_idlist[MAX_LSM_COUNT];
+>  	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
+>  	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
+> @@ -362,9 +339,6 @@ static void __init ordered_lsm_init(void)
+>  	init_debug("xattr slots          = %d\n", blob_sizes.lbs_xattr_count);
+>  	init_debug("bdev blob size       = %d\n", blob_sizes.lbs_bdev);
+>  
+> -	/*
+> -	 * Create any kmem_caches needed for blobs
+> -	 */
+>  	if (blob_sizes.lbs_file)
+>  		lsm_file_cache = kmem_cache_create("lsm_file_cache",
+>  						   blob_sizes.lbs_file, 0,
+> @@ -374,10 +348,14 @@ static void __init ordered_lsm_init(void)
+>  						    blob_sizes.lbs_inode, 0,
+>  						    SLAB_PANIC, NULL);
+>  
+> -	lsm_early_cred((struct cred *) current->cred);
+> -	lsm_early_task(current);
+> -	for (lsm = ordered_lsms; *lsm; lsm++)
+> +	if (lsm_cred_alloc((struct cred *)current->cred, GFP_KERNEL))
+> +		panic("%s: early cred alloc failed.\n", __func__);
+> +	if (lsm_task_alloc(current))
+> +		panic("%s: early task alloc failed.\n", __func__);
 > +
->  struct lsm_blob_sizes blob_sizes;
+> +	lsm_order_for_each(lsm) {
+>  		initialize_lsm(*lsm);
+> +	}
+>  }
 >  
->  struct kmem_cache *lsm_file_cache;
+>  static bool match_last_lsm(const char *list, const char *lsm)
+> @@ -479,7 +457,7 @@ int __init early_security_init(void)
+>  {
+>  	struct lsm_info *lsm;
+>  
+> -	for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
+> +	lsm_early_for_each_raw(lsm) {
+>  		if (!lsm->enabled)
+>  			lsm->enabled = &lsm_enabled_true;
+>  		lsm_prep_single(lsm);
+> @@ -506,7 +484,7 @@ int __init security_init(void)
+>  	 * Append the names of the early LSM modules now that kmalloc() is
+>  	 * available
+>  	 */
+> -	for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
+> +	lsm_early_for_each_raw(lsm) {
+>  		init_debug("  early started: %s (%s)\n", lsm->name,
+>  			   is_enabled(lsm) ? "enabled" : "disabled");
+>  		if (lsm->enabled)
+> @@ -514,7 +492,7 @@ int __init security_init(void)
+>  	}
+>  
+>  	/* Load LSMs in specified order. */
+> -	ordered_lsm_init();
+> +	lsm_init_ordered();
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.49.0
+> 
+
+Other stuff seems good.
+
+-- 
+Kees Cook
 
