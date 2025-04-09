@@ -1,78 +1,78 @@
-Return-Path: <linux-integrity+bounces-5712-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5713-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1316DA82F72
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 20:55:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE8F9A82FAD
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 20:57:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCF73173F41
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 18:54:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CADEC8A46DA
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 18:54:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C4F27C843;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B65E27C175;
 	Wed,  9 Apr 2025 18:53:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bABg+TkN"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="MlUMReY1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C0627C175
-	for <linux-integrity@vger.kernel.org>; Wed,  9 Apr 2025 18:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7D327C178
+	for <linux-integrity@vger.kernel.org>; Wed,  9 Apr 2025 18:53:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744224828; cv=none; b=AEP13Y7pFWavYh7BDw5kfKG+GLwbs75j7iqmojTU97dS7vkxiCuS+hZr4u0xjQ6ZZQ8F0B05/iobuiU9z4aUxO0/sOTYsnEBW6UVfw0SHSJcOsJMcSZiueL6UwScag7vPFQFbavrVDUWVLXiTMOj9QiPEvyWL/ii7HsryOrIsRM=
+	t=1744224829; cv=none; b=bm4jTsk1Kcot4PFhE+bwIyQDohvMqNkEtlunzCmNbUhjX4isMTeEksIGREtnTCZhzL8DW/HzhCXt7twVu2Y6Y++Hox3G6ifL2d628JFJM3pNPCZA6pJ+YvxyvNkHd/dfWY3jv6y6YLxUlgq2OuVgwK8dmQ/OFZlSYxvwuDkH8s0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744224828; c=relaxed/simple;
-	bh=XtVvlYRWblGkknMxfv+0u+Iq02pAOnDokKRM2FiShT4=;
+	s=arc-20240116; t=1744224829; c=relaxed/simple;
+	bh=U0J8daT5qbdY0XH0/6KwMZfXF6KoGXdJq3T5B3kThVs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fH+OO7gov27lPAWbgTJ80K65Ut722Siis5kXlKm/6yWxIQOOTII9zno0wFTCmRVbhTxoUWBvd3Wg5KyuI0eLD8f75gllBWTBy+MpQT8HNE8l9mx1LX/2VpqduKqeyN9ozzEFZpKy700LtSxAax9xOkH2lWAY84GQtnC85Hpt9tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bABg+TkN; arc=none smtp.client-ip=209.85.222.169
+	 MIME-Version; b=EZ2JGuR83KIIH2CzRU39d7IH12vJKtcTYEg9Xwp6bzdwAfBjVnOwV8JTFD/82DXofzochTvxIdJ3mZi1FbOopn5zopnTOfS+69YY2L1byfbs47QiBx9ocmnM4RX6O4qwj0QSyh4a6Y+6fy9w2PuRehWJjMWkqi6W7XgjC20UGEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=MlUMReY1; arc=none smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7c58974ed57so1038285a.2
-        for <linux-integrity@vger.kernel.org>; Wed, 09 Apr 2025 11:53:46 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7c54f67db99so113480185a.1
+        for <linux-integrity@vger.kernel.org>; Wed, 09 Apr 2025 11:53:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=paul-moore.com; s=google; t=1744224826; x=1744829626; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WiYgLl5uDhdQl6bgeaSF1pb+X4c4kmb/z637fZ12vBc=;
-        b=bABg+TkNnbtkLFqk/dxIoxhs+A8RzY61I7acLGLIGV2vTiDgDkEwSKB82Y1OCnpcrV
-         T/HCrjTjCW/78k7lAmaxTsA6l4btWW6uKrMA0L9abEClFw+oVf3/ZvKeN2EQGyq7e9EL
-         vK6/HVTe9/mgmXEnmeF6h+MpJNPetWpGJeLrN/7BbAbm7J6wgbcU6sclrmFeetwkp24d
-         AEvMRTrO5Bc3zgAmU2pEhnV8JXthA55hAwfKVbGwuWe9mDFyQ3AfpmIWmpQhDU1M/Lwv
-         RSCvrIxhHZsA4Py5AW35Q+FgnQ+WHJp/RoeNNac97J6i9RoVrVprTCSq1NxU/z9AXrZx
-         X6Uw==
+        bh=XOHKz9d/qjT2CE9duhaUIeD9jISgOoKf1CYvh/h5rto=;
+        b=MlUMReY1lCgQD/eolgpi9Nr2raLx8fyK/f/5UFvFpjgpC+ghisy+6p8O9hvspmDe7h
+         ZxD2q9eEHqdyI4QOCghfzrj9w5sqG3+Bpl9jFIhbYI+msYw9pLQdV9CxYdkQ77QE3AkP
+         uKoU6SFRCvV38f6t1iv5r/MncgpusEajtdgBYvgIE8UePHbsaMyIsJD+maZ9fd2pepIb
+         iYIQDO6q3xBPNHRG+FiqNyGVrqkTDlguV5JOk7b8zAwmTBz3OWuUVX4dF02YU4dOYNiR
+         QWf3wJMVAtivjAyvIEy2xf9IpB2Q6Yr4mYdo0FEBlBqj0sm+tzkuoRdoqTDj01kn44k6
+         MY7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1744224826; x=1744829626;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WiYgLl5uDhdQl6bgeaSF1pb+X4c4kmb/z637fZ12vBc=;
-        b=FxKhcCCN36Kuyx85xX8TKri9OdreWJq0LG9vYAdoqTNmG9NnkCO1TerXjbF6TqNlwH
-         sH2EeLELH7yZ3EOeEGzQP67QzRs7hoqTAjgTdGb1+2TGEGxnDT3cmOVy3LXVXrQTUWNK
-         3tPPJQNe2ofzT/OlB/jRC85tdx1UIoszMsRVJwB8jjC7H/ACv1kbwvv7aL9piEcWDFxW
-         6cdYaPNLzdUL8UWj21yy+oYkcwyON5KsZ9fnHbqstvrS0ed0sicMiS292FxQ5loZ1Mi1
-         XA6h/kpzS+4pf5YBu3DCLx9DZuHdXFmhdhetPbAeMVYucsgaOZfSLw8rqPyj3oI/KRCo
-         EWqw==
-X-Forwarded-Encrypted: i=1; AJvYcCXqQEzhm9cgVO8exbG3MtVkqkDvpacCn+TGHzLLFNf2epsO+XpzJI4WzSe0iFWTS32EXbiPlaDHz83JAm2ungg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNo/SYpIarbxZRBz5TyLEDpF8EyPqQ7hkA927JBkbgS/BjBnWZ
-	EP//FcdAfltJsQ+9cng1MT94jY50anh5P0hpnNDsIMwkbWbnhGj1D5CwfMpd6w==
-X-Gm-Gg: ASbGncsNXfNaDVNrgtkbWs4lErmrloDB8BfHOuEtgYrISrocwn5ezNEc5X4O0fnCsFd
-	pCdeXLCGmFdX+2BCqgbe9PEBBG36mwBhTYTO5c+A1mWqicy0sNpewNxA90q5qj2DksTnqgC58MT
-	t3A8C4nIIPrf75TWNDWBqvfGHhY5YNYtplztyfF9jsGJ666+ZePhfUbmnPD8rU6HgWil5DxDcfo
-	yk1Bo8GBI0R6hNWcyzN+xcQaYn+TRuOfFFIEwEXyQj+QtK0hkCwIssvC6Rb+2oIBlmgf5qcKHes
-	wdjgshCzktI17h1LPZi1gGf0Vo/MEH+vehTZAdkYA4ndXjMRVT2J1I0JyH4vwQzsB0aGEXTrBqR
-	7A4Wa1kli4Q==
-X-Google-Smtp-Source: AGHT+IEstbFu3PL/cbUHeUSev6rcgIuGMR1geIV1sucvr8fjrY/zJYpai452XgMdp2eTPzdTSZOr1A==
-X-Received: by 2002:a05:620a:2484:b0:7c5:562d:cd02 with SMTP id af79cd13be357-7c79cc356b7mr584073585a.41.1744224825767;
-        Wed, 09 Apr 2025 11:53:45 -0700 (PDT)
+        bh=XOHKz9d/qjT2CE9duhaUIeD9jISgOoKf1CYvh/h5rto=;
+        b=sfvOtB/9vAf6AcOrvo6/Ik2eel//PES9meea59oLA6/BVvwd0LegLBhQ3evOkUGBpE
+         +8Pg6OXCr2l7/oQzBNDM69Mixa1+9XkYH0Glj5yS32sHkD2ovX+dsWh1/S7A0z5hNx4i
+         CLQht2Rrnuaqxojb0lKgOWDuz2Bu/DczcGo2O/DhvtOh2sh7xSHp/dbcr4ObSTI/HCyL
+         SbPKGtkhJDvgrHNoSIbqJ4+z5ZcxPqsOKdrmbSb6PaA59Qf2XzaQUXFnIBYq1qH2NdTQ
+         fvdwNMIbRHl52V4oYS0+6qhGDH2D/wDx0tZUhmrTSven2lSBWVV1vPYETIfVkcU71UfK
+         /DNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXwFTy89wpitZKMzDXMjA7FvIXU1z/hKzgyTmY5O3Sts++xTwdjG8Pa1CYThpXsJL2l6+JvLFqGi9WvB7YA9ec=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA5M4M74nfYsYbeMwKTYhpLwm3V5qo2evI1VZxqwmedUFl6tYW
+	9DMT12Shsb81sl77orH16FdgHsqIIYqtMErzgdPZ+PqkY52X/FlZKNOXcPx/Iw==
+X-Gm-Gg: ASbGncvcHW0Ft6qdxnWu055PT/67Un4bX4VpmCePYAoCum3pDJRnGmjvJoyxqYKCri3
+	I317N8282EKiGCUj1Qe7fNDiGXZYGIPgjAJQIGQ0rNTBGuwN/OaE5XXDcxPR5sbzWMeAAOWyRs6
+	p17On+AD045SNDp/YJoxuqOGuEGEkKlx68Viz66AcM98LTMygV/40ya7UlQR7xtg8t0XwjqtyCX
+	oF8GqSblpfknqqCO9JW9acEI7TSNSn72c0ReDtp4HYw+A6zy/QU0AVoOhK6P2frGpRmh30WPJXm
+	S34yFQgq7lgpcdAgxdvq64MyQU7BV1p/R7X9NZc58UmVSzqMkDzbFBXLegIxcOgHNoB6j7g8nfC
+	TPmzyBRhIcA==
+X-Google-Smtp-Source: AGHT+IG+c6drXp3nozaPsjXztwAoOvjGgCaW6rE/tB4NQI4PpZiDxVdOYrpKlKJ0q3cSZYNhC4QBsQ==
+X-Received: by 2002:a05:620a:258d:b0:7c0:b384:77bb with SMTP id af79cd13be357-7c7a65e1ce2mr100060285a.14.1744224826739;
+        Wed, 09 Apr 2025 11:53:46 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c7a11c9ffesm106634785a.72.2025.04.09.11.53.45
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7c7a11c9bd0sm105448885a.85.2025.04.09.11.53.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 11:53:45 -0700 (PDT)
+        Wed, 09 Apr 2025 11:53:46 -0700 (PDT)
 From: Paul Moore <paul@paul-moore.com>
 To: linux-security-module@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
@@ -87,9 +87,9 @@ Cc: John Johansen <john.johansen@canonical.com>,
 	Micah Morton <mortonm@chromium.org>,
 	Casey Schaufler <casey@schaufler-ca.com>,
 	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Subject: [RFC PATCH 17/29] lsm: introduce an initcall mechanism into the LSM framework
-Date: Wed,  9 Apr 2025 14:50:02 -0400
-Message-ID: <20250409185019.238841-48-paul@paul-moore.com>
+Subject: [RFC PATCH 18/29] loadpin: move initcalls to the LSM framework
+Date: Wed,  9 Apr 2025 14:50:03 -0400
+Message-ID: <20250409185019.238841-49-paul@paul-moore.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250409185019.238841-31-paul@paul-moore.com>
 References: <20250409185019.238841-31-paul@paul-moore.com>
@@ -99,177 +99,50 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5184; i=paul@paul-moore.com; h=from:subject; bh=XtVvlYRWblGkknMxfv+0u+Iq02pAOnDokKRM2FiShT4=; b=owEBbQKS/ZANAwAIAeog8tqXN4lzAcsmYgBn9sHQ+Moqr3n7R64wGhRt/UGOmMdC+5MJlDSx8 8OmCZZcNTGJAjMEAAEIAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCZ/bB0AAKCRDqIPLalzeJ c57FEADj5jUlkFCqXxTiPtSD4o6Qnmx1TwCb2o+mS3u5Tw4nSO9+R66f8yIppWkiMoK8qOI2EC+ v9x+Al/BrRTYnoM5RD5p5/DhfZ6DGx6/s9r6FtRgXOtSIpPXW2aEJQsnHzDdSwQkZoBugDkn4LE 2BPU9w4MKU5TFTUBOE+kSaMEpeCawtM4TLol2DD1Ct/R849T7B50zDgcvPaUhp3vDxIjZAvljWB 7CwHYdsHOhTU+RIi1/jG4/w4wmnAgeo+19dKNdu7rTa6yqjGOeXMkCPMalmIq7Ut0huuf7T15bP hmFEsnJq9OmgQLnyKiR1f868pY5dWxxiQ/PrORnHiuFZKtfeeCkEyh60ZXKOTD/Iq0tOxvb/wG/ XOQibSEEj1vUhlWYCft/D5KePpupRp8lzzKvk1zsK73pgTq56Qzij/k1YwDy/sEHkypZ9YXuWkV YftgErcpYMyLp64Bix/Qp22PcvgkjRrOLwhAteQHnMSuMxfoiNuODr3/IYAvcqu6i1QvSgB8jw0 qRkXG+iidTfUBTUQDuPtnbURcBfudtL5ERl/FDpGxvf69W0a5EIz78G2XQ6b4HgoaeDDtNlOBsH m9hFdNHzfURLvUfYxkEl7JJevreUDiIzZ0e0dPOcVcWjqOa1UbvXXJv3KS/o4kq4CuhcfQd1KFS 3GLCrcrpeqgqzCA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1169; i=paul@paul-moore.com; h=from:subject; bh=U0J8daT5qbdY0XH0/6KwMZfXF6KoGXdJq3T5B3kThVs=; b=owEBbQKS/ZANAwAIAeog8tqXN4lzAcsmYgBn9sHWJoStLswLfKePDDr3dsFYxt6C8v3Zk7goC HEKVxevRFKJAjMEAAEIAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCZ/bB1gAKCRDqIPLalzeJ c2KMEACm7+2OCx2kQ5fG7StRMJW/3n1wX/suF7NH5uiAbGUkQgRDyX3aohGr/TNR1vI0WuBxcxd iKIdGrsFiPSGjQVFKWdgQmAA3zJYwHttMd+uS5G03hIGriID5uLDqrsS0x6/jkN9X1IrTgMWXNd 17OyZ6e4fOYvenc0FEn7YTz5Z1RIBC6zdeMSw8A9U1FFGzWltu8mkyQlTnwBBxQonW7ZZ5TLER+ t40CYiSURQJOBUllsApcrEz5+N64liy92cl726YpbmPrw159omGFxwf5WBG1rn11ERliOAlCRxZ qBo/r24HBp56gtHYSSLiVtKUziOqdVTPKEnhCRXJSx1U5ilJF1Sp1wMa+Biem4oqq1ujXQsK/Km 9Ezmy1vpGCuwmTeoZbWXfJO0K8iq2RSRD9RwpaTvcekvWqCbjOJb6AzQ5aaGAs+NI5QulV59d7J QnQrF2hKccrPBWm9TZrQi8k2S2oAstftdKSDzu57BCqJHT1QweyWXYUhN2TUneUPDNLJXfQ2xX3 IJXNGatmzo6V8malwATvZD5r8vEkCJlosykEOhY1nye5NsnenufsZPDWX7fEBy97J1T3oxhmTTP dUpVwCuOnSmTvsyqvwMopHrPMGloXaQBXAtRfVLJSbkgyDmaYBBntNgyOGRo2Y18lN5XoXHL/gG hT8O2jpwYddoTog==
 X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
 
-Currently the individual LSMs register their own initcalls, and while
-this should be harmless, it can be wasteful in the case where a LSM
-is disabled at boot as the initcall will still be executed.  This
-patch introduces support for managing the initcalls in the LSM
-framework, and future patches will convert the existing LSMs over to
-this new mechanism.
-
-Only initcall types which are used by the current in-tree LSMs are
-supported, additional initcall types can easily be added in the future
-if needed.
-
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- include/linux/lsm_hooks.h | 33 ++++++++++++---
- security/lsm_init.c       | 89 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 117 insertions(+), 5 deletions(-)
+ security/loadpin/loadpin.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index a7ecb0791a0f..0d2c2a017ffc 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -148,13 +148,36 @@ enum lsm_order {
- 	LSM_ORDER_LAST = 1,	/* This is only for integrity. */
- };
- 
-+/**
-+ * struct lsm_info - Define an individual LSM for the LSM framework.
-+ * @id: LSM name/ID info
-+ * @order: ordering with respect to other LSMs, optional
-+ * @flags: descriptive flags, optional
-+ * @blobs: LSM blob sharing, optional
-+ * @enabled: controlled by CONFIG_LSM, optional
-+ * @init: LSM specific initialization routine
-+ * @initcall_pure: LSM callback for initcall_pure() setup, optional
-+ * @initcall_early: LSM callback for early_initcall setup, optional
-+ * @initcall_core: LSM callback for core_initcall() setup, optional
-+ * @initcall_subsys: LSM callback for subsys_initcall() setup, optional
-+ * @initcall_fs: LSM callback for fs_initcall setup, optional
-+ * @nitcall_device: LSM callback for device_initcall() setup, optional
-+ * @initcall_late: LSM callback for late_initcall() setup, optional
-+ */
- struct lsm_info {
- 	const struct lsm_id *id;
--	enum lsm_order order;	/* Optional: default is LSM_ORDER_MUTABLE */
--	unsigned long flags;	/* Optional: flags describing LSM */
--	int *enabled;		/* Optional: controlled by CONFIG_LSM */
--	int (*init)(void);	/* Required. */
--	struct lsm_blob_sizes *blobs; /* Optional: for blob sharing. */
-+	enum lsm_order order;
-+	unsigned long flags;
-+	struct lsm_blob_sizes *blobs;
-+	int *enabled;
-+	int (*init)(void);
-+	int (*initcall_pure)(void);
-+	int (*initcall_early)(void);
-+	int (*initcall_core)(void);
-+	int (*initcall_subsys)(void);
-+	int (*initcall_fs)(void);
-+	int (*initcall_device)(void);
-+	int (*initcall_late)(void);
- };
- 
- #define DEFINE_LSM(lsm)							\
-diff --git a/security/lsm_init.c b/security/lsm_init.c
-index 8e00afeb84cf..75eb0cc82869 100644
---- a/security/lsm_init.c
-+++ b/security/lsm_init.c
-@@ -39,6 +39,27 @@ static __initdata struct lsm_info *lsm_order[MAX_LSM_COUNT + 1];
- 	for ((iter) = __start_early_lsm_info;				\
- 	     (iter) < __end_early_lsm_info; (iter)++)
- 
-+#define lsm_initcall(level)						\
-+	({ 								\
-+		int _r, _rc = 0;					\
-+		struct lsm_info **_lp, *_l; 				\
-+		lsm_order_for_each(_lp) { 				\
-+			_l = *_lp; 					\
-+			if (!_l->initcall_##level) 			\
-+				continue;				\
-+			lsm_pr_dbg("running %s %s initcall",		\
-+				   _l->id->name, #level);		\
-+			_r = _l->initcall_##level();			\
-+			if (_r) {					\
-+				pr_warn("failed LSM %s %s initcall with errno %d\n", \
-+					_l->id->name, #level, _r);	\
-+				if (!_rc)				\
-+					_rc = _r;			\
-+			}						\
-+		}							\
-+		_rc;							\
-+	})
-+
- /**
-  * lsm_choose_security - Legacy "major" LSM selection
-  * @str: kernel command line parameter
-@@ -458,3 +479,71 @@ int __init security_init(void)
- 
+diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+index b9ddf05c5c16..273ffbd6defe 100644
+--- a/security/loadpin/loadpin.c
++++ b/security/loadpin/loadpin.c
+@@ -270,11 +270,6 @@ static int __init loadpin_init(void)
  	return 0;
  }
+ 
+-DEFINE_LSM(loadpin) = {
+-	.id = &loadpin_lsmid,
+-	.init = loadpin_init,
+-};
+-
+ #ifdef CONFIG_SECURITY_LOADPIN_VERITY
+ 
+ enum loadpin_securityfs_interface_index {
+@@ -434,10 +429,16 @@ static int __init init_loadpin_securityfs(void)
+ 	return 0;
+ }
+ 
+-fs_initcall(init_loadpin_securityfs);
+-
+ #endif /* CONFIG_SECURITY_LOADPIN_VERITY */
+ 
++DEFINE_LSM(loadpin) = {
++	.id = &loadpin_lsmid,
++	.init = loadpin_init,
++#ifdef CONFIG_SECURITY_LOADPIN_VERITY
++	.initcall_fs = init_loadpin_securityfs,
++#endif /* CONFIG_SECURITY_LOADPIN_VERITY */
++};
 +
-+/**
-+ * security_initcall_pure - Run the LSM pure initcalls
-+ */
-+static int __init security_initcall_pure(void)
-+{
-+	return lsm_initcall(pure);
-+}
-+pure_initcall(security_initcall_pure);
-+
-+/**
-+ * security_initcall_early - Run the LSM early initcalls
-+ */
-+static int __init security_initcall_early(void)
-+{
-+	return lsm_initcall(early);
-+}
-+early_initcall(security_initcall_early);
-+
-+/**
-+ * security_initcall_core - Run the LSM core initcalls
-+ */
-+static int __init security_initcall_core(void)
-+{
-+	return lsm_initcall(core);
-+}
-+core_initcall(security_initcall_core);
-+
-+/**
-+ * security_initcall_subsys - Run the LSM subsys initcalls
-+ */
-+static int __init security_initcall_subsys(void)
-+{
-+	return lsm_initcall(subsys);
-+}
-+subsys_initcall(security_initcall_subsys);
-+
-+/**
-+ * security_initcall_fs - Run the LSM fs initcalls
-+ */
-+static int __init security_initcall_fs(void)
-+{
-+	return lsm_initcall(fs);
-+}
-+fs_initcall(security_initcall_fs);
-+
-+/**
-+ * security_initcall_device - Run the LSM device initcalls
-+ */
-+static int __init security_initcall_device(void)
-+{
-+	return lsm_initcall(device);
-+}
-+device_initcall(security_initcall_device);
-+
-+/**
-+ * security_initcall_late - Run the LSM late initcalls
-+ */
-+static int __init security_initcall_late(void)
-+{
-+	int rc;
-+
-+	rc = lsm_initcall(late);
-+	lsm_pr_dbg("all enabled LSMs fully activated\n");
-+
-+	return rc;
-+}
-+late_initcall(security_initcall_late);
+ /* Should not be mutable after boot, so not listed in sysfs (perm == 0). */
+ module_param(enforce, int, 0);
+ MODULE_PARM_DESC(enforce, "Enforce module/firmware pinning");
 -- 
 2.49.0
 
