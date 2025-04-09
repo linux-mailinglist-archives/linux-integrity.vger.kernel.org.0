@@ -1,148 +1,284 @@
-Return-Path: <linux-integrity+bounces-5726-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5727-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30EBCA832D7
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 22:55:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99ABDA8331E
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 23:17:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11C26446D07
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 20:55:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AACDC19E0C95
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 21:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5B220297E;
-	Wed,  9 Apr 2025 20:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC35214201;
+	Wed,  9 Apr 2025 21:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TGuOLviF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cmy2FGnt"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C363F1DDC04;
-	Wed,  9 Apr 2025 20:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC291EB18E;
+	Wed,  9 Apr 2025 21:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744232149; cv=none; b=rJm163gHqSI5p2/8i0VcHqX66ebVk+T808tPQEc+FQUEgdqOpx1ELQlN2URwdlfUk8cRAGHQvyRuUjfae1M/vVn+o22n4FUVPmPNentV0+oFTf3JIvh5sn3UBatQSSd4VfmQ7eD9yuu+BYK2u9JHu580lzA6L3ORv/bujwMvBXM=
+	t=1744233403; cv=none; b=b8Le6qUrx8uedKkFLtBlcocOm82efjDmoBo6wAOPbzX0W6VWDO0z7hU+Cg1C4eINFArciA/fdy/SokmeuczUecehH+mx3pOJJ+Fw+CtmpMmzcVI8WkgezF9DLWZRCcJAcdp1zSxE1mhThkle15BVfh+O9UVHWOf7LwkUsFNbjn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744232149; c=relaxed/simple;
-	bh=EPn/d0cd3kjYwFoD8biIUR0OJ+wRMiKabWAhIrPT/2g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=C4mgkzUDsdzf7BJaiVUrkUwTlCpGZEuTN4CsEfnrDexHWbl1JhVJqxWnrWx3pxdSk2/B9fmNOlMl2KKUPUgTxjbkjWkqMFzV3qpar4vyUzIBqZoQiRs2c3Mo341ddT3Ma5P9UeuF5bmlQQXfqmJ3Q3kj1iEX9CxKc8QXSR6NQBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TGuOLviF; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-736c1cf75e4so30750b3a.2;
-        Wed, 09 Apr 2025 13:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744232147; x=1744836947; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7QkpG4m8Lc/btjIEh5jay7XVuJOJzyS0YVOjKC0nw0g=;
-        b=TGuOLviFP76RgHxquxIVbBQ3WDvyvk2uPHQoRNZ1vu8FMVrUzLQ0bILzzvUS2X4Cq+
-         IeS2LSH95xLjhmerLe0lnd6b2hG7F6sP0JZMkg98n+0GxKsOvRbnkX0WGQkvERjGjOy9
-         IR/gCRXPDb3TtZ8M3E8hE8MI86EBX/9SKpVLSwNCl2O4EMiFWk5JKTN9tSsLEu4fpb8Y
-         nyt1DfQINTrl2DnKUOB1pv1eivjLoE3e6XqRJ56mJRRDrnPi4Jr7F2JgAeEEe6DTj2RN
-         jQsoAHS0m2fX9LkBoGed55d7ZvNUGAFfZJNKfvyTGKy0uD8tNMQ7VhTrWLsrYiQiUGE3
-         Zy9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744232147; x=1744836947;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7QkpG4m8Lc/btjIEh5jay7XVuJOJzyS0YVOjKC0nw0g=;
-        b=KaTaOw6IFT/zpwtgoyvMNd/RNysKVy743cevIr+9NgZA7fdAjzxy3QHu4MEWwALlP7
-         I1mLDx4oDs1Zs25XG7gTjwdrB7dAQ1Ppaiv/oge0hJ4V3CiVLelDnToHt29hQAbdEazS
-         KZu+A7CwBgLXeTpMGkMIaA6ztUodvG1tktK2GJABSFy+15/XpLeeGHy6OVr6UhWZVwhZ
-         w6oLqq+JfLQym1+Wgu0SZ/uIeK9dSshh1mZ0/3zwUdx7Sp9iL/bjh3KOQM1NnqQKEdi7
-         lsaNtI5KPKm/GvZIbvi3zGswjVziaYqCEYQsXy2Psyk46MEXGwsGPM7FVn0nzfoH74u7
-         5SIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUDUSxdDDp0wgbNVzRu0Q3W6s4S1NMwAkXPvv6IGzZbbYMrdrpCpyEp3QztARI06saFUm13lVwZZn0OY0i7@vger.kernel.org, AJvYcCUpLVqVFJbx4h7W1jKWOBAMwXsBnQ9F/Jqj2u33AAheH7Bzm0Rp4F1a+/0fB0yZSRB0SsUQVu6HZgux+KA5ZFw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkfACZBRA9Idp+MrrHumDAIFryyKOkMWgoPuiVhOUyjMa5jzmZ
-	tCAcqjcAkvzkplod9XkKvNdxXURKanKMoM6xqCClT1iozmhFp7EM
-X-Gm-Gg: ASbGnctyHUt9X9ogRfHEtHgMhT5z7r596Jt09yvE6PEWOzBuWEfRx1vXvsYhcjTX0hQ
-	qgXWd/jDMniiotbmcbGgMeIeB26RZFue3nB/F8RvGSjrASYmy2AHD+m1qdXG2FsosvX6bsJr/Gu
-	xlJkmT+ddv4up3jFhFgyFVtm+CA3TmzJQv/yQnF7PkZmMk+0wXgVvzmsF0tej5tos3rsw2/sWjf
-	6skYG3qD3nuxj2KKEYu2f1N99GuBEZcvyCgwh0v3Ra5xDcleCus+nY3dWrjPqnMlvaONiC3+5l+
-	VuQ490SmP9AvPnCw/XIv5oqitx4gc3l4+2kzoMR0LW8qUeBFWMpgyvNtlnDzObCphqbfNQ2slw=
-	=
-X-Google-Smtp-Source: AGHT+IGhGUwWPR32v/s/SkavVBdJ58Gtxo/MVhQ80j4uIDoiELiGftMvP4XeTKKA/0fHgSDCX83T/w==
-X-Received: by 2002:a05:6a00:3987:b0:728:e2cc:bfd6 with SMTP id d2e1a72fcca58-73bbefabeeemr383715b3a.18.1744232146641;
-        Wed, 09 Apr 2025 13:55:46 -0700 (PDT)
-Received: from purva-IdeaPad-Gaming-3-15IHU6.. ([2409:4080:204:a537:9312:7e1:b2cb:ef99])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1d46509sm1875527b3a.57.2025.04.09.13.55.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 13:55:46 -0700 (PDT)
-From: Purva Yeshi <purvayeshi550@gmail.com>
-To: peterhuewe@gmx.de,
-	jarkko@kernel.org
-Cc: jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Purva Yeshi <purvayeshi550@gmail.com>
-Subject: [PATCH] char: tpm: tpm-buf: Fix uninitialized return values in read helpers
-Date: Thu, 10 Apr 2025 02:25:36 +0530
-Message-Id: <20250409205536.210202-1-purvayeshi550@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1744233403; c=relaxed/simple;
+	bh=+mqY8nLH6ozGdqw3+Rz1yDdpQlH+FIoOnuqVmEWUUKg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JPKV++mFZTQAR7XYKKAEeosVzaEgnDkL3AjvWD2uBShaCIE2I10WrWd+s9u/bH9S4NsjIH3zkvp5VrQPCa7Jcefw/ze7YunTm1BQT/AdYPe0RTJstBbjMoHjQ1a+SMT38YuZk1cNC47EFcOHHL2QUFVsEzO2eTlu/3kuQfd7aFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cmy2FGnt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5676C4CEE2;
+	Wed,  9 Apr 2025 21:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744233400;
+	bh=+mqY8nLH6ozGdqw3+Rz1yDdpQlH+FIoOnuqVmEWUUKg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cmy2FGnt6RKSBHp4nugrmO9gaL8uU4BZZ9jzoA4Q3c5pFLY7cH+FYbqi6JvwvynVw
+	 lKoldyDhh0N9qLdoOoCbirFU8fqGZOYT7l6kR1HfNHDuiVPjJoklen5ODet5DrXTjw
+	 5kCM5Ue770pRo4CmfWREuEyUIgXZaA+qN3opRyY9/Rz17VA2j0o+zUg7GCVwz7O7qZ
+	 2BCkielMJBleKdBy669h6JXRvmTDLu1uyvdBV4xW5KZNBh2nWCMSrG1W3qciPa146V
+	 McrRweZgLnrnaLHMpJPXyzdIB3qJV1pqo9AaMKp8l8dPzGmPI9lMJIT4zZXYAcz62Q
+	 2ochW06DTuLMA==
+Date: Wed, 9 Apr 2025 14:16:37 -0700
+From: Kees Cook <kees@kernel.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org,
+	John Johansen <john.johansen@canonical.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Micah Morton <mortonm@chromium.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Subject: Re: [RFC PATCH 17/29] lsm: introduce an initcall mechanism into the
+ LSM framework
+Message-ID: <202504091406.0A86DE05@keescook>
+References: <20250409185019.238841-31-paul@paul-moore.com>
+ <20250409185019.238841-48-paul@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250409185019.238841-48-paul@paul-moore.com>
 
-Fix Smatch-detected error:
-drivers/char/tpm/tpm-buf.c:208 tpm_buf_read_u8() error:
-uninitialized symbol 'value'.
-drivers/char/tpm/tpm-buf.c:225 tpm_buf_read_u16() error:
-uninitialized symbol 'value'.
-drivers/char/tpm/tpm-buf.c:242 tpm_buf_read_u32() error:
-uninitialized symbol 'value'.
+On Wed, Apr 09, 2025 at 02:50:02PM -0400, Paul Moore wrote:
+> Currently the individual LSMs register their own initcalls, and while
+> this should be harmless, it can be wasteful in the case where a LSM
+> is disabled at boot as the initcall will still be executed.  This
+> patch introduces support for managing the initcalls in the LSM
+> framework, and future patches will convert the existing LSMs over to
+> this new mechanism.
+> 
+> Only initcall types which are used by the current in-tree LSMs are
+> supported, additional initcall types can easily be added in the future
+> if needed.
+> 
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> ---
+>  include/linux/lsm_hooks.h | 33 ++++++++++++---
+>  security/lsm_init.c       | 89 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 117 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index a7ecb0791a0f..0d2c2a017ffc 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -148,13 +148,36 @@ enum lsm_order {
+>  	LSM_ORDER_LAST = 1,	/* This is only for integrity. */
+>  };
+>  
+> +/**
+> + * struct lsm_info - Define an individual LSM for the LSM framework.
+> + * @id: LSM name/ID info
+> + * @order: ordering with respect to other LSMs, optional
+> + * @flags: descriptive flags, optional
+> + * @blobs: LSM blob sharing, optional
+> + * @enabled: controlled by CONFIG_LSM, optional
+> + * @init: LSM specific initialization routine
+> + * @initcall_pure: LSM callback for initcall_pure() setup, optional
+> + * @initcall_early: LSM callback for early_initcall setup, optional
+> + * @initcall_core: LSM callback for core_initcall() setup, optional
+> + * @initcall_subsys: LSM callback for subsys_initcall() setup, optional
+> + * @initcall_fs: LSM callback for fs_initcall setup, optional
+> + * @nitcall_device: LSM callback for device_initcall() setup, optional
+> + * @initcall_late: LSM callback for late_initcall() setup, optional
+> + */
 
-Call tpm_buf_read() to populate value but do not check its return
-status. If the read fails, value remains uninitialized, causing
-undefined behavior when returned or processed.
+Yay! Proper kerndoc. :)
 
-Initialize value to zero to ensure a defined return even if
-tpm_buf_read() fails, avoiding undefined behavior from using
-an uninitialized variable.
+>  struct lsm_info {
+>  	const struct lsm_id *id;
+> -	enum lsm_order order;	/* Optional: default is LSM_ORDER_MUTABLE */
+> -	unsigned long flags;	/* Optional: flags describing LSM */
+> -	int *enabled;		/* Optional: controlled by CONFIG_LSM */
+> -	int (*init)(void);	/* Required. */
+> -	struct lsm_blob_sizes *blobs; /* Optional: for blob sharing. */
+> +	enum lsm_order order;
+> +	unsigned long flags;
+> +	struct lsm_blob_sizes *blobs;
+> +	int *enabled;
+> +	int (*init)(void);
+> +	int (*initcall_pure)(void);
+> +	int (*initcall_early)(void);
+> +	int (*initcall_core)(void);
+> +	int (*initcall_subsys)(void);
+> +	int (*initcall_fs)(void);
+> +	int (*initcall_device)(void);
+> +	int (*initcall_late)(void);
+>  };
+>  
+>  #define DEFINE_LSM(lsm)							\
+> diff --git a/security/lsm_init.c b/security/lsm_init.c
+> index 8e00afeb84cf..75eb0cc82869 100644
+> --- a/security/lsm_init.c
+> +++ b/security/lsm_init.c
+> @@ -39,6 +39,27 @@ static __initdata struct lsm_info *lsm_order[MAX_LSM_COUNT + 1];
+>  	for ((iter) = __start_early_lsm_info;				\
+>  	     (iter) < __end_early_lsm_info; (iter)++)
+>  
+> +#define lsm_initcall(level)						\
+> +	({ 								\
+> +		int _r, _rc = 0;					\
+> +		struct lsm_info **_lp, *_l; 				\
+> +		lsm_order_for_each(_lp) { 				\
+> +			_l = *_lp; 					\
+> +			if (!_l->initcall_##level) 			\
+> +				continue;				\
+> +			lsm_pr_dbg("running %s %s initcall",		\
+> +				   _l->id->name, #level);		\
+> +			_r = _l->initcall_##level();			\
+> +			if (_r) {					\
+> +				pr_warn("failed LSM %s %s initcall with errno %d\n", \
+> +					_l->id->name, #level, _r);	\
+> +				if (!_rc)				\
+> +					_rc = _r;			\
+> +			}						\
+> +		}							\
+> +		_rc;							\
+> +	})
+> +
+>  /**
+>   * lsm_choose_security - Legacy "major" LSM selection
+>   * @str: kernel command line parameter
+> @@ -458,3 +479,71 @@ int __init security_init(void)
+>  
+>  	return 0;
+>  }
+> +
+> +/**
+> + * security_initcall_pure - Run the LSM pure initcalls
+> + */
+> +static int __init security_initcall_pure(void)
+> +{
+> +	return lsm_initcall(pure);
+> +}
+> +pure_initcall(security_initcall_pure);
+> +
+> +/**
+> + * security_initcall_early - Run the LSM early initcalls
+> + */
+> +static int __init security_initcall_early(void)
+> +{
+> +	return lsm_initcall(early);
+> +}
+> +early_initcall(security_initcall_early);
+> +
+> +/**
+> + * security_initcall_core - Run the LSM core initcalls
+> + */
+> +static int __init security_initcall_core(void)
+> +{
+> +	return lsm_initcall(core);
+> +}
+> +core_initcall(security_initcall_core);
+> +
+> +/**
+> + * security_initcall_subsys - Run the LSM subsys initcalls
+> + */
+> +static int __init security_initcall_subsys(void)
+> +{
+> +	return lsm_initcall(subsys);
+> +}
+> +subsys_initcall(security_initcall_subsys);
+> +
+> +/**
+> + * security_initcall_fs - Run the LSM fs initcalls
+> + */
+> +static int __init security_initcall_fs(void)
+> +{
+> +	return lsm_initcall(fs);
+> +}
+> +fs_initcall(security_initcall_fs);
+> +
+> +/**
+> + * security_initcall_device - Run the LSM device initcalls
+> + */
+> +static int __init security_initcall_device(void)
+> +{
+> +	return lsm_initcall(device);
+> +}
+> +device_initcall(security_initcall_device);
+> +
+> +/**
+> + * security_initcall_late - Run the LSM late initcalls
+> + */
+> +static int __init security_initcall_late(void)
+> +{
+> +	int rc;
+> +
+> +	rc = lsm_initcall(late);
+> +	lsm_pr_dbg("all enabled LSMs fully activated\n");
+> +
+> +	return rc;
+> +}
+> +late_initcall(security_initcall_late);
 
-Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
----
- drivers/char/tpm/tpm-buf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+You'd need a new place for the lsm_pr_dbg, but these are all just
+copy/paste. These could be macro-ified too?
 
-diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-index e49a19fea3bd..dc882fc9fa9e 100644
---- a/drivers/char/tpm/tpm-buf.c
-+++ b/drivers/char/tpm/tpm-buf.c
-@@ -201,7 +201,7 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
-  */
- u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset)
- {
--	u8 value;
-+	u8 value = 0;
- 
- 	tpm_buf_read(buf, offset, sizeof(value), &value);
- 
-@@ -218,7 +218,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u8);
-  */
- u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset)
- {
--	u16 value;
-+	u16 value = 0;
- 
- 	tpm_buf_read(buf, offset, sizeof(value), &value);
- 
-@@ -235,7 +235,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u16);
-  */
- u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
- {
--	u32 value;
-+	u32 value = 0;
- 
- 	tpm_buf_read(buf, offset, sizeof(value), &value);
- 
+#define define_lsm_initcall(level)			\
+static int __init security_initcall_##level(void)	\
+{							\
+	return lsm_initcall(level);			\
+}							\
+level##_initcall(security_initcall_##level)
+
+define_lsm_initcall(pure);
+define_lsm_initcall(early);
+define_lsm_initcall(core);
+define_lsm_initcall(subsys);
+define_lsm_initcall(fs);
+define_lsm_initcall(device);
+define_lsm_initcall(late);
+
+I'm not sure exposing the kerndoc for them is worth open-coding them?
+
+And, actually, it's just a macro calling a macro. You could just combine
+them? i.e. turn lsm_initcall() into:
+
+#define define_lsm_initcall(level)				\
+static int __init security_initcall_##level(void)		\
+{	 							\
+	int _r, _rc = 0;					\
+	struct lsm_info **_lp, *_l; 				\
+	...
+	return _rc;						\
+}								\
+level##_initcall(security_initcall_##level)
+
+
+But, I like it either way.
+
+Reviewed-by: Kees Cook <kees@kernel.org>
+
 -- 
-2.34.1
-
+Kees Cook
 
