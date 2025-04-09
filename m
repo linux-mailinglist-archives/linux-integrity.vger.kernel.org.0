@@ -1,304 +1,219 @@
-Return-Path: <linux-integrity+bounces-5690-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5691-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C70C5A82B3E
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 17:52:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0F64A82BFE
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 18:12:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 557EE9A5919
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 15:40:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92B591888AB9
+	for <lists+linux-integrity@lfdr.de>; Wed,  9 Apr 2025 16:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA072676DD;
-	Wed,  9 Apr 2025 15:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEC81D5173;
+	Wed,  9 Apr 2025 16:07:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rO19Fh5u"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="x1LMv1/b"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2083.outbound.protection.outlook.com [40.107.96.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5C3263F4E
-	for <linux-integrity@vger.kernel.org>; Wed,  9 Apr 2025 15:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744213223; cv=none; b=bDHh5++TRolojd82Nmy0lPcmdtx0021ZpXqh2aZ50mYHDTnLc/lQzBWoY8kF7LP6SvpG0p9xvzPrSqoCGIUMopS5+8SnBzGhIDxBOEjfNJfoWbj2OcvazS4qLpxjjDJOXOgbgAb498bi0yLEgPzW9OII6IMvmp1J4k8y+qxkESs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744213223; c=relaxed/simple;
-	bh=PrcIxWostPRHrAo9gsoiNRD6pd4uCgrCbYeQjhDDTBc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jJzyCTeyHakiyjlMfIKSarxLkJX3GCDZ7NeolWn7rTLWaikbTVhGvy6mpW+S0lEkQH4IcKm7bVm0xgZKyZ2vNokxCjJKoFS14te5LQXV5A/BlAZnoPHdglqGpiDR4ckYolzhwe7Nm76RdZg9jjp2s95NiEN31CjGlUEfp/OdCzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rO19Fh5u; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5399CgEH009133;
-	Wed, 9 Apr 2025 15:40:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=/eEGCH
-	Wso6tW+nWSDSY9FoU5Yly9eomYFdp72kkfd9g=; b=rO19Fh5uEmm7XHdosRPlGX
-	UAgg0maOy1tN+6rYIVRpsCGX3WlkguGcoe7NHARoIHeYCz//6QiZTNjAUZxamfhm
-	NXZG3c06PhObozNRJdoZxWL1N/mtloj40dzMsktXGEvSom4CWjrn7xzVpe+davVH
-	ltow7jqS2m4SoB63pzY21+P6lxY7LWPcLJfPm7ZaXSuPYUbjAAqh8XpI3ISCYCvO
-	gjQGoU8/P0XpoxWhLW61gRtrN2NnXNL7EutKBA1pUJmLabE+TEN5vLQIxtzHYum5
-	GhJpFYz91ra+czl3CEBi2FEk08YgOBUFg15BZUNIhGVhfOehcssDkSiaUO4eufpg
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 45wayr4gt1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Apr 2025 15:40:14 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 539EpJkr018451;
-	Wed, 9 Apr 2025 15:40:13 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 45uh2kr6cg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Apr 2025 15:40:13 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 539FeD1i32244240
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 9 Apr 2025 15:40:13 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5E38558061;
-	Wed,  9 Apr 2025 15:40:13 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 02DBE58060;
-	Wed,  9 Apr 2025 15:40:13 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  9 Apr 2025 15:40:12 +0000 (GMT)
-Message-ID: <db0f463cbf4ad9b9cf9f9a23c5869a751ad12bba.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH] ima: add a knob to make IMA be able to be disabled
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Baoquan He <bhe@redhat.com>, chenste@linux.microsoft.com
-Cc: Coiby Xu <coxu@redhat.com>, RuiRui Yang <ruyang@redhat.com>,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Date: Wed, 09 Apr 2025 11:40:12 -0400
-In-Reply-To: <Z/Xero1B0OazLcHL@MiWiFi-R3L-srv>
-References: <20250331061611.253919-1-bhe@redhat.com>
-	 <b1eba83a9f68ed9a19100f6c0dc5aca7aff437d5.camel@linux.ibm.com>
-	 <fv7h5jfb4r6d5j6jjpgyjbv75zyzqpy6tbqn3ahzuewghnvrgd@5yclg75kr3cq>
-	 <CALu+AoQrKunS5RjikkcZD7=J9vwhv1_Dw96fmO0EtyKi0MHHJg@mail.gmail.com>
-	 <d14c72bbb377c6f8f0efdbf6d725c553b3ad741c.camel@linux.ibm.com>
-	 <h3bjnvtded2hgbhya6ugb62mnlmkjpmifa6w6wwutfd3jq326r@lzpoun5pksev>
-	 <Z+0kRhCfsjdZ53rZ@MiWiFi-R3L-srv>
-	 <65057b5256a28c3416e6b90a143d741801e68b03.camel@linux.ibm.com>
-	 <Z/MrpIv9EWftPhbD@MiWiFi-R3L-srv>
-	 <02563b1e8b0000bedf94ded447a8372f21d4304a.camel@linux.ibm.com>
-	 <Z/Xero1B0OazLcHL@MiWiFi-R3L-srv>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686D117A319;
+	Wed,  9 Apr 2025 16:07:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744214879; cv=fail; b=JJeDyC2n/0rV9kjizNmbkuoIED0vpeZpnkJcDu/vzH3Q4t/b/ANSznKJhBCPNYc8lG7M5kWrPNccKHYKiGMQtwGk7FK9ZgUMR7Cvx9JRIcxfER3u04qW7tJ+mfZvBjaNceKYpzC+Po2YghPMI2eNCKz4ZLZs0vmtaxZY7EnNHAg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744214879; c=relaxed/simple;
+	bh=YaROIC+jxgTEaf0zlIIkX4yEhwmlhca4EVSE+d4eTws=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZQXLx5dFzEZafZ5haA0X4RaSOn0j7ugF7ii0z+oSYa403/WM3TIhxI3weJ4S/tzPnq74MnD/B4EF1dwMjMAdzkmzGgUBxVEGQDG3avp4nWJy23vEdbXRjdFhovnJ8idAAPCFqrkgnoQvpccZx9BZ+ur9E89Ao54nk3yhmgEjWKw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=x1LMv1/b; arc=fail smtp.client-ip=40.107.96.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=h6ozzq+V4CaL1c70BCNX8OVPGWXHLhdfiD4i+ujrt/2Mbm/+FTkULdW2dS+BuXZL9cOl68rWIo9b0oeAGUUt5BEwsT0DHcOboTYlRlJMHia+MPYHilmZ8VpwXtrCiVDYcZcMtmMwaWG37EvcTYFtiaK89njNRnzRboWODu5qxfGbaQO2G6THcEmUn7EcbtXg2O+JmLVZ9b3Pd4IGk4rxnnmP5MIozLvkhu3Siu/geWmyu9QUmJgjW+PDuewxjdamh2zYjK8SuXBv7zzw/wnB44kcgFXiiZvNuENYlu+sKvCjroxj4zeRGQT9Y9elZBCO9lpDc7YLiqUK3a9uW2QeNg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rmfP52NbqTAYqJgijfY8BaJSM5aS4uPSrqUP54d4LPY=;
+ b=mFdYcFfF80ZXxuj5P7T97FfKIYkC3GDtFA/N9jqg5ZwoKMiPaB2YfZn52/1I/1WmtyNVLY0RFojlK13c3GfbMGkryJnPKSIgy0UPgO3cwN/kEcT4MKilJgwrlLVhB7SqlhAafiuPCz2EALZkzCQ53YyWE851OMwF22bjkYbN7HaqW4AigWRQYLc/z+wEPt5X2xb/9KPvasbj3A+YBaKsd7S4RLmqI4NQZV9BdSQJEo/8lMISTnucNKoQ1SrMlN0wNZBz76QM5KXEepB93Opm0yVJ9W6Cv1HWW2HTVwEVHxgfUv6xaeNBXP1odR7oA2ECOGIlmB5RKtAVTkHjqZAO2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rmfP52NbqTAYqJgijfY8BaJSM5aS4uPSrqUP54d4LPY=;
+ b=x1LMv1/b3PsHEf8QpplJ62inbHmRFDjKLO+yFDIq8qt9WOAQkPdEpVQmxaUzpEOUFmCKRbzOw0K3muPJ+nZ9Wq5oWJXZcG3Jegahxv0nBmhdGtJ9VYaIoDFa1h1khfVredmkoCSNT19mA3htx01D8iZ366co2Rt3ROEBXXtF4Fs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5070.namprd12.prod.outlook.com (2603:10b6:5:389::22)
+ by MW6PR12MB8663.namprd12.prod.outlook.com (2603:10b6:303:240::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.22; Wed, 9 Apr
+ 2025 16:07:54 +0000
+Received: from DM4PR12MB5070.namprd12.prod.outlook.com
+ ([fe80::20a9:919e:fd6b:5a6e]) by DM4PR12MB5070.namprd12.prod.outlook.com
+ ([fe80::20a9:919e:fd6b:5a6e%5]) with mapi id 15.20.8632.017; Wed, 9 Apr 2025
+ 16:07:54 +0000
+Message-ID: <6e5bf479-ee95-a996-5845-1f76730e2488@amd.com>
+Date: Wed, 9 Apr 2025 11:07:49 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v6 4/4] x86/sev: register tpm-svsm platform device
+To: Borislav Petkov <bp@alien8.de>, Stefano Garzarella <sgarzare@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Peter Huewe <peterhuewe@gmx.de>,
+ Jason Gunthorpe <jgg@ziepe.ca>, "H. Peter Anvin" <hpa@zytor.com>,
+ linux-coco@lists.linux.dev, linux-integrity@vger.kernel.org,
+ Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+ Joerg Roedel <jroedel@suse.de>, Dionna Glaze <dionnaglaze@google.com>,
+ Claudio Carvalho <cclaudio@linux.ibm.com>,
+ James Bottomley <James.Bottomley@hansenpartnership.com>,
+ linux-kernel@vger.kernel.org, Dov Murik <dovmurik@linux.ibm.com>,
+ Thomas Gleixner <tglx@linutronix.de>
+References: <20250403100943.120738-1-sgarzare@redhat.com>
+ <20250403100943.120738-5-sgarzare@redhat.com>
+ <20250408110012.GFZ_UBvOcEfEcIM4mI@fat_crate.local>
+ <eqtiiphs6rtjo7nirkw7zcicew75wnl4ydenrt5vl6jdpqdgj6@2brjlyjbqhoq>
+ <20250408112820.GBZ_UIVPp-LuIiVrIV@fat_crate.local>
+ <o2u7p3wb64lcc4sziunr274hyubkgmspzdjcvihbpzkw6mkvpo@sjq3vi4y2qfl>
+ <20250409102120.GCZ_ZKIJw9WkXpTz4u@fat_crate.local>
+ <CAGxU2F7r_fWgr2YRmCvh2iQ1vPg30f-+W6FXyuidbakZkwhw2w@mail.gmail.com>
+ <20250409113154.GGZ_ZaqgfRrrMij_Zm@fat_crate.local>
+Content-Language: en-US
+From: Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20250409113154.GGZ_ZaqgfRrrMij_Zm@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR13CA0010.namprd13.prod.outlook.com
+ (2603:10b6:806:130::15) To DM4PR12MB5070.namprd12.prod.outlook.com
+ (2603:10b6:5:389::22)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: AjQU931g0Kl01vGx1lIIfPdtW8s1fAk3
-X-Proofpoint-GUID: AjQU931g0Kl01vGx1lIIfPdtW8s1fAk3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-09_05,2025-04-08_04,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 spamscore=0 adultscore=0 phishscore=0
- mlxlogscore=961 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502280000 definitions=main-2504090098
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5070:EE_|MW6PR12MB8663:EE_
+X-MS-Office365-Filtering-Correlation-Id: c98c1d90-f2db-475d-5ca3-08dd7780afc5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZG1jd1JSWWt1d0F0Z0JuNnQ4K05kbXpsNU9VTDF6bWU5R01ZYzNsaE81UUl2?=
+ =?utf-8?B?RklmbVM1VGJYeUlxWUVXaGQyd2M2bmxvUlFoa3huT3h6UGVxZ0FMSkJGZVg5?=
+ =?utf-8?B?TGFxeDBnZzZrSTJMb253Si9mZk5xMkNHL0M3Y0M3MlY2VXVXQ3hVdzdUZFBD?=
+ =?utf-8?B?a1BJdnhJQld4RGZqUGdVVUtMWXJnTmdGdzd2ZmJ5S3hPZzV5YU5iVEZjVkpl?=
+ =?utf-8?B?S3VsMmJpUzMzUzlsV3hmbHduMXEzYjM5d3d5Z1JlcnRkZjRvMmRhdDFIZ0oz?=
+ =?utf-8?B?SmN1NlUrRmtvLzFDMjhnTndGaThVMmlrOStBZXJ2L2UxMXpVUTQyV2U0cks5?=
+ =?utf-8?B?V1Q4NTgvNXZrSU5nbVMyODhobC9MK2pDOUFZTGFEQ0pkMUFxbzB1dXhYc1d1?=
+ =?utf-8?B?TUtJWlh5Q0RLZzEwOS9WdlhpbEJEbzd5R3IwZXdIMlBQTjRUZGhJb3o3UVdW?=
+ =?utf-8?B?YXJORG5HS2ZZQWFsV2U1QmNsT2FEaFYxbkJwakZybTNCZGZyV3JiVzFwbEZJ?=
+ =?utf-8?B?MHZvY3JHTUZpSUdYOUJIWlZqeWs5c0FFUGlxUTBTVG9uOTVkb0orOUthVFYr?=
+ =?utf-8?B?cUt3c3Jwbk50VjhhdGpaMmFyMEt2QVY1NThOMDFUa0dIMzcvODJBRjFmc3Rx?=
+ =?utf-8?B?ckFRSExRclRHVElmM0lObzQ4bDB6cWJWc2JkRnlBQkhhWHFkT2xTN1dKVXFY?=
+ =?utf-8?B?bGhXRXpZdU1SNXhVcCtobFQ2eVFWL1J4M1YxZ2UwbUZMVGV0YXBlTkx1M3pO?=
+ =?utf-8?B?YTBFTkhadGd4MVhyNzVWcXhCQmxkQ05zdUZTRHMrVEg0b0g3bDFRbHphWmYz?=
+ =?utf-8?B?UW1tWDgxWjE0akZ0M1R6V0RtMnh6cG9qT01OU21hNUlSelJjbjhaTWNYOHdi?=
+ =?utf-8?B?M0lva01Id1MvTkFLTFFreHFnNUtjR1NpQUNUM1ZSc3ZBRDdGa3ByS2pnc3Q1?=
+ =?utf-8?B?dWdhakk4bmxSdjJvZFB1azl6eS9saXBuclFrUG50M1hwQlJXTUpIa21lNFRL?=
+ =?utf-8?B?Qnh1MWNEVEZaYnVyNzdEQkNQT2E5UFdCd2YzL3J4Ym5GTVBPRlVJWE85azR3?=
+ =?utf-8?B?SmZMQmNxcUpiU2k0SlI3YUM3YzJadUVIUGp2blhaQXNjVDRwNWtndldXdVlR?=
+ =?utf-8?B?NUowYk1YYTk5Qys1UTh4YnFURGxHdVM1RHVFTUMzMldQeXcrU1FjVFlvN2Z4?=
+ =?utf-8?B?RXFXdmo2RFlhbG5obFZkQzRmcThsZlZWQnJkUjhSYlZHSlIzcnAwM29vcGhx?=
+ =?utf-8?B?WU13Y1NZejZVY1Z0aDdjc294QnFyd2pya2JYbzNad1lrZjFPN3dPMTZCYTNH?=
+ =?utf-8?B?RW9tNVZZc2dBZEM1WWNXdFJNMGY5OEM1bkZLNTk2cXk0NGtXRWJ1NlArTFlR?=
+ =?utf-8?B?dzN1K3d6SXNPQ1R2NUlTSi9FeTJCcHROZjFkS2FVSVp3c2ZSMjdDNThOMXRi?=
+ =?utf-8?B?S1BhSDZFQU9LbzRUZVg3cUlzRHFMSmdPVFBXVGRqTk04TTFLRDlqdmcvNEZm?=
+ =?utf-8?B?cTk0WHJDa0kxS2xJR1JqcTdJb0NSY0ErOWxyY3pjcVFuVTBJc2NsNTBmVGlu?=
+ =?utf-8?B?OS9iOUpRTkhYbTR5R0x4WVVLSWsyQWp2TlQ3QUdIckkwekJMejBpVk5qR3ZS?=
+ =?utf-8?B?Y0cvZUg1cjAzUTZsUThHV05YeFk2TkpRWjFURm8rRlNQK09GRzlTbVNXL0gz?=
+ =?utf-8?B?S0ZEVEVPa1Z3aHJuaW5KMDgxVTV6QlNiRUJ0d3NJbUxoTXpoeGxuZ0FRMTc2?=
+ =?utf-8?B?ZnRhczNQajJwNFlHQ0xqMzRYUng4UWFCQWFIcVZXeGl1U3Q3bWMwRmNjNWg3?=
+ =?utf-8?B?cUlOazZHQlFleEVxa3hUc04waG1DT0VIVFMwVk1EVEtjRzhxUDBPUUZNeG5Z?=
+ =?utf-8?Q?vahZsGzIk1vrt?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5070.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?REpFbGlWaEtPNzBMTlJRaURORkdKZEtwNE84SjZ1VDNtL1d4ekwvLzAyTlpI?=
+ =?utf-8?B?VStzRGkzcFdxcENwb21UcnVHZ0ZzbWNhNUVLRUJSdXAwQjNMV2ppOUlVTnBV?=
+ =?utf-8?B?QW9CUmZST3lIQ3ZETmtLV2MwNmE4MWRjYW1zbHhXbVRoZHF1MytRYmZTNFl3?=
+ =?utf-8?B?Vy9uNjI1Z0p3ak5aQy8yV2J2L1JEZUVQWktmcHJYQ1BkUUdURjdySjYyRlZD?=
+ =?utf-8?B?clh2MlJVS3BnaHE2Z0RSKzlpM0tlckNacS9kQmhlZ3BrZG92YU91Y0ZVRmhH?=
+ =?utf-8?B?SjhSeVRTL3k4VVJiZExTc25SbklxRVppQTVjcm1CbEtCZ2JMNHRSZlowVkxr?=
+ =?utf-8?B?TXNITFpNTUNlVmEwYVRYY1paOE9mMVUwbnMrYUYzRnZETVVXdjZBb1NnaHRN?=
+ =?utf-8?B?NndqVDVQR1o3Z2dlS0Q5REU1c2EyK3BwcHkyWUlrTmdDLzJ6Z3JxRzNreHJS?=
+ =?utf-8?B?QlBraysrTXZSWjh5WFQzeUtMRlVFci8rejIrbkdPUHRaUTBGTnhuSjNrTjJa?=
+ =?utf-8?B?WW9EUHZXKzdwWGxDRG1JOEJpbGlEdWdwY2ZiUmRnSUUrTVN2MzJGQ01ud3FS?=
+ =?utf-8?B?SFVzemxaRk1Cc011UG1LUktJVzJQV2dMbTBYUjU4dGFOeUNDeFNSdHBtZTho?=
+ =?utf-8?B?RHNqOVpxUXRwajNvbGJJYUF2VHlPdVBYWitoQ0pHbVZ2Qzg1bTNoS3V0YVJX?=
+ =?utf-8?B?VVBGaUtabmtYTE0vbFVYZm02b0tIMHJRelVoMWgxYVdwOUdYamhuRlZmS09F?=
+ =?utf-8?B?aGdDbm9jYkgzbmgyNkhzaCtDcVNLL0lyalcrWEFQWXlvbjhQSTRmNW5NeFlR?=
+ =?utf-8?B?Qm8xa01GbFBWYUpoM0hFY2dXTldjMkJjMHdSUlpoOU9kbCtsNjdiNXBwKzc0?=
+ =?utf-8?B?UlBZUWZKQVNGVVdLalJXdnZmVE1CeE82RC82QnBubEYvVWdtUElZa1lyVFJ2?=
+ =?utf-8?B?dGVFQVpWTTAvdURycE4wYjdtTlVOVXdacVBFUnZWajJvc3cxMFhQbjRBMFhr?=
+ =?utf-8?B?Q01KSmI1RlozU2llWmQwbEtxaDFnUFdIRWttNlBvY2s5VVllci80RStvOXBl?=
+ =?utf-8?B?QjdiVTZEUnBubUk0OWZiMzcvRGdnNTBUbXU2dCtlT1g1UStmQkdqSU1kRDkv?=
+ =?utf-8?B?WVNJV2RJWk1UbjJMWWVGNGdWajVaenJoeGlBSWsrM3V1L2NXVHBnTzFsMHFH?=
+ =?utf-8?B?SUNRTDBld0kza1JhS1F5dWdwUjJvZE1KQUMvbWpSYmhIUytwVVF2SHRqc2p3?=
+ =?utf-8?B?djROODlKcXRPNitEeGU5Z2xwbk9vaVRQQW15dHI2NjFzUlFlaElBSzk0dzN0?=
+ =?utf-8?B?dXhKdkRKb1RNUUhqVXJVYUNvcTF5aUs2VmJ2MWgrbDk0bk5QNmVKblJvQ2JX?=
+ =?utf-8?B?Z3poN3p3Vkp4RUtVUnN1Y09jSGU4MjJMUG5vL2UxRUpqck83QmgwZGRHZ1V4?=
+ =?utf-8?B?OXhFdW5NS3JjckdjVzlvQ0ppemNxY0FHdGRLMnFybHA4V0kyUUtselh6Nmdr?=
+ =?utf-8?B?TjBMYlQvejdEWHFqaXRXdzdVTUZ5OENMSDdkZGI2Nm9qcWRsS1BHRTlwNVJs?=
+ =?utf-8?B?VFcyRFExTlI4WU00U0Q0aU5BUTdiell1eno3N2FNdkdRRjZibHpHcjN2VzZW?=
+ =?utf-8?B?bm5ma0ZKaGZ5ZFFiZWJlNVBSbmxyL1FPL3BrVkhrTW93VVpPWnZEVm9lekxi?=
+ =?utf-8?B?QmlVYWRmYkc2amxFVWhoZWtjbU12THp4MFgxZGVPMGorOFdOUDZUSnNMeHN4?=
+ =?utf-8?B?b09HbmszUW1JeW1BMm9jTGJVSVJVSzk2WGFtVWQvKzRlS0xiQ3VFTWowQjFh?=
+ =?utf-8?B?cHB1QVJBTy8wQWR5S20xbFV2S3IrRVhpRHI5emR5RWUybXhCUHlDVFFiRVEz?=
+ =?utf-8?B?Z1ZISFlXSHR6KzBkY1pqNVhROW85SnVzeUhTZzdJWFo3MnowVExhcXhNZ09C?=
+ =?utf-8?B?MjNmYVNDWkE5cWprZGRObm9id3JibWdGSnhaUjRHbCtkWUl4S0hzOC9xc1Zo?=
+ =?utf-8?B?UVc1djA2NDlvY0xMRGljbWhRR01oVnBMdmpaNGFHZ2tmYmtKbC9tdU9mZ2M1?=
+ =?utf-8?B?UThvbU5MVVM4M3lHc1hRYzFVTm1sQU12Q2g0Z1lJZ01pNkpMYnhTemVieFRv?=
+ =?utf-8?Q?+s5L0teRvyH+E8IxVExAGZkmm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c98c1d90-f2db-475d-5ca3-08dd7780afc5
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5070.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 16:07:54.6569
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m/Iv/y3gvy7VXVkSazlNq/v3MPhN5DWeoHvokjyy5/I3dsJLkMl274gyzNuqmvkTHvZ4GBzqiIycCTpOm7kzUg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8663
 
-On Wed, 2025-04-09 at 10:42 +0800, Baoquan He wrote:
-> On 04/07/25 at 07:46am, Mimi Zohar wrote:
-> > On Mon, 2025-04-07 at 09:34 +0800, Baoquan He wrote:
-> > > On 04/03/25 at 04:03pm, Mimi Zohar wrote:
-> > > > On Wed, 2025-04-02 at 19:49 +0800, Baoquan He wrote:
-> > > > > On 04/02/25 at 04:43pm, Coiby Xu wrote:
-> > > > > > On Tue, Apr 01, 2025 at 11:30:09PM -0400, Mimi Zohar wrote:
-> > > > > > > On Wed, 2025-04-02 at 09:47 +0800, RuiRui Yang wrote:
-> > > > > > [...]
-> > > > > > > > > > that.  Please don't make it generic like this.
-> > > > > > > > > >=20
-> > > > > > > > > > Please refer to ima_appraise_parse_cmdline().
-> > > > > > > > >=20
-> > > > > > > > > Hi Mimi,
-> > > > > > > > >=20
-> > > > > > > > > To save memory for kdump, it seems init_ima has been to b=
-e skipped thus
-> > > > > > > > > ima=3Doff is necessary (ima_appraise=3Doff won't serve th=
-e purpose). Or do
-> > > > > > > > > you have any specific concerns in mind?
-> > > > > > > >=20
-> > > > > > > > I think as Mimi said see below logic enforces the IMA even =
-with the
-> > > > > > > > cmdline disabling, see ima_appraise_parse_cmdline:
-> > > > > > > > if (sb_state) {
-> > > > > > > >                 if (!(appraisal_state & IMA_APPRAISE_ENFORC=
-E))
-> > > > > > > >                         pr_info("Secure boot enabled: ignor=
-ing
-> > > > > > > > ima_appraise=3D%s option",
-> > > > > > > >                                 str);
-> > > > > > > >         } else {
-> > > > > > > >                 ima_appraise =3D appraisal_state;
-> > > > > > > >         }
-> > > > > >=20
-> > > > > > Thanks for pointing me to the above code! Note with the whole I=
-MA
-> > > > > > disabled as done by this patch, the above code will not run so =
-IMA
-> > > > > > (appraisal) won't be enforced.
-> > > > > >=20
-> > > > > > >=20
-> > > > > > > Thanks, RuiRui.
-> > > > > > >=20
-> > > > > >=20
-> > > > > > Mimi, so do I understand it correctly that your want IMA-apprai=
-sal to be
-> > > > > > always enabled as long as secure boot is enabled even if users =
-choose to
-> > > > > > disable IMA?=C2=A0
-> > > >=20
-> > > > Secure boot is not the only reason.  Based on policy IMA-appraisal =
-and EVM
-> > > > calculate and store file hashes and HMAC's in their respective secu=
-rity xattrs.
-> > > > Normally the usage of file hashes and HMAC's is limited to mutable =
-files.=20
-> > > > Disabling IMA-appraisal could result in not properly updating the s=
-ecurity
-> > > > xattrs, which would result in not being able to verify the file's i=
-ntegrity on
-> > > > reboot.
-> > > >=20
-> > > > On systems where the RPM includes file signatures, file signatures =
-of immutable
-> > > > files can be safely restored.  Although it is possible to walk the =
-filesystem(s)
-> > > > "fixing" the xattrs of mutable files, it defeats the purpose.  "fix=
-" mode should
-> > > > only be enabled in a trusted environment.
-> > > >=20
-> > > > > > I wonder what security issue will it bring if this promise
-> > > > > > gets broken considering other LSMs can SELinux can be disabled =
-when
-> > > > > > secure boot is enabled?
-> > > >=20
-> > > > The builtin IMA policy rules are not defined in terms of SELinux la=
-bels.  If the
-> > > > initial IMA custom policy defines rules based on SELinux labels and=
- SELinux is
-> > > > not enabled, the policy will fail to be loaded.
-> > > >=20
-> > > > > > > Coiby, would disabling just IMA-measurement, as opposed to IM=
-A-appraisal, save
-> > > > > > > sufficient memory for kdump?
-> > > > > >=20
-> > > > > > For disabling just IMA-measurement, do you mean not enabling an=
-y measure
-> > > > > > rules?  The more memory reserved for the kdump kernel, the less=
- memory
-> > > > > > can be used by the 1st kernel. So from the perfective of kdump,=
- we try
-> > > > > > to make the memory footprint as smaller as possible.
-> > > >=20
-> > > > Got it.
-> > > >=20
-> > > > > > Baoquan, do you have any statistics about the memory overhead o=
-f IMA?
-> > > > >=20
-> > > > > I am getting a system to check that. I think there are two aspect=
-s of
-> > > > > IMA functionality we want to disable. One is disable the IMA-meas=
-urement
-> > > > > copying from 1st kernel to 2nd kernel, this is only needed by kex=
-ec
-> > > > > reboot; the other is IMA is not needed at all in kdump kernel, me=
-ans we
-> > > > > don't want to call ima_init() to initialize
-> > > > > ima_keyring/crypto/template/digests/fs etc.=20
-> > > > >=20
-> > > > > With my shallow knowledge about IMA, I don't know how to imitate
-> > > > > appraisal cmdline to disable IMA partially in kdump kernel case.
-> > >=20
-> > > Thanks for detailed explanations. Just back from holiday, sorry for l=
-ate
-> > > reply.
-> > >=20
-> > > >=20
-> > > > The IMA policy controls how much or how little IMA measures and app=
-raises.  Most
-> > > > of the memory usage is the IMA measurement list, itself, and the pe=
-r file cache
-> > > > info.  (The per file cache info limits re-measuring or re-appraisin=
-g files.)
-> > >=20
-> > > In Steve Chen's kexec supporting ima patchset, kdump kernel loading
-> > > should skip ima_kexec buffers allocating and storing via checking if
-> > > (image->type =3D=3D KEXEC_TYPE_CRASH).
-> > > >=20
-> > > > Similarly my knowledge of kdump is very limited.  Is there a way fo=
-r the kernel
-> > > > to differentiate between kexec and kdump?  If we need a mechanism t=
-o disable
-> > > > IMA-measurement, I'd *really* prefer it be limited to kdump.
-> > >=20
-> > > Yes, function is_kdump_kernel() is provided for checking if the curre=
-nt
-> > > kernel is in kdump kernel.
-> > >=20
-> > > As said in earlier reply, for kdump kernel, there are two things we
-> > > should do:
-> > > 1) when loading 2nd kernel to prepare for switching, we should not
-> > > allocate buffer and store IMA measurement list;
-> > > 2) when switched into kdump kernel, we should not call ima_init() to =
-do
-> > > kinds of init which is useless.
-> > >=20
-> > > My personnal opinion.
-> >=20
-> > Thanks for pointing out the KEXEC_TYPE_CRASH check and is_kdump_kernel(=
-).  Both
-> > changes sound reasonable.
->=20
-> Thanks for confirming. I will consider how to fix it accordingly. Maybe
-> after Steven's patches are merged. That would be great if the buffer
-> allocating and storing can be skiped for kdump in Steven's patch. While
-> I am worried that could disrupt the progress of Steven's patches.
+On 4/9/25 06:31, Borislav Petkov wrote:
+> On Wed, Apr 09, 2025 at 12:43:01PM +0200, Stefano Garzarella wrote:
+>> Sorry, maybe I missed something.
+>>
+>> tpm_svsm.c registers the driver with module_platform_driver_probe().
+>>
+>> Someone (the platform I guess) has to register the device by calling
+>> platform_device_register(), as we already do for example for
+>> sev_guest.
+> 
+> Maybe that platform device thing is the wrong approach. Why does the core code
+> need to register some dummy platform device in the first place? Why can't
+> drivers/char/tpm/tpm_svsm.c probe and init without it?
 
-Agreed, let's get Steven's patch set upstreamed and then make the kdump
-exceptions.
+I think the platform device is the right approach (just like we do for the
+sev-guest driver), but I think we should only register the device if an
+SVSM is present. Then let the vTPM driver probe routine check if the SVSM
+vTPM support is present.
 
-- "ima: kexec: move IMA log copy from kexec load to execute" looks like it =
-isn't
-copying the IMA measurement list records (kexec_post_load), but the memory =
-for
-the IMA measurement list is being allocated (ima_alloc_kexec_file_buf).
+So the vTPM driver wouldn't change, just snp_init_platform_device():
 
-- Do you really want to totally disable IMA for kdump or would disabling IM=
-A-
-measurement be sufficient?  Remember there's already an option to disable I=
-MA-
-appraisal.  Disabling just IMA-measurement would allow IMA-appraisal to con=
-tinue
-to work.  Meaning based on policy the integrity of files - executables, ker=
-nel
-image, etc - could still be verified.
+	if (snp_vmpl && platform_device_register(&tpm_svsm_device))
 
-Without IMA-measurement:
-- No adding records to the IMA measurement list
-- No IMA measurement list pseudo securityfs files
-- No extending the TPM
+Looking at the message that is issued after, maybe it should read
+"devices" now.
 
-With IMA-appraisal:
-- Integrity verification of files based on keys, keyrings
-- Loading keys
+Thanks,
+Tom
 
-Obviously my preference would be to add support to disable IMA-measurement =
-in a
-kdump environment.
-
-thanks,
-
-Mimi
+> 
 
