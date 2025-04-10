@@ -1,183 +1,140 @@
-Return-Path: <linux-integrity+bounces-5759-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5760-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE11A83F3D
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 11:46:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 138D7A83F7A
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 11:55:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 729217B6D05
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 09:45:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C61917211E
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 09:55:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA9D42676FE;
-	Thu, 10 Apr 2025 09:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD56726A0EB;
+	Thu, 10 Apr 2025 09:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OT6SR8K5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d15o3W+s"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9DC26A0D4;
-	Thu, 10 Apr 2025 09:46:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C082571C2
+	for <linux-integrity@vger.kernel.org>; Thu, 10 Apr 2025 09:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744278370; cv=none; b=s9hcc5rDHAo6ig8X1hYWLup6b18z9+h0ful/8s7ph0Jihi8YxkQ9OEIQSXxlvRjIYOQNcY0JD/dzjrzahpC4JibyuIoJHnKKHOYE/alnxEftW+WcnzLHc3LdPYLBUcTIcJv5owILUJAoVdbEQE5roaua6lFc2gB3DM5Emrb5i8s=
+	t=1744278892; cv=none; b=pIW3a6A1VTPxB0GUUQWvd6BGiOYFcMEwMffxPvuOR8fqRRcfIhkU82ALAqrNiZWiwcR4552bNtFG6HdylpwytPvsuxX67yZ8UlCd7av1g3cO7UayCEiiVMPI8Nxbh9lKeYHn1Os8gs6gNWDW+9nt0HPjlE/xJ/tcmPUh+l2VrNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744278370; c=relaxed/simple;
-	bh=4s3ZacDmF0acLH/4llQMYAZNHTv/D6yaEavN2T8m6+8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uwZL2D8oNozCQUL03n0b1nhKGgnURl1WFZUL4v0EH0qS5UwjSyR1H3YUj2d/rWUF7nPH4WtsR4gkea+o/AuVKlzH6AggkvOavhgRqTaKsrOo5rI8sHv2wnyIvYtDTfS3kb3DR60BYUjoXKru4a8/RuJ71gZVcWqVjN0QqShIFh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OT6SR8K5; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-7376dd56f60so369154b3a.3;
-        Thu, 10 Apr 2025 02:46:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744278368; x=1744883168; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X/OI6E9F737xY7P25JwnmZaPm/Y8Wf+gvRZpSuTpy6E=;
-        b=OT6SR8K5twmenZmiGPtc5rp2i3q1k8aoQYIWf5Y9dHPXp3txA3BWCqOCLssQ3/br7Q
-         s8Jn7ZqN8/7kAd05XGpH/hUF4c1m3hl/GDtMlXb8c6Dejm47rGr5nDne1F5Bc7k3GeTW
-         K054+A6/fZ9c5V0+L3EmiXWIlkUUi7MjkRccKJMB+FbX2nauiWpqb1HhLOLGyafU3nl4
-         CTJ1lb+6oTBwTtZemZdkgjz+2dTRre0SwqudTs4UNArAMxc9e9hPztEPwDhQMdXmJgz6
-         thGFTGomyJG8HGd15dVgNydquU6LSEyME6A2GqzpHBHzVozFcLIdm8VcJYTrtBatUvzC
-         J/Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744278368; x=1744883168;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/OI6E9F737xY7P25JwnmZaPm/Y8Wf+gvRZpSuTpy6E=;
-        b=fVZmtHvy3SWgf9N/ogq5A8t1UBrLQPzAg6EYs5U7KQ4a9pPu2JZO0lmy1HCI8BvWsQ
-         aT/KR8DoMBMYpdKYN9anSX/+NWLgzZAu2bP/aztzNk2OgwCYheqR8bVkscdQu3GGB7/K
-         HLBKdhzSmgnafMF2Y0vH8HF+CpxJz89PBgwZFSWX0EuLdy5t9z5msEH6UBjdHTYliMMC
-         RKTAZF20irjrB+IVoGTUOhr80ApohKlHHG65z+ZVblcqmIkmI9VGEJCU5hqQxFCWXrZK
-         wVDmWh3wXGOw3ctO94AshIplxF0omhWviWfSTXo9pEQqNLw+IOMFSzsEguvc13xnt+re
-         qQeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCzsqaO+wXlZ5btUXgo+FdrnT88VlEbfibW8w8NxqIaObnUAvfCOeg+bAr83yq3u6I/mr1T5pN18D0NhCY@vger.kernel.org, AJvYcCW53aNvCgNKYxxCj+riRABWw1h2HXqJe4IfRyurHB/cMXKP6SIlc9Y6sn1xQnD6fGgJuP+hhXQeaJw3pWu+t78=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMPYGNpIzcR38MFfBeWPClKwfCSGhF44dp3xlgTjEUv13xGGUP
-	cWN+WXJkdNyeDxx5ZuEKdLRn3jjPMZPOcdgZOzC0Fb/i1hEU+mlw
-X-Gm-Gg: ASbGncu4zER2uwxJNXMiogBwvxcQVxEPD/WyYE1R2Z9oanRzZRbnF2Tt5IL9/aoeXi/
-	Gw3QOeyz300stqWhj6TQfDTGEtTU9np92OKpNTzzEy/FNyDt+gk8uytWEfHesKp64UPoIMd5qjA
-	e3kCpOdd3eLtYN40o52b7RA0dEgcSGM7cyivxBQa2opTdI00N87k2laR/axR/+yHHHbFB3J2myC
-	WpdZmbZwbR9EPQdMQ/ssuSd+NSnocfAPLVOL1iZt0kz6/ikrVabu3hI0o8bRd8PZw7Ophs3iuov
-	DdZd1jTwWTggCqVw4JyDVtLiO9n5Eol58haZIl7Cpg3MdhuWyulqVVFf1nnpsv4Pw78VmDWkjsm
-	7fgiViZNf9BXmNww=
-X-Google-Smtp-Source: AGHT+IGxbykd1xi8RysmDEKp0xcBu26rSmEn29jOu9EKsE75TvAMZ2b+c2vZBXR06+5s39q7XPlTqg==
-X-Received: by 2002:a05:6a00:170b:b0:736:4110:5579 with SMTP id d2e1a72fcca58-73bc0a074eamr2649067b3a.2.1744278368431;
-        Thu, 10 Apr 2025 02:46:08 -0700 (PDT)
-Received: from ?IPV6:2409:4080:204:a537:5da0:ac0c:6934:f07? ([2409:4080:204:a537:5da0:ac0c:6934:f07])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1d2b34dsm2816398b3a.4.2025.04.10.02.46.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 02:46:07 -0700 (PDT)
-Message-ID: <70de56d3-1cdd-466b-b2b9-a4f69981d696@gmail.com>
-Date: Thu, 10 Apr 2025 15:16:03 +0530
+	s=arc-20240116; t=1744278892; c=relaxed/simple;
+	bh=e8pssY7zMOIxbmYX6eTCFTk3ZdlqMN7WT1Tmj47w+Bk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bdusTZZCm6KtU+jU7hBx7oHsXs7KcoQrCfePKdXwXI2zdg3/V6QwgrQ7aoP/VX04hvVbvqdzEeAK3V4A+kDjXdGsBBbF0PFSJ2+XkgHc9ru+8CZELHMgImnKVQAJ2L+vAikOnKV9yOrqyDuxNJ3t9uDFacQe28o3u6FHgRiURWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d15o3W+s; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744278890;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FBjnDHe05jMrdyAmjlXqvilcIE/JjsVNiTKFB4wAT6A=;
+	b=d15o3W+stNsYKXs++4sdstjmcASii/Wg3R1UVLE8qYjA/DKiA5K9z/L+m+gRqvvnGXW+oc
+	ZTcjd+7EED8rXwZTxjVhmowgrsn3klwyIwOyALuUAd1RcGyI2GC8cTX2uMouuug6KKLimc
+	xcVx5ArTaXK09CDgB/bBdrQ7DfFpFiI=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-80-IMCN5vjAMv-jci4TsADYlw-1; Thu,
+ 10 Apr 2025 05:54:44 -0400
+X-MC-Unique: IMCN5vjAMv-jci4TsADYlw-1
+X-Mimecast-MFC-AGG-ID: IMCN5vjAMv-jci4TsADYlw_1744278882
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C7A1180AF53;
+	Thu, 10 Apr 2025 09:54:41 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.38])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 848791828AA5;
+	Thu, 10 Apr 2025 09:54:38 +0000 (UTC)
+Date: Thu, 10 Apr 2025 17:54:33 +0800
+From: Baoquan He <bhe@redhat.com>
+To: steven chen <chenste@linux.microsoft.com>
+Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
+	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+	eric.snowberg@oracle.com, ebiederm@xmission.com,
+	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
+	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
+	dyoung@redhat.com
+Subject: Re: [PATCH v11 8/9] ima: make the kexec extra memory configurable
+Message-ID: <Z/eVWQw3z7yyzyxb@MiWiFi-R3L-srv>
+References: <20250402124725.5601-1-chenste@linux.microsoft.com>
+ <20250402124725.5601-9-chenste@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] char: tpm: tpm-buf: Fix uninitialized return values in
- read helpers
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Stefano Garzarella <sgarzare@redhat.com>, peterhuewe@gmx.de,
- jgg@ziepe.ca, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250409205536.210202-1-purvayeshi550@gmail.com>
- <Z_dh4tRIa6xxAWQ2@kernel.org>
- <t2ri7facyvtmt6rx6xwcjos7rgtyiln7cywl2gt4effgukeejc@f3ml4apdh4zs>
- <fab2bb2d-a78e-4130-a5fd-bf07430210c7@gmail.com>
- <Z_eHei1jT0YoPgki@kernel.org>
-Content-Language: en-US
-From: Purva Yeshi <purvayeshi550@gmail.com>
-In-Reply-To: <Z_eHei1jT0YoPgki@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250402124725.5601-9-chenste@linux.microsoft.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 10/04/25 14:25, Jarkko Sakkinen wrote:
-> On Thu, Apr 10, 2025 at 02:12:07PM +0530, Purva Yeshi wrote:
->> On 10/04/25 13:21, Stefano Garzarella wrote:
->>> On Thu, Apr 10, 2025 at 09:14:58AM +0300, Jarkko Sakkinen wrote:
->>>> On Thu, Apr 10, 2025 at 02:25:36AM +0530, Purva Yeshi wrote:
->>>>> Fix Smatch-detected error:
->>>>> drivers/char/tpm/tpm-buf.c:208 tpm_buf_read_u8() error:
->>>>> uninitialized symbol 'value'.
->>>>> drivers/char/tpm/tpm-buf.c:225 tpm_buf_read_u16() error:
->>>>> uninitialized symbol 'value'.
->>>>> drivers/char/tpm/tpm-buf.c:242 tpm_buf_read_u32() error:
->>>>> uninitialized symbol 'value'.
->>>>>
->>>>> Call tpm_buf_read() to populate value but do not check its return
->>>>> status. If the read fails, value remains uninitialized, causing
->>>>> undefined behavior when returned or processed.
->>>>>
->>>>> Initialize value to zero to ensure a defined return even if
->>>>> tpm_buf_read() fails, avoiding undefined behavior from using
->>>>> an uninitialized variable.
->>>>
->>>> How does tpm_buf_read() fail?
->>>
->>> If TPM_BUF_BOUNDARY_ERROR is set (or we are setting it), we are
->>> effectively returning random stack bytes to the caller.
->>> Could this be a problem?
->>>
->>> If it is, maybe instead of this patch, we could set `*output` to zero in
->>> the error path of tpm_buf_read(). Or return an error from tpm_buf_read()
->>> so callers can return 0 or whatever they want.
->>>
->>> Thanks,
->>> Stefano
->>>
->>
->> Hi Jarkko, Stefano,
->> Thank you for the review.
->>
->> I've revisited the issue and updated the implementation of tpm_buf_read() to
->> zero out the *output buffer in the error paths, instead of initializing the
->> return value in each caller.
->>
->> static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count,
->> void *output)
->> {
->> 	off_t next_offset;
->>
->> 	/* Return silently if overflow has already happened. */
->> 	if (buf->flags & TPM_BUF_BOUNDARY_ERROR) {
->> 		memset(output, 0, count);
->> 		return;
->> 	}
->>
->> 	next_offset = *offset + count;
->> 	if (next_offset > buf->length) {
->> 		WARN(1, "tpm_buf: read out of boundary\n");
->> 		buf->flags |= TPM_BUF_BOUNDARY_ERROR;
->> 		memset(output, 0, count);
->> 		return;
->> 	}
->>
->> 	memcpy(output, &buf->data[*offset], count);
->> 	*offset = next_offset;
->> }
+On 04/02/25 at 05:47am, steven chen wrote:
+> The extra memory allocated for carrying the IMA measurement list across
+> kexec is hard-coded as half a PAGE.  Make it configurable.
 > 
-> Please don't touch this.
+> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
+> extra memory (in kb) to be allocated for IMA measurements added during
+> kexec soft reboot.  Ensure the default value of the option is set such
+> that extra half a page of memory for additional measurements is allocated
+> for the additional measurements.
+> 
+> Update ima_add_kexec_buffer() function to allocate memory based on the
+> Kconfig option value, rather than the currently hard-coded one.
+> 
+> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  security/integrity/ima/Kconfig     | 10 ++++++++++
+>  security/integrity/ima/ima_kexec.c | 16 +++++++++++-----
+>  2 files changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> index 475c32615006..d73c96c3c1c9 100644
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -321,4 +321,14 @@ config IMA_DISABLE_HTABLE
+>  	help
+>  	   This option disables htable to allow measurement of duplicate records.
+>  
+> +config IMA_KEXEC_EXTRA_MEMORY_KB
+> +	int "Extra memory for IMA measurements added during kexec soft reboot"
+> +	depends on IMA_KEXEC
+> +	default 0
 
-Got it, thanks!
+Usually a new Kconfig item which accepts a range should define the range
+boundary, otherwise it's not clear to people how large or how small it
+can be set. For example, can I set it as value of 1<<40? We should at
+least estimate a possible upper limit for it for other people's
+reference. My personal opinion.
 
-> 
->>
->> This approach ensures that output is always zeroed when the read fails,
->> which avoids returning uninitialized stack values from the helper functions
->> like tpm_buf_read_u8(), tpm_buf_read_u16(), and tpm_buf_read_u32().
->>
->> Does this solution look acceptable for the next version of the patch?
->>
->> Best regards,
->> Purva Yeshi
-> 
-> BR, Jarkko
+The rest looks good to me.
+
+
+> +	help
+> +	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
+> +	  allocated (in kb) for IMA measurements added during kexec soft reboot.
+> +	  If set to the default value of 0, an extra half page of memory for those
+> +	  additional measurements will be allocated.
+> +
+>  endif
+...snip...
 
 
