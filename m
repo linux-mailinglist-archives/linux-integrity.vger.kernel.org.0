@@ -1,214 +1,134 @@
-Return-Path: <linux-integrity+bounces-5778-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5779-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A736EA84A44
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 18:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BC5E7A84A92
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 18:59:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1478E9A2BBF
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 16:35:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECAAB3B4CB9
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 16:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BA01EF365;
-	Thu, 10 Apr 2025 16:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C3B1E9B14;
+	Thu, 10 Apr 2025 16:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OJIRTuHz"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="JHT8LCdC"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845091E8323;
-	Thu, 10 Apr 2025 16:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 555581EE7DA;
+	Thu, 10 Apr 2025 16:59:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744302799; cv=none; b=J45OyrOMyIWvWFulX2XwzpKvxlMi3jVFr1TqgQE/wg5LzXkf9tlDq/K9NZvB0YDNmwT3AOkdJKvs0InaLTPC+hVMj6mqm+fFrcQpm9J6dv4dIqPn2i8RONTzeW3yRzXCFHFNR/2BlJZo6n0ay8XhkPDb81TGh9HpD34oZ50yC9k=
+	t=1744304387; cv=none; b=du2KgvecShP9APFd0V3ykowGL1HefNhc9n8gnMz3T8kL/p78/MYgnRFcY8pXW3CvFXvQ3FytEjIOidLXbsPz5XjUPr1dAahUK0QfAe9mpSCs84sa/MO3FpCwROCq3gUCF7QWOsZnTCRVR6YLF4BOkNYulxBuLJfuhugl+35FtOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744302799; c=relaxed/simple;
-	bh=eoyCJgYzXs55oTDvNvlV65c/RZBE0TfItpeF8wlwoQM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ScVt3aYPVoXI+D5++l6EmQjLTiCopkUNnXpBF6GBMAqeWk/D3O0SLCuYYq39h8mg4iYGj+AOrAMF8Xsb1V1K7lSRHTp2zgrcxWD6EckjwF5bRPhxqP2KF7bxQ5j/ePhXf2TMLO0MwDNkioqKXEMgWLfqoHLW9fpyXzh1fN/HT6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OJIRTuHz; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-301302a328bso1038950a91.2;
-        Thu, 10 Apr 2025 09:33:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744302797; x=1744907597; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=34F/kgXd/VopcAJElGms+ODL4mZ9pERk02sgiuSKvtI=;
-        b=OJIRTuHznHvP91hb8z3WXTKbvMfCTT/OkaBiAFryHMhniyINtU0cqp+XFuobwW2b1U
-         d5yWEz5VZRS1+n9npyitoLf6d8XsviWSBoDeRTyyCSbTglwJs0S03UTfsFIRjgRGMG0K
-         E/YxTBdRff7liZ9OYZ8cBmRdNFRu0nRJKycdX2F7D1Ga9xDP1SsDTLNQIo/9YfPLP4+J
-         jtis/6065K3GX1cNZ8mwGjwo76b3q7uN3t/sxcETISuO9sI06BWtp/nU/eeRtGxyBiCJ
-         cTV1hlfl+tZxQyBmiqJl1sG92fFO3SXaFP4FjqbZ4n41HDGt1u/Au/7vOLoQgcv1orOI
-         k9Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744302797; x=1744907597;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=34F/kgXd/VopcAJElGms+ODL4mZ9pERk02sgiuSKvtI=;
-        b=AEBDgKlbQmghiupdgM2A9cbi/mlZFArWYb2eFkkZh2dO+39L4LxXArfN42L/vqaoc1
-         3TaKYTbSByASaDaoE37kTJ9B24Qb8cUP7QiSo4q0TxRHI4FGzjRfADj5dbKWKOuujMtB
-         IJWhgDMheHHQ8OzF0mJ1oy3ChpaeMoxZ74nkVzfeylVTtKJ8YuAlf67lwxhx5GPS4tSO
-         d6g8BHbo1Lp9rxio6acErzBk+b6MTh2v1oj+1dA79cF+PyYmpzP5hC/TsRA+GY2qdCjS
-         gSIpbDaBhPxlGQDTZBjcnikkKTq4bFYxWEz8u4TRsogAWt+Dyig1CbeF6rQGFMi/O08s
-         YSSA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGgRqm46RCVGAxVqvfQ/toNFuK3KPCI0Ksjg6Qqkl99eMHFLDpjPDK7As5SZrykdUG99sKyAA2Ag==@vger.kernel.org, AJvYcCW1nmgcreTLpzQrLER29p8pZ2fvRGKJ8O9l3K3jZfuv4+QMylcyogj9MVVpyatwZwCbyw3AHOeJuOheySVdTPA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNyEqXdxv1bkyZKm4HD2ovTZUs+tJJNh8UDY+w8IMH8Y29VBeF
-	PNVXsDcscQvPMjsbNNzdFdeNVfIIkQKEvGQFY309LJK29lLHGa5QX4XykC/N5TIoHSX4oQ2XT6v
-	y1GIvK067ttyoRclpBCfZVd8w+BKNERpj
-X-Gm-Gg: ASbGncsZAMFSWj7PBRogsvjg0GqshjxhpcK4vDwl+1DLN5L+/2B3Z5JWFlPj8Rhd5FL
-	xB5vdrEgTEFUqW0zy8dEGEnOGLPAGwEBMrtcaFqEf/sfx22qMmYgxEWZy1umd4Aiv6VbR+47WzC
-	oYXrNXJl0AYuNIVjCSzLs/rE6Qd0rirR+x
-X-Google-Smtp-Source: AGHT+IHYTYQpiCYWMK4DrGiCOA7v1195t7O8LBzxl0z4v6ArS+MbrlheXmr7UYW4yKvKhIfo+88rmbBczXP88poKQ3g=
-X-Received: by 2002:a17:90b:2dc3:b0:2ff:69d4:6fe2 with SMTP id
- 98e67ed59e1d1-307e5997dcemr5622467a91.16.1744302796620; Thu, 10 Apr 2025
- 09:33:16 -0700 (PDT)
+	s=arc-20240116; t=1744304387; c=relaxed/simple;
+	bh=ud40hiuGG5TAQs7UCvIro5914kQp42ofgoH6rUYjU1o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZrXFHcCI2tsBUAwp+72AZ7HsTWktNdB9WCJQNGDBfpeMKgLYYOg5TFVX+2m/v1I+MUOtlgSVDgdB7dgi3zjPwgVDK8j+jTZD6uLtY9p4d0/rhLS4wShEQvVBSuphVNxQ4eSjhLwfOoO266fGEmgKoz3lPFudA7XkaXFoimBlkxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=JHT8LCdC; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [100.70.65.11] (unknown [20.110.218.7])
+	by linux.microsoft.com (Postfix) with ESMTPSA id C81DA2113E87;
+	Thu, 10 Apr 2025 09:59:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C81DA2113E87
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1744304385;
+	bh=vxXwkdEOn7BTRh/cnvKn+B0GcVvl6i4koOpR5p1bqWc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JHT8LCdCXgjdyTqcygVEM0A4oBfxyGSsACAFVgSqpF/r46yj9ypHpbSf9+HHuLb0X
+	 pmX4Hwe5MUrRUG6uvpniItcbSKg3gVhZwQfhXHOUMDNCscbXA/4LlNcntMgVGA1fl7
+	 7Dm1oub7U52nP9dRwCvWoI+slg2g3jGZNsdYjDak=
+Message-ID: <8b5e5495-4b11-4acc-8df1-fb94b2a34f0f@linux.microsoft.com>
+Date: Thu, 10 Apr 2025 09:59:41 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-57-paul@paul-moore.com>
-In-Reply-To: <20250409185019.238841-57-paul@paul-moore.com>
-From: Stephen Smalley <stephen.smalley.work@gmail.com>
-Date: Thu, 10 Apr 2025 12:33:05 -0400
-X-Gm-Features: ATxdqUGLKksXnfWLdkNxXvoOS2PL9wC28ArNVC-UWoB1nIM1nbkZYiIR5jZv6tU
-Message-ID: <CAEjxPJ6ZUXoMzKPE6iwQpvG-_SruVr+kxU-a+nQXU=ToVr8wgA@mail.gmail.com>
-Subject: Re: [RFC PATCH 26/29] selinux: move initcalls to the LSM framework
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Fan Wu <wufan@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 8/9] ima: make the kexec extra memory configurable
+To: Baoquan He <bhe@redhat.com>
+Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
+ roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+ eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+ code@tyhicks.com, bauermann@kolabnow.com, linux-integrity@vger.kernel.org,
+ kexec@lists.infradead.org, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org, madvenka@linux.microsoft.com,
+ nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
+ vgoyal@redhat.com, dyoung@redhat.com
+References: <20250402124725.5601-1-chenste@linux.microsoft.com>
+ <20250402124725.5601-9-chenste@linux.microsoft.com>
+ <Z/eVWQw3z7yyzyxb@MiWiFi-R3L-srv>
+Content-Language: en-US
+From: steven chen <chenste@linux.microsoft.com>
+In-Reply-To: <Z/eVWQw3z7yyzyxb@MiWiFi-R3L-srv>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 9, 2025 at 2:55=E2=80=AFPM Paul Moore <paul@paul-moore.com> wro=
-te:
+On 4/10/2025 2:54 AM, Baoquan He wrote:
+> On 04/02/25 at 05:47am, steven chen wrote:
+>> The extra memory allocated for carrying the IMA measurement list across
+>> kexec is hard-coded as half a PAGE.  Make it configurable.
+>>
+>> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
+>> extra memory (in kb) to be allocated for IMA measurements added during
+>> kexec soft reboot.  Ensure the default value of the option is set such
+>> that extra half a page of memory for additional measurements is allocated
+>> for the additional measurements.
+>>
+>> Update ima_add_kexec_buffer() function to allocate memory based on the
+>> Kconfig option value, rather than the currently hard-coded one.
+>>
+>> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>> ---
+>>   security/integrity/ima/Kconfig     | 10 ++++++++++
+>>   security/integrity/ima/ima_kexec.c | 16 +++++++++++-----
+>>   2 files changed, 21 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+>> index 475c32615006..d73c96c3c1c9 100644
+>> --- a/security/integrity/ima/Kconfig
+>> +++ b/security/integrity/ima/Kconfig
+>> @@ -321,4 +321,14 @@ config IMA_DISABLE_HTABLE
+>>   	help
+>>   	   This option disables htable to allow measurement of duplicate records.
+>>   
+>> +config IMA_KEXEC_EXTRA_MEMORY_KB
+>> +	int "Extra memory for IMA measurements added during kexec soft reboot"
+>> +	depends on IMA_KEXEC
+>> +	default 0
+> Usually a new Kconfig item which accepts a range should define the range
+> boundary, otherwise it's not clear to people how large or how small it
+> can be set. For example, can I set it as value of 1<<40? We should at
+> least estimate a possible upper limit for it for other people's
+> reference. My personal opinion.
+
+Hi Baoquan,
+
+How about I set range 2-40? Default set as 2, same as the fixed setting.
+
+Thanks,
+
+Steven
+
+> The rest looks good to me.
 >
-> SELinux currently has a number of initcalls so we've created a new
-> function, selinux_initcall(), which wraps all of these initcalls so
-> that we have a single initcall function that can be registered with the
-> LSM framework.
 >
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> ---
+>> +	help
+>> +	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
+>> +	  allocated (in kb) for IMA measurements added during kexec soft reboot.
+>> +	  If set to the default value of 0, an extra half page of memory for those
+>> +	  additional measurements will be allocated.
+>> +
+>>   endif
+> ...snip...
 
-> diff --git a/security/selinux/include/audit.h b/security/selinux/include/=
-audit.h
-> index d5b0425055e4..5989f8dd1e86 100644
-> --- a/security/selinux/include/audit.h
-> +++ b/security/selinux/include/audit.h
-> @@ -15,6 +15,11 @@
->  #include <linux/audit.h>
->  #include <linux/types.h>
->
-> +/**
-> + * XXX
-> + */
 
-Assuming this will be fixed before merge.
-
-> +int selinux_audit_rule_avc_callback(u32 event);
-> +
->  /**
->   * selinux_audit_rule_init - alloc/init an selinux audit rule structure.
->   * @field: the field this rule refers to
-> diff --git a/security/selinux/include/initcalls.h b/security/selinux/incl=
-ude/initcalls.h
-> new file mode 100644
-> index 000000000000..6674cf489473
-> --- /dev/null
-> +++ b/security/selinux/include/initcalls.h
-> @@ -0,0 +1,19 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * SELinux initcalls
-> + */
-> +
-> +#ifndef _SELINUX_INITCALLS_H
-> +#define _SELINUX_INITCALLS_H
-> +
-> +int init_sel_fs(void);
-> +int sel_netport_init(void);
-> +int sel_netnode_init(void);
-> +int sel_netif_init(void);
-> +int sel_netlink_init(void);
-> +int sel_ib_pkey_init(void);
-> +int selinux_nf_ip_init(void);
-
-The last two only exist if certain Kconfig options are set.
-
-> +
-> +int selinux_initcall(void);
-> +
-> +#endif
-> diff --git a/security/selinux/initcalls.c b/security/selinux/initcalls.c
-> new file mode 100644
-> index 000000000000..81f01f8ad215
-> --- /dev/null
-> +++ b/security/selinux/initcalls.c
-> @@ -0,0 +1,50 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * SELinux initcalls
-> + */
-> +
-> +#include <linux/init.h>
-> +
-> +#include "initcalls.h"
-> +
-> +/**
-> + * selinux_initcall - Perform the SELinux initcalls
-> + *
-> + * Used as a device initcall in the SELinux LSM definition.
-> + */
-> +int __init selinux_initcall(void)
-> +{
-> +       int rc =3D 0, rc_tmp =3D 0;
-> +
-> +       rc_tmp =3D init_sel_fs();
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +       rc_tmp =3D sel_netport_init();
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +       rc_tmp =3D sel_netnode_init();
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +       rc_tmp =3D sel_netif_init();
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +       rc_tmp =3D sel_netlink_init();
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +       rc_tmp =3D sel_ib_pkey_init();
-
-This one depends on CONFIG_SECURITY_INFINIBAND.
-
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +#if defined(CONFIG_NETFILTER)
-> +       rc_tmp =3D selinux_nf_ip_init();
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +#endif
-> +
-> +       return rc;
-> +}
 
