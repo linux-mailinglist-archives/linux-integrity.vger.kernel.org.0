@@ -1,160 +1,114 @@
-Return-Path: <linux-integrity+bounces-5762-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5763-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D03AA84174
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 13:07:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F119BA84285
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 14:08:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE6BC4C3A6C
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 11:07:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69C3F3A6BA7
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 12:03:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BEA21B9C7;
-	Thu, 10 Apr 2025 11:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD7B26FA77;
+	Thu, 10 Apr 2025 12:03:56 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D03F71DF991;
-	Thu, 10 Apr 2025 11:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EC21E25E3;
+	Thu, 10 Apr 2025 12:03:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744283227; cv=none; b=cF2b56UlpNURpkny8yEVaAnlq34cLP/3YlWXxNtPh+avgBTMmfw0Cosll/nhOpOss9drUTVlY8pqME2qblki+7ZjcerwxBhSQFfgQ8MOWzP/raC338OnK9tooZZv2hBgj3+AOoXKTWUeLxt/YcORFS7VKIBLrkouLFKa6ALH7fA=
+	t=1744286636; cv=none; b=mQXMDPQtdl6p9GbAqn/PB8x8Db7d6QDlPmnYIaTf/y28crANqAkwJ0fsQVZVe41Y3ELMzKImyXdm7EPRPD1JLdPtGWx0kl8IUaszR/3hb3m87/NLtAGpLsTAOY+ftNhWYypYcV/ZJXKbAG2bTf/iqa2X9P4F3UQwMi7hGbrfOmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744283227; c=relaxed/simple;
-	bh=o2o+6a4xQL07Dgpaqul/mMfczU2V+raqlFx4x3NQwp8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tIHWcYsoHfLWBrUGpTAjLJx+7t/7EvV1sVQ/23LoV4kbn1aix4KtG2Z3Xg751yKT/SKisyoKm4P9HTUZN+2xG3osagIesOWjqxHufnWX/LZag1wXGH+Zg4bC/SiveBvPJ8XtWzJ4jJdVd4JxRWx2wGZuP22jcsBfBVlY/YV0r4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3EC60106F;
-	Thu, 10 Apr 2025 04:07:04 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DB0023F6A8;
-	Thu, 10 Apr 2025 04:07:02 -0700 (PDT)
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: peterhuewe@gmx.de,
-	jarkko@kernel.org,
-	jgg@ziepe.ca,
-	sudeep.holla@arm.com,
-	stuart.yoder@arm.com
-Cc: linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH] tpm_ffa_crb: access tpm service over FF-A direct message request v2
-Date: Thu, 10 Apr 2025 12:07:01 +0100
-Message-Id: <20250410110701.1244965-1-yeoreum.yun@arm.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1744286636; c=relaxed/simple;
+	bh=6JRMMXKfVq+zPqoypSPNjKKxb+VJ2BadUFQRCRNAAIs=;
+	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=pFfgMQJ4FLrAUs+dw0VEUhqyNU1+pKDK8Fb5gp42MhSWfdg/ft4v5hxJu/cbfgUOMCvXaqzB5WwCy3Ru0fAr9sfv56Fsn0RvACwu3sFjEzxPsPxIKh1vJbd6CKt3JbXSNOcAt1X2NS3/flEFP28RDyLdkgbRDPHK24kSnfLM8k0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4ZYJ2B5G8jzsRxd;
+	Thu, 10 Apr 2025 19:46:58 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 8BDFF1402F5;
+	Thu, 10 Apr 2025 19:47:20 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwAXzd++r_dnszPFBQ--.30447S2;
+	Thu, 10 Apr 2025 12:47:20 +0100 (CET)
+Message-ID: <fb9f7900d411a3ab752759d818c3da78e2f8f0f1.camel@huaweicloud.com>
+Subject: Credentials not fully initialized before bprm_check LSM hook
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
+	 <brauner@kernel.org>, Kees Cook <kees@kernel.org>, Paul Moore
+	 <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
+	 <serge@hallyn.com>, "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, zohar@linux.ibm.com
+Date: Thu, 10 Apr 2025 13:47:07 +0200
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwAXzd++r_dnszPFBQ--.30447S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Xw18ZFykZF18ZFW8XFWxCrg_yoWkAFg_CF
+	Z8GrWjkw1qqrZ3Jay5Ar1Yva9rXF40g3s8Za4Fqr9xW3y8Jws7Wa4qgryavry8Gr4kArnF
+	9Fnxta9xZw1fWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbx8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+	AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
+	xVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwI
+	DUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBGf3bdwDzAABsn
 
-For secure partition with multi service, tpm_ffa_crb can access tpm
-service with direct message request v2 interface according to chapter 3.3,
-TPM Service Command Response Buffer Interface Over FF-A specification [0].
+Hi everyone
 
-This patch reflects this spec to access tpm service over
-FF-A direct message request v2 ABI.
+recently I discovered a problem in the implementation of our IMA
+bprm_check hook, in particular when the policy is matched against the
+bprm credentials (to be committed later during execve().
 
-Link: https://developer.arm.com/documentation/den0138/latest/ [0]
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
----
- drivers/char/tpm/tpm_crb_ffa.c | 55 ++++++++++++++++++++++++----------
- 1 file changed, 40 insertions(+), 15 deletions(-)
+Before commit 56305aa9b6fab ("exec: Compute file based creds only
+once"), bprm_fill_uid() was called in prepare_binprm() and filled the
+euid/egid before calling security_bprm_check(), which in turns calls
+IMA.
 
-diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-index 3169a87a56b6..0716c88e0281 100644
---- a/drivers/char/tpm/tpm_crb_ffa.c
-+++ b/drivers/char/tpm/tpm_crb_ffa.c
-@@ -105,7 +105,10 @@ struct tpm_crb_ffa {
- 	u16 minor_version;
- 	/* lock to protect sending of FF-A messages: */
- 	struct mutex msg_data_lock;
--	struct ffa_send_direct_data direct_msg_data;
-+	union {
-+		struct ffa_send_direct_data direct_msg_data;
-+		struct ffa_send_direct_data2 direct_msg_data2;
-+	};
- };
+After that commit, bprm_fill_uid() was moved to begin_new_exec(), which
+is when the last interpreter is found.
 
- static struct tpm_crb_ffa *tpm_crb_ffa;
-@@ -185,18 +188,34 @@ static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
+The consequence is that IMA still sees the not yet ready credentials
+and an IMA rule like:
 
- 	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
+measure func=3DCREDS_CHECK euid=3D0
 
--	memset(&tpm_crb_ffa->direct_msg_data, 0x00,
--	       sizeof(struct ffa_send_direct_data));
--
--	tpm_crb_ffa->direct_msg_data.data1 = func_id;
--	tpm_crb_ffa->direct_msg_data.data2 = a0;
--	tpm_crb_ffa->direct_msg_data.data3 = a1;
--	tpm_crb_ffa->direct_msg_data.data4 = a2;
-+	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-+		memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
-+		       sizeof(struct ffa_send_direct_data2));
-+
-+		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
-+		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
-+		tpm_crb_ffa->direct_msg_data2.data[2] = a1;
-+		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
-+
-+		ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
-+				&tpm_crb_ffa->direct_msg_data2);
-+		if (!ret)
-+			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
-+	} else {
-+		memset(&tpm_crb_ffa->direct_msg_data, 0x00,
-+		       sizeof(struct ffa_send_direct_data));
-+
-+		tpm_crb_ffa->direct_msg_data.data1 = func_id;
-+		tpm_crb_ffa->direct_msg_data.data2 = a0;
-+		tpm_crb_ffa->direct_msg_data.data3 = a1;
-+		tpm_crb_ffa->direct_msg_data.data4 = a2;
-+
-+		ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
-+				&tpm_crb_ffa->direct_msg_data);
-+		if (!ret)
-+			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
-+	}
+will not be matched for sudo-like applications.
 
--	ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
--			&tpm_crb_ffa->direct_msg_data);
--	if (!ret)
--		ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
+It does work however with SELinux, because it computes the transition
+before IMA in the bprm_creds_for_exec hook.
 
- 	return ret;
- }
-@@ -231,8 +250,13 @@ int tpm_crb_ffa_get_interface_version(u16 *major, u16 *minor)
+Since IMA needs to be involved for each execution in the chain of
+interpreters, we cannot move to the bprm_creds_from_file hook.
 
- 	rc = __tpm_crb_ffa_send_recieve(CRB_FFA_GET_INTERFACE_VERSION, 0x00, 0x00, 0x00);
- 	if (!rc) {
--		*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
--		*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
-+		if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-+			*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data2.data[1]);
-+			*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data2.data[1]);
-+		} else {
-+			*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
-+			*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
-+		}
- 	}
+How do we solve this problem? The commit mentioned that it is an
+optimization, so probably would not be too hard to partially revert it
+(and keeping what is good).
 
- 	return rc;
-@@ -277,7 +301,8 @@ static int tpm_crb_ffa_probe(struct ffa_device *ffa_dev)
+Thanks
 
- 	tpm_crb_ffa = ERR_PTR(-ENODEV); // set tpm_crb_ffa so we can detect probe failure
-
--	if (!ffa_partition_supports_direct_recv(ffa_dev)) {
-+	if (!ffa_partition_supports_direct_recv(ffa_dev) &&
-+			!ffa_partition_supports_direct_req2_recv(ffa_dev)) {
- 		pr_err("TPM partition doesn't support direct message receive.\n");
- 		return -EINVAL;
- 	}
---
-LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+Roberto
 
 
