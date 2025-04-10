@@ -1,114 +1,130 @@
-Return-Path: <linux-integrity+bounces-5763-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5764-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F119BA84285
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 14:08:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57498A84365
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 14:40:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69C3F3A6BA7
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 12:03:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADD06188F10D
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 12:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD7B26FA77;
-	Thu, 10 Apr 2025 12:03:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E8722836A2;
+	Thu, 10 Apr 2025 12:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bPe4nNb8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EC21E25E3;
-	Thu, 10 Apr 2025 12:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449091DDC0F;
+	Thu, 10 Apr 2025 12:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744286636; cv=none; b=mQXMDPQtdl6p9GbAqn/PB8x8Db7d6QDlPmnYIaTf/y28crANqAkwJ0fsQVZVe41Y3ELMzKImyXdm7EPRPD1JLdPtGWx0kl8IUaszR/3hb3m87/NLtAGpLsTAOY+ftNhWYypYcV/ZJXKbAG2bTf/iqa2X9P4F3UQwMi7hGbrfOmg=
+	t=1744288666; cv=none; b=g+0l3QZMv0RLiS3PDQNCkpvjv+h+A4xmshnVvvp17lgiU2PrfSiy3nse1qXdnaT2dFiLtF1RYFOqcMCqVknKLJR6WbV+TYdW23apsjrd2rDJLpFV6HUW8r9ChFMvCcwRawQK0YZPPVOCnGpOqVXJbgPrWU/WJTY6w1HJg279IOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744286636; c=relaxed/simple;
-	bh=6JRMMXKfVq+zPqoypSPNjKKxb+VJ2BadUFQRCRNAAIs=;
-	h=Message-ID:Subject:From:To:Cc:Date:Content-Type:MIME-Version; b=pFfgMQJ4FLrAUs+dw0VEUhqyNU1+pKDK8Fb5gp42MhSWfdg/ft4v5hxJu/cbfgUOMCvXaqzB5WwCy3Ru0fAr9sfv56Fsn0RvACwu3sFjEzxPsPxIKh1vJbd6CKt3JbXSNOcAt1X2NS3/flEFP28RDyLdkgbRDPHK24kSnfLM8k0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4ZYJ2B5G8jzsRxd;
-	Thu, 10 Apr 2025 19:46:58 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 8BDFF1402F5;
-	Thu, 10 Apr 2025 19:47:20 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwAXzd++r_dnszPFBQ--.30447S2;
-	Thu, 10 Apr 2025 12:47:20 +0100 (CET)
-Message-ID: <fb9f7900d411a3ab752759d818c3da78e2f8f0f1.camel@huaweicloud.com>
-Subject: Credentials not fully initialized before bprm_check LSM hook
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
-	 <brauner@kernel.org>, Kees Cook <kees@kernel.org>, Paul Moore
-	 <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
-	 <serge@hallyn.com>, "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, zohar@linux.ibm.com
-Date: Thu, 10 Apr 2025 13:47:07 +0200
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1744288666; c=relaxed/simple;
+	bh=sPKm1/Nz6ZhOYtb/EBIrtiQ37Zx68yFWZK7cGLk4dIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XFbKLjHDFYfqq6T8jbKr1sOsj8HwsnP/gx6auULloVn69Zpx0u/0pg1lW0LxRxA1XVijT2LqpmjkprLNq9zUjsHpczJEFhaaAB86dH/Wget9zuoA4X4yPlW4SIJehLKPss+Wj4cnA4VpohsbAUZ+y8sXUBL8/mzzXocfX532voE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bPe4nNb8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E857C4CEDD;
+	Thu, 10 Apr 2025 12:37:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744288664;
+	bh=sPKm1/Nz6ZhOYtb/EBIrtiQ37Zx68yFWZK7cGLk4dIM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bPe4nNb8Rj61smw7NSryO5eHHvcfvGZXPo7sfzrPFef+EufqQdBpgcc10lb7/l7Hv
+	 2OTZlHzAMbjjYiKnPGX2X77h4lH8D7qyRBToXyX64l8+Z9/ykI0bS+4owY1ZSM1Y+9
+	 D/qayDHpmxXH9a1dUkAREFQmMtPV7OI494avInjBqwRnxr1qksHuaBmhbhjUfc+DgG
+	 ukWlCK5lnFU2a5AJifYQlEkn9hcd+5wnzGe2Ba/fMwn/RP1/+FbcTnizxxzQ7KMrDK
+	 aRtgNjMoA5tUORBscXVM56MfHNUstljCEHfUDH73q+iRawMJWv8fGNuARKuf6ApNtX
+	 mrIaCBhFtKxyQ==
+Date: Thu, 10 Apr 2025 15:37:40 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Purva Yeshi <purvayeshi550@gmail.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] char: tpm: tpm-buf: Add sanity check fallback in read
+ helpers
+Message-ID: <Z_e7jK00SZWSsWOg@kernel.org>
+References: <20250410103442.17746-1-purvayeshi550@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwAXzd++r_dnszPFBQ--.30447S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xw18ZFykZF18ZFW8XFWxCrg_yoWkAFg_CF
-	Z8GrWjkw1qqrZ3Jay5Ar1Yva9rXF40g3s8Za4Fqr9xW3y8Jws7Wa4qgryavry8Gr4kArnF
-	9Fnxta9xZw1fWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbx8YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-	AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
-	xVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
-	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwI
-	DUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAOBGf3bdwDzAABsn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250410103442.17746-1-purvayeshi550@gmail.com>
 
-Hi everyone
+On Thu, Apr 10, 2025 at 04:04:42PM +0530, Purva Yeshi wrote:
+> Fix Smatch-detected issue:
+> 
+> drivers/char/tpm/tpm-buf.c:208 tpm_buf_read_u8() error:
+> uninitialized symbol 'value'.
+> drivers/char/tpm/tpm-buf.c:225 tpm_buf_read_u16() error:
+> uninitialized symbol 'value'.
+> drivers/char/tpm/tpm-buf.c:242 tpm_buf_read_u32() error:
+> uninitialized symbol 'value'.
+> 
+> Zero-initialize the return values in tpm_buf_read_u8(),
+> tpm_buf_read_u16(), and tpm_buf_read_u32() to guard against
+> uninitialized data in case of a boundary overflow.
+> 
+> Add defensive initialization ensures the return values are
+> always defined, preventing undefined behavior if the unexpected
+> happens.
+> 
+> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+> ---
+> V1 - https://lore.kernel.org/all/20250409205536.210202-1-purvayeshi550@gmail.com/
+> V2 - Update commit message to clarify patch adds a sanity check
+> 
+>  drivers/char/tpm/tpm-buf.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+> index e49a19fea3bd..dc882fc9fa9e 100644
+> --- a/drivers/char/tpm/tpm-buf.c
+> +++ b/drivers/char/tpm/tpm-buf.c
+> @@ -201,7 +201,7 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
+>   */
+>  u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset)
+>  {
+> -	u8 value;
+> +	u8 value = 0;
+>  
+>  	tpm_buf_read(buf, offset, sizeof(value), &value);
+>  
+> @@ -218,7 +218,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u8);
+>   */
+>  u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset)
+>  {
+> -	u16 value;
+> +	u16 value = 0;
+>  
+>  	tpm_buf_read(buf, offset, sizeof(value), &value);
+>  
+> @@ -235,7 +235,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u16);
+>   */
+>  u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
+>  {
+> -	u32 value;
+> +	u32 value = 0;
+>  
+>  	tpm_buf_read(buf, offset, sizeof(value), &value);
+>  
+> -- 
+> 2.34.1
+> 
+> 
 
-recently I discovered a problem in the implementation of our IMA
-bprm_check hook, in particular when the policy is matched against the
-bprm credentials (to be committed later during execve().
+It's good and I think this change is appropriate overall!
 
-Before commit 56305aa9b6fab ("exec: Compute file based creds only
-once"), bprm_fill_uid() was called in prepare_binprm() and filled the
-euid/egid before calling security_bprm_check(), which in turns calls
-IMA.
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-After that commit, bprm_fill_uid() was moved to begin_new_exec(), which
-is when the last interpreter is found.
-
-The consequence is that IMA still sees the not yet ready credentials
-and an IMA rule like:
-
-measure func=3DCREDS_CHECK euid=3D0
-
-will not be matched for sudo-like applications.
-
-It does work however with SELinux, because it computes the transition
-before IMA in the bprm_creds_for_exec hook.
-
-Since IMA needs to be involved for each execution in the chain of
-interpreters, we cannot move to the bprm_creds_from_file hook.
-
-How do we solve this problem? The commit mentioned that it is an
-optimization, so probably would not be too hard to partially revert it
-(and keeping what is good).
-
-Thanks
-
-Roberto
-
+BR, Jarkko
 
