@@ -1,140 +1,152 @@
-Return-Path: <linux-integrity+bounces-5760-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5761-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 138D7A83F7A
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 11:55:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFE08A840C5
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 12:35:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C61917211E
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 09:55:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E499E189C241
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 10:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD56726A0EB;
-	Thu, 10 Apr 2025 09:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F11280CF8;
+	Thu, 10 Apr 2025 10:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d15o3W+s"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m487MtyL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C082571C2
-	for <linux-integrity@vger.kernel.org>; Thu, 10 Apr 2025 09:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1367280A53;
+	Thu, 10 Apr 2025 10:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744278892; cv=none; b=pIW3a6A1VTPxB0GUUQWvd6BGiOYFcMEwMffxPvuOR8fqRRcfIhkU82ALAqrNiZWiwcR4552bNtFG6HdylpwytPvsuxX67yZ8UlCd7av1g3cO7UayCEiiVMPI8Nxbh9lKeYHn1Os8gs6gNWDW+9nt0HPjlE/xJ/tcmPUh+l2VrNM=
+	t=1744281298; cv=none; b=mJRwrkTRdObzuc0UvM8R1ZcemdK1ePh+cF6XXnQZPYDJ52KInKSW8dA6ewSo3S6k2UJ8jZP/a+TENbUeupQh91qfW234uFn6fcWSzWH4/3kjCB1Ql9OvGo7flgiouQktw6YkEObnrwEh18aa4NgxuHFsk84D/T8xuQy7ACZYiLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744278892; c=relaxed/simple;
-	bh=e8pssY7zMOIxbmYX6eTCFTk3ZdlqMN7WT1Tmj47w+Bk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bdusTZZCm6KtU+jU7hBx7oHsXs7KcoQrCfePKdXwXI2zdg3/V6QwgrQ7aoP/VX04hvVbvqdzEeAK3V4A+kDjXdGsBBbF0PFSJ2+XkgHc9ru+8CZELHMgImnKVQAJ2L+vAikOnKV9yOrqyDuxNJ3t9uDFacQe28o3u6FHgRiURWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d15o3W+s; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744278890;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FBjnDHe05jMrdyAmjlXqvilcIE/JjsVNiTKFB4wAT6A=;
-	b=d15o3W+stNsYKXs++4sdstjmcASii/Wg3R1UVLE8qYjA/DKiA5K9z/L+m+gRqvvnGXW+oc
-	ZTcjd+7EED8rXwZTxjVhmowgrsn3klwyIwOyALuUAd1RcGyI2GC8cTX2uMouuug6KKLimc
-	xcVx5ArTaXK09CDgB/bBdrQ7DfFpFiI=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-80-IMCN5vjAMv-jci4TsADYlw-1; Thu,
- 10 Apr 2025 05:54:44 -0400
-X-MC-Unique: IMCN5vjAMv-jci4TsADYlw-1
-X-Mimecast-MFC-AGG-ID: IMCN5vjAMv-jci4TsADYlw_1744278882
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C7A1180AF53;
-	Thu, 10 Apr 2025 09:54:41 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.38])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 848791828AA5;
-	Thu, 10 Apr 2025 09:54:38 +0000 (UTC)
-Date: Thu, 10 Apr 2025 17:54:33 +0800
-From: Baoquan He <bhe@redhat.com>
-To: steven chen <chenste@linux.microsoft.com>
-Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
-	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-	eric.snowberg@oracle.com, ebiederm@xmission.com,
-	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
-	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
-	dyoung@redhat.com
-Subject: Re: [PATCH v11 8/9] ima: make the kexec extra memory configurable
-Message-ID: <Z/eVWQw3z7yyzyxb@MiWiFi-R3L-srv>
-References: <20250402124725.5601-1-chenste@linux.microsoft.com>
- <20250402124725.5601-9-chenste@linux.microsoft.com>
+	s=arc-20240116; t=1744281298; c=relaxed/simple;
+	bh=Usa5GY7gLd+h3dNhdsCfEGEE0m5r6uiwqcZ8ac0SqQA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pPL+S9ulmP/kYBe2ZUu4jjiVPp2b0lbeIzxEDouMazhWkm3b5qJlklG03OeduaUh+vq1fJAE+pM2pHzsc9XlK12J6U6E1J3MITW1kAztQQopsG45eM6I3rUl+h45iPyuyBGPGsFRxMUDaoO6FAxxV3xlPTyS06eSFMRu8lZlxBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m487MtyL; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3054ef26da3so489711a91.3;
+        Thu, 10 Apr 2025 03:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744281296; x=1744886096; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gKoRPjjF2o3edAKt6JuTrWZHCul5MYWhGghZITYn0O0=;
+        b=m487MtyLFmprLombHYrtFpyjP3n9Wo+Sdnb/TwL7msWWXh/5bRqVhKnkD4gVu0XTwc
+         NPY2wiMezbARs6bcfR4ANptpCx3fdGxuGZXACKMkQdNcl5aoAuo7xqpWm+aw54XasB3a
+         G/sfy4UJaPMmLD8T0O0YxQDBg+zn1GgZUugfoPjmUayVat36QnOs9/0jZAUvfnbZhJUI
+         WF0p4AKY8HLllBL6lK/ZLRgnrX3L3H8cqIN3LgJljdb1sY5ZdUgbZvpS+wjzwzqJpEqT
+         D4e0Qn9ogh1N85zw287nKyOa/nWJM5xN6b214c32vgzn60TVtm+/Dk9M4c2cT9kr1GWb
+         YekA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744281296; x=1744886096;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gKoRPjjF2o3edAKt6JuTrWZHCul5MYWhGghZITYn0O0=;
+        b=VdyneZGCGu4ipSarLhiLUZbnSNf0Q0nmYHW7RJ4jUJOt4bYaNGBIGYFLY/UEHCVvnG
+         4fzjBak+R/5Xv62oHnB1fADQXxFvH0vGk1jOZQ3MFDmJZ4xT8FdF8moqg9JfVpCajp+W
+         vhMQWISusWPIWZBo04EeEUp/UDwlz/QZcZZ7qhDHbUuTQk3MZhuY5pGA6DM8mbP3H6IB
+         0usp/9X6A0cTdYtDz76U7tzuA+Z9tyQpQG6wzUviACw3BXMXNEtY6zXO/Wx7syHU14ab
+         sx2wYpnl0G0CKbx70f5xUyzY5xNHRrtWHT6ofj3S+1nRlkaX5jXwlC72GGm8smx3QLtG
+         Uo/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW1xJaP1ModDTXptPZezmJhbrKw6XJoPOe2H0LiiK+ZFxEvnsvX0lHkcZEsOSqQ0rhHvvqR5evZBR5sSmCWGpE=@vger.kernel.org, AJvYcCX7HYANzBwqrOG3Lh/Z23qCUGYbkFa4XvFUMkr06vsohWmohnU3l6Ltw7iYhfWnYZnAnfcSi+2+575kbGsh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxv6nQvTDwYkUOLf4xYutUpWRQOJrpMiDjFEakGBj3KO2VWotec
+	0jg6L02IDWSvXNgWsLbkM65FD1b+FbYY0RQJDyUPktyGCk3FqrOx
+X-Gm-Gg: ASbGncuOYcUNvHhtI+bMAExgi+AvWq9SpuPXDNEdNJsvmbViqRh8g2W+/WDrzjE0cul
+	SqNiNelq5hgKyweKNkWRNPT/lxEtIUQLMSTOvt0jEHwkPCN0HlMIzKfSsAvTIN6L93IX7cY+c3d
+	Cs2y5hUJ0uZ7u6eDmwu+TOjfKQHbYoqgGQxOADZkUNnG8yKPLRKvWbcN4+50GvNI/nh+oQpMKGo
+	L0COBOpCF34wsHBygMsVOWPpT54SkEeDaxWjut9PxHcrz/Tx1oWOY5i/eGYnKxkmgMc+gIxFX4m
+	Kquo/fFD1m1h3d0uKwJBewld5vitOhRL1AW2tlCRgFOkzTbo2BBdMZ5ZE2lTkYXUXHpjzMqSXA=
+	=
+X-Google-Smtp-Source: AGHT+IHM90ALESQ/hFbECm2wePfkPahQU+NMHam5UYKUXQtopaaaZm2Ej9hTWt6CgT+IFZM55oe2rQ==
+X-Received: by 2002:a17:90b:2d46:b0:2ee:6d08:7936 with SMTP id 98e67ed59e1d1-30718b82e49mr3438484a91.20.1744281296168;
+        Thu, 10 Apr 2025 03:34:56 -0700 (PDT)
+Received: from purva-IdeaPad-Gaming-3-15IHU6.. ([2409:4080:204:a537:5da0:ac0c:6934:f07])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-306df4011f1sm3438980a91.41.2025.04.10.03.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Apr 2025 03:34:55 -0700 (PDT)
+From: Purva Yeshi <purvayeshi550@gmail.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Purva Yeshi <purvayeshi550@gmail.com>
+Subject: [PATCH v2] char: tpm: tpm-buf: Add sanity check fallback in read helpers
+Date: Thu, 10 Apr 2025 16:04:42 +0530
+Message-Id: <20250410103442.17746-1-purvayeshi550@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250402124725.5601-9-chenste@linux.microsoft.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Transfer-Encoding: 8bit
 
-On 04/02/25 at 05:47am, steven chen wrote:
-> The extra memory allocated for carrying the IMA measurement list across
-> kexec is hard-coded as half a PAGE.  Make it configurable.
-> 
-> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
-> extra memory (in kb) to be allocated for IMA measurements added during
-> kexec soft reboot.  Ensure the default value of the option is set such
-> that extra half a page of memory for additional measurements is allocated
-> for the additional measurements.
-> 
-> Update ima_add_kexec_buffer() function to allocate memory based on the
-> Kconfig option value, rather than the currently hard-coded one.
-> 
-> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
-> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-> Signed-off-by: steven chen <chenste@linux.microsoft.com>
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> ---
->  security/integrity/ima/Kconfig     | 10 ++++++++++
->  security/integrity/ima/ima_kexec.c | 16 +++++++++++-----
->  2 files changed, 21 insertions(+), 5 deletions(-)
-> 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index 475c32615006..d73c96c3c1c9 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -321,4 +321,14 @@ config IMA_DISABLE_HTABLE
->  	help
->  	   This option disables htable to allow measurement of duplicate records.
->  
-> +config IMA_KEXEC_EXTRA_MEMORY_KB
-> +	int "Extra memory for IMA measurements added during kexec soft reboot"
-> +	depends on IMA_KEXEC
-> +	default 0
+Fix Smatch-detected issue:
 
-Usually a new Kconfig item which accepts a range should define the range
-boundary, otherwise it's not clear to people how large or how small it
-can be set. For example, can I set it as value of 1<<40? We should at
-least estimate a possible upper limit for it for other people's
-reference. My personal opinion.
+drivers/char/tpm/tpm-buf.c:208 tpm_buf_read_u8() error:
+uninitialized symbol 'value'.
+drivers/char/tpm/tpm-buf.c:225 tpm_buf_read_u16() error:
+uninitialized symbol 'value'.
+drivers/char/tpm/tpm-buf.c:242 tpm_buf_read_u32() error:
+uninitialized symbol 'value'.
 
-The rest looks good to me.
+Zero-initialize the return values in tpm_buf_read_u8(),
+tpm_buf_read_u16(), and tpm_buf_read_u32() to guard against
+uninitialized data in case of a boundary overflow.
 
+Add defensive initialization ensures the return values are
+always defined, preventing undefined behavior if the unexpected
+happens.
 
-> +	help
-> +	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
-> +	  allocated (in kb) for IMA measurements added during kexec soft reboot.
-> +	  If set to the default value of 0, an extra half page of memory for those
-> +	  additional measurements will be allocated.
-> +
->  endif
-...snip...
+Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+---
+V1 - https://lore.kernel.org/all/20250409205536.210202-1-purvayeshi550@gmail.com/
+V2 - Update commit message to clarify patch adds a sanity check
+
+ drivers/char/tpm/tpm-buf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+index e49a19fea3bd..dc882fc9fa9e 100644
+--- a/drivers/char/tpm/tpm-buf.c
++++ b/drivers/char/tpm/tpm-buf.c
+@@ -201,7 +201,7 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
+  */
+ u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset)
+ {
+-	u8 value;
++	u8 value = 0;
+ 
+ 	tpm_buf_read(buf, offset, sizeof(value), &value);
+ 
+@@ -218,7 +218,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u8);
+  */
+ u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset)
+ {
+-	u16 value;
++	u16 value = 0;
+ 
+ 	tpm_buf_read(buf, offset, sizeof(value), &value);
+ 
+@@ -235,7 +235,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u16);
+  */
+ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
+ {
+-	u32 value;
++	u32 value = 0;
+ 
+ 	tpm_buf_read(buf, offset, sizeof(value), &value);
+ 
+-- 
+2.34.1
 
 
