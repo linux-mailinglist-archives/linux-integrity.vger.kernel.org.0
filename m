@@ -1,171 +1,103 @@
-Return-Path: <linux-integrity+bounces-5776-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5777-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EA21A84A25
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 18:37:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3238A84A1D
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 18:36:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D73B3A7A95
-	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 16:32:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0A677B46EE
+	for <lists+linux-integrity@lfdr.de>; Thu, 10 Apr 2025 16:34:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0433F1EF09C;
-	Thu, 10 Apr 2025 16:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC7C28C5C6;
+	Thu, 10 Apr 2025 16:31:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ABYrDWHR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sSFETOtG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1791E885A;
-	Thu, 10 Apr 2025 16:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9751EFF8E;
+	Thu, 10 Apr 2025 16:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744302630; cv=none; b=Vxi4PLZCEg31sS7Lx7xdphNNV4ccEQJlmDSRAcLIrn5VwFozJbjoqb334VQr/BCNieScz5cGb5phtygwYAxreoS0YstfeAzgenY/51A1ymMZli24nvRhXdZPcjFh9/9gAKyk4jtCT2fTqhTxq4qENxL6/2ibWlQkDU4etz0OwvA=
+	t=1744302673; cv=none; b=qMFsNvIJWsLPhzgTuH4BoKRvA2FZNbI4YvLf9351fhyoh2aPoVHAZyGLLzd/DPuwRw9G1vkOrkR55O5oW6JlUwd7fK2NnASh+iHSLzTV8ccAb+H7gdVQs+b2cZ1SMPx1iuS3UQ43k3Iibz8sru4Ny7wGiHF8+ma9jZoBcQYo0Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744302630; c=relaxed/simple;
-	bh=11ttv4ahbhHR9sZ2tih/SgMW1YoKlvi3OPar0EPAd+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MfAkIHcybJfdWgNICDrQpf+2KBF8HN9n9fMJeh51MuGVmkkDq6cj+ZO7p0RgjoT99YZnINCBjvJWvQLAWVlVW6l0rCrAhtz1WH2t9pgvGoXFGn7dSOxc9mOJeRuBb/LDtqdUy2b8gmi+XGA4efda5rXR+wVuXRBs1qhevGTlhIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ABYrDWHR; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-227a8cdd241so12590445ad.3;
-        Thu, 10 Apr 2025 09:30:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744302629; x=1744907429; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2l4qjV+BqecbmcsW1PXWYeppPA2F/JV6kYzErO5Ui1E=;
-        b=ABYrDWHRbpB7YbWF+LSUtNdtcRWB9X/7r7AdQcjYymWYjbX+CZQRi0lsBYWz75Ss3i
-         K46nxtDD4ry1Qcl/du5wyPLsRHLt6Y283nEqRtrywaaJw/VUNRjqJrcD+gnqNTH23dJe
-         LFV+L7lVpxKyTJzsF48BeV2FRAdskzGgvIjCHR95SAKPHuXxPA45AAw/WN0BmOpOA2FC
-         pqiQlgltm5JBq6GPoIg4zz/hKeCNWyRgUFuR06JJzUgqtgREMiDYCWh0485Yqj+IG+LA
-         WcUyhfiXMT62C2roUoTs4/M1A4CYlrDZMDGl5MoA93kdf5RCVbjYjvfFJS2/Na43NI9C
-         sWPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744302629; x=1744907429;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2l4qjV+BqecbmcsW1PXWYeppPA2F/JV6kYzErO5Ui1E=;
-        b=dIeyp89WNGIK0vnz5IDfzGI0cimCJv17STdzRfeo+i3rKaFKH701Dhy3LaChVlqbvw
-         sPBSpFIEa9X1NNAaWyW4qQhNj045fUfN5BzZWadn5K7/Zu+nnp6ZKDwK+El81/TMPjNT
-         VHfmhG2NYAewNZlN3izY1SdUFLjXq9E6WrLriOs1GRqQm0bGummaZGl4i3h9JSWR1Zl7
-         UkrvAmx6dibuYWiioBE2PxENb/zkWyGjSzb3BKD1x8UltCyK+M4TgYj1hQcIesPmcmum
-         cv4nbVe2bhpSS/aRK7DgpKBLvT3nZh7IKzVFo5ElA2oePVqwEkNQhaC1ISI1T6iakjDS
-         mUGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUtvz16XftTADT6aJjAt/uD9I8Kcik8gEk0aTJuwEes3QX+V0MBxiuyxg+a01pdlRJcZJccn88mjWyOAoAh@vger.kernel.org, AJvYcCVuJ3vgehOoQXL2xYj2zaighN5W6xd/7jyY8E/1AtYzciHefRFGgCqT/507K+1gK26/M3jy8U+M69wnhnIcV+M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOKhbNZbyl97qIpqn5CkZMPmabjV5zwEnwsAbA5urLy8eEh09g
-	Zb9PrFy2j8ZiPXe2XPsU5s/5KpDrPUYNEoVhJy3yzjkN8/rrUPW3E4yd+QLs
-X-Gm-Gg: ASbGncu8eyOpTXXWYOubJ8RCWF1QiIeT9Eia97No9+w6HS02EOu1LAerIv4XEWdTlHg
-	r0mGOugXUE0ctTv2qW3JfGZADFojSqs6LCh8q4k6PNM2FIrBqEGWWiTt+6mMlpSQE8SWt2A2Q0p
-	hQJUxwWVAFlqQUc8UMFfiQSFxGJ/KhfsOwZZAiDydZYNaeCGuEdDbf903M3ghibmiXJxd97yayR
-	5qii2/n6xDv647MnHcKja+seJBSsHez5BdtkUvBrrLHHgbDYSrX7HS8+3HFlqOJvGUlapc3R52F
-	piZ/uGXtdI2IYflva/Gn624cwqcsjwAaCOKOC8himeL+BgdJsfY4ob0mmqY7l6svId5mf62xSbV
-	gBKXwsxIQyc1cV6/wIA==
-X-Google-Smtp-Source: AGHT+IGQg4KGXXM1ngXxY0/v+O9laACetConth/iV0+PtJEgDWhgCOpVRNWmG8pzOjtT4T4raCS5ng==
-X-Received: by 2002:a17:902:d504:b0:224:1074:63a0 with SMTP id d9443c01a7336-22b42c02570mr56828505ad.34.1744302628569;
-        Thu, 10 Apr 2025 09:30:28 -0700 (PDT)
-Received: from ?IPV6:2409:4080:204:a537:70f5:9c3d:61d0:62b9? ([2409:4080:204:a537:70f5:9c3d:61d0:62b9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73bb1d46586sm3582805b3a.64.2025.04.10.09.30.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Apr 2025 09:30:28 -0700 (PDT)
-Message-ID: <66ecd791-959b-4eee-bf08-7331baca27d4@gmail.com>
-Date: Thu, 10 Apr 2025 22:00:23 +0530
+	s=arc-20240116; t=1744302673; c=relaxed/simple;
+	bh=bEIMva8Jfu96D/+FqV2I5HWsOSzlsPgVRupjZZcj+tk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WPR17hp4SCIHXC69Pxk0wqhrphYfk+aMldLp/gY3/JSmQIa65u2gLglkpv1zYjAC8sArVSfICYCTn1BBkHbZJImuA/76tfNdSmrWzzDRKYEu68dUaQFdYINXjlj7nQcvEYRm4p5f9ngeHTwZJjzNt4M4iRSkgV+JflulfwSv9Hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sSFETOtG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 285ACC4CEDD;
+	Thu, 10 Apr 2025 16:31:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744302673;
+	bh=bEIMva8Jfu96D/+FqV2I5HWsOSzlsPgVRupjZZcj+tk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sSFETOtG+eTatr0XIRcTnqU187gO65vi/YNUcZmvNyV06WD8/FDtRkgsXNgf+Rn5m
+	 zXcoOIAucf56EazfgWb+gpWxJNon4mQ6oDqAU3mURY556zcs9D3qIiQrs+bB/BL4Ea
+	 Z9h1quwmSei4ygy8PUIoMMQNnvhOrGFX9T7XRmjUYBOW24Du9Y4Cvg9MfCl0dTPB6h
+	 /mGDzdVOcmQ6P5uIeF42cuFlcckv20aRo5gZuQA7jxjdjVLWWfrYv0CW3xEvPL72In
+	 wXruR3nFF77qhR9KM/FwyyG0Z/eSQ5WoPCAPIVq30b+yfYaCFFXdO/t4dxMUu/P92J
+	 dGI6ZsXW1G9Xw==
+Date: Thu, 10 Apr 2025 09:31:10 -0700
+From: Kees Cook <kees@kernel.org>
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+	John Johansen <john.johansen@canonical.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	Micah Morton <mortonm@chromium.org>,
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Subject: Re: [RFC PATCH 0/29] Rework the LSM initialization
+Message-ID: <202504100923.42709A64@keescook>
+References: <20250409185019.238841-31-paul@paul-moore.com>
+ <1c13537f-b088-464c-87ee-3e81fb909f92@schaufler-ca.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] char: tpm: tpm-buf: Add sanity check fallback in read
- helpers
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250410103442.17746-1-purvayeshi550@gmail.com>
- <Z_e7jK00SZWSsWOg@kernel.org>
-Content-Language: en-US
-From: Purva Yeshi <purvayeshi550@gmail.com>
-In-Reply-To: <Z_e7jK00SZWSsWOg@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c13537f-b088-464c-87ee-3e81fb909f92@schaufler-ca.com>
 
-On 10/04/25 18:07, Jarkko Sakkinen wrote:
-> On Thu, Apr 10, 2025 at 04:04:42PM +0530, Purva Yeshi wrote:
->> Fix Smatch-detected issue:
->>
->> drivers/char/tpm/tpm-buf.c:208 tpm_buf_read_u8() error:
->> uninitialized symbol 'value'.
->> drivers/char/tpm/tpm-buf.c:225 tpm_buf_read_u16() error:
->> uninitialized symbol 'value'.
->> drivers/char/tpm/tpm-buf.c:242 tpm_buf_read_u32() error:
->> uninitialized symbol 'value'.
->>
->> Zero-initialize the return values in tpm_buf_read_u8(),
->> tpm_buf_read_u16(), and tpm_buf_read_u32() to guard against
->> uninitialized data in case of a boundary overflow.
->>
->> Add defensive initialization ensures the return values are
->> always defined, preventing undefined behavior if the unexpected
->> happens.
->>
->> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
->> ---
->> V1 - https://lore.kernel.org/all/20250409205536.210202-1-purvayeshi550@gmail.com/
->> V2 - Update commit message to clarify patch adds a sanity check
->>
->>   drivers/char/tpm/tpm-buf.c | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
->> index e49a19fea3bd..dc882fc9fa9e 100644
->> --- a/drivers/char/tpm/tpm-buf.c
->> +++ b/drivers/char/tpm/tpm-buf.c
->> @@ -201,7 +201,7 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
->>    */
->>   u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset)
->>   {
->> -	u8 value;
->> +	u8 value = 0;
->>   
->>   	tpm_buf_read(buf, offset, sizeof(value), &value);
->>   
->> @@ -218,7 +218,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u8);
->>    */
->>   u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset)
->>   {
->> -	u16 value;
->> +	u16 value = 0;
->>   
->>   	tpm_buf_read(buf, offset, sizeof(value), &value);
->>   
->> @@ -235,7 +235,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_read_u16);
->>    */
->>   u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
->>   {
->> -	u32 value;
->> +	u32 value = 0;
->>   
->>   	tpm_buf_read(buf, offset, sizeof(value), &value);
->>   
->> -- 
->> 2.34.1
->>
->>
+On Thu, Apr 10, 2025 at 07:13:11AM -0700, Casey Schaufler wrote:
+> On 4/9/2025 11:49 AM, Paul Moore wrote:
+> > This is one of those patchsets that started out small and then quickly
+> > expanded to what you see here.  I will warn you that some of the
+> > individual patches are a bit ugly to look at, but I believe the end
+> > result is much cleaner than what we have now, fixes some odd/undesirable
+> > behavior on boot, and enables some new functionality.
+> >
+> > The most obvious changes are the extraction of the LSM notifier and
+> > initialization code out of security/security.c and into their own files,
+> > security/lsm_notifier.c and security/lsm_init.c.  While not strictly
+> > necessary, I think we can all agree that security/security.c has grown
+> > to be a bit of a mess, and these are two bits of functionality which
+> > can be extracted out into their own files without too much fuss.  I
+> > personally find this to be a nice quality-of-life improvement, and while
+> > I'm open to keeping everything in security.c, the argument for doing so
+> > is going to need to be *very* persuasive.
 > 
-> It's good and I think this change is appropriate overall!
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> BR, Jarkko
+> It's something I've considered doing as part of the stacking work,
+> but that I have eschewed in the spirit of churn reduction. I've no
+> problem with it.
 
-Thank you for the review.
+Yeah, to be clear, I'm a fan of these refactorings. :)
 
-Best Regards,
-Purva Yeshi
+> There's a lot of churn here due to unnecessary name changes. I can't
+> say they're unjustified, but the patch set is bigger than it needs to
+> be, and more disruptive.
+
+If renamings are desired, sure, let's do it, but I'd love to see them
+very distinctly separated from logical changes.
+
+-- 
+Kees Cook
 
