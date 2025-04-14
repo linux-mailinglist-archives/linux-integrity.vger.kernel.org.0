@@ -1,70 +1,70 @@
-Return-Path: <linux-integrity+bounces-5872-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5873-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22FA9A88D8A
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Apr 2025 23:04:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19466A88DA1
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Apr 2025 23:19:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 575EA189A7F6
-	for <lists+linux-integrity@lfdr.de>; Mon, 14 Apr 2025 21:04:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 492BD7A4637
+	for <lists+linux-integrity@lfdr.de>; Mon, 14 Apr 2025 21:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D606F1E1E19;
-	Mon, 14 Apr 2025 21:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05241B393A;
+	Mon, 14 Apr 2025 21:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q854v39l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CyFobZ4t"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CED1DF962;
-	Mon, 14 Apr 2025 21:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4002DFA4E;
+	Mon, 14 Apr 2025 21:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744664660; cv=none; b=gg0tdbUM3gnksf6A3qf6rA57YRdgpaIAQf5d61WzVWFpZS9HYRDX0QR9LAgMkyLdh8E2OjizQFLBZtllgmOJLxweGyz41+s1t6goaCvgnKykfePHsugKD5R9azSNno0ZPBlYH81NJegQeW9QEO+eMADqxGSkdzYLzKnei8/7GR0=
+	t=1744665561; cv=none; b=Hv5vVwxglaZjLBtf2r8YyS646SAPcPtWH+q9AosK9kE/JABaQVUEpgejOp2hrr3QgUHo8pkQuhKQRG4oKWRlfcp9gvC1BlaR+Sl0rMel3VRX6jgz3OIOfvqgxQFiuwseXnkRHpGwTJLBKLnd7ILyTF/hIDLNKLgvjO4aOHU9FBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744664660; c=relaxed/simple;
-	bh=/kMmR3/aCBr6gqrr9IbjWqrz3oTfnW6UJ3YNWHF6aNM=;
+	s=arc-20240116; t=1744665561; c=relaxed/simple;
+	bh=j6wOhLDwJ/trz2erD0Wh0yn9GSgSP0Ggd8mJ248LGVE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QAg3ITT4xWAapcW7BF8aiRFTOj9S6n6HpHcqWti7ZhDNfzHe41QWiTUu/T4roJhrpq4iEQNzMbskox3br9CUYwQFgEBHZJuJgnhz5KfEvvxkmmrjGYriQeKNKvqYAcMI8mPdYRXR3ZLBHh1xe+kkNASmDkr1LCM5enPMJAOxLSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q854v39l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AABC4CEE5;
-	Mon, 14 Apr 2025 21:04:20 +0000 (UTC)
+	 To:Cc:Content-Type; b=JPzy6mufCZBQL4QXh0xs+j3dpZL2adw3e/skMaQ/sUdYnCyGHR7hdNI95NSAcqPzNF5tw9oq9eqD8eeCIhboJvGC6CKmjjokSGyObNW0G9+NjBoPERF0ul82TsxBHEkh3M20rJQ+2D/bW9UtW5HayYaX9Ax+fGm2bG8gi1OebJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CyFobZ4t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D7B6C4CEF0;
+	Mon, 14 Apr 2025 21:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744664660;
-	bh=/kMmR3/aCBr6gqrr9IbjWqrz3oTfnW6UJ3YNWHF6aNM=;
+	s=k20201202; t=1744665561;
+	bh=j6wOhLDwJ/trz2erD0Wh0yn9GSgSP0Ggd8mJ248LGVE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=q854v39lOHRFCRldRR5okc2pYWSToevpLynlcxSzkWx+ixgvzbv11cSJTu7KX0AVm
-	 D9vXue0YCPXtoxY50bLSG6udSV5nQmMj89hlKDociv5R820cNtNyKoCQyO/X72G6kX
-	 L843omoegemhu9OKbFjCxlDXW4ZLUKy26kmVNyaGrocOc+coDMz/JJiKPTgpXG44Dr
-	 8LwFVKlrUsqa5VeMNBAUcqhm1OpEJKpPA5/fe14JoI9cCgpE45jUXx7VtcEjp88mhl
-	 aFlYgYSW1mpeCanzO9W7QfIpFhGz3SDQcnc/Rw9+Xx7iKTAfAgc6F5fEEP+EisUA8f
-	 PHKxFKeimrx8A==
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e53ef7462b6so4613310276.3;
-        Mon, 14 Apr 2025 14:04:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU6Y4+jkyDVSoWGuBtMwMxmOojPHpNuRc2bwqaHRN2V9VEkTmkKOo50Cggjjn77cJNcBS6aTXDhWjBslMld2y0=@vger.kernel.org, AJvYcCXnkXgFeuY7QhhlxI1HbAFzq3lIF6qCcWzZexNwOfV7gmeK7vknGL87yEn0KjO2HULbYLFxOkGf0g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqLtlwupm1tKGMSOp0wb4zOQCHK8v0Qm+k0qVnI5oNFBeiT9ZN
-	86bHWIAYo5nZ0cGJ81cMvn8HPXTHlTX7xbo5GVM6gr4GHhSaeVOI5IJ7kFUNWDPacfHxAU99KPD
-	HeUfzFO6g+78h/8CVhBNvrUKP2k8=
-X-Google-Smtp-Source: AGHT+IHt4YRN2kpPHFLSp4blfMyhlknml4TGUKUN/WIObMEJdiJ6sBZcaltdRF3A1GpTp8dpeOVHfFZtVLz3TFY8+ZA=
-X-Received: by 2002:a25:3f81:0:b0:e6e:1d4c:b34d with SMTP id
- 3f1490d57ef6-e704deee80cmr16743790276.4.1744664659451; Mon, 14 Apr 2025
- 14:04:19 -0700 (PDT)
+	b=CyFobZ4tQ/M/h7Q7aZyhdLfq0tdBqzaFkJ3xN78paogmOKmMRW/P31rXHEPlpc1/e
+	 WJ8ijfy4c/KpnEZg57lW5vfp9XxwQrYcGTZBepggoS3DAcomVXyS4CPTN/u1PymPGL
+	 O9vDsLvMP2sDRuGFLIQMLmqlAr+ivddYzZLFYjhxKiml9RKzPZANsCOWaGsia/lJAL
+	 e11/FSEeD4VpXnDe/ccmcdyMi81nAql/NCo6M3XwQ6b5ODzeB11sFg2bEJFUJ75sh7
+	 N792NX0WLygmSIdje4uCINu0r3jrUApS19Kg/D0DX7qaSvzBymh5zInIn2VrFFrNEo
+	 pkNW8u/Ee1FMA==
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6fedefb1c9cso41400007b3.0;
+        Mon, 14 Apr 2025 14:19:21 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUjjlXudrFDR0fq165pDGHrR8MZkEiuIH9OQ1C6reqSODF8IpLZihMhm06kRkOK/WOOdQukfofiAA==@vger.kernel.org, AJvYcCW0jH3xA4J4tmGHsDW7mAbm1lHxfxoioH47ruYLkjc4CsFCdSH8yEqKg2Xl7XMGJa95yZhso0cPj9+tZ1cQP4w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpZJayU+HdlX4rur/USdkmGPRU5sFttzPax/fqNDPYqd3YY/ql
+	kvyYZJEAD0JA3P4OjbJumfTvTIM3Us/xcwraBmBajwcLITt4YOGfGN5RM8bHlt0WS0hVNZvjf1W
+	syJFzVmmBbrOOmdje+iNVMWf7PcU=
+X-Google-Smtp-Source: AGHT+IHjzbvj5+C9RyG4NN0z4GbdAKbWSk3tuauhpjJWEJawSM1DpohZQ8i/++eh5wF5bUG+miKrnBZwa/zCfEYWEQg=
+X-Received: by 2002:a81:be19:0:b0:705:5ab0:ea06 with SMTP id
+ 00721157ae682-7055ab0ea6dmr194037897b3.2.1744665560291; Mon, 14 Apr 2025
+ 14:19:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-51-paul@paul-moore.com>
-In-Reply-To: <20250409185019.238841-51-paul@paul-moore.com>
+References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-50-paul@paul-moore.com>
+In-Reply-To: <20250409185019.238841-50-paul@paul-moore.com>
 From: Fan Wu <wufan@kernel.org>
-Date: Mon, 14 Apr 2025 14:04:07 -0700
-X-Gmail-Original-Message-ID: <CAKtyLkGWtiRRcxvA9vJSuwnS+bmikKpwHYOWkSYiFOToPFAt0g@mail.gmail.com>
-X-Gm-Features: ATxdqUF3ZOFosRk8lZl6cthQpodOGpWi1kcGkYEBFVIm0bmEIdnTgAsfPKxXAbs
-Message-ID: <CAKtyLkGWtiRRcxvA9vJSuwnS+bmikKpwHYOWkSYiFOToPFAt0g@mail.gmail.com>
-Subject: Re: [RFC PATCH 20/29] smack: move initcalls to the LSM framework
+Date: Mon, 14 Apr 2025 14:19:08 -0700
+X-Gmail-Original-Message-ID: <CAKtyLkG3PEwpNV55mpsntp=pbRjaZVhoYOc2wWGCsoEdqnFS_g@mail.gmail.com>
+X-Gm-Features: ATxdqUEknNldTsjoVWpW9fZnE2aqd6TR4mTnfTSuNu3-1ohxgSfO_BQWVKJmM2Q
+Message-ID: <CAKtyLkG3PEwpNV55mpsntp=pbRjaZVhoYOc2wWGCsoEdqnFS_g@mail.gmail.com>
+Subject: Re: [RFC PATCH 19/29] ipe: move initcalls to the LSM framework
 To: Paul Moore <paul@paul-moore.com>
 Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
 	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
@@ -79,124 +79,60 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Apr 9, 2025 at 11:53=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
 ote:
 >
-> As the LSM framework only supports one LSM initcall callback for each
-> initcall type, the init_smk_fs() and smack_nf_ip_init() functions were
-> wrapped with a new function, smack_initcall() that is registered with
-> the LSM framework.
->
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
 > ---
->  security/smack/smack.h           |  6 ++++++
->  security/smack/smack_lsm.c       | 16 ++++++++++++++++
->  security/smack/smack_netfilter.c |  4 +---
->  security/smack/smackfs.c         |  4 +---
->  4 files changed, 24 insertions(+), 6 deletions(-)
+>  security/ipe/fs.c  | 4 +---
+>  security/ipe/ipe.c | 1 +
+>  security/ipe/ipe.h | 2 ++
+>  3 files changed, 4 insertions(+), 3 deletions(-)
 >
-> diff --git a/security/smack/smack.h b/security/smack/smack.h
-> index bf6a6ed3946c..709e0d6cd5e1 100644
-> --- a/security/smack/smack.h
-> +++ b/security/smack/smack.h
-> @@ -275,6 +275,12 @@ struct smk_audit_info {
->  #endif
->  };
->
-> +/*
-> + * Initialization
-> + */
-> +int init_smk_fs(void);
-> +int smack_nf_ip_init(void);
-> +
->  /*
->   * These functions are in smack_access.c
+> diff --git a/security/ipe/fs.c b/security/ipe/fs.c
+> index 5b6d19fb844a..e4437c70ed3d 100644
+> --- a/security/ipe/fs.c
+> +++ b/security/ipe/fs.c
+> @@ -187,7 +187,7 @@ static const struct file_operations enforce_fops =3D =
+{
+>   * Return: %0 on success. If an error occurs, the function will return
+>   * the -errno.
 >   */
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index e09b33fed5f0..80b129a0c92c 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -5277,6 +5277,21 @@ static __init int smack_init(void)
->         return 0;
->  }
->
-> +static int smack_initcall(void)
-> +{
-> +       int rc, rc_tmp;
-> +
-> +       rc_tmp =3D init_smk_fs();
-> +       if (rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +       rc_tmp =3D smack_nf_ip_init();
-> +       if (!rc && rc_tmp)
-> +               rc =3D rc_tmp;
-> +
-> +       return rc;
-> +}
-> +
->  /*
->   * Smack requires early initialization in order to label
->   * all processes and objects when they are created.
-> @@ -5286,4 +5301,5 @@ DEFINE_LSM(smack) =3D {
->         .flags =3D LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
->         .blobs =3D &smack_blob_sizes,
->         .init =3D smack_init,
-> +       .initcall_device =3D smack_initcall,
->  };
-> diff --git a/security/smack/smack_netfilter.c b/security/smack/smack_netf=
-ilter.c
-> index 8fd747b3653a..17ba578b1308 100644
-> --- a/security/smack/smack_netfilter.c
-> +++ b/security/smack/smack_netfilter.c
-> @@ -68,7 +68,7 @@ static struct pernet_operations smack_net_ops =3D {
->         .exit =3D smack_nf_unregister,
->  };
->
-> -static int __init smack_nf_ip_init(void)
-> +int __init smack_nf_ip_init(void)
+> -static int __init ipe_init_securityfs(void)
+> +int __init ipe_init_securityfs(void)
 >  {
->         if (smack_enabled =3D=3D 0)
->                 return 0;
-> @@ -76,5 +76,3 @@ static int __init smack_nf_ip_init(void)
->         printk(KERN_DEBUG "Smack: Registering netfilter hooks\n");
->         return register_pernet_subsys(&smack_net_ops);
+>         int rc =3D 0;
+>         struct ipe_policy *ap;
+> @@ -243,5 +243,3 @@ static int __init ipe_init_securityfs(void)
+>         securityfs_remove(root);
+>         return rc;
 >  }
 > -
-> -__initcall(smack_nf_ip_init);
-> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
-> index 90a67e410808..d33dd0368807 100644
-> --- a/security/smack/smackfs.c
-> +++ b/security/smack/smackfs.c
-> @@ -2980,7 +2980,7 @@ static struct vfsmount *smackfs_mount;
->   * Returns true if we were not chosen on boot or if
->   * we were chosen and filesystem registration succeeded.
->   */
-> -static int __init init_smk_fs(void)
-> +int __init init_smk_fs(void)
->  {
->         int err;
->         int rc;
-> @@ -3023,5 +3023,3 @@ static int __init init_smk_fs(void)
+> -fs_initcall(ipe_init_securityfs);
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index 2426441181dc..71644748ed56 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -95,4 +95,5 @@ DEFINE_LSM(ipe) =3D {
+>         .id =3D &ipe_lsmid,
+>         .init =3D ipe_init,
+>         .blobs =3D &ipe_blobs,
+> +       .initcall_fs =3D ipe_init_securityfs,
+>  };
+> diff --git a/security/ipe/ipe.h b/security/ipe/ipe.h
+> index fb37513812dd..25cfdb8f0c20 100644
+> --- a/security/ipe/ipe.h
+> +++ b/security/ipe/ipe.h
+> @@ -23,4 +23,6 @@ struct ipe_bdev *ipe_bdev(struct block_device *b);
+>  struct ipe_inode *ipe_inode(const struct inode *inode);
+>  #endif /* CONFIG_IPE_PROP_FS_VERITY_BUILTIN_SIG */
 >
->         return err;
->  }
-> -
-> -__initcall(init_smk_fs);
+> +int ipe_init_securityfs(void);
+> +
+>  #endif /* _IPE_H */
 > --
 > 2.49.0
 >
 
-I'm getting the following WARNING:
+I have run the ipe's testsuite and all passed.
 
-WARNING: modpost: vmlinux: section mismatch in reference:
-smack_initcall+0xb (section: .text) -> init_smk_fs (section:
-.init.text)
-WARNING: modpost: vmlinux: section mismatch in reference:
-smack_initcall+0x16 (section: .text) -> smack_nf_ip_init (section:
-.init.text)
-WARNING: modpost: vmlinux: section mismatch in reference:
-smack_initcall+0x27 (section: .text) -> smack_nf_ip_init (section:
-.init.text)
-
-I guess "__init" is missed for smack_initcall?
-
--Fan
+Tested-by: Fan Wu <wufan@kernel.org>
+Acked-by: Fan Wu <wufan@kernel.org>
 
