@@ -1,157 +1,234 @@
-Return-Path: <linux-integrity+bounces-5881-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5882-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B08DBA896F2
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 10:42:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4937DA89D79
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 14:17:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9EBE3ADC5D
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 08:41:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3DD03BC036
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 12:16:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C229F250C08;
-	Tue, 15 Apr 2025 08:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F27129A3F3;
+	Tue, 15 Apr 2025 12:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QUxLxY0v"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="r1wO3wg4"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2393418D65E
-	for <linux-integrity@vger.kernel.org>; Tue, 15 Apr 2025 08:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616D72973D7;
+	Tue, 15 Apr 2025 12:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744706523; cv=none; b=tIFDAhHs2W0tQA6ilGQiEPGKm9GH9rM2zq2DlnknQlf62IgEOAKuFGYcYVohRnFrhyUhwcCsPa4o7eRiKTLfC3ocRnAXlijmqZKqkll/HREnKHpYfcYIj0/plRO+xkrNvGZ17QyuJcWdwvVGeXsahMWwp4nseNWKzlV2bavHZ0A=
+	t=1744719305; cv=none; b=nPJoH70C0RM5Z8yP1v0ZDDFd54qfhb8z4w2VcaYXPYOgN7NXE3bB4hT4WGWwtQ0ntDCltXmIQo9tvOKGUqFxp3F+AhoYsFKKMY4DDJCzheS9p3uno6r1FneoGlFMrUknPBv8rjnkpZbwH44qlMjp8yOtONtz68g99Bq+bHtAQVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744706523; c=relaxed/simple;
-	bh=MHKkf2eTQKJSDUVgrB+fzpXdXVMv5f/0cBZlNz363RY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dwscpzdnK4uOw1oiH1HZPYWDGZmbuoP/+VTm3sEG1q2ECZKr3myvyn9oQuWRFjlVN60U6FDWc+rz9JCu26kUtAGJQkihJuQbUxAq24lc3lbYx38nTCSOUCthtB0/JZfTwSQoBgipsD4IRIs+cIZjQXmtaWLTMxJtRPYDoze4SYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QUxLxY0v; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744706520;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rQgMM1c/L1dY1ZPWx+Tr6nBOMEoSGXdQFR50SH8ffA8=;
-	b=QUxLxY0v173+svns+yhNDGRuiFfFljRfow/rU7jsS750Vx45P982pQOytQOuJbC0HmOsMX
-	9wH+/AyOikWSdgKnEfWgszauBCYQbO/t7SCMmOht/LWTGclxWROA6s8UqReqIrWvGseXC9
-	6qmohBUzQ5K7xM77X3sLa+RU8nDgx+M=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-453-La_acylzOxeokKKRbQ1wGA-1; Tue, 15 Apr 2025 04:41:58 -0400
-X-MC-Unique: La_acylzOxeokKKRbQ1wGA-1
-X-Mimecast-MFC-AGG-ID: La_acylzOxeokKKRbQ1wGA_1744706517
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43947a0919aso35970095e9.0
-        for <linux-integrity@vger.kernel.org>; Tue, 15 Apr 2025 01:41:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744706517; x=1745311317;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rQgMM1c/L1dY1ZPWx+Tr6nBOMEoSGXdQFR50SH8ffA8=;
-        b=d/iRNBFg2r+JHvAglKCYQDLs+3oaeloCX0BXe9YSFVH2dwl+JKx4xhqdr+PTRg5TBS
-         0pujwpH1zya5FBmmn47Y92paPzwT2xwPkfKKLNNnK16qmYb5k+9nSLh/xPr6RtcHrFIY
-         8mAcXsymJeqcNkPYYFlQCo2AmcNPIbQ4a23ByOMG1UovdcJ2HynLY2cnyzhSUNlFoYJl
-         jFU8LY5EAymWioLK2oC3hvefI0pf39gWdPRtatVq9jXNVckT90jr6Z1PCrHNFOeMICiI
-         S8rTOjzsmiS4bcyvAya3sPEfO8m8NkiDD0RKnp/rcNpqyoimxwjgm1ToJ5PR3+qbWhAv
-         GwXw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZQqLoo1S1EKysG2pVUSQSq6Nqg0OSWdlgmzK80jETijMzMm8gfqNNeK7ztXl5I7QkSBJakF/YVJp+m1mTSs0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZkLm4LsCKELUG8h65V10GIjKoyQ9gRd4xwo1LesGjw+BqWHCU
-	DMuCfwGluTO42HEzMJRRYUGSz0pfdLq/OIpeZM6jxIqVxz73QWdZVH5C4+mosjb494N0Tfk0qnz
-	gBfN4rNova1K4AeEH/4hazOa/qqgWslpUl2TBH7IY5/rRXuZ1aPiBxpop1gLi5Pd/Lg==
-X-Gm-Gg: ASbGnctja12L9azV5fxS5r9EZx122+nJct8i7rRFd9TuXlaLnq99tIlPCGvDFIjhpy/
-	gMU7lTyfQzqZamEUIW9DVsgo4unzXFfmeqi720hBS1J/arZGD7cwxNl/3pJbkHOWuQYlsyzFns7
-	R9tAxBD1MB8AZmbw/T8czncaeNAee0XlHUq9U0Tb46juB0CWiJjLfKZJ5vDiFRe651Msx++AcFS
-	cT2yXjNEGWNFplcEHcFpdk7hS1g/pQxu8vKQus5/kCAmPK074zPuefVbcGXd0n3WRmurbo0FVxB
-	hlojk6EmpW+LBlCDMg==
-X-Received: by 2002:a05:600c:1d08:b0:43c:fe9f:ab90 with SMTP id 5b1f17b1804b1-43f3a9aefc4mr100464835e9.28.1744706516958;
-        Tue, 15 Apr 2025 01:41:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF/OMyHwno+9Cfn8yM66f8zcKW4KPSM63TW50jawT4VK4YHrLWm5KRsF4/mSRxZf7hHDZfrvA==
-X-Received: by 2002:a05:600c:1d08:b0:43c:fe9f:ab90 with SMTP id 5b1f17b1804b1-43f3a9aefc4mr100464635e9.28.1744706516527;
-        Tue, 15 Apr 2025 01:41:56 -0700 (PDT)
-Received: from sgarzare-redhat ([193.207.162.137])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-39eaf43cdfdsm13750153f8f.61.2025.04.15.01.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Apr 2025 01:41:55 -0700 (PDT)
-Date: Tue, 15 Apr 2025 10:41:49 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, 
-	sudeep.holla@arm.com, stuart.yoder@arm.com, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] tpm_crb_ffa: use dev_xx() macro to print log
-Message-ID: <yglnqdykvvof7iwviaacqnmmoanhhoefgmaulw7nrlf6zotbgj@obuqtycczzm7>
-References: <20250415075712.2157073-1-yeoreum.yun@arm.com>
- <20250415075712.2157073-3-yeoreum.yun@arm.com>
+	s=arc-20240116; t=1744719305; c=relaxed/simple;
+	bh=vdsvwCD3s4DY/WHfx6PSbZVy63COf/zosT7b77JmbfA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FVtGTkPzFhYCmQKVt+NY1mcJ+PgYbkKp7JnOXCdpfuI6eBlqxhPfMlE009GU2m+aDZ/5qKbWcLnQ9we531al/6PexkoSwpTxVhNl3EagnMRrQMrL7lrmA1+mNNHDc2SpM0LMRXr/dJJ07RIQjLTRtyYbLS8XSQAJYd9YnxvXFn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=r1wO3wg4; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from [192.168.192.85] (unknown [50.39.103.202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 2D81F3F189;
+	Tue, 15 Apr 2025 12:14:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1744719294;
+	bh=2WHQwBU+Gw9HB563JW+6d3V4NOu1OiBPoTs+y31s0Xk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=r1wO3wg4EKbfH80qZ44/SV8Q5TZGsApj5kK+ZQLPWeqWKiVrwVP3tCIunhZqLLl8d
+	 abIDLPDomCmt6oTHjz1o3bsgbJnFvxP5eB3irQQaZItLvPZJ6RDY8BUGaIE7beKwKf
+	 3OAtI/5hel806I+f6HGs1L/ecH2MKE86BS17ORbSYjTSoW81Uc5oV8UVZLP7+hSYGn
+	 ijFzCWOD30nZDYZBJrdV1xNYTsKnm6zFwe+qQ+yXR9hArDQAABjWFLFfuun63fFeFV
+	 QKjvT8aJd5fE/UuiC5123X8g/Jm5nYW8+W1gXdTGX5vvBVZufwcrMR77jdmRfLFzLS
+	 G3lktbL3NJn0A==
+Message-ID: <4c2ff1fe-9ded-45ad-9289-320f6f8fd098@canonical.com>
+Date: Tue, 15 Apr 2025 05:14:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20250415075712.2157073-3-yeoreum.yun@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 01/29] lsm: split the notifier code out into
+ lsm_notifier.c
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+References: <20250409185019.238841-31-paul@paul-moore.com>
+ <20250409185019.238841-32-paul@paul-moore.com>
+Content-Language: en-US
+From: John Johansen <john.johansen@canonical.com>
+Autocrypt: addr=john.johansen@canonical.com; keydata=
+ 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 lT9Q
+Organization: Canonical
+In-Reply-To: <20250409185019.238841-32-paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 15, 2025 at 08:57:12AM +0100, Yeoreum Yun wrote:
->Instread of pr_xxx() macro, use dev_xxx() to print log.
->
->Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
->---
-> drivers/char/tpm/tpm_crb_ffa.c | 8 ++++----
-> 1 file changed, 4 insertions(+), 4 deletions(-)
->
->diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
->index fed775cf53ab..0bb8098e93ae 100644
->--- a/drivers/char/tpm/tpm_crb_ffa.c
->+++ b/drivers/char/tpm/tpm_crb_ffa.c
->@@ -303,7 +303,7 @@ static int tpm_crb_ffa_probe(struct ffa_device *ffa_dev)
->
-> 	if (!ffa_partition_supports_direct_recv(ffa_dev) &&
-> 	    !ffa_partition_supports_direct_req2_recv(ffa_dev)) {
->-		pr_err("TPM partition doesn't support direct message receive.\n");
->+		dev_warn(&ffa_dev->dev, "partition doesn't support direct message receive.\n");
+On 4/9/25 11:49, Paul Moore wrote:
+> In an effort to decompose security/security.c somewhat to make it less
+> twisted and unwieldy, pull out the LSM notifier code into a new file
+> as it is fairly well self-contained.
+> 
+> No code changes.
+> 
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-It's pre-existent, but since we are here, should we put \n also in the 
-other messages besides this one?
+lgtm
 
-That said, maybe I'd mention in the commit message that we changed some 
-errors to warnings and why.
+Reviewed-by: John Johansen <john.johansen@canonical.com>
 
-Thanks,
-Stefano
-
-> 		return -EINVAL;
-> 	}
->
->@@ -324,17 +324,17 @@ static int tpm_crb_ffa_probe(struct ffa_device *ffa_dev)
-> 	rc = tpm_crb_ffa_get_interface_version(&tpm_crb_ffa->major_version,
-> 					       &tpm_crb_ffa->minor_version);
-> 	if (rc) {
->-		pr_err("failed to get crb interface version. rc:%d", rc);
->+		dev_err(&ffa_dev->dev, "failed to get crb interface version. rc:%d", rc);
-> 		goto out;
-> 	}
->
->-	pr_info("ABI version %u.%u", tpm_crb_ffa->major_version,
->+	dev_info(&ffa_dev->dev, "ABI version %u.%u", tpm_crb_ffa->major_version,
-> 		tpm_crb_ffa->minor_version);
->
-> 	if (tpm_crb_ffa->major_version != CRB_FFA_VERSION_MAJOR ||
-> 	    (tpm_crb_ffa->minor_version > 0 &&
-> 	    tpm_crb_ffa->minor_version < CRB_FFA_VERSION_MINOR)) {
->-		pr_err("Incompatible ABI version");
->+		dev_warn(&ffa_dev->dev, "Incompatible ABI version");
-> 		goto out;
-> 	}
->
->-- 
->LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
->
+> ---
+>   security/Makefile       |  2 +-
+>   security/lsm_notifier.c | 31 +++++++++++++++++++++++++++++++
+>   security/security.c     | 23 -----------------------
+>   3 files changed, 32 insertions(+), 24 deletions(-)
+>   create mode 100644 security/lsm_notifier.c
+> 
+> diff --git a/security/Makefile b/security/Makefile
+> index 22ff4c8bd8ce..14d87847bce8 100644
+> --- a/security/Makefile
+> +++ b/security/Makefile
+> @@ -11,7 +11,7 @@ obj-$(CONFIG_SECURITY) 			+= lsm_syscalls.o
+>   obj-$(CONFIG_MMU)			+= min_addr.o
+>   
+>   # Object file lists
+> -obj-$(CONFIG_SECURITY)			+= security.o
+> +obj-$(CONFIG_SECURITY)			+= security.o lsm_notifier.o
+>   obj-$(CONFIG_SECURITYFS)		+= inode.o
+>   obj-$(CONFIG_SECURITY_SELINUX)		+= selinux/
+>   obj-$(CONFIG_SECURITY_SMACK)		+= smack/
+> diff --git a/security/lsm_notifier.c b/security/lsm_notifier.c
+> new file mode 100644
+> index 000000000000..c92fad5d57d4
+> --- /dev/null
+> +++ b/security/lsm_notifier.c
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * LSM notifier functions
+> + *
+> + */
+> +
+> +#include <linux/notifier.h>
+> +#include <linux/security.h>
+> +
+> +static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
+> +
+> +int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+> +{
+> +	return blocking_notifier_call_chain(&blocking_lsm_notifier_chain,
+> +					    event, data);
+> +}
+> +EXPORT_SYMBOL(call_blocking_lsm_notifier);
+> +
+> +int register_blocking_lsm_notifier(struct notifier_block *nb)
+> +{
+> +	return blocking_notifier_chain_register(&blocking_lsm_notifier_chain,
+> +						nb);
+> +}
+> +EXPORT_SYMBOL(register_blocking_lsm_notifier);
+> +
+> +int unregister_blocking_lsm_notifier(struct notifier_block *nb)
+> +{
+> +	return blocking_notifier_chain_unregister(&blocking_lsm_notifier_chain,
+> +						  nb);
+> +}
+> +EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
+> diff --git a/security/security.c b/security/security.c
+> index fb57e8fddd91..477be0a17e3f 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -90,8 +90,6 @@ const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+>   	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+>   };
+>   
+> -static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
+> -
+>   static struct kmem_cache *lsm_file_cache;
+>   static struct kmem_cache *lsm_inode_cache;
+>   
+> @@ -643,27 +641,6 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+>   	}
+>   }
+>   
+> -int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+> -{
+> -	return blocking_notifier_call_chain(&blocking_lsm_notifier_chain,
+> -					    event, data);
+> -}
+> -EXPORT_SYMBOL(call_blocking_lsm_notifier);
+> -
+> -int register_blocking_lsm_notifier(struct notifier_block *nb)
+> -{
+> -	return blocking_notifier_chain_register(&blocking_lsm_notifier_chain,
+> -						nb);
+> -}
+> -EXPORT_SYMBOL(register_blocking_lsm_notifier);
+> -
+> -int unregister_blocking_lsm_notifier(struct notifier_block *nb)
+> -{
+> -	return blocking_notifier_chain_unregister(&blocking_lsm_notifier_chain,
+> -						  nb);
+> -}
+> -EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
+> -
+>   /**
+>    * lsm_blob_alloc - allocate a composite blob
+>    * @dest: the destination for the blob
 
 
