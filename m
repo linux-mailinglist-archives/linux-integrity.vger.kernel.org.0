@@ -1,254 +1,484 @@
-Return-Path: <linux-integrity+bounces-5895-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5896-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4428CA8AB34
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 00:17:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7F20A8AB39
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 00:20:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A50A7A3E7F
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 22:16:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A6A417CA68
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 22:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1AE3275110;
-	Tue, 15 Apr 2025 22:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FEE27511E;
+	Tue, 15 Apr 2025 22:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eNkRdyBA";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="tuM7rXcf"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="Rq65eT/n"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7611DE4C3;
-	Tue, 15 Apr 2025 22:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744755454; cv=fail; b=HwGaoB3Xg7eBq4lm+fwqsXEyjQHlDD6hRPuJ4lcu9bvttmeu5cFirB8XIveAWVWf4w0WCgG0fhCTxzGvSU8LoZTFYk600s3Q4s8ytFO91xEthuqN1rauFkUhhkcBey9oahPnH69gwFSIRPeCvuhfui1o39r0QlC0u7YVZBXAetI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744755454; c=relaxed/simple;
-	bh=5jmrIqQfdKM5Ver6L/Ia3XBJn/UJHJdxH9sdKxNhy9Q=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=NPRuxZAvGUpICAmrvgy1m2SVXRUQb5GzK/CBOXbh2QFqMYxdE83OJOFxzlOrOmGJ8Mx9uEmLS+O1EJ3S6Iaku+0AyiKRJaZGCrXMILRYnWabyVhGpYSTSgOjMZbc5D0hTjrgWMrWCZ0fIxEjpSe/kLLCRImzvM1ke2GH0drMGE8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=eNkRdyBA; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=tuM7rXcf; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53FKu1en027997;
-	Tue, 15 Apr 2025 22:16:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=O7Onn5V6bB4u9LDHpwd6ST/qIS3SmpdMDDk+8KHfaP4=; b=
-	eNkRdyBAuAv0qsX/QK+gHbh7nPQpcnDqfcShsDt8MAlClbXpLtfCTNIn/SEu/w35
-	TCQ0/jvO8t1fZ7gv0xGbOg2E9SehiDVNj0GCjbgZrLFnkbPwH9jPicV+6SkCOh6g
-	ZzVCMZzvLHXiVpPSLbvF/J3qpBFrBd8LzSQsesRfpcY07WWJw3uf0WP7gfIhyYKV
-	U8ZuewbJsJDzLI3t6GKobgp6Cnfs4tXxOvqC6bin/g296MeZ6W7OZKeR5jPowbXc
-	lXCPAW/pwwm+orwf2aemIT7oMH1kSE6kSJs5fWbIue9/XC1r3aB6ZONWsYI9OkFe
-	TaDgtU3+6cb6j5efGWpaLw==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 46180wavps-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 15 Apr 2025 22:16:53 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 53FKTvDX030983;
-	Tue, 15 Apr 2025 22:16:52 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2176.outbound.protection.outlook.com [104.47.58.176])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 460dbb919e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 15 Apr 2025 22:16:52 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jnXe7fGcGX4PNk2VbA1yRASQnSYzbXzDxi9pja8i/rgyL7BRRsp07+ezeOc+ORpR1T7lOU7kiFS5vRLsVPBwJB5r9fem+iCz921NBVSM5HzEqxg7purBUtJr/Q9rOvEV7rpD1mQEEgTrTp8OOxP2Yra/ggpNqaeAtCBkHvOWKJsqB4I2EfKbwjNwssrKSh6VwGa3IBSPWBfxjkjV4diivw+Gk1+6K5YsaEgcr1aD/r7w61ccCGp8x1hUXSmU5/FCDuQgFpwYrsTYl4SOOaueJ7LPdODfZxjn3kiS17JI0aaMPCoYN9ANqm76/7Q42x6P9lv5obYRR85vmVjKAZe1jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O7Onn5V6bB4u9LDHpwd6ST/qIS3SmpdMDDk+8KHfaP4=;
- b=yf9lbkgdL3qwCRaVLuVc6f9PL/hTCmcauMhGnLLvYlmXlD15uAcASwJnKNuo0qTt+Fiees4q0ssRl0OtJ+LvuhAcduM9kUhtx5gwgcqFfZhGu9VEsKt+a3AB1i4AoP7Xp7G4khZ/I+DvbqVCLJIkU6PPN5mn4VDqHQx3JV+TbMhzhr3hwN1Sw3Amn3T3lEW7tABaS8ZmOcs5KQtPRMF/5qr61cLyaXXXwlldnlweW/Rvv5+AsEMSeoyONIl0j3kQwP2/AFF8Gz6WbFCmt43kyLINJlsp2iZJFTAEWlp5FjERnqhB5TS7UcX/PtsXgmvRkFc0pLMNs5kXivyCJ9jT5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O7Onn5V6bB4u9LDHpwd6ST/qIS3SmpdMDDk+8KHfaP4=;
- b=tuM7rXcfJqN8EWpfSRtyrcWU5bRS1162vI80vZpY9Thga4OyhREWu5VzaGfr1k07Y/WduBZlqvhdwVp0eoPwc7janikFrbA8oejTmmHjqC3hkeNKHo6oqK+UlrkKlGwJnTPYNtVZ58ndsymQU54TTGaMzjlHswlNWkMwa4CQbF8=
-Received: from DS0PR10MB7224.namprd10.prod.outlook.com (2603:10b6:8:f5::14) by
- CY5PR10MB6071.namprd10.prod.outlook.com (2603:10b6:930:39::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8655.21; Tue, 15 Apr 2025 22:16:50 +0000
-Received: from DS0PR10MB7224.namprd10.prod.outlook.com
- ([fe80::c57:383f:cfb2:47f8]) by DS0PR10MB7224.namprd10.prod.outlook.com
- ([fe80::c57:383f:cfb2:47f8%5]) with mapi id 15.20.8632.030; Tue, 15 Apr 2025
- 22:16:49 +0000
-Message-ID: <981894aa-0db0-42e7-a18f-f9d73e75010d@oracle.com>
-Date: Tue, 15 Apr 2025 15:16:45 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 09/19] x86: Secure Launch kernel early boot stub
-To: Sean Christopherson <seanjc@google.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
-        linux-efi@vger.kernel.org, iommu@lists.linux.dev,
-        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
-        ardb@kernel.org, mjg59@srcf.ucam.org,
-        James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
-        jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
-        nivedita@alum.mit.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, corbet@lwn.net, ebiederm@xmission.com,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-References: <20250410204149.2576104-1-ross.philipson@oracle.com>
- <20250410204149.2576104-10-ross.philipson@oracle.com>
- <Z_mMaAykU0IVKsjU@google.com>
- <e781cabc-90ee-48cf-9a09-116a8edace1e@citrix.com>
- <Z_7aeWAxBSdU6cvc@google.com>
-Content-Language: en-US
-From: ross.philipson@oracle.com
-In-Reply-To: <Z_7aeWAxBSdU6cvc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0066.namprd03.prod.outlook.com
- (2603:10b6:a03:331::11) To DS0PR10MB7224.namprd10.prod.outlook.com
- (2603:10b6:8:f5::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2976F18D65E;
+	Tue, 15 Apr 2025 22:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1744755629; cv=none; b=jSvXyuc0Xs4zDZ5vD8Wd1EVLf2RfnOfe8mrcYzolZvpXy7oV3zQMll6zc9AattKd40uuIhoGrIws4SZmovsmcAlN3/pbLDkdyVdKsJsqMaeyZW2BhKg0fnZZEp2Ps+1atgLvYQ212lMyf0PgR8Mye7fduSmjP7Zm99EN+hsYLrk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1744755629; c=relaxed/simple;
+	bh=AzahQwlSCH6s1vCo1CR3wFKc44D3IhLgNuB0CmzvXGE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SQv2LHlAZjiLLvWiGL3FZ/XrgH2i2Ga0ENF8aHxTVONOq4uNfXr2Ix+2m3MXiERALHWxuDFVZ2gmUHMMwZc7ozHxF7MLRWCu8w7UlteaIpfcsk7T4L8bXrgS1i7UpRBEl8eQunM82C/Z9Fq5LX82stUbIWZNLE0R4T1wUfu9THk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=Rq65eT/n; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from [192.168.192.85] (unknown [50.39.103.202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 634753F779;
+	Tue, 15 Apr 2025 22:20:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1744755624;
+	bh=6U1USbtGfcBikKztHoLjjrarLGNGDJI2WnIN47llRKY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=Rq65eT/n0G1FuDguu+7hGIT871z5fdqRLh26yXrmvtH/OrBhTxgHPiMEFCsJ1TFOm
+	 MJ3KdG5Kv06uPNSiBeSf3dwBd2QEa18vgZ8+J7yJ9wS6OpRv9YlKaV4ykaX1WHkT4B
+	 mjzjymmR90LnfoXPOoYcF8hzdaA7fvpaXSv7kD+yJYmzXqqn3MCndpHBYaN+DxCgR0
+	 EY3D4xBcXGkviu5avS5AHEO3OBiufw6rfTZGD6nFY4ZlgR5U17PhRIE/NUArzjOLT8
+	 XCA+onpvFCCTFs+fI9zY8EyFnK8jDnl8aF6wLP6Lmkv4m5J67EO4gpwWfu8iuvT6y3
+	 U5CLWZ/rPeGGA==
+Message-ID: <3d5ba3b4-2931-4544-9861-947bd378c1ae@canonical.com>
+Date: Tue, 15 Apr 2025 15:20:19 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB7224:EE_|CY5PR10MB6071:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f1d9298-9a84-4285-6e6d-08dd7c6b37ca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cXhOOTYwYzIyVHpWUlpUUlJKRWV3dnUrL01jdFBldFh1Q3F6MUo1VDdnSlIx?=
- =?utf-8?B?ZWxSMno4d2JOTlNOU000OXZnZStWdzhRTEtWazFNSFM2bjMwTnBZdlBsQVpW?=
- =?utf-8?B?SUFNd0pYOHVFZVNuSUNBdzdBanBHemk1V2hqdHJubUZ4bVMrQXZ6YTUyS01Z?=
- =?utf-8?B?NktsVEVwSU9xSW5JS0FMNlJuNlNvT2Z2U2liYjJ4OUVNNVZJanEyMG4ydHdV?=
- =?utf-8?B?UktoUXpLVVdxS3dBbklVTllVRTNVV1c0aE1BemthWFVaYnhZU3FhSmFJZGlK?=
- =?utf-8?B?cDdpUWRLYnZnZG9La1FMT3ZGZzdiek1oUHNqaXp3SStGNDh5Z0RQeU5hS281?=
- =?utf-8?B?dUpUdG5vQ3hwckxpZ29ZZW1WMkxUbFJISFlVZGl0SnRma0taMTQ4ekk1cXN0?=
- =?utf-8?B?Z3p2Zk9aVlpaMkdEeHkzTnZRRmZDbm5tSGRBVVh5M2ZXYVB4TUprRjJ6M015?=
- =?utf-8?B?UG9VWS80dTVLYS9WSzc1bHFpajgrVWpTcjVzeHFXbW1obnN2MEM2bndRRFBj?=
- =?utf-8?B?QVBpeWVlaFB2YjFndXhKUERPbXRLY3Q4TFh1S2JoaHVFWDZvdVNWZTN4QjNZ?=
- =?utf-8?B?dVdBTjlEMHlXMitjcDJtdktGc2VjZzhWQWs4YW9iSEtyNDVLcFVtQ2pYUjZG?=
- =?utf-8?B?aytmb2JYTWRiUUVaMjd2WXRvOU1IS3VDdm5VVDZHTjhmSXg1MzJiNWsyWGdD?=
- =?utf-8?B?QitUcWZrVUhTYXFhNEd4SnNTQnpsdlVCcEQwYlp6bzVYOUErSXBwcDl6cCtF?=
- =?utf-8?B?aWgyUDEzYjJtTkkvNko1WVI1RGNzakFJeXlvVnN5aW5oWTdoUVNPTkFrQlcw?=
- =?utf-8?B?UXFXSnZ3bDhWak1KY2JRUk5TUXNBWkZnZTkyMnpMYUt0Tkk3N2VZUVFjNEtC?=
- =?utf-8?B?SUhVNTdtSG5KNTNTdGpLdUUxQWdsS2lWSGcwR0FPdkk0WFk4aE5OdldpNGVF?=
- =?utf-8?B?dkV3anFBNlJLVVBXYVkyMDczMjBOQnpnNDkzQ2EwaUhxaVBLNVRMTEt1NHpl?=
- =?utf-8?B?MW15SEhLNGxweEdQRmNSNTcvdEJPNGJaWEh5Ymg3OVhxTktHbWJnZnp0clgv?=
- =?utf-8?B?TUhsV3pvZXEwWWFvWEFENjFpWUlhaHlYVTNPNFVoSEx1UlcrYXVJRytBcXZl?=
- =?utf-8?B?VUxTc1JjdzZhQ0pyaGh1azhZNW4xUnl2N1BybWl5SmtaamJNeTUvNTZLNkkv?=
- =?utf-8?B?N1RFVDZkL3FWWHhYcnFDb084ZnNZQ3dyTDZYZmVsL3BOYjhtRDZVb2kxKy9y?=
- =?utf-8?B?NmdSYWFuOFlVUFhZUks5cURTNkJXdGkxWXM1eUJCRDcwTUcrd1BFMFduQnNH?=
- =?utf-8?B?dENEakI2NE56UnZCNXpQS1hFaTNnbzc0U096SXNPdVdSK3ZscWErVCtFWk9M?=
- =?utf-8?B?emtMSzUyTjlpT2ZxeTNhSEdSL3VRUUl4TmRnRDhxMkdaNlpvbzd1djFPR0Z2?=
- =?utf-8?B?VnJ1UXBsUk9YTU52RUJLTnVYM1pHZnFoOVZja0IzRGRYZkpncUdlb3NCSDlJ?=
- =?utf-8?B?MGpQakhhSFdwVWlqRk1yaUF4QjR4K1E4VGNVc09hcDdXMG5WdUNsVXMvT1Np?=
- =?utf-8?B?Y2ozSndhUmI5WDNDaUlXN3VPU3BjdTg0ZzNEUkgxZ3dudnc4OXZCVUpCTmha?=
- =?utf-8?B?VWJPNmtuVFJGL3dhbXFwOCtiT1VLR0xqUFUvL3JZVUxaUnBqMnVjeWM2dlVC?=
- =?utf-8?B?MnBVc3l4d2xJNHlTZ2YxMlliQ09ROFVIOWpzVVlBRk91d2h3eUVuUEVabHRj?=
- =?utf-8?B?OTY0MVI5MVRQQjhhenQ3NUppeVduMXhVbHIweEF1Slo0Y2lvUHF0Z0VDTDRq?=
- =?utf-8?B?cTlENXlUamE1QmtaZ1Q4Y2lsRnI5ZDdhUDgwSmlFb0xVUDc1aHNiMmVQY2NL?=
- =?utf-8?B?dDh6OVlTTXFDK1BUdjlYSzVVMlZjcThhUVdPdGdaVEZUK0ErMjF1eDhFRWxO?=
- =?utf-8?Q?TcXMWZb5fPI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7224.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eG9HZjJlYmpPT2dTQVhXZFdiZEw3UXk3TTE4aERwUVNZZDBIOXhOWXpSQlNv?=
- =?utf-8?B?WGJlRGY4YWNiR3VkNjJqVmxXbFlGMytmUm8zWWNhdXZGSS9jMUlnTDhzTUNT?=
- =?utf-8?B?NWZpMEJhRS8zb3dyZ1NlRWVpSmRVOFJOL1o4ZWUrdTVvZ3B1akJ5cVdTRWcz?=
- =?utf-8?B?TGtGTUZKKzB2Qy9uSGZEZEV5QTVZcHZzNjNrRSttZElIbVdpUHY4VEFseFVV?=
- =?utf-8?B?MTZPQ3lIaHpFd2lJTU1kQTdpdURXeU5ZN3RMMnJnZUU2dzczbmg3VnI1MXV6?=
- =?utf-8?B?RFh6TlY2Y0thamRYSHBKdVRQalJvbjR5Y3Z3MEplTGZuUHgzcERKYjEycml3?=
- =?utf-8?B?RzhjMGhnV1hVREFGNlZuVW1ReVM2K1N4WnRBZWlKdzhsZU9UU01tc1NIQVVv?=
- =?utf-8?B?czVvbjh1NXBnN01aN3cxRXo1QkRxUGlZTW9NTklleUFtSXdVazYzK1NSby9K?=
- =?utf-8?B?UU4rVERCSHJqZ3NxQklqblF6NUJ4TWc3SUw2cE5ZcjEzdUxFMkRob3ZlQ3Vq?=
- =?utf-8?B?OE9kT044MnFFMzBPQ3JNMi9Ud3hMcituTGIyRll0REF2UDRxVkhHTnJLcHV5?=
- =?utf-8?B?K3hpek45QUVKdTcrZ2FYTGViRnZQSHh2ZnFnK1FzVmtCSlZMdWtzR0phKzlD?=
- =?utf-8?B?R2JWN25YV2Ruak1PaUUzRnBnZGdIWFZia1hNMHRBdjQxVVo3VkZOd0lkNFJU?=
- =?utf-8?B?MGJqRWFlQiswQUlCMlc5OUJHcG9GTVdNUnZ5OHJLNXUzdm0wUTludVVmbkM4?=
- =?utf-8?B?ZzFEN2NNbmJ6ZVdSVFprdjdJeXpTY3VMMkJIY2lNZDhhQURjYmtyYWczcVFN?=
- =?utf-8?B?VFBmV0t5RGpNUFo3NXdITkF6dzVnMVNtY1Y4M2RsL0RQbzRjemdlOTljeEMr?=
- =?utf-8?B?T1RpdjVpeU5XTjk2QUo1WmxiaVk4WmcxSXBpdzNHako5R21RaW41eHZTMHUw?=
- =?utf-8?B?ZjN3Sm9YdW8zbnRLVDh1ZVd1QTRER2g1NVFKaFowdWg2dDJjcm5lenM4aFRM?=
- =?utf-8?B?eXNSZFJQRCs0eTBXZHQyY0IraHRyaW1pZzlsSXdCenBvR0k5bjlGZ3J4alRW?=
- =?utf-8?B?RWV0WHBFZjE5Smg0Qndldnd2N1ZUQ1F6NUwrZDlJTVk2YTliRTlTZ1plUlJt?=
- =?utf-8?B?ODZ0bXpxTnpJeTZYeE9nTFRzR0Y5a1A3Q2pkVTZUMktzeC95MkdKYnRheHpV?=
- =?utf-8?B?TStjWk8wbzJTYkRwMEVmTEE0YU1LMmRPYWJhWlJaSnpzcHdHZ2tFcWw1SERY?=
- =?utf-8?B?cTJYeHJSZ3Q5eElBSVJWOXR0Nm4wQk1EUGd3Q0QvZGZaNnJGbU1VOEs1SS9r?=
- =?utf-8?B?Rld4VFBaNXJBallxN2x2ZWg2ZkFCTFhJOVlaVFNvVWtJZ0grdDdqUW5UTnNP?=
- =?utf-8?B?SkNhcTFLWjZlR3ltTDM2REZyaGdMQWl5aDVBQzRDcDlnamEwY1AyT29qaHhs?=
- =?utf-8?B?TjFSZTUydXZXcDkxS3I3c0FLSGs0ay9RdXFaRVhyTUVHUThNQkFLRy92cXJO?=
- =?utf-8?B?RTdZdTUraDJndWpWU3VFQ1lGcFMwdmVVN1pITHhpVXNiZDladURjQXpMZ1pB?=
- =?utf-8?B?aDlTQVpMWkc2eWFyRGt0RUlKMStRek5KM2hUSzBjT3UvZUFDVjlLVkdod3JJ?=
- =?utf-8?B?YWxubGN1a2Ftd1BLa2UrUzkzeUovdDltSGFqYktmeUpaRmZ1d3VsZnFic0tv?=
- =?utf-8?B?TUdhR3I2R2E5aDFtdzF6MmxlcWFxeXJpQ3FVRG9vMklwQitHeFlZZHBMeGJk?=
- =?utf-8?B?NmhvOHZ1aTg4OUdIcVIvMXRFQjBJMWdwK1ZoaXZ3emtsWFd5cHBZemFQUUJu?=
- =?utf-8?B?anlENkxrUTVWOVhnbFRDcUhWUGdveFUvNTVSUWVvUDRpUGNyU1ltY2RaSEpF?=
- =?utf-8?B?cy9nZUpUOWpTYno0M05pUms4cUo4eG1TMkhMd2RZUDVaN1ZnanVUK21sdnZ6?=
- =?utf-8?B?aS9GWG5WWkRucVhYSktLVFlZeGxYVURUemFNb3poa3RjbThxamJRWEYyWUU0?=
- =?utf-8?B?Qjc3RmNzb2NQTkN6aGh1WkFhamJQK0pDK2pMR3BTTjZLL3Azc0k2d0ZRNGxT?=
- =?utf-8?B?U1dLdEV6VlRzMHozTk55RVJUVTVQKzhDQ2k1M0RkK21tdXpOWUgxUmx3c2Uw?=
- =?utf-8?B?MC9GQVBJRVJYc0JEZHdTOHZGdGQwNkx6RlB5QlVRY0JBMWd1cExPOVdCcmRu?=
- =?utf-8?B?YkE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	batsWyYL3JlnWyLIRrDdSB0JyVlPmssZASZGdKP+xQyIjaekZoWZ0APezujkRrZGMWjJsf17QXVLB5XtBeU0rUBY5E8PbqRNKvmSC+8qCsbca0Ual5uxRFrJCR+DIE/I2n4QZhXRjp74TTWTKAG4US4wDNvtLZpWO590MW8SVKpGF/3pZI8HLqQMv4ezxqK+jsPOyihrZz3bk7UJF1K2RdSH3mVjBiE8XJRZ6xZFDZJEdFGYFPLbJhN5mIrry9HrvOsadiJd4OgLU403Y15B/tG8wsKzj2xo7HNEwspoZG95hInnR9qNkVl6clhndPVpv/JDCR4sARYIoke1jKxFe5s3m01vqFlBZe23+boSUy18N91W4C8b9INstMB/JOM8J9728uF7evTqNgT5/1DWdweAR5IPeC+8vt2HVOhN5wM6xW2wuhRI9tWKJWkgHgO/QFPTckjLCxeHuMSHJ4imhLGhJYvohQwQCKRJVga0xlOHFN47TJul0kaygmA4OY2jebJEpR5cROs+zzN/PX9afrNeqIGERiPDE6hkNBuN93ADc9DfSGl9sVU8YiVxf8bGxqBEt1zdoUbV6+UXj79py7LWzjnztIgyTpFWA0tg0xs=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f1d9298-9a84-4285-6e6d-08dd7c6b37ca
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7224.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2025 22:16:49.7859
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FdpWlxR7ANMX+j3gPTxH2/hm3fPrdyMHMAU8Gc4sKrXwLstY8L2DIOfC50uDG2ni2DJOzALOOK57vGVZmX9G+2XoS31FjERt9IOS8mqL1ZE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6071
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-15_08,2025-04-15_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 phishscore=0
- mlxscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502280000
- definitions=main-2504150158
-X-Proofpoint-ORIG-GUID: i3iyyxswUsSfxtjzkEKMKufhD-hoDCxa
-X-Proofpoint-GUID: i3iyyxswUsSfxtjzkEKMKufhD-hoDCxa
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 05/29] lsm: replace the name field with a pointer to
+ the lsm_id struct
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+References: <20250409185019.238841-31-paul@paul-moore.com>
+ <20250409185019.238841-36-paul@paul-moore.com>
+Content-Language: en-US
+From: John Johansen <john.johansen@canonical.com>
+Autocrypt: addr=john.johansen@canonical.com; keydata=
+ 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 lT9Q
+Organization: Canonical
+In-Reply-To: <20250409185019.238841-36-paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 4/15/25 3:15 PM, Sean Christopherson wrote:
-> On Tue, Apr 15, 2025, Andrew Cooper wrote:
->> On 11/04/2025 10:40 pm, Sean Christopherson wrote:
->>> On Thu, Apr 10, 2025, Ross Philipson wrote:
->>>> +	 * instruction can return for a number of reasons. Test to see if it returned
->>>> +	 * because the monitor was written to.
->>>> +	 */
->>>> +	monitor
->>>> +
->>>> +1:
->>>> +	mfence
->>>> +	mwait
->>>> +	movl	(%eax), %edx
->>> Why load the value into EDX?  At a glance, the value is never consumed.
->>>
->>>> +	testl	%edx, %edx
->>>> +	jz	1b
->>> This usage of MONITOR/MWAIT is flawed.  The monitor needs to be re-armed in each
->>> loop, otherwise mwait will be a glorified nop.
->>>
->>> More importantly, the exit condition needs to be checked before monitor,
->>
->> after monitor and before mwait.
+On 4/9/25 11:49, Paul Moore wrote:
+> Reduce the duplication between the lsm_id struct and the DEFINE_LSM()
+> definition by linking the lsm_id struct directly into the individual
+> LSM's DEFINE_LSM() instance.
 > 
-> Gah, yeah, I mean to say "before mwait".
+> Linking the lsm_id into the LSM definition also allows us to simplify
+> the security_add_hooks() function by removing the code which populates
+> the lsm_idlist[] array and moving it into the normal LSM startup code
+> where the LSM list is parsed and the individual LSMs are enabled,
+> making for a cleaner implementation with less overhead at boot.
+> 
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-Thanks Sean and Andy, I will fix this.
 
-Ross
+Reviewed-by: John Johansen <john.johansen@canonical.com>
+
+> ---
+>   include/linux/lsm_hooks.h         |  2 +-
+>   security/apparmor/lsm.c           |  2 +-
+>   security/bpf/hooks.c              |  2 +-
+>   security/commoncap.c              |  2 +-
+>   security/integrity/evm/evm_main.c |  2 +-
+>   security/integrity/ima/ima_main.c |  2 +-
+>   security/ipe/ipe.c                |  2 +-
+>   security/landlock/setup.c         |  2 +-
+>   security/loadpin/loadpin.c        |  2 +-
+>   security/lockdown/lockdown.c      |  2 +-
+>   security/lsm_init.c               | 43 ++++++++++++-------------------
+>   security/safesetid/lsm.c          |  2 +-
+>   security/selinux/hooks.c          |  2 +-
+>   security/smack/smack_lsm.c        |  2 +-
+>   security/tomoyo/tomoyo.c          |  2 +-
+>   security/yama/yama_lsm.c          |  2 +-
+>   16 files changed, 31 insertions(+), 42 deletions(-)
+> 
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index eeb4bfd60b79..4cd17c9a229f 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -149,7 +149,7 @@ enum lsm_order {
+>   };
+>   
+>   struct lsm_info {
+> -	const char *name;	/* Required. */
+> +	const struct lsm_id *id;
+>   	enum lsm_order order;	/* Optional: default is LSM_ORDER_MUTABLE */
+>   	unsigned long flags;	/* Optional: flags describing LSM */
+>   	int *enabled;		/* Optional: controlled by CONFIG_LSM */
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index 9b6c2f157f83..a7f6a3274682 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -2272,7 +2272,7 @@ static int __init apparmor_init(void)
+>   }
+>   
+>   DEFINE_LSM(apparmor) = {
+> -	.name = "apparmor",
+> +	.id = &apparmor_lsmid,
+>   	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
+>   	.enabled = &apparmor_enabled,
+>   	.blobs = &apparmor_blob_sizes,
+> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> index db759025abe1..40efde233f3a 100644
+> --- a/security/bpf/hooks.c
+> +++ b/security/bpf/hooks.c
+> @@ -33,7 +33,7 @@ struct lsm_blob_sizes bpf_lsm_blob_sizes __ro_after_init = {
+>   };
+>   
+>   DEFINE_LSM(bpf) = {
+> -	.name = "bpf",
+> +	.id = &bpf_lsmid,
+>   	.init = bpf_lsm_init,
+>   	.blobs = &bpf_lsm_blob_sizes
+>   };
+> diff --git a/security/commoncap.c b/security/commoncap.c
+> index 28d4248bf001..e04aa4f50eaf 100644
+> --- a/security/commoncap.c
+> +++ b/security/commoncap.c
+> @@ -1509,7 +1509,7 @@ static int __init capability_init(void)
+>   }
+>   
+>   DEFINE_LSM(capability) = {
+> -	.name = "capability",
+> +	.id = &capability_lsmid,
+>   	.order = LSM_ORDER_FIRST,
+>   	.init = capability_init,
+>   };
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> index 0add782e73ba..db8e324ed4e6 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -1175,7 +1175,7 @@ struct lsm_blob_sizes evm_blob_sizes __ro_after_init = {
+>   };
+>   
+>   DEFINE_LSM(evm) = {
+> -	.name = "evm",
+> +	.id = &evm_lsmid,
+>   	.init = init_evm_lsm,
+>   	.order = LSM_ORDER_LAST,
+>   	.blobs = &evm_blob_sizes,
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index f3e7ac513db3..55a4f08a2565 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -1251,7 +1251,7 @@ struct lsm_blob_sizes ima_blob_sizes __ro_after_init = {
+>   };
+>   
+>   DEFINE_LSM(ima) = {
+> -	.name = "ima",
+> +	.id = &ima_lsmid,
+>   	.init = init_ima_lsm,
+>   	.order = LSM_ORDER_LAST,
+>   	.blobs = &ima_blob_sizes,
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index 4317134cb0da..2426441181dc 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -92,7 +92,7 @@ static int __init ipe_init(void)
+>   }
+>   
+>   DEFINE_LSM(ipe) = {
+> -	.name = "ipe",
+> +	.id = &ipe_lsmid,
+>   	.init = ipe_init,
+>   	.blobs = &ipe_blobs,
+>   };
+> diff --git a/security/landlock/setup.c b/security/landlock/setup.c
+> index bd53c7a56ab9..47dac1736f10 100644
+> --- a/security/landlock/setup.c
+> +++ b/security/landlock/setup.c
+> @@ -75,7 +75,7 @@ static int __init landlock_init(void)
+>   }
+>   
+>   DEFINE_LSM(LANDLOCK_NAME) = {
+> -	.name = LANDLOCK_NAME,
+> +	.id = &landlock_lsmid,
+>   	.init = landlock_init,
+>   	.blobs = &landlock_blob_sizes,
+>   };
+> diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+> index 68252452b66c..b9ddf05c5c16 100644
+> --- a/security/loadpin/loadpin.c
+> +++ b/security/loadpin/loadpin.c
+> @@ -271,7 +271,7 @@ static int __init loadpin_init(void)
+>   }
+>   
+>   DEFINE_LSM(loadpin) = {
+> -	.name = "loadpin",
+> +	.id = &loadpin_lsmid,
+>   	.init = loadpin_init,
+>   };
+>   
+> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+> index cf83afa1d879..4813f168ff93 100644
+> --- a/security/lockdown/lockdown.c
+> +++ b/security/lockdown/lockdown.c
+> @@ -168,6 +168,6 @@ DEFINE_EARLY_LSM(lockdown) = {
+>   #else
+>   DEFINE_LSM(lockdown) = {
+>   #endif
+> -	.name = "lockdown",
+> +	.id = &lockdown_lsmid,
+>   	.init = lockdown_lsm_init,
+>   };
+> diff --git a/security/lsm_init.c b/security/lsm_init.c
+> index 407429688f1b..d458a365b0d5 100644
+> --- a/security/lsm_init.c
+> +++ b/security/lsm_init.c
+> @@ -124,9 +124,10 @@ static void __init append_ordered_lsm(struct lsm_info *lsm, const char *from)
+>   	/* Enable this LSM, if it is not already set. */
+>   	if (!lsm->enabled)
+>   		lsm->enabled = &lsm_enabled_true;
+> -	ordered_lsms[last_lsm++] = lsm;
+> +	ordered_lsms[last_lsm] = lsm;
+> +	lsm_idlist[last_lsm++] = lsm->id;
+>   
+> -	init_debug("%s ordered: %s (%s)\n", from, lsm->name,
+> +	init_debug("%s ordered: %s (%s)\n", from, lsm->id->name,
+>   		   is_enabled(lsm) ? "enabled" : "disabled");
+>   }
+>   
+> @@ -154,7 +155,7 @@ static void __init lsm_prep_single(struct lsm_info *lsm)
+>   		set_enabled(lsm, false);
+>   		return;
+>   	} else if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && exclusive) {
+> -		init_debug("exclusive disabled: %s\n", lsm->name);
+> +		init_debug("exclusive disabled: %s\n", lsm->id->name);
+>   		set_enabled(lsm, false);
+>   		return;
+>   	}
+> @@ -162,7 +163,7 @@ static void __init lsm_prep_single(struct lsm_info *lsm)
+>   	/* Mark the LSM as enabled. */
+>   	set_enabled(lsm, true);
+>   	if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && !exclusive) {
+> -		init_debug("exclusive chosen:   %s\n", lsm->name);
+> +		init_debug("exclusive chosen:   %s\n", lsm->id->name);
+>   		exclusive = lsm;
+>   	}
+>   
+> @@ -194,9 +195,9 @@ static void __init initialize_lsm(struct lsm_info *lsm)
+>   	if (is_enabled(lsm)) {
+>   		int ret;
+>   
+> -		init_debug("initializing %s\n", lsm->name);
+> +		init_debug("initializing %s\n", lsm->id->name);
+>   		ret = lsm->init();
+> -		WARN(ret, "%s failed to initialize: %d\n", lsm->name, ret);
+> +		WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
+>   	}
+>   }
+>   
+> @@ -231,10 +232,10 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   		for (major = __start_lsm_info; major < __end_lsm_info;
+>   		     major++) {
+>   			if ((major->flags & LSM_FLAG_LEGACY_MAJOR) &&
+> -			    strcmp(major->name, chosen_major_lsm) != 0) {
+> +			    strcmp(major->id->name, chosen_major_lsm) != 0) {
+>   				set_enabled(major, false);
+>   				init_debug("security=%s disabled: %s (only one legacy major LSM)\n",
+> -					   chosen_major_lsm, major->name);
+> +					   chosen_major_lsm, major->id->name);
+>   			}
+>   		}
+>   	}
+> @@ -246,7 +247,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   		bool found = false;
+>   
+>   		for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> -			if (strcmp(lsm->name, name) == 0) {
+> +			if (strcmp(lsm->id->name, name) == 0) {
+>   				if (lsm->order == LSM_ORDER_MUTABLE)
+>   					append_ordered_lsm(lsm, origin);
+>   				found = true;
+> @@ -263,7 +264,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   		for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+>   			if (exists_ordered_lsm(lsm))
+>   				continue;
+> -			if (strcmp(lsm->name, chosen_major_lsm) == 0)
+> +			if (strcmp(lsm->id->name, chosen_major_lsm) == 0)
+>   				append_ordered_lsm(lsm, "security=");
+>   		}
+>   	}
+> @@ -280,7 +281,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>   			continue;
+>   		set_enabled(lsm, false);
+>   		init_debug("%s skipped: %s (not in requested order)\n",
+> -			   origin, lsm->name);
+> +			   origin, lsm->id->name);
+>   	}
+>   
+>   	kfree(sep);
+> @@ -313,12 +314,12 @@ static void __init lsm_init_ordered(void)
+>   		if (is_enabled(early))
+>   			pr_cont("%s%s",
+>   				early == __start_early_lsm_info ? "" : ",",
+> -				early->name);
+> +				early->id->name);
+>   	}
+>   	lsm_order_for_each(lsm) {
+>   		if (is_enabled(*lsm))
+>   			pr_cont("%s%s",
+> -				lsm == ordered_lsms ? "" : ",", (*lsm)->name);
+> +				lsm == ordered_lsms ? "" : ",", (*lsm)->id->name);
+>   	}
+>   	pr_cont("\n");
+>   
+> @@ -426,18 +427,6 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+>   {
+>   	int i;
+>   
+> -	/*
+> -	 * A security module may call security_add_hooks() more
+> -	 * than once during initialization, and LSM initialization
+> -	 * is serialized. Landlock is one such case.
+> -	 * Look at the previous entry, if there is one, for duplication.
+> -	 */
+> -	if (lsm_active_cnt == 0 || lsm_idlist[lsm_active_cnt - 1] != lsmid) {
+> -		if (lsm_active_cnt >= MAX_LSM_COUNT)
+> -			panic("%s Too many LSMs registered.\n", __func__);
+> -		lsm_idlist[lsm_active_cnt++] = lsmid;
+> -	}
+> -
+>   	for (i = 0; i < count; i++) {
+>   		hooks[i].lsmid = lsmid;
+>   		lsm_static_call_init(&hooks[i]);
+> @@ -485,10 +474,10 @@ int __init security_init(void)
+>   	 * available
+>   	 */
+>   	lsm_early_for_each_raw(lsm) {
+> -		init_debug("  early started: %s (%s)\n", lsm->name,
+> +		init_debug("  early started: %s (%s)\n", lsm->id->name,
+>   			   is_enabled(lsm) ? "enabled" : "disabled");
+>   		if (lsm->enabled)
+> -			lsm_append(lsm->name, &lsm_names);
+> +			lsm_append(lsm->id->name, &lsm_names);
+>   	}
+>   
+>   	/* Load LSMs in specified order. */
+> diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
+> index 1ba564f097f5..9a7c68d4e642 100644
+> --- a/security/safesetid/lsm.c
+> +++ b/security/safesetid/lsm.c
+> @@ -287,6 +287,6 @@ static int __init safesetid_security_init(void)
+>   }
+>   
+>   DEFINE_LSM(safesetid_security_init) = {
+> +	.id = &safesetid_lsmid,
+>   	.init = safesetid_security_init,
+> -	.name = "safesetid",
+>   };
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index e7a7dcab81db..f28a12a0a1c8 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -7562,7 +7562,7 @@ void selinux_complete_init(void)
+>   /* SELinux requires early initialization in order to label
+>      all processes and objects when they are created. */
+>   DEFINE_LSM(selinux) = {
+> -	.name = "selinux",
+> +	.id = &selinux_lsmid,
+>   	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
+>   	.enabled = &selinux_enabled_boot,
+>   	.blobs = &selinux_blob_sizes,
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 99833168604e..e09b33fed5f0 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -5282,7 +5282,7 @@ static __init int smack_init(void)
+>    * all processes and objects when they are created.
+>    */
+>   DEFINE_LSM(smack) = {
+> -	.name = "smack",
+> +	.id = &smack_lsmid,
+>   	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
+>   	.blobs = &smack_blob_sizes,
+>   	.init = smack_init,
+> diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
+> index d6ebcd9db80a..ed0f7b052a85 100644
+> --- a/security/tomoyo/tomoyo.c
+> +++ b/security/tomoyo/tomoyo.c
+> @@ -612,7 +612,7 @@ static int __init tomoyo_init(void)
+>   }
+>   
+>   DEFINE_LSM(tomoyo) = {
+> -	.name = "tomoyo",
+> +	.id = &tomoyo_lsmid,
+>   	.enabled = &tomoyo_enabled,
+>   	.flags = LSM_FLAG_LEGACY_MAJOR,
+>   	.blobs = &tomoyo_blob_sizes,
+> diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+> index 3d064dd4e03f..38b21ee0c560 100644
+> --- a/security/yama/yama_lsm.c
+> +++ b/security/yama/yama_lsm.c
+> @@ -476,6 +476,6 @@ static int __init yama_init(void)
+>   }
+>   
+>   DEFINE_LSM(yama) = {
+> -	.name = "yama",
+> +	.id = &yama_lsmid,
+>   	.init = yama_init,
+>   };
+
 
