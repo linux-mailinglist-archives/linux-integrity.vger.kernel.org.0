@@ -1,87 +1,87 @@
-Return-Path: <linux-integrity+bounces-5874-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5875-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76FEBA8919E
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 03:54:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7612CA891B4
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 03:58:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E32B17C6F7
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 01:54:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 858C017D19A
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 01:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA2913C8F3;
-	Tue, 15 Apr 2025 01:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBED5201116;
+	Tue, 15 Apr 2025 01:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="FlcWpH2c"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XEflOkZV"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1CC19E99E
-	for <linux-integrity@vger.kernel.org>; Tue, 15 Apr 2025 01:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B0673A1BA
+	for <linux-integrity@vger.kernel.org>; Tue, 15 Apr 2025 01:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744682091; cv=none; b=H4pH15yUKCbVQgvIsn9I126bQtAbUzvph8scWE2YApAlzlFrSvYJk9wiA+zAlREYHBsYjaKnA6FoXdAPLmwBlVdR1QdwsT+v1bXUc8EXpCC1RwGI1BP1XUmGIZwihF3793OqMjVT/Ufrt5fsBxLFU4C+nm70X3LIEyQjyuadA5Y=
+	t=1744682302; cv=none; b=WkzrHzEdEiVzzcRPE+3X+KWSum3MYCRZL+xTnZRaBl15LZRvQb7u/I81m0Uu3+xRUSR3DdY+ouPvz1SaZ4XR3K9UGFoJRA85PCtdRru/6vNONagmI6/AMS0adCUb8KksQKJO2jwKabn8xo91xcmARFooUAC44DoqXAxceY8TBbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744682091; c=relaxed/simple;
-	bh=RIuEpCAWwJBwcXSxpMUxjacCf2Nd7SQD0nUn/o2H6WM=;
+	s=arc-20240116; t=1744682302; c=relaxed/simple;
+	bh=rxUfE/v2nDHJxUYj7jPx7y6EB83OwOnUI3i7DLmxAuc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JMLyw2gIoKnF7+Xavvqqc6iChHElGvntqIo1GsAfw6G4oWA8EUyk79hlkp7+UuMpSZZ5PaBp+0aY/vL8CI/S3MLjSHdOFANQgO4ZlT0V7Zg2vVFdVcGRsegPkxSa/8cJzKiWm1UK+dJcpvjCw1F3brhikyyDXNK3i26ZdHGPDO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=FlcWpH2c; arc=none smtp.client-ip=209.85.219.173
+	 To:Cc:Content-Type; b=EfEfeyV8EiO1fdj+4OmUkUlVAAYN7+LFO2LsSwKoH6J5rTKMFIAqHGgbJ9RgTc8UneAb/c4Fm3WHhU+xWTx7kdfw4taWFzlo9rw8JbmAnZaQ+SZRKnFadTTUNSJDnmHyxkjBAGG7KjDKfkNqKuIb6ZyPagMdmwBMMuc866XS/e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XEflOkZV; arc=none smtp.client-ip=209.85.128.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e53ef7462b6so4794819276.3
-        for <linux-integrity@vger.kernel.org>; Mon, 14 Apr 2025 18:54:48 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-70575d66612so19622127b3.1
+        for <linux-integrity@vger.kernel.org>; Mon, 14 Apr 2025 18:58:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1744682087; x=1745286887; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1744682300; x=1745287100; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3kf2HB+2t0DsSXOO3Gr3LgcuugUFp/PyDyoGAYGDC1c=;
-        b=FlcWpH2ckuRZRNrpGaMccwMpvcn6AoggUaeR+7f0b/Ks2jLEqYH3E1E4kOFPi/rli9
-         oAHxvyE/NaSK5zFxicoA01dMQhrmWoFyOD2Spb61QHs1ktuV4kHaAj/E+36L+PZBPddJ
-         BsU5M0jz2WN7yr0kalvuGCo66eAbHLuwXrI5pkcnNwqYrjzyw0QUVbt02ojITRqJO6Hp
-         ieNmLr2WFCwsXT7ktSk+YrZYsn3pzvYKKRb4QtWblQ1i5VgVQMZEDK2h31lAMYOYENyH
-         OVt6TVeNRdDxeWX8yK+eegWzSnCxTKvVsYBZbSfKOYFjf9NYdLj4gxWikLNylTzDFiw0
-         zKNg==
+        bh=qgNnzJLDju9A10e50BztXbFlpGHdbLWVEcQRfEr8Uao=;
+        b=XEflOkZV4UIL5V+xKBe4TLQXozbELihpI2uHHbBzD+r+H3lzBlic4kfWhJ9kHcKhcH
+         XeVrog6gXYuqMB7fszOIMcq8trvx145vOFl46WI19+SvbBc11Q1Hw1w49KpSFlFDtVw+
+         7DPvA90IrdT9oZ+MR57IQ2RA8OkmBhAEvzcY8AEamCxB0qH8ZdHT9XYfSv+/SMoc6uq3
+         RCjy6OeJaGYPM33YRzr9DLX5w/bvWXEfA1K2o3xAkktaMGRk50TjROE+z0QIStoDyZw1
+         l0VQ+v1t66dyShfkMDMkndzD2K9nJkZu0LjNU9cYw6Xf9Lz4JBEM6zjpJwA0kCFx1+Fv
+         ck0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744682087; x=1745286887;
+        d=1e100.net; s=20230601; t=1744682300; x=1745287100;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3kf2HB+2t0DsSXOO3Gr3LgcuugUFp/PyDyoGAYGDC1c=;
-        b=g8DYstAbshe1FbmGLGx05a3i19TqoekUN9LXtr7FTCOcz3MiLgKBzP6nA8IsG3fryz
-         4OYKRib7gp5nvBhVFuNpELxokKuTTXjvAN0xcT11LlTl5fRN/EOkVNzXOr6rCUmENOjh
-         Ab6V4Xtpp+pjGi41LMwZ+Lm6uBuYaZrbGvpCxQlP/rxyklqyuseTjnp3hCTjGGhoa5CI
-         xOSr7QeLv91a9GMbx2rURzpcvJTz8SYGsBzTRbrN8mZJW3i95kxYga4BfaVgn56mhbhR
-         DPeMMopQu41JbzCaR0DtABI/FPGBCz2ipHSwrRlw71thWboG9AViSBL4Co/F8hLyF1me
-         IPPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkkgkzSn11a35UAHDpFXmkms1bg/x2wZD0OZluZONR4flV/APqDtF1n/guHjXjJtZkGgjFjBQLBvXZSuBqS5g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKYwoTpxp+ginU/Ll6nFia66/okqiVgA0Pn7E2Gl7+24Szt56q
-	kosJRf5gfLWYgMoH50dFWu2n1rHgImPPasTDx01vz5NfceQ/JR0A+IJKe5CTjxdDItCvDqU7Z6F
-	8G1XcD/NAxNKQfuVMLkgnWeApCPMIV84nbHka
-X-Gm-Gg: ASbGncv/rLIBoS7sbjy3Z1ssg20hUaoB1Tfng0x9IpGWTg4bsLuMQr1YXBeTX1roEVX
-	L39I0lG+Xt1DMIiel5c97nzJ42ZqIZ9o/NsbuIPxhyafo//KQIrG+c2vBh4opnZRzsu6Gt+9I9Z
-	aw37erzOItN6pSJ4NAMpIvpg==
-X-Google-Smtp-Source: AGHT+IHAvWs/9H4IE5oVAZXQLadFHf3OPEuDA39J2HxSOfQADnUIBLhlOASR5Q5rlyPVk613nwuKqqugeaFfh5OppIo=
-X-Received: by 2002:a05:6902:d43:b0:e6d:e3d0:38 with SMTP id
- 3f1490d57ef6-e704dfbe613mr22814287276.39.1744682087599; Mon, 14 Apr 2025
- 18:54:47 -0700 (PDT)
+        bh=qgNnzJLDju9A10e50BztXbFlpGHdbLWVEcQRfEr8Uao=;
+        b=n/L01RU+NyjvN2VSDwZFS70FJHw3tS+HVNQve2/QT3AfE9RiyJUQyv29jOT54/0Xdt
+         8liax0C38C+31XDXbApa4KqbeYlVPdxiHicKn8Q9U2iaTa3y25Sm+Z6rtFUr5nF8hp9i
+         YkxyoTXQROrO5zGGfirKyFO2zvFMKXHWAXD/E5A46zkYCzcZO9GE4uQoCQO47zzob8h+
+         p+PTX0p1Uh8OZ5pwpUlMC11vljvutC21h9c1SedAuIOb00ufko3LMgPcMpJVJVTGtesS
+         6k2yRHih/ponjiBVf0HziSlmZcBsPiPCYwH7CkHHjprUapvgeX578CLN7zyz8ilDhbD2
+         iQnA==
+X-Forwarded-Encrypted: i=1; AJvYcCV7xs1Ml92l2FWDA2V6UEJhxJX4WqM3VvNocBLr4CSbv7Rz5ORLHNXe82UIzT3UvxLn6EYIBXqo9PW4Wrce7nk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEogpwCfy1U0uXe2seZupR28W1GgFfOhLY90FVutAPZR+5CCAk
+	kvybREk/ZppOHV1jN0Sx7eCc8hQmCLHVDoJ290Pkfd8HRnUHqOHOBGhtyJ16KE4foZh6VpZTi0W
+	RtN10zIkz9S0kL6XW8sgrj+CCSs778mlYQxCL
+X-Gm-Gg: ASbGncvlNVoO1UQ6qEIrpw6NSlC9aM00CVFkaYdEsg3r2AdSirU8TvyAmFKusKSSp4T
+	BYOKYIPGwCOA9wdE1A2SI92Mg+Yj3NKVz0vLLjY6SoBb4e1Cee8MgwIOBaxLZ6crBpfKfraB4lv
+	VKcza5MMbK6YO7jDDgN7qfCg==
+X-Google-Smtp-Source: AGHT+IE+O+qaO9IzOFxYmwdXgL5o4sY4lXcGxON+fCx0AlD3dy29wINp9CXDcgL2xssdQXTCuf5oMj4o1y2NmO59pkc=
+X-Received: by 2002:a05:6902:1606:b0:e6d:e183:4e0e with SMTP id
+ 3f1490d57ef6-e704df5f8b0mr21296050276.22.1744682300213; Mon, 14 Apr 2025
+ 18:58:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-51-paul@paul-moore.com>
- <CAKtyLkGWtiRRcxvA9vJSuwnS+bmikKpwHYOWkSYiFOToPFAt0g@mail.gmail.com>
-In-Reply-To: <CAKtyLkGWtiRRcxvA9vJSuwnS+bmikKpwHYOWkSYiFOToPFAt0g@mail.gmail.com>
+References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-50-paul@paul-moore.com>
+ <CAKtyLkG3PEwpNV55mpsntp=pbRjaZVhoYOc2wWGCsoEdqnFS_g@mail.gmail.com>
+In-Reply-To: <CAKtyLkG3PEwpNV55mpsntp=pbRjaZVhoYOc2wWGCsoEdqnFS_g@mail.gmail.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 14 Apr 2025 21:54:35 -0400
-X-Gm-Features: ATxdqUF1-XzruXrFAtcGGxs4uxnPPaDZjoullBc6BTEXhHCar2kkKxiuquSCz30
-Message-ID: <CAHC9VhQtN93Z7pfQL-63ZLbm61g-UUc+RrdmzUtRiqeJyp5Sig@mail.gmail.com>
-Subject: Re: [RFC PATCH 20/29] smack: move initcalls to the LSM framework
+Date: Mon, 14 Apr 2025 21:58:09 -0400
+X-Gm-Features: ATxdqUHXTqHh3BTd3Af7U8uMaRUAJKrsIIuJHmSbWNQTnuyizJTe74CXY-81aIE
+Message-ID: <CAHC9VhSDqftrOS=maqPhw6A46X7H3X+QAc1AFXeb50GRdjbm=Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 19/29] ipe: move initcalls to the LSM framework
 To: Fan Wu <wufan@kernel.org>
 Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
 	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
@@ -93,40 +93,26 @@ Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 14, 2025 at 5:04=E2=80=AFPM Fan Wu <wufan@kernel.org> wrote:
+On Mon, Apr 14, 2025 at 5:19=E2=80=AFPM Fan Wu <wufan@kernel.org> wrote:
+>
 > On Wed, Apr 9, 2025 at 11:53=E2=80=AFAM Paul Moore <paul@paul-moore.com> =
 wrote:
 > >
-> > As the LSM framework only supports one LSM initcall callback for each
-> > initcall type, the init_smk_fs() and smack_nf_ip_init() functions were
-> > wrapped with a new function, smack_initcall() that is registered with
-> > the LSM framework.
-> >
 > > Signed-off-by: Paul Moore <paul@paul-moore.com>
 > > ---
-> >  security/smack/smack.h           |  6 ++++++
-> >  security/smack/smack_lsm.c       | 16 ++++++++++++++++
-> >  security/smack/smack_netfilter.c |  4 +---
-> >  security/smack/smackfs.c         |  4 +---
-> >  4 files changed, 24 insertions(+), 6 deletions(-)
+> >  security/ipe/fs.c  | 4 +---
+> >  security/ipe/ipe.c | 1 +
+> >  security/ipe/ipe.h | 2 ++
+> >  3 files changed, 4 insertions(+), 3 deletions(-)
 
 ...
 
-> I'm getting the following WARNING:
+> I have run the ipe's testsuite and all passed.
 >
-> WARNING: modpost: vmlinux: section mismatch in reference:
-> smack_initcall+0xb (section: .text) -> init_smk_fs (section:
-> .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference:
-> smack_initcall+0x16 (section: .text) -> smack_nf_ip_init (section:
-> .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference:
-> smack_initcall+0x27 (section: .text) -> smack_nf_ip_init (section:
-> .init.text)
->
-> I guess "__init" is missed for smack_initcall?
+> Tested-by: Fan Wu <wufan@kernel.org>
+> Acked-by: Fan Wu <wufan@kernel.org>
 
-Yep, fixed, thanks.
+Thanks Fan.
 
 --=20
 paul-moore.com
