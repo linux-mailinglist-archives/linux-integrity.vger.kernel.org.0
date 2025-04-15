@@ -1,55 +1,55 @@
-Return-Path: <linux-integrity+bounces-5899-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5900-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3355A8ABBA
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 01:03:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1DCDA8ABC8
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 01:04:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AE2F1902783
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 23:03:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FA6D3BF38C
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 23:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C66127E1D5;
-	Tue, 15 Apr 2025 23:03:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 248B22D86AF;
+	Tue, 15 Apr 2025 23:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="JUyp+cdD"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="tkNdy2FA"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4CC226CF6;
-	Tue, 15 Apr 2025 23:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8C227A115;
+	Tue, 15 Apr 2025 23:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744758186; cv=none; b=DfjSjJ/i0o2neufgz4uWY2KncNLPfRBdygTaBexx3A4sSktqSXTuTguD5c2UxdiPUP1FwfA0/bhb7SzLZ4fPRmI9JvFvez/nEFSfA72NG2Wo1run8DIEspraKC6CH7zD2KtLoVOLE5ev80PgRRfh/JpTM30CgpwyYVNIsk7pTjw=
+	t=1744758250; cv=none; b=gX7n6Pbdya1N29vakI0eCF2ObUKQpC4RSI9H2THlMd43+734K8ggkw98FQK/lFE6ZMuQswtGa+6ELbG7yzRQkt47SSZkcC+2NuyqYpmLM+U9D7m057vGbgZqKETSVnoZkv9pVJ8H9EkZSYfXdMrVChpC7z+o/b+iAtXb+0ELPtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744758186; c=relaxed/simple;
-	bh=qRqEMRS1Xc5oGgsA7fIpZ88w2dIIdw95fR0JJfgMZ2s=;
+	s=arc-20240116; t=1744758250; c=relaxed/simple;
+	bh=dpC2Hf2yu8CMaVP2YFhDjU2Z6KS6nwg+1ldLsPuSiQM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZaU0tmbaMKiBEYDYPwrC61p4FyALDHHriqgq7H0ShLvgCf2mEddg2XBMKCH1GDgCjSYzxcdhpi8H/qh8IPmKJGTl43LuJqnPOXzPOglanG2TbMrZArpCXLuXQNKHUwQZOxOXyu8rAAD/yzC3dHHZLzEDiRLYFQy93YsP7XL5148=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=JUyp+cdD; arc=none smtp.client-ip=185.125.188.120
+	 In-Reply-To:Content-Type; b=XcgTpxe9Hdb8G52HQ4yWAum2AehltfXdXM352kxVw3YBp59J0aHz4Pkcxzw9bjRfJ/elsYzwsHfftkHLF4/WhuaKR9utA/uOVpU2z/MSklsVqi8QEIU+ff7ieZDuD/7+Q4EL78/bGDY+YW81usWgoCsZhKLWfIjPAfJpFHyMwNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=tkNdy2FA; arc=none smtp.client-ip=185.125.188.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [192.168.192.85] (unknown [50.39.103.202])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 342833F1E0;
-	Tue, 15 Apr 2025 23:02:57 +0000 (UTC)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 16BB13F1E0;
+	Tue, 15 Apr 2025 23:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1744758179;
-	bh=tHVFJlZirvSP8jcYvgXm9cY4OU+leDwBsAXROWsIbXA=;
+	s=20210705; t=1744758244;
+	bh=ieigLbIomHfCcXv9icCgIWrGxSwv8MnaqRdWasEag8w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=JUyp+cdDvuf9iJqPQgygBlFaYXLEQIJFx84rctJtqsLM3SZsjAf6UnhrkMuUGxuqE
-	 dVBwRx+ykR7thCCDI0kXDOhFYHS7YWQZXf4AwPKRMc4CEeK6M30x0E+ye03cszuC5I
-	 Vf3hCOUz/ucjKWQVXcJ3n5fXvweSQ0E0M2TB8wQJCj21sY9I+BZRtusKEFiwWTkYNX
-	 JfQ3/OBfokP5qAGpresg202MPWHdb98fodDtU0W4D0FRA5OKirIMOEPizARXG/2BRY
-	 z623shtpk50VLZBlCr4G82qdM6ITUT4/bzh2sBb9RDz0EeCqIOxRvxObnHo2yYylnU
-	 hoBqI6Ny2SKKQ==
-Message-ID: <b2bb1bdb-c698-462b-95aa-f1bbb4b73ad4@canonical.com>
-Date: Tue, 15 Apr 2025 16:02:54 -0700
+	b=tkNdy2FAnXjC8Zqf9ACR9BJjA/MEr/DWOI2J/1bcsysYTlcfwDovYoB/Gwtuebdf7
+	 lni175Jw3/dNUndkMyzlQcVv+BgeuaGmlZgFbjoOqxnfynB8AtYX2EOp0DVd6copWP
+	 77y8O2NxXpwxRhFg3o3SJGJsH9HY+Gi9smS2pYhXaoHSXsA1Szv3A7KA3ZXokZ4CB1
+	 N0ZS4fSaBgfINX5+mhfNeMD0OKGHdIvu7XHQ303WWL3JXkiHpNLaG05FiGe5fg3+Qa
+	 Xe6+w0vJPFRoq5F0QNxCvCBgBULBcUrevSGCUxj0vXWIjTkp1wBDNJR7Bw263/C47C
+	 KWKwSXYd21RMg==
+Message-ID: <49fb1e0c-4733-47c8-bb3f-94945f773858@canonical.com>
+Date: Tue, 15 Apr 2025 16:04:00 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -57,7 +57,8 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 10/29] lsm: cleanup the LSM blob size code
+Subject: Re: [RFC PATCH 11/29] lsm: cleanup initialize_lsm() and rename to
+ lsm_init_single()
 To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
  linux-integrity@vger.kernel.org, selinux@vger.kernel.org
 Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
@@ -68,7 +69,7 @@ Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
  Casey Schaufler <casey@schaufler-ca.com>,
  Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 References: <20250409185019.238841-31-paul@paul-moore.com>
- <20250409185019.238841-41-paul@paul-moore.com>
+ <20250409185019.238841-42-paul@paul-moore.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -114,138 +115,73 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <20250409185019.238841-41-paul@paul-moore.com>
+In-Reply-To: <20250409185019.238841-42-paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/9/25 11:49, Paul Moore wrote:
-> Convert the lsm_blob_size fields to unsigned integers as there is no
-> current need for them to be negative, change "lsm_set_blob_size()" to
-> "lsm_blob_size_update()" to better reflect reality, and perform some
-> other minor cleanups to the associated code.
+> One part of a larger effort to cleanup the LSM framework initialization
+> code.
 > 
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
+
 
 Reviewed-by: John Johansen <john.johansen@canonical.com>
 
 > ---
->   include/linux/lsm_hooks.h | 28 +++++++++++-----------
->   security/lsm_init.c       | 50 +++++++++++++++++++++++----------------
->   2 files changed, 43 insertions(+), 35 deletions(-)
+>   security/lsm_init.c | 24 ++++++++++++++----------
+>   1 file changed, 14 insertions(+), 10 deletions(-)
 > 
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index bc477fb20d02..a7ecb0791a0f 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -102,20 +102,20 @@ struct security_hook_list {
->    * Security blob size or offset data.
->    */
->   struct lsm_blob_sizes {
-> -	int lbs_cred;
-> -	int lbs_file;
-> -	int lbs_ib;
-> -	int lbs_inode;
-> -	int lbs_sock;
-> -	int lbs_superblock;
-> -	int lbs_ipc;
-> -	int lbs_key;
-> -	int lbs_msg_msg;
-> -	int lbs_perf_event;
-> -	int lbs_task;
-> -	int lbs_xattr_count; /* number of xattr slots in new_xattrs array */
-> -	int lbs_tun_dev;
-> -	int lbs_bdev;
-> +	unsigned int lbs_cred;
-> +	unsigned int lbs_file;
-> +	unsigned int lbs_ib;
-> +	unsigned int lbs_inode;
-> +	unsigned int lbs_sock;
-> +	unsigned int lbs_superblock;
-> +	unsigned int lbs_ipc;
-> +	unsigned int lbs_key;
-> +	unsigned int lbs_msg_msg;
-> +	unsigned int lbs_perf_event;
-> +	unsigned int lbs_task;
-> +	unsigned int lbs_xattr_count; /* num xattr slots in new_xattrs array */
-> +	unsigned int lbs_tun_dev;
-> +	unsigned int lbs_bdev;
->   };
->   
->   /*
 > diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index 7f2bc8c22ce9..9bb4b4fc9888 100644
+> index 9bb4b4fc9888..163fc2a1a952 100644
 > --- a/security/lsm_init.c
 > +++ b/security/lsm_init.c
-> @@ -148,16 +148,22 @@ static void __init lsm_order_append(struct lsm_info *lsm, const char *src)
->   		   lsm_is_enabled(lsm) ? "enabled" : "disabled");
+> @@ -214,16 +214,20 @@ static void __init lsm_prep_single(struct lsm_info *lsm)
+>   	lsm_blob_size_update(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
 >   }
 >   
-> -static void __init lsm_set_blob_size(int *need, int *lbs)
+> -/* Initialize a given LSM, if it is enabled. */
+> -static void __init initialize_lsm(struct lsm_info *lsm)
 > +/**
-> + * lsm_blob_size_update - Update the LSM blob size and offset information
-> + * @sz_req: the requested additional blob size
-> + * @sz_cur: the existing blob size
+> + * lsm_init_single - Initialize a given LSM
+> + * @lsm: LSM definition
 > + */
-> +static void __init lsm_blob_size_update(unsigned int *sz_req,
-> +					unsigned int *sz_cur)
+> +static void __init lsm_init_single(struct lsm_info *lsm)
 >   {
-> -	int offset;
-> +	unsigned int offset;
+> -	if (lsm_is_enabled(lsm)) {
+> -		int ret;
+> +	int ret;
 >   
-> -	if (*need <= 0)
-> +	if (*sz_req == 0)
->   		return;
->   
-> -	offset = ALIGN(*lbs, sizeof(void *));
-> -	*lbs = offset + *need;
-> -	*need = offset;
-> +	offset = ALIGN(*sz_cur, sizeof(void *));
-> +	*sz_cur = offset + *sz_req;
-> +	*sz_req = offset;
+> -		init_debug("initializing %s\n", lsm->id->name);
+> -		ret = lsm->init();
+> -		WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
+> -	}
+> +	if (!lsm_is_enabled(lsm))
+> +		return;
+> +
+> +	init_debug("initializing %s\n", lsm->id->name);
+> +	ret = lsm->init();
+> +	WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
 >   }
 >   
->   /**
-> @@ -186,24 +192,26 @@ static void __init lsm_prep_single(struct lsm_info *lsm)
+>   /* Populate ordered LSMs list from comma-separated LSM name list. */
+> @@ -374,7 +378,7 @@ static void __init lsm_init_ordered(void)
+>   		panic("%s: early task alloc failed.\n", __func__);
 >   
->   	/* Register the LSM blob sizes. */
->   	blobs = lsm->blobs;
-> -	lsm_set_blob_size(&blobs->lbs_cred, &blob_sizes.lbs_cred);
-> -	lsm_set_blob_size(&blobs->lbs_file, &blob_sizes.lbs_file);
-> -	lsm_set_blob_size(&blobs->lbs_ib, &blob_sizes.lbs_ib);
-> +	lsm_blob_size_update(&blobs->lbs_cred, &blob_sizes.lbs_cred);
-> +	lsm_blob_size_update(&blobs->lbs_file, &blob_sizes.lbs_file);
-> +	lsm_blob_size_update(&blobs->lbs_ib, &blob_sizes.lbs_ib);
->   	/* inode blob gets an rcu_head in addition to LSM blobs. */
->   	if (blobs->lbs_inode && blob_sizes.lbs_inode == 0)
->   		blob_sizes.lbs_inode = sizeof(struct rcu_head);
-> -	lsm_set_blob_size(&blobs->lbs_inode, &blob_sizes.lbs_inode);
-> -	lsm_set_blob_size(&blobs->lbs_ipc, &blob_sizes.lbs_ipc);
-> -	lsm_set_blob_size(&blobs->lbs_key, &blob_sizes.lbs_key);
-> -	lsm_set_blob_size(&blobs->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
-> -	lsm_set_blob_size(&blobs->lbs_perf_event, &blob_sizes.lbs_perf_event);
-> -	lsm_set_blob_size(&blobs->lbs_sock, &blob_sizes.lbs_sock);
-> -	lsm_set_blob_size(&blobs->lbs_superblock, &blob_sizes.lbs_superblock);
-> -	lsm_set_blob_size(&blobs->lbs_task, &blob_sizes.lbs_task);
-> -	lsm_set_blob_size(&blobs->lbs_tun_dev, &blob_sizes.lbs_tun_dev);
-> -	lsm_set_blob_size(&blobs->lbs_xattr_count,
-> -			  &blob_sizes.lbs_xattr_count);
-> -	lsm_set_blob_size(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
-> +	lsm_blob_size_update(&blobs->lbs_inode, &blob_sizes.lbs_inode);
-> +	lsm_blob_size_update(&blobs->lbs_ipc, &blob_sizes.lbs_ipc);
-> +	lsm_blob_size_update(&blobs->lbs_key, &blob_sizes.lbs_key);
-> +	lsm_blob_size_update(&blobs->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
-> +	lsm_blob_size_update(&blobs->lbs_perf_event,
-> +			     &blob_sizes.lbs_perf_event);
-> +	lsm_blob_size_update(&blobs->lbs_sock, &blob_sizes.lbs_sock);
-> +	lsm_blob_size_update(&blobs->lbs_superblock,
-> +			     &blob_sizes.lbs_superblock);
-> +	lsm_blob_size_update(&blobs->lbs_task, &blob_sizes.lbs_task);
-> +	lsm_blob_size_update(&blobs->lbs_tun_dev, &blob_sizes.lbs_tun_dev);
-> +	lsm_blob_size_update(&blobs->lbs_xattr_count,
-> +			     &blob_sizes.lbs_xattr_count);
-> +	lsm_blob_size_update(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
+>   	lsm_order_for_each(lsm) {
+> -		initialize_lsm(*lsm);
+> +		lsm_init_single(*lsm);
+>   	}
 >   }
 >   
->   /* Initialize a given LSM, if it is enabled. */
+> @@ -423,7 +427,7 @@ int __init early_security_init(void)
+>   	lsm_early_for_each_raw(lsm) {
+>   		lsm_enabled_set(lsm, true);
+>   		lsm_prep_single(lsm);
+> -		initialize_lsm(lsm);
+> +		lsm_init_single(lsm);
+>   	}
+>   
+>   	return 0;
 
 
