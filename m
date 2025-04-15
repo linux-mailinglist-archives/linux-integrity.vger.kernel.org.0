@@ -1,55 +1,55 @@
-Return-Path: <linux-integrity+bounces-5898-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5899-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCD50A8AB49
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 00:30:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3355A8ABBA
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 01:03:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72DB93AE558
-	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 22:30:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AE2F1902783
+	for <lists+linux-integrity@lfdr.de>; Tue, 15 Apr 2025 23:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679C22741A9;
-	Tue, 15 Apr 2025 22:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C66127E1D5;
+	Tue, 15 Apr 2025 23:03:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="AA2M7U8E"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="JUyp+cdD"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11501161310;
-	Tue, 15 Apr 2025 22:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4CC226CF6;
+	Tue, 15 Apr 2025 23:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744756227; cv=none; b=Jv+b/f40NhpR04UBRr+odSdwGZqRgqDPH08bmZfbccg7bIcrHWEYe5slGM9Ptdp/rJwVc5qtzXXj25LGbLR8CakX26gGVQ9AV58R0WDr8Wevolebs8/3D+muiln2g22d2Lc5cfDHutAOWYdfKMVmr4ecrmgyYjNQxp0qrucx0ac=
+	t=1744758186; cv=none; b=DfjSjJ/i0o2neufgz4uWY2KncNLPfRBdygTaBexx3A4sSktqSXTuTguD5c2UxdiPUP1FwfA0/bhb7SzLZ4fPRmI9JvFvez/nEFSfA72NG2Wo1run8DIEspraKC6CH7zD2KtLoVOLE5ev80PgRRfh/JpTM30CgpwyYVNIsk7pTjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744756227; c=relaxed/simple;
-	bh=sm4m4Ic1r6NGTXiHiFp3iMuC4VALm6Hln+XUk/0O7dA=;
+	s=arc-20240116; t=1744758186; c=relaxed/simple;
+	bh=qRqEMRS1Xc5oGgsA7fIpZ88w2dIIdw95fR0JJfgMZ2s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eBUBPjU3ECVs8ngc7EmcSWv+alOXqrv6hw0qkisV7LrRt+kJQjxUbvXFLssxq0OYvAT6prPsaHkLqthqe5PQTHH/OLfvjSDGadUSUz+knliWQcBWEjIp2gJdP0+lDtsjvdyRBjXmYFa1sbTkElOGjZPfBN6roG35RVNuS3vfBGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=AA2M7U8E; arc=none smtp.client-ip=185.125.188.120
+	 In-Reply-To:Content-Type; b=ZaU0tmbaMKiBEYDYPwrC61p4FyALDHHriqgq7H0ShLvgCf2mEddg2XBMKCH1GDgCjSYzxcdhpi8H/qh8IPmKJGTl43LuJqnPOXzPOglanG2TbMrZArpCXLuXQNKHUwQZOxOXyu8rAAD/yzC3dHHZLzEDiRLYFQy93YsP7XL5148=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=JUyp+cdD; arc=none smtp.client-ip=185.125.188.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [192.168.192.85] (unknown [50.39.103.202])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 275363FFBD;
-	Tue, 15 Apr 2025 22:30:11 +0000 (UTC)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 342833F1E0;
+	Tue, 15 Apr 2025 23:02:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1744756214;
-	bh=7xg0mN2qYJiYxvFo4La6OGn/H9iXblVBNB/eOGi69YQ=;
+	s=20210705; t=1744758179;
+	bh=tHVFJlZirvSP8jcYvgXm9cY4OU+leDwBsAXROWsIbXA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=AA2M7U8E61gLuAtcR1MmlnIHrroDzdhpethO12wDheKLYEsDn0BFZSvvz2hUv3JU1
-	 dNTLPQ45deS9jLcH/7ILfj3kFgsZiwUByT99Fqn3XIT/3jn+BOQxBo9bH2AS1cP8f9
-	 E4N70yHqlo1RTGSkzl0JzaM7IheoVcsxIktE0/Fsy4/dHlVF5xuUZYAvIxrwQI6oee
-	 GOfcMioubIue8gJ38yfqGGN3ahvz71Sxk1LFHTmrdtVXW+EjXwdMpJ+LvxEK/IL5V6
-	 2QimebIE0KeFYdqEUKNvKqUSAjhbmFxzse9PNoe5F256NSZQSOu4Hdg2t5AY+msBXJ
-	 ju7raYw6ODygA==
-Message-ID: <03eeafb2-12e7-44a2-b0fc-cf26fa256f1b@canonical.com>
-Date: Tue, 15 Apr 2025 15:30:10 -0700
+	b=JUyp+cdDvuf9iJqPQgygBlFaYXLEQIJFx84rctJtqsLM3SZsjAf6UnhrkMuUGxuqE
+	 dVBwRx+ykR7thCCDI0kXDOhFYHS7YWQZXf4AwPKRMc4CEeK6M30x0E+ye03cszuC5I
+	 Vf3hCOUz/ucjKWQVXcJ3n5fXvweSQ0E0M2TB8wQJCj21sY9I+BZRtusKEFiwWTkYNX
+	 JfQ3/OBfokP5qAGpresg202MPWHdb98fodDtU0W4D0FRA5OKirIMOEPizARXG/2BRY
+	 z623shtpk50VLZBlCr4G82qdM6ITUT4/bzh2sBb9RDz0EeCqIOxRvxObnHo2yYylnU
+	 hoBqI6Ny2SKKQ==
+Message-ID: <b2bb1bdb-c698-462b-95aa-f1bbb4b73ad4@canonical.com>
+Date: Tue, 15 Apr 2025 16:02:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -57,20 +57,18 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 08/29] lsm: get rid of the lsm_names list and do some
- cleanup
-To: Paul Moore <paul@paul-moore.com>, Kees Cook <kees@kernel.org>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
- selinux@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+Subject: Re: [RFC PATCH 10/29] lsm: cleanup the LSM blob size code
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
  =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
  =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Micah Morton <mortonm@chromium.org>, Casey Schaufler
- <casey@schaufler-ca.com>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+ Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 References: <20250409185019.238841-31-paul@paul-moore.com>
- <20250409185019.238841-39-paul@paul-moore.com>
- <202504091607.0A394D5EF@keescook>
- <CAHC9VhS4nB2xV-zw+=eN2MYaetvCkParammXn1fPGsm-wuHtTw@mail.gmail.com>
+ <20250409185019.238841-41-paul@paul-moore.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -116,75 +114,138 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <CAHC9VhS4nB2xV-zw+=eN2MYaetvCkParammXn1fPGsm-wuHtTw@mail.gmail.com>
+In-Reply-To: <20250409185019.238841-41-paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 4/10/25 15:47, Paul Moore wrote:
-> On Wed, Apr 9, 2025 at 7:13 PM Kees Cook <kees@kernel.org> wrote:
->>
->> On Wed, Apr 09, 2025 at 02:49:53PM -0400, Paul Moore wrote:
->>> The LSM currently has a lot of code to maintain a list of the
->>> currently active LSMs in a human readable string, with the only
->>> user being the "/sys/kernel/security/lsm" code.  Let's drop all
->>> of that code and generate the string on an as-needed basis when
->>> userspace reads "/sys/kernel/security/lsm".
->>>
->>> Signed-off-by: Paul Moore <paul@paul-moore.com>
->>> ---
->>>   include/linux/lsm_hooks.h |  1 -
->>>   security/inode.c          | 27 +++++++++++++++++++--
->>>   security/lsm_init.c       | 49 ---------------------------------------
->>>   3 files changed, 25 insertions(+), 52 deletions(-)
+On 4/9/25 11:49, Paul Moore wrote:
+> Convert the lsm_blob_size fields to unsigned integers as there is no
+> current need for them to be negative, change "lsm_set_blob_size()" to
+> "lsm_blob_size_update()" to better reflect reality, and perform some
+> other minor cleanups to the associated code.
 > 
-> ...
-> 
->>> @@ -343,8 +345,29 @@ static struct dentry *lsm_dentry;
->>>   static ssize_t lsm_read(struct file *filp, char __user *buf, size_t count,
->>>                        loff_t *ppos)
->>>   {
->>> -     return simple_read_from_buffer(buf, count, ppos, lsm_names,
->>> -             strlen(lsm_names));
->>> +     int i;
->>> +     char *str;
->>> +     ssize_t rc, len = 0;
->>> +
->>> +     for (i = 0; i < lsm_count; i++)
->>> +             /* the '+ 1' accounts for either a comma or a NUL terminator */
->>> +             len += strlen(lsm_order[i]->id->name) + 1;
->>> +
->>> +     str = kmalloc(len, GFP_KERNEL);
->>> +     if (!str)
->>> +             return -ENOMEM;
->>> +     str[0] = '\0';
->>> +
->>> +     i = 0;
->>> +     while (i < lsm_count) {
->>> +             strcat(str, lsm_order[i]->id->name);
->>> +             if (++i < lsm_count)
->>> +                     strcat(str, ",");
->>> +     }
->>> +
->>> +     rc = simple_read_from_buffer(buf, count, ppos, str, len);
->>> +     kfree(str);
->>> +     return rc;
->>
->> Hrm, at least cache it?
-> 
-> Are you aware of a performance critical use of this?
-> 
-no I can't see anything performance critical, I think it just is cleaner
-to only generate once if after init the list doesn't change.
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
->> Better yet, do this whole thing in a initcall after LSMs are loaded, and
->> both can gain __ro_after_init...
+Reviewed-by: John Johansen <john.johansen@canonical.com>
+
+> ---
+>   include/linux/lsm_hooks.h | 28 +++++++++++-----------
+>   security/lsm_init.c       | 50 +++++++++++++++++++++++----------------
+>   2 files changed, 43 insertions(+), 35 deletions(-)
 > 
-> I *really* disliked all the stuff we were having to do during boot,
-> and all the redundant global state we were keeping around.  I'll go
-> ahead and cache the lsm_read() result local to the function but that's
-> probably all I'm going to accept at this point in time.
-> 
-fair, I don't even think this needs to be changed, I think kees's suggestion
-is more of a nice to have
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index bc477fb20d02..a7ecb0791a0f 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -102,20 +102,20 @@ struct security_hook_list {
+>    * Security blob size or offset data.
+>    */
+>   struct lsm_blob_sizes {
+> -	int lbs_cred;
+> -	int lbs_file;
+> -	int lbs_ib;
+> -	int lbs_inode;
+> -	int lbs_sock;
+> -	int lbs_superblock;
+> -	int lbs_ipc;
+> -	int lbs_key;
+> -	int lbs_msg_msg;
+> -	int lbs_perf_event;
+> -	int lbs_task;
+> -	int lbs_xattr_count; /* number of xattr slots in new_xattrs array */
+> -	int lbs_tun_dev;
+> -	int lbs_bdev;
+> +	unsigned int lbs_cred;
+> +	unsigned int lbs_file;
+> +	unsigned int lbs_ib;
+> +	unsigned int lbs_inode;
+> +	unsigned int lbs_sock;
+> +	unsigned int lbs_superblock;
+> +	unsigned int lbs_ipc;
+> +	unsigned int lbs_key;
+> +	unsigned int lbs_msg_msg;
+> +	unsigned int lbs_perf_event;
+> +	unsigned int lbs_task;
+> +	unsigned int lbs_xattr_count; /* num xattr slots in new_xattrs array */
+> +	unsigned int lbs_tun_dev;
+> +	unsigned int lbs_bdev;
+>   };
+>   
+>   /*
+> diff --git a/security/lsm_init.c b/security/lsm_init.c
+> index 7f2bc8c22ce9..9bb4b4fc9888 100644
+> --- a/security/lsm_init.c
+> +++ b/security/lsm_init.c
+> @@ -148,16 +148,22 @@ static void __init lsm_order_append(struct lsm_info *lsm, const char *src)
+>   		   lsm_is_enabled(lsm) ? "enabled" : "disabled");
+>   }
+>   
+> -static void __init lsm_set_blob_size(int *need, int *lbs)
+> +/**
+> + * lsm_blob_size_update - Update the LSM blob size and offset information
+> + * @sz_req: the requested additional blob size
+> + * @sz_cur: the existing blob size
+> + */
+> +static void __init lsm_blob_size_update(unsigned int *sz_req,
+> +					unsigned int *sz_cur)
+>   {
+> -	int offset;
+> +	unsigned int offset;
+>   
+> -	if (*need <= 0)
+> +	if (*sz_req == 0)
+>   		return;
+>   
+> -	offset = ALIGN(*lbs, sizeof(void *));
+> -	*lbs = offset + *need;
+> -	*need = offset;
+> +	offset = ALIGN(*sz_cur, sizeof(void *));
+> +	*sz_cur = offset + *sz_req;
+> +	*sz_req = offset;
+>   }
+>   
+>   /**
+> @@ -186,24 +192,26 @@ static void __init lsm_prep_single(struct lsm_info *lsm)
+>   
+>   	/* Register the LSM blob sizes. */
+>   	blobs = lsm->blobs;
+> -	lsm_set_blob_size(&blobs->lbs_cred, &blob_sizes.lbs_cred);
+> -	lsm_set_blob_size(&blobs->lbs_file, &blob_sizes.lbs_file);
+> -	lsm_set_blob_size(&blobs->lbs_ib, &blob_sizes.lbs_ib);
+> +	lsm_blob_size_update(&blobs->lbs_cred, &blob_sizes.lbs_cred);
+> +	lsm_blob_size_update(&blobs->lbs_file, &blob_sizes.lbs_file);
+> +	lsm_blob_size_update(&blobs->lbs_ib, &blob_sizes.lbs_ib);
+>   	/* inode blob gets an rcu_head in addition to LSM blobs. */
+>   	if (blobs->lbs_inode && blob_sizes.lbs_inode == 0)
+>   		blob_sizes.lbs_inode = sizeof(struct rcu_head);
+> -	lsm_set_blob_size(&blobs->lbs_inode, &blob_sizes.lbs_inode);
+> -	lsm_set_blob_size(&blobs->lbs_ipc, &blob_sizes.lbs_ipc);
+> -	lsm_set_blob_size(&blobs->lbs_key, &blob_sizes.lbs_key);
+> -	lsm_set_blob_size(&blobs->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
+> -	lsm_set_blob_size(&blobs->lbs_perf_event, &blob_sizes.lbs_perf_event);
+> -	lsm_set_blob_size(&blobs->lbs_sock, &blob_sizes.lbs_sock);
+> -	lsm_set_blob_size(&blobs->lbs_superblock, &blob_sizes.lbs_superblock);
+> -	lsm_set_blob_size(&blobs->lbs_task, &blob_sizes.lbs_task);
+> -	lsm_set_blob_size(&blobs->lbs_tun_dev, &blob_sizes.lbs_tun_dev);
+> -	lsm_set_blob_size(&blobs->lbs_xattr_count,
+> -			  &blob_sizes.lbs_xattr_count);
+> -	lsm_set_blob_size(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
+> +	lsm_blob_size_update(&blobs->lbs_inode, &blob_sizes.lbs_inode);
+> +	lsm_blob_size_update(&blobs->lbs_ipc, &blob_sizes.lbs_ipc);
+> +	lsm_blob_size_update(&blobs->lbs_key, &blob_sizes.lbs_key);
+> +	lsm_blob_size_update(&blobs->lbs_msg_msg, &blob_sizes.lbs_msg_msg);
+> +	lsm_blob_size_update(&blobs->lbs_perf_event,
+> +			     &blob_sizes.lbs_perf_event);
+> +	lsm_blob_size_update(&blobs->lbs_sock, &blob_sizes.lbs_sock);
+> +	lsm_blob_size_update(&blobs->lbs_superblock,
+> +			     &blob_sizes.lbs_superblock);
+> +	lsm_blob_size_update(&blobs->lbs_task, &blob_sizes.lbs_task);
+> +	lsm_blob_size_update(&blobs->lbs_tun_dev, &blob_sizes.lbs_tun_dev);
+> +	lsm_blob_size_update(&blobs->lbs_xattr_count,
+> +			     &blob_sizes.lbs_xattr_count);
+> +	lsm_blob_size_update(&blobs->lbs_bdev, &blob_sizes.lbs_bdev);
+>   }
+>   
+>   /* Initialize a given LSM, if it is enabled. */
 
 
