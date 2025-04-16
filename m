@@ -1,113 +1,203 @@
-Return-Path: <linux-integrity+bounces-5921-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5922-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACCE1A90845
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 18:05:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ECD5A90C66
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 21:34:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 337925A00B3
-	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 16:05:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3198A177A57
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Apr 2025 19:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F7ED20DD48;
-	Wed, 16 Apr 2025 16:05:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F71A2222BB;
+	Wed, 16 Apr 2025 19:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="IVpc4FxV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+A0oHTS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A54C2191;
-	Wed, 16 Apr 2025 16:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E2121146F;
+	Wed, 16 Apr 2025 19:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744819533; cv=none; b=M0qAyfrEATYCTphAtyNR15rb56U1dLWRrnAM7WhIH+h5RhnWpo8OPXrmxIdBh3XhESdBFqochncR32K9oCuk/0BGhmc1oTXSsh8sWIZ6xEMcf89Nrjy7cR4oKPteR+bbmlw8bUtqaDMllhCEIQrIl7jQt7nWb5J2oVDYr8H33ME=
+	t=1744832061; cv=none; b=g/EU9kR9cxKz8UEWbZP8AcluyV37kk73JbLtlhw4Bpqtug9xCkSExDlqDU5Ga/T8BRYNrb4LyrPgYhQ5bLrrA2mw5Mrl8uLil16alG8ejJqRBkxW45s/dlbE8oKOQLWSwMT97BO77cu+MjG6yCJQjRCVsQPI3LmE0zJder1tuSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744819533; c=relaxed/simple;
-	bh=EhmqrT1n26AMQEMDb1XRZ5HxSAiGsR+p35wieLTxIRk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AXtb4XNLenJ4ftBjHfhUdwEAlREEfFDDZ89S601MhcC2S9mblwEMFr9kYtnXUZtBgRtYhJwvj7feuZ6lZni55UvaJut0dvWOF2M+Gq0L+knhcRQIUsxBzPhFCxY8ten4CGv72QeEeEyOHaYj6Fx8aTSxTPpuWbKwe5kWS9Iq/Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=IVpc4FxV; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4Zd5Tk3HCJzm0yVN;
-	Wed, 16 Apr 2025 16:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1744819525; x=1747411526; bh=4rA+OYQ/k01wwgm+jiFIFEx4
-	hVYW6A62leL4CloUvtI=; b=IVpc4FxVxUl02nZnmIlRB8AfWVTQcXcDjI7g+qLS
-	XSxRkVoM0SzjfHxAHdZabaGZYOhmKcE9S4Zu7Rvcsn2X1WMsxibhKmgF3d9pNm8B
-	NLN3WRWoJBbLlzgpb+QDeVVYCNQ0WrSBzGhpEfENba7fXOJEe7ITKb2+L6NBxzqk
-	WDLbgWblz4anjLuvefXnDadn1gWFq2NicjUStiM/py12gk9I0H6Clg9kjgeMilu8
-	wjIHxV7rDmHF0QYAYemBOoWoWHBWfkfpoE1/Jg9FgZhPG/UrrIa5SeZP31NbUL1J
-	ZVjskPOWJSo/jiJ3j8sXD5O3ynk+tekn5+d96iFunAf0Qw==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 76cUTHYzIjV1; Wed, 16 Apr 2025 16:05:25 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4Zd5T91lhkzm0djk;
-	Wed, 16 Apr 2025 16:05:00 +0000 (UTC)
-Message-ID: <bb713790-0b68-4d91-831c-b18fa1ea01a9@acm.org>
-Date: Wed, 16 Apr 2025 09:04:58 -0700
+	s=arc-20240116; t=1744832061; c=relaxed/simple;
+	bh=geLExcJtOAjXjEY3nYZsjfpMc2TX5ES0OBy8m9gKC/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yy005nBXdkAaHF1EwwQ8c0y9rp28Uo/T6FLQCmdaPAixt0MRl71W9muINEfO3tWan1DW7GfofxbeyYqcEsSTfbWbt0YFNf9c3yJCLJ5VZT1AiUPYf61FB/TDFjmvxDXOSIsXPCMIE1x1BYLlxFxn1W61cJz6FYTFwRbxKOi/doY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+A0oHTS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E34AC4CEE2;
+	Wed, 16 Apr 2025 19:34:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744832059;
+	bh=geLExcJtOAjXjEY3nYZsjfpMc2TX5ES0OBy8m9gKC/k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T+A0oHTSymTtL9IlRxP2X49sZVIM+qKZykeUc2U1jckOh7Fab2nVwAlbNWbp/XYXH
+	 72yCmdRJgMazizkaUaoxG0Wn7KFWs6aHcG6OfFWYy+IW8oFbj4GScY3vpMq0460m83
+	 znneUQQNp70DChBAFipuLJMTCbl0QPbJuB9t45gg34S2XEtV2Xy7YIWXsmuR4MnGoB
+	 ONm30k/EW8IhlQTZhxZ/RMNIYfZyo3oG6WmJH2ox1m2hZrI+VEcIhKMAYk9WTZNjB/
+	 RizhkamT1QOnRjMZK46AjXuFi1Hwlokh2lbPLIBWcjDTJ5LJe25/TXY4xyWLb6lIOf
+	 LWfCobji2UGcQ==
+Date: Wed, 16 Apr 2025 22:34:16 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: chenlinxuan@uniontech.com
+Cc: Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Yishai Hadas <yishaih@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, kvm@vger.kernel.org,
+	virtualization@lists.linux.dev, linux-integrity@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	Winston Wen <wentao@uniontech.com>,
+	Changbin Du <changbin.du@intel.com>
+Subject: Re: [PATCH RFC v2 4/5] tpm: add __always_inline for
+ tpm_is_hwrng_enabled
+Message-ID: <aAAGOIN-IsnTK2gm@kernel.org>
+References: <20250416-noautoinline-v2-0-e69a2717530f@uniontech.com>
+ <20250416-noautoinline-v2-4-e69a2717530f@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 5/5] lib/Kconfig.debug: introduce
- CONFIG_NO_AUTO_INLINE
-To: chenlinxuan@uniontech.com, Keith Busch <kbusch@kernel.org>,
- Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
- Sagi Grimberg <sagi@grimberg.me>, Andrew Morton <akpm@linux-foundation.org>,
- Yishai Hadas <yishaih@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
- Kevin Tian <kevin.tian@intel.com>,
- Alex Williamson <alex.williamson@redhat.com>, Peter Huewe
- <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
- Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, kvm@vger.kernel.org, virtualization@lists.linux.dev,
- linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org,
- llvm@lists.linux.dev, Winston Wen <wentao@uniontech.com>,
- Changbin Du <changbin.du@intel.com>
-References: <20250416-noautoinline-v2-0-e69a2717530f@uniontech.com>
- <20250416-noautoinline-v2-5-e69a2717530f@uniontech.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20250416-noautoinline-v2-5-e69a2717530f@uniontech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250416-noautoinline-v2-4-e69a2717530f@uniontech.com>
 
-On 4/16/25 2:44 AM, Chen Linxuan via B4 Relay wrote:
-> 2. Make it depends on X86 and LOONGARCH,
->     as I haven't test other architectures
+On Wed, Apr 16, 2025 at 05:44:50PM +0800, Chen Linxuan via B4 Relay wrote:
+> From: Winston Wen <wentao@uniontech.com>
+> 
+> Presume that kernel is compiled for x86_64 with gcc version 13.3.0:
+> 
+>   make defconfig
+>   ./scripts/kconfig/merge_config.sh .config <(
+>     echo CONFIG_TCG_TPM=y
+>     echo CONFIG_HW_RANDOM=m
+>   )
+>   make KCFLAGS="-fno-inline-small-functions -fno-inline-functions-called-once"
+> 
+> This results a link error:
+> 
+>   ld: vmlinux.o: in function `tpm_add_hwrng':
+>   tpm-chip.c:(.text+0x6c5924): undefined reference to `hwrng_register'
+>   ld: vmlinux.o: in function `tpm_chip_unregister':
+>   (.text+0x6c5bc9): undefined reference to `hwrng_unregister'
+>   ld: vmlinux.o: in function `tpm_chip_register':
+>   (.text+0x6c5c9b): undefined reference to `hwrng_unregister'
+> 
+> With `CONFIG_TCG_TPM=y` and `CONFIG_HW_RANDOM=m`,
+> the functions `tpm_add_hwrng`, `tpm_chip_unregister`, and
+> `tpm_chip_register` are compiled into `vmlinux.o`
+> and reference the symbols `hwrng_register` and `hwrng_unregister`.
+> These symbols, however, are compiled into `rng-core.ko`, which results
+> in the linking error.
+> 
+> I am not sure but I think this weird linking error only arises when
+> auto inlining is disabled because of some dead code elimination.
+> 
+> `CONFIG_TCG_TPM=y` and `CONFIG_HW_RANDOM=m` set `CONFIG_HW_RANDOM_TPM=n`.
+> This causes the function `tpm_is_hwrng_enabled` to always return
+> `false`, as shown below:
+> 
+>   static bool tpm_is_hwrng_enabled(struct tpm_chip *chip)
+>   {
+>       if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM))
+>           return false;
+>       if (tpm_is_firmware_upgrade(chip))
+>           return false;
+>       if (chip->flags & TPM_CHIP_FLAG_HWRNG_DISABLED)
+>           return false;
+>       return true;
+>   }
+> 
+> When `tpm_is_hwrng_enabled` is inlined, dead code elimination
+> optimizations are applied and the reference to the `hwrng_*` functions
+> will been removed.
+> For instance, in the `tpm_chip_unregister` function:
+> 
+>   void tpm_chip_unregister(struct tpm_chip *chip)
+>   {
+>   #ifdef CONFIG_TCG_TPM2_HMAC
+>       int rc;
+> 
+>       rc = tpm_try_get_ops(chip);
+>       if (!rc) {
+>           tpm2_end_auth_session(chip);
+>           tpm_put_ops(chip);
+>       }
+>   #endif
+> 
+>       tpm_del_legacy_sysfs(chip);
+>       if (tpm_is_hwrng_enabled(chip))
+>           hwrng_unregister(&chip->hwrng);
+>       tpm_bios_log_teardown(chip);
+>       if (chip->flags & TPM_CHIP_FLAG_TPM2 && !tpm_is_firmware_upgrade(chip))
+>           tpm_devs_remove(chip);
+>       tpm_del_char_device(chip);
+>   }
+> 
+> When `tpm_is_hwrng_enabled` is inlined and always returns `false`,
+> the call to `hwrng_unregister` is effectively part of a `if (false)`
+> block, which I guess that will be then optimized out.
+> 
+> However, when the `-fno-inline-small-functions` and
+> `-fno-inline-functions-called-once` flags are used,
+> tpm_is_hwrng_enabled is not inline.
+> 
+> And this optimization some how cannot occur,
+> leading to the undefined reference errors during linking.
+> 
+> Adding the `__always_inline` attribute ensures that
+> `tpm_is_hwrng_enabled` is inlined regardless of the compiler flags.
+> This allows the dead code elimination to proceed as expected,
+> resolving the linking issue.
+> 
+> Co-developed-by: Chen Linxuan <chenlinxuan@uniontech.com>
+> Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
+> Signed-off-by: Winston Wen <wentao@uniontech.com>
+> ---
+>  drivers/char/tpm/tpm-chip.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index e25daf2396d37bcaeae8a96267764df0861ad1be..48cc74d84247e258a39f2118e03aa10d0cbb066a 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -534,7 +534,7 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
+>  	return tpm_get_random(chip, data, max);
+>  }
+>  
+> -static bool tpm_is_hwrng_enabled(struct tpm_chip *chip)
+> +static __always_inline bool tpm_is_hwrng_enabled(struct tpm_chip *chip)
+>  {
+>  	if (!IS_ENABLED(CONFIG_HW_RANDOM_TPM))
+>  		return false;
+> 
+> -- 
+> 2.48.1
+> 
+> 
+> 
 
-That sounds weird to me. Shouldn't this option be made architecture-
-independent?
+Thank you.
 
-> +config NO_AUTO_INLINE
-> +	bool "Disable compiler auto-inline optimizations (EXPERIMENTAL)"
-> +	default n
-> +	depends on CC_IS_GCC && (X86 || LOONGARCH)
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Why "depends on CC_IS_GCC"? Please make sure that both gcc and clang are
-supported.
 
-Thanks,
-
-Bart.
+BR, Jarkko
 
