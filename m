@@ -1,62 +1,62 @@
-Return-Path: <linux-integrity+bounces-5929-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5930-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17A3EA93459
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 10:15:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 744C7A9351A
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 11:08:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BA1616F8CA
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 08:15:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D10E73B4424
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 09:08:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B5D26B2D7;
-	Fri, 18 Apr 2025 08:15:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9348D26FDA6;
+	Fri, 18 Apr 2025 09:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KQ6RttrT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="INJYjuVL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C9E26B2CA
-	for <linux-integrity@vger.kernel.org>; Fri, 18 Apr 2025 08:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AE226E15F
+	for <linux-integrity@vger.kernel.org>; Fri, 18 Apr 2025 09:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744964113; cv=none; b=bl3AenUHZBKRFvTki2Oall8rohatLoNvHnLCv9LkjvS+XbzhXy0X8KqZ2TdB2ppo6ZsyTjtKDyBgsVjkWPZrCttJuEQoqBbHaAlKExtKohlujzEDzIP6VM0vkdnd4anJJKbdISsi1+5c/zaF0VYDl/KAxDrRjxlKoosNnI6lSJg=
+	t=1744967301; cv=none; b=Uub1c3LdQRT0Ms/vI6nsa1miAL+D75jhonPQRXb6sxxdaSs38VfCNuORYrzT8aLHG0owBjizFnvC5l0i3gc9kgqxIkBLXEKYC3dZA31cUmdqYDVjSonV1r7YoR/VvJ1OA0xXpqgCTnawOSHGjNcOqugsL8LqxMeXs6ermWJvF64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744964113; c=relaxed/simple;
-	bh=rX7D5fJ6dxuaIJHo2NjKN2s6bX97dO1N9qsbOAQFqWc=;
+	s=arc-20240116; t=1744967301; c=relaxed/simple;
+	bh=5zEttM7G523BvZfLQt5yZk/a/I6V3yfIpylGzhsSLJ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o/VUhTyxGLympYDLXLr7A5smFtwtIW6iwlP36Un95QRRNwAvG+29+mVJs45+Peduuz+tsCkkazPqNFfkdtIrwk0duAo+b5xP7mO4kmCctmp+auCbl8wcrCWBuUuXkIe13UgsVtqlql1FZ9n+dSxO+wldoEVqKG7zq+JFC6hFhNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KQ6RttrT; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=INSF2nhzMCVUpXQmrCu0tcyIiqInsGffLhiTwgXqRQUwh4kT3yjvi0yMmSfT0C1EJpzTjd7iNgscnkFfzUSc9c1GE7R+0b+VZyQYuIg154SFcE7KE+yLOJf/+7YZKCBjfRa9Ml9FJsxIneFKkYJyIkXvX0FGH9VcuoZmp+VJmdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=INJYjuVL; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744964110;
+	s=mimecast20190719; t=1744967297;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=oGpLEGpFPjLHr2TI5L2WF5TxWp0RKlr+m9WjaH1iqOo=;
-	b=KQ6RttrTjsC8w9E4HnC+Jkc8oWd6j2hW93C1JmB6LD1SbSRWj9hGYjGrTTL6/194oGtu62
-	6so7osapXkdzUpQP/cPgBIGHEdosTgwhVagAmvF7ZkBtubtH4du2syWpZ4F1zdeSpSXjX4
-	gM+EKTqHfGbkBZ5NDJzmK9NLpVgvjR0=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+	bh=uRi/YC/7QKviF7pv3VzTS7PeAGEq5rIpEBd7JwQprps=;
+	b=INJYjuVL9y9zxlFmDhh0HYM1mLS5hdSEYh36ZmILE+0kpgZ4wDwOpzJ47LHlNKn2plrlCX
+	aoky16MS7q21b4BS0DKFKfe4UhB90DIfsWU+m83L5kqVLQBzcCfqApCGHC3G4vBNmACWuA
+	JTuD1kGMpA7wW6bHx9+Fc5kg7rapXN8=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-SJ0K13ASMYa3gF71ua8eWQ-1; Fri,
- 18 Apr 2025 04:15:04 -0400
-X-MC-Unique: SJ0K13ASMYa3gF71ua8eWQ-1
-X-Mimecast-MFC-AGG-ID: SJ0K13ASMYa3gF71ua8eWQ_1744964102
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-631-N1O5AT04PE6H56hQf3-Zog-1; Fri,
+ 18 Apr 2025 05:08:14 -0400
+X-MC-Unique: N1O5AT04PE6H56hQf3-Zog-1
+X-Mimecast-MFC-AGG-ID: N1O5AT04PE6H56hQf3-Zog_1744967291
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4C8E819560AB;
-	Fri, 18 Apr 2025 08:15:01 +0000 (UTC)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 786B31956086;
+	Fri, 18 Apr 2025 09:08:10 +0000 (UTC)
 Received: from localhost (unknown [10.72.112.33])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EB5B519560A3;
-	Fri, 18 Apr 2025 08:14:58 +0000 (UTC)
-Date: Fri, 18 Apr 2025 16:14:54 +0800
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 83CFE19560BA;
+	Fri, 18 Apr 2025 09:08:07 +0000 (UTC)
+Date: Fri, 18 Apr 2025 17:08:03 +0800
 From: Baoquan He <bhe@redhat.com>
 To: steven chen <chenste@linux.microsoft.com>
 Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
@@ -68,10 +68,11 @@ Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
 	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
 	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
 	dyoung@redhat.com
-Subject: Re: [PATCH v12 8/9] ima: make the kexec extra memory configurable
-Message-ID: <aAIJ/vpJD7GpBwKe@MiWiFi-R3L-srv>
+Subject: Re: [PATCH v12 9/9] ima: measure kexec load and exec events as
+ critical data
+Message-ID: <aAIWcwzuht+GCn29@MiWiFi-R3L-srv>
 References: <20250416021028.1403-1-chenste@linux.microsoft.com>
- <20250416021028.1403-9-chenste@linux.microsoft.com>
+ <20250416021028.1403-10-chenste@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -80,96 +81,139 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416021028.1403-9-chenste@linux.microsoft.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+In-Reply-To: <20250416021028.1403-10-chenste@linux.microsoft.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
 On 04/15/25 at 07:10pm, steven chen wrote:
 > From: Steven Chen <chenste@linux.microsoft.com>
 > 
-> The extra memory allocated for carrying the IMA measurement list across
-> kexec is hard-coded as half a PAGE.  Make it configurable.
+> The amount of memory allocated at kexec load, even with the extra memory
+> allocated, might not be large enough for the entire measurement list.  The
+> indeterminate interval between kexec 'load' and 'execute' could exacerbate
+> this problem.
 > 
-> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
-> extra memory (in kb) to be allocated for IMA measurements added during
-> kexec soft reboot.  Ensure the default value of the option is set such
-> that extra half a page of memory for additional measurements is allocated
-> for the additional measurements.
+> Define two new IMA events, 'kexec_load' and 'kexec_execute', to be 
+> measured as critical data at kexec 'load' and 'execute' respectively.
+> Report the allocated kexec segment size, IMA binary log size and the
+> runtime measurements count as part of those events.
 > 
-> Update ima_add_kexec_buffer() function to allocate memory based on the
-> Kconfig option value, rather than the currently hard-coded one.
+> These events, and the values reported through them, serve as markers in
+> the IMA log to verify the IMA events are captured during kexec soft
+> reboot.  The presence of a 'kexec_load' event in between the last two
+> 'boot_aggregate' events in the IMA log implies this is a kexec soft
+> reboot, and not a cold-boot. And the absence of 'kexec_execute' event
+> after kexec soft reboot implies missing events in that window which
+> results in inconsistency with TPM PCR quotes, necessitating a cold boot
+> for a successful remote attestation.
 > 
-> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
+> These critical data events are displayed as hex encoded ascii in the
+> ascii_runtime_measurement_list.  Verifying the critical data hash requires 
+> calculating the hash of the decoded ascii string.  
+> 
+> For example, to verify the 'kexec_load' data hash:
+> 
+> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements 
+> | grep  kexec_load | cut -d' ' -f 6 | xxd -r -p | sha256sum
+> 
+> 
+> To verify the 'kexec_execute' data hash:
+> 
+> sudo cat /sys/kernel/security/integrity/ima/ascii_runtime_measurements 
+> | grep kexec_execute | cut -d' ' -f 6 | xxd -r -p | sha256sum
+> 
 > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-   ^^^^^^^^^^^^^^^^
+  ^^^^^
 > Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
+  ^^^^^
+> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 > ---
->  security/integrity/ima/Kconfig     | 11 +++++++++++
->  security/integrity/ima/ima_kexec.c | 16 +++++++++++-----
->  2 files changed, 22 insertions(+), 5 deletions(-)
-
-The contributor's tag need be updated too, otherwise,
+>  security/integrity/ima/ima.h       |  6 ++++++
+>  security/integrity/ima/ima_kexec.c | 21 +++++++++++++++++++++
+>  security/integrity/ima/ima_queue.c |  5 +++++
+>  3 files changed, 32 insertions(+)
 
 Acked-by: Baoquan He <bhe@redhat.com>
 
 > 
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index 475c32615006..976e75f9b9ba 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -321,4 +321,15 @@ config IMA_DISABLE_HTABLE
->  	help
->  	   This option disables htable to allow measurement of duplicate records.
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index 24d09ea91b87..34815baf5e21 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -240,6 +240,12 @@ void ima_post_key_create_or_update(struct key *keyring, struct key *key,
+>  				   unsigned long flags, bool create);
+>  #endif
 >  
-> +config IMA_KEXEC_EXTRA_MEMORY_KB
-> +	int "Extra memory for IMA measurements added during kexec soft reboot"
-> +	range 0 40
-> +	depends on IMA_KEXEC
-> +	default 0
-> +	help
-> +	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
-> +	  allocated (in kb) for IMA measurements added during kexec soft reboot.
-> +	  If set to the default value of 0, an extra half page of memory for those
-> +	  additional measurements will be allocated.
+> +#ifdef CONFIG_IMA_KEXEC
+> +void ima_measure_kexec_event(const char *event_name);
+> +#else
+> +static inline void ima_measure_kexec_event(const char *event_name) {}
+> +#endif
 > +
->  endif
+>  /*
+>   * The default binary_runtime_measurements list format is defined as the
+>   * platform native format.  The canonical format is defined as little-endian.
 > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index ed867734ee70..d1c9d369ba08 100644
+> index d1c9d369ba08..38cb2500f4c3 100644
 > --- a/security/integrity/ima/ima_kexec.c
 > +++ b/security/integrity/ima/ima_kexec.c
-> @@ -118,6 +118,7 @@ void ima_add_kexec_buffer(struct kimage *image)
->  				  .buf_min = 0, .buf_max = ULONG_MAX,
->  				  .top_down = true };
->  	unsigned long binary_runtime_size;
-> +	unsigned long extra_memory;
+> @@ -17,6 +17,8 @@
+>  #include "ima.h"
 >  
->  	/* use more understandable variable names than defined in kbuf */
->  	size_t kexec_buffer_size = 0;
-> @@ -125,15 +126,20 @@ void ima_add_kexec_buffer(struct kimage *image)
->  	int ret;
+>  #ifdef CONFIG_IMA_KEXEC
+> +#define IMA_KEXEC_EVENT_LEN 256
+> +
+>  static bool ima_kexec_update_registered;
+>  static struct seq_file ima_kexec_file;
+>  static size_t kexec_segment_size;
+> @@ -31,6 +33,24 @@ static void ima_free_kexec_file_buf(struct seq_file *sf)
+>  	sf->count = 0;
+>  }
 >  
+> +void ima_measure_kexec_event(const char *event_name)
+> +{
+> +	char ima_kexec_event[IMA_KEXEC_EVENT_LEN];
+> +	size_t buf_size = 0;
+> +	long len;
+> +	int n;
+> +
+> +	buf_size = ima_get_binary_runtime_size();
+> +	len = atomic_long_read(&ima_htable.len);
+> +
+> +	n = scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
+> +		      "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
+> +		      "ima_runtime_measurements_count=%ld;",
+> +		      kexec_segment_size, buf_size, len);
+> +
+> +	ima_measure_critical_data("ima_kexec", event_name, ima_kexec_event, n, false, NULL, 0);
+> +}
+> +
+>  static int ima_alloc_kexec_file_buf(size_t segment_size)
+>  {
 >  	/*
-> -	 * Reserve an extra half page of memory for additional measurements
-> -	 * added during the kexec load.
-> +	 * Reserve extra memory for measurements added during kexec.
->  	 */
-> -	binary_runtime_size = ima_get_binary_runtime_size();
-> +	if (CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB <= 0)
-> +		extra_memory = PAGE_SIZE / 2;
-> +	else
-> +		extra_memory = CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB * 1024;
+> @@ -53,6 +73,7 @@ static int ima_alloc_kexec_file_buf(size_t segment_size)
+>  out:
+>  	ima_kexec_file.read_pos = 0;
+>  	ima_kexec_file.count = sizeof(struct ima_kexec_hdr);	/* reserved space */
+> +	ima_measure_kexec_event("kexec_load");
+>  
+>  	return 0;
+>  }
+> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
+> index 83d53824aa98..590637e81ad1 100644
+> --- a/security/integrity/ima/ima_queue.c
+> +++ b/security/integrity/ima/ima_queue.c
+> @@ -241,6 +241,11 @@ static int ima_reboot_notifier(struct notifier_block *nb,
+>  			       unsigned long action,
+>  			       void *data)
+>  {
+> +#ifdef CONFIG_IMA_KEXEC
+> +	if (action == SYS_RESTART && data && !strcmp(data, "kexec reboot"))
+> +		ima_measure_kexec_event("kexec_execute");
+> +#endif
 > +
-> +	binary_runtime_size = ima_get_binary_runtime_size() + extra_memory;
-> +
->  	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
->  		kexec_segment_size = ULONG_MAX;
->  	else
-> -		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
-> -					   PAGE_SIZE / 2, PAGE_SIZE);
-> +		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
-> +
->  	if ((kexec_segment_size == ULONG_MAX) ||
->  	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
->  		pr_err("Binary measurement list too large.\n");
+>  	ima_measurements_suspend();
+>  
+>  	return NOTIFY_DONE;
 > -- 
 > 2.43.0
 > 
