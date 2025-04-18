@@ -1,62 +1,62 @@
-Return-Path: <linux-integrity+bounces-5928-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5929-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 248F6A93398
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 09:41:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17A3EA93459
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 10:15:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A02FB19E518D
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 07:41:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BA1616F8CA
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 08:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BBD1269838;
-	Fri, 18 Apr 2025 07:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B5D26B2D7;
+	Fri, 18 Apr 2025 08:15:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fHt+zKUH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KQ6RttrT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907F526A08F
-	for <linux-integrity@vger.kernel.org>; Fri, 18 Apr 2025 07:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C9E26B2CA
+	for <linux-integrity@vger.kernel.org>; Fri, 18 Apr 2025 08:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744962056; cv=none; b=rvMFjXdFyDRIJxChJOGfLd/7+X2fPGkAtoxm4l0SCtXF3Ma7J5XMT/Z5pXv8MCKthr7B8KgXhYUzDoWMDQ99LQxfd4vkX+mAsQCkCTC6JXQiY/qu/Eu9PGS/Hy2Spr642jeyVfPcg3AAu7jDTzYu7nuGC3kIwMO4Cn3F9kAHxNA=
+	t=1744964113; cv=none; b=bl3AenUHZBKRFvTki2Oall8rohatLoNvHnLCv9LkjvS+XbzhXy0X8KqZ2TdB2ppo6ZsyTjtKDyBgsVjkWPZrCttJuEQoqBbHaAlKExtKohlujzEDzIP6VM0vkdnd4anJJKbdISsi1+5c/zaF0VYDl/KAxDrRjxlKoosNnI6lSJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744962056; c=relaxed/simple;
-	bh=DCbZzSSzK5J5K8EjuW/T/It7HcLzCrosViqmRrAxcDg=;
+	s=arc-20240116; t=1744964113; c=relaxed/simple;
+	bh=rX7D5fJ6dxuaIJHo2NjKN2s6bX97dO1N9qsbOAQFqWc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XYwhtSCa20HRpX4fKcfZ/83v86Rz5Df/QkP4CTtDeskpn9MStCwzR3k6MHlYYSY1KA50lkX+3karg7zRR3zNSE2sQAePDTgAL/X9sEtHfxQIFTSPdQyfIe32W9yETjYVLnEW/Db91JJIsUxYjNa/aZgiPGGyJE8jQlCL5yEvwXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fHt+zKUH; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/VUhTyxGLympYDLXLr7A5smFtwtIW6iwlP36Un95QRRNwAvG+29+mVJs45+Peduuz+tsCkkazPqNFfkdtIrwk0duAo+b5xP7mO4kmCctmp+auCbl8wcrCWBuUuXkIe13UgsVtqlql1FZ9n+dSxO+wldoEVqKG7zq+JFC6hFhNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KQ6RttrT; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1744962053;
+	s=mimecast20190719; t=1744964110;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=5U3XpV/CK06BzDowrEdMCxWwiNqlbcO+Z4oINkEbeuE=;
-	b=fHt+zKUHJukXA/YGuh7kQPuAzZGcCfu/KNJKKa6AEuyyuRiBBnq4clqL/fsm6miXHwo+DP
-	5l1dV0STI6sxNOmVgRwuhzmiQeggTEGnUta3OH5J7lFQcex5lUFSqZ820HzRjHxDhcNR9Q
-	PvGcSZ5GNOHiXm9tnHrqjrizXpLqwK0=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=oGpLEGpFPjLHr2TI5L2WF5TxWp0RKlr+m9WjaH1iqOo=;
+	b=KQ6RttrTjsC8w9E4HnC+Jkc8oWd6j2hW93C1JmB6LD1SbSRWj9hGYjGrTTL6/194oGtu62
+	6so7osapXkdzUpQP/cPgBIGHEdosTgwhVagAmvF7ZkBtubtH4du2syWpZ4F1zdeSpSXjX4
+	gM+EKTqHfGbkBZ5NDJzmK9NLpVgvjR0=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-5-nLuEatHzOmSecP1Tc5jYuw-1; Fri,
- 18 Apr 2025 03:40:48 -0400
-X-MC-Unique: nLuEatHzOmSecP1Tc5jYuw-1
-X-Mimecast-MFC-AGG-ID: nLuEatHzOmSecP1Tc5jYuw_1744962045
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-SJ0K13ASMYa3gF71ua8eWQ-1; Fri,
+ 18 Apr 2025 04:15:04 -0400
+X-MC-Unique: SJ0K13ASMYa3gF71ua8eWQ-1
+X-Mimecast-MFC-AGG-ID: SJ0K13ASMYa3gF71ua8eWQ_1744964102
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B2C3619560BC;
-	Fri, 18 Apr 2025 07:40:44 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4C8E819560AB;
+	Fri, 18 Apr 2025 08:15:01 +0000 (UTC)
 Received: from localhost (unknown [10.72.112.33])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C2A2918001EA;
-	Fri, 18 Apr 2025 07:40:42 +0000 (UTC)
-Date: Fri, 18 Apr 2025 15:40:38 +0800
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EB5B519560A3;
+	Fri, 18 Apr 2025 08:14:58 +0000 (UTC)
+Date: Fri, 18 Apr 2025 16:14:54 +0800
 From: Baoquan He <bhe@redhat.com>
 To: steven chen <chenste@linux.microsoft.com>
 Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
@@ -68,11 +68,10 @@ Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
 	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
 	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
 	dyoung@redhat.com
-Subject: Re: [PATCH v12 5/9] ima: kexec: define functions to copy IMA log at
- soft boot
-Message-ID: <aAIB9ga3wPWb5sC8@MiWiFi-R3L-srv>
+Subject: Re: [PATCH v12 8/9] ima: make the kexec extra memory configurable
+Message-ID: <aAIJ/vpJD7GpBwKe@MiWiFi-R3L-srv>
 References: <20250416021028.1403-1-chenste@linux.microsoft.com>
- <20250416021028.1403-6-chenste@linux.microsoft.com>
+ <20250416021028.1403-9-chenste@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -81,135 +80,96 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250416021028.1403-6-chenste@linux.microsoft.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+In-Reply-To: <20250416021028.1403-9-chenste@linux.microsoft.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
 On 04/15/25 at 07:10pm, steven chen wrote:
 > From: Steven Chen <chenste@linux.microsoft.com>
 > 
-> The IMA log is currently copied to the new kernel during kexec 'load' 
-> using ima_dump_measurement_list(). However, the log copied at kexec 
-> 'load' may result in loss of IMA measurements that only occurred after
-> kexec "load'. Setup the needed infrastructure to move the IMA log copy 
-> from kexec 'load' to 'execute'.
+> The extra memory allocated for carrying the IMA measurement list across
+> kexec is hard-coded as half a PAGE.  Make it configurable.
 > 
-> Define a new IMA hook ima_update_kexec_buffer() as a stub function.
-> It will be used to call ima_dump_measurement_list() during kexec 'execute'.
+> Define a Kconfig option, IMA_KEXEC_EXTRA_MEMORY_KB, to configure the
+> extra memory (in kb) to be allocated for IMA measurements added during
+> kexec soft reboot.  Ensure the default value of the option is set such
+> that extra half a page of memory for additional measurements is allocated
+> for the additional measurements.
 > 
-> Implement ima_kexec_post_load() function to be invoked after the new 
-> Kernel image has been loaded for kexec. ima_kexec_post_load() maps the 
-> IMA buffer to a segment in the newly loaded Kernel.  It also registers 
-> the reboot notifier_block to trigger ima_update_kexec_buffer() at 
-> kexec 'execute'.
+> Update ima_add_kexec_buffer() function to allocate memory based on the
+> Kconfig option value, rather than the currently hard-coded one.
 > 
-> Set the priority of register_reboot_notifier to INT_MIN to ensure that the
-> IMA log copy operation will happen at the end of the operation chain, so 
-> that all the IMA measurement records extended into the TPM are copied
-> 
+> Suggested-by: Stefan Berger <stefanb@linux.ibm.com>
 > Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
-  ^^^
-
- The tag
-
-> Cc: Eric Biederman <ebiederm@xmission.com>
-> Cc: Baoquan He <bhe@redhat.com> 
-> Cc: Vivek Goyal <vgoyal@redhat.com>
-> Cc: Dave Young <dyoung@redhat.com>
+   ^^^^^^^^^^^^^^^^
 > Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 > ---
->  include/linux/ima.h                |  3 ++
->  security/integrity/ima/ima_kexec.c | 47 ++++++++++++++++++++++++++++++
->  2 files changed, 50 insertions(+)
+>  security/integrity/ima/Kconfig     | 11 +++++++++++
+>  security/integrity/ima/ima_kexec.c | 16 +++++++++++-----
+>  2 files changed, 22 insertions(+), 5 deletions(-)
 
-Other than the tag, this looks good to me:
+The contributor's tag need be updated too, otherwise,
 
 Acked-by: Baoquan He <bhe@redhat.com>
 
 > 
-> diff --git a/include/linux/ima.h b/include/linux/ima.h
-> index 0bae61a15b60..8e29cb4e6a01 100644
-> --- a/include/linux/ima.h
-> +++ b/include/linux/ima.h
-> @@ -32,6 +32,9 @@ static inline void ima_appraise_parse_cmdline(void) {}
+> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
+> index 475c32615006..976e75f9b9ba 100644
+> --- a/security/integrity/ima/Kconfig
+> +++ b/security/integrity/ima/Kconfig
+> @@ -321,4 +321,15 @@ config IMA_DISABLE_HTABLE
+>  	help
+>  	   This option disables htable to allow measurement of duplicate records.
 >  
->  #ifdef CONFIG_IMA_KEXEC
->  extern void ima_add_kexec_buffer(struct kimage *image);
-> +extern void ima_kexec_post_load(struct kimage *image);
-> +#else
-> +static inline void ima_kexec_post_load(struct kimage *image) {}
->  #endif
->  
->  #else
+> +config IMA_KEXEC_EXTRA_MEMORY_KB
+> +	int "Extra memory for IMA measurements added during kexec soft reboot"
+> +	range 0 40
+> +	depends on IMA_KEXEC
+> +	default 0
+> +	help
+> +	  IMA_KEXEC_EXTRA_MEMORY_KB determines the extra memory to be
+> +	  allocated (in kb) for IMA measurements added during kexec soft reboot.
+> +	  If set to the default value of 0, an extra half page of memory for those
+> +	  additional measurements will be allocated.
+> +
+>  endif
 > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-> index 7e0a19c3483f..e79f6caf895b 100644
+> index ed867734ee70..d1c9d369ba08 100644
 > --- a/security/integrity/ima/ima_kexec.c
 > +++ b/security/integrity/ima/ima_kexec.c
-> @@ -12,10 +12,14 @@
->  #include <linux/kexec.h>
->  #include <linux/of.h>
->  #include <linux/ima.h>
-> +#include <linux/reboot.h>
-> +#include <asm/page.h>
->  #include "ima.h"
+> @@ -118,6 +118,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+>  				  .buf_min = 0, .buf_max = ULONG_MAX,
+>  				  .top_down = true };
+>  	unsigned long binary_runtime_size;
+> +	unsigned long extra_memory;
 >  
->  #ifdef CONFIG_IMA_KEXEC
-> +static bool ima_kexec_update_registered;
->  static struct seq_file ima_kexec_file;
-> +static void *ima_kexec_buffer;
+>  	/* use more understandable variable names than defined in kbuf */
+>  	size_t kexec_buffer_size = 0;
+> @@ -125,15 +126,20 @@ void ima_add_kexec_buffer(struct kimage *image)
+>  	int ret;
 >  
->  static void ima_free_kexec_file_buf(struct seq_file *sf)
->  {
-> @@ -162,6 +166,49 @@ void ima_add_kexec_buffer(struct kimage *image)
->  	kexec_dprintk("kexec measurement buffer for the loaded kernel at 0x%lx.\n",
->  		      kbuf.mem);
->  }
+>  	/*
+> -	 * Reserve an extra half page of memory for additional measurements
+> -	 * added during the kexec load.
+> +	 * Reserve extra memory for measurements added during kexec.
+>  	 */
+> -	binary_runtime_size = ima_get_binary_runtime_size();
+> +	if (CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB <= 0)
+> +		extra_memory = PAGE_SIZE / 2;
+> +	else
+> +		extra_memory = CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB * 1024;
 > +
-> +/*
-> + * Called during kexec execute so that IMA can update the measurement list.
-> + */
-> +static int ima_update_kexec_buffer(struct notifier_block *self,
-> +				   unsigned long action, void *data)
-> +{
-> +	return NOTIFY_OK;
-> +}
+> +	binary_runtime_size = ima_get_binary_runtime_size() + extra_memory;
 > +
-> +static struct notifier_block update_buffer_nb = {
-> +	.notifier_call = ima_update_kexec_buffer,
-> +	.priority = INT_MIN
-> +};
+>  	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
+>  		kexec_segment_size = ULONG_MAX;
+>  	else
+> -		kexec_segment_size = ALIGN(ima_get_binary_runtime_size() +
+> -					   PAGE_SIZE / 2, PAGE_SIZE);
+> +		kexec_segment_size = ALIGN(binary_runtime_size, PAGE_SIZE);
 > +
-> +/*
-> + * Create a mapping for the source pages that contain the IMA buffer
-> + * so we can update it later.
-> + */
-> +void ima_kexec_post_load(struct kimage *image)
-> +{
-> +	if (ima_kexec_buffer) {
-> +		kimage_unmap_segment(ima_kexec_buffer);
-> +		ima_kexec_buffer = NULL;
-> +	}
-> +
-> +	if (!image->ima_buffer_addr)
-> +		return;
-> +
-> +	ima_kexec_buffer = kimage_map_segment(image,
-> +					      image->ima_buffer_addr,
-> +					      image->ima_buffer_size);
-> +	if (!ima_kexec_buffer) {
-> +		pr_err("Could not map measurements buffer.\n");
-> +		return;
-> +	}
-> +
-> +	if (!ima_kexec_update_registered) {
-> +		register_reboot_notifier(&update_buffer_nb);
-> +		ima_kexec_update_registered = true;
-> +	}
-> +}
-> +
->  #endif /* IMA_KEXEC */
->  
->  /*
+>  	if ((kexec_segment_size == ULONG_MAX) ||
+>  	    ((kexec_segment_size >> PAGE_SHIFT) > totalram_pages() / 2)) {
+>  		pr_err("Binary measurement list too large.\n");
 > -- 
 > 2.43.0
 > 
