@@ -1,131 +1,180 @@
-Return-Path: <linux-integrity+bounces-5923-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5924-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AC67A91104
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Apr 2025 03:10:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A8ECA930D1
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 05:30:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30C1B3BEDFB
-	for <lists+linux-integrity@lfdr.de>; Thu, 17 Apr 2025 01:09:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5A00173759
+	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 03:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704872DFA56;
-	Thu, 17 Apr 2025 01:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F722267F45;
+	Fri, 18 Apr 2025 03:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="n86RXRgp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TWwts1m9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F1C1547C9;
-	Thu, 17 Apr 2025 01:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E48E27E0FF
+	for <linux-integrity@vger.kernel.org>; Fri, 18 Apr 2025 03:30:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744852208; cv=none; b=qA6Pda2msgauAxAqtpQfdfHyTxdxS1a4H3Gv41ZBWdgkdNpxxzVlUCH7ttTKMxjUzrLxgPn/hTWcTSL2mtzheL+BVO1WfCvJ5hZS/e/knq/kiu2adCmEmtwXmzW/8opVgkeEiK5X+YjKNxV0bL+PtzuiUQHDf45DDrnw4oIR5Cs=
+	t=1744947042; cv=none; b=np1w/rPc9Tj92fjeNaIJHqGz8jh9e7NhDtexkhAwvK7NrRLZeZPV+LarA1V33ojgqi5JlyYachinwTCgQQ3Wxdhb5fvtdTeJ1J1haOxOOg9J5PXQwrVzKWPX4Vv0Y86GdYc3PnoRq2zvmUrxAM+scsWs+xd55YWLSiDSuLMZk6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744852208; c=relaxed/simple;
-	bh=sCk4s2BEvqzj6Ctkri/ogbGb7GtmwjvsewhjBHtEO70=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kz4SvGp531L9HMUkO0o8Yp4SOGBXlWPbf8BSaMjARdialJrRKe/XsqLDYX+kPhwG3inCC1e6L1T7DBehWlMH/+byuzNgkgBWt9SNutXJWodH/ajUBqf+hEpjwZP0Wi13VMWUeo/pXgkO+2Z3YsC+EJ1MWEhT/Azk/mVSJo+zsyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=n86RXRgp; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53GLW826019008;
-	Thu, 17 Apr 2025 01:09:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ah/lLz
-	BmfOIHy5wOwIFiZy+sp117fbDDGICRD88/xh8=; b=n86RXRgper66X0nQGr/SIC
-	rYc7HochvI/iHrEML50CySpLEsaptWcfK7HSgDf7O8qS6C/zNnQPxwfo4pgb6+eX
-	AkQxleDMoK8rlIxBFadOqGo2jcEr4rie3dbIIax0MMF++ZMn6pd0zad6QNsvFpZx
-	/0fSVrfPEJLBVnApDjCByVBoqWCvNyqec4O5LUGn4DvyKYCUyG7xKmK24f0qfszi
-	hQAonjj02jIGh2uAOBqZQy5tHmE96XC2phK+ohnOB0X9wmvLcUwp4SoheHCcLnKg
-	2b1tARm921vHxIxNAf0JizkFpHIPUNgWVtNyCYPGmfBx29Pn784UoflR7LhTwiSQ
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 462mhu0r9h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Apr 2025 01:09:28 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53GNSmTf010392;
-	Thu, 17 Apr 2025 01:09:27 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4604qkaym2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Apr 2025 01:09:27 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53H19QBm24380138
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Apr 2025 01:09:27 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 96C895805F;
-	Thu, 17 Apr 2025 01:09:26 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DADCF5805A;
-	Thu, 17 Apr 2025 01:09:24 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 17 Apr 2025 01:09:24 +0000 (GMT)
-Message-ID: <4a2f7fde-99ee-4bcd-a97d-fe0db418fd5f@linux.ibm.com>
-Date: Wed, 16 Apr 2025 21:09:24 -0400
+	s=arc-20240116; t=1744947042; c=relaxed/simple;
+	bh=q9ITA69y44BPFoM6d1viEjhR7yw9U9I7tW2KwgQ3i34=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=meQ/T2NDp81rFPH0hlRdtglzhIEuW7qfJJFIoZFSj2Ot/1yLUC1qPwYXp5WL4sS62n+T0O6mrHsvij1uvD9PdpN0NpwlrlPqFWRzPp3DXlu8E6IlBo7DGDiyHcfxqPf55X0pFkVM6LtBxEy20qYY+isCqzEcDdIqJ9B3a5svO+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TWwts1m9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1744947037;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=w9jU+Dda1PsZ40rgWEcGbvLsKjnyo8h4BHDeBqrNr3A=;
+	b=TWwts1m9tm5bu7b7FSx2OTaV3s9JdoN2dOqDLsSethc28vdFaI5Q0KDvATPoKjwOqObMaC
+	Tbs9UOlVtGGn9Tc7tUh9FwrdJiY6OQD1XHSVt/aUmbb+wX7vP2WZjgmRy6cHf2vNHla4ZX
+	DZL3oqFvK7+srkqm83ckCSoU5grQhQo=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-592-cB5k-wf9NOyOLoWEw41P6w-1; Thu,
+ 17 Apr 2025 23:30:34 -0400
+X-MC-Unique: cB5k-wf9NOyOLoWEw41P6w-1
+X-Mimecast-MFC-AGG-ID: cB5k-wf9NOyOLoWEw41P6w_1744947031
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7BBC41956095;
+	Fri, 18 Apr 2025 03:30:30 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.106])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C495318001EA;
+	Fri, 18 Apr 2025 03:30:27 +0000 (UTC)
+Date: Fri, 18 Apr 2025 11:30:23 +0800
+From: Baoquan He <bhe@redhat.com>
+To: steven chen <chenste@linux.microsoft.com>
+Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
+	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+	eric.snowberg@oracle.com, ebiederm@xmission.com,
+	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
+	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
+	dyoung@redhat.com
+Subject: Re: [PATCH v12 1/9] ima: rename variable the seq_file "file" to
+ "ima_kexec_file"
+Message-ID: <aAHHTz6Zx5hzQYq0@MiWiFi-R3L-srv>
+References: <20250416021028.1403-1-chenste@linux.microsoft.com>
+ <20250416021028.1403-2-chenste@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 0/9] ima: kexec: measure events between kexec load and
- execute
-To: steven chen <chenste@linux.microsoft.com>, zohar@linux.ibm.com,
-        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
-        code@tyhicks.com, bauermann@kolabnow.com,
-        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-        James.Bottomley@HansenPartnership.com, bhe@redhat.com,
-        vgoyal@redhat.com, dyoung@redhat.com
-References: <20250416021028.1403-1-chenste@linux.microsoft.com>
-Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20250416021028.1403-1-chenste@linux.microsoft.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=Hvd2G1TS c=1 sm=1 tr=0 ts=680054c8 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=yMhMjlubAAAA:8 a=VnNF1IyMAAAA:8 a=KXIcZCm0EDoHl9fo71cA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: j6fdTeznLc-rslj-Y7d3L1utxejtCVup
-X-Proofpoint-GUID: j6fdTeznLc-rslj-Y7d3L1utxejtCVup
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-04-16_09,2025-04-15_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 suspectscore=0
- malwarescore=0 bulkscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 classifier=spam authscore=0 adjust=0
- reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2504170006
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250416021028.1403-2-chenste@linux.microsoft.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-
-
-On 4/15/25 10:10 PM, steven chen wrote:
+On 04/15/25 at 07:10pm, steven chen wrote:
 > From: Steven Chen <chenste@linux.microsoft.com>
 > 
-> The current kernel behavior is IMA measurements snapshot is taken at
-> kexec 'load' and not at kexec 'execute'.  IMA log is then carried
-> over to the new kernel after kexec 'execute'.
+> Before making the function local seq_file "file" variable file static
+> global, rename it to "ima_kexec_file".
 > 
-> Currently, the kernel behavior during kexec load is to fetch the IMA
-> measurements log from TPM PCRs and store it in a buffer. When a kexec
-> reboot is triggered, this stored log buffer is carried over to the second
-> kernel. However, the time gap between kexec load and kexec reboot can be
-> very long. During this time window, new events extended into TPM PCRs miss
-> the chance to be carried over to the second kernel. This results in
-> mismatch between TPM PCR quotes and the actual IMA measurements list after
-> kexec soft reboot, which in turn results in remote attestation failure.
+> Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
+> ---
+>  security/integrity/ima/ima_kexec.c | 31 +++++++++++++++---------------
+>  1 file changed, 16 insertions(+), 15 deletions(-)
 
-Tested-by: Stefan Berger <stefanb@linux.ibm.com> # ppc64/kvm
+Acked-by: Baoquan He <bhe@redhat.com>
+
+> 
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 9d45f4d26f73..650beb74346c 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -18,30 +18,30 @@
+>  static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
+>  				     unsigned long segment_size)
+>  {
+> +	struct seq_file ima_kexec_file;
+>  	struct ima_queue_entry *qe;
+> -	struct seq_file file;
+>  	struct ima_kexec_hdr khdr;
+>  	int ret = 0;
+>  
+>  	/* segment size can't change between kexec load and execute */
+> -	file.buf = vmalloc(segment_size);
+> -	if (!file.buf) {
+> +	ima_kexec_file.buf = vmalloc(segment_size);
+> +	if (!ima_kexec_file.buf) {
+>  		ret = -ENOMEM;
+>  		goto out;
+>  	}
+>  
+> -	file.file = NULL;
+> -	file.size = segment_size;
+> -	file.read_pos = 0;
+> -	file.count = sizeof(khdr);	/* reserved space */
+> +	ima_kexec_file.file = NULL;
+> +	ima_kexec_file.size = segment_size;
+> +	ima_kexec_file.read_pos = 0;
+> +	ima_kexec_file.count = sizeof(khdr);	/* reserved space */
+>  
+>  	memset(&khdr, 0, sizeof(khdr));
+>  	khdr.version = 1;
+>  	/* This is an append-only list, no need to hold the RCU read lock */
+>  	list_for_each_entry_rcu(qe, &ima_measurements, later, true) {
+> -		if (file.count < file.size) {
+> +		if (ima_kexec_file.count < ima_kexec_file.size) {
+>  			khdr.count++;
+> -			ima_measurements_show(&file, qe);
+> +			ima_measurements_show(&ima_kexec_file, qe);
+>  		} else {
+>  			ret = -EINVAL;
+>  			break;
+> @@ -55,23 +55,24 @@ static int ima_dump_measurement_list(unsigned long *buffer_size, void **buffer,
+>  	 * fill in reserved space with some buffer details
+>  	 * (eg. version, buffer size, number of measurements)
+>  	 */
+> -	khdr.buffer_size = file.count;
+> +	khdr.buffer_size = ima_kexec_file.count;
+>  	if (ima_canonical_fmt) {
+>  		khdr.version = cpu_to_le16(khdr.version);
+>  		khdr.count = cpu_to_le64(khdr.count);
+>  		khdr.buffer_size = cpu_to_le64(khdr.buffer_size);
+>  	}
+> -	memcpy(file.buf, &khdr, sizeof(khdr));
+> +	memcpy(ima_kexec_file.buf, &khdr, sizeof(khdr));
+>  
+>  	print_hex_dump_debug("ima dump: ", DUMP_PREFIX_NONE, 16, 1,
+> -			     file.buf, file.count < 100 ? file.count : 100,
+> +			     ima_kexec_file.buf, ima_kexec_file.count < 100 ?
+> +			     ima_kexec_file.count : 100,
+>  			     true);
+>  
+> -	*buffer_size = file.count;
+> -	*buffer = file.buf;
+> +	*buffer_size = ima_kexec_file.count;
+> +	*buffer = ima_kexec_file.buf;
+>  out:
+>  	if (ret == -EINVAL)
+> -		vfree(file.buf);
+> +		vfree(ima_kexec_file.buf);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.43.0
+> 
 
 
