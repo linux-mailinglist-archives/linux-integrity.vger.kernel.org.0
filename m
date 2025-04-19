@@ -1,161 +1,136 @@
-Return-Path: <linux-integrity+bounces-5938-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5939-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA0B6A935F9
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 12:25:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D353A94112
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Apr 2025 04:43:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD09A17383D
-	for <lists+linux-integrity@lfdr.de>; Fri, 18 Apr 2025 10:25:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63FB93B4E38
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Apr 2025 02:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50CAD270ECA;
-	Fri, 18 Apr 2025 10:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F1F6A33F;
+	Sat, 19 Apr 2025 02:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b+nHox6+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947912222A4;
-	Fri, 18 Apr 2025 10:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E183594F;
+	Sat, 19 Apr 2025 02:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744971916; cv=none; b=Iv3Gc04y0cNkgkaT8GdP8EP0IGrwM6oRDX1pYh5fGzyIfnDWCcI5+pOCKjuFNx6URhYXW8zS3ab4khcv2TAm/K7DPFQUbb0vko+vsFJ1a/Xk6ZAd1FGOV0Oa3P7HsrbAXwolocJYsTpJUbBlGe31PvF95aPOOThWxChr//9KkGM=
+	t=1745030585; cv=none; b=kXYaScEMYkuEvlUo3FtCRqudD0zanVi+SwNdFxd9LoMwOiHlQC21oG5CzkvhH1HTPVglbSJdrJoP0dqFC6BL6ceE8cExrmR1OpiBIOIrjSmHHlDaphp+wjJnq+wJvM172fw5AD4oZmOmg2Okg/UK1Pl7mHYjuDdF4syfyrnKoMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744971916; c=relaxed/simple;
-	bh=kcuQkKYCSl4USmcoi03BAP5hQffQY2sFSoVLQiTnuR4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dmhnF+O8WV2zHoralKps1f+pFHNdio8f4oNoPDotOQoQ3RMhjAoUm5Q3mGqD+c9H6/joz/TkzJyYLWroTKjYnzT4SV1nRqsw6fyNalsBHIKSGZdiMHGGySGefz1/CvFOHTO5aiXVZU+ihy7NHDfV2m7KAfZbUxG6HzInJkkb7VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=black-desk.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=black-desk.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-476ab588f32so23483001cf.2;
-        Fri, 18 Apr 2025 03:25:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744971913; x=1745576713;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XMi6RjNLnii56OiqqTtBYh/fDGXu3JBH/VNIF3fIEn0=;
-        b=kwWkuJCvvIs4cCzEyLOzU2W2KTcSpk5lic6IQtPffPaBCfV+0mCrpfQ/8oENZjKhIg
-         hgMETAHD1NEv2XFFT17aN/QdcEup+GZY/Qco531lZrWzHiWaxoHPzBwsIE+CDHTN6AiR
-         KCsJC0/IhuL9V/gVxhlHL4pCkx0sglvgMfPyLosSe9W8aFm1Z9UpWpDNd+EgIoYLgK/V
-         Hv0CfNghJOPpOB0FEcXiUw9IFzm0hz5u8jpInN6HJIv53lXd3CSs0Cb+Wi4T0XvhWHeq
-         nE+FJ867h0iNyGZLihaJQjvc2LsfZ6T0rMl+ARSS7sYxj4C/CZFZBWyq6m3ep16oN2xY
-         2sEA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/BhyLdA8tIjWsqExgThYugoCwgStBnS2zAqKuCVa8cp2mDIuV6a6PJM1vZt4z3c4mB5lQlzMiGVYRbdgM@vger.kernel.org, AJvYcCVC9/rn9oyw2wWj3+PXx6JBa7sVAZYJjMrkOzzw8csAn8OInh7WV1oGRgxXaFBJ2pA16Avqn5gJU4UbEvCQ@vger.kernel.org, AJvYcCVqHWa8z3fRrsu41NvaKWTwq/uLIhZI/tbIfFlN3qTq5ywx6EjvxMtMD2nfhcqUaabDgcyTihAzmz4nw71/emGV@vger.kernel.org, AJvYcCXi8vpe57yLfUnMghlVHEdtgIJwa4+Mn3yM0+4AGgWuE1R01MQ931lzUDko8MrK9A2PWiQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVC3TQfy44rq82yCD/zxkJ/Zyz4X4GZuZYfw7uXyV40ghgaQXU
-	XKQia6F47riI4ZKipfCrpgGLVcWfUG7N/AA+wrSWLAYCJSk3QCb7
-X-Gm-Gg: ASbGncuK1SGXhJPW9UDZuVeoFZtwVbhnSbeXlXrX52PhWBdvxVgnaPm/LoHY2giwDuN
-	LtN8+d8lpgG7GRMyh4hlT25n1j9LiRiDgRemOCCGvgEH35lxPfky0zIq384MYxviEuyIssbTBa9
-	HQGa71tF1gRTp+7iK0xlL+q0NmKlzlLlojPbxWHQNDIxaysHfyvP1xLW6nA72a+7dzn61Yw7fe5
-	o5XchsTsL/WrBLzBbBGRvS2XLyp2dGhNzhMpKgoLZs1CctW0PVcXot3IiUeUIVDtzLrVinxFZ24
-	G7X6Ecoczu8e9tH0Hd+l8qWodykz5GxlGpJcHIdCtI/7olxPhvgrBTiSxujB+Mhl
-X-Google-Smtp-Source: AGHT+IEKJZWW+CA0u03L2I1YwGaBuPS3Jq/Tgj4wyFEY1P0tyWIjeS90rjHfjPUoep1kge+Jl0aKkA==
-X-Received: by 2002:ac8:5807:0:b0:47a:e6e1:c04f with SMTP id d75a77b69052e-47aec4cb1fdmr34086211cf.46.1744971913152;
-        Fri, 18 Apr 2025 03:25:13 -0700 (PDT)
-Received: from localhost.localdomain (ip170.ip-51-81-44.us. [51.81.44.170])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47ae9c17673sm9266701cf.13.2025.04.18.03.25.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Apr 2025 03:25:12 -0700 (PDT)
-From: Chen Linxuan <me@black-desk.cn>
-To: bvanassche@acm.org
-Cc: akpm@linux-foundation.org,
-	alex.williamson@redhat.com,
-	axboe@kernel.dk,
-	changbin.du@intel.com,
-	chenlinxuan@uniontech.com,
-	hch@lst.de,
-	jarkko@kernel.org,
-	jgg@ziepe.ca,
-	justinstitt@google.com,
-	kbusch@kernel.org,
-	kevin.tian@intel.com,
-	kvm@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-nvme@lists.infradead.org,
-	llvm@lists.linux.dev,
-	masahiroy@kernel.org,
-	morbo@google.com,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	nicolas.schier@linux.dev,
-	peterhuewe@gmx.de,
-	sagi@grimberg.me,
-	shameerali.kolothum.thodi@huawei.com,
-	virtualization@lists.linux.dev,
-	wentao@uniontech.com,
-	yishaih@nvidia.com
-Subject: Re: [PATCH RFC v2 5/5] lib/Kconfig.debug: introduce CONFIG_NO_AUTO_INLINE
-Date: Fri, 18 Apr 2025 18:24:53 +0800
-Message-ID: <20250418102453.982042-1-me@black-desk.cn>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <bb713790-0b68-4d91-831c-b18fa1ea01a9@acm.org>
-References: <bb713790-0b68-4d91-831c-b18fa1ea01a9@acm.org>
+	s=arc-20240116; t=1745030585; c=relaxed/simple;
+	bh=ZlkSq5Td6WYYbF+F+e+FXuqnAmKdgsTD1oTyXzFrM48=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iG1h4PX9IAOu9K+vj48+scbA7c3shIifMEJaEPwofX+TAi46Znky0DH0BcDy3mwBm4UFTTBjnu+B7qc+sllQL4UpYx2nae8C6tVb/8i1EnSPmknWXIGSFsQ+51egBrwVRLixioxb7nLxTrvlcDCo3Aj5QupH8K8EPEKSnSt8v2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b+nHox6+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CDB9C4AF09;
+	Sat, 19 Apr 2025 02:43:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745030585;
+	bh=ZlkSq5Td6WYYbF+F+e+FXuqnAmKdgsTD1oTyXzFrM48=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=b+nHox6+aLlwYSX+ok3rJWbzoMhFNVlr3PyqhFldr0YB2CtJJm6p8uB3/whFmrBsZ
+	 czBPq2+pML2KWkAoGBDJ2bor14NZ7uueOn20XQfoFV5Qj3K4ZHkmOdUdK3JWcvYYqs
+	 AO0cqeZ/3St1eC7h0icuga9HIs7/sSCQYE2cCqwvAFhCBIRnm9C4PMxze0DZPPcbkE
+	 BSklgmi848wJ1g0735g3Kpg/lZlpzYmT5rtYgxc7bj7735aYGwKddimm5ztndMpUpE
+	 LI7nDjuY+aql5qTutuwiaPW5fslPgntg7TeMFuPfUOTjgqFDPkO1Ok/RgRqeBuD+lP
+	 0pC/g9a0jsG+A==
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-703cd93820fso21447507b3.2;
+        Fri, 18 Apr 2025 19:43:05 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUyclHgTHTrrNHXDYMWdjLaEm/twy5LtaZ9in579Cr9KWqbYUGt2WYgvhS+7RVBGQ1QtpsI7RkRHg==@vger.kernel.org, AJvYcCXdGFP8KnFn2nftS17QRBoHys8bOZ6tuAOdmT7OkCvUGh8KgQ8ku5qmkGb7+T5H6PtrxcOYg3RR/lFpYC2U3VM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvyTPd3NL7cLhH36c9fwDa2OkZiL3Pslds63fdtAlJvp/CBVKm
+	eZw1FXTk4hltqfvacVa29JJd4N93lk3kovuupqRBMuvTi90o72czuyt59qGWH6yp+fTUtIV5Ndc
+	9gCr9N4yYr2zSIybD0A24xoDiC88=
+X-Google-Smtp-Source: AGHT+IFtrN2IG9k3zHXRKl+p7dZrpWB/qfzB9Z94kJ0h6i96vvuhHrQr+YtGSk9tA6iZRIm3DeD4tZXRPfktA0y0nWw=
+X-Received: by 2002:a05:690c:7109:b0:6fb:1e5a:fcdd with SMTP id
+ 00721157ae682-706ccd28033mr62513067b3.17.1745030584292; Fri, 18 Apr 2025
+ 19:43:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-41-paul@paul-moore.com>
+In-Reply-To: <20250409185019.238841-41-paul@paul-moore.com>
+From: Fan Wu <wufan@kernel.org>
+Date: Fri, 18 Apr 2025 19:42:52 -0700
+X-Gmail-Original-Message-ID: <CAKtyLkEzie5dg2sVETdZ6NZwwN0Ni7SY4Za5mDCMWRJkUtYh=w@mail.gmail.com>
+X-Gm-Features: ATxdqUFfUvXpOZ9Oh5rBNORPGL_yQNsMXbrYKVfXmJaqxlF6oIdZhIhto4spysg
+Message-ID: <CAKtyLkEzie5dg2sVETdZ6NZwwN0Ni7SY4Za5mDCMWRJkUtYh=w@mail.gmail.com>
+Subject: Re: [RFC PATCH 10/29] lsm: cleanup the LSM blob size code
+To: Paul Moore <paul@paul-moore.com>
+Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Fan Wu <wufan@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4/17/25 5:04 PM, Bart Van Assche wrote:
-> On 4/16/25 2:44 AM, Chen Linxuan via B4 Relay wrote:
-> > 2. Make it depends on X86 and LOONGARCH,
-> >     as I haven't test other architectures
-> 
-> That sounds weird to me. Shouldn't this option be made architecture-
-> independent?
+On Wed, Apr 9, 2025 at 11:53=E2=80=AFAM Paul Moore <paul@paul-moore.com> wr=
+ote:
+>
+> Convert the lsm_blob_size fields to unsigned integers as there is no
+> current need for them to be negative, change "lsm_set_blob_size()" to
+> "lsm_blob_size_update()" to better reflect reality, and perform some
+> other minor cleanups to the associated code.
+>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> ---
+>  include/linux/lsm_hooks.h | 28 +++++++++++-----------
+>  security/lsm_init.c       | 50 +++++++++++++++++++++++----------------
+>  2 files changed, 43 insertions(+), 35 deletions(-)
+>
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index bc477fb20d02..a7ecb0791a0f 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -102,20 +102,20 @@ struct security_hook_list {
+>   * Security blob size or offset data.
+>   */
+>  struct lsm_blob_sizes {
+> -       int lbs_cred;
+> -       int lbs_file;
+> -       int lbs_ib;
+> -       int lbs_inode;
+> -       int lbs_sock;
+> -       int lbs_superblock;
+> -       int lbs_ipc;
+> -       int lbs_key;
+> -       int lbs_msg_msg;
+> -       int lbs_perf_event;
+> -       int lbs_task;
+> -       int lbs_xattr_count; /* number of xattr slots in new_xattrs array=
+ */
+> -       int lbs_tun_dev;
+> -       int lbs_bdev;
+> +       unsigned int lbs_cred;
+> +       unsigned int lbs_file;
+> +       unsigned int lbs_ib;
+> +       unsigned int lbs_inode;
+> +       unsigned int lbs_sock;
+> +       unsigned int lbs_superblock;
+> +       unsigned int lbs_ipc;
+> +       unsigned int lbs_key;
+> +       unsigned int lbs_msg_msg;
+> +       unsigned int lbs_perf_event;
+> +       unsigned int lbs_task;
+> +       unsigned int lbs_xattr_count; /* num xattr slots in new_xattrs ar=
+ray */
+> +       unsigned int lbs_tun_dev;
+> +       unsigned int lbs_bdev;
+>  };
 
-It should, but I have only tested it on X86 and LOONGARCH.
+Can we use size_t here?
 
-> 
-> > +config NO_AUTO_INLINE
-> > +	bool "Disable compiler auto-inline optimizations (EXPERIMENTAL)"
-> > +	default n
-> > +	depends on CC_IS_GCC && (X86 || LOONGARCH)
-> 
-> Why "depends on CC_IS_GCC"? Please make sure that both gcc and clang are
-> supported.
-
-I make it depends on CC_IS_GCC because
-
-1. Clang do not have `-fno-inline-small-functions`
-   and `-fno-inline-functions-called-once`.
-
-2. If we wrap those options with cc-option,
-   Clang 18.1.3 fails to compile test_bitmap_const_eval(),
-   with config KASAN and TEST_BITMAP is enabled.
-
-   Comments above test_bitmap_const_eval() says that:
-
-   > /*
-   >  * FIXME: Clang breaks compile-time evaluations when KASAN and GCOV are enabled.
-   >  * To workaround it, GCOV is force-disabled in Makefile for this configuration.
-   >  */
-
-   It seems there are some issues with Clang's compile-time evaluations.
-
-So I think there are some ways to workaround this problem:
-
-1. Make NO_AUTO_INLINE depends on CC_IS_GCC;
-2. Make NO_AUTO_INLINE depends on KASAN=n;
-3. Disable NO_AUTO_INLINE for TEST_BITMAP
-   like how we handle CC_IS_CLANG && KASAN && GCOV in lib/Makefile:
-
-   > ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_KASAN),yy)
-   > # FIXME: Clang breaks test_bitmap_const_eval when KASAN and GCOV are enabled
-   > GCOV_PROFILE_test_bitmap.o := n
-   > endif
-
-Which one do you prefer or do you have any other suggestions?
-
-> 
-> Thanks,
-> 
-> Bart.
+-Fan
 
