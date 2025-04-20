@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-5945-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5946-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3DE6A947DD
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Apr 2025 14:30:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01909A947E2
+	for <lists+linux-integrity@lfdr.de>; Sun, 20 Apr 2025 14:32:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9AC23B1280
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Apr 2025 12:30:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99A3C18927E6
+	for <lists+linux-integrity@lfdr.de>; Sun, 20 Apr 2025 12:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F411C1DE2C6;
-	Sun, 20 Apr 2025 12:30:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4861D6EB7C;
+	Sun, 20 Apr 2025 12:32:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="V4Np+vMs"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="e+HeHWTs"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C02B262A6;
-	Sun, 20 Apr 2025 12:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55C6288CC;
+	Sun, 20 Apr 2025 12:32:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745152239; cv=none; b=ej4QO4NvnDU8CXiQYbBn4dTl3hD3/Ne7DJ1jD67TWWcY/KAD5UWEwhCPUAJJj/1ZCPGP/f8geXZESsQn9Z5nhMT0fU0YH9dNyeEpp9LTqE0E/yPPN4kQjIN9ComxfzR0PEE1M+v7pQuTB3dRDuLOekd4dTImgHsxgfVG8fpOxaA=
+	t=1745152347; cv=none; b=hSXZb6oM6Q3daSOraJX7A5zjXsx62rx6GAEpqypRei1b6UJ/+ZDAfxjZ3gOTX9gVsQFsVpVbu1HzEsyV+QoDqKZ43MW1DPZ/sDEFMbOqx2ho6aA0BWYQKoHHxA0dLl9AS+GJef2Fbd6ckG1n/dRanz+gJzjeHc/rXNaEdMJd3wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745152239; c=relaxed/simple;
-	bh=5b5/FWnIrEzpCy0kn9VAxmzU7MFyxemO188s/rptvTI=;
+	s=arc-20240116; t=1745152347; c=relaxed/simple;
+	bh=Nf3OFePBSz1U9d4FkN3YBGvm+3AHx9Xgi2lsTwIY/g4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kpoIazUldV5PlOIffrzJCILO42umcV/DSzBLul69zKEpbu5SPjU3D5FdL4r/Qgsu3sufbZGL8Qit3F6ny0CiE2rUYN8q7/jx//MKHOuMSwhrS1VFv6a6ZM70VqbVKon0e3YQzOfpz50hj/05GL4N7Hf7Lkt0IjJV274OGDtgHcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=V4Np+vMs; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=WjTQbfuXTAAw3220ecPEAQ+RrZXnoskPrJnbycxMLftbActZJ4GMTFWrhNZY4iSGIFvTu+YBn6Ehty3N7/5T3UJskzqbVmUPbE6wkKrjNz+0rAcQkU1R22ANvXZJ1pV3pA7eqtHKf9EhvFCJm6QJxNcBZ9YUL0OMyL3niASruno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=e+HeHWTs; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Received: from [100.70.200.26] (unknown [20.110.218.7])
-	by linux.microsoft.com (Postfix) with ESMTPSA id C47DB2052525;
-	Sun, 20 Apr 2025 05:30:35 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C47DB2052525
+	by linux.microsoft.com (Postfix) with ESMTPSA id 47A5C2052525;
+	Sun, 20 Apr 2025 05:32:23 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 47A5C2052525
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1745152237;
-	bh=QfQcgycMxq4nFFdzo1bb4Mu23pE71kIy82/gI3Q5HR8=;
+	s=default; t=1745152345;
+	bh=HpjMk3pZQOHEwt3Sr15b3n4nFe//isbVm/Zdun/kS94=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=V4Np+vMsDXuWmgqdQ24dSBKB/bda0EoaXO8SXIxFdLnBzuuvLGiSX/cekoo3Hwt1o
-	 1dztDlj5ZtHUC6mkUaJwEeOWc//MQYrhn1kmFDTtX0EDpakTFURgS0JngBVI+clV2A
-	 LBPBfKqpczgqlm1OR0izf5GVEK+quBc6jq6LbZEk=
-Message-ID: <95d249ef-bfb3-431f-b633-8b3de383e067@linux.microsoft.com>
-Date: Sun, 20 Apr 2025 05:30:33 -0700
+	b=e+HeHWTsWBSiPxDfBksXj0boaynvyG/tRMj8vO8X27olU3ekHBfA2yieo4xDHzKds
+	 cqT3qN4y8AhB9XEKONazg6BFnQRW7NOhanEaNvXSavejOFhBrw7HfHBcT1HPlPLgV1
+	 SlilaOnJrDvVPsANwKMaYez8gnNJxQVLGI2hx3LQ=
+Message-ID: <01c4d9b8-6e69-45ee-9552-413be6a44de9@linux.microsoft.com>
+Date: Sun, 20 Apr 2025 05:32:21 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,7 +49,8 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 3/9] kexec: define functions to map and unmap segments
+Subject: Re: [PATCH v12 4/9] ima: kexec: skip IMA segment validation after
+ kexec soft reboot
 To: Baoquan He <bhe@redhat.com>
 Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
  roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
@@ -60,148 +61,151 @@ Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
  nramas@linux.microsoft.com, James.Bottomley@hansenpartnership.com,
  vgoyal@redhat.com, dyoung@redhat.com
 References: <20250416021028.1403-1-chenste@linux.microsoft.com>
- <20250416021028.1403-4-chenste@linux.microsoft.com>
- <aAHW4O9qAKzaoa+O@MiWiFi-R3L-srv>
+ <20250416021028.1403-5-chenste@linux.microsoft.com>
+ <aAH9rGzumUIMMR7R@MiWiFi-R3L-srv>
 Content-Language: en-US
 From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <aAHW4O9qAKzaoa+O@MiWiFi-R3L-srv>
+In-Reply-To: <aAH9rGzumUIMMR7R@MiWiFi-R3L-srv>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4/17/2025 9:36 PM, Baoquan He wrote:
+On 4/18/2025 12:37 AM, Baoquan He wrote:
 > On 04/15/25 at 07:10pm, steven chen wrote:
 >> From: Steven Chen <chenste@linux.microsoft.com>
->   ^^^^^^
->> Implement kimage_map_segment() to enable IMA to map the measurement log
->> list to the kimage structure during the kexec 'load' stage. This function
->> gathers the source pages within the specified address range, and maps them
->> to a contiguous virtual address range.
 >>
->> This is a preparation for later usage.
+>> Currently, the function kexec_calculate_store_digests() calculates and
+>> stores the digest of the segment during the kexec_file_load syscall,
+>> where the  IMA segment is also allocated.
 >>
->> Implement kimage_unmap_segment() for unmapping segments using vunmap().
+>> Later, the IMA segment will be updated with the measurement log at the
+>> kexec execute stage when a kexec reboot is initiated. Therefore, the
+>> digests should be updated for the IMA segment in the  normal case. The
+>> problem is that the content of memory segments carried over to the new
+>> kernel during the kexec systemcall can be changed at kexec 'execute'
+>> stage, but the size and the location of the memory segments cannot be
+>> changed at kexec 'execute' stage.
 >>
->> From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->    ^^^^^^
->> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->    ^^^^^^^
+>> To address this, skip the calculation and storage of the digest for the
+>> IMA segment in kexec_calculate_store_digests() so that it is not added
+>> to the purgatory_sha_regions.
+>>
+>> With this change, the IMA segment is not included in the digest
+>> calculation, storage, and verification.
+>>
 >> Cc: Eric Biederman <ebiederm@xmission.com>
 >> Cc: Baoquan He <bhe@redhat.com>
 >> Cc: Vivek Goyal <vgoyal@redhat.com>
 >> Cc: Dave Young <dyoung@redhat.com>
->> Signed-off-by: steven chen <chenste@linux.microsoft.com>
->    ^^^^^
+>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+>> Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
+> You may need to set tags as below for this patch:
 >
-> The signing on this patch is a little confusing. I can't see who is the
-> real author, who is the co-author, between you and Tushar. You may need
-> to refer to Documentation/process/5.Posting.rst to make that clear.
+> Co-developed-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
+> Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
+>
+> =======Quoted from Documentation/process/5.Posting.rst=====
+>   - Co-developed-by: states that the patch was co-created by several developers;
+>     it is a used to give attribution to co-authors (in addition to the author
+>     attributed by the From: tag) when multiple people work on a single patch.
+>     Every Co-developed-by: must be immediately followed by a Signed-off-by: of
+>     the associated co-author.  Details and examples can be found in
+>     :ref:`Documentation/process/submitting-patches.rst <submittingpatches>`.
+> ========
+>
+> Other than this nit, this looks good to me:
+>
+> Acked-by: Baoquan He <bhe@redhat.com>
 
 Hi Baoquan,
 
- From my understanding, if there is no change from the original author 
-patch, need to add
- From tag and Signed-off-by tag; otherwise, if there are changes, 
-Signed-off-by can be used.
+I will add Co-developed-by tag in next version.
 
 Thanks,
 
 Steven
 
->> Acked-by: Baoquan He <bhe@redhat.com>
 >> ---
->>   include/linux/kexec.h |  6 +++++
->>   kernel/kexec_core.c   | 54 +++++++++++++++++++++++++++++++++++++++++++
->>   2 files changed, 60 insertions(+)
+>>   include/linux/kexec.h              |  3 +++
+>>   kernel/kexec_file.c                | 22 ++++++++++++++++++++++
+>>   security/integrity/ima/ima_kexec.c |  3 +++
+>>   3 files changed, 28 insertions(+)
 >>
 >> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
->> index f0e9f8eda7a3..7d6b12f8b8d0 100644
+>> index 7d6b12f8b8d0..107e726f2ef3 100644
 >> --- a/include/linux/kexec.h
 >> +++ b/include/linux/kexec.h
->> @@ -467,13 +467,19 @@ extern bool kexec_file_dbg_print;
->>   #define kexec_dprintk(fmt, arg...) \
->>           do { if (kexec_file_dbg_print) pr_info(fmt, ##arg); } while (0)
+>> @@ -362,6 +362,9 @@ struct kimage {
 >>   
->> +extern void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size);
->> +extern void kimage_unmap_segment(void *buffer);
->>   #else /* !CONFIG_KEXEC_CORE */
->>   struct pt_regs;
->>   struct task_struct;
->> +struct kimage;
->>   static inline void __crash_kexec(struct pt_regs *regs) { }
->>   static inline void crash_kexec(struct pt_regs *regs) { }
->>   static inline int kexec_should_crash(struct task_struct *p) { return 0; }
->>   static inline int kexec_crash_loaded(void) { return 0; }
->> +static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
->> +{ return NULL; }
->> +static inline void kimage_unmap_segment(void *buffer) { }
->>   #define kexec_in_progress false
->>   #endif /* CONFIG_KEXEC_CORE */
+>>   	phys_addr_t ima_buffer_addr;
+>>   	size_t ima_buffer_size;
+>> +
+>> +	unsigned long ima_segment_index;
+>> +	bool is_ima_segment_index_set;
+>>   #endif
 >>   
->> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
->> index c0bdc1686154..a5e378e1dc7f 100644
->> --- a/kernel/kexec_core.c
->> +++ b/kernel/kexec_core.c
->> @@ -867,6 +867,60 @@ int kimage_load_segment(struct kimage *image,
->>   	return result;
+>>   	/* Core ELF header buffer */
+>> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+>> index 3eedb8c226ad..606132253c79 100644
+>> --- a/kernel/kexec_file.c
+>> +++ b/kernel/kexec_file.c
+>> @@ -38,6 +38,21 @@ void set_kexec_sig_enforced(void)
 >>   }
+>>   #endif
 >>   
->> +void *kimage_map_segment(struct kimage *image,
->> +			 unsigned long addr, unsigned long size)
+>> +#ifdef CONFIG_IMA_KEXEC
+>> +static bool check_ima_segment_index(struct kimage *image, int i)
 >> +{
->> +	unsigned long src_page_addr, dest_page_addr = 0;
->> +	unsigned long eaddr = addr + size;
->> +	kimage_entry_t *ptr, entry;
->> +	struct page **src_pages;
->> +	unsigned int npages;
->> +	void *vaddr = NULL;
->> +	int i;
->> +
->> +	/*
->> +	 * Collect the source pages and map them in a contiguous VA range.
->> +	 */
->> +	npages = PFN_UP(eaddr) - PFN_DOWN(addr);
->> +	src_pages = kmalloc_array(npages, sizeof(*src_pages), GFP_KERNEL);
->> +	if (!src_pages) {
->> +		pr_err("Could not allocate ima pages array.\n");
->> +		return NULL;
->> +	}
->> +
->> +	i = 0;
->> +	for_each_kimage_entry(image, ptr, entry) {
->> +		if (entry & IND_DESTINATION) {
->> +			dest_page_addr = entry & PAGE_MASK;
->> +		} else if (entry & IND_SOURCE) {
->> +			if (dest_page_addr >= addr && dest_page_addr < eaddr) {
->> +				src_page_addr = entry & PAGE_MASK;
->> +				src_pages[i++] =
->> +					virt_to_page(__va(src_page_addr));
->> +				if (i == npages)
->> +					break;
->> +				dest_page_addr += PAGE_SIZE;
->> +			}
->> +		}
->> +	}
->> +
->> +	/* Sanity check. */
->> +	WARN_ON(i < npages);
->> +
->> +	vaddr = vmap(src_pages, npages, VM_MAP, PAGE_KERNEL);
->> +	kfree(src_pages);
->> +
->> +	if (!vaddr)
->> +		pr_err("Could not map ima buffer.\n");
->> +
->> +	return vaddr;
+>> +	if (image->is_ima_segment_index_set && i == image->ima_segment_index)
+>> +		return true;
+>> +	else
+>> +		return false;
 >> +}
->> +
->> +void kimage_unmap_segment(void *segment_buffer)
+>> +#else
+>> +static bool check_ima_segment_index(struct kimage *image, int i)
 >> +{
->> +	vunmap(segment_buffer);
+>> +	return false;
 >> +}
+>> +#endif
 >> +
->>   struct kexec_load_limit {
->>   	/* Mutex protects the limit count. */
->>   	struct mutex mutex;
+>>   static int kexec_calculate_store_digests(struct kimage *image);
+>>   
+>>   /* Maximum size in bytes for kernel/initrd files. */
+>> @@ -764,6 +779,13 @@ static int kexec_calculate_store_digests(struct kimage *image)
+>>   		if (ksegment->kbuf == pi->purgatory_buf)
+>>   			continue;
+>>   
+>> +		/*
+>> +		 * Skip the segment if ima_segment_index is set and matches
+>> +		 * the current index
+>> +		 */
+>> +		if (check_ima_segment_index(image, i))
+>> +			continue;
+>> +
+>>   		ret = crypto_shash_update(desc, ksegment->kbuf,
+>>   					  ksegment->bufsz);
+>>   		if (ret)
+>> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+>> index b12ac3619b8f..7e0a19c3483f 100644
+>> --- a/security/integrity/ima/ima_kexec.c
+>> +++ b/security/integrity/ima/ima_kexec.c
+>> @@ -145,6 +145,7 @@ void ima_add_kexec_buffer(struct kimage *image)
+>>   	kbuf.buffer = kexec_buffer;
+>>   	kbuf.bufsz = kexec_buffer_size;
+>>   	kbuf.memsz = kexec_segment_size;
+>> +	image->is_ima_segment_index_set = false;
+>>   	ret = kexec_add_buffer(&kbuf);
+>>   	if (ret) {
+>>   		pr_err("Error passing over kexec measurement buffer.\n");
+>> @@ -155,6 +156,8 @@ void ima_add_kexec_buffer(struct kimage *image)
+>>   	image->ima_buffer_addr = kbuf.mem;
+>>   	image->ima_buffer_size = kexec_segment_size;
+>>   	image->ima_buffer = kexec_buffer;
+>> +	image->ima_segment_index = image->nr_segments - 1;
+>> +	image->is_ima_segment_index_set = true;
+>>   
+>>   	kexec_dprintk("kexec measurement buffer for the loaded kernel at 0x%lx.\n",
+>>   		      kbuf.mem);
 >> -- 
 >> 2.43.0
 >>
