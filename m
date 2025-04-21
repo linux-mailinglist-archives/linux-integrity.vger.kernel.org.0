@@ -1,47 +1,65 @@
-Return-Path: <linux-integrity+bounces-5977-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-5978-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0036A95771
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Apr 2025 22:41:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2CDCA95793
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Apr 2025 22:53:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9025C171CDE
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Apr 2025 20:41:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC60E1894491
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Apr 2025 20:53:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3004D1F0E37;
-	Mon, 21 Apr 2025 20:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FACB1F0995;
+	Mon, 21 Apr 2025 20:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ZYBrkbU/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ELPG5eW+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF191EFFBB;
-	Mon, 21 Apr 2025 20:41:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748191E04BD;
+	Mon, 21 Apr 2025 20:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745268065; cv=none; b=cVEOvG9czqlAZPSGrYNyY3zZFhKqlukHVeNyj3KOzFBxx+kP9gTLnrZhRGdWMVHpPFBXfbHxqPAJ874iE/oKx5xGaBBNc7XLz89HyaG+RMBQIR1/jqH8YaWPyR8B3wDceoU68XhTMmOTrw41GYFl3PkeitLCuHNkK4vgIHPF8mk=
+	t=1745268775; cv=none; b=WtDxfchj/M/SnsZ5tKHL2AqaGmny347/UpihVi3RvuantNiBuIwzazogkofvqSHLv82a9KI9G4VkZscLtcb+StKwZvy6tqnj2o2PHVLjMER7h/p3uLp1za2+ryOeyRYl6LqrWi7epkAjd+LldmeSie77N4sZPYs1lYjcFQAJcoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745268065; c=relaxed/simple;
-	bh=k/KvvdmYqnq20t4QpYKRC5H2tOPmgmWGmQI2x5qrhVI=;
+	s=arc-20240116; t=1745268775; c=relaxed/simple;
+	bh=QHt442+DY5nVVL6KjRB8BWAE3g/35KN4kTNAgMQxtiQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l+9LH9s8fvOmTL7uj3WJifE4qLeGCdUGphfZ2zcOZ2KXysTSjLFenSiLJj1ldimmjhlBnQi6NkmedzwYk7u1tMPC9bK8Lwcr5wBLSaWXaOtX2uIqCcI8OUk/LDDCoEdnf3WlZFgd/vRtTGqel/IzXNY853+z9JhQDzBwUirtRXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ZYBrkbU/; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.70.226.168] (unknown [172.172.34.12])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 2D1FE203B867;
-	Mon, 21 Apr 2025 13:40:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2D1FE203B867
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1745268060;
-	bh=g0iye+uMwzSnSSeghwU6QTJxGHXm0NSZS7e1/drAZPU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZYBrkbU/LFFdjvk6DLcNcYdLDKhhaGSQR/VM+5s0eBYMJ1WmqQvw2jeEg+kjCCJcr
-	 mAZrX5xhGwPSSokj4TSa6TuNWe4itLJKu6yqKfDtdvb6ksfjPB/Ztl36SqHC6mcAdR
-	 PVjR03iqBgEl8blRnYvobIEdJlyW2oh2xpSBveQM=
-Message-ID: <a9e3713f-4edf-479c-8be1-fe5b3dc22866@linux.microsoft.com>
-Date: Mon, 21 Apr 2025 13:40:56 -0700
+	 In-Reply-To:Content-Type; b=az0RGcG/L8EqihP+G2mp2cwe53LOUkP7UfhGSt9Ap8DiBid0tFvOXUtm29LY1KatcL+mzsQ6ccQXy5Z91DbLT3lN3krm7Mv0fh42FSXvxi9wcQWRS7LIyiQIuQ2N3GgV9E0UiBa5gNnZuouMKviXO0pEX5fwVyfcsZnp9nipk7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ELPG5eW+; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745268773; x=1776804773;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QHt442+DY5nVVL6KjRB8BWAE3g/35KN4kTNAgMQxtiQ=;
+  b=ELPG5eW+xkeH0Ji9NK0yKy4viutEqg0ZLPaGbPjJYV9cvMgFvaL7+VuS
+   YjjlrcsG7X7emuon3h5bP8n2BF5d4ThnBZfh7/UwFpt/ho1CjveBypCB/
+   vbj5NCQBT/KL/xWbPF9qEBQ38wa4AkN9VvHVhudwSF4DXf1rPpezp+eUL
+   XIg+IeQrIohJ6z8ZlwLOlaaza3U/G0E8uKnbIryQl++dTB4wicomVwYgR
+   Auc/WDOGcHvqggNgInlA4HnRQf17fGmk4HiAz/o+7d+K9OESqAaFmrd5T
+   /0nabbsM9No81uy5CZk1oUBJ5sD3gl1IMjqg4FuKnpKLaDPKrEzZw1+UW
+   w==;
+X-CSE-ConnectionGUID: aJrRc0eyTEKNe9e4NodVsA==
+X-CSE-MsgGUID: Eqd2ZPxLTBWfhNwqIVLfmQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11410"; a="50471258"
+X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
+   d="scan'208";a="50471258"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 13:52:52 -0700
+X-CSE-ConnectionGUID: 7KMhmrQkQxOneaR8qqFdTA==
+X-CSE-MsgGUID: lWZ7fPoAQQaeIwwPtNEjyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,229,1739865600"; 
+   d="scan'208";a="132345484"
+Received: from jairdeje-mobl1.amr.corp.intel.com (HELO [10.124.220.113]) ([10.124.220.113])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2025 13:52:50 -0700
+Message-ID: <d96f9c5e-64ed-4c28-a8ad-e22daea19742@intel.com>
+Date: Mon, 21 Apr 2025 13:52:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -49,86 +67,83 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 3/9] kexec: define functions to map and unmap segments
-To: Mimi Zohar <zohar@linux.ibm.com>, Baoquan He <bhe@redhat.com>
-Cc: stefanb@linux.ibm.com, roberto.sassu@huaweicloud.com,
- roberto.sassu@huawei.com, eric.snowberg@oracle.com, ebiederm@xmission.com,
- paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
- linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
- madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
- James.Bottomley@hansenpartnership.com, vgoyal@redhat.com, dyoung@redhat.com
-References: <20250416021028.1403-1-chenste@linux.microsoft.com>
- <20250416021028.1403-4-chenste@linux.microsoft.com>
- <aAHW4O9qAKzaoa+O@MiWiFi-R3L-srv>
- <dcde124baec01318e661f5430ce8a008a6d196c0.camel@linux.ibm.com>
- <ef18ae186cd17431b9ff6b8a443b63fd6fb78b98.camel@linux.ibm.com>
+Subject: Re: [PATCH v14 00/19] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+To: Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, iommu@lists.linux.dev
+Cc: dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+ bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, ardb@kernel.org,
+ mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+ peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net,
+ nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net,
+ corbet@lwn.net, ebiederm@xmission.com, dwmw2@infradead.org,
+ baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
+ andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
+References: <20250421162712.77452-1-ross.philipson@oracle.com>
+From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <ef18ae186cd17431b9ff6b8a443b63fd6fb78b98.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250421162712.77452-1-ross.philipson@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/21/2025 7:18 AM, Mimi Zohar wrote:
-> On Mon, 2025-04-21 at 09:51 -0400, Mimi Zohar wrote:
->> On Fri, 2025-04-18 at 12:36 +0800, Baoquan He wrote:
->>> On 04/15/25 at 07:10pm, steven chen wrote:
->>>> From: Steven Chen <chenste@linux.microsoft.com>
->>>   ^^^^^^
->> As James Bottomley previously explained[1], if you haven't made any changes to
->> Tushar's patch, then the very first line of the patch description would be
->> "From: Tushar Sugandhi <tusharsu@linux.microsoft.com>" followed by a blank line.
->> If there is a minor change, you would add "<your email address>: explanation".
->> For example:
->>
->> Steven Chen <chenste@linux.microsoft.com>: modified patch description
-> To clarify: This line would be included below with your Signed-off-by tag.
->
->> [1]
->> https://lore.kernel.org/lkml/58e70121aaee33679ac295847197c1e5511b2a81.camel@HansenPartnership.com/
->>
->>>> Implement kimage_map_segment() to enable IMA to map the measurement log
->>>> list to the kimage structure during the kexec 'load' stage. This function
->>>> gathers the source pages within the specified address range, and maps them
->>>> to a contiguous virtual address range.
->>>>
->>>> This is a preparation for later usage.
->>>>
->>>> Implement kimage_unmap_segment() for unmapping segments using vunmap().
->>>>
->>>> From: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->>>    ^^^^^^
->> Neither "Author:" nor "From:" belong here.  Please remove.
->>
->>>> Signed-off-by: Tushar Sugandhi <tusharsu@linux.microsoft.com>
->>>    ^^^^^^^
->> Having Tushar's "Signed-off-by" tag and yours below indicate that you modified
->> the original author's patch.
-> To clarify: "Just" having Tushar's "Signed-off-by" tag and yours below indicate
-> that you modified the original author's patch.
+On 4/21/25 09:26, Ross Philipson wrote:
+> The larger focus of the TrenchBoot project (https://github.com/TrenchBoot) is to
+> enhance the boot security and integrity in a unified manner.
 
-Hi Mimi,
+Hey Folks,
 
-I will update it in next version.
+It isn't immediately apparent what these 5,000 lines of code do which is
+new, why they are important to users and who will use them. I've
+wondered this from v1 and I was hoping it would have gotten better by
+v14, but alas...
 
-Just wandering are you done reviewing or still need more time?
-
-Thanks,
-
-Steven
-
->>>> Cc: Eric Biederman <ebiederm@xmission.com>
->>>> Cc: Baoquan He <bhe@redhat.com>
->>>> Cc: Vivek Goyal <vgoyal@redhat.com>
->>>> Cc: Dave Young <dyoung@redhat.com>
->>>> Signed-off-by: steven chen <chenste@linux.microsoft.com>
->>>    ^^^^^
->>>
->>> The signing on this patch is a little confusing. I can't see who is the
->>> real author, who is the co-author, between you and Tushar. You may need
->>> to refer to Documentation/process/5.Posting.rst to make that clear.
->>>
->>>> Acked-by: Baoquan He <bhe@redhat.com>
-
-
+Purely from the amount of interest and review tags and the whole "v14"
+thing, it doesn't look like this is very important to anyone. Not to be
+to flippant about it, but if nobody else cares, why should I (or the
+other x86 maintainers)?
 
