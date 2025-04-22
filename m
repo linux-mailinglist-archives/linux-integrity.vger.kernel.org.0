@@ -1,79 +1,124 @@
-Return-Path: <linux-integrity+bounces-6002-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6003-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E21BA97807
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Apr 2025 22:54:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69634A9787A
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Apr 2025 23:26:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9F1C7A4FE6
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Apr 2025 20:52:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A632B1743B5
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Apr 2025 21:26:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700ED2D92D1;
-	Tue, 22 Apr 2025 20:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9282129CB41;
+	Tue, 22 Apr 2025 21:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O6wiDdit"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/D7yWRx"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CB524467F;
-	Tue, 22 Apr 2025 20:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5900E27BF6C;
+	Tue, 22 Apr 2025 21:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745355237; cv=none; b=YGv92t056SVP24ygBadCAxS0lavNfn8Au4HNWyq8vYg8/yKk/y4CPIPTkryt+58DSLAHfUl01D5eCvdFs5fe65OTG64+PAOkhC/dwqyNQt203l6ZI0tw4cPiHTj0n6FQ2jZ4z0kL+fGePBAtAOrhk1WcnMD4P5ZGUDVJAa6hhS4=
+	t=1745357208; cv=none; b=AhnwQtnhlYIiIu0f+LDAmcOZP/c9z+jZh1kH3iXl0YQqiOAILkMmujo9LUdQhI4mDSzL46uwdIv2o0tP1cCRoYLS4gHvGumG+4+/DWV9XG+kgjXxAPZ+DYA2rZNXiVbZNfXb8gLU8eVmNay3MhbVLVHZ16hro1W3N0f0mT432+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745355237; c=relaxed/simple;
-	bh=adSf8SEXY79LaBK4YqJd/4jet/jRcLzwl+YkNhNsZrg=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=dc+ISWlpufwHb7LKAllxuEgzyJiG9erktzjH7bCcwLZGZqFIf0DJ0Q0iQNX4TtL7uA7bKUIIv+JU/PUS/pCkyjQzp9x9X5YRoG3jXsFm3OFBLL5nIwXfw5JgLBkV9JIKlh5+LmVz9IRDwUeMU5X5ye4nMyELfxTgoJzR54oLsqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O6wiDdit; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E6FC4CEE9;
-	Tue, 22 Apr 2025 20:53:55 +0000 (UTC)
+	s=arc-20240116; t=1745357208; c=relaxed/simple;
+	bh=9Hc5x03Xt6Q8VLLhD3mCqz80+X90ssoJI+f+CleuBKQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CWULsCDlsA6NjI6l15OKCCNWfvEzxZtYfwUcSg44X/hE+IDYSWO1u10Ug6UH07RR93Mje0vFqb7morL0SfBRrtAB6289RUVc2UH3TV0g42kDHlNORFdF/WQ5jbLIHvN+q3jq8VyDX1Bhcrx5zbSkxVsGYwN34rsl76JJXtxIFHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/D7yWRx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8B45C4CEEE;
+	Tue, 22 Apr 2025 21:26:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745355235;
-	bh=adSf8SEXY79LaBK4YqJd/4jet/jRcLzwl+YkNhNsZrg=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=O6wiDdit7ywPCIRmO5ShQxQsNrMrCgoGwM/QDCgK3eoxyjR8E1zsyPLo+CmKzT6fd
-	 c4n1YraSGDWR2Yp0JW7HwLPG29rWSUgLnqkj2PxhRUthbKadRQm+bDvn1fhl0JN8Fz
-	 s6eIJvee+EOg6xBsp+Oarr+uhciolwXTbCQdpLHC90VMPgfmQD1CtjPJWYGOWdDS0Q
-	 MRlmJ+H5RSX+xjgWYUdNlOc2WA2643qf3+yOpgFK6UqFno00dcqAlMLkDkbnEnHhx6
-	 A4xXwK+JV7bb1nuuOz2k2zLE31E2ygCyRsY0Oa9gOcEoN2BYHYvr2vcRg5bCbMcF+C
-	 M+lSobJbii4uQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 716BE380CEF4;
-	Tue, 22 Apr 2025 20:54:35 +0000 (UTC)
-Subject: Re: [GIT PULL] Integrity fix for kernel 6.15-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20250422154805.1817045-1-roberto.sassu@huaweicloud.com>
-References: <20250422154805.1817045-1-roberto.sassu@huaweicloud.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20250422154805.1817045-1-roberto.sassu@huaweicloud.com>
-X-PR-Tracked-Remote: https://github.com/linux-integrity/linux.git tags/integrity-6.15-rc3-fix
-X-PR-Tracked-Commit-Id: 30d68cb0c37ebe2dc63aa1d46a28b9163e61caa2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e4b51cb60e16f09b95c9ee567692aaec50087747
-Message-Id: <174535527398.2047083.5663936107739866748.pr-tracker-bot@kernel.org>
-Date: Tue, 22 Apr 2025 20:54:33 +0000
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: torvalds@linux-foundation.org, zohar@linux.ibm.com, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+	s=k20201202; t=1745357207;
+	bh=9Hc5x03Xt6Q8VLLhD3mCqz80+X90ssoJI+f+CleuBKQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=h/D7yWRxhbT0Tokd9yCp1wg9xCgigqp3o/yVm8u9b06tDs17VYlkXgDU2aKW+tBEW
+	 yCFBWgaWcd9omhGXkDuPp7Lt9n5PqXhp+tTGMo9ams2ktewBPqhsq1gZcpvy0FHL19
+	 Kzfr1/T+J+vS0tqDyftCuRmUR5Qdukw/vc+WnDWc8OJCiw4ChzEg9UgCLeqUobbDHt
+	 fT9OYOrU03U/lBXrwh75XJJ+nGMz7uFFqrzPHi4ccGmIRSkGGIoHkpoDTdGy1jf0zq
+	 7UYuaRvxExEQ/uuuaiRPfMFtyeRRyXUuO5bVqNWk3tNUQfdJkgjjHHwRz4FIW7A464
+	 Gfm/LQFCLpQ5w==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-30beedb99c9so50351021fa.3;
+        Tue, 22 Apr 2025 14:26:47 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWDUcVVNRQnN2IT6VWNi4mXWG9DG3NwDWkL3fzCUiM8mxQZ9Y8ccXmqKio+OGwWcEr1pwdDRB3n5BFNEbboTY3E@vger.kernel.org, AJvYcCXfx3pDb2VjpVHaNRMIN73R3z9zeaAPpn731wi0CBpnVcijy1OcKQQFlzhvz1ofGjP1cFDl8WaGbeuh@vger.kernel.org, AJvYcCXguiuURkAiuUi5TsxwbleVbpC/BORoTWk8EZlPHxFqa3qN7+EgqbsIcgA64nN/15bC3/X1DgC7rYfT@vger.kernel.org, AJvYcCXr7xnIpX+TISLPgVyUcYwNxC2hLHgCRFp1vpOpoM6ISlYukdYGVcfvqRQLQ7Ok5R7cy7eum11+4JI2CV0=@vger.kernel.org, AJvYcCXtckLoJHtP0/8PhTSLP2vuLkvTE+HOqEftGH7eRZXJldmtA47l0eBGpOG7DzqsvAyQtHkAyxnsxlhvvPfQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyopMAqU9lSHwq2Egq0c8g65s3lnz9zXd2VF4SbTELY3tMLgycz
+	NKLv2oj0dWyPitlipHC1K3pEU2+dXUzgdUSQekLFbHnaILFO/aeougusmeJyRa3drg/lDv/w54w
+	8B1gN+MZ4KnL/mbULwGWMub1+vaw=
+X-Google-Smtp-Source: AGHT+IHNjwddJlnhR8ziXrRYCvaKzZHBeDFB7aTS+2S6/Juebmx60PYYbz8oxxdYeTQFH7iZZN2OhK0zcRmnc7XV21k=
+X-Received: by 2002:a2e:9586:0:b0:310:749c:f8da with SMTP id
+ 38308e7fff4ca-310905bac8fmr43410821fa.22.1745357206245; Tue, 22 Apr 2025
+ 14:26:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250421162712.77452-1-ross.philipson@oracle.com>
+ <d96f9c5e-64ed-4c28-a8ad-e22daea19742@intel.com> <c05731ae-bcf1-4747-b64c-0f4b79f3587f@citrix.com>
+In-Reply-To: <c05731ae-bcf1-4747-b64c-0f4b79f3587f@citrix.com>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Tue, 22 Apr 2025 23:26:35 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHNpxTqm5hOcxdKRnE58WLmhJo0Rk5pvVGyAtkkki6bvg@mail.gmail.com>
+X-Gm-Features: ATxdqUE-wCQ698lYIM2xY-XaLjiHODMSR6r5gfRYGnF_Ynuwr3onsuyDzkvTRu8
+Message-ID: <CAMj1kXHNpxTqm5hOcxdKRnE58WLmhJo0Rk5pvVGyAtkkki6bvg@mail.gmail.com>
+Subject: Re: [PATCH v14 00/19] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+To: Andrew Cooper <andrew.cooper3@citrix.com>
+Cc: Dave Hansen <dave.hansen@intel.com>, Ross Philipson <ross.philipson@oracle.com>, 
+	linux-kernel@vger.kernel.org, x86@kernel.org, linux-integrity@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	kexec@lists.infradead.org, linux-efi@vger.kernel.org, iommu@lists.linux.dev, 
+	dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, mjg59@srcf.ucam.org, 
+	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, jarkko@kernel.org, 
+	jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net, 
+	ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com, 
+	kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The pull request you sent on Tue, 22 Apr 2025 17:48:05 +0200:
+On Tue, 22 Apr 2025 at 20:17, Andrew Cooper <andrew.cooper3@citrix.com> wrote:
+>
+> On 21/04/2025 9:52 pm, Dave Hansen wrote:
+> > Purely from the amount of interest and review tags and the whole "v14"
+> > thing, it doesn't look like this is very important to anyone. Not to be
+> > to flippant about it, but if nobody else cares, why should I (or the
+> > other x86 maintainers)?
+>
+> There are several downstreams already using this as a part of their
+> overall system security, one example being
+> https://www.qubes-os.org/doc/anti-evil-maid/
+>
+> It's all giant out-of-tree patch series (in multiple projects; Grub,
+> Xen, iPXE too).
 
-> https://github.com/linux-integrity/linux.git tags/integrity-6.15-rc3-fix
+... and this is the main problem: All the existing protocols and
+layering go straight out the window, and are replaced with bespoke
+alternatives, for booting but also for secondary bringup, etc etc
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e4b51cb60e16f09b95c9ee567692aaec50087747
+Conceptually, the secure launch could be performed under the hood,
+e.g., during ExitBootServices() when doing EFI boot, and the OS would
+have to be none the wiser (or at least, not need 100s of additional
+lines of opaque assembly to be able to operate in this mode).
 
-Thank you!
+The fact that all these components need such intrusive changes in
+order to orchestrate this pivot to the reduced TCB constitutes a
+spectacular failure in design IMO, but AIUI, the software side is not
+really at fault here: the layering violations are intrinsic to the
+hardware support in the CPU. I'm sure Andy or others on cc can
+elaborate on this, as they have done many times already.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+So if that is true (I'm not a x86 uarch expert by any measure), then
+pushing back on this series on the basis that it is ugly and intrusive
+is not really reasonable. From security pov, I think D-RTM is an
+important feature and it deserves to be upstream if it is used widely
+in the field.
+
+OTOH, if the arm64 implementation (which is still on the drawing
+board) bears any resemblance at all to the x86 version, it can be
+considered NACKed already.
 
