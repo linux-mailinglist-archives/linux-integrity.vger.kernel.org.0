@@ -1,117 +1,123 @@
-Return-Path: <linux-integrity+bounces-6018-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6019-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85D68A9B11F
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Apr 2025 16:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61B87A9B568
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Apr 2025 19:37:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96FD84A6AF2
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Apr 2025 14:37:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB5454A48C2
+	for <lists+linux-integrity@lfdr.de>; Thu, 24 Apr 2025 17:37:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F2B385270;
-	Thu, 24 Apr 2025 14:37:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C939328F501;
+	Thu, 24 Apr 2025 17:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c9ZH3tBR"
+	dkim=pass (1024-bit key) header.d=yandex.com header.i=@yandex.com header.b="bDnIMZMo"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from forward201b.mail.yandex.net (forward201b.mail.yandex.net [178.154.239.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BFE43AA1
-	for <linux-integrity@vger.kernel.org>; Thu, 24 Apr 2025 14:37:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A39528EA59
+	for <linux-integrity@vger.kernel.org>; Thu, 24 Apr 2025 17:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745505452; cv=none; b=bxOK0x97MQdatSpw5pkfruj9bxs/aMfxsGIXZdiXDxWQM7nybWn21rg8BlLJdF0BYT6kxLaY1RDYS6nOe3t1D0WoZ7ZcL590QPSJBk7ciEUrK87caZaTSZjl0HzHFSWPA1mEQdzLn1nAkYmh9h/ZjD1BoRt6wV68H9M7wryZjxI=
+	t=1745516112; cv=none; b=UtDeJVsVArQbkWuO25WY+l9N2nkCLsvuRsw+jYagswGgxV5aVJFxQC1KmmtBtbUxRW/tDhnNbVK+8xhcnv1jbd3c4eMaFXIq7zT36Nv/7m1o75lXvF0QcOwj9MMvuozBPZZYl3wiyix6LhsGhBsegO6b7syFnZXYVHPzWmvQZHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745505452; c=relaxed/simple;
-	bh=MF8yM0hDLJMunXliqAKRJc3PoReh69CIks5Rz58mYHI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cDvrUh1rY/dKY80CB6VvDBsoVU+i1fQi+SzVL+VQsunmpaHF5zGToK1FFBcLVUQUA0u2Yd8A1GK6HIxlbIxKxi/1xzesyX+GSNXBRw2rxX7F9uP7GiUUNIJr9Sq7OPQKrx3EY0kyqh7nPrPwTWWvaObG50W3mJZKrGdDKi4Du08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c9ZH3tBR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745505449;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bYUUd0z6A0+ZkWdTi7S3yGhP4LTb46IOeiMEmdUvozc=;
-	b=c9ZH3tBRyEfXLvEPGhFvuzdWkLH66eEjhUtqQd8wgCEhcKVtAUpW85/VTlyOn51Oz/EiFd
-	7O2ZKxXV9Wrk3/SrTO1FQXEy+f2qjSkr+1xEzMgjxfp0z1PF6K/5FWFgjkBDee4ybaKOcj
-	InGTFytTiLowHpEdZ9lbACT/smnG+Pg=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-145-pZpKcBiLNymKpzeyzdU94w-1; Thu,
- 24 Apr 2025 10:37:26 -0400
-X-MC-Unique: pZpKcBiLNymKpzeyzdU94w-1
-X-Mimecast-MFC-AGG-ID: pZpKcBiLNymKpzeyzdU94w_1745505444
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2090718004A7;
-	Thu, 24 Apr 2025 14:37:23 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.62])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CAFAC18002AD;
-	Thu, 24 Apr 2025 14:37:20 +0000 (UTC)
-Date: Thu, 24 Apr 2025 22:37:16 +0800
-From: Baoquan He <bhe@redhat.com>
-To: steven chen <chenste@linux.microsoft.com>
-Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
-	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
-	eric.snowberg@oracle.com, ebiederm@xmission.com,
-	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
-	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
-	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
-	dyoung@redhat.com
-Subject: Re: [PATCH v13 0/9] ima: kexec: measure events between kexec load
- and execute
-Message-ID: <aApMnEl1Xzarmimn@fedora>
-References: <20250421222516.9830-1-chenste@linux.microsoft.com>
+	s=arc-20240116; t=1745516112; c=relaxed/simple;
+	bh=TWikDJCxC5anGmCJOYswMamfffFmBWcw9siJc+NyXE0=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=DZTNpodFfWxoy6mbqQv/CSMTUO8zp0wbv1FJcuCsIJIR9sqyZtKcggZTwRkXAAac4g6BPhSIcs1k7zp6a6DW9MGzNseGhyA/EGk7+ox59bj/qMJ4LLV8LjlqOEO9MMFiDpJ8FoEpk76Uw3xbcrrAAeQ8YOljNUELIKo5U9/cee8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.com; spf=pass smtp.mailfrom=yandex.com; dkim=pass (1024-bit key) header.d=yandex.com header.i=@yandex.com header.b=bDnIMZMo; arc=none smtp.client-ip=178.154.239.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.com
+Received: from forward103b.mail.yandex.net (forward103b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d103])
+	by forward201b.mail.yandex.net (Yandex) with ESMTPS id 11EA663D31
+	for <linux-integrity@vger.kernel.org>; Thu, 24 Apr 2025 20:29:44 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net [IPv6:2a02:6b8:c11:109b:0:640:c015:0])
+	by forward103b.mail.yandex.net (Yandex) with ESMTPS id 1753160B01
+	for <linux-integrity@vger.kernel.org>; Thu, 24 Apr 2025 20:29:36 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id GTUDlw1LkeA0-yUnQOKl0;
+	Thu, 24 Apr 2025 20:29:35 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.com; s=mail;
+	t=1745515775; bh=G2XEUa3Di0jO+rSRZsBwtsKjpQd3eFF+HyTMGgBJ9ok=;
+	h=Subject:From:To:Date:Message-ID;
+	b=bDnIMZMofb5Aqjcfwl90IPeWkgbRjPmAyMlIdz+py14Avo6+yW8H18hLmuTXb5buy
+	 l1SjK/iFl+Lj0XGHFtXQFlTTtWzkNstlXVU5tsXEDVEGNub0CjR9Qk86FNmK0Ke1s6
+	 F8Ki1hI8yuiECz9YQSXr/kxOdcJqSnl4vl7tWZQM=
+Authentication-Results: mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.com
+Message-ID: <5ac2d162-a9f2-44db-a2be-c69602d14b17@yandex.com>
+Date: Thu, 24 Apr 2025 20:29:16 +0300
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250421222516.9830-1-chenste@linux.microsoft.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>
+From: Lev Olshvang <levonshe@yandex.com>
+Subject: evmctl hmac fails in setxattr even in version 1.6.2
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Steven,
 
-Could you test below code and post a formal patch to not copy
-measurement list buffer to kdump kernel? Below log is just for your
-reference, please feel free to modify or rephrase. 
+Hi List,
 
-===
-Kdump kernel doesn't need IMA to do integrity measurement.
-Hence the measurement list in 1st kernel doesn't need to be copied to
-kdump kenrel.
+I work on a ARM64 ubuntu 22 system, with installed
+ima-evm-utils   1.1-0ubuntu2
 
-Here skip allocating buffer for measurement list copying if loading
-kdump kernel. Then there won't be the later handling related to
-ima_kexec_buffer.
-===
 
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 38cb2500f4c3..7362f68f2d8b 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -146,6 +146,9 @@ void ima_add_kexec_buffer(struct kimage *image)
- 	void *kexec_buffer = NULL;
- 	int ret;
- 
-+	if (image->type == KEXEC_TYPE_CRASH)
-+		return;
-+
- 	/*
- 	 * Reserve extra memory for measurements added during kexec.
- 	 */
+I succedeed in implementing IMA and now I want to add EMV hmac 
+functionality.
+
+I booted kernel command line   "ima=on ima_appraise=log"
+
+Then I made _evm keyring and added kmk and emv keys:
+EVM_KR=`keyctl newring _evm @u`
+keyctl add user kmk "$(dd if=/dev/urandom bs=1 count=32 2> /dev/null)" @u
+keyctl add encrypted evm-key "new user:kmk 64" $EVM_KR
+keyctl shows
+  711205770 ----s-rv      0     0       \_ keyring: _ima
+1066122475 --als--v      0     0       |   \_ asymmetric: mra: 
+adm_signing key: 9375cf2445606beba28208741540ad1897d59051
+  315058417 --alswrv      0     0       \_ keyring: _evm
+  685369470 --alswrv      0     0       |   \_ encrypted: evm-key
+   35009219 --alswrv      0     0       \_ user: kmk
+
+
+But evmctl hmac command returns error:
+evmctl hmac /etc/init.d/netconsole
+setxattr failed: /etc/init.d/netconsole
+errno: Operation not permitted (1)
+
+
+
+I cloned ima-evmctl and compiled version 1.6.2 for x86_64, same ubuntu ,
+I got same result
+sudo /usr/local/bin/evmctl -d hmac --hmackey /etc/keys/plain.txt 
+../IMA_EVM/DEMO
+hash(sha256): 
+0404a6cffb233ebd759555c7070d9985961bbd1d3007e7c8d9cba5e9c5c28496c51f
+Reading to /etc/keys/plain.txt
+generation: 3093355876
+no xattr: security.selinux
+no xattr: security.SMACK64
+no xattr: security.apparmor
+name: security.ima, size: 34
+no xattr: security.capability
+uuid: 069df3798ff14641a6e0f1db2b852380
+hmac: 9df5db81cf089c22c4c128070c36827d7983284f
+Setting EVM hmac xattr failed: ../IMA_EVM/DEMO  (errno: Operation not 
+permitted)
+
+
+It must be something trivial, please help
+
+
+BR,
+
+Lev
 
 
