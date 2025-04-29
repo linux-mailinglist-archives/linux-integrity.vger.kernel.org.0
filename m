@@ -1,142 +1,112 @@
-Return-Path: <linux-integrity+bounces-6068-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6069-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0803AA3C48
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 01:31:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C1A9AA3D4F
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 01:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6D2F3AB166
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Apr 2025 23:30:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69F5F7B2435
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Apr 2025 23:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97AC92DCB50;
-	Tue, 29 Apr 2025 23:31:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A378272773;
+	Tue, 29 Apr 2025 23:50:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="EKXBOqmu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l7AKq4d7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5999C21B8F7
-	for <linux-integrity@vger.kernel.org>; Tue, 29 Apr 2025 23:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4217227276D;
+	Tue, 29 Apr 2025 23:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745969464; cv=none; b=b7YkYTYVuJCdTyb3bsCDpKyBIfWfpxEoJdpzzWziRTr/OIJp/M/f1WqAfC6iKyCTj0SCoWkTB8l5W2CUQKM0f2wUryybsZPU99e82e8sUL1JS5TWsurxGYKwnEOSeTksgu6+wgV5hAZ7IR2Wft3SmG72tpzkb/aBGaccnBZ4AhQ=
+	t=1745970655; cv=none; b=A3tg7OeHHvbhcMOAJ9ayC0fmMvHTFhQ9YfxBLMxRhDt07Sp7gEmvMknxVnnSz1gqJkbVGcNZxF9Fzsf6NiT6LtMg7zWXnb+jcbQG2/jr05uR4A+pDECvkimGpWrXOJfCYm0LGlJ7U4IrrX/9spc997r/379EeTpAY4xSMbNH84s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745969464; c=relaxed/simple;
-	bh=6+tn3bVnsdbyoFhXLXW3XNOXO8RdLpvvD8H+IgN8isw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kuk4RsyDrZlLotiGGEIdQ/MKKS9/0ud4bFCvwQv/7Oe8MugxodiG9HzkP2h8kkkgE6ZrJA4B9d7kSJd4/B80Nqc15am/5CuD2dn0D9v4/qq0z9zY4g/eFmHglGpzphmjb0E9IITDxmsvXSbH2YI5KuFH/1cQ4p0PrnW4ALuk1wI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=EKXBOqmu; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e730b8d934aso5009273276.2
-        for <linux-integrity@vger.kernel.org>; Tue, 29 Apr 2025 16:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1745969460; x=1746574260; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cIuAebnQ3utGP4sRcNF3af9094rXpAxKt1SXsqCPHIU=;
-        b=EKXBOqmuBPd3QD0u0uXcMb8RXce8GeOv2o58ReliDmsY6jwHqdPW/JGLY+OEiGpmbT
-         lja2QVzmYiVG1FUiP9tnnqOQqueX/mWLevqAKG1cZIgtJibmyj/PZAwSkCrPGfE5S+Vx
-         ICYJZd9sxzmS32qWTvu6WGZ0u6715wpCeNxiUM7RroHWdXn5KAPoik7dU67SobIF1Ak0
-         W0KKY44pEeikYACgaLWIn6BpYQrRMReyGFibQT7N3PH9iI6TmA6utLBcD5SK0Zgg4D5y
-         IW6iZtZ02YU7Yc7nKGNd5Ze+slDFZj9UkpZVrf8WRaYytC14nazrOwLnYtA5MImIgzns
-         PeoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745969460; x=1746574260;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cIuAebnQ3utGP4sRcNF3af9094rXpAxKt1SXsqCPHIU=;
-        b=vuf7NJ2y69ygFBQuzFrefw3bupiAnOoOjAnnDOEQ1wbOl6f3HEwJf2ToyEQyjhRm7z
-         jHXBcMgAWhSahgHNa/QUH5pER5Y3YaML4GjrIkeTnRUIDt7iwVS58kE+qj6ZHw9hTm1w
-         QbqqPxMOonjTrUQPo3NE6PIdkFzoRSOvCBBjOgSb0Qyc/q5iiioyqNoAk3xAckHM3u/T
-         Bppb7LKNVr854MAj8smLd5BmigIs16+dvfZdgvpeg9dnMoHePFb1YVz9dHseu7mu3MAC
-         qgWUnef1pvelgSGGxJrBFLqERk+RoVT7F+3pEES7dk2qhS8luqPagleGTyzgZi7dDJpK
-         pvyw==
-X-Forwarded-Encrypted: i=1; AJvYcCVuAFz3MkgD8GqePfOJlDkpnqiNZQO4bwolOPGS5GChcfAgWH5A+YRDgNoTAAteEf8a13SLbUjw1zDYPDNJ8bg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHt5e3mGVPRcj9L4seyEYIK0wmc9PyhDlBBV8j8QAT5S+6VgTW
-	akAB+20KBJkxdhem+Wrsw3oDogToGkTZeTtvdZXdPo9NVUykKGVSbWvUNxcFE6mVPyz0aqygOXK
-	ewlUWAPoeV8+V72jxhWRiEHSM/oVFAxnFALrA
-X-Gm-Gg: ASbGncuOK4FRBVcAfQanh8P7zvTc4fJc28NNxmlk3zUp/DrccXmzb8lig878ATdArU/
-	bQieYgrf+Xc7mnEVdUSIE9+B1qMBwBQoz6y6iTGwpqWQVm2oXs0jDd7koZ7g4viV7d51/lJWlPs
-	Cc6KI5at4Ll5Pio55O7Ml0LQ==
-X-Google-Smtp-Source: AGHT+IGwua5N9PuQI5YXnZ9QizB13TEvlVyb3ghRMEepupOY9IBACmHRKJ/ceFLULrT2r9vA2fNY/xi9tZpK618tJa8=
-X-Received: by 2002:a05:6902:e09:b0:e73:17e3:ef4e with SMTP id
- 3f1490d57ef6-e73ecf7cabdmr1474221276.48.1745969460035; Tue, 29 Apr 2025
- 16:31:00 -0700 (PDT)
+	s=arc-20240116; t=1745970655; c=relaxed/simple;
+	bh=41ABFjClMBGA0nWlECmrZkLAQRu/08sJgg9YS19HDHI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=dyf8pdm3tJfvn0qruDBAhZIRSwIrNIqc32lP7c+IHwt5IvKfrGjycmkREV4jtaE/NOWHkBgh7oU4p9APZoSYUEXfxWILCbU4MNs7r44njZ4qHKPdyXtZbj4wzxdvDb+79jeJx+8+B7V7A9/xa+VvWs1HFu6RTy2bN4L0Op39bY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l7AKq4d7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB0A4C4CEED;
+	Tue, 29 Apr 2025 23:50:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745970654;
+	bh=41ABFjClMBGA0nWlECmrZkLAQRu/08sJgg9YS19HDHI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=l7AKq4d7kSsUoEn74CZ8OjHL9AVwzhFNu1ItjPLBBIl7EI4nt4o+VUncNFiGPVpHV
+	 8R5E/fM/Dvngh5WHAa7quTLnBC3pnGAvIJdE6KH9hxdazkrrYkav1tcLtODtWSjG0g
+	 HYJ8uRGA/KCpSBLSYrvScminuyCCxbMRkEwo7Oj9jNZJpMmNlxrshYeMDqoa2Dq10w
+	 HGshN2hSsH3NPKfnypPqWfSXpW+N4fjpTduXpSt+smIzitfYBnAzLfsaBtv9lL5Irt
+	 mAOFfioiDMRz++MqDS2lhlXXrbMzh8nW7nYoh/ErnN+TkrsXA9ocj5Ef5GB6gNhDpe
+	 LDljevX0apWCw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Frederick Lawler <fred@cloudflare.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Sasha Levin <sashal@kernel.org>,
+	dmitry.kasatkin@gmail.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 25/39] ima: process_measurement() needlessly takes inode_lock() on MAY_READ
+Date: Tue, 29 Apr 2025 19:49:52 -0400
+Message-Id: <20250429235006.536648-25-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250429235006.536648-1-sashal@kernel.org>
+References: <20250429235006.536648-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net> <20250429-module-hashes-v3-8-00e9258def9e@weissschuh.net>
-In-Reply-To: <20250429-module-hashes-v3-8-00e9258def9e@weissschuh.net>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 29 Apr 2025 19:30:48 -0400
-X-Gm-Features: ATxdqUHKCRv2dWw3Z8HwiaRKbffRbebAcIs6GQu6Ludlza-Iyae1SuGp-QceJWc
-Message-ID: <CAHC9VhSAANnOYB11AerdtpEwWSu9OoRdxW34dap909D3z=t49A@mail.gmail.com>
-Subject: Re: [PATCH v3 8/9] lockdown: Make the relationship to MODULE_SIG a dependency
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	=?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
-	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
-	Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai=2DDrosi?= <mcaju95@gmail.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14.4
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 29, 2025 at 9:04=E2=80=AFAM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
->
-> The new hash-based module integrity checking will also be able to
-> satisfy the requirements of lockdown.
-> Such an alternative is not representable with "select", so use
-> "depends on" instead.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> ---
->  security/lockdown/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+From: Frederick Lawler <fred@cloudflare.com>
 
-I'm hopeful that we will see notice about dedicated Lockdown
-maintainers soon, but in the meantime this looks okay to me.
+[ Upstream commit 30d68cb0c37ebe2dc63aa1d46a28b9163e61caa2 ]
 
-Acked-by: Paul Moore <paul@paul-moore.com>
+On IMA policy update, if a measure rule exists in the policy,
+IMA_MEASURE is set for ima_policy_flags which makes the violation_check
+variable always true. Coupled with a no-action on MAY_READ for a
+FILE_CHECK call, we're always taking the inode_lock().
 
-> diff --git a/security/lockdown/Kconfig b/security/lockdown/Kconfig
-> index e84ddf48401010bcc0829a32db58e6f12bfdedcb..155959205b8eac2c85897a8c4=
-c8b7ec471156706 100644
-> --- a/security/lockdown/Kconfig
-> +++ b/security/lockdown/Kconfig
-> @@ -1,7 +1,7 @@
->  config SECURITY_LOCKDOWN_LSM
->         bool "Basic module for enforcing kernel lockdown"
->         depends on SECURITY
-> -       select MODULE_SIG if MODULES
-> +       depends on !MODULES || MODULE_SIG
->         help
->           Build support for an LSM that enforces a coarse kernel lockdown
->           behaviour.
->
-> --
-> 2.49.0
+This becomes a performance problem for extremely heavy read-only workloads.
+Therefore, prevent this only in the case there's no action to be taken.
 
---=20
-paul-moore.com
+Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+Acked-by: Roberto Sassu <roberto.sassu@huawei.com>
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ security/integrity/ima/ima_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index f3e7ac513db3f..f99ab1a3b0f09 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -245,7 +245,9 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 				&allowed_algos);
+ 	violation_check = ((func == FILE_CHECK || func == MMAP_CHECK ||
+ 			    func == MMAP_CHECK_REQPROT) &&
+-			   (ima_policy_flag & IMA_MEASURE));
++			   (ima_policy_flag & IMA_MEASURE) &&
++			   ((action & IMA_MEASURE) ||
++			    (file->f_mode & FMODE_WRITE)));
+ 	if (!action && !violation_check)
+ 		return 0;
+ 
+-- 
+2.39.5
+
 
