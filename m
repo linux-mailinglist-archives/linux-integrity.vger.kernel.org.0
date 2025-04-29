@@ -1,100 +1,184 @@
-Return-Path: <linux-integrity+bounces-6043-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6049-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42B4FAA0BC3
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Apr 2025 14:35:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB7D0AA0CD3
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Apr 2025 15:06:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 528C17A3DA0
-	for <lists+linux-integrity@lfdr.de>; Tue, 29 Apr 2025 12:34:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E496C3A52EF
+	for <lists+linux-integrity@lfdr.de>; Tue, 29 Apr 2025 13:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A855D2C1799;
-	Tue, 29 Apr 2025 12:35:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2602D3234;
+	Tue, 29 Apr 2025 13:04:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="IRRJNLk+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCAD280A52;
-	Tue, 29 Apr 2025 12:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218692D29B8;
+	Tue, 29 Apr 2025 13:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745930115; cv=none; b=qLdqkvkkMJrachoxXmtxZZMklURwNE2/8UTE9LgXA7YHAskSsl0rEvT1WQ6jocT82W6H7Gg+drcV3yuc+tLXsMEqzBojH0/3Izt3RMAlLvUQNJP35hnwzQwil5KS8vxXVcG5BJA/pDrJxLNOmBWl+fCnBnYue5V85rfl7s/YtWo=
+	t=1745931891; cv=none; b=dKo40atZJSIykaGCaoo+WhFwvw0EBCXPEAXg3LOb5cErAJk5Z+QdC3uPC3rGwS2kabaQ/F4rJ9pYuUTaTrD9cDIlQeYggIIdPHA0GCslOt67PS/vLCbjiso8Pyl5xRtjeBTgAEoUQJnMth0wIsaby2JhekwmwdYbIe27b3g6iwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745930115; c=relaxed/simple;
-	bh=YA9K64SGJNboEqUy75D/7syj4zAm+0ahG0X4Cz9zGlk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HThWlnZanLKK1YO+MeGM+jVLM+vNMRZej75JPaSkaIa0uJKbv69nRm9i9kD7Eb5IzYsYyU3UB/SxbOgRUDr352Vb2jmXZXTFrnRUfdMuG6ag6z5zlH6sEIgu4kRbJj4tir0wCzdrH6zBLK/k8ppGepLDPzd2utUC9qB7y32LiDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id DBA7F68AA6; Tue, 29 Apr 2025 14:35:04 +0200 (CEST)
-Date: Tue, 29 Apr 2025 14:35:04 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: chenlinxuan@uniontech.com
-Cc: Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Yishai Hadas <yishaih@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kvm@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, Winston Wen <wentao@uniontech.com>,
-	kasan-dev@googlegroups.com, xen-devel@lists.xenproject.org,
-	Changbin Du <changbin.du@intel.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH RFC v3 0/8] kernel-hacking: introduce
- CONFIG_NO_AUTO_INLINE
-Message-ID: <20250429123504.GA13093@lst.de>
-References: <20250429-noautoinline-v3-0-4c49f28ea5b5@uniontech.com>
+	s=arc-20240116; t=1745931891; c=relaxed/simple;
+	bh=Y+xLjK61Kdyaf5qG4FimETVDBBB3izTwQkrP8AuirI4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Q0qKgOfhrdVnz6OYLlgYLW1yXVhqYN+Bfh1EKN/dwsYY9xqIn22QF6vs3VYpPu82l/hpcAOdXlilAEt+vi291IRVDDWjEn32uP1x8bIeMMXLlmr3nGlaFowKz6tPvg5U9cmjpCnMQwhVDnVEk9b331AkT6USS8w8DuX8a+nadZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=IRRJNLk+; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1745931874;
+	bh=Y+xLjK61Kdyaf5qG4FimETVDBBB3izTwQkrP8AuirI4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=IRRJNLk+e7inQgG0GdySHCzALbfOkLdvGf9nPAyO84CiqXQO1UO0uUl/tT200tV6h
+	 t9zLXBXeJ6gdAnQbVxAEgBRjbrPzmpUaaDXzdsTg/s3ZAvFTqsHtb66hBTk8xURkCa
+	 s3CiPKXGBG51UzVaWwtvmbgx9fG90CgWNMI1hDFk=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v3 0/9] module: Introduce hash-based integrity checking
+Date: Tue, 29 Apr 2025 15:04:27 +0200
+Message-Id: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250429-noautoinline-v3-0-4c49f28ea5b5@uniontech.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFvOEGgC/3XMQQrCMBCF4auUrI1kpi0RV96juEiTqQloK5k2K
+ qV3Ny24UVz+D943C6YYiMWxmEWkFDgMfY5yVwjrTX8hGVxugQorQKzlbXDTlaQ37ImlNrUy2lo
+ 0pRL5c4/UhefmNefcPvA4xNfGJ1jXf1ICqaTToCxpU3YOTg8KzGz95Pc9jWLlEn6IWgGqbwIz0
+ RqAQ0WoW939EMuyvAGqrA4I8gAAAA==
+X-Change-ID: 20241225-module-hashes-7a50a7cc2a30
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Sami Tolvanen <samitolvanen@google.com>, 
+ Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, 
+ Nicolas Schier <nicolas.schier@linux.dev>
+Cc: =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+ Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+ kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>, 
+ =?utf-8?q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1745931873; l=4167;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=Y+xLjK61Kdyaf5qG4FimETVDBBB3izTwQkrP8AuirI4=;
+ b=EPx/fKWbgM9Vin3BDBMnBLPm+4MHXpOt4igmfsC24uEu/uUVs9r+4rDAXbDMhihK1CxXjLsGa
+ zLa8agdSfc0DAmg+2uNWPgMQwlyk4enmeazWuA4PLxnd5pszMLDhjHD
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Tue, Apr 29, 2025 at 12:06:04PM +0800, Chen Linxuan via B4 Relay wrote:
-> This series introduces a new kernel configuration option NO_AUTO_INLINE,
-> which can be used to disable the automatic inlining of functions.
-> 
-> This will allow the function tracer to trace more functions
-> because it only traces functions that the compiler has not inlined.
+The current signature-based module integrity checking has some drawbacks
+in combination with reproducible builds:
+Either the module signing key is generated at build time, which makes
+the build unreproducible, or a static key is used, which precludes
+rebuilds by third parties and makes the whole build and packaging
+process much more complicated.
+Introduce a new mechanism to ensure only well-known modules are loaded
+by embedding a list of hashes of all modules built as part of the full
+kernel build into vmlinux.
 
-This still feels like a bad idea because it is extremely fragile.
+Interest has been proclaimed by NixOS, Arch Linux, Proxmox, SUSE and the
+general reproducible builds community.
+
+To properly test the reproducibility in combination with CONFIG_INFO_BTF
+another patch or pahole v1.29 is needed:
+"[PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation" [0]
+
+Questions for current patch:
+* Naming
+* Can the number of built-in modules be retrieved while building
+  kernel/module/hashes.o? This would remove the need for the
+  preallocation step in link-vmlinux.sh.
+* How should this interaction with IMA?
+
+Further improvements:
+* Use a LSM/IMA Keyring to store and validate hashes
+* Use MODULE_SIG_HASH for configuration
+* UAPI for discovery?
+* Currently has a permanent memory overhead
+
+[0] https://lore.kernel.org/lkml/20241211-pahole-reproducible-v1-1-22feae19bad9@weissschuh.net/
+
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Changes in v3:
+- Rebase on v6.15-rc1
+- Use openssl to calculate hash
+- Avoid warning if no modules are built
+- Simplify module_integrity_check() a bit
+- Make incompatibility with INSTALL_MOD_STRIP explicit
+- Update docs
+- Add IMA cleanups
+- Link to v2: https://lore.kernel.org/r/20250120-module-hashes-v2-0-ba1184e27b7f@weissschuh.net
+
+Changes in v2:
+- Drop RFC state
+- Mention interested parties in cover letter
+- Expand Kconfig description
+- Add compatibility with CONFIG_MODULE_SIG
+- Parallelize module-hashes.sh
+- Update Documentation/kbuild/reproducible-builds.rst
+- Link to v1: https://lore.kernel.org/r/20241225-module-hashes-v1-0-d710ce7a3fd1@weissschuh.net
+
+---
+Thomas Weißschuh (9):
+      powerpc/ima: Drop unnecessary check for CONFIG_MODULE_SIG
+      ima: efi: Drop unnecessary check for CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
+      kbuild: add stamp file for vmlinux BTF data
+      kbuild: generate module BTF based on vmlinux.unstripped
+      module: Make module loading policy usable without MODULE_SIG
+      module: Move integrity checks into dedicated function
+      module: Move lockdown check into generic module loader
+      lockdown: Make the relationship to MODULE_SIG a dependency
+      module: Introduce hash-based integrity checking
+
+ .gitignore                                   |  1 +
+ Documentation/kbuild/reproducible-builds.rst |  5 ++-
+ Makefile                                     |  8 +++-
+ arch/powerpc/kernel/ima_arch.c               |  3 +-
+ include/asm-generic/vmlinux.lds.h            | 11 ++++++
+ include/linux/module.h                       |  8 ++--
+ include/linux/module_hashes.h                | 17 +++++++++
+ kernel/module/Kconfig                        | 21 ++++++++++-
+ kernel/module/Makefile                       |  1 +
+ kernel/module/hashes.c                       | 56 ++++++++++++++++++++++++++++
+ kernel/module/internal.h                     |  8 +---
+ kernel/module/main.c                         | 51 ++++++++++++++++++++++---
+ kernel/module/signing.c                      | 24 +-----------
+ scripts/Makefile.modfinal                    | 18 ++++++---
+ scripts/Makefile.modinst                     |  4 ++
+ scripts/Makefile.vmlinux                     |  5 +++
+ scripts/link-vmlinux.sh                      | 31 ++++++++++++++-
+ scripts/module-hashes.sh                     | 26 +++++++++++++
+ security/integrity/ima/ima_efi.c             |  6 +--
+ security/lockdown/Kconfig                    |  2 +-
+ 20 files changed, 250 insertions(+), 56 deletions(-)
+---
+base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+change-id: 20241225-module-hashes-7a50a7cc2a30
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
 
