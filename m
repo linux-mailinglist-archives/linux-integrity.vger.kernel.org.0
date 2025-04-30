@@ -1,68 +1,57 @@
-Return-Path: <linux-integrity+bounces-6100-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6101-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3A3DAA50C2
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 17:49:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09874AA50CB
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 17:51:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 551E01C050EE
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 15:50:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CFA8179020
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 15:51:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB1D19C556;
-	Wed, 30 Apr 2025 15:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C16325DAF0;
+	Wed, 30 Apr 2025 15:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILkRzJmx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6UhhimE"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E865A2DC797;
-	Wed, 30 Apr 2025 15:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432DF2DC760;
+	Wed, 30 Apr 2025 15:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746028183; cv=none; b=hlNkxJl3w3aduz53ltqUwVJENMOhVsXoLfw6UgP2Eb1NLVhcJ4xq38Nugw2tyeasCz9T53aHTp2VHF6r774Zn8yYANmfQM7gzrKf99EOXfA8R1JETSR3Yk5CtOmALjvxFqugi03AIrxXDda4w423mv2S3oYmaXoO11Ga/HBWojo=
+	t=1746028282; cv=none; b=gy6IdHxa2etqLY0yxOxZ9UST1krW9P5EshKVDGHlkj7gOLDs3G/xh0HfhVQsth8VPSn09y1jb515MXmmNCz/Pa/ZawgT8DB7YDCAND45GzuJTPNX7Osvt+L7TE+xv2t1Feh1aEIKDgBxLB6n5MCiTer3JrVtE/YoLdHfZeVoHn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746028183; c=relaxed/simple;
-	bh=jbN75Y77ia3DaPmLil5WAcGzaZgfrTs67v8JYHeLyFY=;
+	s=arc-20240116; t=1746028282; c=relaxed/simple;
+	bh=HFAl2I5gZT2GyBUXPqdrTWgbvKrwXcO69HTsc8RnnRI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ulhlpMZEF0md3NFO6yMwYYb6YqBVeKV1q3+9kR8a+DlKDGaVfub2yKY6EpEnjQnFiccEWuyykFigB5CxR/ROPc69EtKO7KDnXCcz4s6pgNKpVbZj8hV2Q75NpdYr+XLVSoQ6NWHYq0eRjH5gMNnYYogbVZHvs79TkPnqqEGkaGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILkRzJmx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB48DC4CEE7;
-	Wed, 30 Apr 2025 15:49:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AJ2tn8cXEXw9ov55WrRK4D0ifQIjKkVuIHMD0m3qdRhm4fEss5/ouq+gsR+ffHkB2HJ3VmPdTQ9IHHufmzLCGlFnOUCrpQXMKJhmJGlskxE6WGT+j1iU2ZjCVJ9BwTHdE3oWDGTeHz+aAGDGXeovrTFgz8ibbUZtXI0sg5B9IZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6UhhimE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DCAC4CEE7;
+	Wed, 30 Apr 2025 15:51:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746028182;
-	bh=jbN75Y77ia3DaPmLil5WAcGzaZgfrTs67v8JYHeLyFY=;
+	s=k20201202; t=1746028282;
+	bh=HFAl2I5gZT2GyBUXPqdrTWgbvKrwXcO69HTsc8RnnRI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ILkRzJmxPdFObsI9MPCYwxX97C4pY7WZMUG69FkF2voL4XquCgdJqXarl/qXSmdsT
-	 lIE+AMd4Db+DvmeQIlqNoL1xbfIFeUiYZIWEMhbbxTe6T82fBtJQVkcfuwBWzs9vnZ
-	 2v1VvzarKWKk6kHsUF7YLUq8XDSco1Hy7lT0Owon3EWnk74hfL0VsyDxC1CugjAZrz
-	 0KhAuvpzMf2pXyQG4H3hQtLNkWpqyEAMtY8aiDijMy3p5zSKqi5zD7Nsuw/CecffIl
-	 Y+CFLFQ5Ck/om6P0AA0xzbTrnH45tDY2ptwuSj3T2Ag4pWXq1iPlboUxdMmHpjZus1
-	 pT5EdHo2bLaXg==
-Date: Wed, 30 Apr 2025 18:49:37 +0300
+	b=m6UhhimEujjkJ1riJa7v3hJ+BFdf3ed1IaOiLbfA4Ao9B6hLaSnLHK0ZKsej5VjVh
+	 azzbV9TzXlIoQgQAnjmgGIa0eGV5bLthO3H2Y66F6A0GmubDM8MO79vexYL0HelCeK
+	 cH2AEZXKUVoIUnmm+3aABkVcxg04395YThwkRhhQ4G7TNdNfeBNaIK11ebuGV2fmyX
+	 bbSb6GrVUWVlr+VCUZpirD5jsW0HwUOLmKQ6BjrR323E2bY8I2qitjE84jlDG0DSVV
+	 XRVOxgnbQahqO0TzL19ZJur3LXTfrL/yR0tInnre553KbrOSS0bhNdTY8uepwtEBki
+	 wdGmmU19cH81w==
+Date: Wed, 30 Apr 2025 18:51:17 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-integrity@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Sumit Garg <sumit.garg@kernel.org>, linux-kernel@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v3 4/4] tpm/tpm_svsm: support TPM_CHIP_FLAG_SYNC
-Message-ID: <aBJGkSil1YAzSXsg@kernel.org>
-References: <20250414145653.239081-1-sgarzare@redhat.com>
- <20250414145653.239081-5-sgarzare@redhat.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, sudeep.holla@arm.com,
+	stuart.yoder@arm.com, sgarzare@redhat.com,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] tpm_ffa_crb: access tpm service over FF-A direct
+ message request v2
+Message-ID: <aBJG9TmzSCQTNy5b@kernel.org>
+References: <20250415185013.2387369-1-yeoreum.yun@arm.com>
+ <20250415185013.2387369-2-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -71,95 +60,116 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250414145653.239081-5-sgarzare@redhat.com>
+In-Reply-To: <20250415185013.2387369-2-yeoreum.yun@arm.com>
 
-On Mon, Apr 14, 2025 at 04:56:53PM +0200, Stefano Garzarella wrote:
-> From: Stefano Garzarella <sgarzare@redhat.com>
+On Tue, Apr 15, 2025 at 07:50:12PM +0100, Yeoreum Yun wrote:
+> For secure partition with multi service, tpm_ffa_crb can access tpm
+> service with direct message request v2 interface according to chapter 3.3,
+> TPM Service Command Response Buffer Interface Over FF-A specificationi v1.0 BET.
 > 
-> This driver does not support interrupts, and receiving the response is
-> synchronous with sending the command.
+> This patch reflects this spec to access tpm service over
+> FF-A direct message request v2 ABI.
 > 
-> So we can set TPM_CHIP_FLAG_SYNC to support synchronous send() and
-> return responses in the same buffer used for commands. This way we
-> don't need to implement recv() op.
-> 
-> Keep using the same pre-allocated buffer to avoid having to allocate
-> it for each command. We need the buffer to have the header required by
-> the SVSM protocol and the command contiguous in memory.
-> 
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-
-Similar comments, and a bit redundancy does not matter i.e., they can
-have pretty much the same explanation.
-
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  drivers/char/tpm/tpm_svsm.c | 27 +++++++++++----------------
->  1 file changed, 11 insertions(+), 16 deletions(-)
+>  drivers/char/tpm/tpm_crb_ffa.c | 55 ++++++++++++++++++++++++----------
+>  1 file changed, 40 insertions(+), 15 deletions(-)
 > 
-> diff --git a/drivers/char/tpm/tpm_svsm.c b/drivers/char/tpm/tpm_svsm.c
-> index d3ca5615b6f7..db1983072345 100644
-> --- a/drivers/char/tpm/tpm_svsm.c
-> +++ b/drivers/char/tpm/tpm_svsm.c
-> @@ -25,38 +25,32 @@ struct tpm_svsm_priv {
->  	void *buffer;
+> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+> index 3169a87a56b6..fed775cf53ab 100644
+> --- a/drivers/char/tpm/tpm_crb_ffa.c
+> +++ b/drivers/char/tpm/tpm_crb_ffa.c
+> @@ -105,7 +105,10 @@ struct tpm_crb_ffa {
+>  	u16 minor_version;
+>  	/* lock to protect sending of FF-A messages: */
+>  	struct mutex msg_data_lock;
+> -	struct ffa_send_direct_data direct_msg_data;
+> +	union {
+> +		struct ffa_send_direct_data direct_msg_data;
+> +		struct ffa_send_direct_data2 direct_msg_data2;
+> +	};
 >  };
 >  
-> -static int tpm_svsm_send(struct tpm_chip *chip, u8 *buf, size_t len,
-> +static int tpm_svsm_send(struct tpm_chip *chip, u8 *buf, size_t cmd_len,
->  			 size_t buf_size)
->  {
->  	struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
->  	int ret;
+>  static struct tpm_crb_ffa *tpm_crb_ffa;
+> @@ -185,18 +188,34 @@ static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
 >  
-> -	ret = svsm_vtpm_cmd_request_fill(priv->buffer, 0, buf, len);
-> +	ret = svsm_vtpm_cmd_request_fill(priv->buffer, 0, buf, cmd_len);
->  	if (ret)
->  		return ret;
+>  	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
 >  
->  	/*
->  	 * The SVSM call uses the same buffer for the command and for the
-> -	 * response, so after this call, the buffer will contain the response
-> -	 * that can be used by .recv() op.
-> +	 * response, so after this call, the buffer will contain the response.
-> +	 *
-> +	 * Note: we have to use an internal buffer because the device in SVSM
-> +	 * expects the svsm_vtpm header + data to be physically contiguous.
->  	 */
-> -	return snp_svsm_vtpm_send_command(priv->buffer);
-> -}
+> -	memset(&tpm_crb_ffa->direct_msg_data, 0x00,
+> -	       sizeof(struct ffa_send_direct_data));
 > -
-> -static int tpm_svsm_recv(struct tpm_chip *chip, u8 *buf, size_t len)
-> -{
-> -	struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
-> +	ret = snp_svsm_vtpm_send_command(priv->buffer);
-> +	if (ret)
-> +		return ret;
+> -	tpm_crb_ffa->direct_msg_data.data1 = func_id;
+> -	tpm_crb_ffa->direct_msg_data.data2 = a0;
+> -	tpm_crb_ffa->direct_msg_data.data3 = a1;
+> -	tpm_crb_ffa->direct_msg_data.data4 = a2;
+> +	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
+> +		memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
+> +		       sizeof(struct ffa_send_direct_data2));
+> +
+> +		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
+> +		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
+> +		tpm_crb_ffa->direct_msg_data2.data[2] = a1;
+> +		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
+> +
+> +		ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
+> +				&tpm_crb_ffa->direct_msg_data2);
+> +		if (!ret)
+> +			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
+> +	} else {
+> +		memset(&tpm_crb_ffa->direct_msg_data, 0x00,
+> +		       sizeof(struct ffa_send_direct_data));
+> +
+> +		tpm_crb_ffa->direct_msg_data.data1 = func_id;
+> +		tpm_crb_ffa->direct_msg_data.data2 = a0;
+> +		tpm_crb_ffa->direct_msg_data.data3 = a1;
+> +		tpm_crb_ffa->direct_msg_data.data4 = a2;
+> +
+> +		ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
+> +				&tpm_crb_ffa->direct_msg_data);
+> +		if (!ret)
+> +			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
+> +	}
 >  
-> -	/*
-> -	 * The internal buffer contains the response after we send the command
-> -	 * to SVSM.
-> -	 */
-> -	return svsm_vtpm_cmd_response_parse(priv->buffer, buf, len);
-> +	return svsm_vtpm_cmd_response_parse(priv->buffer, buf, buf_size);
+> -	ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
+> -			&tpm_crb_ffa->direct_msg_data);
+> -	if (!ret)
+> -		ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
+>  
+>  	return ret;
 >  }
+> @@ -231,8 +250,13 @@ int tpm_crb_ffa_get_interface_version(u16 *major, u16 *minor)
 >  
->  static struct tpm_class_ops tpm_chip_ops = {
->  	.flags = TPM_OPS_AUTO_STARTUP,
-> -	.recv = tpm_svsm_recv,
->  	.send = tpm_svsm_send,
->  };
+>  	rc = __tpm_crb_ffa_send_recieve(CRB_FFA_GET_INTERFACE_VERSION, 0x00, 0x00, 0x00);
+>  	if (!rc) {
+> -		*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
+> -		*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
+> +		if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
+> +			*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data2.data[1]);
+> +			*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data2.data[1]);
+> +		} else {
+> +			*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
+> +			*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
+> +		}
+>  	}
 >  
-> @@ -85,6 +79,7 @@ static int __init tpm_svsm_probe(struct platform_device *pdev)
+>  	return rc;
+> @@ -277,7 +301,8 @@ static int tpm_crb_ffa_probe(struct ffa_device *ffa_dev)
 >  
->  	dev_set_drvdata(&chip->dev, priv);
+>  	tpm_crb_ffa = ERR_PTR(-ENODEV); // set tpm_crb_ffa so we can detect probe failure
 >  
-> +	chip->flags |= TPM_CHIP_FLAG_SYNC;
->  	err = tpm2_probe(chip);
->  	if (err)
->  		return err;
+> -	if (!ffa_partition_supports_direct_recv(ffa_dev)) {
+> +	if (!ffa_partition_supports_direct_recv(ffa_dev) &&
+> +	    !ffa_partition_supports_direct_req2_recv(ffa_dev)) {
+>  		pr_err("TPM partition doesn't support direct message receive.\n");
+>  		return -EINVAL;
+>  	}
 > -- 
-> 2.49.0
+> LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 > 
+> 
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
 
