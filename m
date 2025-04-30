@@ -1,162 +1,100 @@
-Return-Path: <linux-integrity+bounces-6097-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6098-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0843AA5093
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 17:41:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19E38AA50AD
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 17:47:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C10D77A5BCC
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 15:40:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2E5E3A5EF0
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 15:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723C825DAFB;
-	Wed, 30 Apr 2025 15:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sYMmM/96"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F0C25DD0A;
+	Wed, 30 Apr 2025 15:47:30 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474172DC760;
-	Wed, 30 Apr 2025 15:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A38F19C556;
+	Wed, 30 Apr 2025 15:47:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746027708; cv=none; b=Vh/29qT+jaNI3BJ9hE1fwEiLGZbZH7rzIxAuYmRUCt3XXWKRUrLfzf1HvGq9KabtZwTlodhK4H/kwZLt2qNS2hi6jY4H5XMs5sFOqFRgt9Az1nGREYvPwPMt8lWMy5d2kV8xKeLsEdrn50WqijT2rJh4+QBzi6RZz26fzfBACLk=
+	t=1746028050; cv=none; b=UNaQxtE931Os0MZwSwNSLKOqQj6uce0w2FyigmwQTUJL2sIDOI94DNiMcPWO+jbTczUhXoQC5++oUfBDSsgac1sdNzktSUneaQhNcq++8d1ksONZ8hjUfjGjVda5ZG1l313aPS1CpGA/sqY4VoUYGGn+v3ycuecDQI4R6jRm+hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746027708; c=relaxed/simple;
-	bh=t3Uy1BtGwRmWTleefFwzwLEd+DTXVI1qrt1CFuU5vhY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IMDdRjsH1NEuE+5JLopP0pB8QkqgMCEhZCyKOPqp26TwBVZ6B9ck3aX7goV4xpd3f1NTu+2uvNT6rUWSeIzkngnjJQAL4jFQ2bhxmoOk2qvT77f24jKfVmwZl6AZL/7IG+y/hkeDWFTyX4RglVThYVIKte+m0WB38YxCZYtRE6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sYMmM/96; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B85AC4CEE7;
-	Wed, 30 Apr 2025 15:41:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746027707;
-	bh=t3Uy1BtGwRmWTleefFwzwLEd+DTXVI1qrt1CFuU5vhY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sYMmM/96Ea5WB/UvivqqMgPKi50QLTkUGDOlUIy8mwSv8AYlnTHcebGdMJlGrm5I6
-	 poHKYrdkKnHyAYuUBE7nu1gKhpcHTZbAs1Y1YVsulkzKbrBRtnijB/6VXXw1PYtAzA
-	 VnhHz91fh02nYKhlA7IAwQGMLluYkCOJunjViNaP/RcSDb8vEV+RwQcZKG56FgPGwL
-	 ZO+FnTUv8Zu59RED36Xj/HRIUw+0S2GL8BAJqk0CO/XglbIgvlCPGyvepALRhEMi01
-	 A29hzM7jzpG0WVStsQYbvZtWvcFXpsm9Wes9S3rIStawxDCGKm+Jx+IyXowYzzzPAL
-	 yt4MFdxt2J5WA==
-Date: Wed, 30 Apr 2025 18:41:43 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-integrity@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Sumit Garg <sumit.garg@kernel.org>, linux-kernel@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v3 2/4] tpm: support devices with synchronous send()
-Message-ID: <aBJEt41g_T7Thm6s@kernel.org>
-References: <20250414145653.239081-1-sgarzare@redhat.com>
- <20250414145653.239081-3-sgarzare@redhat.com>
+	s=arc-20240116; t=1746028050; c=relaxed/simple;
+	bh=ahui+q9/P4ykIV2+I5zWINb2R8LLzsTOV2mfFGCgVuA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HEcjZ3zm+/DZsIyVd9RBzzxwxPVsnysNUdT6BH2g5t+l+WMSqjqRHZEpUad0XoD+A20D/Ibh5KywahFat9HoWb8NKfHRQikznU4XGTeAUxsEh6YTylLMMLsptZMcM887TtqlL1C3gUb1Iwz8aOmHGMztzkaad7mlUYhSZ+rQJ1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CE5A1063;
+	Wed, 30 Apr 2025 08:47:21 -0700 (PDT)
+Received: from beelzebub.ast.arm.com (u203013-lin.austin.arm.com [10.118.28.29])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5E8C53F5A1;
+	Wed, 30 Apr 2025 08:47:28 -0700 (PDT)
+From: Stuart Yoder <stuart.yoder@arm.com>
+To: linux-integrity@vger.kernel.org,
+	jarkko@kernel.org,
+	peterhuewe@gmx.de,
+	jgg@ziepe.ca,
+	sudeep.holla@arm.com
+Cc: linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tpm_crb: ffa_tpm: fix/update comments describing the CRB over FFA ABI
+Date: Wed, 30 Apr 2025 10:47:23 -0500
+Message-Id: <20250430154723.1025101-1-stuart.yoder@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250414145653.239081-3-sgarzare@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 14, 2025 at 04:56:51PM +0200, Stefano Garzarella wrote:
-> From: Stefano Garzarella <sgarzare@redhat.com>
-> 
-> Some devices do not support interrupts and provide a single synchronous
-> operation to send the command and receive the response on the same buffer.
-> 
-> Currently, these types of drivers must use an internal buffer where they
-> temporarily store the response between .send() and recv() calls.
-> 
-> Introduce a new flag (TPM_CHIP_FLAG_SYNC) to support synchronous send().
-> If that flag is set by the driver, tpm_try_transmit() will use the send()
-> callback to send the command and receive the response on the same buffer
-> synchronously. In that case send() return the number of bytes of the
-> response on success, or -errno on failure.
-> 
-> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
-> v3:
-> - fixed comment style [Jarkko]
-> - renamend `out_send_sync` label to `out_sync` [Jarkko]
-> ---
->  include/linux/tpm.h              |  1 +
->  drivers/char/tpm/tpm-interface.c | 20 +++++++++++++++++---
->  2 files changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index 2e38edd5838c..0e9746dc9d30 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -350,6 +350,7 @@ enum tpm_chip_flags {
->  	TPM_CHIP_FLAG_SUSPENDED			= BIT(8),
->  	TPM_CHIP_FLAG_HWRNG_DISABLED		= BIT(9),
->  	TPM_CHIP_FLAG_DISABLE			= BIT(10),
-> +	TPM_CHIP_FLAG_SYNC			= BIT(11),
->  };
->  
->  #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-> diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> index 3b6ddcdb4051..3dc06836f932 100644
-> --- a/drivers/char/tpm/tpm-interface.c
-> +++ b/drivers/char/tpm/tpm-interface.c
-> @@ -114,8 +114,19 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
->  		return rc;
->  	}
->  
-> -	/* A sanity check. send() should just return zero on success e.g.
-> -	 * not the command length.
-> +	/*
-> +	 * Synchronous devices return the response directly during the send()
-> +	 * call in the same buffer.
-> +	 */
-> +	if (chip->flags & TPM_CHIP_FLAG_SYNC) {
-> +		len = rc;
-> +		rc = 0;
-> +		goto out_sync;
-> +	}
-> +
-> +	/*
-> +	 * A sanity check. send() of asynchronous devices should just return
-> +	 * zero on success e.g. not the command length.
->  	 */
->  	if (rc > 0) {
->  		dev_warn(&chip->dev,
-> @@ -151,7 +162,10 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
->  	if (len < 0) {
->  		rc = len;
->  		dev_err(&chip->dev, "tpm_transmit: tpm_recv: error %d\n", rc);
-> -	} else if (len < TPM_HEADER_SIZE || len != be32_to_cpu(header->length))
-> +		return rc;
-> +	}
-> +out_sync:
-> +	if (len < TPM_HEADER_SIZE || len != be32_to_cpu(header->length))
->  		rc = -EFAULT;
->  
->  	return rc ? rc : len;
-> -- 
-> 2.49.0
-> 
+-Fix the comment describing the 'start' function, which was a cut/paste
+ mistake for a different function.
 
-I think this is ok.
+-The comment for DIRECT_REQ and DIRECT_RESP only mentioned AArch32
+ and listed 32-bit function IDs.  Update to include 64-bit.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
+---
+v2:
+  -squashed the two comment updates into a single patch
 
-BR, Jarkko
+ drivers/char/tpm/tpm_crb_ffa.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+index 3169a87a56b60..134747911ba38 100644
+--- a/drivers/char/tpm/tpm_crb_ffa.c
++++ b/drivers/char/tpm/tpm_crb_ffa.c
+@@ -38,9 +38,11 @@
+  * messages.
+  *
+  * All requests with FFA_MSG_SEND_DIRECT_REQ and FFA_MSG_SEND_DIRECT_RESP
+- * are using the AArch32 SMC calling convention with register usage as
+- * defined in FF-A specification:
+- * w0:    Function ID (0x8400006F or 0x84000070)
++ * are using the AArch32 or AArch64 SMC calling convention with register usage
++ * as defined in FF-A specification:
++ * w0:    Function ID
++ *          -for 32-bit: 0x8400006F or 0x84000070
++ *          -for 64-bit: 0xC400006F or 0xC4000070
+  * w1:    Source/Destination IDs
+  * w2:    Reserved (MBZ)
+  * w3-w7: Implementation defined, free to be used below
+@@ -68,7 +70,8 @@
+ #define CRB_FFA_GET_INTERFACE_VERSION 0x0f000001
+ 
+ /*
+- * Return information on a given feature of the TPM service
++ * Notifies the TPM service that a TPM command or TPM locality request is
++ * ready to be processed, and allows the TPM service to process it.
+  * Call register usage:
+  * w3:    Not used (MBZ)
+  * w4:    TPM service function ID, CRB_FFA_START
+-- 
+2.34.1
+
 
