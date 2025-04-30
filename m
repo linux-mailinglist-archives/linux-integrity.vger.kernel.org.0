@@ -1,57 +1,56 @@
-Return-Path: <linux-integrity+bounces-6101-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6102-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09874AA50CB
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 17:51:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 231BBAA50CD
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 17:51:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CFA8179020
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 15:51:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAC1B9A4134
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 15:51:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C16325DAF0;
-	Wed, 30 Apr 2025 15:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E1E25B1C2;
+	Wed, 30 Apr 2025 15:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6UhhimE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TGLC1iTW"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432DF2DC760;
-	Wed, 30 Apr 2025 15:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3B5422156D;
+	Wed, 30 Apr 2025 15:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746028282; cv=none; b=gy6IdHxa2etqLY0yxOxZ9UST1krW9P5EshKVDGHlkj7gOLDs3G/xh0HfhVQsth8VPSn09y1jb515MXmmNCz/Pa/ZawgT8DB7YDCAND45GzuJTPNX7Osvt+L7TE+xv2t1Feh1aEIKDgBxLB6n5MCiTer3JrVtE/YoLdHfZeVoHn8=
+	t=1746028311; cv=none; b=Iq82PurvUIoaeZPkHi36mi4Y4nPBV7aEihHcFWgK4QZemr4lWcI21ZNhI1Hxl7byE6XYmUoNIf/iur4d7WUTBz4WplQuN1BpobGZjtr4wZWITf9z7Ik/Dt84RVc1+3grV4zICDkwmvDJmxBOa3V4EeoEpO97sSnAkt5xYhmigbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746028282; c=relaxed/simple;
-	bh=HFAl2I5gZT2GyBUXPqdrTWgbvKrwXcO69HTsc8RnnRI=;
+	s=arc-20240116; t=1746028311; c=relaxed/simple;
+	bh=qHt+fbelDpkV87aLSJc+IyuA57EgLArJ4MYkvgj6wC8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AJ2tn8cXEXw9ov55WrRK4D0ifQIjKkVuIHMD0m3qdRhm4fEss5/ouq+gsR+ffHkB2HJ3VmPdTQ9IHHufmzLCGlFnOUCrpQXMKJhmJGlskxE6WGT+j1iU2ZjCVJ9BwTHdE3oWDGTeHz+aAGDGXeovrTFgz8ibbUZtXI0sg5B9IZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m6UhhimE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3DCAC4CEE7;
-	Wed, 30 Apr 2025 15:51:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BxobpBMQqllyrxyKFYSYaGcOFj2NgWARt7WoevwY1sKu2OBxgM8DWbAAqstUYWRHJCwhlrP7oYMc84ARk/FX4qXA2OFCsfFiPcohjVQRuG+vjzvulW7EvoucpWtmQrV2CmwfXW9Z94xlRD363iY3GC01q4i6W9Rhm16SAVySAaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TGLC1iTW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CADAEC4CEE7;
+	Wed, 30 Apr 2025 15:51:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746028282;
-	bh=HFAl2I5gZT2GyBUXPqdrTWgbvKrwXcO69HTsc8RnnRI=;
+	s=k20201202; t=1746028310;
+	bh=qHt+fbelDpkV87aLSJc+IyuA57EgLArJ4MYkvgj6wC8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m6UhhimEujjkJ1riJa7v3hJ+BFdf3ed1IaOiLbfA4Ao9B6hLaSnLHK0ZKsej5VjVh
-	 azzbV9TzXlIoQgQAnjmgGIa0eGV5bLthO3H2Y66F6A0GmubDM8MO79vexYL0HelCeK
-	 cH2AEZXKUVoIUnmm+3aABkVcxg04395YThwkRhhQ4G7TNdNfeBNaIK11ebuGV2fmyX
-	 bbSb6GrVUWVlr+VCUZpirD5jsW0HwUOLmKQ6BjrR323E2bY8I2qitjE84jlDG0DSVV
-	 XRVOxgnbQahqO0TzL19ZJur3LXTfrL/yR0tInnre553KbrOSS0bhNdTY8uepwtEBki
-	 wdGmmU19cH81w==
-Date: Wed, 30 Apr 2025 18:51:17 +0300
+	b=TGLC1iTWkEoFUdboTey0EUVYjlQxm277R0u67HVs0tcyIqynQXG0SXDgsI2BEZEB6
+	 WhiKjpFm+VfgTmiZpOGQXwWuubD1pgqk9Iv2wNVtSvUEaDsB4d2Tmcx3b5faJpthwN
+	 o4JYZa5tW4M3pli8w+TZkx9bM8ajw2Aco/SreOmLJlc+7DNZuLXiAsg76rBwpP9eFq
+	 fihDBhH1OQCMRBryBw5L146jKTrlaO/H8zr6vcYFQ2lH8DCzwk0aG51cHfigfw+XRa
+	 cGmtRng1PcgoScYsL4x+TJopOgraj0qQpr0VQxASNeRneFVvhUnXi+MWq0mLiiVuQP
+	 ZhkdE4VlOtpxQ==
+Date: Wed, 30 Apr 2025 18:51:45 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Yeoreum Yun <yeoreum.yun@arm.com>
 Cc: peterhuewe@gmx.de, jgg@ziepe.ca, sudeep.holla@arm.com,
 	stuart.yoder@arm.com, sgarzare@redhat.com,
 	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] tpm_ffa_crb: access tpm service over FF-A direct
- message request v2
-Message-ID: <aBJG9TmzSCQTNy5b@kernel.org>
+Subject: Re: [PATCH v5 2/2] tpm_crb_ffa: use dev_xx() macro to print log
+Message-ID: <aBJHESVFL6K0pgmd@kernel.org>
 References: <20250415185013.2387369-1-yeoreum.yun@arm.com>
- <20250415185013.2387369-2-yeoreum.yun@arm.com>
+ <20250415185013.2387369-3-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -60,110 +59,54 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250415185013.2387369-2-yeoreum.yun@arm.com>
+In-Reply-To: <20250415185013.2387369-3-yeoreum.yun@arm.com>
 
-On Tue, Apr 15, 2025 at 07:50:12PM +0100, Yeoreum Yun wrote:
-> For secure partition with multi service, tpm_ffa_crb can access tpm
-> service with direct message request v2 interface according to chapter 3.3,
-> TPM Service Command Response Buffer Interface Over FF-A specificationi v1.0 BET.
+On Tue, Apr 15, 2025 at 07:50:13PM +0100, Yeoreum Yun wrote:
+> Instead of pr_xxx() macro, use dev_xxx() to print log.
+> This patch changes some error log level to warn log level when
+> the tpm_crb_ffa secure partition doesn't support properly but
+> system can run without it.
+> (i.e) unsupport of direct message ABI or unsupported ABI version
 > 
-> This patch reflects this spec to access tpm service over
-> FF-A direct message request v2 ABI.
-> 
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  drivers/char/tpm/tpm_crb_ffa.c | 55 ++++++++++++++++++++++++----------
->  1 file changed, 40 insertions(+), 15 deletions(-)
+>  drivers/char/tpm/tpm_crb_ffa.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
 > diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-> index 3169a87a56b6..fed775cf53ab 100644
+> index fed775cf53ab..66b38b2cbdd5 100644
 > --- a/drivers/char/tpm/tpm_crb_ffa.c
 > +++ b/drivers/char/tpm/tpm_crb_ffa.c
-> @@ -105,7 +105,10 @@ struct tpm_crb_ffa {
->  	u16 minor_version;
->  	/* lock to protect sending of FF-A messages: */
->  	struct mutex msg_data_lock;
-> -	struct ffa_send_direct_data direct_msg_data;
-> +	union {
-> +		struct ffa_send_direct_data direct_msg_data;
-> +		struct ffa_send_direct_data2 direct_msg_data2;
-> +	};
->  };
+> @@ -303,7 +303,7 @@ static int tpm_crb_ffa_probe(struct ffa_device *ffa_dev)
 >  
->  static struct tpm_crb_ffa *tpm_crb_ffa;
-> @@ -185,18 +188,34 @@ static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
->  
->  	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
->  
-> -	memset(&tpm_crb_ffa->direct_msg_data, 0x00,
-> -	       sizeof(struct ffa_send_direct_data));
-> -
-> -	tpm_crb_ffa->direct_msg_data.data1 = func_id;
-> -	tpm_crb_ffa->direct_msg_data.data2 = a0;
-> -	tpm_crb_ffa->direct_msg_data.data3 = a1;
-> -	tpm_crb_ffa->direct_msg_data.data4 = a2;
-> +	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-> +		memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
-> +		       sizeof(struct ffa_send_direct_data2));
-> +
-> +		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
-> +		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
-> +		tpm_crb_ffa->direct_msg_data2.data[2] = a1;
-> +		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
-> +
-> +		ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
-> +				&tpm_crb_ffa->direct_msg_data2);
-> +		if (!ret)
-> +			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
-> +	} else {
-> +		memset(&tpm_crb_ffa->direct_msg_data, 0x00,
-> +		       sizeof(struct ffa_send_direct_data));
-> +
-> +		tpm_crb_ffa->direct_msg_data.data1 = func_id;
-> +		tpm_crb_ffa->direct_msg_data.data2 = a0;
-> +		tpm_crb_ffa->direct_msg_data.data3 = a1;
-> +		tpm_crb_ffa->direct_msg_data.data4 = a2;
-> +
-> +		ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
-> +				&tpm_crb_ffa->direct_msg_data);
-> +		if (!ret)
-> +			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
-> +	}
->  
-> -	ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
-> -			&tpm_crb_ffa->direct_msg_data);
-> -	if (!ret)
-> -		ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
->  
->  	return ret;
->  }
-> @@ -231,8 +250,13 @@ int tpm_crb_ffa_get_interface_version(u16 *major, u16 *minor)
->  
->  	rc = __tpm_crb_ffa_send_recieve(CRB_FFA_GET_INTERFACE_VERSION, 0x00, 0x00, 0x00);
->  	if (!rc) {
-> -		*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
-> -		*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
-> +		if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-> +			*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data2.data[1]);
-> +			*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data2.data[1]);
-> +		} else {
-> +			*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
-> +			*minor = CRB_FFA_MINOR_VERSION(tpm_crb_ffa->direct_msg_data.data2);
-> +		}
->  	}
->  
->  	return rc;
-> @@ -277,7 +301,8 @@ static int tpm_crb_ffa_probe(struct ffa_device *ffa_dev)
->  
->  	tpm_crb_ffa = ERR_PTR(-ENODEV); // set tpm_crb_ffa so we can detect probe failure
->  
-> -	if (!ffa_partition_supports_direct_recv(ffa_dev)) {
-> +	if (!ffa_partition_supports_direct_recv(ffa_dev) &&
-> +	    !ffa_partition_supports_direct_req2_recv(ffa_dev)) {
->  		pr_err("TPM partition doesn't support direct message receive.\n");
+>  	if (!ffa_partition_supports_direct_recv(ffa_dev) &&
+>  	    !ffa_partition_supports_direct_req2_recv(ffa_dev)) {
+> -		pr_err("TPM partition doesn't support direct message receive.\n");
+> +		dev_warn(&ffa_dev->dev, "partition doesn't support direct message receive.\n");
 >  		return -EINVAL;
 >  	}
+>  
+> @@ -324,17 +324,17 @@ static int tpm_crb_ffa_probe(struct ffa_device *ffa_dev)
+>  	rc = tpm_crb_ffa_get_interface_version(&tpm_crb_ffa->major_version,
+>  					       &tpm_crb_ffa->minor_version);
+>  	if (rc) {
+> -		pr_err("failed to get crb interface version. rc:%d", rc);
+> +		dev_err(&ffa_dev->dev, "failed to get crb interface version. rc:%d\n", rc);
+>  		goto out;
+>  	}
+>  
+> -	pr_info("ABI version %u.%u", tpm_crb_ffa->major_version,
+> +	dev_info(&ffa_dev->dev, "ABI version %u.%u\n", tpm_crb_ffa->major_version,
+>  		tpm_crb_ffa->minor_version);
+>  
+>  	if (tpm_crb_ffa->major_version != CRB_FFA_VERSION_MAJOR ||
+>  	    (tpm_crb_ffa->minor_version > 0 &&
+>  	    tpm_crb_ffa->minor_version < CRB_FFA_VERSION_MINOR)) {
+> -		pr_err("Incompatible ABI version");
+> +		dev_warn(&ffa_dev->dev, "Incompatible ABI version\n");
+>  		goto out;
+>  	}
+>  
 > -- 
 > LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 > 
