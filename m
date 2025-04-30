@@ -1,54 +1,46 @@
-Return-Path: <linux-integrity+bounces-6103-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6104-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A5E8AA512B
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 18:07:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 885C3AA516E
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 18:18:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB7F47AA34B
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 16:05:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C71259E123F
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 16:18:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2362192E3;
-	Wed, 30 Apr 2025 16:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nflcwBLK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96E2225A658;
+	Wed, 30 Apr 2025 16:18:01 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31D77405A;
-	Wed, 30 Apr 2025 16:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69449265629;
+	Wed, 30 Apr 2025 16:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746029218; cv=none; b=eSrvE4iUCxMHLwU9f566Jpedx0R3iJTY0HBw4cjY2lmFq8x6JB4up3j5hndhnQHq+QTM4yRwkHPS1P0SmPfyF4FYB0cHgjnafGHdVRt7yEfyh4twyirSKuoDGYKntd8p+NZc2fsXmJv4My9603WJp5hn1V81fyup46fA3LQbadY=
+	t=1746029881; cv=none; b=tLnJs6/DCy+n2EqqOfXWSOkTgjt/7GlqtOcoj07JVR4j9mQwloCCMCOq78OYWqgbQspTf/zdPB/5g+Q6p3EP0WdmG3EDTYSjX+WaTc4+ELkNa0IH+X3z7owAKmlkzmqan8lugdyIwS5x8zGJu4gGGz96heFQ9UdZG8FEMkddX0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746029218; c=relaxed/simple;
-	bh=soJAtQ/95K0qhMDwUc6Jg9lOyFJXTYDM54IGj7C7NM4=;
+	s=arc-20240116; t=1746029881; c=relaxed/simple;
+	bh=Tbgdcv1Iv4vsXqovySHOgv8baFUO4hV80x404vOUDnc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CPc6oZuXcFz9B8HKi3ClOXspnp1Mb/wtPpj79cDP1dpJR1dCacP6GlZuYnJhDV+FznBT/6WefvcpC7wgLnrzVIyOKfjtp1x9aLKNARuoymtVhGnygp2Fi8Jga8TNDrsAxxCgZT1XDPDfPqQR2hQhQ8iCEK4N3F4X9RkD6hN9Yfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nflcwBLK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E308C4CEE7;
-	Wed, 30 Apr 2025 16:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746029218;
-	bh=soJAtQ/95K0qhMDwUc6Jg9lOyFJXTYDM54IGj7C7NM4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nflcwBLKxWZiUP7NYwl3WUucfxNnRxj3cXrtcW+IgLmfoAHernqYTD/cOk1vx+Aiw
-	 fM/LZb9mqx0XZsoFsGszhVQNUKpq+nxzoOnW1LAzuKK72QryssAzMJSi+cZJxV5lfE
-	 +0BDqbNaxX6ATMTZzSICbyKQNSRjxOa0k8bB1hhgPmco53mGLpIuQDTSr3mzukPfYO
-	 OUAMokxguTNBULy0ZaSGbx78Xs3OfoumozydqW5UX5v6KdKtFm3A6STg4JcMimAbiW
-	 ybFM7JkqUj4balokNEtGI68CmdFETR9ld7h5xkWrZHMtuYCPCqE/ypBrAPSZyISO2o
-	 fgpa7xLtELKrw==
-Date: Wed, 30 Apr 2025 19:06:53 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=e3461U71yq7iEJmETdoxgVJ9zkvBWxq9Gka+YthueBXrm8wJhA8UkvKCutvh06Iy1lD10hqJdzSkXG/AC3acHqJ1vfSiol3aiGzB9vArpSetFlxzUgYA79Xon6iV1IwuHvOsv3fQVLmm+2Rzr1Y7tgGMLOVe79mIyUO3sLy/Log=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 76C8C1063;
+	Wed, 30 Apr 2025 09:17:51 -0700 (PDT)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 91B233F673;
+	Wed, 30 Apr 2025 09:17:57 -0700 (PDT)
+Date: Wed, 30 Apr 2025 17:17:54 +0100
+From: Sudeep Holla <sudeep.holla@arm.com>
 To: Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	sudeep.holla@arm.com, linux-kernel@vger.kernel.org
+Cc: <linux-integrity@vger.kernel.org>, <jarkko@kernel.org>,
+	<peterhuewe@gmx.de>, <jgg@ziepe.ca>, <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2] tpm_crb: ffa_tpm: fix/update comments describing the
  CRB over FFA ABI
-Message-ID: <aBJKnYJgke_clJOn@kernel.org>
+Message-ID: <20250430-enormous-romantic-antelope-ecdce1@sudeepholla>
 References: <20250430154723.1025101-1-stuart.yoder@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -67,48 +59,12 @@ On Wed, Apr 30, 2025 at 10:47:23AM -0500, Stuart Yoder wrote:
 > -The comment for DIRECT_REQ and DIRECT_RESP only mentioned AArch32
 >  and listed 32-bit function IDs.  Update to include 64-bit.
 > 
-> Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
-> ---
-> v2:
->   -squashed the two comment updates into a single patch
-> 
->  drivers/char/tpm/tpm_crb_ffa.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-> index 3169a87a56b60..134747911ba38 100644
-> --- a/drivers/char/tpm/tpm_crb_ffa.c
-> +++ b/drivers/char/tpm/tpm_crb_ffa.c
-> @@ -38,9 +38,11 @@
->   * messages.
->   *
->   * All requests with FFA_MSG_SEND_DIRECT_REQ and FFA_MSG_SEND_DIRECT_RESP
-> - * are using the AArch32 SMC calling convention with register usage as
-> - * defined in FF-A specification:
-> - * w0:    Function ID (0x8400006F or 0x84000070)
-> + * are using the AArch32 or AArch64 SMC calling convention with register usage
-> + * as defined in FF-A specification:
-> + * w0:    Function ID
-> + *          -for 32-bit: 0x8400006F or 0x84000070
-> + *          -for 64-bit: 0xC400006F or 0xC4000070
->   * w1:    Source/Destination IDs
->   * w2:    Reserved (MBZ)
->   * w3-w7: Implementation defined, free to be used below
-> @@ -68,7 +70,8 @@
->  #define CRB_FFA_GET_INTERFACE_VERSION 0x0f000001
->  
->  /*
-> - * Return information on a given feature of the TPM service
-> + * Notifies the TPM service that a TPM command or TPM locality request is
-> + * ready to be processed, and allows the TPM service to process it.
->   * Call register usage:
->   * w3:    Not used (MBZ)
->   * w4:    TPM service function ID, CRB_FFA_START
-> -- 
-> 2.34.1
-> 
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+LGTM, FWIW
 
-BR, Jarkko
+Reviewed-by Sudeep Holla <sudeep.holla@arm.com>
+
+-- 
+Regards,
+Sudeep
 
