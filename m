@@ -1,132 +1,117 @@
-Return-Path: <linux-integrity+bounces-6087-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6088-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5666AA4697
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 11:13:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89C70AA4AF6
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 14:20:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 896407A6405
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 09:12:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 348274C351F
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 12:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B15221292;
-	Wed, 30 Apr 2025 09:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74956259C9B;
+	Wed, 30 Apr 2025 12:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="BApprQi7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77AD22206B1;
-	Wed, 30 Apr 2025 09:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AB224728A
+	for <linux-integrity@vger.kernel.org>; Wed, 30 Apr 2025 12:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746004330; cv=none; b=SOP2ffU/nBnpTZa5gLGdVZJqhE+Pk/h7wR/DpEKSHUG8hx23aKZVXtXbgnCAVPa8esYpgVcyXdC5WtnWycS7Y3uUNEwnUs2ZYQtC2NyXNdLeTJwUgJySVPMa2U4BrMUQaMv3vBZkJtE0kS++KzjZ3xccGI4YoJmUbLz5S4g0DZ8=
+	t=1746015510; cv=none; b=rpoojuNfDkXtEkcr04zFKx4NFnTerso/liryz/RR2SuX40HlA7diqI20h2bJD+0Vjfg9a3iVnvva9SFk2NNuj+3p+6ocIMcoUstyMNpQymYmHKbxmEiCzXUdq0AHUlHKxSZIVqAv8dW7Y8JlKOf7J6wZNoQ/1U6svcRuuWSNtS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746004330; c=relaxed/simple;
-	bh=Qk0DryjXIt3ss4um7MXcOMei15BeSthVbi80x1XAoCM=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=KY9EtUjBjPV+8tp06tiIIkcGKfNpfCWWD9PUdZbmyVx5HkpTkSvF+4JAbeF+LpfMgtqUhEKO2YRQYcTc5+645ULIPB7xWhOxBj4HDbpPIS63VkN/fxRmR5OChlQM7YIDVU8NuuERvekvokts7wXzlNqDabtLHs1fzGqwU1KahAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.164])
-	by gateway (Coremail) with SMTP id _____8Bx32tj6RFoAADLAA--.8960S3;
-	Wed, 30 Apr 2025 17:12:03 +0800 (CST)
-Received: from [10.20.42.164] (unknown [10.20.42.164])
-	by front1 (Coremail) with SMTP id qMiowMAxHsdb6RFocwSgAA--.44342S2;
-	Wed, 30 Apr 2025 17:11:57 +0800 (CST)
-Subject: Re: [PATCH v8 0/5] Add Loongson Security Engine chip driver
-To: Lee Jones <lee@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
- Herbert Xu <herbert@gondor.apana.org.au>, jarkko@kernel.org
-Cc: davem@davemloft.net, peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
- loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca,
- linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de
-References: <20250418093506.1349-1-zhaoqunqin@loongson.cn>
- <CAAhV-H608_ddH0g0gyFCZSTVxYHOBqLXrtGYxZ1eoXX6eCcEuA@mail.gmail.com>
- <75bb29fa-6d77-6f95-eec4-ee183190da17@loongson.cn>
- <aBHc2tT2-Duj3_-A@gondor.apana.org.au>
- <6b7385ce-d8ad-1be9-4503-55460f40fe72@loongson.cn>
- <CAAhV-H6ku=imPGqaFrey6hCMwXSL4Qsoif9Rv=Gko2R1CBtGmw@mail.gmail.com>
- <20250430085809.GD1567507@google.com>
-From: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Message-ID: <0f2a34ce-3e4b-7dda-4835-34bfd0ef60fc@loongson.cn>
-Date: Wed, 30 Apr 2025 17:10:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1746015510; c=relaxed/simple;
+	bh=jLQ7VSocQYR71p+4p10bsNmcteCmdXgdSrNIPdrCjlI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aciooI6ObjfwyxQkiDoRXPvm/G9o2dWQSLsOtVHN4cDBO9Yaqog1rK1osrjyu80q1qpcu6iRXk0xvksltdqMvBVIKQ9JBWB8GJTtX/7hpOzoPybf+VSASCq45oXJHaSEip6rB7WHJygOeIrYWJSW/CvnKli73H5pw66kvR/Skqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=BApprQi7; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6e8f05acc13so99647846d6.2
+        for <linux-integrity@vger.kernel.org>; Wed, 30 Apr 2025 05:18:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1746015507; x=1746620307; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W+V7cm9jvinYzZ6ye2QtNYnV8/h1lACQcCRpp+snmxs=;
+        b=BApprQi7IoHjfzY16R72gtdF43hbuQnsMLp3Qi+93iGBpfA8SatViUBBG0y39LiF2v
+         dbJSzUWB0ZjSv/z0WSmu5I98Kc621IYD45FoKZ7KzqNaNwoWmw8uEy189ER/zxYnnX5f
+         QqyNKcIAVUhwVSBPw94/pTN5STnY0NcI+yVBA0dKctBJJct8wyDjDplEHucsm5Z7x56d
+         WIAwwyJbkDqIQugzkMMLvUJxVhBxHGoPUitEgbL60l9dbSfSKzMquPeM4/tyCFLMH7+Q
+         xH+FJk5bzSdrd+TKAdXqFJbduN2vIJHLafOiaqpuBtVtUO2LuVZm43qJ0M0mZsd+1Q+Y
+         ObxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746015507; x=1746620307;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W+V7cm9jvinYzZ6ye2QtNYnV8/h1lACQcCRpp+snmxs=;
+        b=l5iVe7aG4NJg9r+jvjgsVPFR3TNdph13NsphAJ5NW2hiKejPvsgmbwUImRhhgROJ0a
+         ME3aaWsyE+Gceu3i+qPeFsk+3IWWUm4oDsGh7Vhyx4skuGE4NQLKPvqNNJHGxHPZwfpv
+         ytiEZPz7hbZ7ZZUe9/cf8cK8tl3ogmDdyLMhiCv0rlkHy3CdwsjhdKM0bPS5jCQ8W7Ec
+         /2EPCu05SCMvFuS4ycBuGYBvajjUm5LP4YdMrrt/ka0Vz17Dr2hOqOiE1CEvukWCrqAZ
+         fu5J1wnEiL6tFnhetmaJPoQ/MXlU8UxNfwyHiOgBWuy+lA4+CJ+v/NXlgHvoWH+GEOA0
+         z93g==
+X-Forwarded-Encrypted: i=1; AJvYcCVakaeziDcXSgBRik7OTokI7snmEt5WXm3sB61P+O2eVdS48C298A42kYGIIkJtYMgKptnv5EyrmBE2WXqmWX0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHNrGM6UlKRP31uRgffhB09+DYr8jPvu54i7gQCm/T3nM5BFBG
+	1qAmCFSzZssvEYHURBxeO0+ywLLZPUzjDT3c70UIJ/10UAo5V8m4KzVwRASzZSI=
+X-Gm-Gg: ASbGncs+3ZSepet6+yjfsSKAEWuAZ40reYamow3KnMMZ8GgAx7GErP1A0BgjUS9Vc8W
+	qOfI+S8Lz9C3PWNRbB6tnUSYlthlpv7e4hn/l2z6Yyv2dYmCZ4zfcxzDl3xAjnQgiLcJWvwSnTW
+	KbcA85wFWv0DeeqvB/ANSn1eAGgqzfnR6Tfr+m0E5/qavFMmTXti6OCdjc6duafkk/re12/Ljjt
+	SxioRE/5E0CRpxv6IVdbpiQJl/2rQfim8M7h6jarE7E2g1FDXTq1kK8vLOtikaRnIp0ziG2SDG9
+	snK0sNq9hr5e1uBzS/nRPoa2fFXrNE6A1C1wpNstcwek8exJrrPrMxz7TjW+idjsLH7L0F9D8ak
+	BAXBW/O0c0K3LXnHtJcQ=
+X-Google-Smtp-Source: AGHT+IELliOgWL1VLuF3keZ0L9C0SuC6eT6G/zrGEIVhFJleyHOjZQlXG23pL+OAV2vZNQZVoxOzXg==
+X-Received: by 2002:a05:6214:40a:b0:6e8:f17e:e00d with SMTP id 6a1803df08f44-6f4fe057ae1mr42658596d6.14.1746015507283;
+        Wed, 30 Apr 2025 05:18:27 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-167-219-86.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.167.219.86])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6f4fe70a07esm7585906d6.57.2025.04.30.05.18.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 05:18:26 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1uA6OQ-0000000BFaw-0xHr;
+	Wed, 30 Apr 2025 09:18:26 -0300
+Date: Wed, 30 Apr 2025 09:18:26 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
+	linux-integrity@vger.kernel.org, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next][V4] tpm: remove kmalloc failure error message
+Message-ID: <20250430121826.GE2260621@ziepe.ca>
+References: <20250430083435.860146-1-colin.i.king@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20250430085809.GD1567507@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:qMiowMAxHsdb6RFocwSgAA--.44342S2
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFy7Cr4rWrW8WrWfKrWrtFc_yoW8Wr1kpF
-	47Jay2kF4Dtr4Fk3sFqr48AFyYy3s3tryFgr98Gas5Zas0vFyrAw4UGFWjkFWDZ3W8Jr1j
-	vF48AayS9F15ZabCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
-	McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
-	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWrXVW3AwC20s026c02F40E14v26r
-	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
-	0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250430083435.860146-1-colin.i.king@gmail.com>
 
+On Wed, Apr 30, 2025 at 09:34:35AM +0100, Colin Ian King wrote:
+> The kmalloc failure message is just noise. Remove it and
+> replace -EFAULT with -ENOMEM as standard for out of memory
+> allocation error returns.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+> V1: remove trailing space after \n
+> V2: remove entire message, originally just removed a trailing space
+> V3: replace -EFAULT with -ENOMEM
+> V4: send correct fix for V3, actually return -ENOMEM
+> ---
+> 
+>  drivers/char/tpm/eventlog/tpm1.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
 
-在 2025/4/30 下午4:58, Lee Jones 写道:
-> On Wed, 30 Apr 2025, Huacai Chen wrote:
->
->> On Wed, Apr 30, 2025 at 4:47 PM Qunqin Zhao <zhaoqunqin@loongson.cn> wrote:
->>>
->>> 在 2025/4/30 下午4:18, Herbert Xu 写道:
->>>> On Wed, Apr 30, 2025 at 04:14:40PM +0800, Qunqin Zhao wrote:
->>>>> Sorry to bother you, may i ask is it fine to move  the Security Engine base
->>>>> driver[Patch v8 1/5] to drivers/crypto ?
->>>>>
->>>>> The base driver uses MFD  interface  to register child device(tpm, rng) , as
->>>>> done in
->>>>>
->>>>> "drivers/iio/common/ssp_sensors/ssp_dev.c" and
->>>>> "drivers/firmware/xilinx/zynqmp.c".
->>>>>
->>>>> Thank you, and I look forward to hearing from you.
->>>> I don't mind at this point in time.  But if this driver were to
->>>> develop features way outside of the Crypto API in future then I
->>>> may change my mind.
->>> Hi, Herbert, thanks for your reply.
->>>
->>> In future it just add child platform devices  name(sm2, sm3, sm4) to
->>> "struct  mfd_cell engines".
->>>
->>>
->>> Hi, Huaci
->>>
->>> Let's go via Herbert's crypto tree for the base driver patch under
->>> drivers/crypto/loongson/,
->>>
->>> What do you think of it?
->> In my opinion drivers/mfd is better, because another user is in
->> drivers/char rather than drivers/crypto.
->>
->> But if moving to drivers/crypto is what Lee Jones wants, then everything is OK.
-> You can move the driver, but then you must not reference or use the MFD API.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Then looks like i should move it back to drivers/mfd,  will do that in 
-next revision.
-
-Thank you very much for everyone's replies.
-
-BR, Qunqin.
-
->
-
+Jason
 
