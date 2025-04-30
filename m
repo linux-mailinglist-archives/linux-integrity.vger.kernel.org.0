@@ -1,151 +1,132 @@
-Return-Path: <linux-integrity+bounces-6085-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6087-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24BA7AA465E
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 11:06:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5666AA4697
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 11:13:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CD63189018E
-	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 09:06:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 896407A6405
+	for <lists+linux-integrity@lfdr.de>; Wed, 30 Apr 2025 09:12:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01C90220698;
-	Wed, 30 Apr 2025 09:04:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JXA0JVx9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B15221292;
+	Wed, 30 Apr 2025 09:12:10 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D9E221DB4;
-	Wed, 30 Apr 2025 09:04:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77AD22206B1;
+	Wed, 30 Apr 2025 09:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746003868; cv=none; b=jd+18HRQh9HG50+ud68PKCh5eQ5ND/UUJI9uuIO7XG60KfQbWYRty2kmEwh6I9gDOID3Z999nxxuWsX/BiI2A1Lj+hAhulbBLRt3/UJhTvqAEJFgkAp0z7ygtOiZ+oG8EN8Ik7wf+/RHBa83o31oLZIkjMvOtV/0kpIwDeI7neE=
+	t=1746004330; cv=none; b=SOP2ffU/nBnpTZa5gLGdVZJqhE+Pk/h7wR/DpEKSHUG8hx23aKZVXtXbgnCAVPa8esYpgVcyXdC5WtnWycS7Y3uUNEwnUs2ZYQtC2NyXNdLeTJwUgJySVPMa2U4BrMUQaMv3vBZkJtE0kS++KzjZ3xccGI4YoJmUbLz5S4g0DZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746003868; c=relaxed/simple;
-	bh=sg4nP1vsmKRyIOjaBfvOLljwCcb3ODZxzVhxgr0uGp0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MW0TV0JN1Ou0TwqNuUYEEArlA24F34EdeS2jpfsdeeCchDyL3HoNrF1yRE0e7mXpcwMdObqrihTo5UWoQ5ujEOVi/creKybeB417F14xa4yzLguFxbGXHkry9TpqzKt1N1ck+nRTL2OpUedp9F4BI+LzDgg9jxI0Ikf1sXMhj78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JXA0JVx9; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53TNkg4F028053;
-	Wed, 30 Apr 2025 09:04:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=kZmvUAuKXTdsxm2nV
-	PwxC8EqEMZqr7IelCZT3bJXADk=; b=JXA0JVx93qGUJGvtmm/AnnbZX4LED35xe
-	paeYvkAN3mYlCKrJWBqDcs74Ycttl4IV2aYrnALji5Y0m37+mepzbpb3wE5vbCla
-	NgERwXeFmms25HXhabg2LqcVogVbMDVEQiG1quPW2bivtE8fTsDHt3xeeZ3pcrdZ
-	Ouq6TXzTlXUvY7KB18UJr7pWY+un1Ccoa8l6T4ixDseyEqbFNY0KdS0pijhD3Zhe
-	TstKGGqUgk2u/cCesNTX5WClVjUY+Frh5pcMEhjTPZq1hunncyfZ77vtxEXkLVor
-	12hF2lmGQMFip7x7Wyn+WETU+9oZkny28r6SpeS3yvAnQJtzef4Qg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46b8r0sqmy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 09:04:14 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 53U941h6020790;
-	Wed, 30 Apr 2025 09:04:14 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46b8r0sqmw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 09:04:14 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53U7Ugv1031628;
-	Wed, 30 Apr 2025 09:04:13 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4699tu79x9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 09:04:13 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53U9497N58917316
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 30 Apr 2025 09:04:09 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9964820079;
-	Wed, 30 Apr 2025 09:04:09 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CE65B20065;
-	Wed, 30 Apr 2025 09:04:06 +0000 (GMT)
-Received: from li-fc74f8cc-3279-11b2-a85c-ef5828687581.ibm.com.com (unknown [9.39.31.221])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 30 Apr 2025 09:04:06 +0000 (GMT)
-From: Srish Srinivasan <ssrish@linux.ibm.com>
-To: linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, ajd@linux.ibm.com,
-        zohar@linux.ibm.com, nayna@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] integrity/platform_certs: Allow loading of keys in static key management mode
-Date: Wed, 30 Apr 2025 14:33:50 +0530
-Message-ID: <20250430090350.30023-4-ssrish@linux.ibm.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250430090350.30023-1-ssrish@linux.ibm.com>
-References: <20250430090350.30023-1-ssrish@linux.ibm.com>
+	s=arc-20240116; t=1746004330; c=relaxed/simple;
+	bh=Qk0DryjXIt3ss4um7MXcOMei15BeSthVbi80x1XAoCM=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=KY9EtUjBjPV+8tp06tiIIkcGKfNpfCWWD9PUdZbmyVx5HkpTkSvF+4JAbeF+LpfMgtqUhEKO2YRQYcTc5+645ULIPB7xWhOxBj4HDbpPIS63VkN/fxRmR5OChlQM7YIDVU8NuuERvekvokts7wXzlNqDabtLHs1fzGqwU1KahAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8Bx32tj6RFoAADLAA--.8960S3;
+	Wed, 30 Apr 2025 17:12:03 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMAxHsdb6RFocwSgAA--.44342S2;
+	Wed, 30 Apr 2025 17:11:57 +0800 (CST)
+Subject: Re: [PATCH v8 0/5] Add Loongson Security Engine chip driver
+To: Lee Jones <lee@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+ Herbert Xu <herbert@gondor.apana.org.au>, jarkko@kernel.org
+Cc: davem@davemloft.net, peterhuewe@gmx.de, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca,
+ linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de
+References: <20250418093506.1349-1-zhaoqunqin@loongson.cn>
+ <CAAhV-H608_ddH0g0gyFCZSTVxYHOBqLXrtGYxZ1eoXX6eCcEuA@mail.gmail.com>
+ <75bb29fa-6d77-6f95-eec4-ee183190da17@loongson.cn>
+ <aBHc2tT2-Duj3_-A@gondor.apana.org.au>
+ <6b7385ce-d8ad-1be9-4503-55460f40fe72@loongson.cn>
+ <CAAhV-H6ku=imPGqaFrey6hCMwXSL4Qsoif9Rv=Gko2R1CBtGmw@mail.gmail.com>
+ <20250430085809.GD1567507@google.com>
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Message-ID: <0f2a34ce-3e4b-7dda-4835-34bfd0ef60fc@loongson.cn>
+Date: Wed, 30 Apr 2025 17:10:04 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20250430085809.GD1567507@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDMwMDA2MCBTYWx0ZWRfXxkwx/pBELxXi PUkHSRULFE+jO/gPAFl3QyEU+/snpcLYfpHt8hJ9aIlfM2HZk8MGREWd42y5l/df8XxBRX80kXD 4lCF4PAoAUskv9sGZ6yus8rFTfTmQpXqoiPMm2aApe79zfhBGFmlToCGWtKGbleZRMVKyPHUz6m
- 7x3d+NqWPhrtmOnZU5fcgGhzqsnc/ppYDBdcLZnJA/tCDeyMKcBJLE89sO2AS8KmuUFlqeyZmjq eN+LzuV+fVSI/NmnYQO0dg9dA0F5ADVTuwsXd8ucBt/IROhmDbPPtWXc6NwivQ2pq3exihsjF7Z xCn8THK1T6nijoo2SFooJqQ5alsFJjTIS9Rrh6LKUpMgRvCqPjT0tI4bFCcfz0ivKxbHskkzdau
- li/xFQg2NeCFik9BNKBmxXD5RTMo3HtiqqKFSmwaNMJE3cJ81UFrDCJHZiyOMMavFi++OO/h
-X-Authority-Analysis: v=2.4 cv=OqdPyz/t c=1 sm=1 tr=0 ts=6811e78e cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=XR8D0OoHHMoA:10 a=VnNF1IyMAAAA:8 a=AtMIOgTZpS777Q0Lz8kA:9
-X-Proofpoint-GUID: YUFNTwMgtxTxrtbS7pwWlX3I7nRR7VGC
-X-Proofpoint-ORIG-GUID: DnfyhYWRTC1PWnK5XbqbXaZbp3tDUmfB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-30_02,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 spamscore=0 mlxlogscore=999
- phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504300060
+Content-Language: en-US
+X-CM-TRANSID:qMiowMAxHsdb6RFocwSgAA--.44342S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7tFy7Cr4rWrW8WrWfKrWrtFc_yoW8Wr1kpF
+	47Jay2kF4Dtr4Fk3sFqr48AFyYy3s3tryFgr98Gas5Zas0vFyrAw4UGFWjkFWDZ3W8Jr1j
+	vF48AayS9F15ZabCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
+	McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
+	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWrXVW3AwC20s026c02F40E14v26r
+	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
+	0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
 
-On PLPKS enabled PowerVM LPAR, there is no provision to load signed
-third-party kernel modules when the key management mode is static. This
-is because keys from secure boot secvars are only loaded when the key
-management mode is dynamic.
 
-Allow loading of the trustedcadb and moduledb keys even in the static
-key management mode, where the secvar format string takes the form
-"ibm,plpks-sb-v0".
+在 2025/4/30 下午4:58, Lee Jones 写道:
+> On Wed, 30 Apr 2025, Huacai Chen wrote:
+>
+>> On Wed, Apr 30, 2025 at 4:47 PM Qunqin Zhao <zhaoqunqin@loongson.cn> wrote:
+>>>
+>>> 在 2025/4/30 下午4:18, Herbert Xu 写道:
+>>>> On Wed, Apr 30, 2025 at 04:14:40PM +0800, Qunqin Zhao wrote:
+>>>>> Sorry to bother you, may i ask is it fine to move  the Security Engine base
+>>>>> driver[Patch v8 1/5] to drivers/crypto ?
+>>>>>
+>>>>> The base driver uses MFD  interface  to register child device(tpm, rng) , as
+>>>>> done in
+>>>>>
+>>>>> "drivers/iio/common/ssp_sensors/ssp_dev.c" and
+>>>>> "drivers/firmware/xilinx/zynqmp.c".
+>>>>>
+>>>>> Thank you, and I look forward to hearing from you.
+>>>> I don't mind at this point in time.  But if this driver were to
+>>>> develop features way outside of the Crypto API in future then I
+>>>> may change my mind.
+>>> Hi, Herbert, thanks for your reply.
+>>>
+>>> In future it just add child platform devices  name(sm2, sm3, sm4) to
+>>> "struct  mfd_cell engines".
+>>>
+>>>
+>>> Hi, Huaci
+>>>
+>>> Let's go via Herbert's crypto tree for the base driver patch under
+>>> drivers/crypto/loongson/,
+>>>
+>>> What do you think of it?
+>> In my opinion drivers/mfd is better, because another user is in
+>> drivers/char rather than drivers/crypto.
+>>
+>> But if moving to drivers/crypto is what Lee Jones wants, then everything is OK.
+> You can move the driver, but then you must not reference or use the MFD API.
 
-Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
----
- security/integrity/platform_certs/load_powerpc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Then looks like i should move it back to drivers/mfd,  will do that in 
+next revision.
 
-diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-index c85febca3343..714c961a00f5 100644
---- a/security/integrity/platform_certs/load_powerpc.c
-+++ b/security/integrity/platform_certs/load_powerpc.c
-@@ -75,12 +75,13 @@ static int __init load_powerpc_certs(void)
- 		return -ENODEV;
- 
- 	// Check for known secure boot implementations from OPAL or PLPKS
--	if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-sb-v1", buf)) {
-+	if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-sb-v1", buf) &&
-+	    strcmp("ibm,plpks-sb-v0", buf)) {
- 		pr_err("Unsupported secvar implementation \"%s\", not loading certs\n", buf);
- 		return -ENODEV;
- 	}
- 
--	if (strcmp("ibm,plpks-sb-v1", buf) == 0)
-+	if (strcmp("ibm,plpks-sb-v1", buf) == 0 || strcmp("ibm,plpks-sb-v0", buf) == 0)
- 		/* PLPKS authenticated variables ESL data is prefixed with 8 bytes of timestamp */
- 		offset = 8;
- 
--- 
-2.47.1
+Thank you very much for everyone's replies.
+
+BR, Qunqin.
+
+>
 
 
