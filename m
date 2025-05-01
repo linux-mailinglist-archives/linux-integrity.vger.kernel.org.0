@@ -1,127 +1,145 @@
-Return-Path: <linux-integrity+bounces-6107-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6108-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06A8FAA6065
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 May 2025 17:03:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DBCAAA60AB
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 May 2025 17:23:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79DFA1B62A3F
-	for <lists+linux-integrity@lfdr.de>; Thu,  1 May 2025 15:03:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E13241B6746F
+	for <lists+linux-integrity@lfdr.de>; Thu,  1 May 2025 15:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7736201270;
-	Thu,  1 May 2025 15:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A0A202981;
+	Thu,  1 May 2025 15:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QE9K7S0F"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RqqwQegs"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41321EA7C6;
-	Thu,  1 May 2025 15:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA15202C3B
+	for <linux-integrity@vger.kernel.org>; Thu,  1 May 2025 15:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746111791; cv=none; b=A1NB3QJuSlt0AQJcIAzD5Glj4GSf98aU4GhqvCEBi9zz/UQ/v3vlbQl75P/LWG3EFuuXHRy2XnBKrZ6KQF3tIKpxURGOumJ3nyWyqS8zTo/GUqEeWFwZEbsjq0wo17l0W7GFY8VJkuQhXmsw1/P6PMMZKcSwRKirm3FTa4ylEus=
+	t=1746112980; cv=none; b=BY/c2HhGU4Z5DQ8RSsIpYjCyJceuWuRCxP394YdHosL/gkLrzDxweyvDvuCMdT2mFWCNBTqHtp/vZOsj2HoGfr3/VmdlDh3ChO4Y7HqI9mL0hQd76z0syLTjG27k4VVXA3UrW6KCFwlj4SJMjn0F9ABfcwi+cPAcqOxoy7P8HvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746111791; c=relaxed/simple;
-	bh=4ySaPdEMd4+Vb4yQ+0YUSkKNLjFLCkYhYBoAAExMs3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkA40cvOe/OtEv8hBUGlPDxu68SZALFpXB3HobIqYdNeHwgSfoTWLTJZ5JUaYhONFPxWvst8EFgVOjLN10UQWtklOi2tY02YJ5IR9q9NZJ1UFQwpGz/Bl1d7ChOcc8FtSc0eCQ0qGX8rybZc9CV1WKY1Ja0eSpow47+EvI3u3GE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QE9K7S0F; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=SknNweDJMYv6Cc7JXUCuginAJHi4T0ZKllMpOn1Yf9A=; b=QE9K7S0FqJXdRMiI2MUQfyFVKN
-	zJkaOZZAvX0UK9xBOJnD6xr1oo4dLko0vESRIIkP4sjHHPxZkleb2D8Zai321exEYA2JJr82ElX7s
-	y72vsCa48dbNhj3sR2u6AvvpDc6GUftTpqrd7fLDiVr8l4ZJcPOvCc/B4Kso/X5VwtY001koeorb7
-	w0lpR1LpdbzQwtNNGzQXqNnli6Sbl3pH+QAdCVePhkf3FUFd/ngVNiv41q8dPOdm8t1mbTM/UmJ5P
-	NuryBBTCcNBBOjT/+JRWnUfQQL+DhMwA+igl0308JTBNEPRBnnqN+OImNHFtw2Imib6YH9ERSKUcP
-	cmUpe09A==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uAVQk-00000000oH8-33tB;
-	Thu, 01 May 2025 15:02:30 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 1B7DC30072F; Thu,  1 May 2025 17:02:30 +0200 (CEST)
-Date: Thu, 1 May 2025 17:02:29 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Christoph Hellwig <hch@lst.de>, chenlinxuan@uniontech.com,
-	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Sagi Grimberg <sagi@grimberg.me>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Yishai Hadas <yishaih@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Juergen Gross <jgross@suse.com>,
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kvm@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev, Winston Wen <wentao@uniontech.com>,
-	kasan-dev@googlegroups.com, xen-devel@lists.xenproject.org,
-	Changbin Du <changbin.du@intel.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH RFC v3 0/8] kernel-hacking: introduce
- CONFIG_NO_AUTO_INLINE
-Message-ID: <20250501150229.GU4439@noisy.programming.kicks-ass.net>
-References: <20250429-noautoinline-v3-0-4c49f28ea5b5@uniontech.com>
- <20250429123504.GA13093@lst.de>
- <D9KW1QQR88EY.2TOSTVYZZH5KN@google.com>
+	s=arc-20240116; t=1746112980; c=relaxed/simple;
+	bh=GnwsPoOxW8mCGc7CAgjoDtFw8dTWra4gUIbWL5YCLUs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=i5+XVT26ILzqqpxUuwW5B+/9ZfXU1dorNV3q9MZmnScFOZP51wSpVQb3BFc4rBpM7UgQ4yJ6l4fg1+w4k/hnlXDVGnNLbx0A8jD692sYguMyktp0DSGKRbJoVVaQZPe7tz4TrA0vQOxlCDGBun7o7cUn2oWxfVhLnSyWDKwQQuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RqqwQegs; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-43d734da1a3so4127765e9.0
+        for <linux-integrity@vger.kernel.org>; Thu, 01 May 2025 08:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1746112977; x=1746717777; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wm8HDKzWcPs/ZOJ7u1MGp3oUtkY4RQR0TPLRQCBj5DQ=;
+        b=RqqwQegsrWLsB1Yvk3XF6QMZObcZSJzZhmHOuynYxfAjO0oGplp27iKhLgAVcrPz0j
+         eWMVzCG9CejZi9x3NWPUhr1TIByngtnippTREg9TBe5WYJhV3hDngP2L9u/C0y4L+KM4
+         6ze5N6b7zDXBq/JS27TtKUGHyfcbNWTSmaEekY8HKP6pJFEwbRZsR/kH6YXFGC/5IjH3
+         e4vPZeITPxnOaDhMNWzPBrX1Dg0AwW+aEKY1dKZXOvoGEdTtmtU4GGb86piX/Aad55Da
+         /uynSSrFWN5ORTZPS8H/O00MqgO+KM9d5s2rBmL1yeW0ZzXXRC2PVlV1F/jK3ifRzbqF
+         xs4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746112977; x=1746717777;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wm8HDKzWcPs/ZOJ7u1MGp3oUtkY4RQR0TPLRQCBj5DQ=;
+        b=Fw7n2LgOoJxY43oW400+WW2G5ar+SsxwiMPHcVGqX7949e3Gfc1GouPNgHZj61UR+4
+         xVy0jwtqxjo7z774XzNqI5Le/vGjOnM947Vl3ModzGck+KG6IwoYYn+WHxTIbHH+6c+2
+         D9Jgxe1OSms+Drt/vCTszRAGV5DWEJHHM05JS27f1v2MF2bFKAjHOFsvJueUXCtkMBx8
+         9rhlW647IJi2kdc+utYoyDy7A2Ad2eSENha4PhN8FqWEiPMt5eaq2f6pHVRnQz58Kxtg
+         XXsEdGFbfEh4oAHk80s79r4XJjeu+utwa0zNW2PmcUb0QhVBS37TQ6S9uelANvvqc08x
+         DNlg==
+X-Forwarded-Encrypted: i=1; AJvYcCWVpG+/GekktIP5L1KgHXYPImONH85YkvWpcRXzcUL/sbtWri2WfYd3OGVN/5CdY5GpUswVXWXhRUbMoi/9WNk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvzQZwqQhuntplPbuMuK2lHLhbddFTS1mEuuOmUX11FRlP6X30
+	nji5mPXQGUgp0DwhS4gchyO5nW9ROy9hmUc4iOFTbuxulyxpG1QLQDGzxjhC1OlDEqBpZHPVTYJ
+	eiQik4OJ65Q==
+X-Google-Smtp-Source: AGHT+IG1H8EWFmTdy9mXUfcCJxQBprr6abVa1X9treBvRrD020Cub+yFF9voa0K8UUVl5WCrL4gH+SDc7+SKLQ==
+X-Received: from wmbel14.prod.google.com ([2002:a05:600c:3e0e:b0:440:5f8a:667c])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:4ec6:b0:43d:a90:9f1 with SMTP id 5b1f17b1804b1-441b2635482mr61130455e9.6.1746112976936;
+ Thu, 01 May 2025 08:22:56 -0700 (PDT)
+Date: Thu, 01 May 2025 15:22:55 +0000
+In-Reply-To: <20250501150229.GU4439@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D9KW1QQR88EY.2TOSTVYZZH5KN@google.com>
+Mime-Version: 1.0
+References: <20250429-noautoinline-v3-0-4c49f28ea5b5@uniontech.com>
+ <20250429123504.GA13093@lst.de> <D9KW1QQR88EY.2TOSTVYZZH5KN@google.com> <20250501150229.GU4439@noisy.programming.kicks-ass.net>
+X-Mailer: aerc 0.20.0
+Message-ID: <D9KXE2YX8R2M.3L7Q6NVIXKPE9@google.com>
+Subject: Re: [PATCH RFC v3 0/8] kernel-hacking: introduce CONFIG_NO_AUTO_INLINE
+From: Brendan Jackman <jackmanb@google.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Christoph Hellwig <hch@lst.de>, <chenlinxuan@uniontech.com>, 
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, Sagi Grimberg <sagi@grimberg.me>, 
+	Andrew Morton <akpm@linux-foundation.org>, Yishai Hadas <yishaih@nvidia.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>, 
+	Kevin Tian <kevin.tian@intel.com>, Alex Williamson <alex.williamson@redhat.com>, 
+	Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, <linux-nvme@lists.infradead.org>, 
+	<linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>, <kvm@vger.kernel.org>, 
+	<virtualization@lists.linux.dev>, <linux-integrity@vger.kernel.org>, 
+	<linux-kbuild@vger.kernel.org>, <llvm@lists.linux.dev>, 
+	Winston Wen <wentao@uniontech.com>, <kasan-dev@googlegroups.com>, 
+	<xen-devel@lists.xenproject.org>, Changbin Du <changbin.du@intel.com>, 
+	Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 01, 2025 at 02:19:47PM +0000, Brendan Jackman wrote:
-> On Tue Apr 29, 2025 at 12:35 PM UTC, Christoph Hellwig wrote:
-> > On Tue, Apr 29, 2025 at 12:06:04PM +0800, Chen Linxuan via B4 Relay wrote:
-> >> This series introduces a new kernel configuration option NO_AUTO_INLINE,
-> >> which can be used to disable the automatic inlining of functions.
-> >> 
-> >> This will allow the function tracer to trace more functions
-> >> because it only traces functions that the compiler has not inlined.
-> >
-> > This still feels like a bad idea because it is extremely fragile.
-> 
-> Can you elaborate on that - does it introduce new fragility?
+On Thu May 1, 2025 at 3:02 PM UTC, Peter Zijlstra wrote:
+> On Thu, May 01, 2025 at 02:19:47PM +0000, Brendan Jackman wrote:
+>> On Tue Apr 29, 2025 at 12:35 PM UTC, Christoph Hellwig wrote:
+>> > On Tue, Apr 29, 2025 at 12:06:04PM +0800, Chen Linxuan via B4 Relay wrote:
+>> >> This series introduces a new kernel configuration option NO_AUTO_INLINE,
+>> >> which can be used to disable the automatic inlining of functions.
+>> >> 
+>> >> This will allow the function tracer to trace more functions
+>> >> because it only traces functions that the compiler has not inlined.
+>> >
+>> > This still feels like a bad idea because it is extremely fragile.
+>> 
+>> Can you elaborate on that - does it introduce new fragility?
+>
+> given it needs to sprinkle __always_inline around where it wasn't needed
+> before, yeah.
 
-given it needs to sprinkle __always_inline around where it wasn't needed
-before, yeah.
+Right, I guess I just wouldn't have associated that with the word
+"fragility", but that's a reasonable complaint!
 
-Also, why would you want this? function tracer is already too much
-output. Why would you want even more?
+> Also, why would you want this? function tracer is already too much
+> output. Why would you want even more?
 
+Yes, tracing every function is already too noisy, this would make it
+even more too-noisy, not sure "too noisy" -> "way too noisy" is a
+particularly meaningful degradation.
 
+Whereas enlarging the pool of functions that you can _optionally target_
+for tracing, or nice reliable breakpoints in GDB, and disasm that's
+easier to mentally map back to C, seems like a helpful improvement for
+test builds. Personally I sometimes spam a bunch of `noinline` into code
+I'm debugging so this seems like a way to just slap that same thing on
+the whole tree without dirtying the code, right?
+
+Not that I have a strong opinion on the cost/benefit here, but the
+benefit seems nonzero to me.
 
