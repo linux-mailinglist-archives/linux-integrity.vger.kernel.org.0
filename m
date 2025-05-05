@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-6129-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6130-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23683AA9F36
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 00:21:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6B26AAA85E
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 02:52:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8028B7ADFCA
-	for <lists+linux-integrity@lfdr.de>; Mon,  5 May 2025 22:18:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AC09163565
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 00:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C5C27E1C8;
-	Mon,  5 May 2025 22:14:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D006E34D643;
+	Mon,  5 May 2025 22:39:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0D+6xHv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N1KNwV/L"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC2027E1B9;
-	Mon,  5 May 2025 22:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A641C29B8E6;
+	Mon,  5 May 2025 22:39:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746483296; cv=none; b=oFGE9/c5Kexr64n5Z6pJP+ZaBybwQ08jpA8w4CWoAcmOxthyApohjYkQKahibVEb4tbgar6lDjp0Gc49ibLICzpanEU6UViGhghi+yH9WGKdzh+pwlcpYvEIRMFgWrauQWd0tt9NuPOASG7nZPZN3wXnDWwe86DnJkROupNmJjU=
+	t=1746484794; cv=none; b=DqzFUykugImLyTVv7pyFOUgdvx/RTL0BJhgO/nrkSjE7xKe/j7/ZmxxVGR/Jn5wkmrmm5G0HrENg0OkDIP867gnGJ6k2Lye0DAsITnTKtWE7sBYFJQYTFD282UZ7DtqKQHoVBAcDSCtpBqxe4R2zaeDzvgeVQMhiL81BbfoWPWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746483296; c=relaxed/simple;
-	bh=RmknoLkIOzZEd4IDcW5L2WIxSDhD1l3uF/XpnvBeFwE=;
+	s=arc-20240116; t=1746484794; c=relaxed/simple;
+	bh=Pzar7iFHGx0C1ukBGapZnxhXD7NXDJvM+1AU/LbBr24=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bg6k5osf04imtBDNGo3RgCNjxgoEJe6iDwmEZqWWc60riSAcXQgtfC0WkdJcmuPk145ifyfvXIWaAWbnE3AzmoS7GmgRQJBnIAAszqsKJByqXuGO9hZ0vBfqLW+ZCA0iUPSKTqKzi7aSygwl7VQtgWASPJ/2iUEPXXKNPAmdmH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0D+6xHv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E379DC4CEED;
-	Mon,  5 May 2025 22:14:54 +0000 (UTC)
+	 MIME-Version; b=f3sNtsrhW1Y5TszXfefMc9ikNLQD2EZP3b7SSpzLFRM41jMqpG16aSAlr8vWYpSZnqBmqMTJjpFmazRJGSKBx7zGN4yYDZTH84/BfBw3y9XrfnMxNAogdbrQjLlK6J1IwALpxhviCoRVUY+ISbR7D1BViGwYo+dS1mMqD6zoPEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N1KNwV/L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39AF3C4CEEE;
+	Mon,  5 May 2025 22:39:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746483295;
-	bh=RmknoLkIOzZEd4IDcW5L2WIxSDhD1l3uF/XpnvBeFwE=;
+	s=k20201202; t=1746484794;
+	bh=Pzar7iFHGx0C1ukBGapZnxhXD7NXDJvM+1AU/LbBr24=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=h0D+6xHvdgVLhGqWI9q6dZMoK85qum2oMx50u7GN0GjdKBrhtVIDf/iEnp6isbn4D
-	 k7UYp3o5cDCFnLXM6iY0Xe/NGk6MxUC5NXm0eReAaJPyLzDNmMonb0CnML3cI21lv+
-	 Mfzdz4uus3dmUEHeLUv+MljoYOtv5Evz0bfh6coNMQjnEXn+dZqcbEym+dJfIkd5p8
-	 h7PjGi5KoXAhUURrT3hx2X7bgmtCCFPrlii2mBiwvHea1zNMOlKu9a0I3Nrb/yN1Fw
-	 d7Qg3xhcEI2lSegkP+N/FVK5dcI1qq9vRQ9adfy3iuo+pYqkabOaZmnJm8iDFronzX
-	 yNCYHmqPJfxcg==
+	b=N1KNwV/LGfZbKjTs0ZfHFnSfax3cqLEnhM9PuEWh4xrmBAPsaDsB9RuWwKt3Ydy1h
+	 4Md2HanoW9ibCKVM/wu7LFo7e1zH1gpTLmHQJDSnur212UTYh9NA00G+Z56WLGehK+
+	 I1cM05B+iC+dX/BYmJ4Qek8X2qyKr38HIPxjz+JUJy5IA0HF1LQ5AxVPkQQkwYfsLX
+	 66dcPaIHM1FU9y7JlX4aDeS5PBkFscrY/Bj5YKF345ueAye9Wh5r/XHqAIKXM0hCXC
+	 plkiNPn1voDfkLixjSmSOR5k+jXn4D7pCkJoIOx3KuReFWSPTE4bK+flh1t8Bx7dyQ
+	 iq74XAMYPPOjw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -49,12 +49,12 @@ Cc: Jonathan McDowell <noodles@meta.com>,
 	Sasha Levin <sashal@kernel.org>,
 	peterhuewe@gmx.de,
 	linux-integrity@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 020/642] tpm: Convert warn to dbg in tpm2_start_auth_session()
-Date: Mon,  5 May 2025 18:03:56 -0400
-Message-Id: <20250505221419.2672473-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 018/486] tpm: Convert warn to dbg in tpm2_start_auth_session()
+Date: Mon,  5 May 2025 18:31:34 -0400
+Message-Id: <20250505223922.2682012-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505221419.2672473-1-sashal@kernel.org>
-References: <20250505221419.2672473-1-sashal@kernel.org>
+In-Reply-To: <20250505223922.2682012-1-sashal@kernel.org>
+References: <20250505223922.2682012-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.5
+X-stable-base: Linux 6.12.26
 Content-Transfer-Encoding: 8bit
 
 From: Jonathan McDowell <noodles@meta.com>
@@ -93,7 +93,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index b70165b588ecc..3f89635ba5e85 100644
+index b0f13c8ea79c7..7c829de09afb0 100644
 --- a/drivers/char/tpm/tpm2-sessions.c
 +++ b/drivers/char/tpm/tpm2-sessions.c
 @@ -982,7 +982,7 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
