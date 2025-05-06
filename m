@@ -1,178 +1,269 @@
-Return-Path: <linux-integrity+bounces-6146-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6147-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 625E3AAC626
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 15:32:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4E5AAAC78F
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 16:14:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 240511C2258E
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 13:30:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85FD7167B9A
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 14:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A739B28315B;
-	Tue,  6 May 2025 13:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BDBE281517;
+	Tue,  6 May 2025 14:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="kudIcstS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KO8PBTyP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96044280A4C;
-	Tue,  6 May 2025 13:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF9E280313
+	for <linux-integrity@vger.kernel.org>; Tue,  6 May 2025 14:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746537872; cv=none; b=hFq6SvA9mNXXDybalffJKmPN2iPcYd5f4wbDb877husqDFcNfyZv3j2ZG1zPdJ1vsUcb5dmRDYuUEesnRfr/hu5ky2s9lYfoAv1jYR7K0s9dYW5wS6x9mHJjh4Hh0rX+62aDQgB3mA+JaQBRf9h58cKRwXoD0AlML38rOVp7ovY=
+	t=1746540799; cv=none; b=K5CfzGTRDrXbdTg/RgDHQpIcp5EQWfSS/CiPPdBSSkuTfklw6Bq+jbaVJGxmCBnubVeXXfxBRr8XN/HzfAY4RaD/GEGszmqNVvl5K+gYyHRBRnX20g6QTWy1wckrqCrcV62mKLmYhlQ9dTjCMdADJO4nSS4ZyRWs2foRNJOvRlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746537872; c=relaxed/simple;
-	bh=F7zOBD4JAh8eNkUq1aOu8T2CC42hIfJGwb4RjEXOjWE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=qlxDulI+yk1za725yEyPUm6rXKMxvKrKzTxzUb43C702Krp5aoiJ3pMUoIwcYXP7gN56Xkc76Vw49rqD3ZMIVADuNE1+H2PUI4TI91bfn3HB+lMcr25jNA44kKFGiSp+MPZWB9wVmmAZsGt0ASIfI7NX6Yx/NEHBt4W6kGfWZuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=kudIcstS; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1746537868;
-	bh=F7zOBD4JAh8eNkUq1aOu8T2CC42hIfJGwb4RjEXOjWE=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=kudIcstShORppqVcWOgm2xMuqo86L3l191A+iiZoP0FH1mJF8lNXO3O/TSyOyzBrK
-	 QpOlI6wKJX7OdQYhwilMuzVSEaGljo5UHrNLFMhKtKn+cx2niRNWCTdQwh/UMzliIu
-	 An4D/+ZkXSqXFIDIuRxX2gWa3/jcvEhZmnx/0bgg=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id F0B8D1C0320;
-	Tue, 06 May 2025 09:24:27 -0400 (EDT)
-Message-ID: <2413d57aee6d808177024e3a88aaf61e14f9ddf4.camel@HansenPartnership.com>
-Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Arnout Engelen <arnout@bzzt.net>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
-	 <linux@weissschuh.net>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
- <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, Paul Moore
- <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
- <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan
- <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas
- Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, Roberto
- Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>,  Eric Snowberg <eric.snowberg@oracle.com>,
- Nicolas Schier <nicolas.schier@linux.dev>, Fabian
- =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>, Mattia Rizzolo
- <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, Christian Heusel
- <christian@heusel.eu>,  =?ISO-8859-1?Q?C=E2ju?= Mihai-Drosi
- <mcaju95@gmail.com>, linux-kbuild@vger.kernel.org,
- linux-kernel@vger.kernel.org,  linux-arch@vger.kernel.org,
- linux-modules@vger.kernel.org,  linux-security-module@vger.kernel.org,
- linux-doc@vger.kernel.org,  linuxppc-dev@lists.ozlabs.org,
- linux-integrity@vger.kernel.org
-Date: Tue, 06 May 2025 09:24:26 -0400
-In-Reply-To: <072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
-	 <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
-	 <840b0334-71e4-45b1-80b0-e883586ba05c@t-8ch.de>
-	 <b586e946c8514cecde65f98de8e19eb276c09703.camel@HansenPartnership.com>
-	 <072b392f-8122-4e4f-9a94-700dadcc0529@app.fastmail.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1746540799; c=relaxed/simple;
+	bh=dvnpBTc5+V4/wKRdMg2GHV3TaYrI7wpbz7l2TiXkoro=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=joOS+J4FI2q2CcTr9gpUlIUBX5jkIqXiXx+jEXAzHH9ImrrRywyAR0h+/BiNXS4vx3oTqnBWXNhyN1CmpYN3jq9MBM2QeOVkzEdcQQiOncLcFA0/5WVpsfJVnPQ7uM5ip8HBZ6Tt1MDsF86yXRRovXfSKakEt3MEvfIpF5PV+OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KO8PBTyP; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746540796;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UFcgBeXDokvr+kUt+Nx4wd/ULZnjMDwH1N2JLsWAOOw=;
+	b=KO8PBTyPZxY9cAOtCPYyFjwSiN/wNOgbWV+YemoYvrx88icew8wprVcvnBJIYwCUEl1SSc
+	E49KQswV4JFBup6D7oD7RaIzXQTe+vpASykTR47tmJ+BS7eJerGl/5Y75bxHDVORMXwHQD
+	boZbtMLX8l5Ig1ci8aKZ9MHxXYt68Ak=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-351-6jzqjjt6Od28Gmw-S-HjPA-1; Tue, 06 May 2025 10:13:14 -0400
+X-MC-Unique: 6jzqjjt6Od28Gmw-S-HjPA-1
+X-Mimecast-MFC-AGG-ID: 6jzqjjt6Od28Gmw-S-HjPA_1746540794
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-acb8f9f58ebso427995566b.2
+        for <linux-integrity@vger.kernel.org>; Tue, 06 May 2025 07:13:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746540793; x=1747145593;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UFcgBeXDokvr+kUt+Nx4wd/ULZnjMDwH1N2JLsWAOOw=;
+        b=sRACQO17B5quFN62e8wbPxxxxKADKS2Q8oUTnYDZ4Sf3r5QZeqruVFNBV6MaNL+YWO
+         PprTeyIS3AvWn33eWO5FeycZMTQ2JmaYUS3EjyvDN9L1zH3rN+bNCEC66sVMyIQbG0sM
+         QcyD8uIYFsSuCurt7UBpSTuIZGTVcsWLDv2a0kqPkKsF8CG8XnUsYtNWgZM2505Vn7ot
+         Kyoz+3k4IDNL2KvTisKM2o9Ku4scjhXv0fBEUGgjMElW7nutqKViXwQOQ2RhFmKnPiOT
+         BL7u51+IJt4+aj76z1vipkwnHdbSMWxbYz8veXhbQ+biQaQUUSCaSXCgzeX44g6qVexF
+         CE5w==
+X-Forwarded-Encrypted: i=1; AJvYcCXCP+0BAGBzRfutsHs5MmAzbTQ/VBXYp8cMY3ab25t13rXhnRm6ojVbO6TkmjY/56YB303NRXZJPC2FjbXX5bg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6NJXOvc2TZaqaRoOfqTJ2DsuRTNBr0Q776t9L69i0RnqyrzkM
+	UMKd8N+xn93b0xWjZmHMRhIC3dGRFfNFhcdjdyp5mmWL1/kEAOfLAF/8lXQd6lGW2FORBZnz2NP
+	uhFEowl0tCspzSqVs1I23uj6POTZ+d01yyxS2d7E9i0XygNWQ5tNHpGQn0XGUyiEnpg==
+X-Gm-Gg: ASbGncsGgvePjPxbmLoKwdDPm5u+2JnY8ps7LDBGPz6BVqG96HJ7RMItVBRKBzCqdIg
+	s7noEPhIiQnsHGBFdL+lerR0nokKfCWpD+0lswyS3QFoXlCcqZqPiVqqpcoyYFL+q0SL3XD1rbd
+	Mtl7Xucavbr9lsoAMnSt2F6AeRFOu8GTn8tYhm80oarXRppvQoXyUlgRh1gjBPnqwu6aEPdjBZK
+	r6aIW0aVb4u2XRFY3wCuIFgLEOX1YD/vk3SMLqPJVkvHKmbHH4VWybCrnoODn5bqrF2WgruamGL
+	AzFHUDyG8sTDqu53
+X-Received: by 2002:a17:907:a08e:b0:ace:9d4e:d0cd with SMTP id a640c23a62f3a-ad1a48bd2c0mr1016932366b.7.1746540793550;
+        Tue, 06 May 2025 07:13:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHBtjlS6sVWj/jhXomSr6feRAM5taE6rOBhOmzWM1geyTp2Xsw9XEuNk4QndQH7TAg8XB5sEA==
+X-Received: by 2002:a17:907:a08e:b0:ace:9d4e:d0cd with SMTP id a640c23a62f3a-ad1a48bd2c0mr1016929066b.7.1746540793005;
+        Tue, 06 May 2025 07:13:13 -0700 (PDT)
+Received: from sgarzare-redhat ([193.207.145.28])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad18914d031sm710777166b.20.2025.05.06.07.13.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 May 2025 07:13:12 -0700 (PDT)
+Date: Tue, 6 May 2025 16:13:04 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net, 
+	peterhuewe@gmx.de, jarkko@kernel.org, linux-kernel@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca, 
+	linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de, Yinggang Gu <guyinggang@loongson.cn>, 
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v9 4/5] tpm: Add a driver for Loongson TPM device
+Message-ID: <2nuadbg5awe6gvagxg7t5ewvxsbmiq4qrcrycvnrmt2etzq2ke@6oyzavctwrma>
+References: <20250506031947.11130-1-zhaoqunqin@loongson.cn>
+ <20250506031947.11130-5-zhaoqunqin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20250506031947.11130-5-zhaoqunqin@loongson.cn>
 
-On Sat, 2025-05-03 at 10:19 +0200, Arnout Engelen wrote:
-> On Fri, May 2, 2025, at 15:30, James Bottomley wrote:
-> > On Fri, 2025-05-02 at 08:53 +0200, Thomas Wei=C3=9Fschuh wrote:
-> > > Specifically the output of any party can recreate bit-by-bit
-> > > identical copies of all specified artifacta previous build (the
-> > > public key, module signatures) is not available during the
-> > > rebuild or verification.
-> >=20
-> > You just strip the signatures before verifying reproducibility.
->=20
-> If the goal is: "verify the Linux Kernel is reproducible", that could
-> work. It gets increasingly cumbersome when you're trying to check the
-> reproducibility of some larger artifact that embeds the Linux kernel
-> (and lots of other stuff), like an ISO or disk image, though: you'd
-> have to unpack/mount it, check all its contents individually (perhaps
-> recursively), and strip signatures in 'just the right places'.
+On Tue, May 06, 2025 at 11:19:46AM +0800, Qunqin Zhao wrote:
+>Loongson Security Engine supports random number generation, hash,
+>symmetric encryption and asymmetric encryption. Based on these
+>encryption functions, TPM2 have been implemented in the Loongson
+>Security Engine firmware. This driver is responsible for copying data
+>into the memory visible to the firmware and receiving data from the
+>firmware.
+>
+>Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
+>Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
+>Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+>Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+>Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>---
+>v9: "tpm_loongson_driver" --> "tpm_loongson"
+>    "depends on CRYPTO_DEV_LOONGSON_SE" --> "depends on MFD_LOONGSON_SE"
+>
+>v8: In the send callback, it will wait until the TPM2 command is
+>    completed. So do not need to wait in the recv callback.
+>    Removed Jarkko's tag cause there are some changes in v8
+>
+>v7: Moved Kconfig entry between TCG_IBMVTPM and TCG_XEN.
+>    Added Jarkko's tag(a little change, should be fine).
+>
+>v6: Replace all "ls6000se" with "loongson"
+>    Prefix all with tpm_loongson instead of tpm_lsse.
+>    Removed Jarkko's tag cause there are some changes in v6
+>
+>v5: None
+>v4: Prefix all with tpm_lsse instead of tpm.
+>    Removed MODULE_AUTHOR fields.
+>
+>v3: Added reminder about Loongson security engine to git log.
+>
+> drivers/char/tpm/Kconfig        |  9 ++++
+> drivers/char/tpm/Makefile       |  1 +
+> drivers/char/tpm/tpm_loongson.c | 78 +++++++++++++++++++++++++++++++++
+> 3 files changed, 88 insertions(+)
+> create mode 100644 drivers/char/tpm/tpm_loongson.c
+>
+>diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+>index fe4f3a609..13f0682c6 100644
+>--- a/drivers/char/tpm/Kconfig
+>+++ b/drivers/char/tpm/Kconfig
+>@@ -189,6 +189,15 @@ config TCG_IBMVTPM
+> 	  will be accessible from within Linux.  To compile this driver
+> 	  as a module, choose M here; the module will be called tpm_ibmvtpm.
+>
+>+config TCG_LOONGSON
+>+	tristate "Loongson TPM Interface"
+>+	depends on MFD_LOONGSON_SE
+>+	help
+>+	  If you want to make Loongson TPM support available, say Yes and
+>+	  it will be accessible from within Linux. To compile this
+>+	  driver as a module, choose M here; the module will be called
+>+	  tpm_loongson.
+>+
+> config TCG_XEN
+> 	tristate "XEN TPM Interface"
+> 	depends on TCG_TPM && XEN
+>diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+>index 2b004df8c..cb534b235 100644
+>--- a/drivers/char/tpm/Makefile
+>+++ b/drivers/char/tpm/Makefile
+>@@ -45,3 +45,4 @@ obj-$(CONFIG_TCG_CRB) += tpm_crb.o
+> obj-$(CONFIG_TCG_ARM_CRB_FFA) += tpm_crb_ffa.o
+> obj-$(CONFIG_TCG_VTPM_PROXY) += tpm_vtpm_proxy.o
+> obj-$(CONFIG_TCG_FTPM_TEE) += tpm_ftpm_tee.o
+>+obj-$(CONFIG_TCG_LOONGSON) += tpm_loongson.o
+>diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loongson.c
+>new file mode 100644
+>index 000000000..cbbd9c22a
+>--- /dev/null
+>+++ b/drivers/char/tpm/tpm_loongson.c
+>@@ -0,0 +1,78 @@
+>+// SPDX-License-Identifier: GPL-2.0
+>+/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
+>+
+>+#include <linux/device.h>
+>+#include <linux/mfd/loongson-se.h>
+>+#include <linux/platform_device.h>
+>+#include <linux/wait.h>
+>+
+>+#include "tpm.h"
+>+
+>+struct tpm_loongson_cmd {
+>+	u32 cmd_id;
+>+	u32 data_off;
+>+	u32 data_len;
+>+	u32 pad[5];
+>+};
+>+
+>+static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+>+{
+>+	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
+>+	struct tpm_loongson_cmd *cmd_ret = tpm_engine->command_ret;
+>+
+>+	memcpy(buf, tpm_engine->data_buffer, cmd_ret->data_len);
 
-Most GPL/LGPL software requires a build recipe anyway.  Realistically,
-you're just proving you can exercise that in reverse.
+Should we limit the memcpy to `count`?
 
-> Writing such tooling is a chore, but of course feasible: diffoscope
-> already comes a long way (though checking large images may take some
-> resources). The problem is trusting such tooling: instead of 'simply'
-> checking the images are identical, suddenly I now have to convince
-> myself there's no shenanigans possible in the disk image
-> interpretation and other check tooling, which gets nontrivial fast.
+I mean, can happen that `count` is less than `cmd_ret->data_len`?
 
-I'll repeat the key point again: all modern hermetic build systems come
-with provenance which is usually a signature.  Developing the tooling
-is already a requirement.
+Thanks,
+Stefano
 
-Plus, you've got to remember that a signature is a cryptographic
-function of the hash over the build minus the signature.  You can't
-verify a signature unless you know how to get the build minus the
-signature.  So the process is required to be deterministic.
-
-> > All current secure build processes (hermetic builds, SLSA and the
-> > like) are requiring output provenance (i.e. signed artifacts).=C2=A0 If
-> > you try to stand like Canute against this tide saying "no signed
-> > builds", you're simply opposing progress for the sake of it
->=20
-> I don't think anyone is saying 'no signed builds', but we'd enjoy
-> being able to keep the signatures as detached metadata instead of
-> having to embed them into the 'actual' artifacts.
-
-We had this debate about 15 years ago when Debian first started
-reproducible builds for the kernel.  Their initial approach was
-detached module signatures.  This was the original patch set:
-
-https://lore.kernel.org/linux-modules/20160405001611.GJ21187@decadent.org.u=
-k/
-
-And this is the reason why Debian abandoned it:
-
-https://lists.debian.org/debian-kernel/2016/05/msg00384.html
-
-The specific problem is why detached signatures are almost always a
-problem: after a period of time, particularly if the process for
-creating updated artifacts gets repeated often matching the output to
-the right signature becomes increasingly error prone.
-
-Debian was, however, kind enough to attach what they currently do to
-get reproducible builds to the kernel documentation:
-
-https://docs.kernel.org/kbuild/reproducible-builds.html
-
-Although they went for deterministic signing, I will note that it is
-perfectly possible to follow their receipe with an ephemeral
-certificate as well.
-
-However, if you want to detach the module signatures for packaging, so
-the modules can go in a reproducible section and the signatures
-elsewhere, then I think we could accommodate that (the output of the
-build is actually unsigned modules, they just get signed on install).
-
-Regards,
-
-James
+>+
+>+	return cmd_ret->data_len;
+>+}
+>+
+>+static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
+>+{
+>+	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
+>+	struct tpm_loongson_cmd *cmd = tpm_engine->command;
+>+
+>+	cmd->data_len = count;
+>+	memcpy(tpm_engine->data_buffer, buf, count);
+>+
+>+	return loongson_se_send_engine_cmd(tpm_engine);
+>+}
+>+
+>+static const struct tpm_class_ops tpm_loongson_ops = {
+>+	.flags = TPM_OPS_AUTO_STARTUP,
+>+	.recv = tpm_loongson_recv,
+>+	.send = tpm_loongson_send,
+>+};
+>+
+>+static int tpm_loongson_probe(struct platform_device *pdev)
+>+{
+>+	struct loongson_se_engine *tpm_engine;
+>+	struct device *dev = &pdev->dev;
+>+	struct tpm_loongson_cmd *cmd;
+>+	struct tpm_chip *chip;
+>+
+>+	tpm_engine = loongson_se_init_engine(dev->parent, SE_ENGINE_TPM);
+>+	if (!tpm_engine)
+>+		return -ENODEV;
+>+	cmd = tpm_engine->command;
+>+	cmd->cmd_id = SE_CMD_TPM;
+>+	cmd->data_off = tpm_engine->buffer_off;
+>+
+>+	chip = tpmm_chip_alloc(dev, &tpm_loongson_ops);
+>+	if (IS_ERR(chip))
+>+		return PTR_ERR(chip);
+>+	chip->flags = TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
+>+	dev_set_drvdata(&chip->dev, tpm_engine);
+>+
+>+	return tpm_chip_register(chip);
+>+}
+>+
+>+static struct platform_driver tpm_loongson = {
+>+	.probe   = tpm_loongson_probe,
+>+	.driver  = {
+>+		.name  = "loongson-tpm",
+>+	},
+>+};
+>+module_platform_driver(tpm_loongson);
+>+
+>+MODULE_ALIAS("platform:loongson-tpm");
+>+MODULE_LICENSE("GPL");
+>+MODULE_DESCRIPTION("Loongson TPM driver");
+>-- 
+>2.45.2
+>
+>
 
 
