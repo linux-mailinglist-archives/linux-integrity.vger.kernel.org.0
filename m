@@ -1,110 +1,130 @@
-Return-Path: <linux-integrity+bounces-6138-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6139-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6142AAAB9D7
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 09:05:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 368F0AABB8F
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 09:43:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B4FB1C25716
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 07:00:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ED8A3B3DF0
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 May 2025 07:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC75827F19D;
-	Tue,  6 May 2025 04:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C55F127FD5A;
+	Tue,  6 May 2025 05:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fcxpy9O5"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2ADD2F417C;
-	Tue,  6 May 2025 03:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04FA278E59
+	for <linux-integrity@vger.kernel.org>; Tue,  6 May 2025 05:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746501589; cv=none; b=b4HuT9lSSX7uEyFWgxkQ5EeBIhYdLfsBfI8TgnoyHBOaC+w2yKrZN2D/Hgu/buU/0yYUK3ctDgLxX2YGfb1ZVXttACoL31Dfkx/ltg+5l/ZTYwZIy7UCrbuVq0aiizWv4vYqck5S4PJgR5Nt2TuGunODJMKN9NVqVzRQCDH7DF8=
+	t=1746510560; cv=none; b=GtWlOIHBWwdMEMnJcnidYchVQQPz2B5Lwj5InUYVi+hgJbvwan6FG5Rmc4+3eOK3HPskPXxCMZAIX1FmdW4dZi70nxqKFTr6HOH0+MNrnDLaDfGdoOGwDv6flfDNZS/HqxdMTavEHgFq26lDCZ9wGja0D0itiiAwdKU+vBBAL7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746501589; c=relaxed/simple;
-	bh=zqF6QTBzffxsZMW0fO1fWtYNslKqS3mmFRaKT3EOsI0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GZ1SG8jTVxK9zRfAEh+8nwhaI3kkn9VUQpcxoQbBTx5L+Rfr7pgqrAJvijAI2cp84XDYjEHdy9P1dl3UCEb2cLh0xxBp/jw4AG1hsDsF+1cQb5NbKylxbBfIMt15e7/8qeJU+leTPNndUhR5OUVi9mqKKKluds+XZhMWJcNpbs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.40.54.178])
-	by gateway (Coremail) with SMTP id _____8CxeXHOfxloz0rWAA--.23435S3;
-	Tue, 06 May 2025 11:19:42 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.40.54.178])
-	by front1 (Coremail) with SMTP id qMiowMDxvhvLfxloNri1AA--.14266S2;
-	Tue, 06 May 2025 11:19:39 +0800 (CST)
-From: Qunqin Zhao <zhaoqunqin@loongson.cn>
-To: lee@kernel.org,
-	herbert@gondor.apana.org.au,
-	davem@davemloft.net,
-	peterhuewe@gmx.de,
-	jarkko@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-crypto@vger.kernel.org,
-	jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	pmenzel@molgen.mpg.de,
-	Qunqin Zhao <zhaoqunqin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH v9 5/5] MAINTAINERS: Add tpm_loongson.c to LOONGSON CRYPTO DRIVER entry
-Date: Tue,  6 May 2025 11:20:53 +0800
-Message-ID: <20250506032053.11147-1-zhaoqunqin@loongson.cn>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1746510560; c=relaxed/simple;
+	bh=lthuNe7tw5ZqdJOqbZ9IJt0SeCYYGcz7hyE+08AeCw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=prLMz6L6gqJtmHFxXne5Ss2HFsR5VeZcSqkiFoAtkgSlry99q7/9LvvVGQA3m9B9QdZ6Pcow1VvGXuLVjQUe/PNotKONSCboPrPxnCUFaIt8rx6Nm7SbfEKxabZEVgWWb0OCQJcgQ1jDUKOAMqM92oKyk5dHQO5e2vNAaMMFDjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fcxpy9O5; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1746510557;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ef8W+vMYwBS9RnWnXRE7fKcNBov/mCBwOP6v8SZB5sY=;
+	b=fcxpy9O5UDlQ8VGs2fRFcug5ViNF6aIdXsKAdGozBHei1G47dflglBqpT8fRFOjzyWOdVS
+	SEviHoVQs06WZ38pzlCqp3q9px6HR9UQpYoskbFj0mt2K1YymRcUwtk8DTwFXxETMKNtT/
+	PMc9X8NtXBbvSkMD/lZCig0eDDuVaNs=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-63-KDeYyDfQNRafeLfXFymNcw-1; Tue,
+ 06 May 2025 01:49:13 -0400
+X-MC-Unique: KDeYyDfQNRafeLfXFymNcw-1
+X-Mimecast-MFC-AGG-ID: KDeYyDfQNRafeLfXFymNcw_1746510549
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ADDE31800EC9;
+	Tue,  6 May 2025 05:49:08 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.8])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 729071956094;
+	Tue,  6 May 2025 05:49:05 +0000 (UTC)
+Date: Tue, 6 May 2025 13:49:01 +0800
+From: Baoquan He <bhe@redhat.com>
+To: steven chen <chenste@linux.microsoft.com>
+Cc: zohar@linux.ibm.com, stefanb@linux.ibm.com,
+	roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+	eric.snowberg@oracle.com, ebiederm@xmission.com,
+	paul@paul-moore.com, code@tyhicks.com, bauermann@kolabnow.com,
+	linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+	James.Bottomley@hansenpartnership.com, vgoyal@redhat.com,
+	dyoung@redhat.com
+Subject: Re: [PATCH v13 0/9] ima: kexec: measure events between kexec load
+ and execute
+Message-ID: <aBmizZATrxhXbWyE@MiWiFi-R3L-srv>
+References: <20250421222516.9830-1-chenste@linux.microsoft.com>
+ <aApMnEl1Xzarmimn@fedora>
+ <7337e27f-cc54-4c51-91d8-11d875baee49@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDxvhvLfxloNri1AA--.14266S2
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7GFyftFyrAF48Jr1rCw1xJFc_yoW3Kwb_Ca
-	y2q397Wr18GF1Ig34SvF97Za1YqrW3X3Wxu3WDt34fX34qyr9xtrnrAF4kK3W3urW8GFZx
-	uayxG3Z3Ar1fZosvyTuYvTs0mTUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY6Fy7
-	McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
-	1lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-	Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-	cVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
-	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0_WrPUUUUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7337e27f-cc54-4c51-91d8-11d875baee49@linux.microsoft.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-Changes to Loongson TPM driver would be best reviewed by the Loongson
-crypto driver maintainers.
+On 05/02/25 at 09:25am, steven chen wrote:
+> On 4/24/2025 7:37 AM, Baoquan He wrote:
+> > Hi Steven,
+> > 
+> > Could you test below code and post a formal patch to not copy
+> > measurement list buffer to kdump kernel? Below log is just for your
+> > reference, please feel free to modify or rephrase.
+> > 
+> > ===
+> > Kdump kernel doesn't need IMA to do integrity measurement.
+> > Hence the measurement list in 1st kernel doesn't need to be copied to
+> > kdump kenrel.
+> > 
+> > Here skip allocating buffer for measurement list copying if loading
+> > kdump kernel. Then there won't be the later handling related to
+> > ima_kexec_buffer.
+> > ===
+> > 
+> > diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> > index 38cb2500f4c3..7362f68f2d8b 100644
+> > --- a/security/integrity/ima/ima_kexec.c
+> > +++ b/security/integrity/ima/ima_kexec.c
+> > @@ -146,6 +146,9 @@ void ima_add_kexec_buffer(struct kimage *image)
+> >   	void *kexec_buffer = NULL;
+> >   	int ret;
+> > +	if (image->type == KEXEC_TYPE_CRASH)
+> > +		return;
+> > +
+> >   	/*
+> >   	 * Reserve extra memory for measurements added during kexec.
+> >   	 */
+> > 
+> Hi Baoquan,
+> 
+> I tested the kernel with above change. Normal soft reboot works fine.
+> 
+> I will post the patch for review.
 
-Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v8-v9: None 
-v7: Added tag from Jarkko and Huacai
-v6: "tpm_lsse.c" -> "tpm_loongson"
-v4-v5: None
-
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2d696671e..acbb127f3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13935,6 +13935,7 @@ LOONGSON CRYPTO DRIVER
- M:	Qunqin Zhao <zhaoqunqin@loongson.cn>
- L:	linux-crypto@vger.kernel.org
- S:	Maintained
-+F:	drivers/char/tpm/tpm_loongson.c
- F:	drivers/crypto/loongson/
- F:	drivers/mfd/loongson-se.c
- F:	include/linux/mfd/loongson-se.h
--- 
-2.45.2
+Just come back from Labor Day public holiday. I went through the code
+flow, the code should be fine. I will test it by checking the setup_data
+if IMA data is excluded in kdump case.
 
 
