@@ -1,162 +1,167 @@
-Return-Path: <linux-integrity+bounces-6157-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6158-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8429BAADB7D
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 11:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 39565AAE56A
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 17:50:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F23E14E117D
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 09:32:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A4FF5250E7
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 15:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA361F417E;
-	Wed,  7 May 2025 09:32:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600EE28B7FE;
+	Wed,  7 May 2025 15:49:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XTR6XmVp"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FU7Og6M1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895C71F2BAB
-	for <linux-integrity@vger.kernel.org>; Wed,  7 May 2025 09:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE4528B7FB;
+	Wed,  7 May 2025 15:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746610356; cv=none; b=ZuGRIKmaHfNuAwcnCPXqJkKdS9fot/mRKviS2aR4Xejk5HIFzMamlFqAwS1Ta6UcbYw9UkCMBSPC5jyP9e450ohvfRNmNkGqr+5H6qmlJYO9Zk2/QpYuNq6LCyjRj/dEHzXRRau+gY+EPjuqmsEAwaZjMLnOUXcGdvSG2YCigy8=
+	t=1746632954; cv=none; b=MQWjbgICco4SZVGeQ4wK894lS7f6o5NePpoofS3BUSlNPQmRh7fMzvWtPyvy0qxUMsAxYh85YoAfBHCD01gmfyLEQxwkctfTKbTZSILm1/BmvSryONS98KdhkhJKmIN4FnVhuY2n/qKQrsubR+fJ+XAx7U+JSW0HcVHEmWz5Z/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746610356; c=relaxed/simple;
-	bh=+dcoGM/MPnQ7gR2bwDmEC4W4glqMT6D4Z27/zHMAu6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=az3iSMnsrsdJzfVmy2a0dsgGWBhX6Fj5r5b0nzqpUUNyCblTbKcCKXcrHyAnx0fx9FU5MdINkXYGjnvvjgkYQr6M8BMSI78Uo8uci8UQUQuAeBrBtci6lBfjVkD77SJR6D00oH06ttgwiHaujBLJ5Jrw0mk6VTICZSy3Pb5r1LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XTR6XmVp; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746610353;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=89g+uUbAmI4s1rHApPcoGavOskeIK/6Orkxfvy6zQ+0=;
-	b=XTR6XmVpWa4wZxSIc0nJI2ItHsT5JkZXjc92gyUPWAJ6ptdKrhEDqFKC/7KHet4l0HxFga
-	PlExHDks005c5vYQAfzAZwWplMPwQSGZpKvllUs4wTg2Ep2WnNBVx03OGznWfq45yjVsDB
-	jMCULBqfPjV1HnJpiUZCfS7SLvUiBuE=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636-jnD_1aKBOg6IveRu0Za5ig-1; Wed, 07 May 2025 05:32:32 -0400
-X-MC-Unique: jnD_1aKBOg6IveRu0Za5ig-1
-X-Mimecast-MFC-AGG-ID: jnD_1aKBOg6IveRu0Za5ig_1746610351
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-ac3db5469fbso540980666b.0
-        for <linux-integrity@vger.kernel.org>; Wed, 07 May 2025 02:32:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746610351; x=1747215151;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=89g+uUbAmI4s1rHApPcoGavOskeIK/6Orkxfvy6zQ+0=;
-        b=kle5FHzN77twoNFrmwRUKxUVqLZlb9z7T7JzWFVjTHRVnjESYnQsj8GiZefrYiXrLV
-         ZNnv+wB9cEpLwDpRzHjsO85wUc36hXXtg7//0UDHO0bMc0P31PxQEWEuTvSB97Cm9h2p
-         8JO8S18yMNEaPeVaHm9dByywgVcudLsPCozvH2PtgcCuFSQYshXSpX9M0zzjtuYy6BHl
-         HqL1PboY50x7WS6qGmuiSlt36tFyczMpWzB5jIXVqFWWRxgKdNbWkrG3HVD994rlYJcD
-         quKPwO69RwCaCAqNZ9hbqDHVD+xplaEVHT3J2AGvdpAjPIB84OnWWDE9AuYlv/rT0sVs
-         DGvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXXgb0DnqXHbx3O6DmE5DjavHVTjtku55egbstUWbQVhwwYtXCJdefKA8TX1qhDvGNOYcz23rYeBIG2ckgYbYI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/uc+jt0x5agmDYguGiaPdFolGTxGZtrsL7Wwer9FIqLPnDsah
-	/jJJN0BDXWf21/wccvSvPi2YrY1w8j+ziGt0/CkM8vkF1e7+O9ZZOIXUsx8RNQZqqSppmY0pIMq
-	ahL9JECQQ/oCPBaXPp1mlNutnP7oqSWoZoRY5vBkXiuUHmYxoISuRDGvIQGPQYJq/vw==
-X-Gm-Gg: ASbGnctc8iReU2o7/tMmrAxo2A02srkazMaHTWx9meJSM8zPQ2glMR8bjwjUyuAHbVP
-	+yDmLyhUuEGuNjl4HB/c2f71IK9Nw1fAUTn6V/zAo+QH0IZQB/O6RfyMpPLgxwKT2bQkncHEK64
-	eyP0VcqQRSjUlU+MqAysuCwCObEfCldfY8KnHUa3xG6pblYqgVvjwiztNZv6Fx2CwntFXAgY48z
-	FSBZgFY0f3HLxeAvXY7cfP4D/f8Rka4422VaQy5Mg1PPf8UFvwm9jE61p6hBp/Szk/WQ+wVLfSQ
-	+gkmBhI9/SLgF9rP
-X-Received: by 2002:a17:906:d54d:b0:aca:9615:3c90 with SMTP id a640c23a62f3a-ad1e8d0ba2bmr267001166b.52.1746610350921;
-        Wed, 07 May 2025 02:32:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFB9GITuMuYoSYN8HyavQFo2/J56H0NB7QS0JaWBQv+IFH3p+ygglDzNeMYFn+SDDKrajLukA==
-X-Received: by 2002:a17:906:d54d:b0:aca:9615:3c90 with SMTP id a640c23a62f3a-ad1e8d0ba2bmr266997766b.52.1746610350328;
-        Wed, 07 May 2025 02:32:30 -0700 (PDT)
-Received: from sgarzare-redhat ([193.207.165.32])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad189147329sm869562066b.1.2025.05.07.02.32.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 May 2025 02:32:29 -0700 (PDT)
-Date: Wed, 7 May 2025 11:32:10 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net, 
-	peterhuewe@gmx.de, jarkko@kernel.org, linux-kernel@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca, 
-	linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de, Yinggang Gu <guyinggang@loongson.cn>, 
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v9 4/5] tpm: Add a driver for Loongson TPM device
-Message-ID: <CAGxU2F6m2=+07sUoy4PKVs1vMR6Yr--pgkOG3SEGg8gi=HRf+g@mail.gmail.com>
-References: <20250506031947.11130-1-zhaoqunqin@loongson.cn>
- <20250506031947.11130-5-zhaoqunqin@loongson.cn>
- <2nuadbg5awe6gvagxg7t5ewvxsbmiq4qrcrycvnrmt2etzq2ke@6oyzavctwrma>
- <0b148f09-d20d-b6be-d31b-6c8a553658c9@loongson.cn>
+	s=arc-20240116; t=1746632954; c=relaxed/simple;
+	bh=xZnKGEo9gN2J5vqHkqMj2J3kGI6Zq/gW1MHVVy4ApYw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jO3WghBU/z1Oeq5wCEB3CJDiczkHZN/clQ7tw4N4otA+gYC1kSdYu4sY3iOIwZhbsLFsDuvyGVr01r+1Ncj2zRckeDBsSoE0q/bpPS7/KiIZZ3SWzj1NhIbTBvFctA0iyj3aeq3GrKV7ybclJ7BVBH8qLt9FzYjwd70eVoBFPDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FU7Og6M1; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 547AWSCu016688;
+	Wed, 7 May 2025 15:48:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=rxNYkF
+	WtHwpUdB6qVUY8sUHqnKrrwew+/mCMWWdHo04=; b=FU7Og6M1cbvnL7VjCmQNIM
+	B+6cJQYZ6H9MPhMEWpe2cHNrqxyAwuhQPqpuqGqXYwK40Q7ZU5NoPSJ5v1tvLyzH
+	bGbDqm3BljWPNXEdrsuSLnc+hRlP2Xl5mQQpkDqyvS1cbQGlooosfeG78AjxgTbA
+	LOd0bn45JRXUYDGBCAhdT5NJqqReHDyGzw4HluiBXNTJ9h5ZVfC0fPPMMEBamKXH
+	I5txNMLh+ooRXMRrY58MwtUEnDp27yX7zc3MLH62sBmZLjaxOYNGJTPCKORf6ksx
+	g144BObN0Slnb52ST/2aWPPsgXzv2GLMC1fW/BPdBfBaXOuzCCfoUn4bdPs3Ew3Q
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46fvd0m3m5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 May 2025 15:48:56 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 547FdLwr031187;
+	Wed, 7 May 2025 15:48:55 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46fvd0m3m0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 May 2025 15:48:55 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 547Es3BY013765;
+	Wed, 7 May 2025 15:48:55 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 46e062h22v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 07 May 2025 15:48:55 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 547FmrYS24248944
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 7 May 2025 15:48:53 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 76C6758056;
+	Wed,  7 May 2025 15:48:53 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E3DDF58054;
+	Wed,  7 May 2025 15:48:46 +0000 (GMT)
+Received: from [9.39.20.214] (unknown [9.39.20.214])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  7 May 2025 15:48:46 +0000 (GMT)
+Message-ID: <e80c83a1-77db-452e-8a5d-d435e61bd544@linux.ibm.com>
+Date: Wed, 7 May 2025 21:18:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0b148f09-d20d-b6be-d31b-6c8a553658c9@loongson.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] powerpc/pseries: Correct secvar format representation
+ for static key management
+To: Andrew Donnellan <ajd@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, zohar@linux.ibm.com,
+        nayna@linux.ibm.com, linux-kernel@vger.kernel.org
+References: <20250430090350.30023-1-ssrish@linux.ibm.com>
+ <20250430090350.30023-2-ssrish@linux.ibm.com>
+ <87e1185273ce21e5fd69ff071a1be986c2a0301a.camel@linux.ibm.com>
+ <2b7145a2-1cfb-4b1a-929c-10a03747119e@linux.ibm.com>
+ <24106430db9693f580c3765206257677c10e4375.camel@linux.ibm.com>
+Content-Language: en-US
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+In-Reply-To: <24106430db9693f580c3765206257677c10e4375.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0n5xQSiBnbuu_XS3icD9NCdQqM7XK_al
+X-Proofpoint-GUID: 3_6RqbKZ8aCNXmUSTH6QTnv6Mad-dn-p
+X-Authority-Analysis: v=2.4 cv=LYc86ifi c=1 sm=1 tr=0 ts=681b80e8 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=1mVJ_uiqAAAA:8 a=Icq07P0Zc9DzbdNrBL8A:9 a=QEXdDO2ut3YA:10
+ a=h67g7WpEjx8dfGT80pje:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA3MDE0NyBTYWx0ZWRfXxxc3J+kuXBEW vDq3iyDNIp7Lkc9l1c+nvDqkLncWa25YVHUuE48n/g/AXgzqbqVO69RQ18/JN0g/MJQS6gTx5I1 sya3QVQphs/LevEM7OJpd41I5/3Z0u33DS5VTAFbzTU8j7RSE3I9ozCRKO5/YHSxHTvYhH5RvfI
+ 6DHEkWYYgktPeqMOmy9LFCa0D85sq39pq8xt3aJACxoPTu2MNcU2qGyxCTKYtuqDvhI8DBRb05S 6anCcgSDlDIQRFixpTXLxE9QUpmi/WkZjy2lRDobubqIGVF4SihgqwFPckaVlsV733SxUueIl+l dd420VYlRkV2XnUPycHa6uHOVqP+1Y/mG3BA5z+KbAKu1zIFOQanHofrVVdEj3+npAgLPTHGLt/
+ Dovdd6CzUtklrE6rFYuc0frWAbUKBiXvyryFo9qvn0fwWie4ntvP8LSn30AtE1eJ2WEdJOqn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-07_05,2025-05-06_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ impostorscore=0 priorityscore=1501 spamscore=0 clxscore=1015 phishscore=0
+ adultscore=0 bulkscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505070147
 
-On Wed, 7 May 2025 at 03:35, Qunqin Zhao <zhaoqunqin@loongson.cn> wrote:
+
+On 5/7/25 11:47 AM, Andrew Donnellan wrote:
+> On Wed, 2025-05-07 at 00:29 +0530, Srish Srinivasan wrote:
+>>>> +	rc = plpks_read_fw_var(&var);
+>>>> +	if (rc) {
+>>>> +		pr_info("Error %ld reading SB_VERSION from
+>>>> firmware\n", rc);
+>>> We need to check for -ENOENT, otherwise this message is going to be
+>>> printed every time you boot a machine in static mode.
+>> Yes, I agree with your concern. I just want to add that, as per my
+>> understanding, we need to check for both -ENOENT and -EPERM,
+>> as explained below:
+>>
+>> As per H_PKS_READ_OBJECT semantics described in the PAPR v10.60
+>> (https://files.openpower.foundation/s/XFgfMaqLMD5Bcm8),
+>>
+>> * If the object is not world readable, verify that the consumer
+>> password
+>> matches the stored value in the hypervisor. Else return H_AUTHORITY.
+>> * Verify if the object exists, else return H_NOT_FOUND.
+>> * Verify if the policy for the object is met, else return
+>> H_AUTHORITY.
+>>
+>> So, the hypervisor returns H_NOT_FOUND only for the authenticated
+>> consumer. For unauthenticated consumers, which is the case here,
+>> it would return H_AUTHORITY.
+> We expect SB_VERSION to always be world-readable, I think? In which
+> case it shouldn't return H_AUTHORITY / -EPERM, ever, and if it does
+> that's an error which should be handled as an error. Or am I
+> misinterpreting the spec here?
+
+Yes, SB_VERSION is world-readable and should not return H_AUTHORITY in 
+the case of dynamic key management mode. However, in
+the case of static key management mode, when SB_VERSION does not exist, 
+the hypervisor tries to authenticate the consumer. If the
+authentication is successful, H_NOT_FOUND is returned, else H_AUTHORITY 
+is returned. The intention behind authenticating the
+consumer when the object is not found is to ensure that a 
+non-authenticated consumer is unable to conclude on the absence of
+the object. Here, when the kernel tries to read the non-existent 
+SB_VERSION, it fails the authentication check and therefore,
+gets the H_AUTHORITY error code.
+
 >
 >
-> 在 2025/5/6 下午10:13, Stefano Garzarella 写道:
-> > On Tue, May 06, 2025 at 11:19:46AM +0800, Qunqin Zhao wrote:
-> >> Loongson Security Engine supports random number generation, hash,
-> >> symmetric encryption and asymmetric encryption. Based on these
-> >> encryption functions, TPM2 have been implemented in the Loongson
-> >> Security Engine firmware. This driver is responsible for copying data
-> >> into the memory visible to the firmware and receiving data from the
-> >> firmware.
-> >>
-> >> Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
-> >> Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
-> >> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
-> >> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-> >> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >> ---
-> >> v9: "tpm_loongson_driver" --> "tpm_loongson"
-> >>    "depends on CRYPTO_DEV_LOONGSON_SE" --> "depends on MFD_LOONGSON_SE"
-> >>
-> ...
-> >> +static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t
-> >> count)
-> >> +{
-> >> +    struct loongson_se_engine *tpm_engine =
-> >> dev_get_drvdata(&chip->dev);
-> >> +    struct tpm_loongson_cmd *cmd_ret = tpm_engine->command_ret;
-> >> +
-> >> +    memcpy(buf, tpm_engine->data_buffer, cmd_ret->data_len);
-> >
-> > Should we limit the memcpy to `count`?
-> >
-> > I mean, can happen that `count` is less than `cmd_ret->data_len`?
->
-> Hi, Stefan, thanks for your comment.
->
-> Firmware ensures "cmd_ret->data_len" will be less than TPM_BUFSIZE,  so
-> this would never happen.
-
-I see, but I meant the opposite, if `count` (size of `buf`) is less than 
-`cmd_ret->data_len`.
-
-I mean, should we add something like this:
-
-	if (count < cmd_ret->data_len) {
-		return -EIO;
-	}
-
-I see we do this in other drivers as well (e.g. crb, ftpm), so I'm 
-trying to understand why here is not the case.
-
-Thanks,
-Stefano
-
 
