@@ -1,125 +1,137 @@
-Return-Path: <linux-integrity+bounces-6152-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6153-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5501AAD2D5
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 03:35:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 482AFAAD36F
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 04:42:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC02298552A
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 01:35:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D915B7B4453
+	for <lists+linux-integrity@lfdr.de>; Wed,  7 May 2025 02:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA6761494DB;
-	Wed,  7 May 2025 01:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDDE4B1E5F;
+	Wed,  7 May 2025 02:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IObWT5zk"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8362E13AD38;
-	Wed,  7 May 2025 01:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7459C19C546
+	for <linux-integrity@vger.kernel.org>; Wed,  7 May 2025 02:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746581747; cv=none; b=tGB5C/QZtjanPFBKOCZYmRU+CwT3cuIelwEVvGn1A04PrRStTdQ/wKHLj7ffmE1/nTA9BUjJU5cJbGEykEOoewVfB6Qi7N6s6ZKCBWhSV5Wnd7vhwm46UUYsI+sgFi2a0zFj3ELs6iN8M0VkhrAWNYlr3LmGbrDsW8QDmKUY2sI=
+	t=1746585728; cv=none; b=AKsugM+xbuPXkIKJxqIC9bxIQE7vxs3Uhf+s9zQJrrpF7eps9g59pQ42GTiWbuz/aG1Eh9tDg/Sxog9IymTJnjQ2V1MCad7cMwO1XBKnL/HaKZsELgYdm8E9nIHgsvtA55TJrAfOipFju/gXw6ZVc5BfFYBiCDeq5+POZMn4JSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746581747; c=relaxed/simple;
-	bh=zgD0KtQ6+c4Xt135Y5OUFoybXsZd/9SqcHvNmny7ARQ=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=hJXv2hcSzaJxvZWsvReGUDfuD4Biz+xw4lEEOYCZlcw+vjo5d5goR9iX0Us2LmUa3xtAfLbNCLIN0poxEwjNSsouk4Y5N4ynO9ztOaYcUhTo4rMa6ryM1/2awnyo9+cEgOeJ57WqR67SKBwToyzRPS56kEKfVy/NxxBs8kkoQpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.164])
-	by gateway (Coremail) with SMTP id _____8Axz3PruBpoE4_XAA--.25331S3;
-	Wed, 07 May 2025 09:35:39 +0800 (CST)
-Received: from [10.20.42.164] (unknown [10.20.42.164])
-	by front1 (Coremail) with SMTP id qMiowMAxTsXduBpoXMO4AA--.49926S2;
-	Wed, 07 May 2025 09:35:28 +0800 (CST)
-Subject: Re: [PATCH v9 4/5] tpm: Add a driver for Loongson TPM device
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net,
- peterhuewe@gmx.de, jarkko@kernel.org, linux-kernel@vger.kernel.org,
- loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca,
- linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de,
- Yinggang Gu <guyinggang@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>
-References: <20250506031947.11130-1-zhaoqunqin@loongson.cn>
- <20250506031947.11130-5-zhaoqunqin@loongson.cn>
- <2nuadbg5awe6gvagxg7t5ewvxsbmiq4qrcrycvnrmt2etzq2ke@6oyzavctwrma>
-From: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Message-ID: <0b148f09-d20d-b6be-d31b-6c8a553658c9@loongson.cn>
-Date: Wed, 7 May 2025 09:33:32 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1746585728; c=relaxed/simple;
+	bh=6etL97QEsqJN3YZrjYchxkPsyMZOXMw61jInfbT3Xw0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rKx9Tp1OZBTdQfHVOtmkqd5RjSEPc1bXpoq911JzOhztbdqW88a4OVZOVU5H3I43jU49S6Sf/UUKf7fpMS7Mtzd3we+Pm3EV3IwOBJbohObLTxywfVbP0b2E+ev0b0dRRme2Uq9Y01NzSlfSOojm+sM825qnv1riAU3oUD9ukvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IObWT5zk; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <87e475ca-c4db-4fe4-94df-4e29f779a383@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1746585713;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jR9JKWCrpFIfn9jOgzBStj0mD3xOCH22odNml15ltfQ=;
+	b=IObWT5zkKq5EkbWwVKTGdfdlbql9PSombG1SPX7hWaaxp/EZwXp2Nl3674HN9qu9nFmHVS
+	RgIulIF+wOLmuBVb0Sv6jMyjKYDRkt7uDwC8waWe5ZIGzGz9EYnlcH9IWiJyaih6994gMd
+	OrHpRZDB6IIrblHWYWCjsyBVZ6D71g8=
+Date: Wed, 7 May 2025 10:41:46 +0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <2nuadbg5awe6gvagxg7t5ewvxsbmiq4qrcrycvnrmt2etzq2ke@6oyzavctwrma>
+Subject: Re: [PATCH v9 5/5] MAINTAINERS: Add tpm_loongson.c to LOONGSON CRYPTO
+ DRIVER entry
+To: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: lee@kernel.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ peterhuewe@gmx.de, jarkko@kernel.org, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-crypto@vger.kernel.org, jgg@ziepe.ca,
+ linux-integrity@vger.kernel.org, pmenzel@molgen.mpg.de,
+ Huacai Chen <chenhuacai@loongson.cn>
+References: <20250506032053.11147-1-zhaoqunqin@loongson.cn>
+ <a03b4963-55aa-4a75-b795-1e8f0db7ec89@linux.dev>
+ <00196f77-1060-fe67-3e6b-6721092207d6@loongson.cn>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yanteng Si <si.yanteng@linux.dev>
+In-Reply-To: <00196f77-1060-fe67-3e6b-6721092207d6@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:qMiowMAxTsXduBpoXMO4AA--.49926S2
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7uw4DJr43GF43AFyfWrW3urX_yoW8Xw4DpF
-	WfCa1UGFs8Kr18CwsrJrWfZry3ZrZ5XFWDXFWDA347Crn8Awn5J34UZr4vv3WDAF48Gw1I
-	vFWI9rWF93Z8uFgCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
-	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-	I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
-	x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r
-	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-	0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+X-Migadu-Flow: FLOW_OUT
 
 
-在 2025/5/6 下午10:13, Stefano Garzarella 写道:
-> On Tue, May 06, 2025 at 11:19:46AM +0800, Qunqin Zhao wrote:
->> Loongson Security Engine supports random number generation, hash,
->> symmetric encryption and asymmetric encryption. Based on these
->> encryption functions, TPM2 have been implemented in the Loongson
->> Security Engine firmware. This driver is responsible for copying data
->> into the memory visible to the firmware and receiving data from the
->> firmware.
+在 5/6/25 8:14 PM, Qunqin Zhao 写道:
+>
+> 在 2025/5/6 下午5:03, Yanteng Si 写道:
+>> 在 5/6/25 11:20 AM, Qunqin Zhao 写道:
+>>> Changes to Loongson TPM driver would be best reviewed by the Loongson
+>>> crypto driver maintainers.
+>>>
+>>> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+>>> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+>>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>> ---
+>>> v8-v9: None
+>>> v7: Added tag from Jarkko and Huacai
+>>> v6: "tpm_lsse.c" -> "tpm_loongson"
+>>> v4-v5: None
+>>>
+>>>   MAINTAINERS | 1 +
+>>>   1 file changed, 1 insertion(+)
+>> I'm just curious. Why is this patch kept outside the tmp_loongson 
+>> patch set?
+>
+> Hi, Yanteng. Thanks for your reply.
+>
+>
+> When sending this patch, git send-email prompted "too many commands"
+>
+> and disconnected from the server. Then I sent this patch separately.
+>
+> Even after setting sendemail.smtpBatchSize to 100, I still have this 
+> problem.
+
+>
+> Now I am trying to find  Loongson SMTP server administrator to solve it.
+
+This is the best solution.
+
+
+>
+> Have you ever encountered this kind of problem?
+
+This seems to be a feature of the Loongson mailbox. I've observed that Yang
+
+Tiezhu also has a patch that is outside of the patch set. An interesting 
+pattern
+
+is that there are only five emails in one patch set.
+
+
+Thanks,
+
+Yanteng
+
+
+
+>
+>
+> BR, Qunqin.
+>
 >>
->> Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
->> Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
->> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
->> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
->> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->> ---
->> v9: "tpm_loongson_driver" --> "tpm_loongson"
->>    "depends on CRYPTO_DEV_LOONGSON_SE" --> "depends on MFD_LOONGSON_SE"
+>> <https://lore.kernel.org/loongarch/20250506031947.11130-1-zhaoqunqin@loongson.cn/T/#mf09225c286a8e2b92a677720afafb9e20be57a18> 
 >>
-...
->> +static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t 
->> count)
->> +{
->> +    struct loongson_se_engine *tpm_engine = 
->> dev_get_drvdata(&chip->dev);
->> +    struct tpm_loongson_cmd *cmd_ret = tpm_engine->command_ret;
->> +
->> +    memcpy(buf, tpm_engine->data_buffer, cmd_ret->data_len);
+>>
+>> Thanks,
+>> Yanteng
 >
-> Should we limit the memcpy to `count`?
->
-> I mean, can happen that `count` is less than `cmd_ret->data_len`?
-
-Hi, Stefan, thanks for your comment.
-
-Firmware ensures "cmd_ret->data_len" will be less than TPM_BUFSIZE,  so 
-this would never happen.
-
-BR, Qunqin.
-
->
-> Thanks,
-> Stefano
-
 
