@@ -1,232 +1,190 @@
-Return-Path: <linux-integrity+bounces-6164-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6165-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9397BAB0A30
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 May 2025 08:00:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59CB6AB0DF0
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 May 2025 10:58:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A02747A2A0B
-	for <lists+linux-integrity@lfdr.de>; Fri,  9 May 2025 05:59:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 738B01C042BE
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 May 2025 08:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C89B211A0B;
-	Fri,  9 May 2025 06:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B7E2749D5;
+	Fri,  9 May 2025 08:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MAutdXiT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TrilwuXK"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1D9B11CBA
-	for <linux-integrity@vger.kernel.org>; Fri,  9 May 2025 06:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700C42750FC
+	for <linux-integrity@vger.kernel.org>; Fri,  9 May 2025 08:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746770435; cv=none; b=RrVEJGSOoVaFmVKhZxe/j/WrBvai25g55trV7FEEX3si8bzvck1FHp2ApYjGkQ2QdY/qJPtBUddWFfMRxXrLZY7l7nBgXqyKzjsQOnP6o6+nCB1abS4T39jF0F3vYLN0O6c1FC/5Ism+oxTSJ/iMrRgfzoGIIH07rJEnbl7DiHw=
+	t=1746781050; cv=none; b=mOeV+eAB7e/8biB637aKLCzmnXQ4CGU3Reh0ZIetdwbXx2HEPYGKeiNXKP5v06mbxEjoisWYi8weWw0cLUm+az5ptZfV/gJclRTQWQSotNPpEme7vDYBAJM86ydRcTUK8q3hKq2nkGkSaxsvL6V+BZrVBXMdaBSCUYxLFv1Z+0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746770435; c=relaxed/simple;
-	bh=ATQaYsuwstvnBKMIiFvAj8OlhZ4+8deoHwUnIarQYrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mIpxYH9i8jLTfsH7SIyIxJirsx9zZyvDYfask+DyVIokKoIL/7J40Gyly+70gwyXoP8/0HhID1eSo7JYxaSU+1zpeRU7oOMc9qt01WxuEchMuKaWPRF/fWPF6knxb3df1qd1QecQG61qCjyEj9fT1BBvYDab1u7sFYf1zI677f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MAutdXiT; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1746781050; c=relaxed/simple;
+	bh=hxfm1/bpj4A+7xki16WisjavPmtck8sx/M9OaVrjQjg=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=MlGNzuI5YufUXtGlHQhvdLo1sWeWgNOeIX6Toh1GiHpIqm53WzIoO8s09dqwxpt1w+Ng5XZBn+701Q4PA5IKsldlY8l/IcvqgOncbJk8nGo+NWQhu4EaeSIacE8TJP/kcHstsjVGIx2KdoulM0JIphYgGj+xE0dd1ni3FAbFjVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TrilwuXK; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1746770431;
+	s=mimecast20190719; t=1746781046;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2+to1I211iC3afEaRgF5+2vQotsbE1LgjowPA3s1xo8=;
-	b=MAutdXiTsQYjbJKAYWY0EeouRkff2pgKfPhC+yRPJOtkZMlDCIQPllL7EOlogrF8Qp7pbl
-	RMO7dBSI3nrm8pEJC3xgdGmbWB3b9aJ6VVPc02PbNV2m72ttUb470+PA2okBk8cEbh0xCO
-	t2wTGTue8ewIiIkn/U1lcs+Cl+4f5pM=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KczM2UBQW66xcP870XQKZDwDetPPkSEynH8wmBTSFuM=;
+	b=TrilwuXKv7jOuUGaxANxd+ndeM+VIVL+9PuN8LqgZRxg5eaknkpOZG6lPGL/nDkPtcMC3v
+	cFnzxNWUDCR5VygyL5qjqy/ti+WddVk9JOmZLxNSq+UWCUiPxDZXqC4OxlsOczsSBylNtP
+	X4rcG9YW22f9HDLD3nXX9TP8pTrGgHo=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-641-WuMEQjxLOeOLb4mIGjJvxg-1; Fri, 09 May 2025 02:00:30 -0400
-X-MC-Unique: WuMEQjxLOeOLb4mIGjJvxg-1
-X-Mimecast-MFC-AGG-ID: WuMEQjxLOeOLb4mIGjJvxg_1746770429
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-b20755ac243so967861a12.1
-        for <linux-integrity@vger.kernel.org>; Thu, 08 May 2025 23:00:29 -0700 (PDT)
+ us-mta-533-mZFVP1l0NmK0CgcVoi5ICQ-1; Fri, 09 May 2025 04:57:25 -0400
+X-MC-Unique: mZFVP1l0NmK0CgcVoi5ICQ-1
+X-Mimecast-MFC-AGG-ID: mZFVP1l0NmK0CgcVoi5ICQ_1746781044
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-ad225698c20so25367866b.3
+        for <linux-integrity@vger.kernel.org>; Fri, 09 May 2025 01:57:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746770429; x=1747375229;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+to1I211iC3afEaRgF5+2vQotsbE1LgjowPA3s1xo8=;
-        b=K5oYHx4qkNLFRoUDkXme4rjPheMsbyvJaOSmsx23sJQerCrf3JcrGWjXQWzQBPuQPY
-         XBuaicSbx9Ca5Mc9zJeNEUnXJz3qnDRoTeMDG3CD37NqY5WDDr7ZEOpVHqSeiB6ZZK8V
-         OuH9D1cM4PLgM9vM60MF801fb/scnbvulBWPsT8znY/VDTsVlc8buP/y8kxdjqEhunrb
-         AruVekZcrAnHHbPV9Q5aQWIsgsxyJHIyoyu/S5tGg5gQNwqPpniB1KTzTS7rYpTTK1i8
-         S057WJ9+KjT2BBgrKxKDNW0ZHx0SrMrDMCPDa4sPyB/8LYpuFgttTHDt8jHEBWzELnMB
-         DNJg==
-X-Forwarded-Encrypted: i=1; AJvYcCWSr+ym+JLuLTJoOglQNp30JHi9P288C79FxCivw65OZNzcqkuUy7rYtj/SifEVqIXzyo0npfLAx/VM8NCoqhg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjWxHwFQM/YFTS3n4RGnDXoV6Xtp7Df5zVWHaxcYKn0O+YSmob
-	K9t+PqEvZeimwTxxAHZRmNa7nUtrpUMf4ioQqb4UQJgkjWeI013T4dzP9BCkbcCy4jzbpdayJ4f
-	fCp6tpb0zBvKdSuG1+UNcgNmzJweALczlxD9/GN+U0gEVK0ggYKQ1bSOoQ1z3X7Z9gg==
-X-Gm-Gg: ASbGncv0g3ns9/TrWZwfo61hZTbRkbShjsz11SgP3PobJCCHnYbdjilRMZKumbliGSl
-	bcfAQIfXrxpqgtycudCMcP2cy0BRUhy2BF2Wb6lLG8K8Wfmx4OP1wfg4ZikzWw1ZgMGAzqXCrsY
-	Oxs8gGnJbyFOg1osnEGagIlJSv15+vkuzkVmHJCgwI/lfreVf/qeuP+9B1v9wfrVG3D9a9OPYP8
-	nzItCYi2vVcUsFWUFPc80JALcDeg68kMXfHugYzA3AyyohVIoSN51Z8fTlDQFNc/bZLNFBbtCgG
-	GB8=
-X-Received: by 2002:a05:6a21:b8b:b0:1f3:1ba1:266a with SMTP id adf61e73a8af0-215ab2e72b6mr2947517637.0.1746770428681;
-        Thu, 08 May 2025 23:00:28 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFUdYKYbaeIT7SaXV2OeE2x2TbifmrjM8mSWIwSJL/AtvMzlyxWFF0/of7HSQd5+A1u/6HKyg==
-X-Received: by 2002:a05:6a21:b8b:b0:1f3:1ba1:266a with SMTP id adf61e73a8af0-215ab2e72b6mr2947477637.0.1746770428239;
-        Thu, 08 May 2025 23:00:28 -0700 (PDT)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7423770447asm1008438b3a.32.2025.05.08.23.00.26
+        d=1e100.net; s=20230601; t=1746781044; x=1747385844;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KczM2UBQW66xcP870XQKZDwDetPPkSEynH8wmBTSFuM=;
+        b=UoSWrHRvU+dp5O1rv8Nr8uqsluXqVna4k0gSeJKLJIDBUSWPomrqEEKDG2tKXHvWxV
+         0oeRRB5/JAlek5M6W4e9AUdp/q57EnkvnNFhNGS1ggJn7omP5RDj2xtNGmlbt39iDjlj
+         6VsVbb1GRx02/qRFkBAyR9Owa5qrO10wEw5RbbG/i3XMFjVbsv+4xBVbFWGx7eIY/Beq
+         i8B4G57VQ3ZQYX0n5A2VBkabEjcXSMYhbGv2VRpyusUsZdVepd/6X/eGEQ1DulcM+i2J
+         N/zRZXgtsUvsS867e9T+XSl8963faVmzGuO4wSPoa3u2qq8vE06sM+zWLeDsNfJhElR6
+         sNNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6bszUFfyylKRZAslDt2cD8MbHhbvqLaRJtJB36Mxk/DZOMcQ7FabqcYa/Opl9UqHgTJ3/UYNM/wBh8HtaRL4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzea0daGoK2xkYfDbvBectrhS6p6XNfz+M5jOZIeY6hrOVPK5bD
+	E7XHOq50ln9OYigKXk3TevKikK301F4Gqqhu0s/UnkCJeznhdLzngfT/oDbbqiSa2MOLwzXJp5N
+	C+KeKc7GVFLQn5S1r6MCTsaDr+9o5GlRmNp6ueSFhBwhC9fAhAT7PLpauEkbWGr3CuA==
+X-Gm-Gg: ASbGncvIEDBmbB0w4HsY4pb6/fHrS6192VHvponaR8wu36MBC9VF/AXYXxFc4gw+35L
+	zW5V8bsJJMUCGMYvh2LizcW2XLyiqLWXvJSjS8WPDzMZcq4cmsY+jaIYlU/u8iIj/0Nefk88USl
+	/VAtQEsCoRY35dTOhP+aUnaniQDiIEhuUWdsAgRf6ysuQgqNRfFJMFmodgCFk21AAddk4zr5BSX
+	HeXPOPyreJ74MgzUeFwJum4g3C5aQoktZTiMXu8k6ZTPRCUaE9eqtDCH/Q6sKQTIFc050lHgffZ
+	D9WzBRkPwx6lkvwba92pHtQ5Vg==
+X-Received: by 2002:a17:906:6a22:b0:ad1:8d47:f5a1 with SMTP id a640c23a62f3a-ad2187d9ff9mr242885066b.0.1746781043711;
+        Fri, 09 May 2025 01:57:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGHDBevO7YDl8KglZ476gaG4KxHzTLxc7mg7e0L2pUNIVoWmz4WZr1HNz4n0w09X6zYeiH0HQ==
+X-Received: by 2002:a17:906:6a22:b0:ad1:8d47:f5a1 with SMTP id a640c23a62f3a-ad2187d9ff9mr242882866b.0.1746781042944;
+        Fri, 09 May 2025 01:57:22 -0700 (PDT)
+Received: from localhost.localdomain ([193.207.182.136])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fc9cc4f240sm1085791a12.33.2025.05.09.01.57.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 May 2025 23:00:27 -0700 (PDT)
-Date: Fri, 9 May 2025 13:59:44 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Baoquan He <bhe@redhat.com>, chenste@linux.microsoft.com, 
-	RuiRui Yang <ruyang@redhat.com>, linux-integrity@vger.kernel.org, kexec@lists.infradead.org
-Subject: Re: [RFC PATCH] ima: add a knob to make IMA be able to be disabled
-Message-ID: <qvv3tniawgb3rvqeuxzckj25xxkcr2tqbwnji5gmdg4x3ahdha@52hwfd36ttf7>
-References: <h3bjnvtded2hgbhya6ugb62mnlmkjpmifa6w6wwutfd3jq326r@lzpoun5pksev>
- <Z+0kRhCfsjdZ53rZ@MiWiFi-R3L-srv>
- <65057b5256a28c3416e6b90a143d741801e68b03.camel@linux.ibm.com>
- <Z/MrpIv9EWftPhbD@MiWiFi-R3L-srv>
- <02563b1e8b0000bedf94ded447a8372f21d4304a.camel@linux.ibm.com>
- <Z/Xero1B0OazLcHL@MiWiFi-R3L-srv>
- <db0f463cbf4ad9b9cf9f9a23c5869a751ad12bba.camel@linux.ibm.com>
- <Z/8ijFhIf1J6vbWM@MiWiFi-R3L-srv>
- <f75tvrcc6xhfwz5rbwh2ps34wt2odz4wq32vez7dsct732x4ik@sv6nyjqr2ykr>
- <80766b04cafd24a1d7171b8da03c822d86272f3c.camel@linux.ibm.com>
+        Fri, 09 May 2025 01:57:22 -0700 (PDT)
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	linux-integrity@vger.kernel.org,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	Stefano Garzarella <sgarzare@redhat.com>
+Subject: [PATCH v4 0/4] tpm: add support for sync send() and use it in ftpm and svsm drivers
+Date: Fri,  9 May 2025 10:57:09 +0200
+Message-ID: <20250509085713.76851-1-sgarzare@redhat.com>
+X-Mailer: git-send-email 2.49.0
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <80766b04cafd24a1d7171b8da03c822d86272f3c.camel@linux.ibm.com>
 
-On Tue, Apr 29, 2025 at 07:39:17AM -0400, Mimi Zohar wrote:
->On Mon, 2025-04-28 at 11:48 +0800, Coiby Xu wrote:
->> On Wed, Apr 16, 2025 at 11:22:52AM +0800, Baoquan He wrote:
->> > On 04/09/25 at 11:40am, Mimi Zohar wrote:
->> > > On Wed, 2025-04-09 at 10:42 +0800, Baoquan He wrote:
->> > ......snip..
->> > > > Thanks for confirming. I will consider how to fix it accordingly. Maybe
->> > > > after Steven's patches are merged. That would be great if the buffer
->> > > > allocating and storing can be skiped for kdump in Steven's patch. While
->> > > > I am worried that could disrupt the progress of Steven's patches.
->> > >
->> > > Agreed, let's get Steven's patch set upstreamed and then make the kdump
->> > > exceptions.
->> > >
->> > > - "ima: kexec: move IMA log copy from kexec load to execute" looks like it
->> > > isn't
->> > > copying the IMA measurement list records (kexec_post_load), but the memory for
->> > > the IMA measurement list is being allocated (ima_alloc_kexec_file_buf).
->> > >
->> > > - Do you really want to totally disable IMA for kdump or would disabling IMA-
->> > > measurement be sufficient?  Remember there's already an option to disable IMA-
->> > > appraisal.  Disabling just IMA-measurement would allow IMA-appraisal to
->> > > continue
->> > > to work.  Meaning based on policy the integrity of files - executables, kernel
->> > > image, etc - could still be verified.
->> > >
->> > > Without IMA-measurement:
->> > > - No adding records to the IMA measurement list
->> > > - No IMA measurement list pseudo securityfs files
->> > > - No extending the TPM
->> > >
->> > > With IMA-appraisal:
->> > > - Integrity verification of files based on keys, keyrings
->> > > - Loading keys
->>
->> Thanks for listing the impacts of disabling IMA measurement or
->> appraisal!
->>
->> kdump builds and loads its own initramfs as a cpio archive. After a
->> kernel crashes, the loaded initramfs will save the crashed kernel's
->> memory (vmcore) to specified location and then it will reboot the system
->> immediately. Since kdump merely copy files from existing fs into its
->> initramfs, I think at least majority of users don't need IMA for kdump.
->
->That's fine.
->
->> In fact, currently IMA-appraisal doesn't work for kdump because cpio
->> doesn't support xattr.
->
->Although CPIO doesn't support xattrs, tmpfs supports xattrs.
+This series is a follow-up to the discussion we had about whether or not
+to add send_recv() op in tpm_class_ops[1]. Much boilerplate code has
+already been removed by Jarkko with commit 980a573621ea ("tpm: Make
+chip->{status,cancel,req_canceled} opt"). With this series we try to
+avoid also the temporary buffers needed between send() and recv() for
+devices that do not support interrupts and provide a single operation
+to send the command and receive the response on the same buffer like
+tpm_ftpm_tee.
 
-Thanks for pointing it out! I thought tmpfs doesn't support xattrs
-because ima_policy=tcb excludes TMPFS_MAGIC. There are still many
-interesting questions for me to explore. For example, I don't understand
-how 1st kernel's initramfs is shown as ramfs (which doesn't support
-xattrs) but kdump intiramfs without the squashfs module is shown as
-tmpfs.
+The biggest advantage for this approach is with tpm_ftpm_tee where we
+remove the local buffer and extra memory copies. For tpm_svsm it does
+not change much since we continue to use the pre-allocated buffer,
+to avoid making an allocation for each command.
 
->I'm aware that some
->store the security xattr information in a file and write it out as xattrs.
+Introduce a new flag (TPM_CHIP_FLAG_SYNC) to support synchronous send().
+If that flag is set by the driver, tpm_try_transmit() will use the send()
+callback to send the command and receive the response on the same buffer
+synchronously. In that case send() return the number of bytes of the
+response on success, or -errno on failure.
 
-If the built initramfs as a CPIO file doesn't carry xattrs, the loaded
-initramfs still doesn't have xattrs. I just found the initramfs could
-opt to use squashfs or erofs which supports xattrs but currently it's
-hardcoded to disable xattrs. For example, recently the dracut erorfs
-module also follows squashfs to disable xattrs [1]. So in the near
-future, I don't expect xattrs to be supported in kdump.
+This series is based on "[PATCH v7 0/4] Enlightened vTPM support for SVSM
+on SEV-SNP" [2], which is currently merged in the tip tree and available
+in linux-next.
 
-[1] https://github.com/dracut-ng/dracut-ng/pull
+Thanks,
+Stefano
 
->
->> As for the issue of not properly updating the
->> security xattrs, I think in most of cases disabling IMA-appraisal in
->> kdump won't cause the trouble. If the vmcore is saved to a remote fs, the
->> local fs won't even be touched. If the vmcore is saved to local fs and
->> the appraisal rules cover the saved vmcore and the created logs files,
->> we only need to update the xattr file of three files. So from the
->> perspective of kdump, it's good to disable IMA for kdump to save memory.
->
->Remember my original concerns weren't about disabling IMA for kdump, but about not
->limiting disabling IMA to just kdump.
+Changelog
+- v3 -> v4
+  - reworked commit descriptions [Jarkko]
+  - added Jarkko's R-b on patch 2
+  - added Sumit's R-b on patch 3
+  - rebased on next-20250508
+- v2 -> v3: https://lore.kernel.org/linux-integrity/20250414145653.239081-1-sgarzare@redhat.com/
+  - fixed comment style [Jarkko]
+  - renamend `out_send_sync` label to `out_sync` [Jarkko]
+- v1 -> v2: https://lore.kernel.org/linux-integrity/20250408083208.43512-1-sgarzare@redhat.com/
+  - changed title since we removed send_recv() op
+  - implemented TPM_CHIP_FLAG_SYNC idea [Jarkko]
+  - removed Jens' T-b
+- RFC -> v1: https://lore.kernel.org/linux-integrity/20250320152433.144083-1-sgarzare@redhat.com/
+  - added Jens' T-b on ftpm driver
+  - removed last patch since [2] is not yet merged and will require a new version
+- RFC: https://lore.kernel.org/linux-integrity/20250311100130.42169-1-sgarzare@redhat.com/
 
-Thanks for reminding me about that! Baoquan will post a patch to only
-disable IMA for kdump so we won't need to worry about these concerns:)
+[1] https://lore.kernel.org/linux-integrity/Z8sfiDEhsG6RATiQ@kernel.org/
+[2] https://lore.kernel.org/linux-integrity/20250410135118.133240-1-sgarzare@redhat.com/
 
->
->> Of course we can't rule out the possibility some users may want to need
->> IMA in kdump. So a flexible solution like providing a knob to allow
->> users to enable IMA in kdump will be the ideal solution.
->
->Agreed
->
->>
->> Btw, recently, a colleague reminds me of an issue that the system hangs
->> because systemd fails to load incorrect /etc/ima/ima-policy. Of course,
->> we should ask users to verify the policy beforehand. But it's still
->> possible the booting process may be stopped by a strict, albeit
->> syntax-correct policy and users can't log into the system to fix the
->> policy. Do you think a knob to disable IMA is needed to address these
->> cases or is there a better solution?
->
->Agreed a new policy should always be tested, before attempting to load it on boot.
->However there are situations when even a tested policy fails.  Commonly this occurs
->when attempting to load an IMA policy based on IMA features that don't exist in an
->older kernel.  This can normally be resolved by booting into the newer kernel and
->"fixing" the policy.  Instead of disabling IMA, I would allow specifying on the boot
->command line an alternate IMA policy (e.g. ima-policy.backup-version) to be loaded
->as fallback.
+Stefano Garzarella (4):
+  tpm: add buf_size parameter in the .send callback
+  tpm: support devices with synchronous send()
+  tpm/tpm_ftpm_tee: support TPM_CHIP_FLAG_SYNC
+  tpm/tpm_svsm: support TPM_CHIP_FLAG_SYNC
 
-Thanks for letting me know the case where an IMA policy may fails
-because of an older kernel. I'll start a new thread to discuss how to
-fix an booting failure issue since it can be decoupled from this patch.
-Previously you reminded me that re-enabling IMA will require re-fixing
-security.ima. Then I realize that changing IMA policy will also require
-such re-fixing otherwise booting failure may also occur if it involves a
-critical component. So I'll also ask your advice for this matter in the
-new thread as well.
+ drivers/char/tpm/tpm_ftpm_tee.h      |  4 --
+ include/linux/tpm.h                  |  4 +-
+ drivers/char/tpm/st33zp24/st33zp24.c |  2 +-
+ drivers/char/tpm/tpm-interface.c     | 22 ++++++++--
+ drivers/char/tpm/tpm_atmel.c         |  3 +-
+ drivers/char/tpm/tpm_crb.c           |  2 +-
+ drivers/char/tpm/tpm_ftpm_tee.c      | 66 +++++++++-------------------
+ drivers/char/tpm/tpm_i2c_atmel.c     |  3 +-
+ drivers/char/tpm/tpm_i2c_infineon.c  |  3 +-
+ drivers/char/tpm/tpm_i2c_nuvoton.c   |  3 +-
+ drivers/char/tpm/tpm_ibmvtpm.c       |  6 ++-
+ drivers/char/tpm/tpm_infineon.c      |  3 +-
+ drivers/char/tpm/tpm_nsc.c           |  3 +-
+ drivers/char/tpm/tpm_svsm.c          | 28 +++++-------
+ drivers/char/tpm/tpm_tis_core.c      |  3 +-
+ drivers/char/tpm/tpm_tis_i2c_cr50.c  |  6 ++-
+ drivers/char/tpm/tpm_vtpm_proxy.c    |  4 +-
+ drivers/char/tpm/xen-tpmfront.c      |  3 +-
+ 18 files changed, 83 insertions(+), 85 deletions(-)
 
 -- 
-Best regards,
-Coiby
+2.49.0
 
 
