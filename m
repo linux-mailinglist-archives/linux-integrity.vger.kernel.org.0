@@ -1,86 +1,86 @@
-Return-Path: <linux-integrity+bounces-6176-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6177-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B483BAB3400
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 May 2025 11:51:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30ACDAB341A
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 May 2025 11:55:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 560FE18962A4
-	for <lists+linux-integrity@lfdr.de>; Mon, 12 May 2025 09:51:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CA2D18977D8
+	for <lists+linux-integrity@lfdr.de>; Mon, 12 May 2025 09:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487C925DD1B;
-	Mon, 12 May 2025 09:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AC8725EF8D;
+	Mon, 12 May 2025 09:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="C5H0PpXT"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gIkjMdUQ"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EE025E45B;
-	Mon, 12 May 2025 09:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92267256C64;
+	Mon, 12 May 2025 09:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747043486; cv=none; b=abybgH1+MEvLvqXk19e0EJe+k7JvgqAIC2kdWLpP3k5AGb8lEZbF9b2YyyDx6P4p9OM+vN1UMsx9uSOxTN4a7dRunRxmKGV1d0QBLiQrNnJkyLObCJp2ZzJcZ3sI8bdFQlxYTYjU0yccV7q1qU+upL1x1InbYRJpbIb7IzDtdFg=
+	t=1747043748; cv=none; b=ehQO6JetvJS7/F3wpCkqZhK9LZuyt8V1y9vZKNJIU+FDJOx7xI/jSj87dGs1scQUic/AhnGSfnNhmCUTfotj6Go+VhXYFb8qPYP+xi6flPjOP5SZ45KMSfKlmLC3p2S2K+jHLjnlDG6ap/o32oQb5idKPmAMom31DWwKUaTDMMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747043486; c=relaxed/simple;
-	bh=P7bI12/G0BIVIVUm5nBDuryjFpyH9SLNZCMRed4WGXQ=;
+	s=arc-20240116; t=1747043748; c=relaxed/simple;
+	bh=hPypq1n+IkjbO9Av22DG7YTs2siF+gcRKEN1wB0aa0o=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KmJacQLJdaxoH4sGxUVqXf99C/uy665+tZobvGeV5A3RwKro82dKvLzkv0oo1QRUIFCaD7qgDn3wLawWfTs5il5D6gU8ElG0oZ8cN7NIIaomPqsfKahULMnYeNQoS82ePkthiQ7GTyJUwGFnoss+pyDfGlzfeN0Ysz24sDADt+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=C5H0PpXT; arc=none smtp.client-ip=148.163.156.1
+	 Content-Type:MIME-Version; b=dr/ohUZUm+jVtKL7uDknXRzlNGxsx3JZZ5TdFxS2mYbzNfyXSgsg0MGNJsOgb5lKKArXDRrm2f1iNS0JfGETCJkUyxPeYlwJMLHWwPB5xDUmW2+eRMLQQlSFPaWlaUyiQdPyxsVUtaeIxtcG2GtZhKt002num+mgjMD9kgyOxhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gIkjMdUQ; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54C6IYHc024139;
-	Mon, 12 May 2025 09:51:09 GMT
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54BIpYET018642;
+	Mon, 12 May 2025 09:55:33 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=StebqR
-	iYq/ajV6Ebilq0GoKOhhCVhDSrElqu38WL0rE=; b=C5H0PpXT+Gvr5kl80N8tKz
-	Yyi1yU3qExBmAvSogdskB5wJXZNeiaGBQp+6yAni81Vjpgtr/l4hLUZXANYG+SyW
-	ow1aXGotRNOk6ixo6rjd3TTAQhsBAgRsdZ0wrOXtl7Xm0+FsBiCerjXSE6JyYGh5
-	NsmoFNMnK/wEum8uvQUPl/Qo49DvRQbKrX//nxFgpjCq9AP/F7u+hMmq7w6Ig3/4
-	SLWTlaDVZNx4rpbE8n4Mezv9B1dNYiR3zrKj4JqQgq0e9Xx+Q/eGYdpnp1Nw94WU
-	gGDS3fFgP62NBe740UcoprMW5kV6dtSCOQwcJS5NjXRyjvoFAK6OkTNJoVORrUqQ
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Kvv1+Z
+	SE/dsOtlAJDZapWjRbPOdw+bosW+WM8y/jiCM=; b=gIkjMdUQvOunmzeVTwzgKP
+	07IjPOtDpOZbrlty3sotqT/quvjEhlSZGwM/4M7VFH+5sw9xS6RFCyH7rzvp0GtS
+	lxYJbmBQ1eHziBpxMpuK5S6G1UUCHOvN2MiKWFcalbRgndFIR+QUWihWnswORm/y
+	HUWLSDP4LYsyGYAGd/itR4C111FsPWnja1ZJd2DBkx7DFZGRxxHTe9ATO2tCkNRW
+	mA7/8lhaArTx1xQuML1jBhdvBXRZ5Rb1hfjSEW60Q0IOoCwGZZ3ZjA7eg4eDlbb1
+	VoUg7cChLTuRNjPrGY0hgjoD6D/UfYJFYpyfr+DkP5f/KO3vuyqv3g83sq+2w2qQ
 	==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46kbksrvqk-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46k1h8aku0-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 May 2025 09:51:08 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54C9gOP6016866;
-	Mon, 12 May 2025 09:51:08 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46kbksrvqh-1
+	Mon, 12 May 2025 09:55:33 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54C9tXrs002118;
+	Mon, 12 May 2025 09:55:33 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46k1h8aktw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 May 2025 09:51:08 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54C9LNRE025954;
-	Mon, 12 May 2025 09:51:06 GMT
+	Mon, 12 May 2025 09:55:32 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54C6dOJu011544;
+	Mon, 12 May 2025 09:55:32 GMT
 Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46jj4nnatd-1
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 46jku25185-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 May 2025 09:51:06 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54C9p4A354985204
+	Mon, 12 May 2025 09:55:31 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54C9tT0F55443798
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 May 2025 09:51:04 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CE73420075;
-	Mon, 12 May 2025 09:51:04 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5C76C20072;
-	Mon, 12 May 2025 09:51:04 +0000 (GMT)
+	Mon, 12 May 2025 09:55:29 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7FE40200E1;
+	Mon, 12 May 2025 09:55:29 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 141C3200E0;
+	Mon, 12 May 2025 09:55:29 +0000 (GMT)
 Received: from ozlabs.au.ibm.com (unknown [9.63.197.14])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 12 May 2025 09:51:04 +0000 (GMT)
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 12 May 2025 09:55:29 +0000 (GMT)
 Received: from jarvis.ozlabs.ibm.com (haven.au.ibm.com [9.63.198.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 6F5BB6057F;
-	Mon, 12 May 2025 19:51:00 +1000 (AEST)
-Message-ID: <0c0daff7b3674d2520e0fe24af4afcac49b53049.camel@linux.ibm.com>
+	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 9B07560125;
+	Mon, 12 May 2025 19:55:26 +1000 (AEST)
+Message-ID: <9477e99aa57e432b1e55ebd3e903036e60926014.camel@linux.ibm.com>
 Subject: Re: [PATCH 1/3] powerpc/pseries: Correct secvar format
  representation for static key management
 From: Andrew Donnellan <ajd@linux.ibm.com>
@@ -89,14 +89,12 @@ To: Srish Srinivasan <ssrish@linux.ibm.com>, linux-integrity@vger.kernel.org,
 Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
         christophe.leroy@csgroup.eu, naveen@kernel.org, zohar@linux.ibm.com,
         nayna@linux.ibm.com, linux-kernel@vger.kernel.org
-Date: Mon, 12 May 2025 19:51:00 +1000
-In-Reply-To: <e80c83a1-77db-452e-8a5d-d435e61bd544@linux.ibm.com>
+Date: Mon, 12 May 2025 19:55:26 +1000
+In-Reply-To: <2b7145a2-1cfb-4b1a-929c-10a03747119e@linux.ibm.com>
 References: <20250430090350.30023-1-ssrish@linux.ibm.com>
 	 <20250430090350.30023-2-ssrish@linux.ibm.com>
 	 <87e1185273ce21e5fd69ff071a1be986c2a0301a.camel@linux.ibm.com>
 	 <2b7145a2-1cfb-4b1a-929c-10a03747119e@linux.ibm.com>
-	 <24106430db9693f580c3765206257677c10e4375.camel@linux.ibm.com>
-	 <e80c83a1-77db-452e-8a5d-d435e61bd544@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.1 (3.56.1-1.fc42) 
@@ -107,48 +105,42 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=DrhW+H/+ c=1 sm=1 tr=0 ts=6821c48c cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VnNF1IyMAAAA:8 a=C5xzFnOTFPq8S06TRoEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTEyMDEwMCBTYWx0ZWRfXzVZkhw+yTy+A M5jizEdOED5m0IcC3vyJZvje28UsrBI3a+h1h8a1YhA0pRRIGUXwsaNQGcoaqqBC35mhzr/fZR4 gaeRXB/9fFuYHgfcRislT3fA8eRu5gcVRS2EIjr0BKlALvDHBQkvjAwymNvNFN6tKbBxrDXKWXP
- I1jMPdfRGE5vDt0s7ThfWlxvTecnbv4sQ00lSQK3n/g60R3UlFRIfnM/qkahd4Y5YK6VezmYoLZ FdTGFapmGISsrQPEWos303nL1DiR2EQavZmktYC0K1XrPSxwOuuVoB/TLPQUx707oPVQ8UXHIgK ZRZxR78LwnpQQRys/GcL+Mdkqd5Hw+vVlAuLpTVX8Xn0v6Cahn8wOjzlfH8uRrt6/qmcTnEOgcf
- ryzVINFz5EQzhf3Tpo36Hw8+1w9NMomOvM24EB6KRsnoIuOJNNs5CvHF7iDuWWjUeRGJAOey
-X-Proofpoint-GUID: SDHQGz6jmyBWzSs1kw_OvZcKdte8zTvC
-X-Proofpoint-ORIG-GUID: ZMKHPW1qGe7sDeCHOu0qskAGPbwcPAlS
+X-Authority-Analysis: v=2.4 cv=fq3cZE4f c=1 sm=1 tr=0 ts=6821c595 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VnNF1IyMAAAA:8 a=etY5_-Iy7x1mbQhKnqsA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 0RrYxMeiUTn7C5FFZUm4sp9ErZylhjGC
+X-Proofpoint-ORIG-GUID: ijDREITzoh1JWPTJ9roeiJHGPfoUH76v
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTEyMDEwMCBTYWx0ZWRfX8ZtBoNVOi8HA 5qzmEzvf3EZxsxffmvIcyCmY/ruchu02r7Lj1Psak46k9w3jUDnS7vduH6V6Z96gO08wmvEN9Ln Ucioq+iafLOvYybJDZXqQ2tEcQHrRV5DEM6z0Sj98ivhtoav61KGPOBFjJ75jA50M/tD7YeM29k
+ W9DwH5D+lNrOB56g+gemS5Hbs3pChfQqvRb2SFbCcR5g9lsOl7lLGK4MEl+9Cfs8C2o2FEVXfbV mx4YenEgTpJQ3hwW4Fn8GXP1Qw/jPia3tDXCRcvdAbH55FfaIAHWa4mnVpYU3XpIg5QfsKO+4GI ojAvOp6Qjmkls+bAdQa+N4ZmXU4HNsTvAJcvmnmq2jjWmPnTFd7cuS1HbZaQOivfun3vxI0U2H6
+ MEnrgO/z9IvuEZPW8tVtdeZ3aIHNKkXLKCTyjyWt1vCqQHEZrsmxyqEaM5anLe4C6mDuSrX5
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
  definitions=2025-05-12_03,2025-05-09_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- priorityscore=1501 clxscore=1015 impostorscore=0 phishscore=0 bulkscore=0
- mlxscore=0 adultscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=990
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2504070000
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 clxscore=1015 spamscore=0
+ suspectscore=0 impostorscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
  definitions=main-2505120100
 
-On Wed, 2025-05-07 at 21:18 +0530, Srish Srinivasan wrote:
-> > We expect SB_VERSION to always be world-readable, I think? In which
-> > case it shouldn't return H_AUTHORITY / -EPERM, ever, and if it does
-> > that's an error which should be handled as an error. Or am I
-> > misinterpreting the spec here?
->=20
-> Yes, SB_VERSION is world-readable and should not return H_AUTHORITY
-> in=20
-> the case of dynamic key management mode. However, in
-> the case of static key management mode, when SB_VERSION does not
-> exist,=20
-> the hypervisor tries to authenticate the consumer. If the
-> authentication is successful, H_NOT_FOUND is returned, else
-> H_AUTHORITY=20
-> is returned. The intention behind authenticating the
-> consumer when the object is not found is to ensure that a=20
-> non-authenticated consumer is unable to conclude on the absence of
-> the object. Here, when the kernel tries to read the non-existent=20
-> SB_VERSION, it fails the authentication check and therefore,
-> gets the H_AUTHORITY error code.
+On Wed, 2025-05-07 at 00:29 +0530, Srish Srinivasan wrote:
+> > I think you should handle this as the existing code does: if it's
+> > ENOENT, return 0, and for other codes print an error and return -
+> > EIO.
+> Currently, the other layers in the boot stack assume static key mode
+> for=20
+> any failure in reading SB_VERSION. We added the same interpretation
+> in the kernel to keep it consistent with the other layers, and
+> represent=20
+> the same to the user. This is the reason for not parsing the error
+> codes
+> when trying to read SB_VERSION, and defaulting to the static key=20
+> management mode. However, we want the exact error code to be logged
+> for debugging purposes. And, it does make sense to have logging only
+> for=20
+> error codes other than -ENOENT and -EPERM, as you suggested.
+> Does this sound okay?
 
-Ah, I see my confusion: if the object *doesn't exist*, then it
-obviously can't be a world-readable object, thus triggering the
-password verification. In which case, we do need to catch -EPERM.
-
-Thanks for correcting me!
+Okay, maybe document explicitly in a comment that we default to static
+mode in the event of any weird errors.
 
 --=20
 Andrew Donnellan    OzLabs, ADL Canberra
