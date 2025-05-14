@@ -1,188 +1,227 @@
-Return-Path: <linux-integrity+bounces-6221-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6222-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A631AB780A
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 23:37:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC783AB7810
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 23:37:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6CE83B69EA
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 21:36:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C4547B564B
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 21:36:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA8B21F4C96;
-	Wed, 14 May 2025 21:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C2E204098;
+	Wed, 14 May 2025 21:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="ewokmhnz"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qnFQzg7H"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE2061FF2
-	for <linux-integrity@vger.kernel.org>; Wed, 14 May 2025 21:37:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.188.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9149761FF2;
+	Wed, 14 May 2025 21:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747258632; cv=none; b=iQWEvLNCv55TpZ8L7dzlQsAmET2SwgvF7N46dT/gvywsagpxH/U7dJ0ylLWgtB4K8UqHlZ2wKwY3DHiOulHsglRlA2zD50Ii4GosEl/iskG1SzY/dTKmZuHToQPsJLr+L54r1Q2zLSCgom7bXF1hMN0075it8W/lOB9wT9iETYo=
+	t=1747258641; cv=none; b=QLseGd0vF+anYwHtCMSStRy+4lTGE2lMWZ0HcK8cCFlrixP3auShjh2lqy6pII28fAH1/BgjlwSyWdo+hk/HHhfsu7k3pqYS/89/9H24rkbAPoZHARftqHUkyXRcEQDwj32kQBeCnKKC4lpvh1L4YiI/eEjcYcrXZBj7qwlLR0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747258632; c=relaxed/simple;
-	bh=j5YwuITK4pcNxtqbVas0MbbU4h9BklRndVWWiAVdeTQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UVwMvd/OdBlTJ/rGr9cYG1uAZy1yv65NNGomaIrNtq127kcp7kG5LtlT4I7bYC+cgICLDrS/swGZ7m5sN3OoSCa33QOnkhCaEOJZ+XozgeQPy3l5us/BGdTAgLKc++ffJpsmBhc5arWdKG3J6Hi6m8B8lIcTRpOMH5pJN8C+1uA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=ewokmhnz; arc=none smtp.client-ip=66.163.188.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1747258629; bh=aq8QipgkRkFzzw51J/EbqZY3BxWmjQKsp1yEuEBSAsk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=ewokmhnzmU+HVQaxEe5lY4XM1k5PniIn5DLdSJn6tN8Kt4KC3S8jI0Jst/tFwg+RnNf4sTYh+FmfzNXtmxiAbSG0cJvn+epJGW7NV5RkDRZQzC8fgkVxdUnMT5YQBHB2cjGq/hI4bsnfu17F2DYpkrbNNYs8tf5322JPQ0QNXVVN/q5tWF0Li4ML81aCu2BPmIeEGC5xb+8dzB+KebD1HV6/AtFlzH1r9TXVUoTUtYHxrtHcRM8+ala+rbZUeADTntEVaaGDbFWtlKk2FzN7wH37uakaQZDsviU4yqjfJM6tSejAdNzLDUcoxJTAEggGQJ/jcHsuIy8lglwQ3wzV9g==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1747258629; bh=1ZDvcedoosQw47S3sX2NLNsMu913bIfKFRBcpjEv6jU=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=YYJ+BnRJY1LiQ829mpipK9GwzbYxd4qATOlsASr8/4bkvc0Y1gDYzHMs8L5bct3olfGoImoOnsnmkaIxA0YYSDYKATUx+4Pi3GN1+z+RRhZVnrvMVgW2Qy6HhkrQM5JwwdFHMHXX1HKHe2Sx2zFVMEPUYHSfcYR7s1mJYGkmvOGiVgREI+BkO40vpsQnT26ozWVIabx/fTACanwxJww7qaq+CzAyjz2ybD3GOY/qk+sNw75FZZ5IHU8Gftz1B0yOcq/N80RCwCt05Ydw+1PpqrcTEgrk4AMoFuXDNq32SRQUzWKQTiaxW+dZ1KLCzVj+U/GW8zTEAXZGCTtUAO3Y/w==
-X-YMail-OSG: aZopYxwVM1l1S1Cl4VS1XF27XsWdbNMhVL9G3pMLnsCTUz2Zx6lzy0tOYUQOAqs
- 456kOIFHel.hAqqfFc6z_dCvPKkIHNx8zgHwsSYv7GPf31jhx5dN34QRYNBUn.qxZSgu9YoviM8G
- rKqKhT5618W0TZ_H3tJPCue8xRgg9meQAfzQI7_W8lQ9S4VYC83mJdSjHfGbqRIedn2WT2QPWsS1
- qkp.icEeWmEWuzCgh7rPcChb6K.91QFctmXYpH3nscp58O1561EZgbEjp_e6lmAfLcMwjfk6Hrcd
- N9NcrWxbqpIuzfNR1N2bJh7px7XUT8X.PYPCjalR1MMUV5sxy1kXpyNTnLylfr_dD6358mSu8Ln0
- Mv95UgS02N19bRCRzAx09FoSboK2DouXu0Q3DUajs8LLJke.N.JC7xgmVe_6VHk3_SyzKyxBKXL2
- s4imAUXn46rza6IEFDqdHLn6KNgJNEDB60x5A.ag09vByP4qWJ9nJZpJ8Y7RA5m0jA7LMkPRVsqw
- qXHYX_0S0cLI6QN98NGaFdfC0GUtq.qQUQSrf847XkgdY1Yu.Z.YZgbGbujgkGtRtwxvhl5XH3Bk
- Ktr37TJVUVyIJxisHM8HXF_JmA_aJL.UWVNpAo8mfyQMnHU0cFwW8i6oEri2j_AdkOp5GEtRSSS.
- l80XdqnytjcZlwp9D0QZ83LEV6_u.WMAUABlF2gEoK.5I0_A7Q0nmvg3PNfKfHL1WOjbKjWOnlcs
- LviQ7SbfqsebsRR2Rdkmyb2UQlzinYq7H3slpIWmo8I_GoNqmoDINRT.UBWlG_O2T5ICRaN_3kSv
- z04UdE8nxUgxJofVYczlqgYcsPftCd0XF8DlgRLai4oq7HB6TjuSei7JbMCjAWq4Lcq5VGQGTKqK
- XqEDeUg2is8q7JPDxgTo3dQ65rOFLbgUUoYJsaQXvjn4byb58sIn46AoFFZ2vL1ImuhxVftJhom4
- 0DOYtZcdNmASSmC6u3tA6_VPiTCGk72olprHFZ7Ul6HnP5LtWJ4KhifpPf1EaUm7aKCrAWRhicgy
- PKQQnweT0OOf9qGc0evvDrA0fGwGQtIzZZeGAULR6olvCZeaU0ieg8ESXasnDZkfgVUzKG.TdEw4
- p_c3ds6Ydd16.aPTKrkvJnx4WoVkBrTxVyTGrSAYif1ie8BVF2sTocQfykvT_.AcZMf0Z0P_pAnq
- jZW_LVG8AptAmm8dmOm8zqqNqAlsSG9Yj11LUf_DiWzcJLxkkylUryiyMs8YGbPGFWrbSXtofN4l
- vBNo_azPQDd6bPqWdI9v9ojUoFun1BWVyWGBQFp08QxhbXJjx80o2zWjQAf4eN8XoBFMa3nLF72G
- Fn1MHX9YLKU24q8HFaKuLtCU2L2g22qX1Q_i4HAGf6FInLRN3u5F82xHkAHQ1c9Qwv7_7xL_Ckhd
- vGbyE43vJtefTRqVs7uYTcuzbdOwfTnO9BWT4ypiswBRW9OVtm1ZxpADV.OS5TeusT0z9gstwrJz
- _sGCYSO6w_ViGiKDo_cZU7P9dbkDe1tNsO5eCJT5dcCD2_x_6KxSAfSDla90snuDXvUTXNlmwlkP
- EyRNHawp8RcS4qaA8zdqiTXoc3bE0O8nwpNeGHsFG05eAiMgrc91_nombRmUE.7MQ7F4ObAVPxky
- xqA7ji2VoMO4vZT_CpOPUaAHkEmqKJqzNtMVRvQGCGEyXS2R_0AZoI_FdWDO2XbmkK8m8w3nfYwQ
- dcpnKVjEZw1CMmAdPQn2vq.brFe5HPzeM9BIeSjFdjRrTULES4.Syq15ZeJUonE_Pxigl.uwA8Uw
- A7.A1QRHmIV_qx0C3wzk5_b8g.pj2yClKaSbvmkUsgWQleGNK4TY.T1x9sTNlpv7eH_0eVr0mTfT
- nZcHyDUYWYFvx8jYWkCk_BK28ElbtN4Vd_OYtz0eyJvkeUvcxPycKyThdfxJI1YNuqg8L3VLWXMP
- mCFH4IusrBxEJgQWhGY4QVM2Y9nHD.Q55PHB5X7WabtXBZs825T0YIvy4odvcgmVbgWM.WeooycN
- 8pEZbyEMrQKNRjonFR2ObHETQBXRXO2KJyvu6dKg5f3rZtjCWad1MoUOtMwIOh0nroP.dXA2gWVB
- cHdhjJVjn.vZCpSRH9UjIpyc_CLZXT6uDnm7VYifurPpe4WXV8hFcXs6ESx0QUb1y7PwLu0qI9mD
- 47GlPv3loaaIShUeBBOLxjDx0U2q4wprXnjiiDZ33xLVdELbkFGeWO6bDze5mxX4A_7doDtU5Rzz
- CH3HrTkO_VxK2aYoE2ft9FDHPKRsHxERHGrIwtXkdGEz7Nfq2cqpcuXvdOxvd_UoFB1Dey8PZ_Pc
- Jp2FkfvW4_fU2QddkKQuOY1YPGe4-
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 51903e5c-bbb7-4a2b-923d-9c4a76128bb1
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 14 May 2025 21:37:09 +0000
-Received: by hermes--production-gq1-74d64bb7d7-lbnk4 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1a3debea870299291c33f635b17b6e3a;
-          Wed, 14 May 2025 21:16:52 +0000 (UTC)
-Message-ID: <c5b81e66-7e73-41cb-a626-9f18f6074e53@schaufler-ca.com>
-Date: Wed, 14 May 2025 14:16:50 -0700
+	s=arc-20240116; t=1747258641; c=relaxed/simple;
+	bh=xRFOVzuv9WFmt0OA/lEjVrkz1nJAEAvQhv3PjcQUuUc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=d49vKWuOw+R2sGHETNeaenFjPz2iy7fuEjEVmbT9MwY4Csvfo2uKNSQVP+iCC3MeHCmRBcXiDrhQ1sWdZ3yheGDrGaFh9aHE8JVTGfpIr/681wbAyct4kjfRk3o6gbevnh7jshZelE+ABBhvhbgk/w23GjKVFBeUf8YMMohKhgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qnFQzg7H; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54EIsOfN012674;
+	Wed, 14 May 2025 21:36:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=xRFOVz
+	uv9WFmt0OA/lEjVrkz1nJAEAvQhv3PjcQUuUc=; b=qnFQzg7HUiK+nls3CnYth2
+	E65MbfXC4F7eIKUnxhjoxc2QNG9QskMUZofNp9wV+dyFBlM1N43/gSxtAzLB0Umu
+	NwiYVLio++qMzar+i3Ay/xz8ctDRy8AIHNwwVJG28mSDJbDOUVdCQ27ye5kXkNi4
+	thdVHNtQk5c18yvGFni8gUH09/BXB0OtwYP5SsqO3ta8KmaHcinJZVpQByhuKy/P
+	3lZnAHqiX6jyl2QKQASRr/PPH2oh8KQkkUtIvOvzRZkuGMr98zXAbQZzK2tloR+f
+	1YE7YOrtytMi9/L37H35fcyImDjfqX4bZo45VQ8BTE/WrHe2G7dy8WDnQa0art+g
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46n0v6gsv5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 21:36:25 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54ELaOks014072;
+	Wed, 14 May 2025 21:36:25 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46n0v6gsv2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 21:36:24 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54EJbtR5024288;
+	Wed, 14 May 2025 21:36:23 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46mbfs6ppb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 21:36:23 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54ELaM1A28508780
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 14 May 2025 21:36:23 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A87175805A;
+	Wed, 14 May 2025 21:36:22 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 00EAC5805C;
+	Wed, 14 May 2025 21:36:20 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 14 May 2025 21:36:19 +0000 (GMT)
+Message-ID: <3bc7c90c620d46378978f30e03cf8375dc0cbc42.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 2/9] ima: efi: Drop unnecessary check for
+ CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor
+ <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Luis Chamberlain
+ <mcgrof@kernel.org>,
+        Petr Pavlu <petr.pavlu@suse.com>,
+        Sami Tolvanen
+ <samitolvanen@google.com>,
+        Daniel Gomez <da.gomez@samsung.com>, Paul Moore
+ <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn"
+ <serge@hallyn.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Madhavan Srinivasan
+ <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas
+ Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg
+ <eric.snowberg@oracle.com>,
+        Nicolas Schier <nicolas.schier@linux.dev>,
+        Fabian =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+        Arnout
+ Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
+        kpcyrd
+ <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
+        =?ISO-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Date: Wed, 14 May 2025 17:36:19 -0400
+In-Reply-To: <17aaa56b-5ee7-4a7f-a3c1-206e2114645d@weissschuh.net>
+References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
+	 <20250429-module-hashes-v3-2-00e9258def9e@weissschuh.net>
+	 <10ca077d6d51fac10e56c94db4205a482946d15f.camel@linux.ibm.com>
+	 <edeb23e7884e94006d560898b7f9d2dd257a275e.camel@linux.ibm.com>
+	 <17aaa56b-5ee7-4a7f-a3c1-206e2114645d@weissschuh.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 29/29] lsm: add support for counting lsm_prop support
- among LSMs
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
- selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Fan Wu <wufan@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
- Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20250409185019.238841-31-paul@paul-moore.com>
- <20250409185019.238841-60-paul@paul-moore.com>
- <81106a29-90ce-4439-9b4c-60bb2962fe04@schaufler-ca.com>
- <CAHC9VhRUr+sXhLzDSjiG9bEVbzZd2u632dLMVpcCe6By_d_H4w@mail.gmail.com>
- <3d884912-6225-485b-a7dd-2aa4073265f2@schaufler-ca.com>
- <CAHC9VhR5OFDvJNJLy9jKMsB4ZVx=phm6k6iebT6VuXD96kNEEA@mail.gmail.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhR5OFDvJNJLy9jKMsB4ZVx=phm6k6iebT6VuXD96kNEEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.23840 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=IqAecK/g c=1 sm=1 tr=0 ts=68250cd9 cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VnNF1IyMAAAA:8 a=VTue-mJiAAAA:8 a=KLImt8Xm0npdB1J_YwkA:9 a=QEXdDO2ut3YA:10
+ a=S9YjYK_EKPFYWS37g-LV:22
+X-Proofpoint-ORIG-GUID: f5XBtQh4mBIUFD0svQ8WZ4natbLj1BXZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE0MDIwMSBTYWx0ZWRfX0J/q+sNmdfdm i1ZHU47UsEXxhb9YRuiVfLyTUlkU8TH00xq7HIG19po+fL1JGIpvZjM/uX6q5+4t0NPh5dp4k4A uN7188bKesc49xrTc6GBTy7lOMs+ZNjaWji652m5L6f1AxxoZd/vEoWK+Kuo+ncsW4y8DHTRM7p
+ R6fGlTFx5BEJHKJnQaF5K8E1e00WUGwmeibIplYY4v8jFk1SvdHod2h8Nvl+2aCydTecEoo+n2L vSxA3VNRMDV35wrChVwg5zFikRo5P7f2GYU6VboeHo7mguezLscbb4UFmlb2+dU11GdR62pNfTH EqfQwq6lweOyKgkbd7Vp1A4adwXhKyw8C6BaU4Dd+SyySDBKc9yjiTWTRQqlZ+cUd2MW2Iv5eSZ
+ CLMdhE4i1h3uz8OTg/w+xX0bvEzrampxKZGJR0T8KnUmpNAA9Aq1CKvRJUMlTq/5jsMGFxqX
+X-Proofpoint-GUID: mwVJ5c7YLe1v2I9fxeVNmrltNyZdPkRw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-14_04,2025-05-14_03,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ adultscore=0 lowpriorityscore=0 phishscore=0 impostorscore=0
+ priorityscore=1501 clxscore=1015 spamscore=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505070000
+ definitions=main-2505140201
 
-On 5/14/2025 1:57 PM, Paul Moore wrote:
-> On Wed, May 14, 2025 at 3:30 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->> On 5/13/2025 1:23 PM, Paul Moore wrote:
->>> On Tue, May 13, 2025 at 12:39 PM Casey Schaufler <casey@schaufler-ca.com> wrote:
->>>> On 4/9/2025 11:50 AM, Paul Moore wrote:
->>>>> Add two new variables, lsm_count_prop_subj and lsm_count_prop_obj, to
->>>>> count the number of lsm_prop entries for subjects and objects across all
->>>>> of the enabled LSMs.  Future patches will use this to continue the
->>>>> conversion towards the lsm_prop struct.
->>>>>
->>>>> Signed-off-by: Paul Moore <paul@paul-moore.com>
->>>>> ---
->>>>>  include/linux/lsm_hooks.h         | 6 ++++++
->>>>>  security/apparmor/lsm.c           | 1 +
->>>>>  security/bpf/hooks.c              | 1 +
->>>>>  security/commoncap.c              | 1 +
->>>>>  security/integrity/evm/evm_main.c | 1 +
->>>>>  security/integrity/ima/ima_main.c | 1 +
->>>>>  security/ipe/ipe.c                | 1 +
->>>>>  security/landlock/setup.c         | 1 +
->>>>>  security/loadpin/loadpin.c        | 1 +
->>>>>  security/lockdown/lockdown.c      | 1 +
->>>>>  security/lsm.h                    | 4 ++++
->>>>>  security/lsm_init.c               | 6 ++++++
->>>>>  security/safesetid/lsm.c          | 1 +
->>>>>  security/security.c               | 3 +++
->>>>>  security/selinux/hooks.c          | 1 +
->>>>>  security/smack/smack_lsm.c        | 1 +
->>>>>  security/tomoyo/tomoyo.c          | 1 +
->>>>>  security/yama/yama_lsm.c          | 1 +
->>>>>  18 files changed, 33 insertions(+)
->>> ..
->>>
->>>>> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
->>>>> index 40efde233f3a..c72df6ff69f7 100644
->>>>> --- a/security/bpf/hooks.c
->>>>> +++ b/security/bpf/hooks.c
->>>>> @@ -18,6 +18,7 @@ static struct security_hook_list bpf_lsm_hooks[] __ro_after_init = {
->>>>>  static const struct lsm_id bpf_lsmid = {
->>>>>       .name = "bpf",
->>>>>       .id = LSM_ID_BPF,
->>>>> +     .flags = LSM_ID_FLG_PROP_SUBJ | LSM_ID_FLG_PROP_OBJ,
->>>> There's a problem here. BPF can have properties, but usually does not.
->>>> Unless there's a bpf program loaded that provides them it is incorrect
->>>> to use these flags. You can't know that at initialization.
->>>>
->>>> I have an alternative that will address this that I will propose
->>>> shortly.
->>> Okay, thanks.
->> In my coming audit patch I changed where the counts of properties are
->> maintained from the LSM infrastructure to the audit subsystem, where they are
->> actually used. Instead of the LSM init code counting the property users, the
->> individual LSM init functions call an audit function that keeps track. BPF
->> could call that audit function if it loads a program that uses contexts. That
->> could happen after init, and the audit system would handle it properly.
->> Unloading the bpf program would be problematic. I honestly don't know whether
->> that's permitted.
-> BPF programs can definitely go away, so that is something that would
-> need to be accounted for in any solution.  My understanding is that
-> once all references to a BPF program are gone, the BPF program is
-> unloaded from the kernel.
->
-> Perhaps the answer is that whenever the BPF LSM is enabled at boot,
-> the audit subsystem always queries for subj/obj labels from the BPF
-> LSM and instead of using the normal audit placeholder for missing
-> values, "?", we simply don't log the BPF subj/obj fields.  I dislike
-> the special case nature of the solution, but the reality is that the
-> BPF is a bit "special" and we are going to need to have some special
-> code to deal with it.
+On Wed, 2025-05-14 at 20:25 +0200, Thomas Wei=C3=9Fschuh wrote:
+> May 14, 2025 19:39:37 Mimi Zohar <zohar@linux.ibm.com>:
+>=20
+> > On Wed, 2025-05-14 at 11:09 -0400, Mimi Zohar wrote:
+> > > On Tue, 2025-04-29 at 15:04 +0200, Thomas Wei=C3=9Fschuh wrote:
+> > > > When configuration settings are disabled the guarded functions are
+> > > > defined as empty stubs, so the check is unnecessary.
+> > > > The specific configuration option for set_module_sig_enforced() is
+> > > > about to change and removing the checks avoids some later churn.
+> > > >=20
+> > > > Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+> > > >=20
+> > > > ---
+> > > > This patch is not strictly necessary right now, but makes looking f=
+or
+> > > > usages of CONFIG_MODULE_SIG easier.
+> > > > ---
+> > > > =C2=A0security/integrity/ima/ima_efi.c | 6 ++----
+> > > > =C2=A01 file changed, 2 insertions(+), 4 deletions(-)
+> > > >=20
+> > > > diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/=
+ima/ima_efi.c
+> > > > index
+> > > > 138029bfcce1e40ef37700c15e30909f6e9b4f2d..a35dd166ad47beb4a7d46cc3e=
+8fc604f57e03ecb
+> > > > 100644
+> > > > --- a/security/integrity/ima/ima_efi.c
+> > > > +++ b/security/integrity/ima/ima_efi.c
+> > > > @@ -68,10 +68,8 @@ static const char * const sb_arch_rules[] =3D {
+> > > > =C2=A0const char * const *arch_get_ima_policy(void)
+> > > > =C2=A0{
+> > > > =C2=A0=C2=A0=C2=A0 if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_i=
+ma_get_secureboot()) {
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ENABLED(CONFIG_MODULE_=
+SIG))
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_m=
+odule_sig_enforced();
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ENABLED(CONFIG_KEXEC_S=
+IG))
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_k=
+exec_sig_enforced();
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_module_sig_enforced();
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 set_kexec_sig_enforced();
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return sb_arch_rules;
+> > >=20
+> > > Hi Thomas,
+> > >=20
+> > > I'm just getting to looking at this patch set.=C2=A0 Sorry for the de=
+lay.
+> > >=20
+> > > Testing whether CONFIG_MODULE_SIG and CONFIG_KEXEC_SIG are configured=
+ gives priority
+> > > to them, rather than to the IMA support.=C2=A0 Without any other chan=
+ges, both signature
+> > > verifications would be enforced.=C2=A0 Is that the intention?
+> >=20
+> > Never mind, got it.
+> >=20
+> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>=20
+> Thanks for the review!
+>=20
+> Given that this series has no chance
+> of getting into the next merge window,
+> would it be possible to take the two IMA preparation patches
+> through the IMA tree to have them out of the way?
 
-If BPF never calls audit_lsm_secctx() everything is fine, and the BPF
-context(s) never result in an aux record. If BPF does call audit_lsm_secctx()
-and there is another LSM that uses contexts you get the aux record, even
-if the BPF program goes away. You will get an aux record with only one context.
-This is not ideal, but provides the correct information. This all assumes that
-BPF programs can call into the audit system, and that they deal with multiple
-contexts within BPF. There could be a flag to audit_lsm_secctx() to delete the
-entry, but that seems potentially dangerous.
+I'm fine with picking up the two patches simply as code cleanup, meaning dr=
+opping the last
+sentence of the patch description, after some testing.
 
->
-> Of course I'm open to other ideas too ...
->
+Mimi
+
+
 
