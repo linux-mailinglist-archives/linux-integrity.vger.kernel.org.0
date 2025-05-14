@@ -1,172 +1,132 @@
-Return-Path: <linux-integrity+bounces-6202-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6203-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75EEAAB6B43
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:18:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B756BAB6B95
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:41:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10BB119E5BE5
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:18:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D379170E8C
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:41:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54211277020;
-	Wed, 14 May 2025 12:18:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586292777ED;
+	Wed, 14 May 2025 12:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="KscIIPiL"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="G9rlyfQZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3BF2040AB;
-	Wed, 14 May 2025 12:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A4C275866;
+	Wed, 14 May 2025 12:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747225094; cv=none; b=uWTBdG5toX+nz/kYSO6E+X09boY2Ojc0Gxuug8AbmOBFTFu3WavGd+ORvFJdac7F7/99r6QI53bPB+dzB5L4G3ybbVIANXcooLQHf+hCi4XRBCAy1cED3C3NIDH7cXCqqcHlYKxdY8Eo+b1DLVCLRBlKYb2klahR+8ddfhynz7M=
+	t=1747226470; cv=none; b=tetH2ep2Oi+up84i3h4LXfcSNZGVkh3kkczdoRtPE6DSbudD0sWcRWB+ZdzEmKV4mHvH5Z7W/2Z8qzhxonLLxC4N1Y2Ubvu6zo9XGPXjq8lPa3rbA9fy2Ut8+hOjudos+q73u0fk2irFrnQpyohG+YnOjh1cy+CftKv/OLlDCnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747225094; c=relaxed/simple;
-	bh=6FPgWpCa9xf0I4XTSPUrv/BUMXbBTntv196swA/Kv9s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=abYXCQUxduWsehGMvvXk2Ox14zIWPKm0Y9dKTJG9/BtFKZcFa75X01pzRA6JEfTewwM10n8GLChbm2J7QwAUtVq61Dvc8zwFotepu7KvMTnl6qzldBlgjEGY6NXFzGI3LNOEDF9UOwdOJ0BfTA2s0u6OLBDBrBCaCSgySYnI0YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=KscIIPiL; arc=none smtp.client-ip=185.125.188.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from [172.20.3.254] (unknown [213.157.19.135])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id B0A473FF38;
-	Wed, 14 May 2025 12:18:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1747225090;
-	bh=m0Bp5YYz1/B9AlLqi0BlKB1pgD6qjcp/7toda9IedIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=KscIIPiLETMNardkFxRzNEIo7XfAOxX8ppCobIOtaWsojbaEVA1tiAGieF11dkxPD
-	 kzzj4tNzSQtsHMcHGixqaeD3gEYTDsf80AsMPV9N5n/e8FZo9vC6BvFiZu5k0AZ16m
-	 wVGTCf8QzeVBy00Qrgg9417yRTV5HxgBZLN0cC4cJTHu81HGmQDkD3cQnnH7+muZ2g
-	 iOPYTaLZOAemxojo9f+4IRtIncv32FBZ5eAR6nOnstM+p6ynZ6PL9MLr42hCaev94i
-	 V+FDEu3aHmtIH1xxcwR4cWksOqYBYYwaPguWrtVV0zlGvj3LIovfbaMZ1HPPV2rZ+U
-	 mBB92zWcZSghA==
-Message-ID: <c00aad36-934d-4d5c-ba46-0128b84a12f8@canonical.com>
-Date: Wed, 14 May 2025 05:18:09 -0700
+	s=arc-20240116; t=1747226470; c=relaxed/simple;
+	bh=/ltR3xE1jIxqOWOOYkUnrtjTiBPuiBIUhmryLaCAdZY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LUM7YykCWCRJFtH8/2N5KxUNuHG3jJNS/A2mfw3fqNoHmh1/yMVFOq99NqQG3q3Y80aE8dF6KQTzS2HrNdF9Z4Fu+BgzpReD5GZFl0QEChv7byzJezvg4PriVBS+a08kVDQsq34vlhaaR2z49mU+PGV385k3ijM+qdwQgd1Hu/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=G9rlyfQZ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54E743OT003207;
+	Wed, 14 May 2025 12:40:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=/ltR3x
+	E1jIxqOWOOYkUnrtjTiBPuiBIUhmryLaCAdZY=; b=G9rlyfQZgDSitkauVm37X7
+	BHyB8FK7hr6A5Gsr62t0bH4q8Py5mggMPDUKguvc7WESApV/lRbzxQMMTg0SX4ra
+	Sw4k+jhxM2P21VSrrgqIKv3hgmO6WXCCsIXO87FWeeOW5XaQQA4p+56iQsIiVntK
+	RhyJO1rrmrIBds5OGJhg7ldrbKDzVQWpbSLwiWgxfMReLT4xgDaWZxFsHV1rMzVa
+	JlmMAlG+59dfqJZn4Ueu7XBp5N0G3Mo65J4cQGQLA7Ak47l0Ory83iOFx5kiyxhz
+	o00IvQb+vZvoXC7F/W7bl5lh9uvVCJ+bkGjlf6h7jw/uYKGEXdBWD7k76d9Q1LNQ
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46mbh1475f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 12:40:42 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54E9xiIb024281;
+	Wed, 14 May 2025 12:40:42 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46mbfs45d0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 May 2025 12:40:42 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54ECefVe2687684
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 14 May 2025 12:40:42 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D644F58060;
+	Wed, 14 May 2025 12:40:41 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 533225804E;
+	Wed, 14 May 2025 12:40:40 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.143.84])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 14 May 2025 12:40:40 +0000 (GMT)
+Message-ID: <47edc9708d0ca75489d59ef4b9b6ef2f5de21fe9.camel@linux.ibm.com>
+Subject: Re: [PATCH V2] ima: do not copy measurement list to kdump kernel
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, stefanb@linux.ibm.com,
+        roberto.sassu@huaweicloud.com, roberto.sassu@huawei.com,
+        eric.snowberg@oracle.com, ebiederm@xmission.com, paul@paul-moore.com,
+        code@tyhicks.com, bauermann@kolabnow.com,
+        linux-integrity@vger.kernel.org, kexec@lists.infradead.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: madvenka@linux.microsoft.com, nramas@linux.microsoft.com,
+        James.Bottomley@HansenPartnership.com, bhe@redhat.com
+Date: Wed, 14 May 2025 08:40:39 -0400
+In-Reply-To: <20250513143129.1165-1-chenste@linux.microsoft.com>
+References: <20250513143129.1165-1-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 22/29] safesetid: move initcalls to the LSM framework
-To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
- =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
- Casey Schaufler <casey@schaufler-ca.com>,
- Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-References: <20250409185019.238841-31-paul@paul-moore.com>
- <20250409185019.238841-53-paul@paul-moore.com>
-Content-Language: en-US
-From: John Johansen <john.johansen@canonical.com>
-Autocrypt: addr=john.johansen@canonical.com; keydata=
- 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 lT9Q
-Organization: Canonical
-In-Reply-To: <20250409185019.238841-53-paul@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=RpTFLDmK c=1 sm=1 tr=0 ts=68248f4b cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=yMhMjlubAAAA:8 a=20KFwNOVAAAA:8 a=1v2mA-L8tnUgDz3cNWsA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: KFtkED7iNBqTTVFsvX40P1QhtKzqui76
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE0MDExMSBTYWx0ZWRfX3pqPk3C/XJkr r3Cjk9ibS4n+GvwREoqEgmdxsP/iKvaO9gdEi9N1YlgFW2RYO95N/kkV18+YylD/9VdR7krRWyc TbcjDMX3p4vP/1tge40WSi0IB1A5Pu2N2kNItezM8WAqnk67Fb+63uNMAtsfEQK1Z/LUxeSTnYA
+ iUA2W0L3idNEBZtMzTsq9lr4YEggrO9HqMqCDniCS6QWG+36DOL+HJ3g4BPW1YvFZvcm6lmVW3s HuAiLjC89URa2AglwefOIGQPr8XvsX0Tl0DajMG8XRqAdHt7YOQaIiDMeLG5qp9MwqFL+WasE/4 FMP42jOupTfaIc+zGMk+DjP//R5H8MJuZNbaUxHPY16ptrrQCLNQkbbCJ34JWO2AOTz+ahqKfRd
+ rqMe7WGWp8FC0FwfmMEq2ScZ7jw128Mt51vRO72sspwFHZKsfdzzzrcqtQP4E5x9W5yf3+vo
+X-Proofpoint-ORIG-GUID: KFtkED7iNBqTTVFsvX40P1QhtKzqui76
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-14_04,2025-05-14_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2505070000
+ definitions=main-2505140111
 
-On 4/9/25 11:50, Paul Moore wrote:
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
+On Tue, 2025-05-13 at 07:31 -0700, steven chen wrote:
+> From: Steven Chen <chenste@linux.microsoft.com>
+>=20
+> Kdump kernel doesn't need IMA to do integrity measurement.
+> Hence the measurement list in 1st kernel doesn't need to be copied to
+> kdump kernel.
+>=20
+> Here skip allocating buffer for measurement list copying if loading
+> kdump kernel. Then there won't be the later handling related to
+> ima_kexec_buffer.
+>=20
+> Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
+> Tested-by: Baoquan He <bhe@redhat.com>
+> Acked-by: Baoquan He <bhe@redhat.com>
 
-Reviewed-by: John Johansen <john.johansen@canonical.com>
+Thanks, Boaquan, Steven.
 
-> ---
->   security/safesetid/lsm.c        | 1 +
->   security/safesetid/lsm.h        | 2 ++
->   security/safesetid/securityfs.c | 3 +--
->   3 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
-> index 9a7c68d4e642..d5fb949050dd 100644
-> --- a/security/safesetid/lsm.c
-> +++ b/security/safesetid/lsm.c
-> @@ -289,4 +289,5 @@ static int __init safesetid_security_init(void)
->   DEFINE_LSM(safesetid_security_init) = {
->   	.id = &safesetid_lsmid,
->   	.init = safesetid_security_init,
-> +	.initcall_fs = safesetid_init_securityfs,
->   };
-> diff --git a/security/safesetid/lsm.h b/security/safesetid/lsm.h
-> index d346f4849cea..bf5172e2c3f7 100644
-> --- a/security/safesetid/lsm.h
-> +++ b/security/safesetid/lsm.h
-> @@ -70,4 +70,6 @@ enum sid_policy_type _setid_policy_lookup(struct setid_ruleset *policy,
->   extern struct setid_ruleset __rcu *safesetid_setuid_rules;
->   extern struct setid_ruleset __rcu *safesetid_setgid_rules;
->   
-> +int safesetid_init_securityfs(void);
-> +
->   #endif /* _SAFESETID_H */
-> diff --git a/security/safesetid/securityfs.c b/security/safesetid/securityfs.c
-> index 8e1ffd70b18a..ece259f75b0d 100644
-> --- a/security/safesetid/securityfs.c
-> +++ b/security/safesetid/securityfs.c
-> @@ -308,7 +308,7 @@ static const struct file_operations safesetid_gid_file_fops = {
->   	.write = safesetid_gid_file_write,
->   };
->   
-> -static int __init safesetid_init_securityfs(void)
-> +int __init safesetid_init_securityfs(void)
->   {
->   	int ret;
->   	struct dentry *policy_dir;
-> @@ -345,4 +345,3 @@ static int __init safesetid_init_securityfs(void)
->   	securityfs_remove(policy_dir);
->   	return ret;
->   }
-> -fs_initcall(safesetid_init_securityfs);
+This patch is now queued in next-integrity and next-integrity-testing.
+
+Mimi
 
 
