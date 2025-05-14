@@ -1,55 +1,55 @@
-Return-Path: <linux-integrity+bounces-6198-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6199-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95D4AAB6AD9
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:01:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BEE8AB6AE1
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:02:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22F944C14CA
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:01:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 742323B4E14
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:02:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4382750E8;
-	Wed, 14 May 2025 12:01:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A321E9907;
+	Wed, 14 May 2025 12:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="pkcIxFvD"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="WCr5nv7x"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 019CB201268;
-	Wed, 14 May 2025 12:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38822202997;
+	Wed, 14 May 2025 12:02:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747224065; cv=none; b=P2PJ1Q/5lq0KT6Mrs4XGE/HpMZ0BX/OqkLzmiUaFONGL398xyiAVLdx+yKDrPuYMl+1/qZABxSddu6kFT7djONJG+uo9PrhasoNB6CEeDGyVeUZ9WQMVnVIHTlFVlBHS7w2//WXIjaon/fM8v7iVbuupqz5fIqsK7hKuHEftmKg=
+	t=1747224174; cv=none; b=huAI4RZa8b9SiwV/qCvJgvcAqVh6JVTuE5zOgg2ZhT2WkTh6uqcbZIwhmHjUDlnWgaAbJi6yBula732rbx+dM/ed/HTlqsHX22KTVgcINkfvDpdwAi5DRFXTophgsFl9yz60ucf0HsalrC9EHexzztfwTCU9Gk58pM2XBwn9sOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747224065; c=relaxed/simple;
-	bh=idowk7YFWpi73S0m9cff0MrWRxSGHUW7gd6GkZqTaF4=;
+	s=arc-20240116; t=1747224174; c=relaxed/simple;
+	bh=GJbvmy8qNXkkuZgH06DyobcDeTbwNMdLFQJ8IEqKXEo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HURjphyBzUqGtB4gzcwZ5+87w/5BKGpz8ClSZK37uOP2+PpGAmYXH7xCNDzQOKWz3ATBWYudCAkWQ6aYcOECkSeIX8RyeUkDoPdrICJPVGcXaIJjNAA2im/RMmX1WXptdJFZO76j/PGFyCK3dWJ3PWW0MdswvCODwuX3Xoj4AqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=pkcIxFvD; arc=none smtp.client-ip=185.125.188.120
+	 In-Reply-To:Content-Type; b=XUdemKy0e9BKp/fzfInrKaw9jssU4mv5nDSwgjbbH4VhMvwM9MUYczpwtANFhGZ0NGEbEtnmgPo8dVEuoMhRuy+CXr1FV7KJRH1ZVEApRXOJOhP3Ld6u4+crDe0QOspIgViY45gSH9yics3rnRryM2tTFL25Djn9yd4J8K1D/TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=WCr5nv7x; arc=none smtp.client-ip=185.125.188.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [172.20.3.254] (unknown [213.157.19.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id D99A93F78B;
-	Wed, 14 May 2025 12:01:00 +0000 (UTC)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 9E5B33F78B;
+	Wed, 14 May 2025 12:02:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1747224061;
-	bh=zXQwntXwNt2ZWhKbv8QarNIDxC5KKobIQVoeL61PihI=;
+	s=20210705; t=1747224172;
+	bh=TmC3CIVizcLnnWBKfbtchRyDAwGclsEpc8usMmpxuUY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=pkcIxFvDLV9Q8enfkDeB4/5apWjF1PV/4bYaHjhiUEliY4u+2N74/UucwCBGo29Sh
-	 Xzm3amvJkloS0Wn6FwHc3ocmn31R3BIiWqgteXhCme8KuDeGQtE62zQ7qj1K9UhCb2
-	 U0oHvT4mdXEUWr7DEeAZa5tHy3KLiXvoFoHr/uOZG3LKprGoGxDBFXPLi+h5YAX2nr
-	 cufHaGaUXAboCQzIzSU45yqm+abpge0oFNbZVFItgS+i/9goGYgJDbuWoCEiI8UAIF
-	 cN/3dFqz1bdjiCk0zCft8mjDi89Trc7wKgKWVa2ktX76oasC28IPh0TzZ/fYFcWOgN
-	 43CYsfC3V8caQ==
-Message-ID: <cb8f6a2a-07c5-4e43-b5ff-61b04f53c0a8@canonical.com>
-Date: Wed, 14 May 2025 05:01:00 -0700
+	b=WCr5nv7x03SPY9ftFic/R5NkGC+InYQUFZtH3Lvz56k902LpfII/Fir9HqilBFfki
+	 cR2N2lGPqajWEbgR6MKbr56J0Txap89k1w/dD4GP9kjuuwPd5Vy/6Jpva1TlF5s+Mb
+	 k0H6iqtSLoXHt52Zx/sDOenRAZyS68u/IrodzsSixDwmghDfRHACZvwP0PvT5SRIf0
+	 HLQi2aWxby4+AOf20Lf8M8Hz7Roi22L3TdK5Fy2TmbJOnLw8EFvE8Bjq55zHswSUoR
+	 xQlAOOCVKbQ/bUXdB7+B5v7cMY3AqP0y5JuOaf2m+vNT0OU9awHfOPLmiFSDvwbb7z
+	 kuMkciIvfaJ/Q==
+Message-ID: <6d764173-cdf8-435a-a789-bbaf5ecccf0e@canonical.com>
+Date: Wed, 14 May 2025 05:02:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 16/29] lsm: output available LSMs when debugging
+Subject: Re: [RFC PATCH 19/29] ipe: move initcalls to the LSM framework
 To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
  linux-integrity@vger.kernel.org, selinux@vger.kernel.org
 Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
@@ -68,7 +68,7 @@ Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
  Casey Schaufler <casey@schaufler-ca.com>,
  Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 References: <20250409185019.238841-31-paul@paul-moore.com>
- <20250409185019.238841-47-paul@paul-moore.com>
+ <20250409185019.238841-50-paul@paul-moore.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -114,60 +114,61 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <20250409185019.238841-47-paul@paul-moore.com>
+In-Reply-To: <20250409185019.238841-50-paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/9/25 11:50, Paul Moore wrote:
-> This will display all of the LSMs built into the kernel, regardless
-> of if they are enabled or not.
-> 
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
 
 Reviewed-by: John Johansen <john.johansen@canonical.com>
 
+
 > ---
->   security/lsm_init.c | 19 ++++++++++++++++++-
->   1 file changed, 18 insertions(+), 1 deletion(-)
+>   security/ipe/fs.c  | 4 +---
+>   security/ipe/ipe.c | 1 +
+>   security/ipe/ipe.h | 2 ++
+>   3 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index aba1253ffc4c..8e00afeb84cf 100644
-> --- a/security/lsm_init.c
-> +++ b/security/lsm_init.c
-> @@ -363,6 +363,8 @@ int __init early_security_init(void)
+> diff --git a/security/ipe/fs.c b/security/ipe/fs.c
+> index 5b6d19fb844a..e4437c70ed3d 100644
+> --- a/security/ipe/fs.c
+> +++ b/security/ipe/fs.c
+> @@ -187,7 +187,7 @@ static const struct file_operations enforce_fops = {
+>    * Return: %0 on success. If an error occurs, the function will return
+>    * the -errno.
+>    */
+> -static int __init ipe_init_securityfs(void)
+> +int __init ipe_init_securityfs(void)
 >   {
->   	struct lsm_info *lsm;
+>   	int rc = 0;
+>   	struct ipe_policy *ap;
+> @@ -243,5 +243,3 @@ static int __init ipe_init_securityfs(void)
+>   	securityfs_remove(root);
+>   	return rc;
+>   }
+> -
+> -fs_initcall(ipe_init_securityfs);
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index 2426441181dc..71644748ed56 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -95,4 +95,5 @@ DEFINE_LSM(ipe) = {
+>   	.id = &ipe_lsmid,
+>   	.init = ipe_init,
+>   	.blobs = &ipe_blobs,
+> +	.initcall_fs = ipe_init_securityfs,
+>   };
+> diff --git a/security/ipe/ipe.h b/security/ipe/ipe.h
+> index fb37513812dd..25cfdb8f0c20 100644
+> --- a/security/ipe/ipe.h
+> +++ b/security/ipe/ipe.h
+> @@ -23,4 +23,6 @@ struct ipe_bdev *ipe_bdev(struct block_device *b);
+>   struct ipe_inode *ipe_inode(const struct inode *inode);
+>   #endif /* CONFIG_IPE_PROP_FS_VERITY_BUILTIN_SIG */
 >   
-> +	/* NOTE: lsm_pr_dbg() doesn't work here as lsm_debug is not yet set */
+> +int ipe_init_securityfs(void);
 > +
->   	lsm_early_for_each_raw(lsm) {
->   		lsm_enabled_set(lsm, true);
->   		lsm_order_append(lsm, "early");
-> @@ -385,9 +387,24 @@ int __init security_init(void)
->   	struct lsm_info **lsm;
->   
->   	if (lsm_debug) {
-> -		lsm_pr("built-in LSM list: %s\n", lsm_order_builtin);
-> +		struct lsm_info *i;
-> +
-> +		cnt = 0;
-> +		lsm_pr("available LSMs: ");
-> +		lsm_early_for_each_raw(i)
-> +			lsm_pr_cont("%s%s(E)", (cnt++ ? "," : ""), i->id->name);
-> +		lsm_for_each_raw(i)
-> +			lsm_pr_cont("%s%s", (cnt++ ? "," : ""), i->id->name);
-> +		lsm_pr_cont("\n");
-> +
-> +		lsm_pr("built-in LSM config: %s\n", lsm_order_builtin);
-> +
->   		lsm_pr("legacy LSM parameter: %s\n", lsm_order_legacy);
->   		lsm_pr("boot LSM parameter: %s\n", lsm_order_cmdline);
-> +
-> +		/* see the note about lsm_pr_dbg() in early_security_init() */
-> +		lsm_early_for_each_raw(i)
-> +			lsm_pr("enabled LSM early:%s\n", i->id->name);
->   	}
->   
->   	if (lsm_order_cmdline) {
+>   #endif /* _IPE_H */
 
 
