@@ -1,211 +1,172 @@
-Return-Path: <linux-integrity+bounces-6201-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6202-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61668AB6B23
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:12:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75EEAAB6B43
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:18:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29CAC4C2EED
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:11:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10BB119E5BE5
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE9A1EB36;
-	Wed, 14 May 2025 12:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54211277020;
+	Wed, 14 May 2025 12:18:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mjLPrrgL";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="NaRt2/Uz";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mjLPrrgL";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="NaRt2/Uz"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="KscIIPiL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B768227587A
-	for <linux-integrity@vger.kernel.org>; Wed, 14 May 2025 12:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3BF2040AB;
+	Wed, 14 May 2025 12:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747224650; cv=none; b=WVyPmau95cuLRRzPlecNQPjOL60VsLLvN9UG/PR1cEChQTks6+i8Yiti2WVthu5fqlf0xEkESa/da6Jtv8DQj0s+Cnd3qmsrgLFaW5nb5u7hjEySDMCwiYx3WjoP8y2V+rxolA0JclnAZ41vhOGw7a3KnXvIoT6qUN/xhh8oEyA=
+	t=1747225094; cv=none; b=uWTBdG5toX+nz/kYSO6E+X09boY2Ojc0Gxuug8AbmOBFTFu3WavGd+ORvFJdac7F7/99r6QI53bPB+dzB5L4G3ybbVIANXcooLQHf+hCi4XRBCAy1cED3C3NIDH7cXCqqcHlYKxdY8Eo+b1DLVCLRBlKYb2klahR+8ddfhynz7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747224650; c=relaxed/simple;
-	bh=ujFU64lUnTiA1/QHpshqazoqqgK3H8Ez9VWMW+ljgu0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EeR4hsTs42Rm1HirnxlVDqkjLfjJ3+kpLsrCwi6lbG3ejEiJnNqYx3L543wFGS3DIHKMBUO6G9IY1h1d5wOsu20QxpwAGIKtji1Xn9NxadGEMl8lW8viddOImiOinyZMgKXn52x1uCPk8rFwZHuKhYS/ndfcOPprQC1P3wxVOCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mjLPrrgL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=NaRt2/Uz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mjLPrrgL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=NaRt2/Uz; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	s=arc-20240116; t=1747225094; c=relaxed/simple;
+	bh=6FPgWpCa9xf0I4XTSPUrv/BUMXbBTntv196swA/Kv9s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=abYXCQUxduWsehGMvvXk2Ox14zIWPKm0Y9dKTJG9/BtFKZcFa75X01pzRA6JEfTewwM10n8GLChbm2J7QwAUtVq61Dvc8zwFotepu7KvMTnl6qzldBlgjEGY6NXFzGI3LNOEDF9UOwdOJ0BfTA2s0u6OLBDBrBCaCSgySYnI0YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=KscIIPiL; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from [172.20.3.254] (unknown [213.157.19.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D16A01F745;
-	Wed, 14 May 2025 12:10:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1747224646; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Lw+353Ca7lhmfXTfDio3C8efnVDU+1woQnWA/apBzB8=;
-	b=mjLPrrgLHlt+uXShOhyDAy/FpSMJaFSOUxmUDhtG0J+v+vjkmPwq8pne0bvJ6B3jc+qlyy
-	sqQfahb1UcC1AhI1m7QWS6vVEw4L4w1TnfObHfxFK3ETV/HxGA+uQ2lHc5w0In8WYnxt5p
-	YKV03EDbyAXtyulGCNjI2/F0H2psbOo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1747224646;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Lw+353Ca7lhmfXTfDio3C8efnVDU+1woQnWA/apBzB8=;
-	b=NaRt2/UziOA672AmZIuYg6dQ8m4AL5lbhAgC6p8eP2LKvjGiSmon2085un6zbIEa/hdMjz
-	nqbocSZWw+QOYtAQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1747224646; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Lw+353Ca7lhmfXTfDio3C8efnVDU+1woQnWA/apBzB8=;
-	b=mjLPrrgLHlt+uXShOhyDAy/FpSMJaFSOUxmUDhtG0J+v+vjkmPwq8pne0bvJ6B3jc+qlyy
-	sqQfahb1UcC1AhI1m7QWS6vVEw4L4w1TnfObHfxFK3ETV/HxGA+uQ2lHc5w0In8WYnxt5p
-	YKV03EDbyAXtyulGCNjI2/F0H2psbOo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1747224646;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Lw+353Ca7lhmfXTfDio3C8efnVDU+1woQnWA/apBzB8=;
-	b=NaRt2/UziOA672AmZIuYg6dQ8m4AL5lbhAgC6p8eP2LKvjGiSmon2085un6zbIEa/hdMjz
-	nqbocSZWw+QOYtAQ==
-Date: Wed, 14 May 2025 14:10:45 +0200
-From: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jonathan McDowell <noodles@earth.li>,
-	Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH v3] tpm: tis: Double the timeout B to 4s
-Message-ID: <aCSIRS1fq_b9sByn@kitsune.suse.cz>
-References: <4e4640bd-0313-4594-9667-82340ed9368a@molgen.mpg.de>
- <20250404082325.13876-1-msuchanek@suse.de>
- <Z--d7Obw2UEk8Pve@kernel.org>
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id B0A473FF38;
+	Wed, 14 May 2025 12:18:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1747225090;
+	bh=m0Bp5YYz1/B9AlLqi0BlKB1pgD6qjcp/7toda9IedIw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type;
+	b=KscIIPiLETMNardkFxRzNEIo7XfAOxX8ppCobIOtaWsojbaEVA1tiAGieF11dkxPD
+	 kzzj4tNzSQtsHMcHGixqaeD3gEYTDsf80AsMPV9N5n/e8FZo9vC6BvFiZu5k0AZ16m
+	 wVGTCf8QzeVBy00Qrgg9417yRTV5HxgBZLN0cC4cJTHu81HGmQDkD3cQnnH7+muZ2g
+	 iOPYTaLZOAemxojo9f+4IRtIncv32FBZ5eAR6nOnstM+p6ynZ6PL9MLr42hCaev94i
+	 V+FDEu3aHmtIH1xxcwR4cWksOqYBYYwaPguWrtVV0zlGvj3LIovfbaMZ1HPPV2rZ+U
+	 mBB92zWcZSghA==
+Message-ID: <c00aad36-934d-4d5c-ba46-0128b84a12f8@canonical.com>
+Date: Wed, 14 May 2025 05:18:09 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z--d7Obw2UEk8Pve@kernel.org>
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,vger.kernel.org,earth.li,molgen.mpg.de];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email]
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 22/29] safesetid: move initcalls to the LSM framework
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+References: <20250409185019.238841-31-paul@paul-moore.com>
+ <20250409185019.238841-53-paul@paul-moore.com>
+Content-Language: en-US
+From: John Johansen <john.johansen@canonical.com>
+Autocrypt: addr=john.johansen@canonical.com; keydata=
+ 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 lT9Q
+Organization: Canonical
+In-Reply-To: <20250409185019.238841-53-paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 4/9/25 11:50, Paul Moore wrote:
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-On Fri, Apr 04, 2025 at 11:53:00AM +0300, Jarkko Sakkinen wrote:
-> On Fri, Apr 04, 2025 at 10:23:14AM +0200, Michal Suchanek wrote:
-> > With some Infineon chips the timeouts in tpm_tis_send_data (both B and
-> > C) can reach up to about 2250 ms.
-> > 
-> > Timeout C is retried since
-> > commit de9e33df7762 ("tpm, tpm_tis: Workaround failed command reception on Infineon devices")
-> > 
-> > Timeout B still needs to be extended.
-> > 
-> > The problem is most commonly encountered with context related operation
-> > such as load context/save context. These are issued directly by the
-> > kernel, and there is no retry logic for them.
-> > 
-> > When a filesystem is set up to use the TPM for unlocking the boot fails,
-> > and restarting the userspace service is ineffective. This is likely
-> > because ignoring a load context/save context result puts the real TPM
-> > state and the TPM state expected by the kernel out of sync.
-> > 
-> > Chips known to be affected:
-> > tpm_tis IFX1522:00: 2.0 TPM (device-id 0x1D, rev-id 54)
-> > Description: SLB9672
-> > Firmware Revision: 15.22
-> > 
-> > tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1B, rev-id 22)
-> > Firmware Revision: 7.83
-> > 
-> > tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1A, rev-id 16)
-> > Firmware Revision: 5.63
-> > 
-> > Link: https://lore.kernel.org/linux-integrity/Z5pI07m0Muapyu9w@kitsune.suse.cz/
-> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > ---
-> > v2: Only extend timeout B
-> > v3: Update commit message
-> > ---
-> >  drivers/char/tpm/tpm_tis_core.h | 2 +-
-> >  include/linux/tpm.h             | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> > index 970d02c337c7..6c3aa480396b 100644
-> > --- a/drivers/char/tpm/tpm_tis_core.h
-> > +++ b/drivers/char/tpm/tpm_tis_core.h
-> > @@ -54,7 +54,7 @@ enum tis_int_flags {
-> >  enum tis_defaults {
-> >  	TIS_MEM_LEN = 0x5000,
-> >  	TIS_SHORT_TIMEOUT = 750,	/* ms */
-> > -	TIS_LONG_TIMEOUT = 2000,	/* 2 sec */
-> > +	TIS_LONG_TIMEOUT = 4000,	/* 4 secs */
-> >  	TIS_TIMEOUT_MIN_ATML = 14700,	/* usecs */
-> >  	TIS_TIMEOUT_MAX_ATML = 15000,	/* usecs */
-> >  };
-> > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > index 6c3125300c00..3db0b6a87d45 100644
-> > --- a/include/linux/tpm.h
-> > +++ b/include/linux/tpm.h
-> > @@ -224,7 +224,7 @@ enum tpm2_const {
-> >  
-> >  enum tpm2_timeouts {
-> >  	TPM2_TIMEOUT_A          =    750,
-> > -	TPM2_TIMEOUT_B          =   2000,
-> > +	TPM2_TIMEOUT_B          =   4000,
-> >  	TPM2_TIMEOUT_C          =    200,
-> >  	TPM2_TIMEOUT_D          =     30,
-> >  	TPM2_DURATION_SHORT     =     20,
-> > -- 
-> > 2.47.1
-> > 
-> > 
+Reviewed-by: John Johansen <john.johansen@canonical.com>
+
+> ---
+>   security/safesetid/lsm.c        | 1 +
+>   security/safesetid/lsm.h        | 2 ++
+>   security/safesetid/securityfs.c | 3 +--
+>   3 files changed, 4 insertions(+), 2 deletions(-)
 > 
-> Cc: stable@vger.kernel.org # v6.1+
-> 
-> Probably best that I'll piggyback a patch set for stable with the two
-> fixes, in order to cause least noise. I need to do this *after* an
-> ack'd PR to -rc2.
+> diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
+> index 9a7c68d4e642..d5fb949050dd 100644
+> --- a/security/safesetid/lsm.c
+> +++ b/security/safesetid/lsm.c
+> @@ -289,4 +289,5 @@ static int __init safesetid_security_init(void)
+>   DEFINE_LSM(safesetid_security_init) = {
+>   	.id = &safesetid_lsmid,
+>   	.init = safesetid_security_init,
+> +	.initcall_fs = safesetid_init_securityfs,
+>   };
+> diff --git a/security/safesetid/lsm.h b/security/safesetid/lsm.h
+> index d346f4849cea..bf5172e2c3f7 100644
+> --- a/security/safesetid/lsm.h
+> +++ b/security/safesetid/lsm.h
+> @@ -70,4 +70,6 @@ enum sid_policy_type _setid_policy_lookup(struct setid_ruleset *policy,
+>   extern struct setid_ruleset __rcu *safesetid_setuid_rules;
+>   extern struct setid_ruleset __rcu *safesetid_setgid_rules;
+>   
+> +int safesetid_init_securityfs(void);
+> +
+>   #endif /* _SAFESETID_H */
+> diff --git a/security/safesetid/securityfs.c b/security/safesetid/securityfs.c
+> index 8e1ffd70b18a..ece259f75b0d 100644
+> --- a/security/safesetid/securityfs.c
+> +++ b/security/safesetid/securityfs.c
+> @@ -308,7 +308,7 @@ static const struct file_operations safesetid_gid_file_fops = {
+>   	.write = safesetid_gid_file_write,
+>   };
+>   
+> -static int __init safesetid_init_securityfs(void)
+> +int __init safesetid_init_securityfs(void)
+>   {
+>   	int ret;
+>   	struct dentry *policy_dir;
+> @@ -345,4 +345,3 @@ static int __init safesetid_init_securityfs(void)
+>   	securityfs_remove(policy_dir);
+>   	return ret;
+>   }
+> -fs_initcall(safesetid_init_securityfs);
 
-While there is talk about stable this does not seem to be applied
-anywhere I could find. Is that expected?
-
-Thanks
-
-Michal
-
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> BR, Jarkko
 
