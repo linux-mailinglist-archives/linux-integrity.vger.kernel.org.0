@@ -1,55 +1,55 @@
-Return-Path: <linux-integrity+bounces-6199-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6200-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BEE8AB6AE1
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:02:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF624AB6B06
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 14:08:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 742323B4E14
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:02:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8467E4C27D4
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 May 2025 12:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A321E9907;
-	Wed, 14 May 2025 12:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC50D276026;
+	Wed, 14 May 2025 12:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="WCr5nv7x"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="PkXa2/PC"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38822202997;
-	Wed, 14 May 2025 12:02:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146B627510A;
+	Wed, 14 May 2025 12:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747224174; cv=none; b=huAI4RZa8b9SiwV/qCvJgvcAqVh6JVTuE5zOgg2ZhT2WkTh6uqcbZIwhmHjUDlnWgaAbJi6yBula732rbx+dM/ed/HTlqsHX22KTVgcINkfvDpdwAi5DRFXTophgsFl9yz60ucf0HsalrC9EHexzztfwTCU9Gk58pM2XBwn9sOw=
+	t=1747224339; cv=none; b=HD2/an0D7e/zK0jbV6CxYm6ed4+2X/ErQnnVgON20XB7KPdmsOPWc0DKScVhXqU5JfBijK3IRZ6pejd5T0eh4XdqrSfWq3Kcj11DPJfk8MftAyNDOxWtzjFDsJhcCYCBdDBV9oSVWq1GPvw5o8wCWCwcI9+CxzLCPsEyLq55MuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747224174; c=relaxed/simple;
-	bh=GJbvmy8qNXkkuZgH06DyobcDeTbwNMdLFQJ8IEqKXEo=;
+	s=arc-20240116; t=1747224339; c=relaxed/simple;
+	bh=KrM1wrdga3hZBhS33DXbEVF0L09nyoDSxwD2vOAbTr4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XUdemKy0e9BKp/fzfInrKaw9jssU4mv5nDSwgjbbH4VhMvwM9MUYczpwtANFhGZ0NGEbEtnmgPo8dVEuoMhRuy+CXr1FV7KJRH1ZVEApRXOJOhP3Ld6u4+crDe0QOspIgViY45gSH9yics3rnRryM2tTFL25Djn9yd4J8K1D/TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=WCr5nv7x; arc=none smtp.client-ip=185.125.188.120
+	 In-Reply-To:Content-Type; b=TBF/HCvmf74Kqzsj/BKe9h4BZezwdcQEReJxhBY28ZL7opkA+EAslDGMlRTERFXwi+dOVChEFNDccJ/BcaxH45DNWN16AoFFgDKWYGpw+qEFuYB3CFYv0H9jAYkZAkg5Y8NXJPZ0jeOQ6/UogCdvBuPj/WYbsB1cboRMYvSlbaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=PkXa2/PC; arc=none smtp.client-ip=185.125.188.120
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [172.20.3.254] (unknown [213.157.19.135])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 9E5B33F78B;
-	Wed, 14 May 2025 12:02:51 +0000 (UTC)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 4132B3F92B;
+	Wed, 14 May 2025 12:05:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1747224172;
-	bh=TmC3CIVizcLnnWBKfbtchRyDAwGclsEpc8usMmpxuUY=;
+	s=20210705; t=1747224336;
+	bh=0nBwJx9zEBgqUzHif7MWjFxE0P2gdNf7nj0Is1Re7LY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=WCr5nv7x03SPY9ftFic/R5NkGC+InYQUFZtH3Lvz56k902LpfII/Fir9HqilBFfki
-	 cR2N2lGPqajWEbgR6MKbr56J0Txap89k1w/dD4GP9kjuuwPd5Vy/6Jpva1TlF5s+Mb
-	 k0H6iqtSLoXHt52Zx/sDOenRAZyS68u/IrodzsSixDwmghDfRHACZvwP0PvT5SRIf0
-	 HLQi2aWxby4+AOf20Lf8M8Hz7Roi22L3TdK5Fy2TmbJOnLw8EFvE8Bjq55zHswSUoR
-	 xQlAOOCVKbQ/bUXdB7+B5v7cMY3AqP0y5JuOaf2m+vNT0OU9awHfOPLmiFSDvwbb7z
-	 kuMkciIvfaJ/Q==
-Message-ID: <6d764173-cdf8-435a-a789-bbaf5ecccf0e@canonical.com>
-Date: Wed, 14 May 2025 05:02:51 -0700
+	b=PkXa2/PCKEfCe6NqNRtt0YC7ZGLPaR+P3DcNGYCMk/PnEst73y4IrFBmOZwepsr2m
+	 ztQUPW2ggm2oXtxN6IMThhB8Y4NGOqoxavEgqksKOqMHRDT+Y9xK/YW7GE9SQCAt9+
+	 qmjsrjx7if5QgEhEYGzAORxL3IScFuYWpnDFHr85hNf0qyT0p1/b8D9tHWjVaREkVf
+	 idyJcPrg7cjgoYpnCIX6/aOVN1vFgX2P5WibxdEWF9EpLUSIa0moOKx6OcaNhAnMYK
+	 1yUc3mkJYe7RxXSlE3zdCZfiPWRXG0tPbWx6MxWgkL8w1BL5GUDyokolLob9rFakTU
+	 S7UL2QHYuLZ9g==
+Message-ID: <a42e70a0-bbfd-4cb6-aa9b-9512ffd27232@canonical.com>
+Date: Wed, 14 May 2025 05:05:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 19/29] ipe: move initcalls to the LSM framework
+Subject: Re: [RFC PATCH 21/29] tomoyo: move initcalls to the LSM framework
 To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
  linux-integrity@vger.kernel.org, selinux@vger.kernel.org
 Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
@@ -68,7 +68,7 @@ Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
  Casey Schaufler <casey@schaufler-ca.com>,
  Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 References: <20250409185019.238841-31-paul@paul-moore.com>
- <20250409185019.238841-50-paul@paul-moore.com>
+ <20250409185019.238841-52-paul@paul-moore.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -114,61 +114,61 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <20250409185019.238841-50-paul@paul-moore.com>
+In-Reply-To: <20250409185019.238841-52-paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 4/9/25 11:50, Paul Moore wrote:
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
-
 Reviewed-by: John Johansen <john.johansen@canonical.com>
 
-
 > ---
->   security/ipe/fs.c  | 4 +---
->   security/ipe/ipe.c | 1 +
->   security/ipe/ipe.h | 2 ++
+>   security/tomoyo/common.h        | 2 ++
+>   security/tomoyo/securityfs_if.c | 4 +---
+>   security/tomoyo/tomoyo.c        | 1 +
 >   3 files changed, 4 insertions(+), 3 deletions(-)
 > 
-> diff --git a/security/ipe/fs.c b/security/ipe/fs.c
-> index 5b6d19fb844a..e4437c70ed3d 100644
-> --- a/security/ipe/fs.c
-> +++ b/security/ipe/fs.c
-> @@ -187,7 +187,7 @@ static const struct file_operations enforce_fops = {
->    * Return: %0 on success. If an error occurs, the function will return
->    * the -errno.
+> diff --git a/security/tomoyo/common.h b/security/tomoyo/common.h
+> index 0e8e2e959aef..3b2a97d10a5d 100644
+> --- a/security/tomoyo/common.h
+> +++ b/security/tomoyo/common.h
+> @@ -924,6 +924,8 @@ struct tomoyo_task {
+>   
+>   /********** Function prototypes. **********/
+>   
+> +int tomoyo_interface_init(void);
+> +
+>   bool tomoyo_address_matches_group(const bool is_ipv6, const __be32 *address,
+>   				  const struct tomoyo_group *group);
+>   bool tomoyo_compare_number_union(const unsigned long value,
+> diff --git a/security/tomoyo/securityfs_if.c b/security/tomoyo/securityfs_if.c
+> index 7e69747b2f77..33933645f5b9 100644
+> --- a/security/tomoyo/securityfs_if.c
+> +++ b/security/tomoyo/securityfs_if.c
+> @@ -233,7 +233,7 @@ static void __init tomoyo_create_entry(const char *name, const umode_t mode,
+>    *
+>    * Returns 0.
 >    */
-> -static int __init ipe_init_securityfs(void)
-> +int __init ipe_init_securityfs(void)
+> -static int __init tomoyo_interface_init(void)
+> +int __init tomoyo_interface_init(void)
 >   {
->   	int rc = 0;
->   	struct ipe_policy *ap;
-> @@ -243,5 +243,3 @@ static int __init ipe_init_securityfs(void)
->   	securityfs_remove(root);
->   	return rc;
+>   	struct tomoyo_domain_info *domain;
+>   	struct dentry *tomoyo_dir;
+> @@ -269,5 +269,3 @@ static int __init tomoyo_interface_init(void)
+>   	tomoyo_load_builtin_policy();
+>   	return 0;
 >   }
 > -
-> -fs_initcall(ipe_init_securityfs);
-> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
-> index 2426441181dc..71644748ed56 100644
-> --- a/security/ipe/ipe.c
-> +++ b/security/ipe/ipe.c
-> @@ -95,4 +95,5 @@ DEFINE_LSM(ipe) = {
->   	.id = &ipe_lsmid,
->   	.init = ipe_init,
->   	.blobs = &ipe_blobs,
-> +	.initcall_fs = ipe_init_securityfs,
+> -fs_initcall(tomoyo_interface_init);
+> diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
+> index ed0f7b052a85..a015cf0c4a00 100644
+> --- a/security/tomoyo/tomoyo.c
+> +++ b/security/tomoyo/tomoyo.c
+> @@ -617,4 +617,5 @@ DEFINE_LSM(tomoyo) = {
+>   	.flags = LSM_FLAG_LEGACY_MAJOR,
+>   	.blobs = &tomoyo_blob_sizes,
+>   	.init = tomoyo_init,
+> +	.initcall_fs = tomoyo_interface_init,
 >   };
-> diff --git a/security/ipe/ipe.h b/security/ipe/ipe.h
-> index fb37513812dd..25cfdb8f0c20 100644
-> --- a/security/ipe/ipe.h
-> +++ b/security/ipe/ipe.h
-> @@ -23,4 +23,6 @@ struct ipe_bdev *ipe_bdev(struct block_device *b);
->   struct ipe_inode *ipe_inode(const struct inode *inode);
->   #endif /* CONFIG_IPE_PROP_FS_VERITY_BUILTIN_SIG */
->   
-> +int ipe_init_securityfs(void);
-> +
->   #endif /* _IPE_H */
 
 
