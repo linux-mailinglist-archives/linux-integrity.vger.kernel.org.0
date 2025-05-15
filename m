@@ -1,134 +1,172 @@
-Return-Path: <linux-integrity+bounces-6235-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6236-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E0ACAB8CD0
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 18:48:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 587D9AB8CD9
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 18:53:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2744F1BC51D6
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 16:48:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EE88A03A40
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 16:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A68A253939;
-	Thu, 15 May 2025 16:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jr+vQqo+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 190E2253B4C;
+	Thu, 15 May 2025 16:53:08 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8281472638
-	for <linux-integrity@vger.kernel.org>; Thu, 15 May 2025 16:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFBA1D79A6;
+	Thu, 15 May 2025 16:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747327711; cv=none; b=lW4tS8vDBcEqxaPe+k4UyXIANXmqcQYu7cNNRY9dLtTdVSYfoYljuIKv6QDZ2JDE4+nA9+x2mZLOr0GyPXXhwteIzm8NjpHGvHZ8pvcbVgYKR+B/B85E7HrRWjuyEHhAXG3jqzJN9BT/ZhKk4pXBruRH0DNAGyES3yL3U6oDnxI=
+	t=1747327988; cv=none; b=P4UyNplcCa9TFlNTf7V/qAkkKfRVVHPc+BaIuyu16UlGAdDm73CBWN8whBw3tzA9mCCMWN0BGeN+vSySmwmMRmGWloMo7RYoiRPWeSABvBkOFPI9wHrZdIk4ryh275bbcaTUhlbtZZyN+Z6hSn8SSrEB5YmB0EHUGm6/g9v8Qxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747327711; c=relaxed/simple;
-	bh=e7sLRz/Ngexj8R7WF81VpHeIb8mhEtxycl0RQ4IyKzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n7I9pAS32q6+s2/PqXKBxs7IuJ2alBDEU2VtMfRJHDmKn0urmcZEoE4bnzlw+CMvvGWrUvI9WzJkB8kgr+UJpAsdlX0LaTTVdoBhSpT39zj6aFvtuk+Z6/B54pl6tvX5qSDrbSfTQCZPlko3e5jdOAEW3l8N0L+oSPsqHrKPIJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jr+vQqo+; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 15 May 2025 12:48:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1747327705;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ANKimStGiUGQOc3uP+LxjVRcW73HM8BreHOddAxJSDk=;
-	b=jr+vQqo+av+AC45bxpBf4MrrMGToarKcorsY0sn7xB2PvT6vHc4UZLRitpUGOMSQGorx6U
-	fIukGjhLo673D8y6U9SZgEBxZ/GfQwg8C/pjKVGXOlAlkUE4hszD9YLbgRAuY7AT+oj0zz
-	6++wmGp7XLvz3fNn3Tq9ZeY9mlBkmvo=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: syzbot <syzbot+3f0b3970f154dfc95e6e@syzkaller.appspotmail.com>, 
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, paul@paul-moore.com, roberto.sassu@huawei.com, serge@hallyn.com, 
-	syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com, linux-bcachefs@vger.kernel.org
+	s=arc-20240116; t=1747327988; c=relaxed/simple;
+	bh=x2mw5yqY7SjedCStPq1pT8tA+9SiafJT2CicuDHHlus=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aDP3B5F151Pc805a8lQDJL4f8rq52PX2CmroRaWmN9mwvgXJdgg6LuRI668FDqJ6RRm2boK/0S+Qs5CZyLn2JbkBYsvNpohApp1/fnbERyJxkdhE5T33f6KNYy3YAPjncBDTzXedFziwfUVi0GLzMSPXu+M9usJ/F7Md5bmRCb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4Zyx8V3tdtzsST6;
+	Fri, 16 May 2025 00:52:26 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 8BDF61402E0;
+	Fri, 16 May 2025 00:53:00 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwCHC0rhGyZocybvBw--.48004S2;
+	Thu, 15 May 2025 17:52:59 +0100 (CET)
+Message-ID: <2a20e37ac05068a0fbcfb6faaf6cd73123da2844.camel@huaweicloud.com>
 Subject: Re: [syzbot] [lsm?] [integrity?] KMSAN: uninit-value in
  ima_add_template_entry (3)
-Message-ID: <er7lw7xo3qfu67sdjdghcurgar3q2iwcy6lr4jlunsmev5c4qq@b7mue2oh6ort>
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: syzbot <syzbot+3f0b3970f154dfc95e6e@syzkaller.appspotmail.com>, 
+ dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org, 
+ linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, paul@paul-moore.com, 
+ roberto.sassu@huawei.com, serge@hallyn.com,
+ syzkaller-bugs@googlegroups.com,  zohar@linux.ibm.com,
+ linux-bcachefs@vger.kernel.org
+Date: Thu, 15 May 2025 18:52:45 +0200
+In-Reply-To: <er7lw7xo3qfu67sdjdghcurgar3q2iwcy6lr4jlunsmev5c4qq@b7mue2oh6ort>
 References: <6824aea8.a00a0220.104b28.0011.GAE@google.com>
- <38c28bd4dc40b2e992c13a6fdba820a667861d8c.camel@huaweicloud.com>
- <rbab6axciiuomrann3uwvpks2zogx3xfntk7w4p2betq3morlf@5xnl5guhnaxj>
- <576e10238d83f725fbe23c4af63be6e83de9ce48.camel@huaweicloud.com>
- <l7xs6ea7takb5yvyvobxoce3mudbgen5d7s47onksm4ujpdkib@tvstwbdpvm4o>
- <2993afd1b2b1553a75d1016ec2d06b6fb8e78e57.camel@huaweicloud.com>
+	 <38c28bd4dc40b2e992c13a6fdba820a667861d8c.camel@huaweicloud.com>
+	 <rbab6axciiuomrann3uwvpks2zogx3xfntk7w4p2betq3morlf@5xnl5guhnaxj>
+	 <576e10238d83f725fbe23c4af63be6e83de9ce48.camel@huaweicloud.com>
+	 <l7xs6ea7takb5yvyvobxoce3mudbgen5d7s47onksm4ujpdkib@tvstwbdpvm4o>
+	 <2993afd1b2b1553a75d1016ec2d06b6fb8e78e57.camel@huaweicloud.com>
+	 <er7lw7xo3qfu67sdjdghcurgar3q2iwcy6lr4jlunsmev5c4qq@b7mue2oh6ort>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2993afd1b2b1553a75d1016ec2d06b6fb8e78e57.camel@huaweicloud.com>
-X-Migadu-Flow: FLOW_OUT
+X-CM-TRANSID:LxC2BwCHC0rhGyZocybvBw--.48004S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw18uw17XF1DAF1kKF4DArb_yoW5ArWDpa
+	yaqF1UK34DXFy7ArW2k3WYqFyfKrW8t345X34rXr97CF90qr1Y9ryxtr1Y9r17Xr1rtw1U
+	Cr1Dt34avw1DJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOB
+	MKDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBGglkmAH5AAAsT
 
-On Thu, May 15, 2025 at 06:39:48PM +0200, Roberto Sassu wrote:
-> On Thu, 2025-05-15 at 12:37 -0400, Kent Overstreet wrote:
-> > On Thu, May 15, 2025 at 04:30:09PM +0200, Roberto Sassu wrote:
-> > > On Thu, 2025-05-15 at 10:18 -0400, Kent Overstreet wrote:
-> > > > On Thu, May 15, 2025 at 04:06:02PM +0200, Roberto Sassu wrote:
-> > > > > On Wed, 2025-05-14 at 07:54 -0700, syzbot wrote:
-> > > > > > Hello,
-> > > > > 
-> > > > > + Kent, bcachefs mailing list
-> > > > > 
-> > > > > I have the feeling that this was recently fixed in one of the latest
-> > > > > pull requests in bcachefs. I don't see it occurring anymore, and there
-> > > > > are more commits after the one reported by syzbot.
-> > > > 
-> > > > I have no idea how any of the ima stuff works or even what it does, I'm
-> > > > not even sure where I'd start...
-> > > 
-> > > Basically, I got a clue that bcachefs would be the cause from the
-> > > bottom of the report:
-> > > 
-> > >  page_cache_sync_ra+0x108a/0x13e0 mm/readahead.c:621
-> > >  filemap_get_pages+0xfb3/0x3a70 mm/filemap.c:2591
-> > >  filemap_read+0x5c6/0x2190 mm/filemap.c:2702
-> > >  bch2_read_iter+0x559/0x21c0 fs/bcachefs/fs-io-direct.c:221
-> > >  __kernel_read+0x750/0xda0 fs/read_write.c:528
-> > >  integrity_kernel_read+0x77/0x90 security/integrity/iint.c:28
-> > > 
-> > > This means that IMA is reading a file and calculating a digest over it:
-> > > 
-> > >  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:498 [inline]
-> > >  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inline]
-> > >  ima_calc_file_hash+0x240a/0x3fd0 security/integrity/ima/ima_crypto.c:568
-> > >  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api.c:293
-> > >  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.c:385
-> > >  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
-> > > 
-> > > syzbot is complaining that the data the digest was calculated from was
-> > > not initialized (e.g. zeroed).
-> > > 
-> > > There is a reproducer, we would be probably able to do a bisection and
-> > > find the commit that caused it (and maybe the one that fixed it).
-> > 
-> > Ok, that would be fixed by the - multiple - KMSAN fixes, most of those
-> > were spurious but code was lacking annotations. Probably this one:
-> > 
-> > 9c3a2c9b471a bcachefs: Disable asm memcpys when kmsan enabled
-> 
-> Perfect, thanks a lot!
-> 
-> Will check it and mark this report as fixed.
+On Thu, 2025-05-15 at 12:48 -0400, Kent Overstreet wrote:
+> On Thu, May 15, 2025 at 06:39:48PM +0200, Roberto Sassu wrote:
+> > On Thu, 2025-05-15 at 12:37 -0400, Kent Overstreet wrote:
+> > > On Thu, May 15, 2025 at 04:30:09PM +0200, Roberto Sassu wrote:
+> > > > On Thu, 2025-05-15 at 10:18 -0400, Kent Overstreet wrote:
+> > > > > On Thu, May 15, 2025 at 04:06:02PM +0200, Roberto Sassu wrote:
+> > > > > > On Wed, 2025-05-14 at 07:54 -0700, syzbot wrote:
+> > > > > > > Hello,
+> > > > > >=20
+> > > > > > + Kent, bcachefs mailing list
+> > > > > >=20
+> > > > > > I have the feeling that this was recently fixed in one of the l=
+atest
+> > > > > > pull requests in bcachefs. I don't see it occurring anymore, an=
+d there
+> > > > > > are more commits after the one reported by syzbot.
+> > > > >=20
+> > > > > I have no idea how any of the ima stuff works or even what it doe=
+s, I'm
+> > > > > not even sure where I'd start...
+> > > >=20
+> > > > Basically, I got a clue that bcachefs would be the cause from the
+> > > > bottom of the report:
+> > > >=20
+> > > >  page_cache_sync_ra+0x108a/0x13e0 mm/readahead.c:621
+> > > >  filemap_get_pages+0xfb3/0x3a70 mm/filemap.c:2591
+> > > >  filemap_read+0x5c6/0x2190 mm/filemap.c:2702
+> > > >  bch2_read_iter+0x559/0x21c0 fs/bcachefs/fs-io-direct.c:221
+> > > >  __kernel_read+0x750/0xda0 fs/read_write.c:528
+> > > >  integrity_kernel_read+0x77/0x90 security/integrity/iint.c:28
+> > > >=20
+> > > > This means that IMA is reading a file and calculating a digest over=
+ it:
+> > > >=20
+> > > >  ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:498 [in=
+line]
+> > > >  ima_calc_file_shash security/integrity/ima/ima_crypto.c:511 [inlin=
+e]
+> > > >  ima_calc_file_hash+0x240a/0x3fd0 security/integrity/ima/ima_crypto=
+.c:568
+> > > >  ima_collect_measurement+0x45d/0xe60 security/integrity/ima/ima_api=
+.c:293
+> > > >  process_measurement+0x2d1a/0x40e0 security/integrity/ima/ima_main.=
+c:385
+> > > >  ima_file_check+0x8e/0xd0 security/integrity/ima/ima_main.c:613
+> > > >=20
+> > > > syzbot is complaining that the data the digest was calculated from =
+was
+> > > > not initialized (e.g. zeroed).
+> > > >=20
+> > > > There is a reproducer, we would be probably able to do a bisection =
+and
+> > > > find the commit that caused it (and maybe the one that fixed it).
+> > >=20
+> > > Ok, that would be fixed by the - multiple - KMSAN fixes, most of thos=
+e
+> > > were spurious but code was lacking annotations. Probably this one:
+> > >=20
+> > > 9c3a2c9b471a bcachefs: Disable asm memcpys when kmsan enabled
+> >=20
+> > Perfect, thanks a lot!
+> >=20
+> > Will check it and mark this report as fixed.
+>=20
+> Btw, since you mentioned syzbot reproducers, I have a tool for running
+> those locally, with a single command. It's one of the "tests" in ktest:
+>=20
+> https://evilpiepirate.org/git/ktest.git/
+>=20
+> With that, you can do
+>=20
+> build-test-kernel run -IP ~/ktest/tests/syzbot-repro.ktest <syz id>
+>=20
+> in your kernel tree, and it'll build a kernel, launch a vm, and run the
+> reproducer, all in a single command :)
 
-Btw, since you mentioned syzbot reproducers, I have a tool for running
-those locally, with a single command. It's one of the "tests" in ktest:
+Great, will try that!
 
-https://evilpiepirate.org/git/ktest.git/
+Thanks
 
-With that, you can do
+Roberto
 
-build-test-kernel run -IP ~/ktest/tests/syzbot-repro.ktest <syz id>
-
-in your kernel tree, and it'll build a kernel, launch a vm, and run the
-reproducer, all in a single command :)
 
