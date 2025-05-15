@@ -1,199 +1,170 @@
-Return-Path: <linux-integrity+bounces-6240-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6241-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FAF4AB9121
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 23:02:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83673AB92DB
+	for <lists+linux-integrity@lfdr.de>; Fri, 16 May 2025 01:40:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3B553BFA7D
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 21:02:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5860F1BC6436
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 23:40:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29D5627E7D1;
-	Thu, 15 May 2025 21:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4469728C001;
+	Thu, 15 May 2025 23:40:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="XiL8FJUm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N4WhinOa"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4870E1A01B9
-	for <linux-integrity@vger.kernel.org>; Thu, 15 May 2025 21:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE5B25A2B4
+	for <linux-integrity@vger.kernel.org>; Thu, 15 May 2025 23:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747342958; cv=none; b=M2xDK5NqUKCql1inNtoQlV7bvF4FD3x1i12dkuZFJEvF4FTxI5BP4pcZTUau6skR7WHdW2Tchksv2ST9KvtEOSaCrnG5459BnuLGutDtc4m7fS0MUcoNn287Wtf2Kzcob8POrgavk1KvidSojDhSgYLlm5fJectpd55Yav0jgrs=
+	t=1747352413; cv=none; b=i3e4lDLyy/S5A3YONhzFxHCF39fA9t7is0vlouu2+UkkZcYEgpmSCYa3prmL0WyomY0fK41Wj9/5lFPD8yyQNHSr24gBvpJ8LqX7ZwppAjqQOT6L0WUSR5TJPi++V2Fc5ilVhVZvsC0cPG3NrZ2w2i/qDG4osxnEzpMdSSuQVvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747342958; c=relaxed/simple;
-	bh=26lORAklMyj3fACbwa3+V7HA6m0rRTkAPbAuDxglhgQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kKOaYtK1/VoLAmsCfs28Oz6aETztJB1O3zSrL0qqFc3dtoJJ77HaWyzKwtAUQW3BYn4Ue5QINnChwMaAQlVeK2wtkHGkek7/SL6iHF8j+YbeASB+q/Hn1zVlBq8ZiruohvRvhK8TKKS1gVsx8ntcX0bPE5bjVaWMv6ywrLfpHcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=XiL8FJUm; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e7b3178473eso1436268276.2
-        for <linux-integrity@vger.kernel.org>; Thu, 15 May 2025 14:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1747342955; x=1747947755; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VpA+fUmCWeSlCnAM5f9BQqcfVNSkTiIQtWWOa60sp2U=;
-        b=XiL8FJUmFGRnUMqoKtA/ruHD3tcMj1OcxzQFBX7d8tMj4I6tokx/9piGuH8vHN/B14
-         l4uqBVDanrbOs149W3cYP1j5HJCR7rKRyPzhT2ak16KOJPG2u2akDr9W6rIvgaVZp9Go
-         gVRnulBQNJu3OrgtRkis/35NDz5cNnlN4NoEMulEleFsCoovV0/WXZ7sidL5qdltiofw
-         Tl7aAe0BZCtJ6lH+Ww7s/ie7yMNmO1D8d9ouXq3QTXjClHuq+sHM2tGpKN6rza6kRjA+
-         SyzWdrCTmMsFC5AvpT/JNy4ZTxSgvKuO8nCXdtBhIThGkEvYTafseZhIUa3DTYgHy+iD
-         tb0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747342955; x=1747947755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VpA+fUmCWeSlCnAM5f9BQqcfVNSkTiIQtWWOa60sp2U=;
-        b=mgQyFPHL2dd4TeF5hgJxLuWUZiEsKT6xlPkzjWtQHDbA7s5bE5BnsnGUPo25Z33AW2
-         x2VnfgXxeN2cIlt7f70Wn0rTosVmaIF99y+4L0GeWJ9fcYyfTimJRqy6VpCLEMPfuMmY
-         2aEHWSEURNo3tqiNV3vu5QJd2KPPnJptIpM8GVHbdH3rukjxNPCC6zAlfVm4l724g/2G
-         Tlnvx1+cjr/LLSIzHFBf1THoQCWOkf05O3B5NrEdhAgtXVEh9BI1K3pcQc+LlbUkEzBu
-         2HSzmv6/rIvw8HRTPOdN8LjSZy7NTH6w4STY58Yt1Gp6jKhEXqPIT2XNPYIchtsAB6+i
-         C03Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXf0g+0LMuHjoSMgoGgjRiJRSpDTVbkUPRnuCs0J/y16ZeRrCZOMgwGT/vw1rLXBKPkeQtzsezm2hzUGQdkqGc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/xhCrKi3Ni4bCFWxw8MnkC/9vdiaAQN44fJjdi2NGCME5QEax
-	LqtPFHnPZ103XFKvGFU6CHVnmfcZs8b03hVXQc7DUXrWkovBc8SuAYgPdXPwhGsDzFka41o+FyR
-	3Xy7eVzbeuqhgRzHKNSNyArkW0Vur/aVA/ivHTvwf
-X-Gm-Gg: ASbGncshom5RZdlaa8zN2bHw5BDsT/uTV16z+kgQstdxR9+jvlQVoVDoHG8o99Kn6EH
-	5Hfi9O/1WB30u3aMYweyY0CQN9M0mEhSRCEFa3TxPlPv5Iz4BP2/3FWKct9J1ajjyn1KV/8AmqS
-	tOSBG72xNXqNHsl3LbjV19SbY7dFlPZNfF
-X-Google-Smtp-Source: AGHT+IFG4xJfXunSgZQeenjERt+7u3aBw98sMz9/+SZ1qA5bJgp4wIFrzJokOJs37W4C7WHtZPHLnos8TQBVMXB5/Ck=
-X-Received: by 2002:a05:6902:990:b0:e72:97bc:a1a1 with SMTP id
- 3f1490d57ef6-e7b69d546cemr1735351276.7.1747342954909; Thu, 15 May 2025
- 14:02:34 -0700 (PDT)
+	s=arc-20240116; t=1747352413; c=relaxed/simple;
+	bh=ERVX+s959A0yRGyUyhcMw61Csm98b355tffxJ6/0IpA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-type; b=Hifwxf/a+E0jfeXrSJJ5sThd6frsnyv60onSf/HWiDrAG83HWELrgV2X9e76KBAyyKZFI4zCig4sDdW16Ic13FQMl0KNIpBMTLp1q4+tCLfsIMQpKQIu51rg+OAfRERmWIzaruRMRGL5HiQMAIgLoiPdA05vYBhiMv3gk//zGCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N4WhinOa; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747352408;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sN0gqNKdHiRnqR9zRSmok5U8Kkvw2pyyyB0AjUU42/8=;
+	b=N4WhinOaPA+7I6PShSk1tQdLtUDfoeA260sCMp8V143UFIXFqD1NF49x7Jm7+AkP74SjFM
+	XSv+6QzAmovJyc2zq5ob2K+KyRpHmyZUF6tDCgl+OxlAAN6diUZ7sLkZY/6TR/juTS+owy
+	W46xCnD8hVZKSdW7BAjNhHGCaMcYP4Y=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-462-cuv60woJM1SaI0J3R63OZw-1; Thu,
+ 15 May 2025 19:40:05 -0400
+X-MC-Unique: cuv60woJM1SaI0J3R63OZw-1
+X-Mimecast-MFC-AGG-ID: cuv60woJM1SaI0J3R63OZw_1747352403
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F41C6180087F;
+	Thu, 15 May 2025 23:40:02 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (unknown [10.72.112.140])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BBD7830075D8;
+	Thu, 15 May 2025 23:39:57 +0000 (UTC)
+From: Baoquan He <bhe@redhat.com>
+To: linux-integrity@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	zohar@linux.ibm.com,
+	pmenzel@molgen.mpg.de,
+	coxu@redhat.com,
+	ruyang@redhat.com,
+	chenste@linux.microsoft.com,
+	Baoquan He <bhe@redhat.com>
+Subject: [PATCH] ima: add a knob ima= to make IMA be able to be disabled
+Date: Fri, 16 May 2025 07:39:53 +0800
+Message-ID: <20250515233953.14685-1-bhe@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250409185019.238841-31-paul@paul-moore.com> <20250409185019.238841-60-paul@paul-moore.com>
- <81106a29-90ce-4439-9b4c-60bb2962fe04@schaufler-ca.com> <CAHC9VhRUr+sXhLzDSjiG9bEVbzZd2u632dLMVpcCe6By_d_H4w@mail.gmail.com>
- <3d884912-6225-485b-a7dd-2aa4073265f2@schaufler-ca.com> <CAHC9VhR5OFDvJNJLy9jKMsB4ZVx=phm6k6iebT6VuXD96kNEEA@mail.gmail.com>
- <c5b81e66-7e73-41cb-a626-9f18f6074e53@schaufler-ca.com> <CAHC9VhSiGc16g36gtZvWKYdtdx-3WG7HbWWhNXvPSBRfA7uphQ@mail.gmail.com>
- <5df7b895-888e-4aa0-a21f-0a8264158bfa@schaufler-ca.com> <CAHC9VhScu-AsvOAJ+4VoQB_QTmhuFGwVXmQF2PpgH+D-qLi7=w@mail.gmail.com>
- <9351b5b9-ee06-464d-96d8-9fb5a9c94c82@schaufler-ca.com>
-In-Reply-To: <9351b5b9-ee06-464d-96d8-9fb5a9c94c82@schaufler-ca.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 15 May 2025 17:02:22 -0400
-X-Gm-Features: AX0GCFtfuLfEqOgBjxD362RxeF-rLbRPhgbBA9x9mCqA2h8izdggIEODynqOF_o
-Message-ID: <CAHC9VhTwQY1g8tUHLzaLVEJA9ib0Z-_H0m+dPBZfYhEabGYwVQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 29/29] lsm: add support for counting lsm_prop support
- among LSMs
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Fan Wu <wufan@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Thu, May 15, 2025 at 3:41=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
-.com> wrote:
-> On 5/15/2025 11:13 AM, Paul Moore wrote:
-> > On Thu, May 15, 2025 at 10:12=E2=80=AFAM Casey Schaufler <casey@schaufl=
-er-ca.com> wrote:
-> >> On 5/14/2025 3:11 PM, Paul Moore wrote:
-> >>> On Wed, May 14, 2025 at 5:16=E2=80=AFPM Casey Schaufler <casey@schauf=
-ler-ca.com> wrote:
-> >>>> On 5/14/2025 1:57 PM, Paul Moore wrote:
-> >>>>> On Wed, May 14, 2025 at 3:30=E2=80=AFPM Casey Schaufler <casey@scha=
-ufler-ca.com> wrote:
-> >>>>>> On 5/13/2025 1:23 PM, Paul Moore wrote:
-> >>>>>>> On Tue, May 13, 2025 at 12:39=E2=80=AFPM Casey Schaufler <casey@s=
-chaufler-ca.com> wrote:
-> >>>>>>>> On 4/9/2025 11:50 AM, Paul Moore wrote:
-> >>> ..
-> >>>
-> >>>>>> In my coming audit patch I changed where the counts of properties =
-are
-> >>>>>> maintained from the LSM infrastructure to the audit subsystem, whe=
-re they are
-> >>>>>> actually used. Instead of the LSM init code counting the property =
-users, the
-> >>>>>> individual LSM init functions call an audit function that keeps tr=
-ack. BPF
-> >>>>>> could call that audit function if it loads a program that uses con=
-texts. That
-> >>>>>> could happen after init, and the audit system would handle it prop=
-erly.
-> >>>>>> Unloading the bpf program would be problematic. I honestly don't k=
-now whether
-> >>>>>> that's permitted.
-> >>>>> BPF programs can definitely go away, so that is something that woul=
-d
-> >>>>> need to be accounted for in any solution.  My understanding is that
-> >>>>> once all references to a BPF program are gone, the BPF program is
-> >>>>> unloaded from the kernel.
-> >>>>>
-> >>>>> Perhaps the answer is that whenever the BPF LSM is enabled at boot,
-> >>>>> the audit subsystem always queries for subj/obj labels from the BPF
-> >>>>> LSM and instead of using the normal audit placeholder for missing
-> >>>>> values, "?", we simply don't log the BPF subj/obj fields.  I dislik=
-e
-> >>>>> the special case nature of the solution, but the reality is that th=
-e
-> >>>>> BPF is a bit "special" and we are going to need to have some specia=
-l
-> >>>>> code to deal with it.
-> >>>> If BPF never calls audit_lsm_secctx() everything is fine, and the BP=
-F
-> >>>> context(s) never result in an aux record. If BPF does call audit_lsm=
-_secctx()
-> >>>> and there is another LSM that uses contexts you get the aux record, =
-even
-> >>>> if the BPF program goes away. You will get an aux record with only o=
-ne context.
-> >>>> This is not ideal, but provides the correct information. This all as=
-sumes that
-> >>>> BPF programs can call into the audit system, and that they deal with=
- multiple
-> >>>> contexts within BPF. There could be a flag to audit_lsm_secctx() to =
-delete the
-> >>>> entry, but that seems potentially dangerous.
-> >>> I think the answer to "can BPF programs call into the audit subsystem=
-"
-> >>> is dependent on if they have the proper BPF kfuncs for the audit API.
-> >>> I don't recall seeing them post anything to the audit list about that=
-,
-> >>> but it's also possible they did it without telling anyone (ala move
-> >>> fast, break things).  I don't think we would want to prevent BPF
-> >>> programs from calling into the normal audit API that other subsystems
-> >>> use, but we would need to look at that as it comes up.
-> >> I suggest that until the "BPF auditing doesn't work!!!" crisis hits
-> >> there's not a lot of point in going to heroic efforts to ensure all
-> >> the bases are covered. I'll move forward assuming that an LSM could
-> >> dynamically decide to call audit_lsm_secctx(), and that once it does
-> >> it will always show up in the aux record, even if that means subj_bpf=
-=3D?
-> >> shows up every time.
-> > My only concern is that I suspect most/all of the major distro enable
-> > the BPF LSM by default which means that suddenly a lot of users/admins
-> > are going to start seeing the multi-subj/obj labeling scheme only to
-> > have an empty field logged.
->
-> That will only occur if a BPF program says it want to provide contexts
-> and then stops doing so, either by exiting or in error. As no BPF program=
-s
-> currently use audit, it seems that this is at worst a future problem.
-> Should BPF programs develop the ability to use audit the behavior will ne=
-ed
-> to be documented. I don't see how we can anticipate what they'll end up
-> trying.
+Kdump kernel doesn't need IMA functionality, and enabling IMA will cost
+extra memory. It would be very helpful to allow IMA to be disabled for
+kdump kernel.
 
-Okay, I must have misunderstood your proposal; I'll take a look once
-it is posted, that should help clear things up.
+And Coiby also mentioned that for kdump kernel incorrect ima-policy loaded
+by systemd could cause kdump kernel hang, and it's possible the booting
+process may be stopped by a strict, albeit syntax-correct policy and users
+can't log into the system to fix the policy. In these cases, allowing to
+disable IMA is very helpful too for kdump kernel.
 
---=20
-paul-moore.com
+Hence add a knob ima=on|off here to allow people to disable IMA in kdump
+kenrel if needed.
+
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+ .../admin-guide/kernel-parameters.txt         |  5 +++++
+ security/integrity/ima/ima_main.c             | 22 +++++++++++++++++++
+ 2 files changed, 27 insertions(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index d9fd26b95b34..762fb6ddcc24 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -2202,6 +2202,11 @@
+ 			different crypto accelerators. This option can be used
+ 			to achieve best performance for particular HW.
+ 
++	ima=		[IMA] Enable or disable IMA
++			Format: { "off" | "on" }
++			Default: "on"
++			Note that this is only useful for kdump kernel.
++
+ 	init=		[KNL]
+ 			Format: <full_path>
+ 			Run specified binary instead of /sbin/init as init
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index f3e7ac513db3..07af5c6af138 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -27,6 +27,7 @@
+ #include <linux/fs.h>
+ #include <linux/iversion.h>
+ #include <linux/evm.h>
++#include <linux/crash_dump.h>
+ 
+ #include "ima.h"
+ 
+@@ -38,11 +39,27 @@ int ima_appraise;
+ 
+ int __ro_after_init ima_hash_algo = HASH_ALGO_SHA1;
+ static int hash_setup_done;
++static int ima_disabled;
+ 
+ static struct notifier_block ima_lsm_policy_notifier = {
+ 	.notifier_call = ima_lsm_policy_change,
+ };
+ 
++static int __init ima_setup(char *str)
++{
++	if (strncmp(str, "off", 3) == 0)
++		ima_disabled = 1;
++	else if (strncmp(str, "on", 2) == 0)
++		ima_disabled = 0;
++	else
++		pr_err("Invalid ima setup option: \"%s\" , please specify ima=on|off.", str);
++
++	return 1;
++}
++__setup("ima=", ima_setup);
++
++
++
+ static int __init hash_setup(char *str)
+ {
+ 	struct ima_template_desc *template_desc = ima_template_desc_current();
+@@ -1184,6 +1201,11 @@ static int __init init_ima(void)
+ {
+ 	int error;
+ 
++	if (ima_disabled && is_kdump_kernel()) {
++		pr_info("IMA functionality is disabled");
++		return 0;
++	}
++
+ 	ima_appraise_parse_cmdline();
+ 	ima_init_template_list();
+ 	hash_setup(CONFIG_IMA_DEFAULT_HASH);
+-- 
+2.41.0
+
 
