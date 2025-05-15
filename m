@@ -1,159 +1,170 @@
-Return-Path: <linux-integrity+bounces-6224-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6225-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D967AB7B0F
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 03:41:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CED71AB7B1A
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 03:45:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B94084C2BCC
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 01:41:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85BEB1BA75A1
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 May 2025 01:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41862798FF;
-	Thu, 15 May 2025 01:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B322820AE;
+	Thu, 15 May 2025 01:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWzoy3ol"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aNc4tPUl"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E1A746E;
-	Thu, 15 May 2025 01:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491DB28152F;
+	Thu, 15 May 2025 01:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747273312; cv=none; b=Cu02z1ptZvELgcPibhAhLgDzoOktbXW4cFrSqX2AR7ljlOSsg5ZAbGxh5mSSsglDAGgN79ENfLdfyZWQtgrsgcJrPzA8HPnvqQB+bf5sDLBlbsxDyt9yNTWqx6/Vii3/cozSI2NDfFyN5HUTGwRrDkpedHP5LK/S/p9LyGJaY3I=
+	t=1747273543; cv=none; b=RmkZ+Dmo46ohPLA5GY3LoEjWsFko2yirDXF/qKA1FdIfz/e9m7oyfWQVdI+ppbKr+MsihGVLG5X/JMKxe/Np2h6FdkobqDdIrEwI0l1x33ERmzhvjuZuzJI1LuY/SWuEUxlOrkBE6+ObcAtfCEljhXFGx0p99r73oSQqnKOmjOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747273312; c=relaxed/simple;
-	bh=OTWJVAAiNGFgSoscBaj7v9EEyBMWHAN7S4h7HHzq0AU=;
+	s=arc-20240116; t=1747273543; c=relaxed/simple;
+	bh=pnNBST+c9YzDalNQ25GoKXrq/N4ZaCLn+kBAH2QlzYY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gqziuo7hS/6NhFZzC/ToIQwXv+hl5BWSY8396uzZRtAR1XYx8/WXgOcWQoZbD6y+DszypJzA0MzQ7ddoXRmUnELesXobsJzTAC2lHeTeRUncv7Az47658QTtb4lyRyD4Mf0GlFhxoJxEtseAZ6NMbtkSg9Pcgyly5SZUKSkynUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWzoy3ol; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268E4C4CEE3;
-	Thu, 15 May 2025 01:41:50 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=m7vtxql1llS1n6vLVwfwvh9sG2bHMFYPr5aKqrXTEnYAKIPuMrGo/lU+nvMc3HYiapE5dMfgKVTpEZENQbykplstBnQFC50KlGo6bZFn+YbtKtTZWRT8RZDK4W1MKa2+PapSFJT87EQyOWIm1Ea2gZJaX63DagreOyY/GhB6NHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aNc4tPUl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72AEEC4CEE3;
+	Thu, 15 May 2025 01:45:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747273311;
-	bh=OTWJVAAiNGFgSoscBaj7v9EEyBMWHAN7S4h7HHzq0AU=;
+	s=k20201202; t=1747273542;
+	bh=pnNBST+c9YzDalNQ25GoKXrq/N4ZaCLn+kBAH2QlzYY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QWzoy3olVsXjVDZGH/LI5rkCSTD8jlDKpNQlgCTfWjOu6qoTyVaRFKFhTtTpXmFDu
-	 6WYXgFKETXVu4s2KCI+LSWZyjfxc/PXKmaFa3TncKgboAsjHg/E+HY3ZHCnotL01Cd
-	 Ic2UCzWm8x4d5/pMEXzzj8typPY6wOBNMH6YJtzXwF2clgZdOmtG9SSnqEx1zaUHHO
-	 vWBChG+2ebl8tsZk7dDY0AnzaYC4Ip/06Kt4ZPwXwvGXVTlu8Uw24uYUK8JjsMKi0R
-	 dFrugkgvTImU3bimQSRRo26es2PSZoH8pHY5szFWtM9p81+VuOQ2om9peyjDK7mgyj
-	 03wdkYS9UiQwA==
-Date: Thu, 15 May 2025 04:41:47 +0300
+	b=aNc4tPUliPhaLP8MScTBz9lzD/DbFYbrmeQrGDWpJqBK+OQTnINZVdKbioHL6ZlaG
+	 7B0bXpM5nFKBFsjTFtIARi8xIxPPdsGvR8QSEjkD0LDsPK7paj3VIDwNhiy8qLmeS2
+	 Q4vSfcc1Q/MFQqHCSTZoL1YNd65JA6kq/y1Q4LlKsawjEVMBJatGqzWHgfCc0MW7Zm
+	 8aNhLfenXAcGTnLGqlfUzpCqVjZ+e8uT3pusUg7EVriHSdUSomg0SBSri09+p3jmmA
+	 eO5c/aiw0dn9R0/3bGlvru/Yo86J8ScWuzWm/R7NXvtQsxml1nU8VoDc2tJu0iKAur
+	 xuSFgNziuESLA==
+Date: Thu, 15 May 2025 04:45:39 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>,
-	Sasha Levin <sashal@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jonathan McDowell <noodles@earth.li>,
-	Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH v3] tpm: tis: Double the timeout B to 4s
-Message-ID: <aCVGW7T5Gy5zVkJ-@kernel.org>
-References: <4e4640bd-0313-4594-9667-82340ed9368a@molgen.mpg.de>
- <20250404082325.13876-1-msuchanek@suse.de>
- <Z--d7Obw2UEk8Pve@kernel.org>
- <aCSIRS1fq_b9sByn@kitsune.suse.cz>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: linuxppc-dev@lists.ozlabs.org, Peter Huewe <peterhuewe@gmx.de>,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	linux-integrity@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH v5 4/4] tpm/tpm_svsm: support TPM_CHIP_FLAG_SYNC
+Message-ID: <aCVHQ-LRqHeEVEAW@kernel.org>
+References: <20250514134630.137621-1-sgarzare@redhat.com>
+ <20250514134630.137621-5-sgarzare@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aCSIRS1fq_b9sByn@kitsune.suse.cz>
+In-Reply-To: <20250514134630.137621-5-sgarzare@redhat.com>
 
-On Wed, May 14, 2025 at 02:10:45PM +0200, Michal Suchánek wrote:
-> Hello,
+On Wed, May 14, 2025 at 03:46:30PM +0200, Stefano Garzarella wrote:
+> From: Stefano Garzarella <sgarzare@redhat.com>
 > 
-> On Fri, Apr 04, 2025 at 11:53:00AM +0300, Jarkko Sakkinen wrote:
-> > On Fri, Apr 04, 2025 at 10:23:14AM +0200, Michal Suchanek wrote:
-> > > With some Infineon chips the timeouts in tpm_tis_send_data (both B and
-> > > C) can reach up to about 2250 ms.
-> > > 
-> > > Timeout C is retried since
-> > > commit de9e33df7762 ("tpm, tpm_tis: Workaround failed command reception on Infineon devices")
-> > > 
-> > > Timeout B still needs to be extended.
-> > > 
-> > > The problem is most commonly encountered with context related operation
-> > > such as load context/save context. These are issued directly by the
-> > > kernel, and there is no retry logic for them.
-> > > 
-> > > When a filesystem is set up to use the TPM for unlocking the boot fails,
-> > > and restarting the userspace service is ineffective. This is likely
-> > > because ignoring a load context/save context result puts the real TPM
-> > > state and the TPM state expected by the kernel out of sync.
-> > > 
-> > > Chips known to be affected:
-> > > tpm_tis IFX1522:00: 2.0 TPM (device-id 0x1D, rev-id 54)
-> > > Description: SLB9672
-> > > Firmware Revision: 15.22
-> > > 
-> > > tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1B, rev-id 22)
-> > > Firmware Revision: 7.83
-> > > 
-> > > tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1A, rev-id 16)
-> > > Firmware Revision: 5.63
-> > > 
-> > > Link: https://lore.kernel.org/linux-integrity/Z5pI07m0Muapyu9w@kitsune.suse.cz/
-> > > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > > ---
-> > > v2: Only extend timeout B
-> > > v3: Update commit message
-> > > ---
-> > >  drivers/char/tpm/tpm_tis_core.h | 2 +-
-> > >  include/linux/tpm.h             | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> > > index 970d02c337c7..6c3aa480396b 100644
-> > > --- a/drivers/char/tpm/tpm_tis_core.h
-> > > +++ b/drivers/char/tpm/tpm_tis_core.h
-> > > @@ -54,7 +54,7 @@ enum tis_int_flags {
-> > >  enum tis_defaults {
-> > >  	TIS_MEM_LEN = 0x5000,
-> > >  	TIS_SHORT_TIMEOUT = 750,	/* ms */
-> > > -	TIS_LONG_TIMEOUT = 2000,	/* 2 sec */
-> > > +	TIS_LONG_TIMEOUT = 4000,	/* 4 secs */
-> > >  	TIS_TIMEOUT_MIN_ATML = 14700,	/* usecs */
-> > >  	TIS_TIMEOUT_MAX_ATML = 15000,	/* usecs */
-> > >  };
-> > > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > > index 6c3125300c00..3db0b6a87d45 100644
-> > > --- a/include/linux/tpm.h
-> > > +++ b/include/linux/tpm.h
-> > > @@ -224,7 +224,7 @@ enum tpm2_const {
-> > >  
-> > >  enum tpm2_timeouts {
-> > >  	TPM2_TIMEOUT_A          =    750,
-> > > -	TPM2_TIMEOUT_B          =   2000,
-> > > +	TPM2_TIMEOUT_B          =   4000,
-> > >  	TPM2_TIMEOUT_C          =    200,
-> > >  	TPM2_TIMEOUT_D          =     30,
-> > >  	TPM2_DURATION_SHORT     =     20,
-> > > -- 
-> > > 2.47.1
-> > > 
-> > > 
-> > 
-> > Cc: stable@vger.kernel.org # v6.1+
-> > 
-> > Probably best that I'll piggyback a patch set for stable with the two
-> > fixes, in order to cause least noise. I need to do this *after* an
-> > ack'd PR to -rc2.
+> This driver does not support interrupts, and receiving the response is
+> synchronous with sending the command.
 > 
-> While there is talk about stable this does not seem to be applied
-> anywhere I could find. Is that expected?
+> Enable synchronous send() with TPM_CHIP_FLAG_SYNC, which implies that
+> ->send() already fills the provided buffer with a response, and ->recv()
+> is not implemented.
+> 
+> Keep using the same pre-allocated buffer to avoid having to allocate
+> it for each command. We need the buffer to have the header required by
+> the SVSM protocol and the command contiguous in memory.
+> 
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+> v5:
+> - changed order and parameter names to match tpm_try_transmit() [Jarkko]
+> v4:
+> - reworked commit description [Jarkko]
+> ---
+>  drivers/char/tpm/tpm_svsm.c | 27 +++++++++++----------------
+>  1 file changed, 11 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_svsm.c b/drivers/char/tpm/tpm_svsm.c
+> index 0847cbf450b4..f5ba0f64850b 100644
+> --- a/drivers/char/tpm/tpm_svsm.c
+> +++ b/drivers/char/tpm/tpm_svsm.c
+> @@ -26,37 +26,31 @@ struct tpm_svsm_priv {
+>  };
+>  
+>  static int tpm_svsm_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz,
+> -			 size_t len)
+> +			 size_t cmd_len)
+>  {
+>  	struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
+>  	int ret;
+>  
+> -	ret = svsm_vtpm_cmd_request_fill(priv->buffer, 0, buf, len);
+> +	ret = svsm_vtpm_cmd_request_fill(priv->buffer, 0, buf, cmd_len);
+>  	if (ret)
+>  		return ret;
+>  
+>  	/*
+>  	 * The SVSM call uses the same buffer for the command and for the
+> -	 * response, so after this call, the buffer will contain the response
+> -	 * that can be used by .recv() op.
+> +	 * response, so after this call, the buffer will contain the response.
+> +	 *
+> +	 * Note: we have to use an internal buffer because the device in SVSM
+> +	 * expects the svsm_vtpm header + data to be physically contiguous.
+>  	 */
+> -	return snp_svsm_vtpm_send_command(priv->buffer);
+> -}
+> -
+> -static int tpm_svsm_recv(struct tpm_chip *chip, u8 *buf, size_t len)
+> -{
+> -	struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
+> +	ret = snp_svsm_vtpm_send_command(priv->buffer);
+> +	if (ret)
+> +		return ret;
+>  
+> -	/*
+> -	 * The internal buffer contains the response after we send the command
+> -	 * to SVSM.
+> -	 */
+> -	return svsm_vtpm_cmd_response_parse(priv->buffer, buf, len);
+> +	return svsm_vtpm_cmd_response_parse(priv->buffer, buf, bufsiz);
+>  }
+>  
+>  static struct tpm_class_ops tpm_chip_ops = {
+>  	.flags = TPM_OPS_AUTO_STARTUP,
+> -	.recv = tpm_svsm_recv,
+>  	.send = tpm_svsm_send,
+>  };
+>  
+> @@ -85,6 +79,7 @@ static int __init tpm_svsm_probe(struct platform_device *pdev)
+>  
+>  	dev_set_drvdata(&chip->dev, priv);
+>  
+> +	chip->flags |= TPM_CHIP_FLAG_SYNC;
+>  	err = tpm2_probe(chip);
+>  	if (err)
+>  		return err;
+> -- 
+> 2.49.0
+> 
+> 
 
-Definitely not. I got shifted away with other work early April and
-this was left to my TODO folder, apologies.
+I can pick this for 6.16.
 
-Sasha, can you also auto-select this to v6.1+? It is in my next
-branch now (should be soon'ish mirrored to linux-next).
+BR, Jarkko
 
 BR, Jarkko
 
