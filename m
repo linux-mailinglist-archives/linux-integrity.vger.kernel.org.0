@@ -1,247 +1,129 @@
-Return-Path: <linux-integrity+bounces-6244-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6245-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F34EEABA28F
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 May 2025 20:11:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03213ABB091
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 May 2025 16:43:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 781784A059D
-	for <lists+linux-integrity@lfdr.de>; Fri, 16 May 2025 18:11:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77DB3189897F
+	for <lists+linux-integrity@lfdr.de>; Sun, 18 May 2025 14:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4633923E354;
-	Fri, 16 May 2025 18:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5F521D00D;
+	Sun, 18 May 2025 14:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fQcP9IM8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1bdDZCh"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f66.google.com (mail-ed1-f66.google.com [209.85.208.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF7F2AEED;
-	Fri, 16 May 2025 18:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA0321CC70;
+	Sun, 18 May 2025 14:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747419067; cv=none; b=HnaAabWNjGfoiXPKDXVbVg+A+r89t4MXFdxV+WUADbQmnQHfNOwk8tOuLpcgJT915FfwRqqvAMDbfZAqkILg0Nb2gkBKfiNbbliQumXNwIMy7j1T/JvYn2AUj7kfoTaJG2GATbXrRHQ2zhlAgeWbrSlNbPO83dTEXCSo2CsVwxY=
+	t=1747579358; cv=none; b=YNkmUv2vfep/IE43ZVDQNCElQW/Nv5No4BvdSQq3psdxCWb9PuISBZb0zIH63EDcfYLiYOU5IHsJuSN45NnvTAi3AoxmPJUCZq2ceuaB8PKQkvIc3hCBFTF9Bqcevj0bcuSVhjKD6mHD8JOturnXylHgcQPd5/e/15eNrdAiogg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747419067; c=relaxed/simple;
-	bh=7WDsffkadeUUuhy0vWzf6lW/gdjRy6oTywyH2r1JMJ8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tRl37bfNDskjbV/R02sw+njSdG1QU5veSsLPoY6DEY0kRjojXVFJkiuwB+DSrZpJ4d0yZoBLpBzqB8InsBOdqlMzVksEL5xUxaES9PMKgzt17gmEiL/dLQyltVpK/JpAxLcPlVb4ASIxdn5xZ5knk4m8/o3jQWx5RwSugqyA7Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fQcP9IM8; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54GE5HR2023915;
-	Fri, 16 May 2025 18:09:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=7WDsff
-	kadeUUuhy0vWzf6lW/gdjRy6oTywyH2r1JMJ8=; b=fQcP9IM8VQbz46N5AoR5H0
-	5VAuTb2xBCDJxR8gV7pP6tUihHDFVWUxr1e4MWZPG9Y+XeMmQ24snRSQVAMxsqtj
-	n9Nw9AFtn1pHz6eSOBe35iW9ao4Gy5TIVYnfjcqsyY/Zyo3GrAepkovfBiDHasJu
-	LhYiDPampN0+TVvfRsZBUzaA/0b18vwgmH0OCKNEsz7Use/QuKME6uJ2Z775AFf8
-	V8u5AVf0kvqyADIXVq0i8timxb/4/6TTXCNSLpPzx+JM90z4+ct8Fy5yVcVL2doW
-	pUHDd/36FpsGMFqtmXPJbQqcPNX4tY1TXOSWQY89dOWH8DQ6cOnJGe+VNnQYYJOQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46nyytkekb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 May 2025 18:09:34 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54GHu3TI018890;
-	Fri, 16 May 2025 18:09:33 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46nyytkek7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 May 2025 18:09:33 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54GHPPwY021786;
-	Fri, 16 May 2025 18:09:31 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46mbfq0vdv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 May 2025 18:09:31 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54GI9VIY19989182
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 16 May 2025 18:09:31 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1D00958051;
-	Fri, 16 May 2025 18:09:31 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DDCDE58060;
-	Fri, 16 May 2025 18:09:28 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.87.94])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 16 May 2025 18:09:28 +0000 (GMT)
-Message-ID: <ddaa84b8baf0e1ed8a3037abb0449f96a99450ec.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Masahiro
- Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Petr Pavlu
- <petr.pavlu@suse.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Daniel
- Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
-        James
- Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Jonathan
- Corbet <corbet@lwn.net>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael
- Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao
- <naveen@kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dmitry
- Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg
- <eric.snowberg@oracle.com>,
-        Nicolas Schier <nicolas.schier@linux.dev>
-Cc: Fabian =?ISO-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-        Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
-        kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
-        =?ISO-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Date: Fri, 16 May 2025 14:09:28 -0400
-In-Reply-To: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
-References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1747579358; c=relaxed/simple;
+	bh=rAUybgx3w08Pk16V3V7ElWMaPW68BeTRsRpRxxQzxeE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S1PO2xylGll94R/nHkgM/fczSfgeBTBNCUPWXd+AIM14ale7NIk1t3FbzhOR1IIuzM8dLLnZMamAhvP7JUocLFXGIPlls+RUyTAAMERX6iyUlcN9E8zgDzkjackaLw8PImIFER/bM7X4RuREbty72vgdZiNPxLtMUry3Nq68AXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1bdDZCh; arc=none smtp.client-ip=209.85.208.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f66.google.com with SMTP id 4fb4d7f45d1cf-600210e4219so4856566a12.0;
+        Sun, 18 May 2025 07:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747579355; x=1748184155; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rAUybgx3w08Pk16V3V7ElWMaPW68BeTRsRpRxxQzxeE=;
+        b=G1bdDZChhUwF2sG9iVs+z/F/5uX1r5kqzCa7/RAF39YNgFr5Ju19V4F5od73pYxw9b
+         BY02mHbrtNRrItX4s7d5HHt21X5GO7w0dGd0oFV4JsXRWqoKnfOXFT2n4+OIZ3/5gbCG
+         9Iiw4s5LFnnzd/grzoN3S1fVp1g22VkE6PYr8iQMx1cYb1ILwS+4Rq1cSUQfD8OLWmak
+         4Ofuow556uEVs6Q4e1+N73AXzIGpy0XL/vmEYJXHIh2bj/e5IhIrooh/eK8c4UgkTXvp
+         3tny1iEy17VP7QnRNC02oyWoTXvpGWgImMKilKUr1dUJ2wWw5uPNpOcPFw940WBbdEkM
+         9osg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747579355; x=1748184155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rAUybgx3w08Pk16V3V7ElWMaPW68BeTRsRpRxxQzxeE=;
+        b=nin/U/PbR07oLePzhN5mU1XPjJzfQirSLbesBbenRDJW8Yuytunp/9qv+ZISA+m2Ew
+         ouL2eibE6WEZYRdczmsGk27KCbT4dj5Ssk6l23ATji+jZsWnaPXZMu1JUHSUhzhx1BJk
+         x3B6Jkesw9KjG1JLXDYzWoJD/A70EUzNAPEFmauQhNy94o1KBwUH/rE3+VLGqzv19oXP
+         wduSum7t1M0Drn6UKaPqTPksCi5VhUyUi69tI3uClmcVevmxhcrC9HcPqyzqInZIdU6f
+         tgouh7XnL/WtKFY8+G4oOEgfaRXkRr1aSVow+ZsZuj7PRGzXZ2jGmNe5OO3pO1ArqzXe
+         zlbA==
+X-Forwarded-Encrypted: i=1; AJvYcCUh2XN1qysNgyScsPKSIauxItG+OjnwyUF6MxxkJJQArbtl5liifIBrhB1Z8SZI3rqcoBEMXyGisciMemYOWRYD@vger.kernel.org, AJvYcCUvxjxEtd8Ee7FW3gBVRIomRPyyRb1PPLIWD0YsHO3zUCace1c7VmBD7ttWP/+dG9I5Uv9L048kpDYs@vger.kernel.org, AJvYcCWlKabIPOI1wx0FzIypnjsbACZh61xYgoJ0dIaH8BOfRE7d3srJYYnZdAk75FEO45eiYyy4GzUo0DdK4RQ=@vger.kernel.org, AJvYcCWvb5nL4+qmLv/R1MX0s1Iu780VInluxfwoFhRCB73KDmZ2uT7M8b39soNgYgzVFe71atoX8Dd7t7MD@vger.kernel.org, AJvYcCXo6NiD6uHdxET/tatyKdf2JNLfyv4FGvG2YDNByGQeI7pJeC5Fzt4DjOfmziZWndt9t1Yt/THi/owtdYEZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyloTETXRsazmoivtTNjujBtDMpUd8mAcgNnnqaglx7Je3E9OAv
+	9NkWBPOj/k7uPJZ+ZFxpK2ubJ9csWwgE5JkZmjbToO86vyO9d93Po2vd+KwVEInsnNuUANZhNLL
+	xB6ToQTn8bXJF8h+wR+UCm/ZK8sucRCE=
+X-Gm-Gg: ASbGncsERKVSxQ7BRt1dL5UuEoye3hAsbwQCqzfuJK37N2XywRz6nAyJ3yXt+x3fopY
+	uCS9Jwda/RA+hMqNTBFfRRW8MZOlvpk7AUctjf+fTsltsN1E5y1mYAh86zvYi3fbPd5I1BlwmLY
+	WwjXhLa2+++fVdn02RiPR27gmAWMphhQ==
+X-Google-Smtp-Source: AGHT+IHB++m0GR0lO5TfW8cZq+R6bSxHcLUjm6jGofGJAl2FV1P4JdhTYEzSIBs2qV2FvWjm0WoY9STztiddXe/xN+k=
+X-Received: by 2002:a17:907:7d8d:b0:ad5:4998:9f1a with SMTP id
+ a640c23a62f3a-ad549a7e5e8mr600457266b.5.1747579354599; Sun, 18 May 2025
+ 07:42:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: JP_opKLtVXFXrDepXMXFr82Z71tDwcKZ
-X-Proofpoint-ORIG-GUID: LSIXmeF4PPMgXkI58zDkLV8P9sqeLEXK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTE2MDE3NyBTYWx0ZWRfXwS/eEj55lmwX CEZdkSomJY+LwB0UTMSc9BpM85C/G0NhM1CYfJKHPjyPA4+pvLoD4PfE2WG+Sx28YqmXfd2NdYf jpKMpIOrCFRNUCKM4iaCBIfeIOdoLrbOYs4iiAgTnQZa0Jw6hp0pRIG8ZFOSlYOV1Pw1GiJn7vH
- INcvZw8cCM/FYuDKgZhAYGHfzAVJBX80ue9UfPwtV0YbQhagKfnBGbuBSPkK/1m5M5Q8ChLxetE aZg2I0tyeH7lgL+mB9XZ5lR7HCpqdZz99uKc4pj8wL3ZS58OJR0UYg324ykc7sF5Z8SkX+QVeF4 ahhhVVTJHCgLgGbidgBDYdIDeH91LsCRIOAtOrlH38o/2VEqzNQmIPXOUXkn8/Uymye5lD1MsoX
- B/SPGzQXIydqPoriq4Vw9Sy+bx9kv34ZM7ewuT/1eg2zndCkVCEIY/hgewG2ywUHd7h3Khno
-X-Authority-Analysis: v=2.4 cv=ZcMdNtVA c=1 sm=1 tr=0 ts=68277f5e cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=VTue-mJiAAAA:8 a=RvlH7QWmzk5iKMaHqTQA:9 a=QEXdDO2ut3YA:10
- a=S9YjYK_EKPFYWS37g-LV:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-16_06,2025-05-16_03,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- spamscore=0 clxscore=1015 bulkscore=0 priorityscore=1501 mlxlogscore=999
- impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2505070000
- definitions=main-2505160177
+References: <18F9BD47-282D-4225-AB6B-FDA4AD52D7AE@gmail.com>
+ <9b18e8e3-f3e2-48d4-839a-56e1d8f62657@intel.com> <03d0db6b-628e-4a5e-8e71-852233b83f60@apertussolutions.com>
+ <fbb23ee0-c0b4-4b0e-8861-940f8ceaf161@intel.com>
+In-Reply-To: <fbb23ee0-c0b4-4b0e-8861-940f8ceaf161@intel.com>
+From: Mike <mikewallacesmith90@gmail.com>
+Date: Sun, 18 May 2025 09:42:23 -0500
+X-Gm-Features: AX0GCFuU42_TMoi_HKtSGmNW7XrkC1FL6iyDZjOSvOw7NwM1rf6CdCYLar4WcGI
+Message-ID: <CAAyYeYjp0v2PYt1owTdOpQD8_NjakquyXbUr5M1a_OWLEKHQ0A@mail.gmail.com>
+Subject: Re: [PATCH v14 00/19] x86: Trenchboot secure dynamic launch Linux
+ kernel support
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: "Daniel P. Smith" <dpsmith@apertussolutions.com>, Rich Persaud <persaur@gmail.com>, 
+	Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-efi@vger.kernel.org, iommu@lists.linux.dev, tglx@linutronix.de, 
+	mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, 
+	ardb@kernel.org, mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, 
+	peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net, 
+	nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net, 
+	corbet@lwn.net, ebiederm@xmission.com, dwmw2@infradead.org, 
+	baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com, 
+	andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com, 
+	Sergii Dmytruk <sergii.dmytruk@3mdeb.com>, openxt@googlegroups.com, 
+	"Mowka, Mateusz" <mateusz.mowka@intel.com>, Ning Sun <ning.sun@intel.com>, 
+	tboot-devel@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGkgVGhvbWFzLAoKT24gVHVlLCAyMDI1LTA0LTI5IGF0IDE1OjA0ICswMjAwLCBUaG9tYXMgV2Vp
-w59zY2h1aCB3cm90ZToKPiBUaGUgY3VycmVudCBzaWduYXR1cmUtYmFzZWQgbW9kdWxlIGludGVn
-cml0eSBjaGVja2luZyBoYXMgc29tZSBkcmF3YmFja3MKPiBpbiBjb21iaW5hdGlvbiB3aXRoIHJl
-cHJvZHVjaWJsZSBidWlsZHM6Cj4gRWl0aGVyIHRoZSBtb2R1bGUgc2lnbmluZyBrZXkgaXMgZ2Vu
-ZXJhdGVkIGF0IGJ1aWxkIHRpbWUsIHdoaWNoIG1ha2VzCj4gdGhlIGJ1aWxkIHVucmVwcm9kdWNp
-YmxlLCBvciBhIHN0YXRpYyBrZXkgaXMgdXNlZCwgd2hpY2ggcHJlY2x1ZGVzCj4gcmVidWlsZHMg
-YnkgdGhpcmQgcGFydGllcyBhbmQgbWFrZXMgdGhlIHdob2xlIGJ1aWxkIGFuZCBwYWNrYWdpbmcK
-PiBwcm9jZXNzIG11Y2ggbW9yZSBjb21wbGljYXRlZC4KPiBJbnRyb2R1Y2UgYSBuZXcgbWVjaGFu
-aXNtIHRvIGVuc3VyZSBvbmx5IHdlbGwta25vd24gbW9kdWxlcyBhcmUgbG9hZGVkCj4gYnkgZW1i
-ZWRkaW5nIGEgbGlzdCBvZiBoYXNoZXMgb2YgYWxsIG1vZHVsZXMgYnVpbHQgYXMgcGFydCBvZiB0
-aGUgZnVsbAo+IGtlcm5lbCBidWlsZCBpbnRvIHZtbGludXguCgpGcm9tIGEgdmVyeSBoaWdoIGxl
-dmVsLCBJIGxpa2UgdGhlIGlkZWEgb2YgaW5jbHVkaW5nIHRoZSBrZXJuZWwgbW9kdWxlIGhhc2hl
-cwppbiB0aGUga2VybmVsIGltYWdlLCB3aGljaCBpcyBzaWduZWQsIGFuZCBmYWxsaW5nIGJhY2sg
-dG8gdmVyaWZ5aW5nIG90aGVyCmtlcm5lbCBtb2R1bGVzIGJhc2VkIG9uIHNpZ25hdHVyZXMuCgpS
-ZW1vdmluZyB0aGUgQ09ORklHX01PRFVMRV9TSUcgYW5kIENPTkZJR19LRVhFQ19TSUcgY2hlY2tz
-IGluIHRoZSBmaXJzdCB0d28KcGF0Y2hlcyBpcyBjb3JyZWN0LMKgYXMgcHJldmlvdXNseSBtZW50
-aW9uZWQuICBIb3dldmVyIHdpdGhvdXQgdGhlc2UgS2NvbmZpZ3MKYmVpbmcgZW5hYmxlZCwgdGhl
-IElNQSBhcmNoIHNwZWNpZmljIHBvbGljeSBkZWZpbmVzIGFuZCBlbmZvcmNlcyBzaWduYXR1cmUK
-dmVyaWZpY2F0aW9uIGJhc2VkIG9uIHRoZSBzaWduYXR1cmVzIHN0b3JlZCBpbiBzZWN1cml0eS5p
-bWEuICBJIGRvdWJ0IHRoaXMgaXMKd2hhdCB3YXMgaW50ZW5kZWQuCgpDaGFuZ2VzIHdvdWxkIGJl
-IG5lZWRlZCBpbiBpbWFfYXBwcmFpc2VfbWVhc3VyZW1lbnQoKS4gIEl0J3Mgbm90IGVub3VnaCB0
-bwp0ZXN0IHdoZXRoZXIgdGhlIHBvbGljeSBwZXJtaXRzIGFwcGVuZGVkIHNpZ25hdHVyZXMgKG1v
-ZHNpZyksIGJ1dCB0byBkZXRlY3QKd2hldGhlciBDT05GSUdfTU9EVUxFX1NJRyBpcyBlbmFibGVk
-LiAgSW4gYWRkaXRpb24sIHNpbWlsYXIgc3VwcG9ydCB0bwp0cnlfbW9kc2lnLCBuZWVkcyB0byBi
-ZSBhZGRlZCBmb3IgQ09ORklHX01PRFVMRV9IQVNIRVMuCgp0aGFua3MsCgpNaW1pCgo+IAo+IElu
-dGVyZXN0IGhhcyBiZWVuIHByb2NsYWltZWQgYnkgTml4T1MsIEFyY2ggTGludXgsIFByb3htb3gs
-IFNVU0UgYW5kIHRoZQo+IGdlbmVyYWwgcmVwcm9kdWNpYmxlIGJ1aWxkcyBjb21tdW5pdHkuCj4g
-Cj4gVG8gcHJvcGVybHkgdGVzdCB0aGUgcmVwcm9kdWNpYmlsaXR5IGluIGNvbWJpbmF0aW9uIHdp
-dGggQ09ORklHX0lORk9fQlRGCj4gYW5vdGhlciBwYXRjaCBvciBwYWhvbGUgdjEuMjkgaXMgbmVl
-ZGVkOgo+ICJbUEFUQ0ggYnBmLW5leHRdIGtidWlsZCwgYnBmOiBFbmFibGUgcmVwcm9kdWNpYmxl
-IEJURiBnZW5lcmF0aW9uIiBbMF0KPiAKPiBRdWVzdGlvbnMgZm9yIGN1cnJlbnQgcGF0Y2g6Cj4g
-KiBOYW1pbmcKPiAqIENhbiB0aGUgbnVtYmVyIG9mIGJ1aWx0LWluIG1vZHVsZXMgYmUgcmV0cmll
-dmVkIHdoaWxlIGJ1aWxkaW5nCj4gwqAga2VybmVsL21vZHVsZS9oYXNoZXMubz8gVGhpcyB3b3Vs
-ZCByZW1vdmUgdGhlIG5lZWQgZm9yIHRoZQo+IMKgIHByZWFsbG9jYXRpb24gc3RlcCBpbiBsaW5r
-LXZtbGludXguc2guCj4gKiBIb3cgc2hvdWxkIHRoaXMgaW50ZXJhY3Rpb24gd2l0aCBJTUE/Cj4g
-Cj4gRnVydGhlciBpbXByb3ZlbWVudHM6Cj4gKiBVc2UgYSBMU00vSU1BIEtleXJpbmcgdG8gc3Rv
-cmUgYW5kIHZhbGlkYXRlIGhhc2hlcwo+ICogVXNlIE1PRFVMRV9TSUdfSEFTSCBmb3IgY29uZmln
-dXJhdGlvbgo+ICogVUFQSSBmb3IgZGlzY292ZXJ5Pwo+ICogQ3VycmVudGx5IGhhcyBhIHBlcm1h
-bmVudCBtZW1vcnkgb3ZlcmhlYWQKPiAKPiBbMF0KPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9s
-a21sLzIwMjQxMjExLXBhaG9sZS1yZXByb2R1Y2libGUtdjEtMS0yMmZlYWUxOWJhZDlAd2Vpc3Nz
-Y2h1aC5uZXQvCj4gCj4gU2lnbmVkLW9mZi1ieTogVGhvbWFzIFdlacOfc2NodWggPGxpbnV4QHdl
-aXNzc2NodWgubmV0Pgo+IC0tLQo+IENoYW5nZXMgaW4gdjM6Cj4gLSBSZWJhc2Ugb24gdjYuMTUt
-cmMxCj4gLSBVc2Ugb3BlbnNzbCB0byBjYWxjdWxhdGUgaGFzaAo+IC0gQXZvaWQgd2FybmluZyBp
-ZiBubyBtb2R1bGVzIGFyZSBidWlsdAo+IC0gU2ltcGxpZnkgbW9kdWxlX2ludGVncml0eV9jaGVj
-aygpIGEgYml0Cj4gLSBNYWtlIGluY29tcGF0aWJpbGl0eSB3aXRoIElOU1RBTExfTU9EX1NUUklQ
-IGV4cGxpY2l0Cj4gLSBVcGRhdGUgZG9jcwo+IC0gQWRkIElNQSBjbGVhbnVwcwo+IC0gTGluayB0
-byB2MjoKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjUwMTIwLW1vZHVsZS1oYXNoZXMt
-djItMC1iYTExODRlMjdiN2ZAd2Vpc3NzY2h1aC5uZXQKPiAKPiBDaGFuZ2VzIGluIHYyOgo+IC0g
-RHJvcCBSRkMgc3RhdGUKPiAtIE1lbnRpb24gaW50ZXJlc3RlZCBwYXJ0aWVzIGluIGNvdmVyIGxl
-dHRlcgo+IC0gRXhwYW5kIEtjb25maWcgZGVzY3JpcHRpb24KPiAtIEFkZCBjb21wYXRpYmlsaXR5
-IHdpdGggQ09ORklHX01PRFVMRV9TSUcKPiAtIFBhcmFsbGVsaXplIG1vZHVsZS1oYXNoZXMuc2gK
-PiAtIFVwZGF0ZSBEb2N1bWVudGF0aW9uL2tidWlsZC9yZXByb2R1Y2libGUtYnVpbGRzLnJzdAo+
-IC0gTGluayB0byB2MToKPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjQxMjI1LW1vZHVs
-ZS1oYXNoZXMtdjEtMC1kNzEwY2U3YTNmZDFAd2Vpc3NzY2h1aC5uZXQKPiAKPiAtLS0KPiBUaG9t
-YXMgV2Vpw59zY2h1aCAoOSk6Cj4gwqDCoMKgwqDCoCBwb3dlcnBjL2ltYTogRHJvcCB1bm5lY2Vz
-c2FyeSBjaGVjayBmb3IgQ09ORklHX01PRFVMRV9TSUcKPiDCoMKgwqDCoMKgIGltYTogZWZpOiBE
-cm9wIHVubmVjZXNzYXJ5IGNoZWNrIGZvcgo+IENPTkZJR19NT0RVTEVfU0lHL0NPTkZJR19LRVhF
-Q19TSUcKPiDCoMKgwqDCoMKgIGtidWlsZDogYWRkIHN0YW1wIGZpbGUgZm9yIHZtbGludXggQlRG
-IGRhdGEKPiDCoMKgwqDCoMKgIGtidWlsZDogZ2VuZXJhdGUgbW9kdWxlIEJURiBiYXNlZCBvbiB2
-bWxpbnV4LnVuc3RyaXBwZWQKPiDCoMKgwqDCoMKgIG1vZHVsZTogTWFrZSBtb2R1bGUgbG9hZGlu
-ZyBwb2xpY3kgdXNhYmxlIHdpdGhvdXQgTU9EVUxFX1NJRwo+IMKgwqDCoMKgwqAgbW9kdWxlOiBN
-b3ZlIGludGVncml0eSBjaGVja3MgaW50byBkZWRpY2F0ZWQgZnVuY3Rpb24KPiDCoMKgwqDCoMKg
-IG1vZHVsZTogTW92ZSBsb2NrZG93biBjaGVjayBpbnRvIGdlbmVyaWMgbW9kdWxlIGxvYWRlcgo+
-IMKgwqDCoMKgwqAgbG9ja2Rvd246IE1ha2UgdGhlIHJlbGF0aW9uc2hpcCB0byBNT0RVTEVfU0lH
-IGEgZGVwZW5kZW5jeQo+IMKgwqDCoMKgwqAgbW9kdWxlOiBJbnRyb2R1Y2UgaGFzaC1iYXNlZCBp
-bnRlZ3JpdHkgY2hlY2tpbmcKPiAKPiDCoC5naXRpZ25vcmXCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgMSArCj4g
-wqBEb2N1bWVudGF0aW9uL2tidWlsZC9yZXByb2R1Y2libGUtYnVpbGRzLnJzdCB8wqAgNSArKy0K
-PiDCoE1ha2VmaWxlwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA4ICsrKy0KPiDCoGFyY2gvcG93ZXJwYy9r
-ZXJuZWwvaW1hX2FyY2guY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDMgKy0KPiDC
-oGluY2x1ZGUvYXNtLWdlbmVyaWMvdm1saW51eC5sZHMuaMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-fCAxMSArKysrKysKPiDCoGluY2x1ZGUvbGludXgvbW9kdWxlLmjCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgOCArKy0tCj4gwqBpbmNsdWRlL2xpbnV4L21v
-ZHVsZV9oYXNoZXMuaMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDE3ICsrKysrKysr
-Kwo+IMKga2VybmVsL21vZHVsZS9LY29uZmlnwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCB8IDIxICsrKysrKysrKystCj4gwqBrZXJuZWwvbW9kdWxlL01ha2Vm
-aWxlwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDEgKwo+
-IMKga2VybmVsL21vZHVsZS9oYXNoZXMuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgIHwgNTYKPiArKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4gwqBrZXJu
-ZWwvbW9kdWxlL2ludGVybmFsLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHzCoCA4ICstLS0KPiDCoGtlcm5lbC9tb2R1bGUvbWFpbi5jwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgNTEgKysrKysrKysrKysrKysrKysrKysr
-Ky0tLQo+IMKga2VybmVsL21vZHVsZS9zaWduaW5nLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgfCAyNCArLS0tLS0tLS0tLS0KPiDCoHNjcmlwdHMvTWFrZWZpbGUu
-bW9kZmluYWzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8IDE4ICsrKysr
-Ky0tLQo+IMKgc2NyaXB0cy9NYWtlZmlsZS5tb2RpbnN0wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCB8wqAgNCArKwo+IMKgc2NyaXB0cy9NYWtlZmlsZS52bWxpbnV4wqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNSArKysKPiDCoHNjcmlw
-dHMvbGluay12bWxpbnV4LnNowqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHwgMzEgKysrKysrKysrKysrKystCj4gwqBzY3JpcHRzL21vZHVsZS1oYXNoZXMuc2jCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHwgMjYgKysrKysrKysrKysrKwo+
-IMKgc2VjdXJpdHkvaW50ZWdyaXR5L2ltYS9pbWFfZWZpLmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgfMKgIDYgKy0tCj4gwqBzZWN1cml0eS9sb2NrZG93bi9LY29uZmlnwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDIgKy0KPiDCoDIwIGZpbGVzIGNoYW5nZWQsIDI1
-MCBpbnNlcnRpb25zKCspLCA1NiBkZWxldGlvbnMoLSkKPiAtLS0KPiBiYXNlLWNvbW1pdDogMGFm
-MmY2YmUxYjQyODEzODViNjE4Y2I4NmFkOTQ2ZWRlZDA4OWFjOAo+IGNoYW5nZS1pZDogMjAyNDEy
-MjUtbW9kdWxlLWhhc2hlcy03YTUwYTdjYzJhMzAKPiAKPiBCZXN0IHJlZ2FyZHMsCgo=
+On Mon, Apr 28, 2025 at 7:57=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
+ wrote:
+>
+> On 4/28/25 17:04, Daniel P. Smith wrote:
+> >> OK, but why do this in Linux as opposed to tboot? Right now, much of t=
+he
+> >> TXT magic is done outside of the kernel. Why do it *IN* the kernel?
+> >
+> > There was a patch set submitted to tboot to add AMD support. It was
+> > rejected as tboot is solely focused on Intel TXT implementation.
+> >
+> > This meant I either had to go the route of yet another standalone loade=
+r
+> > kernel or do it in the kernel. Doing it as an external loader would hav=
+e
+> > required a new set of touchpoints, like the one you are highlighting. A=
+t
+> > which point, I am sure I would have gotten the question of why I didn't
+> > do it in the kernel.
 
+Will this cause any patent infringement issues in Linux [1]?
+
+1. https://patents.google.com/patent/US9075995B2
 
