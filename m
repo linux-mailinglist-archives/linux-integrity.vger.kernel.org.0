@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-6256-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6257-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C3F9ABC97D
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 23:30:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96F8DABC99B
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 23:33:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B7E344A47ED
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 21:29:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC5C34A212F
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 21:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B12622F744;
-	Mon, 19 May 2025 21:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C3E2356BF;
+	Mon, 19 May 2025 21:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xx9z6vyN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ER5/7zos"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C40E22F3BE;
-	Mon, 19 May 2025 21:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFFD2356B8;
+	Mon, 19 May 2025 21:22:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747689756; cv=none; b=rs4qqBDhxQ69TsvjBbHUiD9Qa7RVktZmYNwUMBKDa9xU+wtaK9uv1BUmZVcMWZMWm4nBu1S/15X2xJddN2snLo04tAynSB67OPWSMbABDmuwhLzU2FkhNVzJZamwuSRUWeHEWsD+A3Bujb+EFulBu5uqe5+M7lyFviLpOE1pwhQ=
+	t=1747689774; cv=none; b=LRY0vfksul0nfNdCt6KB1AyWfLs0m2DZG+2TXxijWa8yeVJiIFQwWBUnN6Wy1iQbkZ0CRM7plbO2wFjPyOFvef9to/AGeOyq9aGILXKE8HoCbs6/pN/7C5WwLn343xLgPLJbSwCgvu0R1l9zLQiBIPecKwPqi+DsKBrwnXEbWXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747689756; c=relaxed/simple;
-	bh=EQ3IzvGXf0ucRDNdpCAmCBBVswJOtl92Ip02snCfp7s=;
+	s=arc-20240116; t=1747689774; c=relaxed/simple;
+	bh=MKcEzRp+6zB+UsCj6QXygYdiA9HahGYDQrKNZmw3d2U=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=T/MJTvyhyJ07AfKIQE6Q7mm6ROfUGC54503oBNsX/7IL3SBxozduk8USPPgu0Cc3ZE69EqyNGhLwZ/G6Zc4eiFaYiExm8Qop4XDkg1kmpfh32ij74+E7lSIzMGG8JSSgsRHQLcgv7aK1x7GTImL7NV4+r3x9qSY4k50WrVjYm+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xx9z6vyN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0557C4CEF2;
-	Mon, 19 May 2025 21:22:34 +0000 (UTC)
+	 MIME-Version; b=U7M0I26TffGjEWqPlUghVYrLuCpBTKi4lkbV3BNucz+gpjiH8/2FXYDM2s2atiYWZNorMR7VosRH3818LRkDE8WLzG6UivGu0OmLWUxv8rEz+mAkWVoBDJxZwitN5aHK4oMkNL5PLCMv45Ex7zhedZU/YCbldCx02nSty9ZS364=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ER5/7zos; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F29C4CEED;
+	Mon, 19 May 2025 21:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747689755;
-	bh=EQ3IzvGXf0ucRDNdpCAmCBBVswJOtl92Ip02snCfp7s=;
+	s=k20201202; t=1747689773;
+	bh=MKcEzRp+6zB+UsCj6QXygYdiA9HahGYDQrKNZmw3d2U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Xx9z6vyNl85/VVfqlJokDeCRCk0Ih62/VjREc/tCK2vr89QRwRdhbk7A+X+0TGixc
-	 MTMfWsA0FM8/C3HX5rNZ+FfFZ+X1LEkjSqZziBb34vWU+TVqhavsRQUVtLr22NJTcX
-	 BENUwT6v2txlYyPrPPTAHTeMY77rYLL2ZGuT6Umy4uO2I/lka5wpgMuE/HH1FWv0K4
-	 iu5yxA+Ro7ql6G/BOqPhR3xBaj6877OQ1pEfYB0S7FAUfrJ468mP2mK+uXvF+Nz3ur
-	 qTu/d2G8MrKt1bG3GVcnUvxMpNR12Zm1nigWRnsCzVDQ+gHWbJK3CY+9+0rsG0hdbm
-	 aOuFvsBzmOScg==
+	b=ER5/7zosxdbj0HD3cYfv8J4zeV4NUYVjhw3Rh3d67LXKkZX9ZhzHbQ8EfdXDBqHd1
+	 RbIqh9i5CneztzhVrIxyjl0tPWXV/S0z0NRUlZdneOeI83KnYEY88knpY+EVz2Vifs
+	 CAyXO2grVixkOchIs80AUyQD/ypWx2AZ525h2eAwFV9QAXrOVqEJmqN7Nd8hOBeYFk
+	 1HnrAlMQ6fHXaIKetMz1dU5aLmg1xMssVoukOe/mgKiMQuAZxdxsz9Ju2Hs4usgYqk
+	 A6On3LnTEV3GtNHSvkU/+1f/a8g8nuQXH2hEx/dmJrofoUotRwvi0N3srTC81auPAV
+	 JP7WngIUMIMvw==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Michal Suchanek <msuchanek@suse.de>,
 	gregkh@linuxfoundation.org,
 	linux-integrity@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 17/18] tpm: tis: Double the timeout B to 4s
-Date: Mon, 19 May 2025 17:22:06 -0400
-Message-Id: <20250519212208.1986028-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 10/11] tpm: tis: Double the timeout B to 4s
+Date: Mon, 19 May 2025 17:22:36 -0400
+Message-Id: <20250519212237.1986368-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250519212208.1986028-1-sashal@kernel.org>
-References: <20250519212208.1986028-1-sashal@kernel.org>
+In-Reply-To: <20250519212237.1986368-1-sashal@kernel.org>
+References: <20250519212237.1986368-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.29
+X-stable-base: Linux 6.6.91
 Content-Transfer-Encoding: 8bit
 
 From: Michal Suchanek <msuchanek@suse.de>
@@ -112,7 +112,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index 970d02c337c7f..6c3aa480396b6 100644
+index 369496a6aebf1..27e61ddfb6229 100644
 --- a/drivers/char/tpm/tpm_tis_core.h
 +++ b/drivers/char/tpm/tpm_tis_core.h
 @@ -54,7 +54,7 @@ enum tis_int_flags {
@@ -125,10 +125,10 @@ index 970d02c337c7f..6c3aa480396b6 100644
  	TIS_TIMEOUT_MAX_ATML = 15000,	/* usecs */
  };
 diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 6c3125300c009..3db0b6a87d454 100644
+index 5f4998626a988..bf8a4ec8a01c1 100644
 --- a/include/linux/tpm.h
 +++ b/include/linux/tpm.h
-@@ -224,7 +224,7 @@ enum tpm2_const {
+@@ -181,7 +181,7 @@ enum tpm2_const {
  
  enum tpm2_timeouts {
  	TPM2_TIMEOUT_A          =    750,
