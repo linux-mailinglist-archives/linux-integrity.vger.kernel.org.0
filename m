@@ -1,129 +1,108 @@
-Return-Path: <linux-integrity+bounces-6245-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6246-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03213ABB091
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 May 2025 16:43:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAB47ABB481
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 07:57:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77DB3189897F
-	for <lists+linux-integrity@lfdr.de>; Sun, 18 May 2025 14:43:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A7AE171460
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 05:57:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5F521D00D;
-	Sun, 18 May 2025 14:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 033731F30CC;
+	Mon, 19 May 2025 05:57:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1bdDZCh"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="msxgBqP+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ed1-f66.google.com (mail-ed1-f66.google.com [209.85.208.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA0321CC70;
-	Sun, 18 May 2025 14:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6712A2D;
+	Mon, 19 May 2025 05:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747579358; cv=none; b=YNkmUv2vfep/IE43ZVDQNCElQW/Nv5No4BvdSQq3psdxCWb9PuISBZb0zIH63EDcfYLiYOU5IHsJuSN45NnvTAi3AoxmPJUCZq2ceuaB8PKQkvIc3hCBFTF9Bqcevj0bcuSVhjKD6mHD8JOturnXylHgcQPd5/e/15eNrdAiogg=
+	t=1747634240; cv=none; b=hVvHytOWbmuAMGhhpUCTJ1XnGcChPymebndbAq9xQMXm3uCM3EyFG/rbqpJiqH+/O0YPAAl5zPT0mTtHvuxdj1dyIlAmLIJZaraLsU8xyC18xXzZ6OmnjmduWZeoTIVWoXdFIPH0RjJJf64AUKvsJwyIaqP8b6IL3cvPtdkj+/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747579358; c=relaxed/simple;
-	bh=rAUybgx3w08Pk16V3V7ElWMaPW68BeTRsRpRxxQzxeE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S1PO2xylGll94R/nHkgM/fczSfgeBTBNCUPWXd+AIM14ale7NIk1t3FbzhOR1IIuzM8dLLnZMamAhvP7JUocLFXGIPlls+RUyTAAMERX6iyUlcN9E8zgDzkjackaLw8PImIFER/bM7X4RuREbty72vgdZiNPxLtMUry3Nq68AXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1bdDZCh; arc=none smtp.client-ip=209.85.208.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f66.google.com with SMTP id 4fb4d7f45d1cf-600210e4219so4856566a12.0;
-        Sun, 18 May 2025 07:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747579355; x=1748184155; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rAUybgx3w08Pk16V3V7ElWMaPW68BeTRsRpRxxQzxeE=;
-        b=G1bdDZChhUwF2sG9iVs+z/F/5uX1r5kqzCa7/RAF39YNgFr5Ju19V4F5od73pYxw9b
-         BY02mHbrtNRrItX4s7d5HHt21X5GO7w0dGd0oFV4JsXRWqoKnfOXFT2n4+OIZ3/5gbCG
-         9Iiw4s5LFnnzd/grzoN3S1fVp1g22VkE6PYr8iQMx1cYb1ILwS+4Rq1cSUQfD8OLWmak
-         4Ofuow556uEVs6Q4e1+N73AXzIGpy0XL/vmEYJXHIh2bj/e5IhIrooh/eK8c4UgkTXvp
-         3tny1iEy17VP7QnRNC02oyWoTXvpGWgImMKilKUr1dUJ2wWw5uPNpOcPFw940WBbdEkM
-         9osg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747579355; x=1748184155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rAUybgx3w08Pk16V3V7ElWMaPW68BeTRsRpRxxQzxeE=;
-        b=nin/U/PbR07oLePzhN5mU1XPjJzfQirSLbesBbenRDJW8Yuytunp/9qv+ZISA+m2Ew
-         ouL2eibE6WEZYRdczmsGk27KCbT4dj5Ssk6l23ATji+jZsWnaPXZMu1JUHSUhzhx1BJk
-         x3B6Jkesw9KjG1JLXDYzWoJD/A70EUzNAPEFmauQhNy94o1KBwUH/rE3+VLGqzv19oXP
-         wduSum7t1M0Drn6UKaPqTPksCi5VhUyUi69tI3uClmcVevmxhcrC9HcPqyzqInZIdU6f
-         tgouh7XnL/WtKFY8+G4oOEgfaRXkRr1aSVow+ZsZuj7PRGzXZ2jGmNe5OO3pO1ArqzXe
-         zlbA==
-X-Forwarded-Encrypted: i=1; AJvYcCUh2XN1qysNgyScsPKSIauxItG+OjnwyUF6MxxkJJQArbtl5liifIBrhB1Z8SZI3rqcoBEMXyGisciMemYOWRYD@vger.kernel.org, AJvYcCUvxjxEtd8Ee7FW3gBVRIomRPyyRb1PPLIWD0YsHO3zUCace1c7VmBD7ttWP/+dG9I5Uv9L048kpDYs@vger.kernel.org, AJvYcCWlKabIPOI1wx0FzIypnjsbACZh61xYgoJ0dIaH8BOfRE7d3srJYYnZdAk75FEO45eiYyy4GzUo0DdK4RQ=@vger.kernel.org, AJvYcCWvb5nL4+qmLv/R1MX0s1Iu780VInluxfwoFhRCB73KDmZ2uT7M8b39soNgYgzVFe71atoX8Dd7t7MD@vger.kernel.org, AJvYcCXo6NiD6uHdxET/tatyKdf2JNLfyv4FGvG2YDNByGQeI7pJeC5Fzt4DjOfmziZWndt9t1Yt/THi/owtdYEZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyloTETXRsazmoivtTNjujBtDMpUd8mAcgNnnqaglx7Je3E9OAv
-	9NkWBPOj/k7uPJZ+ZFxpK2ubJ9csWwgE5JkZmjbToO86vyO9d93Po2vd+KwVEInsnNuUANZhNLL
-	xB6ToQTn8bXJF8h+wR+UCm/ZK8sucRCE=
-X-Gm-Gg: ASbGncsERKVSxQ7BRt1dL5UuEoye3hAsbwQCqzfuJK37N2XywRz6nAyJ3yXt+x3fopY
-	uCS9Jwda/RA+hMqNTBFfRRW8MZOlvpk7AUctjf+fTsltsN1E5y1mYAh86zvYi3fbPd5I1BlwmLY
-	WwjXhLa2+++fVdn02RiPR27gmAWMphhQ==
-X-Google-Smtp-Source: AGHT+IHB++m0GR0lO5TfW8cZq+R6bSxHcLUjm6jGofGJAl2FV1P4JdhTYEzSIBs2qV2FvWjm0WoY9STztiddXe/xN+k=
-X-Received: by 2002:a17:907:7d8d:b0:ad5:4998:9f1a with SMTP id
- a640c23a62f3a-ad549a7e5e8mr600457266b.5.1747579354599; Sun, 18 May 2025
- 07:42:34 -0700 (PDT)
+	s=arc-20240116; t=1747634240; c=relaxed/simple;
+	bh=mZBKw0wJmnWieD8RvOZ90E/QZ8DajgvOAWCuVqPbx2M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qEE4s+Dqdu+bilABmXhFzG56V2aHonrwuezqnCXR52sWqihAWn5p1ygC7NGLWzQGW4SAxVCUIXgXvCV+wL7Mdvm1TbNMN3VEqqSlybYf+ZuOotHHMLNorJlwwdwWORz4waZklkCbSlcQT/FbKke4wYU8gIzr4CJma4vNt+90qJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=msxgBqP+; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=0zbSZULwMpBsF35qyqNlWF7Y18GG1Lj98fZQ/4Oi5ek=; b=msxgBqP+mlc27kvWTMpX+7lLkG
+	FhOl3sHQMXsS7oZlHmgJ1OFuwBBVVYPNVHNX3TMIdMqzzYc5HgVu8vdbDF6VvRGRCsPSJker9IyGo
+	95uClxLl2t+tWdQN2harV7L0oG/Xoo+J5Wzd2eo/Q420D9qHClavW0aHcz7ztbZVtbQCRcC4sZZ+N
+	2l2yG8qzY4AqBdFYYYRyry2O1XaCSBP7lG9WGmZFRPCnR+vb7b1mvl1lXTN8yf+akDd3LYO+Rvs0N
+	xZogCW0da3J43CBa5OhsK/ZXwiGe0fKLDNiiuT240Rd9u7PYZYSWieBcatDcYajVrsQh8JDmB/HRW
+	1+4VKTeg==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uGtUl-00781A-0x;
+	Mon, 19 May 2025 13:57:04 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 19 May 2025 13:57:03 +0800
+Date: Mon, 19 May 2025 13:57:03 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: lee@kernel.org, davem@davemloft.net, peterhuewe@gmx.de,
+	jarkko@kernel.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-crypto@vger.kernel.org,
+	jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	pmenzel@molgen.mpg.de, Yinggang Gu <guyinggang@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v9 2/5] crypto: loongson - add Loongson RNG driver support
+Message-ID: <aCrIL_ZXL-UtaLdJ@gondor.apana.org.au>
+References: <20250506031947.11130-1-zhaoqunqin@loongson.cn>
+ <20250506031947.11130-3-zhaoqunqin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <18F9BD47-282D-4225-AB6B-FDA4AD52D7AE@gmail.com>
- <9b18e8e3-f3e2-48d4-839a-56e1d8f62657@intel.com> <03d0db6b-628e-4a5e-8e71-852233b83f60@apertussolutions.com>
- <fbb23ee0-c0b4-4b0e-8861-940f8ceaf161@intel.com>
-In-Reply-To: <fbb23ee0-c0b4-4b0e-8861-940f8ceaf161@intel.com>
-From: Mike <mikewallacesmith90@gmail.com>
-Date: Sun, 18 May 2025 09:42:23 -0500
-X-Gm-Features: AX0GCFuU42_TMoi_HKtSGmNW7XrkC1FL6iyDZjOSvOw7NwM1rf6CdCYLar4WcGI
-Message-ID: <CAAyYeYjp0v2PYt1owTdOpQD8_NjakquyXbUr5M1a_OWLEKHQ0A@mail.gmail.com>
-Subject: Re: [PATCH v14 00/19] x86: Trenchboot secure dynamic launch Linux
- kernel support
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: "Daniel P. Smith" <dpsmith@apertussolutions.com>, Rich Persaud <persaur@gmail.com>, 
-	Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-efi@vger.kernel.org, iommu@lists.linux.dev, tglx@linutronix.de, 
-	mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com, 
-	ardb@kernel.org, mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, 
-	peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, luto@amacapital.net, 
-	nivedita@alum.mit.edu, herbert@gondor.apana.org.au, davem@davemloft.net, 
-	corbet@lwn.net, ebiederm@xmission.com, dwmw2@infradead.org, 
-	baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com, 
-	andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com, 
-	Sergii Dmytruk <sergii.dmytruk@3mdeb.com>, openxt@googlegroups.com, 
-	"Mowka, Mateusz" <mateusz.mowka@intel.com>, Ning Sun <ning.sun@intel.com>, 
-	tboot-devel@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250506031947.11130-3-zhaoqunqin@loongson.cn>
 
-On Mon, Apr 28, 2025 at 7:57=E2=80=AFPM Dave Hansen <dave.hansen@intel.com>=
- wrote:
+On Tue, May 06, 2025 at 11:19:44AM +0800, Qunqin Zhao wrote:
 >
-> On 4/28/25 17:04, Daniel P. Smith wrote:
-> >> OK, but why do this in Linux as opposed to tboot? Right now, much of t=
-he
-> >> TXT magic is done outside of the kernel. Why do it *IN* the kernel?
-> >
-> > There was a patch set submitted to tboot to add AMD support. It was
-> > rejected as tboot is solely focused on Intel TXT implementation.
-> >
-> > This meant I either had to go the route of yet another standalone loade=
-r
-> > kernel or do it in the kernel. Doing it as an external loader would hav=
-e
-> > required a new set of touchpoints, like the one you are highlighting. A=
-t
-> > which point, I am sure I would have gotten the question of why I didn't
-> > do it in the kernel.
+> +static int loongson_rng_init(struct crypto_tfm *tfm)
+> +{
+> +	struct loongson_rng_ctx *ctx = crypto_tfm_ctx(tfm);
+> +	struct loongson_rng *rng;
+> +	int ret = -EBUSY;
+> +
+> +	mutex_lock(&rng_devices.lock);
+> +	list_for_each_entry(rng, &rng_devices.list, list) {
+> +		if (!rng->is_used) {
+> +			rng->is_used = true;
+> +			ctx->rng = rng;
+> +			ret = 0;
+> +			break;
+> +		}
+> +	}
+> +	mutex_unlock(&rng_devices.lock);
+> +
+> +	return ret;
+> +}
 
-Will this cause any patent infringement issues in Linux [1]?
+This isn't right.  The number of TFMs in the system is unlimited.
+You should not pair each tfm with an individual hardwre device.
 
-1. https://patents.google.com/patent/US9075995B2
+If you want to do load-balancing you could certainly pick a device
+per tfm, but each device must be able to support an unlimited number
+of tfms.
+
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
