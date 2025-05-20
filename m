@@ -1,143 +1,200 @@
-Return-Path: <linux-integrity+bounces-6260-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6261-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FC90ABC9F8
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 23:39:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFB3FABDFFB
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 May 2025 18:07:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 881173ABAD9
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 May 2025 21:36:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF7084C3449
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 May 2025 16:07:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71953244691;
-	Mon, 19 May 2025 21:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20403265CD8;
+	Tue, 20 May 2025 16:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lnNCHM3O"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cdU3uf01"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A35244689;
-	Mon, 19 May 2025 21:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC1022B8B1
+	for <linux-integrity@vger.kernel.org>; Tue, 20 May 2025 16:07:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747689811; cv=none; b=AnbpIdkh9ArW25jrtga13cs31uIIWVNrCC+zFfjKOY2T0Jyhp1s3/bz+AGqpzW0WSqgt5fAaKs/LFQ4PUVm3n0Z249XP5jCLKU2Hwl8SXiAsFfSlLwkAt2K2yqas2cptOdUZI7pcAelo6R2GwGBSGvXbzoaCIDZhlRTTBwkGx8c=
+	t=1747757238; cv=none; b=fSQZq2nLQKNMg4Z5mi+6P5yZjNTElqqH0yk0XJvtiJUjccabwmsYmw3YSyfIkHPg1yqzxWjTF+nIh93ND2gh5a/PKfE77FHL7Bpbau0WJAVRgXcfIIgmDISs4VpC2WUWqgqHPpF/K7ZxF8IfP5Fe7HvRbs84//RgWYdCUCtm5q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747689811; c=relaxed/simple;
-	bh=O33U2Imm5ypbs0NToGKPRgFoOC4/c8VH64LahKk3eME=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pVJkHVMSTWN6/1RF/lMdJE02bGfPIXcOvdM7eXqKKVLGIB/a12ERHFWlwwI8gpdCfoncH7NVsw+MSVAbtEvTWh0uaWbuG86c/n0nLahEKTk+v2F7RDTp6Lk7uDvBrCQCdC2w4MbRT34h6xmRwmNBNQ07JF2YCFCOGpwFvKWOzcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lnNCHM3O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C39C4CEEB;
-	Mon, 19 May 2025 21:23:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747689810;
-	bh=O33U2Imm5ypbs0NToGKPRgFoOC4/c8VH64LahKk3eME=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lnNCHM3O8IiaHlYWmJAEUrjtWotXwX9naW/eDUZOXv0fs+rSzi8W8viwqbomuFPO0
-	 LkIlIDJO7wnIVdnXkJ3Kil/d+l/My17pMmkJHS+3NnT3fOIwK2fUAZ56BqK4/Yhqxy
-	 ijhvuHMxpxqQQcN1OQzylRRxXtaT24xDD8GDw9iUIRIEcTItuQ2bVSxu3+Ci5j6iNZ
-	 1U5XEgk2CPt1Jq8p4zqlAbS8DXstEhxRhddMtEm1DrGJ216Rd1yEB36Qfbp50TzQIx
-	 dK/LPC++lh4lv57U/MHrxrLwJDqhh0OVh+ouzySc87CtqqtzvusP7aRX3zq2or9H/k
-	 U/+L+NYxlMdPA==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Michal Suchanek <msuchanek@suse.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	peterhuewe@gmx.de,
-	jarkko.sakkinen@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 6/6] tpm: tis: Double the timeout B to 4s
-Date: Mon, 19 May 2025 17:23:20 -0400
-Message-Id: <20250519212320.1986749-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250519212320.1986749-1-sashal@kernel.org>
-References: <20250519212320.1986749-1-sashal@kernel.org>
+	s=arc-20240116; t=1747757238; c=relaxed/simple;
+	bh=yWls8QfeA9fpnOgrHlH+dO1UEqW/dxD0zbRNGuCAoh0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PCrQP5RGLFpnRsYDL1Q9k1rdWKveFVL2esVvvpQzD/C2tn4C5MT/1WKhCx56jBiA0BP50rVm+I2rwEkoh5196GclpLeiLAsqm3gDd9/IkZo/cZ9T44q25xqY5Cc+M4EDQzCg0Bj9Z8k1yUmQ7K6LU7My9ZcWGg0dRcsEQQTZHnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cdU3uf01; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747757235;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ybC/xEWalGJ0RhCZjvyrvjbHro7QE2FQq7vzTeEzDcM=;
+	b=cdU3uf01e8iI0rlmtlRxetvDnYI1n5XpXw1mQSrd+LtJE3y741/MlXYGKi1XyNjQoGbeA8
+	isosUULxv6qLYrMaDsdT+SwKrL8Y7vuS30ENSkmDzt1uSHvysU+AsVb2F3c9cp9DAbRv8f
+	z5Pwtb/3cZLumaDJUUFLMBbM/w5vafU=
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
+ [209.85.210.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-354-5j5Wq_oOPaSHKuFgXW42IA-1; Tue, 20 May 2025 12:07:03 -0400
+X-MC-Unique: 5j5Wq_oOPaSHKuFgXW42IA-1
+X-Mimecast-MFC-AGG-ID: 5j5Wq_oOPaSHKuFgXW42IA_1747757223
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-72e1e89b532so2782930a34.3
+        for <linux-integrity@vger.kernel.org>; Tue, 20 May 2025 09:07:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747757222; x=1748362022;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ybC/xEWalGJ0RhCZjvyrvjbHro7QE2FQq7vzTeEzDcM=;
+        b=KJcGpL9arHYy/4StZJ2q2qF9B0LLc7PNP7jOk9u8nqEW0JBIF5sK3Tr2znCRx8VFmp
+         Q04lMmbn0ALK7IH4g2WWhJi9xwiryvHoTErCPaS8TplMxUZQ8SazndKqCjvqNv+eWsq1
+         HG3qZOYZdekupYtQHynBNhb4XvN8c7Oz0oMtcsDxU40cako/xn8Qx0zMF0YA6WbHqikN
+         Jyl91KPkqJFt7m6A19GHXTd+hZtfw5f4Aj8qZ6nRpVi14147GudHrG2gptyxN+7urCjM
+         rSU5DhU9ESjYKuTkcjGgGEHV/uXwtkgEmaebGsYGWeoqer95CX6Pm/v0ZHQakXalrfGm
+         wJRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWD1X5XewhJlvKdHDFZc+mTt1cMso+Z9N7jVdxd2WPmYzhhFu33Th7InBHSRelZcLpECQm4vkJz/NCp+bSsNSU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHMw6MbExe9N62R+vp9Ka4v4AFcPR1xYekjTZDQyABeCrlYoyI
+	hS8JxZz//ffcMgmJ6tyOdRVg5KxqGvQaabTNQIPebTlJMhShVp67sGLAZKFexM3cJ/AKqsRSJPL
+	kJHpjuaEOj1oFQULX3aUQOwuJmEp8YA1ZrlM43orYEi7HJRRzTBQNuCi7LaFrC9WKYmtKs7g33z
+	/f18hCvly2aDDhsQYuTsyBiGAnIU2OX0EA6nthWQyySJX5rNqMN4rN
+X-Gm-Gg: ASbGncvYCLOBaUYu5yr29hdPG7D8y87MAs3fMkIySAACn5k5BD8jGrQfFL5gpH5Gh9H
+	GCY/cxJHpdGsVnQ5YLWezeWUIHO+NGQ2orh4L79A0l210kZP++TwZ5zNCgPAUFN+4vNU=
+X-Received: by 2002:a05:6830:658c:b0:727:372e:600e with SMTP id 46e09a7af769-734f6b1a0cdmr10030130a34.14.1747757222616;
+        Tue, 20 May 2025 09:07:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF1ly9i72+pYbDKe5Sks+06FCcNtf9xBC0iJ/paWfH1AFYyUe0Qn2IrAf+QY1o3hDZlmKZQmCGNGBhAxWj1dLY=
+X-Received: by 2002:a05:6830:658c:b0:727:372e:600e with SMTP id
+ 46e09a7af769-734f6b1a0cdmr10030067a34.14.1747757222132; Tue, 20 May 2025
+ 09:07:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.237
-Content-Transfer-Encoding: 8bit
+References: <20250514134630.137621-1-sgarzare@redhat.com> <20250514134630.137621-5-sgarzare@redhat.com>
+ <aCVHQ-LRqHeEVEAW@kernel.org>
+In-Reply-To: <aCVHQ-LRqHeEVEAW@kernel.org>
+From: Stefano Garzarella <sgarzare@redhat.com>
+Date: Tue, 20 May 2025 18:06:50 +0200
+X-Gm-Features: AX0GCFsTmlbq93tR0wE4C3RUpx9Z1D4kjkNOv4wLeycQRtYZ5zeOxDpm0iB8eVA
+Message-ID: <CAGxU2F5AsNY5mQPd=qajW1seFYHSYpB0Fa1iuR_f2QavtoB6sA@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] tpm/tpm_svsm: support TPM_CHIP_FLAG_SYNC
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linuxppc-dev@lists.ozlabs.org, Peter Huewe <peterhuewe@gmx.de>, 
+	Jens Wiklander <jens.wiklander@linaro.org>, linux-integrity@vger.kernel.org, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-arm-kernel@lists.infradead.org, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Nicholas Piggin <npiggin@gmail.com>, 
+	Sumit Garg <sumit.garg@kernel.org>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Michal Suchanek <msuchanek@suse.de>
+On Thu, 15 May 2025 at 03:45, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+> On Wed, May 14, 2025 at 03:46:30PM +0200, Stefano Garzarella wrote:
+> > From: Stefano Garzarella <sgarzare@redhat.com>
+> >
+> > This driver does not support interrupts, and receiving the response is
+> > synchronous with sending the command.
+> >
+> > Enable synchronous send() with TPM_CHIP_FLAG_SYNC, which implies that
+> > ->send() already fills the provided buffer with a response, and ->recv()
+> > is not implemented.
+> >
+> > Keep using the same pre-allocated buffer to avoid having to allocate
+> > it for each command. We need the buffer to have the header required by
+> > the SVSM protocol and the command contiguous in memory.
+> >
+> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > ---
+> > v5:
+> > - changed order and parameter names to match tpm_try_transmit() [Jarkko]
+> > v4:
+> > - reworked commit description [Jarkko]
+> > ---
+> >  drivers/char/tpm/tpm_svsm.c | 27 +++++++++++----------------
+> >  1 file changed, 11 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/char/tpm/tpm_svsm.c b/drivers/char/tpm/tpm_svsm.c
+> > index 0847cbf450b4..f5ba0f64850b 100644
+> > --- a/drivers/char/tpm/tpm_svsm.c
+> > +++ b/drivers/char/tpm/tpm_svsm.c
+> > @@ -26,37 +26,31 @@ struct tpm_svsm_priv {
+> >  };
+> >
+> >  static int tpm_svsm_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz,
+> > -                      size_t len)
+> > +                      size_t cmd_len)
+> >  {
+> >       struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
+> >       int ret;
+> >
+> > -     ret = svsm_vtpm_cmd_request_fill(priv->buffer, 0, buf, len);
+> > +     ret = svsm_vtpm_cmd_request_fill(priv->buffer, 0, buf, cmd_len);
+> >       if (ret)
+> >               return ret;
+> >
+> >       /*
+> >        * The SVSM call uses the same buffer for the command and for the
+> > -      * response, so after this call, the buffer will contain the response
+> > -      * that can be used by .recv() op.
+> > +      * response, so after this call, the buffer will contain the response.
+> > +      *
+> > +      * Note: we have to use an internal buffer because the device in SVSM
+> > +      * expects the svsm_vtpm header + data to be physically contiguous.
+> >        */
+> > -     return snp_svsm_vtpm_send_command(priv->buffer);
+> > -}
+> > -
+> > -static int tpm_svsm_recv(struct tpm_chip *chip, u8 *buf, size_t len)
+> > -{
+> > -     struct tpm_svsm_priv *priv = dev_get_drvdata(&chip->dev);
+> > +     ret = snp_svsm_vtpm_send_command(priv->buffer);
+> > +     if (ret)
+> > +             return ret;
+> >
+> > -     /*
+> > -      * The internal buffer contains the response after we send the command
+> > -      * to SVSM.
+> > -      */
+> > -     return svsm_vtpm_cmd_response_parse(priv->buffer, buf, len);
+> > +     return svsm_vtpm_cmd_response_parse(priv->buffer, buf, bufsiz);
+> >  }
+> >
+> >  static struct tpm_class_ops tpm_chip_ops = {
+> >       .flags = TPM_OPS_AUTO_STARTUP,
+> > -     .recv = tpm_svsm_recv,
+> >       .send = tpm_svsm_send,
+> >  };
+> >
+> > @@ -85,6 +79,7 @@ static int __init tpm_svsm_probe(struct platform_device *pdev)
+> >
+> >       dev_set_drvdata(&chip->dev, priv);
+> >
+> > +     chip->flags |= TPM_CHIP_FLAG_SYNC;
+> >       err = tpm2_probe(chip);
+> >       if (err)
+> >               return err;
+> > --
+> > 2.49.0
+> >
+> >
+>
+> I can pick this for 6.16.
 
-[ Upstream commit 2f661f71fda1fc0c42b7746ca5b7da529eb6b5be ]
+Great, thanks!
 
-With some Infineon chips the timeouts in tpm_tis_send_data (both B and
-C) can reach up to about 2250 ms.
-
-Timeout C is retried since
-commit de9e33df7762 ("tpm, tpm_tis: Workaround failed command reception on Infineon devices")
-
-Timeout B still needs to be extended.
-
-The problem is most commonly encountered with context related operation
-such as load context/save context. These are issued directly by the
-kernel, and there is no retry logic for them.
-
-When a filesystem is set up to use the TPM for unlocking the boot fails,
-and restarting the userspace service is ineffective. This is likely
-because ignoring a load context/save context result puts the real TPM
-state and the TPM state expected by the kernel out of sync.
-
-Chips known to be affected:
-tpm_tis IFX1522:00: 2.0 TPM (device-id 0x1D, rev-id 54)
-Description: SLB9672
-Firmware Revision: 15.22
-
-tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1B, rev-id 22)
-Firmware Revision: 7.83
-
-tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1A, rev-id 16)
-Firmware Revision: 5.63
-
-Link: https://lore.kernel.org/linux-integrity/Z5pI07m0Muapyu9w@kitsune.suse.cz/
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/char/tpm/tpm_tis_core.h | 2 +-
- include/linux/tpm.h             | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index 464ed352ab2e8..ed7b2caa9ebbd 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -53,7 +53,7 @@ enum tis_int_flags {
- enum tis_defaults {
- 	TIS_MEM_LEN = 0x5000,
- 	TIS_SHORT_TIMEOUT = 750,	/* ms */
--	TIS_LONG_TIMEOUT = 2000,	/* 2 sec */
-+	TIS_LONG_TIMEOUT = 4000,	/* 4 secs */
- 	TIS_TIMEOUT_MIN_ATML = 14700,	/* usecs */
- 	TIS_TIMEOUT_MAX_ATML = 15000,	/* usecs */
- };
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 95c3069823f9b..7868e847eee0e 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -174,7 +174,7 @@ enum tpm2_const {
- 
- enum tpm2_timeouts {
- 	TPM2_TIMEOUT_A          =    750,
--	TPM2_TIMEOUT_B          =   2000,
-+	TPM2_TIMEOUT_B          =   4000,
- 	TPM2_TIMEOUT_C          =    200,
- 	TPM2_TIMEOUT_D          =     30,
- 	TPM2_DURATION_SHORT     =     20,
--- 
-2.39.5
+Stefano
 
 
