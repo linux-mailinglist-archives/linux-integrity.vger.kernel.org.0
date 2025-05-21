@@ -1,141 +1,162 @@
-Return-Path: <linux-integrity+bounces-6264-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6265-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5CCBABF111
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 May 2025 12:12:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0945BABF233
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 May 2025 12:58:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B6501895D6C
-	for <lists+linux-integrity@lfdr.de>; Wed, 21 May 2025 10:12:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C8A64E4439
+	for <lists+linux-integrity@lfdr.de>; Wed, 21 May 2025 10:58:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF0C25A353;
-	Wed, 21 May 2025 10:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9972609C7;
+	Wed, 21 May 2025 10:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YLXOzE9H"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="F8TGzlRI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C80250BED;
-	Wed, 21 May 2025 10:12:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F12253B5E;
+	Wed, 21 May 2025 10:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747822344; cv=none; b=Kjd/6/ncJD9W6+FQSVdt4jnsxZxxyU30mZp863u/SlIQ3o0TFYzp9U9pBJ3Qplb7B5bmsXg2naR4i3eD1W9bEZNabBbqLuqBEwFgysp/c1F5LFZ4CtTOKOwZ+snUy/8FDjfy6BgQTV71gunRTpxEf/OdjUH4cc/9xf/vcAREX+8=
+	t=1747825111; cv=none; b=fnET+1NfOs7Tg2+GdvG2JiRdYWlwW3Qi/vHvA8fb1kpvu2g0hxbfrUhY5PDKkT54UdN3YP4YpXbLtxNk38yLfdY+JqmidBYWXtRya9kSDs+fD26HvxMncpNRpu7IFh+KhSXwFQKlCtmUZzvbiatY+VTfT3WBpv+qntSGbwIp1z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747822344; c=relaxed/simple;
-	bh=21cNdzYwUJJBEkAHlt7+sFsml8d7DmKbNlD2kUZGKoQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uys+MivWxrDAhKCtWUm7m5uPR0nGz5eTY/C7hFJ98swMXV9jS2JREOrlyDQ1nkly9ztqPsmSgP/aev6P9cph8iWJiWhRu/tU6pF0I1I3pjWukgR0XgHro0BnSWtupWccRpTOmb9r5RkOtlQINEAggjZw6YwMC20cNSzQMdEUXjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YLXOzE9H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA7E2C4CEED;
-	Wed, 21 May 2025 10:12:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747822344;
-	bh=21cNdzYwUJJBEkAHlt7+sFsml8d7DmKbNlD2kUZGKoQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YLXOzE9HyCy+kC79+nUGLtvp+0cxfR2TUqkZ6h0MDnnvdFk9pskQlEjRl/46ec7W2
-	 TH/x2jlNbam+Us8NSZrtDSx/HbFXHChCs8KdGoSNvyu+6GIK/tABEAfZ5EIJ9jmwiU
-	 W1JLhNCmMAminpUveLFmvUvUzyFGZbmBJ7QRISsH67ON2Eldjw5CzZuxmWFFKjhaMG
-	 5hnpVMxcr0ovTQjUkq13+jJoGGK4Rsio37/Sc3vS01CWAzkYtLStJsFev+cYzyIB6D
-	 cA1Q961SLiRbMcoD6c9XC2jiHOXhz5nQrAyKFReCRaKuiywBNVKDMxR59cSAmmioWM
-	 B1TrXzju+oOcQ==
-Date: Wed, 21 May 2025 13:12:20 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: linuxppc-dev@lists.ozlabs.org, Peter Huewe <peterhuewe@gmx.de>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	linux-integrity@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Sumit Garg <sumit.garg@kernel.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v5 4/4] tpm/tpm_svsm: support TPM_CHIP_FLAG_SYNC
-Message-ID: <aC2nBCxkvWWz5y5E@kernel.org>
-References: <20250514134630.137621-1-sgarzare@redhat.com>
- <20250514134630.137621-5-sgarzare@redhat.com>
- <aCVHQ-LRqHeEVEAW@kernel.org>
- <CAGxU2F5AsNY5mQPd=qajW1seFYHSYpB0Fa1iuR_f2QavtoB6sA@mail.gmail.com>
- <aCzf6aoJAC-IdS_n@kernel.org>
- <CAGxU2F6rfqGV_gJk-JxrCk3f9dWtYn_3o9RODh7cVG0X_oQWaA@mail.gmail.com>
+	s=arc-20240116; t=1747825111; c=relaxed/simple;
+	bh=Geief8uz8eTD4nOPxKIHj107XaA2H+9ey0+QJdhM0Ao=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RxQP21dRznmo5892IjizPqQQR+O8DvFjzVR9vCnEa1HMPRxl0U73/DQobK/tab5fvnVHdOzHOXXhdKAK6itgdPmTkwHuEoCdtTl9wSoYjkA6YZZIXz+2dpfG+mQKHtc0dhzfrKB74n9haLIwZnvQIRGdx4nLZiVBAuDv40OJ08A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=F8TGzlRI; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54L9ErlM031285;
+	Wed, 21 May 2025 10:58:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=SbrGxKuKyhMa7qBj3W0O5z8k9UAjZY3w5kCX92wSh
+	Ho=; b=F8TGzlRIl6p7H5diI1+i+r2jeckSM9XULK5C6JIo3+Csn5gCq4kV5DoTe
+	iFqcXXI0O7RaxndrB5jF8Kfg1LfnrRlU/gP/lTvYYMJhhy5/y+heUTClzJrFx1yD
+	s0RUh8YUejqcE9cJ3cAMZVAikkglY0oPktoOcK9POz5NACuD7oUZg5DH3mPu5Ubn
+	+hwuOQMyQW3B1UDhrLVfL92gRR9Toy07wbJxseCQrHeQYouf/4NcLc39WCZ6NggH
+	c57MF2/s4DV7d3U5pGJlojM6B032Px5/4me3+K0KXrxtXTjG6QXq9KwKf/zRMl2A
+	IsuTSM+dctW2y0w2xMIjNKHwW56yQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46sc1j0ex9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 May 2025 10:58:07 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54LAw7U0002582;
+	Wed, 21 May 2025 10:58:07 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46sc1j0ex4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 May 2025 10:58:07 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54LA0ewA032009;
+	Wed, 21 May 2025 10:58:06 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46rwmq3t90-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 21 May 2025 10:58:06 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54LAw2uT31392020
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 21 May 2025 10:58:02 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4453A20043;
+	Wed, 21 May 2025 10:58:02 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D3AB920040;
+	Wed, 21 May 2025 10:57:59 +0000 (GMT)
+Received: from li-fc74f8cc-3279-11b2-a85c-ef5828687581.in.ibm.com (unknown [9.204.203.112])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 21 May 2025 10:57:59 +0000 (GMT)
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+To: linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, ajd@linux.ibm.com,
+        zohar@linux.ibm.com, nayna@linux.ibm.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/3] Enhancements to the secvar interface in static key management mode
+Date: Wed, 21 May 2025 16:27:56 +0530
+Message-ID: <20250521105759.8408-1-ssrish@linux.ibm.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGxU2F6rfqGV_gJk-JxrCk3f9dWtYn_3o9RODh7cVG0X_oQWaA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: AK58A0-4JuZcf24V18cmuGtLGK8GB0px
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTIxMDEwNSBTYWx0ZWRfX/GRMz80Q8Ta7 2WGuT+a6GWBrZbRnqPMxwdyfti1sltArXpI5hPQg6wkVT47FUR+GcVGq2LvcYR0bQl5+N6oHIeV VQcQle5z+GjV5yZnsk/B3hrzigBLi7pln95NMCz52V7Bf7VEiB4XCFaXyQL++ScZWgURkVVYVve
+ Dct0+MNJrz0Za0ZQKUT1XVrNoFCNins4Vy2qAbPmGtAAL2VjrDwUyJgUThOxH/rwonVuw7fVdAV isUpJ7KvCAQPH6Rk60hLB22pRQZ7hrR2OyFIFBxX6HZxS7yKPrksLWJaR5/z19Qq95t0XYPEIFI ipcwF0vIoRnbEBAv8aHNYa3vf0nDXfPhMufwpVlFejBT2kcMfzkQcHZF6ZISIYA7BcdgbI1cMqh
+ BFyHE72Jfb/omcPmujuYq0jsOH+R/zCZi1HYcXbLlAMHeQTT6E2inQm0m28onj03wuMwZZOh
+X-Authority-Analysis: v=2.4 cv=GpdC+l1C c=1 sm=1 tr=0 ts=682db1bf cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=dt9VzEwgFbYA:10 a=-1jmnclONZOZV9iy3uUA:9
+X-Proofpoint-GUID: ArT8vSoai2X7r-3ul74AEPLarJQFuL55
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-21_03,2025-05-20_03,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ priorityscore=1501 phishscore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ malwarescore=0 clxscore=1015 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505160000 definitions=main-2505210105
 
-On Wed, May 21, 2025 at 09:13:34AM +0200, Stefano Garzarella wrote:
-> On Tue, 20 May 2025 at 22:02, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > On Tue, May 20, 2025 at 06:06:50PM +0200, Stefano Garzarella wrote:
-> > > On Thu, 15 May 2025 at 03:45, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > On Wed, May 14, 2025 at 03:46:30PM +0200, Stefano Garzarella wrote:
-> > > > > From: Stefano Garzarella <sgarzare@redhat.com>
-> > > > >
-> > > > > This driver does not support interrupts, and receiving the response is
-> > > > > synchronous with sending the command.
-> > > > >
-> > > > > Enable synchronous send() with TPM_CHIP_FLAG_SYNC, which implies that
-> > > > > ->send() already fills the provided buffer with a response, and ->recv()
-> > > > > is not implemented.
-> > > > >
-> > > > > Keep using the same pre-allocated buffer to avoid having to allocate
-> > > > > it for each command. We need the buffer to have the header required by
-> > > > > the SVSM protocol and the command contiguous in memory.
-> > > > >
-> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > > > ---
-> > > > > v5:
-> > > > > - changed order and parameter names to match tpm_try_transmit() [Jarkko]
-> > > > > v4:
-> > > > > - reworked commit description [Jarkko]
-> > > > > ---
-> > > > >  drivers/char/tpm/tpm_svsm.c | 27 +++++++++++----------------
-> > > > >  1 file changed, 11 insertions(+), 16 deletions(-)
-> > > > >
-> 
-> [...]
-> 
-> > > >
-> > > > I can pick this for 6.16.
-> > >
-> > > Great, thanks!
-> >
-> > Can you rebase this on top of my next branch and send one more version
-> > of the series (fake ancestor crap)?
-> 
-> I tried, but the last patch (this one) is based on the series merged
-> on the tip tree, where I introduced tpm_svsm.
-> I can see that series in linux-next merged with commit
-> 16a56ee59ab8ee05e67de35bbb5782ef9cfb4f07,
-> but I can't see it in your next tree [1].
-> 
-> How do we proceed in such cases?
-> 
-> Just to be sure, did I use the right tree?
+The PLPKS enabled Power LPAR sysfs exposes all of the secure boot secure
+variables irrespective of the key management mode. There is support for
+both static and dynamic key management and the key management mode can
+be updated using the management console. The user can modify the secure
+boot secvars db, dbx, grubdb, grubdbx, and sbat only in the dynamic key
+mode. But the sysfs interface exposes these secvars even in static key
+mode. This could lead to errors when reading them or writing to them in
+the static key mode.
 
-Thanks for the remark. Lemme check tonight. Hold on doing
-anything ;-) We'll get there...
+Update the secvar format property based on the key management mode and
+expose only the secure variables relevant to the key management mode.
+Enable loading of signed third-party kernel modules in the static key
+mode when the platform keystore is enabled.
 
-> 
-> Thanks,
-> Stefano
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/?h=next
-> 
-> 
+Changelog:
 
-BR, Jarkko
+v2:
+
+* Patch 1:
+
+  - Updated plpks_get_sb_keymgmt_mode to handle -ENOENT and -EPERM in
+    the case of static key management mode, based on feedback from
+    Andrew.
+  - Moved the documentation changes relevant to the secvar format
+    property from Patch 2 to Patch 1.
+  - Added reviewed-by from Nayna.
+
+* Patch 2:
+
+  - Moved the documentaton changes relevant to secure variables from
+    /sys/firmware/secvar/format to
+    /sys/firmware/secvar/vars/<variable name>.
+  - Added reviewed-by from Nayna and Andrew.
+
+* Patch 3:
+  - Added reviewed-by from Nayna and Andrew.
+
+
+Srish Srinivasan (3):
+  powerpc/pseries: Correct secvar format representation for static key
+    management
+  powerpc/secvar: Expose secvars relevant to the key management mode
+  integrity/platform_certs: Allow loading of keys in the static key
+    management mode
+
+ Documentation/ABI/testing/sysfs-secvar        |  15 ++-
+ arch/powerpc/platforms/pseries/plpks-secvar.c | 104 ++++++++++++------
+ .../integrity/platform_certs/load_powerpc.c   |   5 +-
+ 3 files changed, 85 insertions(+), 39 deletions(-)
+
+-- 
+2.47.1
+
 
