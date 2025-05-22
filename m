@@ -1,138 +1,173 @@
-Return-Path: <linux-integrity+bounces-6294-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6295-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 329B2AC0708
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 10:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 42F69AC0802
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 10:59:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53BA71898D7A
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 08:27:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 288391BC5160
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 08:59:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBA76264625;
-	Thu, 22 May 2025 08:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE2628751B;
+	Thu, 22 May 2025 08:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XR1S0QnK"
+	dkim=pass (2048-bit key) header.d=nightmared.fr header.i=@nightmared.fr header.b="VSitrMbB"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326DD263F30
-	for <linux-integrity@vger.kernel.org>; Thu, 22 May 2025 08:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from mail.nightmared.fr (mail.nightmared.fr [51.158.148.24])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C907B27C869;
+	Thu, 22 May 2025 08:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.158.148.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747902410; cv=none; b=iyVdRBZDu99dqfvmlbxUPOWAhvYkCWRlECYWMIGXOufbPjAUrXkARx2edoXlF/RUgYj5xhl0LthKHsMOegmwlmp7Ux6VfJ3mds1Jy0A1olUMmAE2To+SuwrkDtmj+FsoH6p+yODeuVMKNbD9cbPLANWXkfAdLTYKAa7VTfxDWEU=
+	t=1747904245; cv=none; b=caYe0Ue5mYyD5MBKeS1kZXftKOs71m8skGELY9ruYW0viHKIsdly1GU4NBs1ChQ2ndOFotrmYutnDw1OcnHkSV5jFqvBmhNAMDFiZAuVeOWVCpOHldyYCYw+NKpPnsmtnNc4JoWuHLDEvFl5t6/6hTsoBS5PfDBGkOxVy4O5jmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747902410; c=relaxed/simple;
-	bh=Dlp2azLQltfH6emKWYdlW4k16t8gyfKRpWtf3w9Dv60=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XvQUJN+6+WRuX9WZFX01ggjkh0bThKvUdUimmDa10kX6tp+nNI124ivIISt/TyJBrGAvCJgoaO82DBGhuvOaDo/vk4bhw0TfXk38KqtGl6/mGYLQXz7GNYnsmGGcW2NkWrvGpPR4sa18+PoEVUC3oomWlV77nytW/zheGjVEOYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XR1S0QnK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747902408;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Dlp2azLQltfH6emKWYdlW4k16t8gyfKRpWtf3w9Dv60=;
-	b=XR1S0QnKzJcKBXu7IM7mGIOqXTay76uaYTDvlcmNQ7PkjSCwCqr/qYMLXYtmtiKpknCMWp
-	u/uirrerMwaekZk92AENuBU3bSA3ShAcRLGBJGwz7/7h6PJu/zUvn50mZF4E6ybkGKl1Po
-	QmRy3ZjG6SIjY9SUhht4Qwi7eCg6dW0=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-539-zJU4Nv1LMKqxQ-NPMNJBOA-1; Thu, 22 May 2025 04:26:46 -0400
-X-MC-Unique: zJU4Nv1LMKqxQ-NPMNJBOA-1
-X-Mimecast-MFC-AGG-ID: zJU4Nv1LMKqxQ-NPMNJBOA_1747902406
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-70deb82de2fso29681487b3.0
-        for <linux-integrity@vger.kernel.org>; Thu, 22 May 2025 01:26:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747902406; x=1748507206;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dlp2azLQltfH6emKWYdlW4k16t8gyfKRpWtf3w9Dv60=;
-        b=aYzFBJp7jbla9b1mixM2HlOPxzhHxsR6OAjQbRWj3HgWn59mCUX2eYNPRDaU/AUfWT
-         RYo/jbG+5A39Jy4WBzk5VtR3uQLVvXDLbub40dPiVH9iCuMsJP59FReODYjhfvDbvWDu
-         Gbz7AkKlunt7kyJt+mxGWDteNc7kX+DYZ4veuE4ZG5vKyHOG0i2pZ960UchvfDaAdSyc
-         LVMquM9vXMmxbi7KIA7fnhJO2wei6eaX3kUaf+AChEBX94f+G/XyofT6dEDUiOkYMvPj
-         krTGBy3uFwZ0aVtNZypy+Fz+W1sLzHA1iMf20h+ISqJkoGQXSVmHUDNRnA8cOMWpQtcp
-         Wlzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUaB0FABWbdp/hHoZiS9+jUXCr++9TiXJsScVGU9Tas1/ds0Zkjws7g+uxApMWUR4IHmSkCovnjbuX1CaN93WU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzloFId+4MIqDIySX25d9wAHmgDgH5IWgDFIIHYSNNjDuLL1evD
-	AayG5X4dIsKWaJC4HKEZj1hB8TcMioJcQaqVLCnMTFX5BOicJJox+OJW1p2xiA2jXtuOQNeANYR
-	vxWgUBKLgysRD1KyUljBDCG3+4NoNuBarct72ps+HQY0qE5QkkoCGIIKHrjB+OlBOW6yZe2S7ip
-	2+1iU9a66LpQ2KrtAqJrYSUjSy8pEm7rQOjazh4dPdSXq4
-X-Gm-Gg: ASbGncuT/+dHCFMt/IjYmWDK57oPPUVWqVJMNUuht9dwrNsZKyzKutfoRHa/TUPdimM
-	IfGFWQP/X+bPHxexy2nEmET2WGUVP9w3zAsjEBVpz7nbFmlWF07ACnWLDJh6pW7VGnl4=
-X-Received: by 2002:a05:690c:3393:b0:70d:f3bb:a731 with SMTP id 00721157ae682-70df3bba868mr78205667b3.9.1747902405936;
-        Thu, 22 May 2025 01:26:45 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGPhVj8JhGJCK+zc7RP834KN5Eve5FMdd9QufZUZBEqDbkQHG8Gr0Mr3Ft0fdQAFQnebVlVVoTvKHtpXaHPSYY=
-X-Received: by 2002:a05:690c:3393:b0:70d:f3bb:a731 with SMTP id
- 00721157ae682-70df3bba868mr78205367b3.9.1747902405539; Thu, 22 May 2025
- 01:26:45 -0700 (PDT)
+	s=arc-20240116; t=1747904245; c=relaxed/simple;
+	bh=brniH7v+gBzA6HHT54dvM9BL5QJ1ugLgjVvnfc0BXPQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Iixq+QkybybgNODZumgalsVobi28t/lVObVwYqsWuH3l5/s5o4oMB9HJ3Xls/RcXwu474kqgG8kiG/0ZxRBWUg8Birx0mpEFVt3ECO3pT7MSJoT6fpUUIeVRkvEHZ4oejD7mQfQldtqKlD9Cs3IZK/SgxChShzxW8r1+VJRuQao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nightmared.fr; spf=pass smtp.mailfrom=nightmared.fr; dkim=pass (2048-bit key) header.d=nightmared.fr header.i=@nightmared.fr header.b=VSitrMbB; arc=none smtp.client-ip=51.158.148.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nightmared.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nightmared.fr
+Received: from [10.5.1.10] (atoulon-651-1-170-218.w83-113.abo.wanadoo.fr [83.113.65.218])
+	by mail.nightmared.fr (Postfix) with ESMTPSA id DF5AA1085270;
+	Thu, 22 May 2025 08:57:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nightmared.fr;
+	s=docker; t=1747904239;
+	bh=brniH7v+gBzA6HHT54dvM9BL5QJ1ugLgjVvnfc0BXPQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=VSitrMbBYMgwuDW6QfnwldB4YRoStylRSII/Rc2hgKXik82GAvZacpAIa1kS6OW6x
+	 rxWmaxeHNb4C9q39Ac0gthXq4N/9X2U/ACTMAvoxg12QnXxqjcO5crTwCEPn0GeMSj
+	 p/7qT3Iq7wjQEBupg5TQZL7bfgL3KZIhqJUnn1Jq+o0rG9upkyJMKuESoRlHyRoFLr
+	 ATK8mR4WF35F2Z1Fd6E9UQyv/qjp1F1MoXgVKwrn642akmfZ9nyjQqo6RYlNrJpfsH
+	 AGB3RTi7ps/6ce4OPcluwlAMfYb5RzWGcUt3xJ4AI2eYofWQnXDM1zSSXNAnqczLkw
+	 50YwmzPD8yi4A==
+Message-ID: <784fa662-9104-4d8a-9b68-7edc90a8affe@nightmared.fr>
+Date: Thu, 22 May 2025 10:57:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250514134630.137621-1-sgarzare@redhat.com> <20250514134630.137621-5-sgarzare@redhat.com>
- <aCVHQ-LRqHeEVEAW@kernel.org> <CAGxU2F5AsNY5mQPd=qajW1seFYHSYpB0Fa1iuR_f2QavtoB6sA@mail.gmail.com>
- <aCzf6aoJAC-IdS_n@kernel.org> <CAGxU2F6rfqGV_gJk-JxrCk3f9dWtYn_3o9RODh7cVG0X_oQWaA@mail.gmail.com>
- <aC2nBCxkvWWz5y5E@kernel.org> <aC4CVUXpThAyKQdf@kernel.org>
-In-Reply-To: <aC4CVUXpThAyKQdf@kernel.org>
-From: Stefano Garzarella <sgarzare@redhat.com>
-Date: Thu, 22 May 2025 10:26:34 +0200
-X-Gm-Features: AX0GCFvwBrY1Wuz2vdIMhJw7TkALKpOFZS5DJd8t4bfvvVGz5MJKErKjPBRbZJg
-Message-ID: <CAGxU2F5zQJR4GvZ9ovtQBqMFGs-wBMoCRks=JYQ1JF6qMKK-6g@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] tpm/tpm_svsm: support TPM_CHIP_FLAG_SYNC
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linuxppc-dev@lists.ozlabs.org, Peter Huewe <peterhuewe@gmx.de>, 
-	Jens Wiklander <jens.wiklander@linaro.org>, linux-integrity@vger.kernel.org, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-arm-kernel@lists.infradead.org, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Nicholas Piggin <npiggin@gmail.com>, 
-	Sumit Garg <sumit.garg@kernel.org>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/9] LSM: Introduce a new hook:
+ security_kernel_module_load
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20250521140121.591482-1-git@nightmared.fr>
+ <20250521140121.591482-2-git@nightmared.fr>
+ <20250521220349.GA22189@mail.hallyn.com>
+Content-Language: en-US
+From: Simon Thoby <git@nightmared.fr>
+In-Reply-To: <20250521220349.GA22189@mail.hallyn.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 21 May 2025 at 18:42, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Wed, May 21, 2025 at 01:12:20PM +0300, Jarkko Sakkinen wrote:
-> > > I tried, but the last patch (this one) is based on the series merged
-> > > on the tip tree, where I introduced tpm_svsm.
-> > > I can see that series in linux-next merged with commit
-> > > 16a56ee59ab8ee05e67de35bbb5782ef9cfb4f07,
-> > > but I can't see it in your next tree [1].
-> > >
-> > > How do we proceed in such cases?
-> > >
-> > > Just to be sure, did I use the right tree?
-> >
-> > Thanks for the remark. Lemme check tonight. Hold on doing
-> > anything ;-) We'll get there...
->
-> I just rebased my branches on top of latest from Linus. That is what I
-> need base PR also on, and:
->
-> $ git show 16a56ee59ab8ee05e67de35bbb5782ef9cfb4f07
-> fatal: bad object 16a56ee59ab8ee05e67de35bbb5782ef9cfb4f07
->
-> I'd use git cherry-pick on a range to take them from linux-next to a
-> mainline tip...
 
-I see, let me know if I can help in some way.
 
-We can also wait the next cycle if it simplifies your work, definitely
-no rush on my side.
+On 5/22/25 00:03, Serge E. Hallyn wrote:
+> On Wed, May 21, 2025 at 04:01:05PM +0200, Simon THOBY wrote:
+>> Introduce a new hook to allow LSMs to decide whether to block the load
+>> of a kernel module.
+>>
+>> Two hooks already exist:
+>> - kernel_module_request is called when the kernel itself (not userspace)
+>>  request the load of a module, e.g. because a device was detected.
+>>  - security_kernel_load_data(LOADING_MODULE) is called when userspace calls
+>>  init_module/finit_module, but lack information about the module because
+>>  its  headers have not been loaded into kernel space, let alone parsed.
+>>  This may not be sufficient for some LSMs.
+>>
+>> This new hook is similar to security_kernel_load_data(LOADING_MODULE),
+>> but called after the module signature and header are verified, and only
+>> takes the module name for now.
+>>
+>> Signed-off-by: Simon THOBY <git@nightmared.fr>
+>> ---
+>>  include/linux/lsm_hook_defs.h |  1 +
+>>  include/linux/module.h        |  1 +
+>>  include/linux/security.h      |  6 ++++++
+>>  kernel/module/main.c          |  4 ++++
+>>  security/security.c           | 14 ++++++++++++++
+>>  5 files changed, 26 insertions(+)
+>>
+>> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+>> index bf3bbac4e02a..51c5212d8bb6 100644
+>> --- a/include/linux/lsm_hook_defs.h
+>> +++ b/include/linux/lsm_hook_defs.h
+>> @@ -223,6 +223,7 @@ LSM_HOOK(void, LSM_RET_VOID, cred_getlsmprop, const struct cred *c,
+>>  LSM_HOOK(int, 0, kernel_act_as, struct cred *new, u32 secid)
+>>  LSM_HOOK(int, 0, kernel_create_files_as, struct cred *new, struct inode *inode)
+>>  LSM_HOOK(int, 0, kernel_module_request, char *kmod_name)
+>> +LSM_HOOK(int, 0, kernel_module_load, const char *kmod_name)
+>>  LSM_HOOK(int, 0, kernel_load_data, enum kernel_load_data_id id, bool contents)
+>>  LSM_HOOK(int, 0, kernel_post_load_data, char *buf, loff_t size,
+>>  	 enum kernel_load_data_id id, char *description)
+>> diff --git a/include/linux/module.h b/include/linux/module.h
+>> index 8050f77c3b64..b6b8d6f7f599 100644
+>> --- a/include/linux/module.h
+>> +++ b/include/linux/module.h
+>> @@ -39,6 +39,7 @@ struct modversion_info {
+>>  	char name[MODULE_NAME_LEN];
+>>  };
+>>  
+>> +struct load_info;
+>>  struct module;
+>>  struct exception_table_entry;
+>>  
+>> diff --git a/include/linux/security.h b/include/linux/security.h
+>> index cc9b54d95d22..e175b2cc8caf 100644
+>> --- a/include/linux/security.h
+>> +++ b/include/linux/security.h
+>> @@ -498,6 +498,7 @@ void security_cred_getlsmprop(const struct cred *c, struct lsm_prop *prop);
+>>  int security_kernel_act_as(struct cred *new, u32 secid);
+>>  int security_kernel_create_files_as(struct cred *new, struct inode *inode);
+>>  int security_kernel_module_request(char *kmod_name);
+>> +int security_kernel_module_load(const char *kmod_name);
+>>  int security_kernel_load_data(enum kernel_load_data_id id, bool contents);
+>>  int security_kernel_post_load_data(char *buf, loff_t size,
+>>  				   enum kernel_load_data_id id,
+>> @@ -1255,6 +1256,11 @@ static inline int security_kernel_module_request(char *kmod_name)
+>>  	return 0;
+>>  }
+>>  
+>> +static inline int security_kernel_module_load(const char *kmod_name)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>>  static inline int security_kernel_load_data(enum kernel_load_data_id id, bool contents)
+>>  {
+>>  	return 0;
+>> diff --git a/kernel/module/main.c b/kernel/module/main.c
+>> index a2859dc3eea6..12a1a5f4d823 100644
+>> --- a/kernel/module/main.c
+>> +++ b/kernel/module/main.c
+>> @@ -3228,6 +3228,10 @@ static int early_mod_check(struct load_info *info, int flags)
+>>  		return -EPERM;
+>>  	}
+>>  
+>> +	err = security_kernel_module_load(info->name);
+> 
+> Would it be more useful to pass in the whole info struct?
+> 
 
-Thanks,
-Stefano
+I thought about that, but was afraid the LSM hook is still called very early in
+the boot process. I though the 'struct load_info' was only partially populated,
+but upon further checking, you're right, and most fields of the structure were
+already setup by the time the hook is called:
+- len, hdr in the copy_module_from_user function
+- sig_ok in module_sig_check
+- sechdrs, secstrings, index, strtab and name in elf_validity_cache_copy
+
+So I could definitely pass in the info struct instead.
+
+On that note, I wonder if I should move 'struct load_info' out of kernel/module/internal.h,
+because I'm fairly certain we don't want to have linux/security.h depending on an internal
+header file from the module subsystem.
+
+<snip>
 
 
