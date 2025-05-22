@@ -1,131 +1,138 @@
-Return-Path: <linux-integrity+bounces-6293-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6294-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1114FAC0459
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 08:05:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 329B2AC0708
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 10:27:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8834F4E3EC7
-	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 06:05:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53BA71898D7A
+	for <lists+linux-integrity@lfdr.de>; Thu, 22 May 2025 08:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF8E221293;
-	Thu, 22 May 2025 06:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBA76264625;
+	Thu, 22 May 2025 08:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a/o7v4Zk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XR1S0QnK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E35A018DF8D
-	for <linux-integrity@vger.kernel.org>; Thu, 22 May 2025 06:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326DD263F30
+	for <linux-integrity@vger.kernel.org>; Thu, 22 May 2025 08:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747893954; cv=none; b=Tny2UMMxlotIy9hHfzwGrhumAVyhFl149N5Y0H1D7vd4sQoUU1uLBUx6hTGlGMsZ1imgvjCUEsYrxzPl1P5M2Q4cU7cIdC1tPPp/XmMrDZ70n4/rtq/R66sYfhUG912T9910pN+qDfGtGclGukOamhqcnpRFkUcqxKMayUdZ1FE=
+	t=1747902410; cv=none; b=iyVdRBZDu99dqfvmlbxUPOWAhvYkCWRlECYWMIGXOufbPjAUrXkARx2edoXlF/RUgYj5xhl0LthKHsMOegmwlmp7Ux6VfJ3mds1Jy0A1olUMmAE2To+SuwrkDtmj+FsoH6p+yODeuVMKNbD9cbPLANWXkfAdLTYKAa7VTfxDWEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747893954; c=relaxed/simple;
-	bh=I+7T0XWA3psCI0S3YgG5g5cyv/Ez0iIKfqzxER3LdUA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bjzYeHU13LFS05SDVDOFaM3o30FzvMy27A/3QK0jQ20j9nPJCXcVB71G4Gweha8RE5JSjpCFjUHwcFy/q6aNyJ6wyKkiyXPe1Kd3CAo6sjcbRRTM+FVcGsZkn8X3YTpycumtoz4dGqKI5OUSPPXDqqUVW6gMJGfXzImyMG80kCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a/o7v4Zk; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1747902410; c=relaxed/simple;
+	bh=Dlp2azLQltfH6emKWYdlW4k16t8gyfKRpWtf3w9Dv60=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XvQUJN+6+WRuX9WZFX01ggjkh0bThKvUdUimmDa10kX6tp+nNI124ivIISt/TyJBrGAvCJgoaO82DBGhuvOaDo/vk4bhw0TfXk38KqtGl6/mGYLQXz7GNYnsmGGcW2NkWrvGpPR4sa18+PoEVUC3oomWlV77nytW/zheGjVEOYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XR1S0QnK; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1747893951;
+	s=mimecast20190719; t=1747902408;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=T5UcmE338HgvT5w4WTQ/s8ig0Q1beM5AA/bl1F3aF54=;
-	b=a/o7v4ZkwmBXwwC5djpQGh5E3iE7kPwsGSehez+eqvdE1PI4tM0QCW4vxC1N52f80gzasr
-	MFAPb0E4Ht7tTFAbYx1UlI9eMCArXgaGA15+l7sfAltxz2lTaO/YH84OIEJvt358qdrvh1
-	+1Fs9b/FCcHmiWkB9tqKCU1eVN8EAGc=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Dlp2azLQltfH6emKWYdlW4k16t8gyfKRpWtf3w9Dv60=;
+	b=XR1S0QnKzJcKBXu7IM7mGIOqXTay76uaYTDvlcmNQ7PkjSCwCqr/qYMLXYtmtiKpknCMWp
+	u/uirrerMwaekZk92AENuBU3bSA3ShAcRLGBJGwz7/7h6PJu/zUvn50mZF4E6ybkGKl1Po
+	QmRy3ZjG6SIjY9SUhht4Qwi7eCg6dW0=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-204-QEs6Fsz8MYKJBxzUagv5eQ-1; Thu, 22 May 2025 02:05:49 -0400
-X-MC-Unique: QEs6Fsz8MYKJBxzUagv5eQ-1
-X-Mimecast-MFC-AGG-ID: QEs6Fsz8MYKJBxzUagv5eQ_1747893948
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b2c00e965d0so524709a12.2
-        for <linux-integrity@vger.kernel.org>; Wed, 21 May 2025 23:05:49 -0700 (PDT)
+ us-mta-539-zJU4Nv1LMKqxQ-NPMNJBOA-1; Thu, 22 May 2025 04:26:46 -0400
+X-MC-Unique: zJU4Nv1LMKqxQ-NPMNJBOA-1
+X-Mimecast-MFC-AGG-ID: zJU4Nv1LMKqxQ-NPMNJBOA_1747902406
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-70deb82de2fso29681487b3.0
+        for <linux-integrity@vger.kernel.org>; Thu, 22 May 2025 01:26:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747893948; x=1748498748;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T5UcmE338HgvT5w4WTQ/s8ig0Q1beM5AA/bl1F3aF54=;
-        b=rb290KQEaWf6mkaVZtz3yAbkAkMkZ+MimxEHGDAeeH7FkNEyKMK6n8xE7oJXqeHNsK
-         GIWp0CPuVFw6PUpvOV+YspnA/kUsw8Xp5ZMKck7fW8aMVLu5sLNaYbDzPhZEF98a6ihl
-         r2AMbw+M2QZH0Q1xP2z9OmZl0qGC1VPcGzBF6ZrLuPPhtKV8tt+1LZ0bW7+z0vU8Qa2H
-         QYX4O0rn8S8EkXaktcVeOsrbFbJISBL+v0q7h5dVzzk4k9Nt91YezFso7qzKIlGdoQms
-         Wx+nWp5R06v3gJhVTTtvQxL7Y7MBkfSJZ690+dsmQlyluDM5Z/F9nkt32SBAwjNDdb0x
-         3r1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWP19toqivPGNVg/iRuBdERfga0EWooOefFm4YUiwpsTEc35XzvhKibEn5T6awJC7xKuuXwpIX6Yc48X8Qcoiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsuUzHGv+rNtlTsl0sNzVg/Z8T/Tv2HDDjMLu0YkAaUskckIGd
-	94SOT4lR2DzPI7REZ5lY7HKOM2qgDjpOkjAfu75Y7/jDGVwWK1FbcLhiv48PBG8SxgtSGMpbUPu
-	BRSdKTJkNV0xLpBSvbv3IhmU4GhixqMrycGB08R2Qf4IFwjZCyLxCh6c4H1f+9wFaCqbxYA==
-X-Gm-Gg: ASbGncv/P7hJc/DNhk+A0yGFJBtppRda/z7wL1Z9yuezAsTLMlfwU3iC3XGaEAic4U0
-	fn9NSNOC1dzHEFacYDg06m59nTylt5wXtKTfIoOqHV2lYqKhBVPxSkH9K6WJ7h3eoqvitB9bGAk
-	kakFQRh4j1z+T5Y5LnoOWkqnRsBiTCH5j2vzIhh0ZaNshobD53/6AvTWLlNS9iyiBi6e2C9riWx
-	ymDsh7YO+lklkwEmI2Q00KfV0S0OsPrw9RAGSzRGkXgkZV8o2hPsLvczvg1XCQQVRll3xuUjRAe
-	pp8=
-X-Received: by 2002:a05:6a20:12ca:b0:1f3:418c:6281 with SMTP id adf61e73a8af0-21621875ab8mr35263899637.4.1747893948575;
-        Wed, 21 May 2025 23:05:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHTFkdwaFGdarcTnLubzQX5o2FjgnhFMq7UwYkJHfRvH9tVaqvdnFp2FCz6WDEjhRKA3X+QBA==
-X-Received: by 2002:a05:6a20:12ca:b0:1f3:418c:6281 with SMTP id adf61e73a8af0-21621875ab8mr35263873637.4.1747893948226;
-        Wed, 21 May 2025 23:05:48 -0700 (PDT)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb0a0b19sm10539159a12.74.2025.05.21.23.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 May 2025 23:05:47 -0700 (PDT)
-Date: Thu, 22 May 2025 14:02:43 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Baoquan He <bhe@redhat.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de, 
-	ruyang@redhat.com, chenste@linux.microsoft.com
-Subject: Re: [PATCH] ima: add a knob ima= to make IMA be able to be disabled
-Message-ID: <wzquib7u5sycaf5prdgztlcudvaa2kma6jv3zmyfw7krzgnbkp@x2u5vnumfl4v>
-References: <20250515233953.14685-1-bhe@redhat.com>
- <aCaFNvHbYxrCaPbe@MiWiFi-R3L-srv>
- <1d2848fe45dbf58707cecf16c4fc46b179e24415.camel@linux.ibm.com>
- <aC6Y3S9hEB1snvwj@MiWiFi-R3L-srv>
+        d=1e100.net; s=20230601; t=1747902406; x=1748507206;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dlp2azLQltfH6emKWYdlW4k16t8gyfKRpWtf3w9Dv60=;
+        b=aYzFBJp7jbla9b1mixM2HlOPxzhHxsR6OAjQbRWj3HgWn59mCUX2eYNPRDaU/AUfWT
+         RYo/jbG+5A39Jy4WBzk5VtR3uQLVvXDLbub40dPiVH9iCuMsJP59FReODYjhfvDbvWDu
+         Gbz7AkKlunt7kyJt+mxGWDteNc7kX+DYZ4veuE4ZG5vKyHOG0i2pZ960UchvfDaAdSyc
+         LVMquM9vXMmxbi7KIA7fnhJO2wei6eaX3kUaf+AChEBX94f+G/XyofT6dEDUiOkYMvPj
+         krTGBy3uFwZ0aVtNZypy+Fz+W1sLzHA1iMf20h+ISqJkoGQXSVmHUDNRnA8cOMWpQtcp
+         Wlzg==
+X-Forwarded-Encrypted: i=1; AJvYcCUaB0FABWbdp/hHoZiS9+jUXCr++9TiXJsScVGU9Tas1/ds0Zkjws7g+uxApMWUR4IHmSkCovnjbuX1CaN93WU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzloFId+4MIqDIySX25d9wAHmgDgH5IWgDFIIHYSNNjDuLL1evD
+	AayG5X4dIsKWaJC4HKEZj1hB8TcMioJcQaqVLCnMTFX5BOicJJox+OJW1p2xiA2jXtuOQNeANYR
+	vxWgUBKLgysRD1KyUljBDCG3+4NoNuBarct72ps+HQY0qE5QkkoCGIIKHrjB+OlBOW6yZe2S7ip
+	2+1iU9a66LpQ2KrtAqJrYSUjSy8pEm7rQOjazh4dPdSXq4
+X-Gm-Gg: ASbGncuT/+dHCFMt/IjYmWDK57oPPUVWqVJMNUuht9dwrNsZKyzKutfoRHa/TUPdimM
+	IfGFWQP/X+bPHxexy2nEmET2WGUVP9w3zAsjEBVpz7nbFmlWF07ACnWLDJh6pW7VGnl4=
+X-Received: by 2002:a05:690c:3393:b0:70d:f3bb:a731 with SMTP id 00721157ae682-70df3bba868mr78205667b3.9.1747902405936;
+        Thu, 22 May 2025 01:26:45 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGPhVj8JhGJCK+zc7RP834KN5Eve5FMdd9QufZUZBEqDbkQHG8Gr0Mr3Ft0fdQAFQnebVlVVoTvKHtpXaHPSYY=
+X-Received: by 2002:a05:690c:3393:b0:70d:f3bb:a731 with SMTP id
+ 00721157ae682-70df3bba868mr78205367b3.9.1747902405539; Thu, 22 May 2025
+ 01:26:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <aC6Y3S9hEB1snvwj@MiWiFi-R3L-srv>
+References: <20250514134630.137621-1-sgarzare@redhat.com> <20250514134630.137621-5-sgarzare@redhat.com>
+ <aCVHQ-LRqHeEVEAW@kernel.org> <CAGxU2F5AsNY5mQPd=qajW1seFYHSYpB0Fa1iuR_f2QavtoB6sA@mail.gmail.com>
+ <aCzf6aoJAC-IdS_n@kernel.org> <CAGxU2F6rfqGV_gJk-JxrCk3f9dWtYn_3o9RODh7cVG0X_oQWaA@mail.gmail.com>
+ <aC2nBCxkvWWz5y5E@kernel.org> <aC4CVUXpThAyKQdf@kernel.org>
+In-Reply-To: <aC4CVUXpThAyKQdf@kernel.org>
+From: Stefano Garzarella <sgarzare@redhat.com>
+Date: Thu, 22 May 2025 10:26:34 +0200
+X-Gm-Features: AX0GCFvwBrY1Wuz2vdIMhJw7TkALKpOFZS5DJd8t4bfvvVGz5MJKErKjPBRbZJg
+Message-ID: <CAGxU2F5zQJR4GvZ9ovtQBqMFGs-wBMoCRks=JYQ1JF6qMKK-6g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] tpm/tpm_svsm: support TPM_CHIP_FLAG_SYNC
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linuxppc-dev@lists.ozlabs.org, Peter Huewe <peterhuewe@gmx.de>, 
+	Jens Wiklander <jens.wiklander@linaro.org>, linux-integrity@vger.kernel.org, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-arm-kernel@lists.infradead.org, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Nicholas Piggin <npiggin@gmail.com>, 
+	Sumit Garg <sumit.garg@kernel.org>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, linux-kernel@vger.kernel.org, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 22, 2025 at 11:24:13AM +0800, Baoquan He wrote:
->On 05/21/25 at 08:54am, Mimi Zohar wrote:
->> On Fri, 2025-05-16 at 08:22 +0800, Baoquan He wrote:
->> > CC kexec list.
->> >
->> > On 05/16/25 at 07:39am, Baoquan He wrote:
->> > > Kdump kernel doesn't need IMA functionality, and enabling IMA will cost
->> > > extra memory. It would be very helpful to allow IMA to be disabled for
->> > > kdump kernel.
+On Wed, 21 May 2025 at 18:42, Jarkko Sakkinen <jarkko@kernel.org> wrote:
 >
->Thanks a lot for careufl reviewing and great suggestions.
+> On Wed, May 21, 2025 at 01:12:20PM +0300, Jarkko Sakkinen wrote:
+> > > I tried, but the last patch (this one) is based on the series merged
+> > > on the tip tree, where I introduced tpm_svsm.
+> > > I can see that series in linux-next merged with commit
+> > > 16a56ee59ab8ee05e67de35bbb5782ef9cfb4f07,
+> > > but I can't see it in your next tree [1].
+> > >
+> > > How do we proceed in such cases?
+> > >
+> > > Just to be sure, did I use the right tree?
+> >
+> > Thanks for the remark. Lemme check tonight. Hold on doing
+> > anything ;-) We'll get there...
 >
->>
->> The real question is not whether kdump needs "IMA", but whether not enabling
->> IMA in the kdump kernel could be abused.  The comments below don't address
->> that question but limit/emphasize, as much as possible, turning IMA off is
->> limited to the kdump kernel.
+> I just rebased my branches on top of latest from Linus. That is what I
+> need base PR also on, and:
 >
->Are you suggesting removing below paragraph from patch log because they
->are redundant? I can remove it in v2 if yes.
+> $ git show 16a56ee59ab8ee05e67de35bbb5782ef9cfb4f07
+> fatal: bad object 16a56ee59ab8ee05e67de35bbb5782ef9cfb4f07
+>
+> I'd use git cherry-pick on a range to take them from linux-next to a
+> mainline tip...
 
-I understand Mimi's suggestion as the commit message should answer the
-question why disabling IMA should be limited to kdump.
+I see, let me know if I can help in some way.
 
--- 
-Best regards,
-Coiby
+We can also wait the next cycle if it simplifies your work, definitely
+no rush on my side.
+
+Thanks,
+Stefano
 
 
