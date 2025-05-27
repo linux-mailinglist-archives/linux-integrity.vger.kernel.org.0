@@ -1,92 +1,95 @@
-Return-Path: <linux-integrity+bounces-6310-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6311-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23BC8AC50AD
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 May 2025 16:18:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ADF8AC5A55
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 May 2025 21:03:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2E163A181F
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 May 2025 14:17:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D2601BA7E40
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 May 2025 19:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBCB527602C;
-	Tue, 27 May 2025 14:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B641F8F04;
+	Tue, 27 May 2025 19:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="oZJzEvrt"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="T7vJdhhU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25CCA1E5B7D;
-	Tue, 27 May 2025 14:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825591990A7;
+	Tue, 27 May 2025 19:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748355496; cv=none; b=fDQ8zCIEJYSuvXvgUBCRxneAHv9JS1ZzNIWYt7nWBMMupL5tgoRXEgJUn78vodQsYbB74IpJnWk51gGPyMf5Fe9Uh0hNJpPTAWQ9LzczavbdWwuF3ERGD22PSbuReoiHpznvLgjqSeEbqk3T/uYpsVYzJJUhboVy9K7IZnRG2O4=
+	t=1748372597; cv=none; b=fBd063U0q+9uKc8BIgHGYxb+S+cA1OmkoxGu62Ka9nSrm+uDmCCjb58XvFK3KXAkyn0Tqo5JRUa8lt1obrHL/SjT9dbkPyf9C8DGKtc5sSKvFfhsybaI03iWTdy2qh20b7By/yGRRkzvSvCrZzpPlRhKneVNBcyHBttDAH+qo4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748355496; c=relaxed/simple;
-	bh=Jrs2PsKuvoVp1OsGBlJRS5Aku/uOu1fascx9y3dS0Ds=;
+	s=arc-20240116; t=1748372597; c=relaxed/simple;
+	bh=doMS0trNlP/kwdokYAMx2s7mxwnpc0nNhX83X3QDP4E=;
 	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=duTriPUXqlgN8CpF8SYH6UocNIkhxIhxSGfGDYXMGy0PlU4zSgxxyUDgVgEdSGfKDKhR6Xh3TpJOu3f8JMbOMmkUaqPss2gMDDpv9Rb2LN3L9eOsET4x+c9+uA9VyRim1J+bHzCm2IzFIPmmWQ94Y3W/PkKuq5joSdPaBXZILmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=oZJzEvrt; arc=none smtp.client-ip=148.163.158.5
+	 Date:MIME-Version; b=pjbOshe7qPalx/7c4Zq61dkXf+I9kUAmYSyErDWtTn8LYfMYGUPmMDd5zWYdTZ2/yZkPZY8NAa6n8P1rpImj5H4Ij0cMQQ9VOUbfRl3Y8f8dp6rHiHua7iBjQMa+s6W04/ALPg9PwzTm78qAJlcJ0+kZyeAv7jXTBTdM9NVmLZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=T7vJdhhU; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54RE32vG011956;
-	Tue, 27 May 2025 14:17:58 GMT
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54RGHNHx004950;
+	Tue, 27 May 2025 19:02:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=gdCpPJ
-	gY2BBY5QHOA9MLQEpeCzq2THP0NuLmeUUStW8=; b=oZJzEvrt2evzEEMucZ0kBX
-	7XGTiedUi0Tc2jixr+Hy24P83PGEXrWoEc41FGuQMzZj2TpyPFwhdmArZGA1eme+
-	eKX+aULptDG5LkkQogqiTlmYhxy33xKLaCkiXuR7Si1Jg9uJZcni/Nv87xRIlcwc
-	WrskWGdxxYNQTaLlw821AZdoZ5EA5Ctg6rcJaUR+7/ut9ClKucNEoEDI1DQrb9RI
-	Iymy1/iC2ghGDxtyTFKvRQa2hxxuuf20DKOc4K76vuPZUf23VwjApZcggRktPRtf
-	XRHoRAh3jHAgtV0UtcMWPKR64eUA/5MlJ6KBiy6cH382yfHkcC9kD/hgXveAL26A
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Us8SyY
+	ruv+FTdPUtNEtd3t+r94/trKQpiChagfVzK9Y=; b=T7vJdhhUvXPR0mc9VYwrPI
+	b0/u45ypLmm30hLwQSa+fEa0GmlyeZtYo2zK2R4kk5Rdjs963LSpkxt7nVhK3bHw
+	4i708vj7HC5zCMapQ/MnFLj+g+as8Kx+Ctqn7W6G28LWhGq7eK0opFOGGbRbMxOs
+	dDowdTY7mO7RE7Ul5qLi12c2uCUyGCzqpd3ui1VRn11WSyYz+kXNrwgdjw7LnEUq
+	+HsCGr1CjRULRGJID8hAx29dXFlsdjmWtJ8h54UlHMl4HBxxcaN4G30+CN+l4isa
+	7+cGAF3KoxIg4ilH7iveKKSzl5YElE53l3GuskCSEO23dWXuJhbcb/Nag318p0HA
 	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46wgsj0tbf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 May 2025 19:02:45 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54RJ2iXG025065;
+	Tue, 27 May 2025 19:02:44 GMT
 Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46u4hnevyx-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46wgsj0tbb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 May 2025 14:17:57 +0000 (GMT)
+	Tue, 27 May 2025 19:02:44 +0000 (GMT)
 Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54RDJFtu028925;
-	Tue, 27 May 2025 14:17:56 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46useptxuc-1
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54RHOl9r028925;
+	Tue, 27 May 2025 19:02:43 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46usepv0n8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 May 2025 14:17:56 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54REHtMo24773338
+	Tue, 27 May 2025 19:02:43 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54RJ2g2D31261292
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 27 May 2025 14:17:56 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C49EE58053;
-	Tue, 27 May 2025 14:17:55 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A297B5805D;
-	Tue, 27 May 2025 14:17:54 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.137.101])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 27 May 2025 14:17:54 +0000 (GMT)
-Message-ID: <0e794fc984c8f37a6d3eb5acdb6cc094f14df940.camel@linux.ibm.com>
-Subject: Re: [PATCH] ima: add a knob ima= to make IMA be able to be disabled
+	Tue, 27 May 2025 19:02:42 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B11E058057;
+	Tue, 27 May 2025 19:02:42 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 05D5C5805D;
+	Tue, 27 May 2025 19:02:42 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 27 May 2025 19:02:41 +0000 (GMT)
+Message-ID: <f04a8c07d7da1df2cd5b74f04d253611bab9f1ad.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: prevent concurrent list operations in
+ ima_lsm_update_rules
 From: Mimi Zohar <zohar@linux.ibm.com>
-To: Pingfan Liu <piliu@redhat.com>, Baoquan He <bhe@redhat.com>
-Cc: prudo@redhat.com, linux-integrity@vger.kernel.org,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        pmenzel@molgen.mpg.de, coxu@redhat.com, ruyang@redhat.com,
-        chenste@linux.microsoft.com
-In-Reply-To: <CAF+s44QHJs8J27TEy0AW1m2wT=LRSz59nHf-8AuqL8px_zKGUg@mail.gmail.com>
-References: <20250515233953.14685-1-bhe@redhat.com>
-	 <aCaFNvHbYxrCaPbe@MiWiFi-R3L-srv>
-	 <1d2848fe45dbf58707cecf16c4fc46b179e24415.camel@linux.ibm.com>
-	 <aC6Y3S9hEB1snvwj@MiWiFi-R3L-srv>
-	 <c0f1df02160138d0782cb897eda844287b3d7792.camel@linux.ibm.com>
-	 <aC86NSypHlER2C3L@MiWiFi-R3L-srv>
-	 <CAF+s44QHJs8J27TEy0AW1m2wT=LRSz59nHf-8AuqL8px_zKGUg@mail.gmail.com>
+To: Zhao Yipeng <zhaoyipeng5@huawei.com>, roberto.sassu@huawei.com,
+        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        janne.karhunen@gmail.com
+Cc: morgan@kernel.org, lujialin4@huawei.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250527125103.751077-1-zhaoyipeng5@huawei.com>
+References: <20250527125103.751077-1-zhaoyipeng5@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 May 2025 10:17:54 -0400
+Date: Tue, 27 May 2025 15:02:41 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -95,106 +98,104 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=HvB2G1TS c=1 sm=1 tr=0 ts=6835c995 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=UeMwZWw34uBX8khp:21 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=20KFwNOVAAAA:8 a=IVwv8Uz7kQULgHmu4x4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: vkp5hxhSLJ7zdSMRQ-chaKB_rRihN71G
-X-Proofpoint-ORIG-GUID: vkp5hxhSLJ7zdSMRQ-chaKB_rRihN71G
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI3MDExNSBTYWx0ZWRfX09z5M1jtFHoP I/3VEGR33cRH6XswNGrgzAfviqpa4uzihkKguUioEeLZnNaivMyni0MLwBIbp3MJ4MI/i9eCnL1 nXd/sUwBDtmFqPax6qBZNDBtAdAjD3nazrGzhXeYpLoEyvLR5C/3UYAVQ4pJvOHcwr8D/mntKXR
- br7C4QMfiiYPfgkWNcxRkSZWSZjvjbA/tYvM4fmyLMqsVNJVv2bE8iJbBTkho/rpIYOVeR/rj02 IKQcONvHxAO04BphJ0Rt2jOu6R1Plpu8yPpBZLCxsFAA3eAUe44wp/OPwmf2ofWVQcR6aKAFeFh geKhdMQKBLewU8TL855aRiNOp+vGbsF1atEjyNHfwe3ZniNSJY3tUNhL1Em8VTszFSiQPXo27Nk
- Ku6V6h7ZIUkVvOnZEE+5kp5VVfYkdO6hZspjXDMAEiN/kRZG2E+L4CDS4RyHQAcafOniOwoW
+X-Authority-Analysis: v=2.4 cv=IcmHWXqa c=1 sm=1 tr=0 ts=68360c55 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=i0EeH86SAAAA:8 a=RwKbe1zy0JAV_bTXriMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI3MDE1OSBTYWx0ZWRfX/6shcxoJEONO gYcVKbllMdMawPpJ3afG3OzQfw2liWwHHYVMY6GnEppEzyiiuIqEVIBvxN+9lO8x0z46RlR+W2U TUmIEGeF1lc6fdySL28lqfd9CSFvL/8iRLcals9RkBft7IxcahZvD8RntLNL/GQAG8WQgLFjKTh
+ RyzlbyFdBnW4XZxdmFEGsAB4X8tUH5T8du+a5XpBaCWWshpOxZchjXMz94UUK0Ji0uTzIZ1XtZz IaNh//hbenDd/vDBoBkJAdzvxb/5lFxc4KROkNEn/aWeNw0kN/Qj18G0U+UDKWRQtFtYkaAv8qE vVMiTyNeSv3E/dszGT3yST+pQzrRoxBvp0dLWiU8lydNiVUcYOXOofaXG29hvPAJfcEz9nCL776
+ 3DAnhngmQuF/NWjfMBIyFAjfuTIbyLnzHT5gbBPXK+n5xaHOcKBUu4cPhXBs4zoOQc6lerrN
+X-Proofpoint-ORIG-GUID: xI2bhaKHgDBJDtf61pJ-5YsBPSzD1fSV
+X-Proofpoint-GUID: k8z10pVxgJ3YBUWhTOvC1EEXI1_ELafR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-27_07,2025-05-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0
- clxscore=1011 malwarescore=0 mlxlogscore=999 impostorscore=0 spamscore=0
- mlxscore=0 suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505270115
+ definitions=2025-05-27_09,2025-05-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1011
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=996 adultscore=0
+ impostorscore=0 bulkscore=0 spamscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505160000 definitions=main-2505270159
 
-On Tue, 2025-05-27 at 11:25 +0800, Pingfan Liu wrote
-
-When responding to kernel mailing lists, please use plain text not Mime enc=
-oded.
-
-> On Thu, May 22, 2025 at 10:52=E2=80=AFPM Baoquan He <bhe@redhat.com> wrot=
-e:
-> > On 05/22/25 at 07:08am, Mimi Zohar wrote:
-> > > On Thu, 2025-05-22 at 11:24 +0800, Baoquan He wrote:
-> > > > On 05/21/25 at 08:54am, Mimi Zohar wrote:
-> > > > > On Fri, 2025-05-16 at 08:22 +0800, Baoquan He wrote:
-> > > > > > CC kexec list.
-> > > > > >=20
-> > > > > > On 05/16/25 at 07:39am, Baoquan He wrote:
-> > > > > > > Kdump kernel doesn't need IMA functionality, and enabling IMA=
- will
-> > > > > > > cost
-> > > > > > > extra memory. It would be very helpful to allow IMA to be dis=
-abled
-> > > > > > > for
-> > > > > > > kdump kernel.
-> > > >=20
-> > > > Thanks a lot for careufl reviewing and great suggestions.
-> > > >=20
-> > > > >=20
-> > > > > The real question is not whether kdump needs "IMA", but whether n=
-ot
-> > > > > enabling
-> > > > > IMA in the kdump kernel could be abused.=C2=A0 The comments below=
- don't
-> > > > > address
-> > > > > that question but limit/emphasize, as much as possible, turning I=
-MA
-> > > > > off is
-> > > > > limited to the kdump kernel.
-> > > >=20
-> > > > Are you suggesting removing below paragraph from patch log because =
-they
-> > > > are redundant? I can remove it in v2 if yes.
-> > >=20
-> > > "The comments below" was referring to my comments on the patch, not t=
-he
-> > > next
-> > > paragraph.=C2=A0 "don't address that question" refers to whether the =
-kdump
-> > > kernel
-> > > could be abused.
-> > >=20
-> > > We're trying to close integrity gaps, not add new ones.=C2=A0 Verifyi=
-ng the
-> > > UKI's
-> > > signature addresses the integrity of the initramfs.=C2=A0 What about =
-the
-> > > integrity of
-> > > the kdump initramfs (or for that matter the kexec initramfs)?=C2=A0 I=
-f the
-> > > kdump
-> > > initramfs was signed, IMA would be able to verify it before the kexec=
-.
+On Tue, 2025-05-27 at 20:51 +0800, Zhao Yipeng wrote:
+> The current implementation of IMA policy list replacement via
+> list_replace_rcu may trigger general protection faults under concurrent
+> load policy operations. This occurs when a process replaces a node in
+> ima_policy_rules list and sets old->prev =3D LIST_POISON2, while another
+> parallel process still holds references to the old node. Subsequent list
+> operations on the poisoned pointer result in kernel panic due to invalid
+> memory access.
 >=20
-> IMHO, from the higher level, if there is a requirement on the integrity o=
-f the
-> initramfs, it should take a similar approach as UKI. And the system admin=
- can
-> choose whether to disable the unsafe format loader or not.
+> To resolve this, introduce a mutex lock (ima_rules_mutex) in
+> ima_lsm_update_rules() to protect. ima_update_policy() also use the
+> ima_policy_rules. Introduce a mutex lock in it.
 
-Yes, that is a possibility, probably a good aim, but in the case of kexec/k=
-dump
-that isn't really necessary.  As filesystem(s) support xattrs, IMA policies
-could be written in terms of "func=3DKEXEC_INITRAMFS_CHECK" to include the
-initramfs.
+A new IMA policy may replace the existing builtin policy rules with a custo=
+m
+policy. In all other cases, the IMA policy rules may only be extended.  Wri=
+ting
+or extending the IMA policy rules requires taking the ima_write_mutex.
 
->=20
-> This other thing is how to make a handy signature on initramfs? It is nei=
-ther
-> PE nor ELF.
-
-IMA supports signatures stored in the security.ima xattr or as an appended
-signatures.
+There's no need for a new mutex.
 
 Mimi
 
-
-
-
+>=20
+> Fixes: b16942455193 ("ima: use the lsm policy update notifier")
+> Signed-off-by: Zhao Yipeng <zhaoyipeng5@huawei.com>
+> ---
+> =C2=A0security/integrity/ima/ima_policy.c | 10 +++++++++-
+> =C2=A01 file changed, 9 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/security/integrity/ima/ima_policy.c
+> b/security/integrity/ima/ima_policy.c
+> index 128fab897930..d27e615e97d5 100644
+> --- a/security/integrity/ima/ima_policy.c
+> +++ b/security/integrity/ima/ima_policy.c
+> @@ -471,6 +471,8 @@ static bool ima_rule_contains_lsm_cond(struct
+> ima_rule_entry *entry)
+> =C2=A0	return false;
+> =C2=A0}
+> =C2=A0
+> +static DEFINE_MUTEX(ima_rules_mutex);
+> +
+> =C2=A0/*
+> =C2=A0 * The LSM policy can be reloaded, leaving the IMA LSM based rules =
+referring
+> =C2=A0 * to the old, stale LSM policy.=C2=A0 Update the IMA LSM based rul=
+es to reflect
+> @@ -481,16 +483,19 @@ static void ima_lsm_update_rules(void)
+> =C2=A0	struct ima_rule_entry *entry, *e;
+> =C2=A0	int result;
+> =C2=A0
+> +	mutex_lock(&ima_rules_mutex);
+> =C2=A0	list_for_each_entry_safe(entry, e, &ima_policy_rules, list) {
+> =C2=A0		if (!ima_rule_contains_lsm_cond(entry))
+> =C2=A0			continue;
+> =C2=A0
+> =C2=A0		result =3D ima_lsm_update_rule(entry);
+> =C2=A0		if (result) {
+> +			mutex_unlock(&ima_rules_mutex);
+> =C2=A0			pr_err("lsm rule update error %d\n", result);
+> =C2=A0			return;
+> =C2=A0		}
+> =C2=A0	}
+> +	mutex_unlock(&ima_rules_mutex);
+> =C2=A0}
+> =C2=A0
+> =C2=A0int ima_lsm_policy_change(struct notifier_block *nb, unsigned long =
+event,
+> @@ -1038,9 +1043,12 @@ int ima_check_policy(void)
+> =C2=A0 */
+> =C2=A0void ima_update_policy(void)
+> =C2=A0{
+> -	struct list_head *policy =3D &ima_policy_rules;
+> +	struct list_head *policy;
+> =C2=A0
+> +	mutex_lock(&ima_rules_mutex);
+> +	policy =3D &ima_policy_rules;
+> =C2=A0	list_splice_tail_init_rcu(&ima_temp_rules, policy, synchronize_rcu=
+);
+> +	mutex_unlock(&ima_rules_mutex);
+> =C2=A0
+> =C2=A0	if (ima_rules !=3D (struct list_head __rcu *)policy) {
+> =C2=A0		ima_policy_flag =3D 0;
 
 
