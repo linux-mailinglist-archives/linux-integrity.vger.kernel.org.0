@@ -1,117 +1,142 @@
-Return-Path: <linux-integrity+bounces-6324-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6325-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41010AC64AB
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 10:43:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5691DAC650C
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 11:00:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A3869E652A
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 08:43:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69B231BA6227
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 09:01:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842032741A6;
-	Wed, 28 May 2025 08:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A672749F6;
+	Wed, 28 May 2025 09:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J+8/FF+o"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F711F0992;
-	Wed, 28 May 2025 08:43:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFEB2741B3
+	for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 09:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748421798; cv=none; b=GrUJn16wkQjFMU0p7Wq2vzLh6go5C3veKIyp0u4bJ0ytCGiGIHKbXrlGL7KUMR8Y2F7sjZ4o+vkcbb42QLhA8jjVACNDKL5VjgEKfoxDLWZNfRahV1ESCORYg2qBfdZzlT8gTxEIg0u1gAvE87dhzyron16eL4F2gb7RxI7wDKc=
+	t=1748422824; cv=none; b=Jdt65Ik+ZK6Q8fXW8V3Mkbl/qB4tv1V4HaMmJpcFwmXuiSF/YlBORocQImvrqwrmy0LPJRiVunZwoy8hGgbP4HEprQaFW8dFDPm0tDoJWimSyfpH4csG7DX3bWnkpqWO3Cf2QHAqcwOj+nXb1UNUniAjKSMifrlXGIQ29JeMowo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748421798; c=relaxed/simple;
-	bh=MxnGdClLFWl1jY7LIi7McbBUXxSTG4DC87SB7p2eWgQ=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=lY3nA3Mp8Ag9XYsCAoZvyt0+opDoRItqrUE1uIpmZEtN3fl08DO0r1ZRzIC49/E1REJw4Uojg+fsTw5QS6h+tAK3PS4t+1fHj/jhbHBKJ+abEONXNQGanArFrfB3Lu4E5mAB1+wpOpPR1FoZHYr9FURphtp3QaUjIQ9M/LXix5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.164])
-	by gateway (Coremail) with SMTP id _____8AxnOKdzDZokNP_AA--.49136S3;
-	Wed, 28 May 2025 16:43:09 +0800 (CST)
-Received: from [10.20.42.164] (unknown [10.20.42.164])
-	by front1 (Coremail) with SMTP id qMiowMCxLBuWzDZonpz3AA--.26840S2;
-	Wed, 28 May 2025 16:43:04 +0800 (CST)
+	s=arc-20240116; t=1748422824; c=relaxed/simple;
+	bh=t1e/HvfosFpsLoFkhIGG8ncpvv+6aZviJ2nKgmWiOW8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mwnDxF03nWchpmqqGZv20SKFkG2hMToFg91xcMju8keIpUHgcpt+hQIoEkIamnIp6NzoksIHurFCfuQ0rMokMCO6FgczZamzvqn/hAe5+yuMb0Rs2PjdKnfgtNg8SOe+9SVAVQkdVW4TQAd0j8OQzsbDiiuO5p7J3tOsa6t10Ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J+8/FF+o; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748422821;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=64QsXwazpQwW+tOYOMo7hDdSauBGVg6nC6ZKTpmi0VI=;
+	b=J+8/FF+opcuDOX++0wvmaIQVrgvdohzjFJub7w3QEwfLxaSR0+odejqCDAv2eY86hC0jrn
+	2HO6ATFtbcIrJcWZcaORcrq/vINBciOYyucZvfLdtD1w7Wq8dT7kU0rdMEwKD6iHcwGttY
+	xP5MhGtjbxjxoLdb9QmsbhVgZsilMmM=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-609-TPmQe2PUMp66pwY4VaupCw-1; Wed, 28 May 2025 05:00:20 -0400
+X-MC-Unique: TPmQe2PUMp66pwY4VaupCw-1
+X-Mimecast-MFC-AGG-ID: TPmQe2PUMp66pwY4VaupCw_1748422819
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a367b3bb78so2466692f8f.1
+        for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 02:00:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748422819; x=1749027619;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=64QsXwazpQwW+tOYOMo7hDdSauBGVg6nC6ZKTpmi0VI=;
+        b=SL3NDQrIJE54/3IPnZ597GLV4O5G30IHuzFZNDAh1cCfX0+CY/7/zvn5UGcMbzJR4V
+         E9CzP0nHwrAS4OeefexuBREd71scwQBx4Lxw7LmpQ2VBqiJJ51OpCb/kcNMsmX/LSdRm
+         pIKhECVeWB+LP5WHWcFCZvERKXs0CQa7n0D0IcmmRCaOOez9cWxFEqPABqc5guNKUbxT
+         L1Dtbk1Rc7SpdSWxWvefXxelT71us5vFRL4bSAzcKrqsOYjXLKINqo4ksxlbWaWzi2vI
+         x8TTRzmOyVGD/IzedCpO5EtZTQJ9o1sYWTaW+4VOJduqg3JIN6IUFJygRriU1VOY8/rh
+         5VvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVDbAFI+twGd1YlL/gWtOiAXQQRHYAfnazQGXXdE3AM3/7UOUleYfkbQDRr0ZDKBqYWA6kSuEf3e0YVVDqsY8g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7Njr4n1sA+K1Omt7iVV9/+TXWAqx6YZ/kBjsWzXl1eyislDSp
+	WPWYUJfxYxzP5oEMfO6cVoXQ3hk795gOaNkqvuSJWdnU2ggWOqmRpy35mWq+FvZkgWF7sBJ+bOH
+	KMl+kx9VeO85CPHu2GfIyyOjps0m7HPSh1R9KkJa9xSkU2YyBdN2kOz68w59NvKtq1ySOkg==
+X-Gm-Gg: ASbGncuAU/RqAM5ZOn+XSZHYSLeafh1wUmsUzc6dtJ6nSuUcU2+EHqRCmZnWjeTi9mx
+	GJtsnE4mb+eeAdtkY/uRXA1Xl5zerb+BboLox0W1yJlPSAgzA5YMRyVz3sbalUnRJ69yieATfuH
+	DOFuCJAS6tkX4nB44i3oFcKEWHSfn2MAB3yedV9TIjwCWqXXXaed0AES86cCUPTd2RP2t4mqYnD
+	rs1bWfzPCNjeEigrX9MnTWC+JaNtlsrvJZQg3TKMZXmk9uMpNAsONXfnYmp9t9dNlSmUjaiLHAG
+	UvLS1Bo5hEDs16hnnHPT44FfZCGDFAnCYwt28+XdvVvjusyFMCZbPv7shxtJ
+X-Received: by 2002:a5d:5f8b:0:b0:3a3:6595:921f with SMTP id ffacd0b85a97d-3a4cb4b822dmr12928264f8f.41.1748422818880;
+        Wed, 28 May 2025 02:00:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGjrV5vgUL5ysXDl7B3oxB4ovG+UqKk+QHfVQ+EndsK3P47vCbb2duzqpq4xfTjaqx9Sg54xQ==
+X-Received: by 2002:a5d:5f8b:0:b0:3a3:6595:921f with SMTP id ffacd0b85a97d-3a4cb4b822dmr12928217f8f.41.1748422818345;
+        Wed, 28 May 2025 02:00:18 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-35.retail.telecomitalia.it. [82.53.134.35])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4eab0b596sm892079f8f.0.2025.05.28.02.00.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 May 2025 02:00:17 -0700 (PDT)
+Date: Wed, 28 May 2025 11:00:12 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org, 
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, davem@davemloft.net, 
+	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org, 
+	Yinggang Gu <guyinggang@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>
 Subject: Re: [PATCH v10 4/5] tpm: Add a driver for Loongson TPM device
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org,
- linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
- davem@davemloft.net, linux-crypto@vger.kernel.org, peterhuewe@gmx.de,
- jgg@ziepe.ca, linux-integrity@vger.kernel.org,
- Yinggang Gu <guyinggang@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>
+Message-ID: <gymx5tbghi55gm76ydtuzzd6r522expft36twwtvpkbgcl266a@zelnthnhu7kq>
 References: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
  <20250528065944.4511-5-zhaoqunqin@loongson.cn>
  <7ifsmhpubkedbiivcnfrxlrhriti5ksb4lbgrdwhwfxtp5ledc@z2jf6sz4vdgd>
-From: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Message-ID: <afaeb91a-afb4-428a-2c17-3ea5f098da22@loongson.cn>
-Date: Wed, 28 May 2025 16:42:05 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ <afaeb91a-afb4-428a-2c17-3ea5f098da22@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <7ifsmhpubkedbiivcnfrxlrhriti5ksb4lbgrdwhwfxtp5ledc@z2jf6sz4vdgd>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:qMiowMCxLBuWzDZonpz3AA--.26840S2
-X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7XF13Cr1kXF18CF17KFy8JFc_yoWDtrX_Ka
-	y5WF1rua4UCr4DJa1DCr4fuF17K3y2qF1IyayUtrWIyryDJan5AFs5J395Kr1fGa18CrZ8
-	Cr9Ig3Z3Zw13XosvyTuYvTs0mTUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0
-	oVCq3wAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa02
-	0Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1l
-	Yx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI
-	0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr
-	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-	wIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-	W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUUUU=
+In-Reply-To: <afaeb91a-afb4-428a-2c17-3ea5f098da22@loongson.cn>
 
-
-在 2025/5/28 下午3:57, Stefano Garzarella 写道:
->> +    chip = tpmm_chip_alloc(dev, &tpm_loongson_ops);
->> +    if (IS_ERR(chip))
->> +        return PTR_ERR(chip);
->> +    chip->flags = TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
+On Wed, May 28, 2025 at 04:42:05PM +0800, Qunqin Zhao wrote:
 >
-> Why setting TPM_CHIP_FLAG_IRQ?
+>在 2025/5/28 下午3:57, Stefano Garzarella 写道:
+>>>+    chip = tpmm_chip_alloc(dev, &tpm_loongson_ops);
+>>>+    if (IS_ERR(chip))
+>>>+        return PTR_ERR(chip);
+>>>+    chip->flags = TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
+>>
+>>Why setting TPM_CHIP_FLAG_IRQ?
+>
+>When tpm_engine completes  TPM_CC* command,
+>
+>the hardware will indeed trigger an interrupt to the kernel.
 
-When tpm_engine completes  TPM_CC* command,
-
-the hardware will indeed trigger an interrupt to the kernel.
+IIUC that is hidden by loongson_se_send_engine_cmd(), that for this 
+driver is completely synchronous, no?
 
 >
-> IIUC this driver is similar to ftpm and svsm where the send is 
-> synchronous so having .status, .cancel, etc. set to 0 should be enough 
-> to call .recv() just after send() in tpm_try_transmit(). See commit 
-> 980a573621ea ("tpm: Make chip->{status,cancel,req_canceled} opt")
-The send callback would wait until the TPM_CC* command complete. We 
-don't need a poll.
+>>
+>>IIUC this driver is similar to ftpm and svsm where the send is 
+>>synchronous so having .status, .cancel, etc. set to 0 should be 
+>>enough to call .recv() just after send() in tpm_try_transmit(). See 
+>>commit 980a573621ea ("tpm: Make chip->{status,cancel,req_canceled} 
+>>opt")
+>The send callback would wait until the TPM_CC* command complete. We 
+>don't need a poll.
+
+Right, that's what I was saying too, send() is synchronous (as in ftpm 
+and svsm). The polling in tpm_try_transmit() is already skipped since we 
+are setting .status = 0, .req_complete_mask = 0, .req_complete_val = 0, 
+etc. so IMHO this is exactly the same of ftpm and svsm, so we don't need 
+to set TPM_CHIP_FLAG_IRQ.
 
 Thanks,
-
-Qunqin.
-
->
-> BTW, I think I should touch also this driver in the next version of my 
-> series that I'll send after the merge window:
-> https://lore.kernel.org/linux-integrity/20250514134630.137621-1-sgarzare@redhat.com/ 
->
->
-> The rest LGTM!
->
-> Thanks,
-> Stefano
+Stefano
 
 
