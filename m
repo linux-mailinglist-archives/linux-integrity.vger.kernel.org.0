@@ -1,284 +1,169 @@
-Return-Path: <linux-integrity+bounces-6321-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6322-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C88D7AC637A
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 09:57:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4EDFAC63AD
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 10:07:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05E6D7ADB38
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 07:56:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4155E4E0511
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 08:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046DD29408;
-	Wed, 28 May 2025 07:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BW7tNCxZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D75A0246796;
+	Wed, 28 May 2025 08:06:47 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D0B207DE2
-	for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 07:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2F3224728C;
+	Wed, 28 May 2025 08:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748419039; cv=none; b=qPmbdC7xpAV7+5+iIB1sIVA2EtnWDQpcCERSBebVeeF4hqXx1cphE3fENgNmIedK7+FFtv/T1ElFYhrFHBAekwUAhyWHKiidJDhlLQpqxmM37Uqb0wtI+daEImw5oyLxm29p1XxQHXOSCifTG5V8yWbif0czkYemyVJ7YVxm/MA=
+	t=1748419607; cv=none; b=LCfZydscWsw9ZO4NZikABE6LZjd8CjQG/2ROnVCtNeyIaAAo3D+qjJhCtO0ibNLyqGmSmgwSuzUZ7bBlCRnzoV8YDPZiQVrZX0sTEcFkd7Xhzo9fuS65qb5RchK5kseY6164qnitk0Uxj6cKtS84EWxB/+TaxHjXepqUTbY2kIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748419039; c=relaxed/simple;
-	bh=++Q4mKF98cD+c18CNdwprn8yWU8Z/zioCJe8t2w0Kb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KwmkZg4lHtAh6fScfVUhgPFz7OVgp/rDgBMwhUlZ2JB568rElb8NGkdhdr88z7DZOnCV00Hd9bVHDX6Ib2PLYKpu7RmsJJLrwWRc1UPQKkBVly1xneuj9fCVfS9W4+txbllqTtRZv75G7dVGVqdWJ7zdA4YVQkWrODkWCLC4hcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BW7tNCxZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748419036;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iar4upBixTl9NYOuefrehoa64+W7FsckxVPaK+xP0LI=;
-	b=BW7tNCxZbZvfTNgqCGsiK6lioomgkViy+l6LJpDSKogVyXQv9bHFj+BMCtMjww2nisGWpS
-	2/cGRVyqsErFYVYmVx2OGfvleSJmHtXc0+OrYepkmxvymhlwoRlgXJoAy7eqRjJKRbuiJd
-	g3JvpnjRz3x0AX9ppGnk64r/KcKElcg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-NIZYMUffNTOjHn0FeUjdeQ-1; Wed, 28 May 2025 03:57:15 -0400
-X-MC-Unique: NIZYMUffNTOjHn0FeUjdeQ-1
-X-Mimecast-MFC-AGG-ID: NIZYMUffNTOjHn0FeUjdeQ_1748419034
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-43eea5a5d80so26272535e9.1
-        for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 00:57:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748419034; x=1749023834;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iar4upBixTl9NYOuefrehoa64+W7FsckxVPaK+xP0LI=;
-        b=f+kUWbu2o8SODdyCvI3Z0Nc+eRlwjurMCFP3Bh7/WY00d2/gfNH9/fvr4i6opuZH4I
-         uRDNu6oQ7YFlD3g5N/kaqB5I40DgiUsCAhfh1eD83unuYoB/LxoGGwrIwJXGJYd7MGAW
-         gdRJb9fLNfn8JKoqC9d3niCECHybX/DerV3PKG7iTJj0A7gwijfPhUiH9ym/XYlvrLBV
-         cxsjfgP3+85uhnNR//rU0z5ocRiqv7malQXxvqK0YVHMXoVaHdY4rsi1ykhuWTs8Shz1
-         AXfNc+YVC7Wuy8Gyy2JQmhS3vFghXa8Coz2ZdxO3hSjG7H3b6pxw3LtNtLLb9OwIrSPt
-         B8LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUmNLvU1X2ZnP/GurU0+i1tjrZW4vSIfDmf6LaYqhtDTpTFGQ6hLKGhzE2pQvJEbrrrFRmHrnXDD9Na+zQRNpI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKsCOWKyRwY70Dm1a04r5own75C7jH/wJZZy14YFQ9uWi7pM8x
-	NBhQYFjcVI+esOVheIIC69g6c5Ji/vvrRdHtA94tOZUKQxkR5qhSbWE+0+uNzpzGoJAydEayIEI
-	wvOYYUR36uvashbC4k/F6LZSZIApJ0JYj1z9P9d62YWyttM6gEHaiJtYluXjVyyj4Z0UN+Q==
-X-Gm-Gg: ASbGncuMtP6FFmMBdOYNJ9ayKvxr6yIYD0XjWDR09cGN4oV69aXw9LBx8npTH/62Xhw
-	c52gfwqojGWBqkw2uW1uFyLkzicEZwBdzXfG36vTqf3yLrNOKLLbYviLyXKTHUmo8OLFMbnBRDQ
-	ntlpUFcyOd/l9t0/YVB63KIm5w/6dZF+xZcX4ovu6Q9Zdi1RUUKkEnL4Zp7r93HIX/bS3Z3l51f
-	dCpzz8s8dcXvifyjgWbZx3Wnl6WBjv8NnQ47EmUISOkaXedreMJKdwSGe7VDc13yLIQOTXQ4tBH
-	cyZIZ4CPKzqC/+OEASNrhFsoKQWO9HtQN2f89JUEELzHsg2To83ZSWxGmkN8
-X-Received: by 2002:a05:600c:8283:b0:43d:45a:8fca with SMTP id 5b1f17b1804b1-44c94c2a4c6mr144954585e9.30.1748419034131;
-        Wed, 28 May 2025 00:57:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEMJo+Ct94cj0YyB7i6b94aZWFudVWZko8nkaONnu4gYPe+xjPHrearFkc8yOOEVQn4tCzDyQ==
-X-Received: by 2002:a05:600c:8283:b0:43d:45a:8fca with SMTP id 5b1f17b1804b1-44c94c2a4c6mr144954225e9.30.1748419033483;
-        Wed, 28 May 2025 00:57:13 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-35.retail.telecomitalia.it. [82.53.134.35])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-450064add8bsm12831655e9.17.2025.05.28.00.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 May 2025 00:57:12 -0700 (PDT)
-Date: Wed, 28 May 2025 09:57:04 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, davem@davemloft.net, 
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org, 
-	Yinggang Gu <guyinggang@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v10 4/5] tpm: Add a driver for Loongson TPM device
-Message-ID: <7ifsmhpubkedbiivcnfrxlrhriti5ksb4lbgrdwhwfxtp5ledc@z2jf6sz4vdgd>
+	s=arc-20240116; t=1748419607; c=relaxed/simple;
+	bh=Utmj1w9gpAnryKiUXD1QajcvknvGJPR2n8w8hmdFaHw=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=WV7VtxIwCtEDy9H64c7/sS0VzJJCK9+mu/f9a/LbUJFa1aT5sqVTRQfxeTC3uOL1m1Dv+8S9WM6USAwUymTmKA/Rp5EXJJjkEKWY/YE4UnkiHlI4piyB4dHgpP5DQIx+lq+PiwzCAI+m/oWCRRfsxymgEQkZ9AtiGRCd/csqsoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.164])
+	by gateway (Coremail) with SMTP id _____8Bx22oRxDZo5Mb_AA--.49226S3;
+	Wed, 28 May 2025 16:06:41 +0800 (CST)
+Received: from [10.20.42.164] (unknown [10.20.42.164])
+	by front1 (Coremail) with SMTP id qMiowMDxfRsLxDZolYv3AA--.27101S2;
+	Wed, 28 May 2025 16:06:38 +0800 (CST)
+Subject: Re: [PATCH v10 0/5] Add Loongson Security Engine chip driver
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ davem@davemloft.net, linux-crypto@vger.kernel.org, peterhuewe@gmx.de,
+ jgg@ziepe.ca, linux-integrity@vger.kernel.org
 References: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
- <20250528065944.4511-5-zhaoqunqin@loongson.cn>
+ <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Message-ID: <cda7ef56-87b3-6594-c2b6-2a4f5a1b63ce@loongson.cn>
+Date: Wed, 28 May 2025 16:05:39 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20250528065944.4511-5-zhaoqunqin@loongson.cn>
+In-Reply-To: <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:qMiowMDxfRsLxDZolYv3AA--.27101S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXF4ktFWfCry3XFyrXw18Zwc_yoW5ZF47pF
+	45Ca9xCr4UJF47C3s3t34rCFyrZ3s3Jr9rKa9rXw15ur9rAa4xXrW7AFyUCFW7ZF1rGry2
+	vFWxCF43uF15AacCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUcpBTUUUUU
 
-On Wed, May 28, 2025 at 02:59:43PM +0800, Qunqin Zhao wrote:
->Loongson Security Engine supports random number generation, hash,
->symmetric encryption and asymmetric encryption. Based on these
->encryption functions, TPM2 have been implemented in the Loongson
->Security Engine firmware. This driver is responsible for copying data
->into the memory visible to the firmware and receiving data from the
->firmware.
->
->Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
->Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
->Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
->Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
->---
->v10: Added error check in send and recv callbak
->
->v9: "tpm_loongson_driver" --> "tpm_loongson"
->    "depends on CRYPTO_DEV_LOONGSON_SE" --> "depends on MFD_LOONGSON_SE"
->
->v8: In the send callback, it will wait until the TPM2 command is
->    completed. So do not need to wait in the recv callback.
->    Removed Jarkko's tag cause there are some changes in v8
->
->v7: Moved Kconfig entry between TCG_IBMVTPM and TCG_XEN.
->    Added Jarkko's tag(a little change, should be fine).
->
->v6: Replace all "ls6000se" with "loongson"
->    Prefix all with tpm_loongson instead of tpm_lsse.
->    Removed Jarkko's tag cause there are some changes in v6
->
->v5: None
->v4: Prefix all with tpm_lsse instead of tpm.
->    Removed MODULE_AUTHOR fields.
->
->v3: Added reminder about Loongson security engine to git log.
->
-> drivers/char/tpm/Kconfig        |  9 ++++
-> drivers/char/tpm/Makefile       |  1 +
-> drivers/char/tpm/tpm_loongson.c | 84 +++++++++++++++++++++++++++++++++
-> 3 files changed, 94 insertions(+)
-> create mode 100644 drivers/char/tpm/tpm_loongson.c
->
->diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
->index dddd702b2..ba3924eb1 100644
->--- a/drivers/char/tpm/Kconfig
->+++ b/drivers/char/tpm/Kconfig
->@@ -189,6 +189,15 @@ config TCG_IBMVTPM
-> 	  will be accessible from within Linux.  To compile this driver
-> 	  as a module, choose M here; the module will be called tpm_ibmvtpm.
->
->+config TCG_LOONGSON
->+	tristate "Loongson TPM Interface"
->+	depends on MFD_LOONGSON_SE
->+	help
->+	  If you want to make Loongson TPM support available, say Yes and
->+	  it will be accessible from within Linux. To compile this
->+	  driver as a module, choose M here; the module will be called
->+	  tpm_loongson.
->+
-> config TCG_XEN
-> 	tristate "XEN TPM Interface"
-> 	depends on TCG_TPM && XEN
->diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
->index 9de1b3ea3..5b5cdc0d3 100644
->--- a/drivers/char/tpm/Makefile
->+++ b/drivers/char/tpm/Makefile
->@@ -46,3 +46,4 @@ obj-$(CONFIG_TCG_ARM_CRB_FFA) += tpm_crb_ffa.o
-> obj-$(CONFIG_TCG_VTPM_PROXY) += tpm_vtpm_proxy.o
-> obj-$(CONFIG_TCG_FTPM_TEE) += tpm_ftpm_tee.o
-> obj-$(CONFIG_TCG_SVSM) += tpm_svsm.o
->+obj-$(CONFIG_TCG_LOONGSON) += tpm_loongson.o
->diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loongson.c
->new file mode 100644
->index 000000000..5cbdb37f8
->--- /dev/null
->+++ b/drivers/char/tpm/tpm_loongson.c
->@@ -0,0 +1,84 @@
->+// SPDX-License-Identifier: GPL-2.0
->+/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
->+
->+#include <linux/device.h>
->+#include <linux/mfd/loongson-se.h>
->+#include <linux/platform_device.h>
->+#include <linux/wait.h>
->+
->+#include "tpm.h"
->+
->+struct tpm_loongson_cmd {
->+	u32 cmd_id;
->+	u32 data_off;
->+	u32 data_len;
->+	u32 pad[5];
->+};
->+
->+static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t count)
->+{
->+	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
->+	struct tpm_loongson_cmd *cmd_ret = tpm_engine->command_ret;
->+
->+	if (cmd_ret->data_len > count)
->+		return -EIO;
->+
->+	memcpy(buf, tpm_engine->data_buffer, cmd_ret->data_len);
->+
->+	return cmd_ret->data_len;
->+}
->+
->+static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
->+{
->+	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
->+	struct tpm_loongson_cmd *cmd = tpm_engine->command;
->+
->+	if (count > tpm_engine->buffer_size)
->+		return -E2BIG;
->+
->+	cmd->data_len = count;
->+	memcpy(tpm_engine->data_buffer, buf, count);
->+
->+	return loongson_se_send_engine_cmd(tpm_engine);
->+}
->+
->+static const struct tpm_class_ops tpm_loongson_ops = {
->+	.flags = TPM_OPS_AUTO_STARTUP,
->+	.recv = tpm_loongson_recv,
->+	.send = tpm_loongson_send,
->+};
->+
->+static int tpm_loongson_probe(struct platform_device *pdev)
->+{
->+	struct loongson_se_engine *tpm_engine;
->+	struct device *dev = &pdev->dev;
->+	struct tpm_loongson_cmd *cmd;
->+	struct tpm_chip *chip;
->+
->+	tpm_engine = loongson_se_init_engine(dev->parent, SE_ENGINE_TPM);
->+	if (!tpm_engine)
->+		return -ENODEV;
->+	cmd = tpm_engine->command;
->+	cmd->cmd_id = SE_CMD_TPM;
->+	cmd->data_off = tpm_engine->buffer_off;
->+
->+	chip = tpmm_chip_alloc(dev, &tpm_loongson_ops);
->+	if (IS_ERR(chip))
->+		return PTR_ERR(chip);
->+	chip->flags = TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
 
-Why setting TPM_CHIP_FLAG_IRQ?
+在 2025/5/28 下午3:17, Huacai Chen 写道:
+> Hi, Qunqin,
+>
+> As I said before, why the patch "MAINTAINERS: Add entry for Loongson
+> Security Module driver" is missing?
 
-IIUC this driver is similar to ftpm and svsm where the send is 
-synchronous so having .status, .cancel, etc. set to 0 should be enough 
-to call .recv() just after send() in tpm_try_transmit(). See commit 
-980a573621ea ("tpm: Make chip->{status,cancel,req_canceled} opt")
+Hi, Huacai
 
-BTW, I think I should touch also this driver in the next version of my 
-series that I'll send after the merge window:
-https://lore.kernel.org/linux-integrity/20250514134630.137621-1-sgarzare@redhat.com/
-
-The rest LGTM!
+https://lore.kernel.org/all/8e55801a-a46e-58d5-cf84-2ee8a733df9a@loongson.cn/
 
 Thanks,
-Stefano
 
->+	dev_set_drvdata(&chip->dev, tpm_engine);
->+
->+	return tpm_chip_register(chip);
->+}
->+
->+static struct platform_driver tpm_loongson = {
->+	.probe   = tpm_loongson_probe,
->+	.driver  = {
->+		.name  = "loongson-tpm",
->+	},
->+};
->+module_platform_driver(tpm_loongson);
->+
->+MODULE_ALIAS("platform:loongson-tpm");
->+MODULE_LICENSE("GPL");
->+MODULE_DESCRIPTION("Loongson TPM driver");
->-- 
->2.45.2
+Qunqin.
+
 >
+> Huacai
 >
+> On Wed, May 28, 2025 at 2:59 PM Qunqin Zhao <zhaoqunqin@loongson.cn> wrote:
+>> The Loongson Security Engine chip supports RNG, SM2, SM3 and SM4
+>> accelerator engines. Each engine have its own DMA buffer provided
+>> by the controller. The kernel cannot directly send commands to the
+>> engine and must first send them to the controller, which will
+>> forward them to the corresponding engine. Based on these engines,
+>> TPM2 have been implemented in the chip, then let's treat TPM2 itself
+>> as an engine.
+>>
+>> v10: mfd: Cleanned up coding style.
+>>       crypto: Unlimited tfm
+>>       tpm: Added error check
+>>
+>> v9: Moved the base driver back to drivers/mfd. Cleanned up coding style.
+>>
+>> v8: Like Lee said, the base driver goes beyond MFD scope. Since these
+>>      are all encryption related drivers and SM2, SM3, and SM4 drivers
+>>      will be added to the crypto subsystem in the future, the base driver
+>>      need to be changed when adding these drivers. Therefore, it may be
+>>      more appropriate to place the base driver within the crypto
+>>      subsystem.
+>>
+>>      Removed complete callback in all driver. Removed the concepts of
+>>      "channel", "msg" and "request" as they may be confusing. Used
+>>
+>> v7: Addressed Huacai's comments.
+>>
+>> v6: mfd :MFD_LS6000SE -> MFD_LOONGSON_SE,  ls6000se.c -> loongson-se.c
+>>
+>>      crypto :CRYPTO_DEV_LS6000SE_RNG -> CRYPTO_DEV_LOONGSON_RNG,
+>>      ls6000se-rng.c ->loongson-rng.c
+>>
+>>      tpm: TCG_LSSE -> TCG_LOONGSON, tpm_lsse.c ->tpm_loongson.c
+>>
+>> v5: Registered "ls6000se-rng" device in mfd driver
+>>
+>>
+>> Qunqin Zhao (5):
+>>    mfd: Add support for Loongson Security Engine chip controller
+>>    crypto: loongson - add Loongson RNG driver support
+>>    MAINTAINERS: Add entry for Loongson crypto driver
+>>    tpm: Add a driver for Loongson TPM device
+>>    MAINTAINERS: Add tpm_loongson.c to LOONGSON CRYPTO DRIVER entry
+>>
+>>   MAINTAINERS                            |   9 +
+>>   drivers/char/tpm/Kconfig               |   9 +
+>>   drivers/char/tpm/Makefile              |   1 +
+>>   drivers/char/tpm/tpm_loongson.c        |  84 ++++++++
+>>   drivers/crypto/Kconfig                 |   1 +
+>>   drivers/crypto/Makefile                |   1 +
+>>   drivers/crypto/loongson/Kconfig        |   5 +
+>>   drivers/crypto/loongson/Makefile       |   1 +
+>>   drivers/crypto/loongson/loongson-rng.c | 211 +++++++++++++++++++++
+>>   drivers/mfd/Kconfig                    |  11 ++
+>>   drivers/mfd/Makefile                   |   2 +
+>>   drivers/mfd/loongson-se.c              | 253 +++++++++++++++++++++++++
+>>   include/linux/mfd/loongson-se.h        |  53 ++++++
+>>   13 files changed, 641 insertions(+)
+>>   create mode 100644 drivers/char/tpm/tpm_loongson.c
+>>   create mode 100644 drivers/crypto/loongson/Kconfig
+>>   create mode 100644 drivers/crypto/loongson/Makefile
+>>   create mode 100644 drivers/crypto/loongson/loongson-rng.c
+>>   create mode 100644 drivers/mfd/loongson-se.c
+>>   create mode 100644 include/linux/mfd/loongson-se.h
+>>
+>>
+>> base-commit: c89756bcf406af313d191cfe3709e7c175c5b0cd
+>> --
+>> 2.45.2
+>>
+>>
 
 
