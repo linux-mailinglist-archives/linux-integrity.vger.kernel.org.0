@@ -1,143 +1,174 @@
-Return-Path: <linux-integrity+bounces-6332-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6333-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4EBFAC68DC
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 14:11:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 123CBAC6915
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 14:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4AC64E2D21
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 12:11:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8087A1BC70B8
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 12:19:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D00283FE2;
-	Wed, 28 May 2025 12:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80B41283FF8;
+	Wed, 28 May 2025 12:18:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5CTCwkV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d01FmOdW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF42283FC7;
-	Wed, 28 May 2025 12:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E2E284B45
+	for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 12:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748434278; cv=none; b=Nj25nBrhoe+F260GgG1dug0d93wthTSZIhXPkdu4ozqWZVsMPxO10F+not4Pxm9Fsz/zdyH5zqrABiN6GeC7dL7ndpI9KnpJPA7ejuAvs3PwObb8qh7nP7ATk8snkqjZHZDnrXzgmcBIXSR17Q7/7iQ+8ePKLRw7ulfPWwxijPs=
+	t=1748434710; cv=none; b=WR5ZvhTOsDGZdbeBKIrJD89SkQVYd7WswDJ1wfnDftG1XDgkxD4lkA7hHL5YtjEfF+K7H7n/JC8cffUwyeu+KnGWHDYTDVHgnR3tlpGcNeyWw3gOr48W0zbaDKvKANPdOZh8j8i5sfI5Ps2d7JvA74FvHw4e6RUFFAoQknsgHik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748434278; c=relaxed/simple;
-	bh=8MfdXtHyOEsCmd1YNW5odISMpHpK4Xt9XoQx6rI00ew=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IY9JRcn3BQC7ggmvFXH0ROv4YAbH93QTVPcoLlpjDHIBsIq6E8QE4Q3eQjxb6Byjd2o7sW1zmaBDBOU2ml7hjvZ1LpXyodmKXBSbdfcgBADXAIPrBvA6g2f/dHb21u5QiXDje+oT2jNJm0R4RoEQCRopfcehvuDgQqp1Ui3Ot84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5CTCwkV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E5BC4CEE7;
-	Wed, 28 May 2025 12:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748434276;
-	bh=8MfdXtHyOEsCmd1YNW5odISMpHpK4Xt9XoQx6rI00ew=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=G5CTCwkVw2zDw45I+BjQQ/PqW9ZeMRMNcW73i0sHphYveNnkQifCpFfdL09ode8OF
-	 HN/cDyzjy3BRjh+4HQS0qVhVPEIiAhAgLkPzqEbyjhTSUq+SwzZYnj/7g3xgEX4Hkw
-	 TiXoxfUFkNZyxgAMPC9h2sz50uxctB9XJtthduxKIyXV6Xk456XqL5WohOuxiWwAZz
-	 Kq7EQCEoClxzCIqqgBNCN5yrduDZnlZxIRoEJFvWvrAJyJ6fDC8poRnC0tloKwdZeI
-	 Ic3nz9RNlMfuMB5scE0Yt2upnWmjxPtIyiPTT40ZRqEJUI1RCf10OSdPEJCPCyiqPh
-	 y56VOzODK5zEA==
-Message-ID: <cae7d546-3e9a-4d31-8d46-ee4d6c8e0892@kernel.org>
-Date: Wed, 28 May 2025 14:11:12 +0200
+	s=arc-20240116; t=1748434710; c=relaxed/simple;
+	bh=LA+kkxIPYmiR7oonheV94jgpXwqI/VWQON0Mo3qHank=;
+	h=From:To:cc:Subject:MIME-Version:Content-Type:Date:Message-ID; b=VS7kEPwinzcCNezzuwRy7c4ArLO9Px4qnMWlLbPM+UeSCsiZW9wDv5LWpDoz071iy6EN3O/4DYBlmqgX0yX7Z6qZKDZk3BoKvOZkjChTNjzIeVlh16kgRvVTMXFgQrox56BUBchGdkjWFpS7aYnTSPVKy0tQM4Nf4PPN8Hsx4Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d01FmOdW; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748434706;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=e3anGqMiFxhRjcJUcS/g6XPJaPxiEJieaKDIyxVkHoo=;
+	b=d01FmOdWd5orlftLrIwoehrcY5tAdv6NXW1VbRnK/IuLLvAPbBvUEem3aQHcYm3CR3jmVm
+	Xm7/4ddrM0IN680JCWLf45KafHoMBZntBYJYbnothCpqUXQGKnFiBhLN1NczYimKTHXwzP
+	/M6j0verr94Lc5eLNvOliKl5oWizcfg=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-522-3eGQ-0HqOtuakLtdbVugFw-1; Wed,
+ 28 May 2025 08:18:23 -0400
+X-MC-Unique: 3eGQ-0HqOtuakLtdbVugFw-1
+X-Mimecast-MFC-AGG-ID: 3eGQ-0HqOtuakLtdbVugFw_1748434702
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9332118001CA;
+	Wed, 28 May 2025 12:18:21 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.2])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 87DF23000714;
+	Wed, 28 May 2025 12:18:18 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+To: torvalds@linux-foundation.org
+cc: dhowells@redhat.com, Herbert Xu <herbert@gondor.apana.org.au>,
+    Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+    linux-security-module@vger.kernel.org, linux-crypto@vger.kernel.org,
+    linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KEYS: Invert FINAL_PUT bit
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 5/5] MAINTAINERS: Add tpm_loongson.c to LOONGSON
- CRYPTO DRIVER entry
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>, lee@kernel.org,
- herbert@gondor.apana.org.au, jarkko@kernel.org
-Cc: linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
- davem@davemloft.net, linux-crypto@vger.kernel.org, peterhuewe@gmx.de,
- jgg@ziepe.ca, linux-integrity@vger.kernel.org,
- Huacai Chen <chenhuacai@loongson.cn>
-References: <20250528070104.4525-1-zhaoqunqin@loongson.cn>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250528070104.4525-1-zhaoqunqin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <301013.1748434697.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 28 May 2025 13:18:17 +0100
+Message-ID: <301015.1748434697@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 28/05/2025 09:01, Qunqin Zhao wrote:
-> Changes to Loongson TPM driver would be best reviewed by the Loongson
-> crypto driver maintainers.
-> 
-> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
-> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v8-v10: None 
-> v7: Added tag from Jarkko and Huacai 
-> v6: "tpm_lsse.c" -> "tpm_loongson"
-> v4-v5: None
-> 
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0fd568a6b..aa6db2912 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13984,6 +13984,7 @@ LOONGSON CRYPTO DRIVER
->  M:	Qunqin Zhao <zhaoqunqin@loongson.cn>
->  L:	linux-crypto@vger.kernel.org
->  S:	Maintained
-> +F:	drivers/char/tpm/tpm_loongson.c
->  F:	drivers/crypto/loongson/
+Hi Linus,
 
-This makes no sense - you just added this entry in patch #3. Just add a
-complete entry instead of adding first half and second half later.
+Could you apply this, please?  There shouldn't be any functional change,
+rather it's a switch to using combined bit-barrier ops and lesser barriers=
+.
+A better way to do this might be to provide set_bit_release(), but the end
+result would be much the same.
 
-Best regards,
-Krzysztof
+Thanks,
+David
+---
+From: Herbert Xu <herbert@gondor.apana.org.au>
+
+KEYS: Invert FINAL_PUT bit
+
+Invert the FINAL_PUT bit so that test_bit_acquire and clear_bit_unlock
+can be used instead of smp_mb.
+
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+cc: keyrings@vger.kernel.org
+cc: linux-security-module@vger.kernel.org
+cc: linux-crypto@vger.kernel.org
+cc: linux-integrity@vger.kernel.org
+---
+ include/linux/key.h |    2 +-
+ security/keys/gc.c  |    4 ++--
+ security/keys/key.c |    5 +++--
+ 3 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/key.h b/include/linux/key.h
+index ba05de8579ec..81b8f05c6898 100644
+--- a/include/linux/key.h
++++ b/include/linux/key.h
+@@ -236,7 +236,7 @@ struct key {
+ #define KEY_FLAG_ROOT_CAN_INVAL	7	/* set if key can be invalidated by roo=
+t without permission */
+ #define KEY_FLAG_KEEP		8	/* set if key should not be removed */
+ #define KEY_FLAG_UID_KEYRING	9	/* set if key is a user or user session ke=
+yring */
+-#define KEY_FLAG_FINAL_PUT	10	/* set if final put has happened on key */
++#define KEY_FLAG_USER_ALIVE	10	/* set if final put has not happened on ke=
+y yet */
+ =
+
+ 	/* the key type and key description string
+ 	 * - the desc is used to match a key against search criteria
+diff --git a/security/keys/gc.c b/security/keys/gc.c
+index f27223ea4578..748e83818a76 100644
+--- a/security/keys/gc.c
++++ b/security/keys/gc.c
+@@ -218,8 +218,8 @@ static void key_garbage_collector(struct work_struct *=
+work)
+ 		key =3D rb_entry(cursor, struct key, serial_node);
+ 		cursor =3D rb_next(cursor);
+ =
+
+-		if (test_bit(KEY_FLAG_FINAL_PUT, &key->flags)) {
+-			smp_mb(); /* Clobber key->user after FINAL_PUT seen. */
++		if (!test_bit_acquire(KEY_FLAG_USER_ALIVE, &key->flags)) {
++			/* Clobber key->user after final put seen. */
+ 			goto found_unreferenced_key;
+ 		}
+ =
+
+diff --git a/security/keys/key.c b/security/keys/key.c
+index 7198cd2ac3a3..3bbdde778631 100644
+--- a/security/keys/key.c
++++ b/security/keys/key.c
+@@ -298,6 +298,7 @@ struct key *key_alloc(struct key_type *type, const cha=
+r *desc,
+ 	key->restrict_link =3D restrict_link;
+ 	key->last_used_at =3D ktime_get_real_seconds();
+ =
+
++	key->flags |=3D 1 << KEY_FLAG_USER_ALIVE;
+ 	if (!(flags & KEY_ALLOC_NOT_IN_QUOTA))
+ 		key->flags |=3D 1 << KEY_FLAG_IN_QUOTA;
+ 	if (flags & KEY_ALLOC_BUILT_IN)
+@@ -658,8 +659,8 @@ void key_put(struct key *key)
+ 				key->user->qnbytes -=3D key->quotalen;
+ 				spin_unlock_irqrestore(&key->user->lock, flags);
+ 			}
+-			smp_mb(); /* key->user before FINAL_PUT set. */
+-			set_bit(KEY_FLAG_FINAL_PUT, &key->flags);
++			/* Mark key as safe for GC after key->user done. */
++			clear_bit_unlock(KEY_FLAG_USER_ALIVE, &key->flags);
+ 			schedule_work(&key_gc_work);
+ 		}
+ 	}
+
 
