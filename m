@@ -1,156 +1,83 @@
-Return-Path: <linux-integrity+bounces-6319-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6320-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29D90AC62C5
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 09:17:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A3F6AC633B
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 09:43:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7B343AE593
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 07:17:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9853517B505
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 07:42:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76ADE24467D;
-	Wed, 28 May 2025 07:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECFCD2459E6;
+	Wed, 28 May 2025 07:42:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ced6P5O/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FUN/QgMS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C961F872D;
-	Wed, 28 May 2025 07:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF02124500E
+	for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 07:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748416646; cv=none; b=cW7Yp087+YU9ZIpc2PiH3FqvSygDh/tyn+Zjii6A/V9nlGSkyLqiJ6T/ZKqQbXGPvvVo/o/MPaQsSXYajo7hTqxeAHG6UAI9RTOq94gErRrNlbt5He7BJQHFxpZynR4j0VOom2+ZEUG0gX9iBrTnhOAxaqjg7RsWLSUoN8YUYJQ=
+	t=1748418158; cv=none; b=oPJOlWC0soaKAw6doZyXHUlvLbnHdQzIJfOXrKJAfxVWQJxmIEtWd9pWRBUyR2PNY1lDqr3XAD0Y6W2sO2Uu+cVmqPECGA0St1avegxF5n0EGO6QagFxkmZM7nsehMWw0PB+B44gJ+us/Bnt8B8PbLprgYwErpi2o3+lfpM50nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748416646; c=relaxed/simple;
-	bh=R+f29xiLd8IReSQyDpamYthFgoEuOJOqeanA6Eoi8Qk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=igLpMyKxTNdMCyYHfw8sIis9MER5HgNWwn00gZj7tP62TFIN6dMNhPjcZKwDRKjiF/IReSLuBLkxTIRotQcSzDIMaj66C3+TJhh1LOGRbPZDsguGDwAtmK/pGG2pPngMXU0YqS4RXlVZA+SZaeiyylTCBN/LvIrb7aArQtsWMwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ced6P5O/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB129C4CEF2;
-	Wed, 28 May 2025 07:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748416645;
-	bh=R+f29xiLd8IReSQyDpamYthFgoEuOJOqeanA6Eoi8Qk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ced6P5O/gL4/4hT7d4beZXNWruI6RNKDrJFw1HI2NaKeauOVVC0GSx3hOvXrzzHSm
-	 y6EtHewr5HuyC8pRYGAYZ8xevfi4d0QhAHcpXl3WGO0/1oTC+PY9Cb0Ojx4gSFOnWm
-	 M4cAeVDBqpfxXxXkJLrjv26i6FRzfYw7gvFEzE7GZ/2s+SP0n6RoLrtQiT4AB8/FXC
-	 lVdDgO79mj5V0aMYNm5iokted9AQzDR4r76Ssw5j6BImRLqk4NSDIFanAyKnoUIIbg
-	 om1fD21cq/eY0Kbre2i8gGGtqjyIA/mSF18LOcm39fOyHB7zHQbQ5RYot349fJQx+C
-	 U8frzT9dX5Atw==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-604e745b6fbso3970017a12.2;
-        Wed, 28 May 2025 00:17:25 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVJnbhX4x5535yM7qwPRRy9D7+5mkdhVOnkTV8g9AXV5TIbqEgxqxq3XYGxtEMQduPM+wwB81BsIlvFcmn+@vger.kernel.org, AJvYcCW5GuGUKOiPotDarYQqqHDif9ZDHQP7qOHSM1+j4875XqIQCyMFkQA/Vul8sFWI/julyyqnLD77b769TEw=@vger.kernel.org, AJvYcCWh7ilaGcVvABf/2O5VQYAXiOEXVTCEnzI+vXxf1UTm4VFZ3Sc59bqpNRG0lYRjVinMZC2yVcGYsgS7Sx3E2wOh@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAu1aNBCZFY1PTO79J4jjXda8Tm9ulZ+Ak9a8TvHkC9tCyvRLn
-	cQe54DimfeGxFx+L5llyAHW4xnE94/HGSTNKlwn1XJNGut1669zNZRqHIpNeTiLnIOHfnirDruQ
-	ZNgqd8BHjrPpc5H/vnRiBdc85njallHE=
-X-Google-Smtp-Source: AGHT+IHCLtdmroV2Jn717BjtWj2/PFsHPpgneov+NHQPQi7ryO9RQG3YNYf02S1+/qgP7fr2xVHK2n+PMl/EbxAxjb0=
-X-Received: by 2002:a05:6402:27d2:b0:5fb:c4be:b1e with SMTP id
- 4fb4d7f45d1cf-6051c377803mr795235a12.11.1748416644421; Wed, 28 May 2025
- 00:17:24 -0700 (PDT)
+	s=arc-20240116; t=1748418158; c=relaxed/simple;
+	bh=xYJevYiGKI0K7avOKmDDQjjiD0+OYWRjkuns92h5r1U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LVuCcahUv4tCkx2mZUZZ0D0Xh1KFdMLWdt96FXWKg3WjZg57s7dHh3O7QeHjE7Ltq30OqEa4rUytHos/JWfeGLV10JtMVqjG+QwfXlBa+cCenGHKQF9kLew5zbNeZ2LqoYpmXvV6Iay+PxhxpkK47v6cLqmyGpaRzwVbqV5dHfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FUN/QgMS; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <edd25df6-47a0-410d-ab48-54a0660c6149@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1748418144;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XWpUHx95xVQCUGTqWlHukBzLJnxxv1s1PMTNi6sAZco=;
+	b=FUN/QgMSNmz/dsJyLSQ9iduOvw6nDteuE2lDMs+7mz6z+byomfgosG2T1MsoPBeBuVGhR3
+	DBo5chzKTeQei5Z+/poQJRfeZGsrvUQPYNRBP56S3w7sjU3iWWntUmD91zAaH5rj//wrCs
+	WazTaJjqCQLRdwYSootlfyykjyxhnlA=
+Date: Wed, 28 May 2025 15:42:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
-In-Reply-To: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 28 May 2025 15:17:11 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
-X-Gm-Features: AX0GCFv1PqBc0S9eTI_-YpcpFrAcsFhiOkHWorIkKM40rfRHllkBaZF6-n5uegw
-Message-ID: <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
 Subject: Re: [PATCH v10 0/5] Add Loongson Security Engine chip driver
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, davem@davemloft.net, 
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, 
-	linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: Huacai Chen <chenhuacai@kernel.org>, Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ davem@davemloft.net, linux-crypto@vger.kernel.org, peterhuewe@gmx.de,
+ jgg@ziepe.ca, linux-integrity@vger.kernel.org
+References: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
+ <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yanteng Si <si.yanteng@linux.dev>
+In-Reply-To: <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi, Qunqin,
+在 5/28/25 3:17 PM, Huacai Chen 写道:
+> Hi, Qunqin,
+> 
+> As I said before, why the patch "MAINTAINERS: Add entry for Loongson
+> Security Module driver" is missing?
 
-As I said before, why the patch "MAINTAINERS: Add entry for Loongson
-Security Module driver" is missing?
+Similar issues widely exist in the Loongarch mailing list.
+The cause should be attributed to the mail server of Loongson.
 
-Huacai
+It seems that Loongson Mail can only send no more than five
+emails at a time. I suggest abandoning the use of Loongson Mail.
 
-On Wed, May 28, 2025 at 2:59=E2=80=AFPM Qunqin Zhao <zhaoqunqin@loongson.cn=
-> wrote:
->
-> The Loongson Security Engine chip supports RNG, SM2, SM3 and SM4
-> accelerator engines. Each engine have its own DMA buffer provided
-> by the controller. The kernel cannot directly send commands to the
-> engine and must first send them to the controller, which will
-> forward them to the corresponding engine. Based on these engines,
-> TPM2 have been implemented in the chip, then let's treat TPM2 itself
-> as an engine.
->
-> v10: mfd: Cleanned up coding style.
->      crypto: Unlimited tfm
->      tpm: Added error check
->
-> v9: Moved the base driver back to drivers/mfd. Cleanned up coding style.
->
-> v8: Like Lee said, the base driver goes beyond MFD scope. Since these
->     are all encryption related drivers and SM2, SM3, and SM4 drivers
->     will be added to the crypto subsystem in the future, the base driver
->     need to be changed when adding these drivers. Therefore, it may be
->     more appropriate to place the base driver within the crypto
->     subsystem.
->
->     Removed complete callback in all driver. Removed the concepts of
->     "channel", "msg" and "request" as they may be confusing. Used
->
-> v7: Addressed Huacai's comments.
->
-> v6: mfd :MFD_LS6000SE -> MFD_LOONGSON_SE,  ls6000se.c -> loongson-se.c
->
->     crypto :CRYPTO_DEV_LS6000SE_RNG -> CRYPTO_DEV_LOONGSON_RNG,
->     ls6000se-rng.c ->loongson-rng.c
->
->     tpm: TCG_LSSE -> TCG_LOONGSON, tpm_lsse.c ->tpm_loongson.c
->
-> v5: Registered "ls6000se-rng" device in mfd driver
->
->
-> Qunqin Zhao (5):
->   mfd: Add support for Loongson Security Engine chip controller
->   crypto: loongson - add Loongson RNG driver support
->   MAINTAINERS: Add entry for Loongson crypto driver
->   tpm: Add a driver for Loongson TPM device
->   MAINTAINERS: Add tpm_loongson.c to LOONGSON CRYPTO DRIVER entry
->
->  MAINTAINERS                            |   9 +
->  drivers/char/tpm/Kconfig               |   9 +
->  drivers/char/tpm/Makefile              |   1 +
->  drivers/char/tpm/tpm_loongson.c        |  84 ++++++++
->  drivers/crypto/Kconfig                 |   1 +
->  drivers/crypto/Makefile                |   1 +
->  drivers/crypto/loongson/Kconfig        |   5 +
->  drivers/crypto/loongson/Makefile       |   1 +
->  drivers/crypto/loongson/loongson-rng.c | 211 +++++++++++++++++++++
->  drivers/mfd/Kconfig                    |  11 ++
->  drivers/mfd/Makefile                   |   2 +
->  drivers/mfd/loongson-se.c              | 253 +++++++++++++++++++++++++
->  include/linux/mfd/loongson-se.h        |  53 ++++++
->  13 files changed, 641 insertions(+)
->  create mode 100644 drivers/char/tpm/tpm_loongson.c
->  create mode 100644 drivers/crypto/loongson/Kconfig
->  create mode 100644 drivers/crypto/loongson/Makefile
->  create mode 100644 drivers/crypto/loongson/loongson-rng.c
->  create mode 100644 drivers/mfd/loongson-se.c
->  create mode 100644 include/linux/mfd/loongson-se.h
->
->
-> base-commit: c89756bcf406af313d191cfe3709e7c175c5b0cd
-> --
-> 2.45.2
->
->
+
+Thanks,
+Yanteng
 
