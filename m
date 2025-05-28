@@ -1,186 +1,147 @@
-Return-Path: <linux-integrity+bounces-6312-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6313-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACA07AC5CC9
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 00:08:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79EB9AC6272
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 08:59:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A4E29E1037
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 May 2025 22:08:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4340C4A2103
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 06:59:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D25E214812;
-	Tue, 27 May 2025 22:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OZ8GVL53"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4312B24337D;
+	Wed, 28 May 2025 06:59:44 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22AD2153C7;
-	Tue, 27 May 2025 22:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBDEDE55B;
+	Wed, 28 May 2025 06:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748383727; cv=none; b=BlNp/XPk7z8D46uXXt/R9hfudVZYbzfZ4m7eCgaEfIXOOc8FyC5Y5E0eRv2oHzhIf6eFb4yZa7vltwJTuHqSfFIxgOgx3+BGjL79LlnhX6XVVFNuavNNij/D0GC5+B92TzVU+tYwRVMEiaI9R5pj9cCPXanXvcT+CN7Tca0u+2Q=
+	t=1748415584; cv=none; b=GywnpgbQx/TK46PIOFCvORIXAUWoIy4ZmzIWNr/hGHP98cJnQFHwhdaDEWOcO50pHH2PVaiY8j/F4H0g28+Vo0tTqeLk35y/V5+l+AoRg1Xb45esG0NWiIPpo3zaW9X2sq4aNaEVScevEwp4rPxvdVREYtfVtrpbd485FQUrm6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748383727; c=relaxed/simple;
-	bh=nfbvpQXSErwoMt1fAZCaoWf2Wp0M63j9GJB+h1tYXu4=;
-	h=Message-ID:Subject:From:To:Cc:Content-Type:Date:MIME-Version; b=Ln2kuqZviZZF2lcY2vPqJdYcdY1K/Ga2/wiMnA808OpehbxY65hw/sgcKxpxc5GBhIzjTsmAUaAZnDkxEwp6ioPEI5snI6GfYr18g8zqPelr3xihyUjoDvrfl7vEd73FtV0Z40Ja9L5/xWadUDGqm19uvZOmq5zctGHaQsLaeP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OZ8GVL53; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54RGHQ6a017244;
-	Tue, 27 May 2025 22:08:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=WhGjwuAmWq7QvhA7Pl1DzvvUw0nA
-	pFVIUNFIHpnkn68=; b=OZ8GVL531rZZf13wfPiH6b6foiKTMAu7/M4sSwznO45U
-	v2/ArXD9321GCp9x+Th/71lpydcHCEMSMgGxKuB5hVIGHw4dHYKtsVx3ytZ9IpsR
-	htTU6caxGWeSTH3kpVkWt8ieh5kLTTOkZg54qMIC9G7E8oESXFQvhj9/67N+IEIY
-	5H8MSbIOq0OA06LxHi0yiHbgMms/2n1MAbQUq7YgICsjv0ZiqzyIFOtwY4iI32pf
-	pjb/eghca7PeS+ZZwogEQlTxI58szSZl5QPA8q56rd/cESLzE8ZiU467QF2dMtqD
-	YT3wUT3Zw4hUYNI4uEtRTwfqt1XxVZzL2lNTWpo8BA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46wgsghg98-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 May 2025 22:08:37 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54RLgb9w028983;
-	Tue, 27 May 2025 22:08:36 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46usepvmam-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 May 2025 22:08:36 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54RM8a6828836492
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 27 May 2025 22:08:36 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 367135805D;
-	Tue, 27 May 2025 22:08:36 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EB19E58052;
-	Tue, 27 May 2025 22:08:35 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 27 May 2025 22:08:35 +0000 (GMT)
-Message-ID: <283be073924bd046f180880b5912338744550884.camel@linux.ibm.com>
-Subject: [GIT PULL] integrity: subsystem fixes for v6.16
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-integrity <linux-integrity@vger.kernel.org>,
-        linux-kernel	
- <linux-kernel@vger.kernel.org>,
-        Roberto Sassu
- <roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 27 May 2025 18:08:35 -0400
+	s=arc-20240116; t=1748415584; c=relaxed/simple;
+	bh=RuGpvcaQzP9nQ2WHgqYd3xi93wAwSSlvvq9QiQCOnrQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ba+qzhXLnyoNtDluWxa58kxg8+ASwyLHpydM2a1+zG5XEoz3F7LCJUE+c58FpwdJbTMa7pqaBrx8Z+PDmHNFJvpES5NuhAEnqZrkyV83AoKBHqlLYsOGeJmSEFbCwFcF/A4OBq8W684wbg9FJNibGzV2t6Dd6Xo++Acqu/JCqfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.40.54.178])
+	by gateway (Coremail) with SMTP id _____8Bx63FStDZoFq7_AA--.18759S3;
+	Wed, 28 May 2025 14:59:30 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.40.54.178])
+	by front1 (Coremail) with SMTP id qMiowMAxzxtQtDZoEG33AA--.60923S2;
+	Wed, 28 May 2025 14:59:28 +0800 (CST)
+From: Qunqin Zhao <zhaoqunqin@loongson.cn>
+To: lee@kernel.org,
+	herbert@gondor.apana.org.au,
+	jarkko@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	davem@davemloft.net,
+	linux-crypto@vger.kernel.org,
+	peterhuewe@gmx.de,
+	jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	Qunqin Zhao <zhaoqunqin@loongson.cn>
+Subject: [PATCH v10 0/5] Add Loongson Security Engine chip driver
+Date: Wed, 28 May 2025 14:59:39 +0800
+Message-ID: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: piJ-QIMhxf0-6imdi4PFOEZEAgO9UKuo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI3MDE4NiBTYWx0ZWRfX9mGqTff/zw63 cafc2TsnVimEQNhOTBNNoqh17rAWGSIArlfUpzXPE/2kaRYwbxVda1CoociwFntrbgEaPlXK+1H Mj16t22fezjKabHPTR7Gzu8J/8Zo5iM13jqI5FzpOoDFRFNzMD0RWvAurBu4l2dN6fo9tetcaNm
- DMSdMXlvTSX3z2CIyWvHaQDn2rWSabXwaKLRXkwHTRUOMfP6iLqH/xh3pcKeL8UfhVhu9NtdYZN h2BejZBbdN47Kq24vLlgClBgqEcpELMmCW6xFWUnIouX1fM+eO2HwrtbbEGjQqVm35hqssYZERJ ilI+PRgHbP1X2nKwbF8SjYZv024/ACm7SZ+RGbWDxt+gWvx24zMaYAl13KmM034pmOpAuv2BV9D
- 3KXNpwqNv8swqT2G/Sk7jbFcpDQ5jF/Kdo3hYZNT16ypEAd+FWTCIm9wOePsJ8U+DZ9uMCxp
-X-Authority-Analysis: v=2.4 cv=bZRrUPPB c=1 sm=1 tr=0 ts=683637e5 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=ADT_KZKfxQbkmW_C2EoA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: piJ-QIMhxf0-6imdi4PFOEZEAgO9UKuo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-27_10,2025-05-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
- mlxscore=0 suspectscore=0 impostorscore=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 malwarescore=0 spamscore=0
- priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
- definitions=main-2505270186
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAxzxtQtDZoEG33AA--.60923S2
+X-CM-SenderInfo: 52kd01pxqtx0o6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxCr43XFy5WrW7Zw1kGr47ZFc_yoW5Gw4xpF
+	45C3yfCr4UJr47Cr93t34UCFyfZa4fJr9xKa9rXw15Wr9rAa48XrW3AFyUZF47ZFn3Jry2
+	vFWkCF4UGF1UXacCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
 
-Hi Linus,
+The Loongson Security Engine chip supports RNG, SM2, SM3 and SM4
+accelerator engines. Each engine have its own DMA buffer provided
+by the controller. The kernel cannot directly send commands to the
+engine and must first send them to the controller, which will
+forward them to the corresponding engine. Based on these engines,
+TPM2 have been implemented in the chip, then let's treat TPM2 itself
+as an engine.
 
-Carrying the IMA measurement list across kexec is not a new feature, but is
-updated to address a couple of issues:
-                                          =20
-- Carrying the IMA measurement list across kexec required knowing apriori a=
-ll
-the file measurements between the "kexec load" and "kexec execute" in order=
- to
-measure them before the "kexec load".  Any delay between the "kexec load" a=
-nd
-"kexec exec" exacerbated the problem.
-                                                                           =
-    =20
-- Any file measurements post "kexec load" were not carried across kexec,
-resulting in the measurement list being out of sync with the TPM PCR.
-                                                                           =
-   =20
-With these changes, the buffer for the IMA measurement list is still alloca=
-ted
-at "kexec load", but copying the IMA measurement list is deferred to after
-quiescing the TPM.
+v10: mfd: Cleanned up coding style.
+     crypto: Unlimited tfm
+     tpm: Added error check
 
-Two new kexec critical data records are defined.
+v9: Moved the base driver back to drivers/mfd. Cleanned up coding style.
 
-Note:                                                                      =
-    =20
-- The IMA kexec segment hash is not calculated or verified.              =
-=20
-                                                                           =
-    =20
-thanks,                                                                    =
-    =20
-                                                                           =
-    =20
-Mimi                                                                       =
-   =20
+v8: Like Lee said, the base driver goes beyond MFD scope. Since these
+    are all encryption related drivers and SM2, SM3, and SM4 drivers
+    will be added to the crypto subsystem in the future, the base driver
+    need to be changed when adding these drivers. Therefore, it may be
+    more appropriate to place the base driver within the crypto
+    subsystem.
+
+    Removed complete callback in all driver. Removed the concepts of
+    "channel", "msg" and "request" as they may be confusing. Used
+
+v7: Addressed Huacai's comments.
+
+v6: mfd :MFD_LS6000SE -> MFD_LOONGSON_SE,  ls6000se.c -> loongson-se.c
+
+    crypto :CRYPTO_DEV_LS6000SE_RNG -> CRYPTO_DEV_LOONGSON_RNG,
+    ls6000se-rng.c ->loongson-rng.c
+
+    tpm: TCG_LSSE -> TCG_LOONGSON, tpm_lsse.c ->tpm_loongson.c
+
+v5: Registered "ls6000se-rng" device in mfd driver
 
 
-The following changes since commit b4432656b36e5cc1d50a1f2dc15357543add530e=
-:
+Qunqin Zhao (5):
+  mfd: Add support for Loongson Security Engine chip controller
+  crypto: loongson - add Loongson RNG driver support
+  MAINTAINERS: Add entry for Loongson crypto driver
+  tpm: Add a driver for Loongson TPM device
+  MAINTAINERS: Add tpm_loongson.c to LOONGSON CRYPTO DRIVER entry
 
-  Linux 6.15-rc4 (2025-04-27 15:19:23 -0700)
+ MAINTAINERS                            |   9 +
+ drivers/char/tpm/Kconfig               |   9 +
+ drivers/char/tpm/Makefile              |   1 +
+ drivers/char/tpm/tpm_loongson.c        |  84 ++++++++
+ drivers/crypto/Kconfig                 |   1 +
+ drivers/crypto/Makefile                |   1 +
+ drivers/crypto/loongson/Kconfig        |   5 +
+ drivers/crypto/loongson/Makefile       |   1 +
+ drivers/crypto/loongson/loongson-rng.c | 211 +++++++++++++++++++++
+ drivers/mfd/Kconfig                    |  11 ++
+ drivers/mfd/Makefile                   |   2 +
+ drivers/mfd/loongson-se.c              | 253 +++++++++++++++++++++++++
+ include/linux/mfd/loongson-se.h        |  53 ++++++
+ 13 files changed, 641 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_loongson.c
+ create mode 100644 drivers/crypto/loongson/Kconfig
+ create mode 100644 drivers/crypto/loongson/Makefile
+ create mode 100644 drivers/crypto/loongson/loongson-rng.c
+ create mode 100644 drivers/mfd/loongson-se.c
+ create mode 100644 include/linux/mfd/loongson-se.h
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git=
-/ tags/integrity-v6.16
-
-for you to fetch changes up to fe3aebf27dc1875b2a0d13431e2e8cf3cf350cca:
-
-  ima: do not copy measurement list to kdump kernel (2025-05-14 06:40:09 -0=
-400)
-
-----------------------------------------------------------------
-integrity-v6.16
-
-----------------------------------------------------------------
-Steven Chen (10):
-      ima: rename variable the seq_file "file" to "ima_kexec_file"
-      ima: define and call ima_alloc_kexec_file_buf()
-      kexec: define functions to map and unmap segments
-      ima: kexec: skip IMA segment validation after kexec soft reboot
-      ima: kexec: define functions to copy IMA log at soft boot
-      ima: kexec: move IMA log copy from kexec load to execute
-      ima: verify if the segment size has changed
-      ima: make the kexec extra memory configurable
-      ima: measure kexec load and exec events as critical data
-      ima: do not copy measurement list to kdump kernel
-
- include/linux/ima.h                |   3 +
- include/linux/kexec.h              |   9 ++
- kernel/kexec_core.c                |  54 ++++++++++
- kernel/kexec_file.c                |  33 ++++++-
- security/integrity/ima/Kconfig     |  11 +++
- security/integrity/ima/ima.h       |   6 ++
- security/integrity/ima/ima_kexec.c | 196 ++++++++++++++++++++++++++++++---=
-----
- security/integrity/ima/ima_queue.c |   5 +
- 8 files changed, 283 insertions(+), 34 deletions(-)
+base-commit: c89756bcf406af313d191cfe3709e7c175c5b0cd
+-- 
+2.45.2
 
 
