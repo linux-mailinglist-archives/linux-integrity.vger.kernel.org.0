@@ -1,120 +1,143 @@
-Return-Path: <linux-integrity+bounces-6331-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6332-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33656AC66E8
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 12:25:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4EBFAC68DC
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 14:11:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD482A22949
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 10:24:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4AC64E2D21
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 12:11:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 101B02749DE;
-	Wed, 28 May 2025 10:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D00283FE2;
+	Wed, 28 May 2025 12:11:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WwF1Y6Pg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5CTCwkV"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D50214229;
-	Wed, 28 May 2025 10:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF42283FC7;
+	Wed, 28 May 2025 12:11:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748427914; cv=none; b=bZwqaI3YWpPoIrDDRkuI2tbVxlMnL65j+fpl4xBARyrFgGrF0DkM/YbM2j8yuphhx0RI4jwuRdjtob0CLhDt0YrnViLL3VTQwLHJczXx2Vo1eJjZKiXHay5/zdtOMTbrLhN51NqCi8guUNqOGtYmmYqIN5Q8hLxeBNUQ1q7Ziag=
+	t=1748434278; cv=none; b=Nj25nBrhoe+F260GgG1dug0d93wthTSZIhXPkdu4ozqWZVsMPxO10F+not4Pxm9Fsz/zdyH5zqrABiN6GeC7dL7ndpI9KnpJPA7ejuAvs3PwObb8qh7nP7ATk8snkqjZHZDnrXzgmcBIXSR17Q7/7iQ+8ePKLRw7ulfPWwxijPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748427914; c=relaxed/simple;
-	bh=LIOi3dndS8s1nCiZiSl6vDayk7Pb84g5JnDJyZlqFBc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RyRuCSnUj6BY9pHVOLmuKr3eUKIJW3fuq10NBiK28gEF+HDNWhjBMivnetKetAkp+DDJ+WjZf7K2/R/LThhBeyfvA1MMx/+IOV9fAQZdfhRBwArFzN21LCetaSmi694TAjXEueZEiJD26Ew/HgKfROinHKXaEmwXS1iA9Qnvt/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WwF1Y6Pg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A661C4CEEB;
-	Wed, 28 May 2025 10:25:14 +0000 (UTC)
+	s=arc-20240116; t=1748434278; c=relaxed/simple;
+	bh=8MfdXtHyOEsCmd1YNW5odISMpHpK4Xt9XoQx6rI00ew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IY9JRcn3BQC7ggmvFXH0ROv4YAbH93QTVPcoLlpjDHIBsIq6E8QE4Q3eQjxb6Byjd2o7sW1zmaBDBOU2ml7hjvZ1LpXyodmKXBSbdfcgBADXAIPrBvA6g2f/dHb21u5QiXDje+oT2jNJm0R4RoEQCRopfcehvuDgQqp1Ui3Ot84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5CTCwkV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79E5BC4CEE7;
+	Wed, 28 May 2025 12:11:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748427914;
-	bh=LIOi3dndS8s1nCiZiSl6vDayk7Pb84g5JnDJyZlqFBc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WwF1Y6Pgx07N4IHmEht4KvHtaFDFCXdIRjCLcBQM0vAMt7nfuNKKGk2N9aIkJxMNR
-	 c8uD4nxRwhY35mkUYEB6BuxGYbUPy2PJ+ZFLzu53Kko+6bfc7Sp7DzFecCgjHr9nDC
-	 0oPdgTKrPVfQ6J228yqd6e9sUEC3q6wK+4xekoHJeeG5gNEk+7sM4Mk5hgZNMbanW9
-	 kCj9r+ya5T+Rr6nAGtTOnndPG5QyZN+UDp4wYayDjUyzqoDybD1hM5ga8SQ4CCMRP4
-	 zh+tqor8DBWu+q9ucD5NZJBA3I8U+miEeKzEp8wpsV2u1RtFKfNgNW0jLcVsgw2HTo
-	 mDIptO3dJpE1w==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6049431b0e9so4508735a12.0;
-        Wed, 28 May 2025 03:25:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUoXRF/roCTFp+oABmJg7TPQaSokUOC6xLa2SiRhn4h9WMASUdDpbAl+uSh7wRIhVj/P9JiJ2SePXkiG14=@vger.kernel.org, AJvYcCXGVcGqWUvHaBiKnb+6Q0XSMRvrhlC1pmL7pF1YshhPBQvyncCbP9QdHLQn5RGXS4RsP2p6eHkQQfG+jp26@vger.kernel.org, AJvYcCXbqMv7JZF71GQpnMJlxilWEw62AcC0F0cUlWdKef9q3Bgz6rh+Oyv4Qdfr9pmLRfZfWL9VixsR3hPxaqAxAr+G@vger.kernel.org
-X-Gm-Message-State: AOJu0YykD88yXTfANlSy7fnnuUKiO0hS2GoXDQPqX8pbNrLB9DGtGr+m
-	ZiYWRaGcA2ePI4cBwx94Px49/DXKk55s30Rsc5ESpBMRlHVBAqhibN4X8gf8W+iy991AcLd1NRg
-	3hziz3nzGYT5G6/sGsTO23f438IQvtOM=
-X-Google-Smtp-Source: AGHT+IGDHiTwGJRagnogeg3ewv6dw7u75sF89so1xzMF1zhmt53vyAE51gY9xZM/y+SFsY6wONjEbQnz9Jore+K4BjA=
-X-Received: by 2002:a05:6402:2713:b0:5f8:e6e5:54ac with SMTP id
- 4fb4d7f45d1cf-602d934d18fmr12369031a12.14.1748427912970; Wed, 28 May 2025
- 03:25:12 -0700 (PDT)
+	s=k20201202; t=1748434276;
+	bh=8MfdXtHyOEsCmd1YNW5odISMpHpK4Xt9XoQx6rI00ew=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=G5CTCwkVw2zDw45I+BjQQ/PqW9ZeMRMNcW73i0sHphYveNnkQifCpFfdL09ode8OF
+	 HN/cDyzjy3BRjh+4HQS0qVhVPEIiAhAgLkPzqEbyjhTSUq+SwzZYnj/7g3xgEX4Hkw
+	 TiXoxfUFkNZyxgAMPC9h2sz50uxctB9XJtthduxKIyXV6Xk456XqL5WohOuxiWwAZz
+	 Kq7EQCEoClxzCIqqgBNCN5yrduDZnlZxIRoEJFvWvrAJyJ6fDC8poRnC0tloKwdZeI
+	 Ic3nz9RNlMfuMB5scE0Yt2upnWmjxPtIyiPTT40ZRqEJUI1RCf10OSdPEJCPCyiqPh
+	 y56VOzODK5zEA==
+Message-ID: <cae7d546-3e9a-4d31-8d46-ee4d6c8e0892@kernel.org>
+Date: Wed, 28 May 2025 14:11:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250528065944.4511-1-zhaoqunqin@loongson.cn> <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
- <cda7ef56-87b3-6594-c2b6-2a4f5a1b63ce@loongson.cn> <CAAhV-H557CLtoF23nbRQaoDPdzuM5xgsS-+-1p_VeX0OreG2vQ@mail.gmail.com>
- <0b328692-f333-4bba-9572-6f3c86dbed29@linux.dev>
-In-Reply-To: <0b328692-f333-4bba-9572-6f3c86dbed29@linux.dev>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 28 May 2025 18:25:00 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4voq8HgwOgxObj-wOzBA0+Wv=8x+oVsR3++01i2NAHTQ@mail.gmail.com>
-X-Gm-Features: AX0GCFvKzI2jSyUtQ0kx2nTZcGobH-pL8xGqTAba7znizU98oerpW-343mbJqLY
-Message-ID: <CAAhV-H4voq8HgwOgxObj-wOzBA0+Wv=8x+oVsR3++01i2NAHTQ@mail.gmail.com>
-Subject: Re: [PATCH v10 0/5] Add Loongson Security Engine chip driver
-To: Yanteng Si <si.yanteng@linux.dev>
-Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, lee@kernel.org, herbert@gondor.apana.org.au, 
-	jarkko@kernel.org, linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, 
-	davem@davemloft.net, linux-crypto@vger.kernel.org, peterhuewe@gmx.de, 
-	jgg@ziepe.ca, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 5/5] MAINTAINERS: Add tpm_loongson.c to LOONGSON
+ CRYPTO DRIVER entry
+To: Qunqin Zhao <zhaoqunqin@loongson.cn>, lee@kernel.org,
+ herbert@gondor.apana.org.au, jarkko@kernel.org
+Cc: linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ davem@davemloft.net, linux-crypto@vger.kernel.org, peterhuewe@gmx.de,
+ jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+ Huacai Chen <chenhuacai@loongson.cn>
+References: <20250528070104.4525-1-zhaoqunqin@loongson.cn>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250528070104.4525-1-zhaoqunqin@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 28, 2025 at 5:15=E2=80=AFPM Yanteng Si <si.yanteng@linux.dev> w=
-rote:
->
-> =E5=9C=A8 5/28/25 4:17 PM, Huacai Chen =E5=86=99=E9=81=93:
-> > On Wed, May 28, 2025 at 4:06=E2=80=AFPM Qunqin Zhao <zhaoqunqin@loongso=
-n.cn> wrote:
-> >>
-> >>
-> >> =E5=9C=A8 2025/5/28 =E4=B8=8B=E5=8D=883:17, Huacai Chen =E5=86=99=E9=
-=81=93:
-> >>> Hi, Qunqin,
-> >>>
-> >>> As I said before, why the patch "MAINTAINERS: Add entry for Loongson
-> >>> Security Module driver" is missing?
-> >>
-> >> Hi, Huacai
-> >>
-> >> https://lore.kernel.org/all/8e55801a-a46e-58d5-cf84-2ee8a733df9a@loong=
-son.cn/
-> > Sorry, I missed this email. But if you put all files in one entry, you
-> > can merge Patch-3 and Patch-5 as the last patch (then you will also
-> > not meet the 5 patches limit).
->
-> We are cutting the foot to fit the shoe. Sigh...
-No, the two patches really need to be squashed.
+On 28/05/2025 09:01, Qunqin Zhao wrote:
+> Changes to Loongson TPM driver would be best reviewed by the Loongson
+> crypto driver maintainers.
+> 
+> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v8-v10: None 
+> v7: Added tag from Jarkko and Huacai 
+> v6: "tpm_lsse.c" -> "tpm_loongson"
+> v4-v5: None
+> 
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0fd568a6b..aa6db2912 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13984,6 +13984,7 @@ LOONGSON CRYPTO DRIVER
+>  M:	Qunqin Zhao <zhaoqunqin@loongson.cn>
+>  L:	linux-crypto@vger.kernel.org
+>  S:	Maintained
+> +F:	drivers/char/tpm/tpm_loongson.c
+>  F:	drivers/crypto/loongson/
 
-Huacai
+This makes no sense - you just added this entry in patch #3. Just add a
+complete entry instead of adding first half and second half later.
 
->
->
-> Thanks,
-> Yanteng
-> >
-> > Huacai
-> >
-> >>
-> >> Thanks,
-> >>
-> >> Qunqin.
-> >>
-> >>>
-> >>> Huacai
+Best regards,
+Krzysztof
 
