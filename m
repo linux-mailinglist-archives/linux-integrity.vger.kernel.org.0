@@ -1,142 +1,102 @@
-Return-Path: <linux-integrity+bounces-6325-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6326-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5691DAC650C
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 11:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09A7AAC657A
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 11:15:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69B231BA6227
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 09:01:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B95FA1888156
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 May 2025 09:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A672749F6;
-	Wed, 28 May 2025 09:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7696B20D51C;
+	Wed, 28 May 2025 09:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J+8/FF+o"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pn4kTPQj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEFEB2741B3
-	for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 09:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98A820D51D
+	for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 09:15:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748422824; cv=none; b=Jdt65Ik+ZK6Q8fXW8V3Mkbl/qB4tv1V4HaMmJpcFwmXuiSF/YlBORocQImvrqwrmy0LPJRiVunZwoy8hGgbP4HEprQaFW8dFDPm0tDoJWimSyfpH4csG7DX3bWnkpqWO3Cf2QHAqcwOj+nXb1UNUniAjKSMifrlXGIQ29JeMowo=
+	t=1748423714; cv=none; b=uPLQsRlSG0GRrX3Thppmc+kyymp8BzD9jp+SCJ49A30/4+vbnkxDYOcCC+rBEG5S+j7qtKGWHN19IL31RIkU9/cqqHQAzGXXQKZfQBVp9IOZXAYmGGlpoWnU6oTzEpiIsiy1lZSWsWGYT82zz1i+d/CXNAFsrKOa/2SMwvRG+nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748422824; c=relaxed/simple;
-	bh=t1e/HvfosFpsLoFkhIGG8ncpvv+6aZviJ2nKgmWiOW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mwnDxF03nWchpmqqGZv20SKFkG2hMToFg91xcMju8keIpUHgcpt+hQIoEkIamnIp6NzoksIHurFCfuQ0rMokMCO6FgczZamzvqn/hAe5+yuMb0Rs2PjdKnfgtNg8SOe+9SVAVQkdVW4TQAd0j8OQzsbDiiuO5p7J3tOsa6t10Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J+8/FF+o; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1748422821;
+	s=arc-20240116; t=1748423714; c=relaxed/simple;
+	bh=4cXf7MErAkLA9U3B2oNG6s7tbUnnuq7wfLX8Cx+1mvM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eDLgN9n7Xte0UHGZfvJ90hKaZ6yMZLgZljbilaY7TL2BinHVpxo2k/Inhk/ENBNvtwwfGgmHr6G4TOgHPUq9wisxOY1tyRKy43RBcCkRj+nfdiic8/Y1ucDFavTSKKjkQ4COeAlJOvnuOeS8yASNaqXQ3IwcMuGDX3OmyWMSP9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pn4kTPQj; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <0b328692-f333-4bba-9572-6f3c86dbed29@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1748423709;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=64QsXwazpQwW+tOYOMo7hDdSauBGVg6nC6ZKTpmi0VI=;
-	b=J+8/FF+opcuDOX++0wvmaIQVrgvdohzjFJub7w3QEwfLxaSR0+odejqCDAv2eY86hC0jrn
-	2HO6ATFtbcIrJcWZcaORcrq/vINBciOYyucZvfLdtD1w7Wq8dT7kU0rdMEwKD6iHcwGttY
-	xP5MhGtjbxjxoLdb9QmsbhVgZsilMmM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-609-TPmQe2PUMp66pwY4VaupCw-1; Wed, 28 May 2025 05:00:20 -0400
-X-MC-Unique: TPmQe2PUMp66pwY4VaupCw-1
-X-Mimecast-MFC-AGG-ID: TPmQe2PUMp66pwY4VaupCw_1748422819
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3a367b3bb78so2466692f8f.1
-        for <linux-integrity@vger.kernel.org>; Wed, 28 May 2025 02:00:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748422819; x=1749027619;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=64QsXwazpQwW+tOYOMo7hDdSauBGVg6nC6ZKTpmi0VI=;
-        b=SL3NDQrIJE54/3IPnZ597GLV4O5G30IHuzFZNDAh1cCfX0+CY/7/zvn5UGcMbzJR4V
-         E9CzP0nHwrAS4OeefexuBREd71scwQBx4Lxw7LmpQ2VBqiJJ51OpCb/kcNMsmX/LSdRm
-         pIKhECVeWB+LP5WHWcFCZvERKXs0CQa7n0D0IcmmRCaOOez9cWxFEqPABqc5guNKUbxT
-         L1Dtbk1Rc7SpdSWxWvefXxelT71us5vFRL4bSAzcKrqsOYjXLKINqo4ksxlbWaWzi2vI
-         x8TTRzmOyVGD/IzedCpO5EtZTQJ9o1sYWTaW+4VOJduqg3JIN6IUFJygRriU1VOY8/rh
-         5VvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDbAFI+twGd1YlL/gWtOiAXQQRHYAfnazQGXXdE3AM3/7UOUleYfkbQDRr0ZDKBqYWA6kSuEf3e0YVVDqsY8g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7Njr4n1sA+K1Omt7iVV9/+TXWAqx6YZ/kBjsWzXl1eyislDSp
-	WPWYUJfxYxzP5oEMfO6cVoXQ3hk795gOaNkqvuSJWdnU2ggWOqmRpy35mWq+FvZkgWF7sBJ+bOH
-	KMl+kx9VeO85CPHu2GfIyyOjps0m7HPSh1R9KkJa9xSkU2YyBdN2kOz68w59NvKtq1ySOkg==
-X-Gm-Gg: ASbGncuAU/RqAM5ZOn+XSZHYSLeafh1wUmsUzc6dtJ6nSuUcU2+EHqRCmZnWjeTi9mx
-	GJtsnE4mb+eeAdtkY/uRXA1Xl5zerb+BboLox0W1yJlPSAgzA5YMRyVz3sbalUnRJ69yieATfuH
-	DOFuCJAS6tkX4nB44i3oFcKEWHSfn2MAB3yedV9TIjwCWqXXXaed0AES86cCUPTd2RP2t4mqYnD
-	rs1bWfzPCNjeEigrX9MnTWC+JaNtlsrvJZQg3TKMZXmk9uMpNAsONXfnYmp9t9dNlSmUjaiLHAG
-	UvLS1Bo5hEDs16hnnHPT44FfZCGDFAnCYwt28+XdvVvjusyFMCZbPv7shxtJ
-X-Received: by 2002:a5d:5f8b:0:b0:3a3:6595:921f with SMTP id ffacd0b85a97d-3a4cb4b822dmr12928264f8f.41.1748422818880;
-        Wed, 28 May 2025 02:00:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGjrV5vgUL5ysXDl7B3oxB4ovG+UqKk+QHfVQ+EndsK3P47vCbb2duzqpq4xfTjaqx9Sg54xQ==
-X-Received: by 2002:a5d:5f8b:0:b0:3a3:6595:921f with SMTP id ffacd0b85a97d-3a4cb4b822dmr12928217f8f.41.1748422818345;
-        Wed, 28 May 2025 02:00:18 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-53-134-35.retail.telecomitalia.it. [82.53.134.35])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a4eab0b596sm892079f8f.0.2025.05.28.02.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 May 2025 02:00:17 -0700 (PDT)
-Date: Wed, 28 May 2025 11:00:12 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, davem@davemloft.net, 
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org, 
-	Yinggang Gu <guyinggang@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v10 4/5] tpm: Add a driver for Loongson TPM device
-Message-ID: <gymx5tbghi55gm76ydtuzzd6r522expft36twwtvpkbgcl266a@zelnthnhu7kq>
-References: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
- <20250528065944.4511-5-zhaoqunqin@loongson.cn>
- <7ifsmhpubkedbiivcnfrxlrhriti5ksb4lbgrdwhwfxtp5ledc@z2jf6sz4vdgd>
- <afaeb91a-afb4-428a-2c17-3ea5f098da22@loongson.cn>
+	bh=FI9HKlKAfdwWrEKUw5etibdxZ+5o3KFvUbDhmI3SbF0=;
+	b=pn4kTPQjC7e1P+nXW2gDru2pUb+AApmOIFcvMaQQcceHjVel2fhXM4qGNuOjhIe8RJ3Tuh
+	h/pNN3yQAx9UsrZwpptM2jrubF5d11fQiql17wRMxC5c7x1plULl8WB2aidGKwNaCq3y3D
+	+NCJy9gWuRc8lQu3Isla4IudqVTf/Mg=
+Date: Wed, 28 May 2025 17:14:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
+Subject: Re: [PATCH v10 0/5] Add Loongson Security Engine chip driver
+To: Huacai Chen <chenhuacai@kernel.org>, Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: lee@kernel.org, herbert@gondor.apana.org.au, jarkko@kernel.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ davem@davemloft.net, linux-crypto@vger.kernel.org, peterhuewe@gmx.de,
+ jgg@ziepe.ca, linux-integrity@vger.kernel.org
+References: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
+ <CAAhV-H7hBksA2P+vfMbpDVnbjW1Mo09Out_wOQLgLRXPLaFCfA@mail.gmail.com>
+ <cda7ef56-87b3-6594-c2b6-2a4f5a1b63ce@loongson.cn>
+ <CAAhV-H557CLtoF23nbRQaoDPdzuM5xgsS-+-1p_VeX0OreG2vQ@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yanteng Si <si.yanteng@linux.dev>
+In-Reply-To: <CAAhV-H557CLtoF23nbRQaoDPdzuM5xgsS-+-1p_VeX0OreG2vQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <afaeb91a-afb4-428a-2c17-3ea5f098da22@loongson.cn>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, May 28, 2025 at 04:42:05PM +0800, Qunqin Zhao wrote:
->
->在 2025/5/28 下午3:57, Stefano Garzarella 写道:
->>>+    chip = tpmm_chip_alloc(dev, &tpm_loongson_ops);
->>>+    if (IS_ERR(chip))
->>>+        return PTR_ERR(chip);
->>>+    chip->flags = TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
+在 5/28/25 4:17 PM, Huacai Chen 写道:
+> On Wed, May 28, 2025 at 4:06 PM Qunqin Zhao <zhaoqunqin@loongson.cn> wrote:
 >>
->>Why setting TPM_CHIP_FLAG_IRQ?
->
->When tpm_engine completes  TPM_CC* command,
->
->the hardware will indeed trigger an interrupt to the kernel.
-
-IIUC that is hidden by loongson_se_send_engine_cmd(), that for this 
-driver is completely synchronous, no?
-
->
 >>
->>IIUC this driver is similar to ftpm and svsm where the send is 
->>synchronous so having .status, .cancel, etc. set to 0 should be 
->>enough to call .recv() just after send() in tpm_try_transmit(). See 
->>commit 980a573621ea ("tpm: Make chip->{status,cancel,req_canceled} 
->>opt")
->The send callback would wait until the TPM_CC* command complete. We 
->don't need a poll.
+>> 在 2025/5/28 下午3:17, Huacai Chen 写道:
+>>> Hi, Qunqin,
+>>>
+>>> As I said before, why the patch "MAINTAINERS: Add entry for Loongson
+>>> Security Module driver" is missing?
+>>
+>> Hi, Huacai
+>>
+>> https://lore.kernel.org/all/8e55801a-a46e-58d5-cf84-2ee8a733df9a@loongson.cn/
+> Sorry, I missed this email. But if you put all files in one entry, you
+> can merge Patch-3 and Patch-5 as the last patch (then you will also
+> not meet the 5 patches limit).
 
-Right, that's what I was saying too, send() is synchronous (as in ftpm 
-and svsm). The polling in tpm_try_transmit() is already skipped since we 
-are setting .status = 0, .req_complete_mask = 0, .req_complete_val = 0, 
-etc. so IMHO this is exactly the same of ftpm and svsm, so we don't need 
-to set TPM_CHIP_FLAG_IRQ.
+We are cutting the foot to fit the shoe. Sigh...
+
 
 Thanks,
-Stefano
-
+Yanteng
+> 
+> Huacai
+> 
+>>
+>> Thanks,
+>>
+>> Qunqin.
+>>
+>>>
+>>> Huacai
 
