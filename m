@@ -1,166 +1,313 @@
-Return-Path: <linux-integrity+bounces-6340-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6341-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA4CAAC81C8
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 May 2025 19:45:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9D9AAC81E8
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 May 2025 19:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68097A4120A
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 May 2025 17:45:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B1B216CA60
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 May 2025 17:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9173230277;
-	Thu, 29 May 2025 17:45:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3ECF22F392;
+	Thu, 29 May 2025 17:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=welho.tech header.i=@welho.tech header.b="Z5O74jSs"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AkTm4zxM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-10626.protonmail.ch (mail-10626.protonmail.ch [79.135.106.26])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE66E22F772
-	for <linux-integrity@vger.kernel.org>; Thu, 29 May 2025 17:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A39A22D4F1;
+	Thu, 29 May 2025 17:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748540729; cv=none; b=mhWuZpnkxW158mgRNC2PKDUX4FzrBXuIlXhByJYaMm3Sl+Ma8nVx1HW71pXv99kze1zhbSEfkZs3VQEDZvJGS7EBf8fl/qU2CDh5xlX/80i92H2EaTGRsyZ5wN2xNGP3I5sf1ZGj4yFG1lRfLYiWc20W9GQaLgbjvrMZ2baTrck=
+	t=1748541468; cv=none; b=gpcivykYGQUrr10djQhexZ7QEBnW3Pge76+1xajQt0UEjOT8xtyga+0DXAX1oddb9PSulkAfCfrt6zIVQnMcc71a+WAwI8c2DQtATZraauUsS/k2FVQeExrb9QaylUSgsw6uty0bR1c4O1Epsw1gYVRPjGowtlKNXKNqWZIRIA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748540729; c=relaxed/simple;
-	bh=+xabQibrftJkVUwZN7dmngN81xgMxDTrpiypIR+Bleg=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GJGBL8AW5uYrbtddTAWu19BFbCZFHnMUvvdIMhKhW/Qmj8mS+qVo8xDObLiQQhslOHD+JS0qtR1cLaiEp1qmIbwFOYmrw98+95HS8KtbJah/GHaWU1/xhF+yjAy8xaBNbQzFSDs/tK3qVO+l1j+0JDNmjfquLT7oZFMM8xchMOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=welho.tech; spf=pass smtp.mailfrom=welho.tech; dkim=pass (2048-bit key) header.d=welho.tech header.i=@welho.tech header.b=Z5O74jSs; arc=none smtp.client-ip=79.135.106.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=welho.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=welho.tech
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=welho.tech;
-	s=protonmail2; t=1748540719; x=1748799919;
-	bh=8gzq8wYrUWwUGXftu5OuGK0/Efmw6ikuz+/C0p0BuvQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
-	 List-Unsubscribe:List-Unsubscribe-Post;
-	b=Z5O74jSs80lfy0YVkKk9CCLGp2po24Y4czyXtsLRWAsYgCK5EKCVejsv/qTmbmz5H
-	 LDgyjPbJhfzhf9PoJ21UGqtqGsk34kP1JVDK+jb0xicjHlc+tm5E604nntR/dageeg
-	 LpdbUfrOMrNaEQLhHfnZrACG/ERi+G/J5OQOUFsjb8eypgxN6mGqGUft6vz6f3LR33
-	 ojPLA6wfC8g2NnB+1/VZBj6M0AbYGFcFYmo4wGaspZppIsOU8DLyiPC7NBKU0sUxO3
-	 x6wRNzewkM01MWJYlvhrKYnUDvvmXRTOl13NHL4dzWNU0I5y3BLm5b0HeSR2OX1/al
-	 aa93IdNCv5NpA==
-Date: Thu, 29 May 2025 17:45:12 +0000
-To: Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-From: Dennis Marttinen <twelho@welho.tech>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, Dennis Marttinen <twelho@welho.tech>
-Subject: [PATCH] fs/ceph: set superblock s_magic for IMA fsmagic matching: up to 60x speedup
-Message-ID: <20250529174453.293618-1-twelho@welho.tech>
-Feedback-ID: 63214926:user:proton
-X-Pm-Message-ID: 294c9fb9a57bf9a61f0c822a773aa432f7737b89
+	s=arc-20240116; t=1748541468; c=relaxed/simple;
+	bh=Wz3ASx+bgv6vNtcVe3W5KiiP6F3X8ZQUO5eAYaTD+4s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZTNdsBYoJBwHBOtnVSa3Aiaj6bPK8f0yDVoTRyAZrn4DQRqLHs47mmXfu0/WoCd8fOmwQVuFq8fUlh0Q0VLlxsTbdRSy4xY5dQVjH+8PcIcB0GH6wuVYVW9yY+Tfd3UTN7udPxiTMIwc/ZqtbRGe6B91ihmvSNHFqrW0VVoqQCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AkTm4zxM; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54TCnwuO013450;
+	Thu, 29 May 2025 17:57:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=MMSPzb
+	4oQ+h918UwB1Z3SCKlZ/8CX7OHWRXLne8aVQg=; b=AkTm4zxMnMqciznNBqK1XZ
+	SWfoiAjlw2KRQsjXoBOiRZGhr4kitR2pHNmknen18ZYWyCuXY/qDnws72f+EqKE6
+	xKOFSFeXLzXdv4kRrOeuS3JP6rQ1uP8Fyi4zHgUM4Y+9P+hyG1MmYMMIb5J7oqM2
+	LqvFvuX0sN26gaAVNtA1HQ4AepB1xHSHoHYZz4gsi2ZYCLyOwm3eOXHhN0P2wG50
+	O7VEL6r3k/a7VMay3ASi+Rr0kGedEjs/Cs90MFSQehdsTNcc2HJUZbGYa7AYrpsY
+	vfDRLePq+SUlM7E5JFtP+RKv6pbGrheWuRpWtq6QEdwlK4gqtvK6R4DOT9jqCinw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46x40h7611-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 May 2025 17:57:31 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54THlPPJ031719;
+	Thu, 29 May 2025 17:57:30 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46x40h760u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 May 2025 17:57:30 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54THYkRY001617;
+	Thu, 29 May 2025 17:57:30 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 46utnmwd6h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 29 May 2025 17:57:30 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54THvSY531261230
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 29 May 2025 17:57:28 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 207BC5805C;
+	Thu, 29 May 2025 17:57:28 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 93AF45805A;
+	Thu, 29 May 2025 17:57:24 +0000 (GMT)
+Received: from [9.39.17.148] (unknown [9.39.17.148])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 29 May 2025 17:57:24 +0000 (GMT)
+Message-ID: <fd6846dc-a2b3-42fa-9d75-8ff41b4ca531@linux.ibm.com>
+Date: Thu, 29 May 2025 23:27:23 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] powerpc/pseries: Correct secvar format
+ representation for static key management
+To: Andrew Donnellan <ajd@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, zohar@linux.ibm.com,
+        nayna@linux.ibm.com, linux-kernel@vger.kernel.org
+References: <20250521105759.8408-1-ssrish@linux.ibm.com>
+ <20250521105759.8408-2-ssrish@linux.ibm.com>
+ <c06c6a36356ce803654a441d4b8b2901b5f78007.camel@linux.ibm.com>
+Content-Language: en-US
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+In-Reply-To: <c06c6a36356ce803654a441d4b8b2901b5f78007.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AUXR36wK3LTPreFspGwVbMMCyC3l3qlR
+X-Proofpoint-ORIG-GUID: JF3PRAuRSYXGXqu-q3qMkGojeNhW5YVa
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI5MDE3MCBTYWx0ZWRfX/zUGsrPo6Evh bBBOo+oIVcx0gKfOT0l5ojOttlZwLRx/5UqwttBM9UX4kugfk7u3Rrp0uSAE+3r82sx4S884GG5 ynoGN3/ZWJ0qVDLBtr1m8nW/OYvhbg0c156G4jV1nNAtpk4A0uSE5mlzHx79irIncWFMuk22VIZ
+ 5BFPQHBDGHLTbSk8YGtY9hgQhvDcR0Nfgns7SXeDE0JIsyXiC/Xu0RKuD4ZpfYOwiOf6/Nc+BB3 ZcDHPyywNxzNqeiS+fvvl0Wbsj9aoh1plvfRtM13HEAHURXFWD6KeVPGniWOUSDLgmFwS9dDB8O yVjowsr1AV1rnJLPcOxfs5qaxvEl1g7gLS9D8ArCtHhl2D/qeH//oAtwC0zYMn1yJoWU66/U3I9
+ amIU5Z6MleGOyWGhhMB2uMy8kffw+6aVE9huX6suTqU9vzEJy2/ASNDuocSmjdl+PYBM6czE
+X-Authority-Analysis: v=2.4 cv=L8MdQ/T8 c=1 sm=1 tr=0 ts=6838a00b cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VnNF1IyMAAAA:8 a=egBsNbqSnoRc1Z-rUywA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-29_08,2025-05-29_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ adultscore=0 spamscore=0 phishscore=0 bulkscore=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
+ definitions=main-2505290170
 
-The CephFS kernel driver forgets to set the filesystem magic signature in
-its superblock. As a result, IMA policy rules based on fsmagic matching do
-not apply as intended. This causes a major performance regression in Talos
-Linux [1] when mounting CephFS volumes, such as when deploying Rook Ceph
-[2]. Talos Linux ships a hardened kernel with the following IMA policy
-(irrelevant lines omitted):
 
-# cat /sys/kernel/security/integrity/ima/policy
-[...]
-dont_measure fsmagic=3D0xc36400 # CEPH_SUPER_MAGIC
-[...]
-measure func=3DFILE_CHECK mask=3D^MAY_READ euid=3D0
-measure func=3DFILE_CHECK mask=3D^MAY_READ uid=3D0
-[...]
+On 5/23/25 11:27 AM, Andrew Donnellan wrote:
+> On Wed, 2025-05-21 at 16:27 +0530, Srish Srinivasan wrote:
+>> On a PLPKS enabled PowerVM LPAR, the secvar format property for
+>> static
+>> key management is misrepresented as "ibm,plpks-sb-unknown", creating
+>> reason for confusion.
+>>
+>> Static key management mode uses fixed, built-in keys. Dynamic key
+>> management mode allows keys to be updated in production to handle
+>> security updates without firmware rebuilds.
+>>
+>> Define a function named plpks_get_sb_keymgmt_mode() to retrieve the
+>> key management mode based on the existence of the SB_VERSION property
+>> in the firmware.
+>>
+>> Set the secvar format property to either "ibm,plpks-sb-v<version>" or
+>> "ibm,plpks-sb-v0" based on the key management mode, and return the
+>> length of the secvar format property.
+>>
+>> Co-developed-by: Souradeep <soura@imap.linux.ibm.com>
+>> Signed-off-by: Souradeep <soura@imap.linux.ibm.com>
+>> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
+>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+> Thanks for the fixes, minor comment about the docs below.
+>
+> Reviewed-by: Andrew Donnellan <ajd@linux.ibm.com>
+>
+>> ---
+>>   Documentation/ABI/testing/sysfs-secvar        |  9 ++-
+>>   arch/powerpc/platforms/pseries/plpks-secvar.c | 76 +++++++++++------
+>> --
+>>   2 files changed, 52 insertions(+), 33 deletions(-)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-secvar
+>> b/Documentation/ABI/testing/sysfs-secvar
+>> index 857cf12b0904..45281888e520 100644
+>> --- a/Documentation/ABI/testing/sysfs-secvar
+>> +++ b/Documentation/ABI/testing/sysfs-secvar
+>> @@ -22,9 +22,12 @@ Description:	A string indicating which backend is
+>> in use by the firmware.
+>>   		and is expected to be "ibm,edk2-compat-v1".
+>>   
+>>   		On pseries/PLPKS, this is generated by the kernel
+>> based on the
+>> -		version number in the SB_VERSION variable in the
+>> keystore, and
+>> -		has the form "ibm,plpks-sb-v<version>", or
+>> -		"ibm,plpks-sb-unknown" if there is no SB_VERSION
+>> variable.
+>> +		version number in the SB_VERSION variable in the
+>> keystore. The
+>> +		version numbering in the SB_VERSION variable starts
+>> from 1. The
+>> +		format string takes the form "ibm,plpks-sb-
+>> v<version>" in the
+>> +		case of dynamic key management mode. Otherwise, for
+>> any error in
+>> +		reading SB_VERSION it takes the form "ibm,plpks-sb-
+>> v0",
+>> +		indicating that the key management mode is static.
+> This last sentence is true, but makes it sound like static mode is only
+> used in case of errors.
+>
+> Something like:
+>
+> "If the SB_VERSION variable does not exist (or there is an error while
+> reading it), it takes the form "ibm,plpks-sb-v0", indicating that the
+> key management mode is static."
+>
+> might be slightly clearer?
 
-Currently, IMA compares 0xc36400 =3D=3D 0x0 for CephFS files, resulting in =
-all
-files opened with O_RDONLY or O_RDWR getting measured with SHA512 on every
-open(2):
+Hi Andrew,
+Sure, will take this up in v3.
 
-# cat /data/cephfs/test-file
-# tail -1 /sys/kernel/security/integrity/ima/ascii_runtime_measurements
-10 69990c87e8af323d47e2d6ae4... ima-ng sha512:<hash> /data/cephfs/test-file
+Thank You.
 
-Since O_WRONLY is rare, this results in an order of magnitude lower
-performance than expected for practically all file operations. Properly
-setting CEPH_SUPER_MAGIC in the CephFS superblock resolves the regression.
-
-Tests performed on a 3x replicated Ceph v19.3.0 cluster across three
-i5-7200U nodes each equipped with one Micron 7400 MAX M.2 disk (BlueStore)
-and Gigabit ethernet, on Talos Linux v1.10.2:
-
-FS-Mark 3.3
-Test: 500 Files, Empty
-Files/s > Higher Is Better
-6.12.27-talos . 16.6  |=3D=3D=3D=3D
-+twelho patch . 208.4 |=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-FS-Mark 3.3
-Test: 500 Files, 1KB Size
-Files/s > Higher Is Better
-6.12.27-talos . 15.6  |=3D=3D=3D=3D=3D=3D=3D
-+twelho patch . 118.6 |=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-FS-Mark 3.3
-Test: 500 Files, 32 Sub Dirs, 1MB Size
-Files/s > Higher Is Better
-6.12.27-talos . 12.7 |=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+twelho patch . 44.7 |=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-IO500 [3] 2fcd6d6 results (benchmarks within variance omitted):
-
-| IO500 benchmark   | 6.12.27-talos  | +twelho patch  | Speedup   |
-|-------------------|----------------|----------------|-----------|
-| mdtest-easy-write | 0.018524 kIOPS | 1.135027 kIOPS | 6027.33 % |
-| mdtest-hard-write | 0.018498 kIOPS | 0.973312 kIOPS | 5161.71 % |
-| ior-easy-read     | 0.064727 GiB/s | 0.155324 GiB/s | 139.97 %  |
-| mdtest-hard-read  | 0.018246 kIOPS | 0.780800 kIOPS | 4179.29 % |
-
-This applies outside of synthetic benchmarks as well, for example, the time
-to rsync a 55 MiB directory with ~12k of mostly small files drops from an
-unusable 10m5s to a reasonable 26s (23x the throughput).
-
-[1]: https://www.talos.dev/
-[2]: https://www.talos.dev/v1.10/kubernetes-guides/configuration/ceph-with-=
-rook/
-[3]: https://github.com/IO500/io500
-
-Signed-off-by: Dennis Marttinen <twelho@welho.tech>
----
-It took me a year to hunt this down: profiling distributed filesystems is
-non-trivial. Since the regression is associated with IMA use, I received a
-hint to CC the folks associated with IMA code. The patch targets the 6.12
-kernel series currently used by Talos Linux, but should apply on top of
-master as well. Please note that this is an independent contribution -
-I am not affiliated with any company or organization.
-
- fs/ceph/super.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/fs/ceph/super.c b/fs/ceph/super.c
-index 73f321b52895e..9549f97233a9e 100644
---- a/fs/ceph/super.c
-+++ b/fs/ceph/super.c
-@@ -1217,6 +1217,7 @@ static int ceph_set_super(struct super_block *s, stru=
-ct fs_context *fc)
- =09s->s_time_min =3D 0;
- =09s->s_time_max =3D U32_MAX;
- =09s->s_flags |=3D SB_NODIRATIME | SB_NOATIME;
-+=09s->s_magic =3D CEPH_SUPER_MAGIC;
-=20
- =09ceph_fscrypt_set_ops(s);
-=20
-
-base-commit: adc218676eef25575469234709c2d87185ca223a
---=20
-2.49.0
-
+>
+>>   
+>>   What:		/sys/firmware/secvar/vars/<variable name>
+>>   Date:		August 2019
+>> diff --git a/arch/powerpc/platforms/pseries/plpks-secvar.c
+>> b/arch/powerpc/platforms/pseries/plpks-secvar.c
+>> index 257fd1f8bc19..767e5e8c6990 100644
+>> --- a/arch/powerpc/platforms/pseries/plpks-secvar.c
+>> +++ b/arch/powerpc/platforms/pseries/plpks-secvar.c
+>> @@ -152,39 +152,55 @@ static int plpks_set_variable(const char *key,
+>> u64 key_len, u8 *data,
+>>   	return rc;
+>>   }
+>>   
+>> -// PLPKS dynamic secure boot doesn't give us a format string in the
+>> same way OPAL does.
+>> -// Instead, report the format using the SB_VERSION variable in the
+>> keystore.
+>> -// The string is made up by us, and takes the form "ibm,plpks-sb-
+>> v<n>" (or "ibm,plpks-sb-unknown"
+>> -// if the SB_VERSION variable doesn't exist). Hypervisor defines the
+>> SB_VERSION variable as a
+>> -// "1 byte unsigned integer value".
+>> -static ssize_t plpks_secvar_format(char *buf, size_t bufsize)
+>> +/*
+>> + * Return the key management mode.
+>> + *
+>> + * SB_VERSION is defined as a "1 byte unsigned integer value",
+>> taking values
+>> + * starting from 1. It is owned by the Partition Firmware and its
+>> presence
+>> + * indicates that the key management mode is dynamic. Any failure in
+>> + * reading SB_VERSION defaults the key management mode to static.
+>> The error
+>> + * codes -ENOENT or -EPERM are expected in static key management
+>> mode. An
+>> + * unexpected error code will have to be investigated. Only signed
+>> variables
+>> + * have null bytes in their names, SB_VERSION does not.
+>> + *
+>> + * Return 0 to indicate that the key management mode is static.
+>> Otherwise
+>> + * return the SB_VERSION value to indicate that the key management
+>> mode is
+>> + * dynamic.
+>> + */
+>> +static u8 plpks_get_sb_keymgmt_mode(void)
+>>   {
+>> -	struct plpks_var var = {0};
+>> -	ssize_t ret;
+>> -	u8 version;
+>> -
+>> -	var.component = NULL;
+>> -	// Only the signed variables have null bytes in their names,
+>> this one doesn't
+>> -	var.name = "SB_VERSION";
+>> -	var.namelen = strlen(var.name);
+>> -	var.datalen = 1;
+>> -	var.data = &version;
+>> -
+>> -	// Unlike the other vars, SB_VERSION is owned by firmware
+>> instead of the OS
+>> -	ret = plpks_read_fw_var(&var);
+>> -	if (ret) {
+>> -		if (ret == -ENOENT) {
+>> -			ret = snprintf(buf, bufsize, "ibm,plpks-sb-
+>> unknown");
+>> -		} else {
+>> -			pr_err("Error %ld reading SB_VERSION from
+>> firmware\n", ret);
+>> -			ret = -EIO;
+>> -		}
+>> -		goto err;
+>> +	u8 mode;
+>> +	ssize_t rc;
+>> +	struct plpks_var var = {
+>> +		.component = NULL,
+>> +		.name = "SB_VERSION",
+>> +		.namelen = 10,
+>> +		.datalen = 1,
+>> +		.data = &mode,
+>> +	};
+>> +
+>> +	rc = plpks_read_fw_var(&var);
+>> +	if (rc) {
+>> +		if (rc != -ENOENT && rc != -EPERM)
+>> +			pr_info("Error %ld reading SB_VERSION from
+>> firmware\n", rc);
+>> +		mode = 0;
+>>   	}
+>> +	return mode;
+>> +}
+>>   
+>> -	ret = snprintf(buf, bufsize, "ibm,plpks-sb-v%hhu", version);
+>> -err:
+>> -	return ret;
+>> +/*
+>> + * PLPKS dynamic secure boot doesn't give us a format string in the
+>> same way
+>> + * OPAL does. Instead, report the format using the SB_VERSION
+>> variable in the
+>> + * keystore. The string, made up by us, takes the form of either
+>> + * "ibm,plpks-sb-v<n>" or "ibm,plpks-sb-v0", based on the key
+>> management mode,
+>> + * and return the length of the secvar format property.
+>> + */
+>> +static ssize_t plpks_secvar_format(char *buf, size_t bufsize)
+>> +{
+>> +	u8 mode;
+>> +
+>> +	mode = plpks_get_sb_keymgmt_mode();
+>> +	return snprintf(buf, bufsize, "ibm,plpks-sb-v%hhu", mode);
+>>   }
+>>   
+>>   static int plpks_max_size(u64 *max_size)
 
