@@ -1,123 +1,148 @@
-Return-Path: <linux-integrity+bounces-6347-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6348-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E37A5AC91EE
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 May 2025 16:59:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A7ABAC9788
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 May 2025 00:04:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB60E189F782
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 May 2025 14:59:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F01E41667B9
+	for <lists+linux-integrity@lfdr.de>; Fri, 30 May 2025 22:04:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BB5B235040;
-	Fri, 30 May 2025 14:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 297AA27AC25;
+	Fri, 30 May 2025 22:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZKbzoavf"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CbVDkgFD"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D050D234973
-	for <linux-integrity@vger.kernel.org>; Fri, 30 May 2025 14:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C3A2609D6;
+	Fri, 30 May 2025 22:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748617180; cv=none; b=AXxA2/DkNU9sABAkepBF7gZ0IeblukDUlvfkvjdluE3w66elfqNzUxUXXm0188cLrPad2nY1YdqgxxK5Y9c7SxT0HlcgI2Jy/xA+f+nj2z/UksjOfvQQkj0JqjyCeJcA+VEwwp6V3DsEOfCgV/QJk1HTw2QewRDY+21C4agpwpc=
+	t=1748642647; cv=none; b=loFE63PcpvOAlAQl/hz7rllsNAijhOx3TYDRQHhJHcoBY6U9JUkbi4rpZwWyQKwEPx3sZwrPkUiyZRkenWoqmnHe081FG/e1QQgNiz5r1bN3i6kq52xyycdPAaNGB4dxBsobMwES/T2kaXv8Q+GhLBQG9ioLG8LWSQHw89wf2Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748617180; c=relaxed/simple;
-	bh=jasKmp2aQuprGgWI5wC0BqX8f7HQURC6vV2wipWoXUk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ry0obpkdwP+ksV8++s8EJoa86bCEi1Z/jCOipEXWWHdqwkH0rS54P1YlzsOAaKplNV34PLw8CAYPcRJ4Zh7zOcX49M7TDkmyYYlvaxCt/LirQgLCapPIwta3vE5cbgzp4u7e227PD2NiV+kjRJdqgAWaBZ0RxZ8YFk10CY4UZmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZKbzoavf; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-70e33252046so20678097b3.3
-        for <linux-integrity@vger.kernel.org>; Fri, 30 May 2025 07:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1748617177; x=1749221977; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FAAu3PNn/g5swmaHMNzxUtR7zHSWqNSkf/EYcL84FJM=;
-        b=ZKbzoavfJTTsa1cyffhW4nXl/B2WC9layXNA/Xwo4HB1mjXpmYbPZnxWkFNlisELmd
-         jAeyAgL9mMb7qJbVHJOUBWT7WsY/P8iJiU447v9jhfjs8clOJCQFPqIz5p+tUUaRg4QQ
-         pqa/2gHJnE6jlOO/7+SiXrX0Tzaq/qm8opI2itTNMgTnTztfNWYxQLoqoUO24cHElzhr
-         PX2UL8PcTbab76f871N6wVhxRyhIyMMaGe4VjQhDAln3ez+tuvmXMeuKK4kOIuyQWpA3
-         8vYI2H81GIXnusEcRhT/wb+GCs17fB1zPeyPi5Zwwor0ddJFGOvho48cupfENEED+BIr
-         a1Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748617177; x=1749221977;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FAAu3PNn/g5swmaHMNzxUtR7zHSWqNSkf/EYcL84FJM=;
-        b=pf2pilzVgv6+sHpORC03HL6IbTq4ZuRJA0A2tZlUWevWYcBKPVxkevxqMQkXsZCSFQ
-         ip5972pY6B1Ft7uf4lUpPdaRhrUN8LeccSqr0e2CC2E2ZIaKjfmmF3Fqg/NTyh7jPhtL
-         Pap6G8V6Vd8VNbN9J6r7HpvO3BeLasrzISlHq5HjA14ownFHae8oxxD2l2cI8oFJRL71
-         lHSIIBVKnKMyHky/kr25Et2ohrAJY4QwThUhI06u3sxQXmHvMwKe02tvRyevkPlMmym1
-         lnBOW3RM9zEgw3xlfvhGWmakerFKAV0UeSFoOOwGNjHXvfg8agkofzT8e3LbXFyKznAo
-         mwUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUs3j34BpPQaRVT3BKr8IxYR7L9Jms0SR9H7hIZfyLyp9zn7bsLuFcSKxAJryzEHWPs4Xp0MKJPci4qWE9JNc4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDRahB2lwLvd1HBog7MV/r54D0O30RlYxBTeXCU+p6qMpPPJY/
-	Vd0Gfo+Q7sskOYrqjWWCBFCdqZRwKVAJRQzQPGxn1/qX2nKRwkw1Ga3iux5Y7bNNrUvj4trrfEd
-	hkM53eH75a/6NmmJFz3tTDHdO7SoLw5+izAiWE2nl
-X-Gm-Gg: ASbGncuFjCq4/5omrOG2vkukSuyOq6mLo96kyKewR8XMbvLZqO0FeNgVv2OsS8hiFOM
-	MFiQN+vYf6o0G3m/FlAFlI9SamdTVTsJCBfuabJMYf0YEbzFczfmOEvW2h8BVVdXp0jjiIRnp9H
-	lCdp65z+U+9vu8p4JESq7VhuAfUNF1d6inWcIy9nIhETg=
-X-Google-Smtp-Source: AGHT+IHHnVePMsvh3ufc14xyANHYkK76dmtQi3C9pr0hEAJFnSpRDvuBz9Sw+cjnx2wg+DaroEvhGoRJ1j6utE6EWUc=
-X-Received: by 2002:a05:690c:c0b:b0:70e:2a04:c768 with SMTP id
- 00721157ae682-70f97e9b96cmr52596327b3.14.1748617177588; Fri, 30 May 2025
- 07:59:37 -0700 (PDT)
+	s=arc-20240116; t=1748642647; c=relaxed/simple;
+	bh=s1w9Bcs78aaLHN+aqiNcLkh6Ysfh9KIjWttvW5o9N6s=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=YGpHp135JfR9w4spmBNpsjNmeS3eztcdTQUKivxjrv3fBY8JZX4RN6BUDOjS2NUgkb7EhcswngGvKdjNYlH9i/6hxOqrUFOACNV0OlKFJAZKQKuE4br+ynJ15hVPybHTdxnvHzl+Izz3f+Vt0ncQ91yc42PbCsVu8/zQfO7igkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CbVDkgFD; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54UKiE4R028695;
+	Fri, 30 May 2025 22:03:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=s1w9Bc
+	s78aaLHN+aqiNcLkh6Ysfh9KIjWttvW5o9N6s=; b=CbVDkgFDDSuoXdLMXGYUE8
+	7bi3J8N4VDrWu5oPSSZQbGtom31fJHStsuqiUHczXN1uWeUe9/jFIoXxFwSYikjv
+	8MPLdy3VLc09zPXOrWB0nCUguxwb33v0/4/JowIz5TF5wsaGCh3pjTj/VJ/NOVcf
+	GvqSD6ngbxlM/qRvdyaKOsaMGYYrBCMP9l0Lxzq0ukmfIJa8+EvzBo06sQygsf/G
+	pP58guRLATDOv7IFpXsNlorXy+pLEhjK7EY2SpbASUo1UO5RQN0zLrdN/OwxKRQ1
+	gVQurU/ung0lozyZU5LTQhL8tn78gkNSpyXM4Z+X+DPN2ZXBK7XsWKWscl8N1xxg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46x40gx0fw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 May 2025 22:03:39 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54UM2lRq025801;
+	Fri, 30 May 2025 22:03:38 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46x40gx0fu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 May 2025 22:03:38 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54UIlhcG026919;
+	Fri, 30 May 2025 22:03:37 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 46uu53k3qh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 30 May 2025 22:03:37 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54UM3bYc30278346
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 30 May 2025 22:03:37 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 28D745805D;
+	Fri, 30 May 2025 22:03:37 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E8FEE58059;
+	Fri, 30 May 2025 22:03:35 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.157.60])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 30 May 2025 22:03:35 +0000 (GMT)
+Message-ID: <12d9ea5981f5a2c33a01798311543db2e9bd4ee3.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 25/29] ima,evm: move initcalls to the LSM framework
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+        Roberto Sassu	
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=	 <mic@digikod.net>,
+        =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+        Kees Cook
+ <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+        Casey Schaufler	
+ <casey@schaufler-ca.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20250409185019.238841-56-paul@paul-moore.com>
+References: <20250409185019.238841-31-paul@paul-moore.com>
+	 <20250409185019.238841-56-paul@paul-moore.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 30 May 2025 18:03:35 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250521140121.591482-1-git@nightmared.fr> <20250521140121.591482-10-git@nightmared.fr>
- <CAHC9VhR-80zxgo+q07Aw8HqK+qiPdnuXC0axONGac0e9JxXvmw@mail.gmail.com>
- <4939d8ab-3911-4759-b8d6-cb57ff9f9cda@nightmared.fr> <CAHC9VhT5JrhzGhRnJ4VNo6e941o-xdAG-FC-Q6wDbSZhgSUWOQ@mail.gmail.com>
- <2495c0bf-5a24-483b-835f-abf433687889@nightmared.fr>
-In-Reply-To: <2495c0bf-5a24-483b-835f-abf433687889@nightmared.fr>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 30 May 2025 10:59:26 -0400
-X-Gm-Features: AX0GCFvKjrCn57dBCtHrgxUd83Gfghrq1tsQqynYBLqWk4EKe074m06s3Cas29k
-Message-ID: <CAHC9VhSvwOZXnh4o3O8_+QXXKJ32D=9ogoizvNzEEGpzQWhx+A@mail.gmail.com>
-Subject: Re: [RFC PATCH 9/9] Loadpol LSM: add a minimal documentation
-To: Simon Thoby <git@nightmared.fr>, Kees Cook <kees@kernel.org>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: tsgP7vh6WhVDl0kunu51buKQurUhYF8J
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTMwMDE5NyBTYWx0ZWRfX1ky5U6F6i9Zf oyHktkmy6MHsWDe81dVLdUU+fMQYtRkc9g/rw5z0uHLpyGuQjLgixaY227oRQDzUvQRd9r2XA5S TCnmdSFX+MbCcGPV0giJkHsAOEapuzIYU6LWbHD2WmkgGm7nN+eirtbE7xl/svyREzUDIQGuT9G
+ TINGSd0Y13KdVohtU62QVVPim7MjybKA1zOY7tC/IM+DsMBsjbcuANyNvSktSNKV3WpdMpS2StX YcFwxkGpFegP8h8Z4Gt5g/juMCCof/aZ4okyTWo+EDIyeNpoRxnDfJxenUMRnR2Z+9nbyn5xjfc DQljZAv8M+JjDdINca238UkWd7NI/LCqA1TiycCIzmfBde2YNac7vtEP67IIntCYDiUkDApblqy
+ rvg87V8VHzbNdZHjgSVFeyOs3EjDhZdGd5rIRBtdLMrW//lMkzbsrEnJpCYb3C5biVH3gDTw
+X-Proofpoint-ORIG-GUID: Hx40OjmTH3wUWazzBIKhE12YMIqrWnAr
+X-Authority-Analysis: v=2.4 cv=UflRSLSN c=1 sm=1 tr=0 ts=683a2b3b cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=XALlg6NdOko_BaNf98IA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-30_10,2025-05-30_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1011 suspectscore=0 mlxscore=0 priorityscore=1501 adultscore=0
+ spamscore=0 impostorscore=0 phishscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=839 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505160000
+ definitions=main-2505300197
 
-On Fri, May 30, 2025 at 3:03=E2=80=AFAM Simon Thoby <git@nightmared.fr> wro=
-te:
-> On 5/30/25 01:49, Paul Moore wrote:
-> >
-> > My thinking around possible augmentation of LoadPin is that both
-> > LoadPin and Loadpol share a similar, limited focus of controlling
-> > access to kernel module loading and Loadpol has support for a basic
-> > loadable policy, a policy that could likely be extended to support a
-> > LoadPin-esque construct that limit module loading based on filesystem
-> > pinning.  It probably makes more sense to think of adding LoadPin
-> > support to Loadpol, rather than augmenting LoadPin to support the
-> > Loadpol concepts, but for consistency with upstream we probably need
-> > to speak in terms of the latter.
->
-> Thanks for the reply, I now see what you meant. I will try to put somethi=
-ng
-> together (hopefully next week), starting with looking at how we can expre=
-ss
-> the current LoadPin feature set as a loadable and user-extensible policy,=
- and
-> then add non-filesystem-related policy entries (like module name restrict=
-ions)
-> to that policy.
+On Wed, 2025-04-09 at 14:50 -0400, Paul Moore wrote:
+> This patch converts IMA and EVM to use the LSM frameworks's initcall
+> mechanism.=C2=A0 There were two challenges to doing this conversion: the
+> first simply being the number of initcalls across IMA and EVM, and the
+> second was the number of resources shared between the two related,
+> yet independent LSMs.
 
-You may want to see what Kees thinks of the idea before you spend too
-much time on this as he is the LoadPin maintainer.  I'm guessing he
-would be okay with the additions, but that is just a guess on my part.
+There are a number of the initcalls under integrity/platform/, which load a=
+rch
+specific keys onto the platform and machine keyrings, which shouldn't be
+included in this patch.
 
---=20
-paul-moore.com
+>=20
+> The first problem was resolved by the creation of two new functions,
+> integrity_device_init() and integrity_late_init(), with each focused on
+> calling all of the various IMA/EVM initcalls for a single initcall type.
+> The second problem was resolved by registering both of these new
+> functions as initcalls for each LSM and including code in each
+> registered initcall to ensure it only executes once.
+
+With the above change, there obviously will be a lot fewer initcalls, but i=
+t
+might still make sense to keep the common ima/evm function.
+
+Mimi
 
