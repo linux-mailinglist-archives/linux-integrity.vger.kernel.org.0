@@ -1,131 +1,198 @@
-Return-Path: <linux-integrity+bounces-6363-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6364-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF67CACE3B4
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jun 2025 19:35:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50E20ACE717
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 01:14:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5963E3A4B0D
-	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jun 2025 17:34:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85AE7188F8D3
+	for <lists+linux-integrity@lfdr.de>; Wed,  4 Jun 2025 23:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099761F9F7A;
-	Wed,  4 Jun 2025 17:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C74326C3AA;
+	Wed,  4 Jun 2025 23:12:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="nRc4g47L"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="nnvKkec1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FCB41C6FF9;
-	Wed,  4 Jun 2025 17:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927B126C38E;
+	Wed,  4 Jun 2025 23:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749058497; cv=none; b=nL9zovYYqqJl00C/Z8Ku2Ew8Hw00ArkM9OFJ6Qb8XJE8zI15eywlvvb7OVcAY0NResnsuOBEscF9Ecowo1bl/2XNlkS/rLDw/Wo2R7LCTacVfyDpbRxUn7Iibb4o5dizVTIti4dOqvJGosx5UATeTHBeFBwht6dm0nGSS42qwg0=
+	t=1749078766; cv=none; b=WXOeetRlHe5ES2vUKBu5W/Zlp52X6PxJng7SPpveritJ5oYSwSJmqfFusWzV4w9qc3SP65mcLhA0HylnbU3kjwhXxtqgSIOl1dzRwSTcWEH9YkpT8kW6nZvdKhdglSPDfjNqNIFbLDvPvxCBmkM2MVrHEJVI2/7pd1k5Ln8UPrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749058497; c=relaxed/simple;
-	bh=FdL78BSlYjtCFfvh1e2vA01YHaqveYiFkAeewDTJreo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Rlx1VS2hBl7DG8ksn1J9z3TWh5cWyeMcDI3HWbB88P0gt5VVO1h4BiOKEo4MXIPtnmvhbv+xmvIHO1Uv/LNSh7Fq+DTkDtvGQdRwSW7/0x7hSPRR1x9CU0/yyxj+6JnTmpxQnSKcX4AWYwjfCJ2ZLkTWCbAoZrt+FhkW0hy8fZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=nRc4g47L; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1749058494;
-	bh=FdL78BSlYjtCFfvh1e2vA01YHaqveYiFkAeewDTJreo=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=nRc4g47LH0Qbd3jP7GOMxitKRYMO4otAu9eM7AoX5uAk8zok1FkIHht/H9vU0fyI1
-	 uwxqUp3JJTP0vAKXvWXHwRHubwrC0y4UmiI3qyjdPvQ3/KZ0SX4GtMe4tTQ+QUGl+e
-	 g/889a10Ip8FiAdd3Bmt5I2dvJk8foMN0OcRguhU=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 03EE31C0396;
-	Wed, 04 Jun 2025 13:34:53 -0400 (EDT)
-Message-ID: <f0b37bc55ed3c02569c74f0fbdb6afa8efd329e2.camel@HansenPartnership.com>
-Subject: Re: [PATCH RFC 0/1] module: Optionally use .platform keyring for
- signatures verification
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Eric Snowberg <eric.snowberg@oracle.com>, Vitaly Kuznetsov
-	 <vkuznets@redhat.com>
-Cc: "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>, "linux-modules@vger.kernel.org"
- <linux-modules@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "keyrings@vger.kernel.org"
- <keyrings@vger.kernel.org>, David Howells <dhowells@redhat.com>, David
- Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, Luis
- Chamberlain <mcgrof@kernel.org>,  Petr Pavlu <petr.pavlu@suse.com>, Sami
- Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,  Paul Moore
- <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
- <serge@hallyn.com>,  Peter Jones <pjones@redhat.com>, Robert Holmes
- <robeholmes@gmail.com>, Jeremy Cline <jcline@redhat.com>,  Coiby Xu
- <coxu@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>
-Date: Wed, 04 Jun 2025 13:34:53 -0400
-In-Reply-To: <0FD18D05-6114-4A25-BD77-C32C1D706CC3@oracle.com>
-References: <20250602132535.897944-1-vkuznets@redhat.com>
-	 <0FD18D05-6114-4A25-BD77-C32C1D706CC3@oracle.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
+	s=arc-20240116; t=1749078766; c=relaxed/simple;
+	bh=dI3zrscUxocjWx/CYt+fx2JLhAr1E1g5rkt3nbMrXWQ=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=HvW/j1H7YJPD63kDU9K7KaSjY6VEFDHrdfm5PXd5/y3ZA+GEqBx23epgDWRFW+9FGW2uZOdgoDofCK98vMrKeJoNytC21vMZKcC/SJWZYz06DAB6i5pmdblznhAVWHZNbNUhn7wlTzLhNHKq7kwvQiSrKduJ6bJJcN3XKSH3PCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=nnvKkec1; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 554LvVwc030628;
+	Wed, 4 Jun 2025 23:12:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=/8T3Wa
+	ZuvL5OZZo93H7D0HmVm+r/qGf9r//grSVRSuo=; b=nnvKkec1dZKCcMdYVXmWqB
+	L3n3DenN7LDxYQseSCyuLgRX0B400IKGEeCxLzA4s+27jTR1/DCydvq0XT3+WQUB
+	wjIa/YsdXIV8KQDCL6BD+Y9+fg0USVbl1a/keagKcoJEEM7sW4XGb2949BPZ4rKL
+	v9PwzjOLPfhaePxq65gq6seBxsK6GQkqWoL4gb/FcgYfBfWmxEH5JydjVr2LKDtz
+	Ha4g9lZ28rIUx2K6BllMuQUikt5tapwBvQS/G5yQrqE/nfU23AIb2IxwSvaVWS+T
+	FdAc5ArH4gRXsxaiIommQ9acDPdIE6ZKPJY8eskF4Sn1P3BE6/wDx0RCIL8lvjgA
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 471geywhf1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Jun 2025 23:12:25 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 554N7WJh024883;
+	Wed, 4 Jun 2025 23:12:24 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 470dkmj0c2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Jun 2025 23:12:24 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 554NCNX37471686
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 4 Jun 2025 23:12:23 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 66BE75803F;
+	Wed,  4 Jun 2025 23:12:23 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 79F4358054;
+	Wed,  4 Jun 2025 23:12:22 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.95.113])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  4 Jun 2025 23:12:22 +0000 (GMT)
+Message-ID: <bf593f8bcadc41e0c4823b7173ee5695da51152e.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: add a knob ima= to make IMA be able to be disabled
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>
+Cc: Baoquan He <bhe@redhat.com>, linux-integrity@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        pmenzel@molgen.mpg.de, ruyang@redhat.com, chenste@linux.microsoft.com
+In-Reply-To: <hn455nyrp65bb23ltub4tet6ixfcggshgerxm2bhun4ubv2iau@eanh3ka67irf>
+References: <20250515233953.14685-1-bhe@redhat.com>
+	 <aCaFNvHbYxrCaPbe@MiWiFi-R3L-srv>
+	 <1d2848fe45dbf58707cecf16c4fc46b179e24415.camel@linux.ibm.com>
+	 <aC6Y3S9hEB1snvwj@MiWiFi-R3L-srv>
+	 <c0f1df02160138d0782cb897eda844287b3d7792.camel@linux.ibm.com>
+	 <hn455nyrp65bb23ltub4tet6ixfcggshgerxm2bhun4ubv2iau@eanh3ka67irf>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+Date: Wed, 04 Jun 2025 18:53:07 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6pZ1Jz3TJQ6e-pkSk8DkFV26sECAxnGM
+X-Authority-Analysis: v=2.4 cv=DYMXqutW c=1 sm=1 tr=0 ts=6840d2d9 cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=UeMwZWw34uBX8khp:21 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=metLV1VPRzkCuRW9CoIA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 6pZ1Jz3TJQ6e-pkSk8DkFV26sECAxnGM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA0MDE5MSBTYWx0ZWRfX9YNkm/q/Ke9O Oprap30aN9L8gV2BwrImoP9RT1qdyxnyhQWJ6yvXljUsJyA9Xm/vEqtn/fMMAMrjUF4oJX24XFQ VMfA5GLTL8ir0GaTZAJ0Quc7ZuMpDgWg3yyvfsqZYRJrzkQgjyAEwtyfVv5s/YBau6bZJDl2E9d
+ +FM5XrOdyhXszpSwnCE0D36EVmrlIVAinGFtm6oSTmr/esgw1CY/lddBwOZ2fmnV0CRS45npryq pXjEy26kVJwyUMG6qaOGve7nzvb3y/842PgX1Dm51fcb+ylkqGTORQ9UXhgHXopBTxVJ7fXpfuv uTzV/iBqVI09BiDFmKywP00f3CNtHW5vVHg3M+cxANawakSJQHLyQeahFjFQVNFedHLL3Mwm8st
+ 1vMTsUN4+lOkXicLknwhZl5MZxnwwdP295+6YXoF9dLiFUYh7xccYLobDiksg/KJVE8PzuIQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-04_04,2025-06-03_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 mlxlogscore=999 adultscore=0
+ malwarescore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506040191
 
-On Wed, 2025-06-04 at 17:01 +0000, Eric Snowberg wrote:
-> > On Jun 2, 2025, at 7:25=E2=80=AFAM, Vitaly Kuznetsov <vkuznets@redhat.c=
-om>=20
-> > The use-case: virtualized and cloud infrastructure generally
-> > provide an ability to customize SecureBoot variables, in
-> > particular, it is possible to bring your own SecureBoot 'db'. This
-> > may come handy when a user wants to load a third party kernel
-> > module (self built or provided by a third party vendor) while still
-> > using a distro provided kernel. Generally, distro provided kernels
-> > sign modules with an ephemeral key and discard the private part
-> > during the build. While MOK can sometimes be used to sign something
-> > out-of-tree, it is a tedious process requiring either a manual
-> > intervention with shim or a 'certmule' (see
-> > https://blogs.oracle.com/linux/post/the-machine-keyring). In
-> > contrast, the beauty of using SecureBoot 'db' in this scenario is
-> > that for public clouds and virtualized infrastructure it is
-> > normally a property of the OS image (or the whole
-> > infrastructure/host) and not an individual instance; this means
-> > that all instances created from the same template will have 'db'
-> > keys in '.platform' by default.
+On Wed, 2025-06-04 at 11:34 +0800, Coiby Xu wrote:
+> On Thu, May 22, 2025 at 07:08:04AM -0400, Mimi Zohar wrote:
+> > On Thu, 2025-05-22 at 11:24 +0800, Baoquan He wrote:
+> > > On 05/21/25 at 08:54am, Mimi Zohar wrote:
+> > > > On Fri, 2025-05-16 at 08:22 +0800, Baoquan He wrote:
+> > > > > CC kexec list.
+> > > > >=20
+> > > > > On 05/16/25 at 07:39am, Baoquan He wrote:
+> > > > > > Kdump kernel doesn't need IMA functionality, and enabling IMA w=
+ill cost
+> > > > > > extra memory. It would be very helpful to allow IMA to be disab=
+led for
+> > > > > > kdump kernel.
+> > >=20
+> > > Thanks a lot for careufl reviewing and great suggestions.
+> > >=20
+> > > >=20
+> > > > The real question is not whether kdump needs "IMA", but whether not=
+ enabling
+> > > > IMA in the kdump kernel could be abused.=C2=A0 The comments below d=
+on't address
+> > > > that question but limit/emphasize, as much as possible, turning IMA=
+ off is
+> > > > limited to the kdump kernel.
+> > >=20
+> > > Are you suggesting removing below paragraph from patch log because th=
+ey
+> > > are redundant? I can remove it in v2 if yes.
+> >=20
+> > "The comments below" was referring to my comments on the patch, not the=
+ next
+> > paragraph.  "don't address that question" refers to whether the kdump k=
+ernel
+> > could be abused.
+> >=20
+> > We're trying to close integrity gaps, not add new ones.  Verifying the =
+UKI's
+> > signature addresses the integrity of the initramfs.  What about the int=
+egrity of
+> > the kdump initramfs (or for that matter the kexec initramfs)?  If the k=
+dump
+> > initramfs was signed, IMA would be able to verify it before the kexec.
 >=20
-> Hasn=E2=80=99t this approach been rejected multiple times in the past?
+> Hi Mimi,
+>=20
+> I thought you were asking that the commit message should address the
+> question why disabling IMA should be limited to the kdump kernel. It
+> turns out I misunderstood your concern.
+>=20
+> Currently there is no way provided to verify the kdump initramfs as a
+> whole file or to verify individual files in the kdump initramfs.
 
-Well not rejected, just we always thought that people (like me) who
-take control of their secure boot systems are a tiny minority who can
-cope with being different.  I have to say the embedding of all the
-variable manipulations in shim made it quite hard.  However you can use
-the efitools KeyTool to get a graphical method for adding MoK keys even
-in the absence of shim.
+There were multiple attempts to close this integrity gap, but none of them =
+were
+upstreamed.
+>=20
+> As you have already known, the kdump initramfs is always generated on
+> the fly and will be re-generated when the dumping target changes or
+> some important files change. We try to generate a minimal initramfs in
+> order to save memory. So yes, it's impossible to sign it as a whole file
+> beforehand.
 
-The question is, is there a growing use case for db users beyond the
-exceptions who own their own keys on their laptop, in which case we
-should reconsider this.
+I'm just curious as to how UKI includes the initramfs, if it does, in the
+signature.
 
-Regards,
+>=20
+> And since xattrs like security.ima are not supported in the kdump
+> initramfs, we have no way to use IMA to verify individual file's
+> integrity.  In fact, we have to stop IMA from working otherwise it's
+> very likely kdump will break.
+>=20
+> So far, I'm not aware of any bug report that complains kdump stops
+> working because of IMA. So it indicates very few users are trying to use
+> IMA in kdump.
+>=20
+> If users do have concerns on the integrity of kdump initramfs, I think
+> we can advice users to make sure the deployed IMA policy will verify the
+> integrity of the files while they are being collected and copied into
+> the kdump initramfs by tools like dracut.
 
-James
+For now, I'd prefer to leave it as an integrity gap that still needs to be
+addressed.
 
+thanks,
+
+Mimi
 
