@@ -1,166 +1,296 @@
-Return-Path: <linux-integrity+bounces-6373-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6374-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70110ACF364
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 17:49:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 324C6ACF8F2
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 22:49:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20885188C024
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 15:49:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CED4D7A7F5E
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 20:48:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E5E11E1DE2;
-	Thu,  5 Jun 2025 15:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E61821E5B9F;
+	Thu,  5 Jun 2025 20:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="wEKIWEMW"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ScOsjFYl"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0E31A239F;
-	Thu,  5 Jun 2025 15:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B6D23741;
+	Thu,  5 Jun 2025 20:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749138579; cv=none; b=UR8QfPk83g+E6aDy58sKXNqQCOlLGdgjwI/GO3mDyCt/v4CpWiiYLKB9VQML0WicC24Aeq18Xb5Fr4Uh5ZoO8Tjx62Lr/qK0+9kwrPf3pSA5XklHZhbs3uAtVten7+s1S+mEEAM/fIGHknS8o8E2Hm8wZuoHgjanq7m+KC1iWhc=
+	t=1749156582; cv=none; b=WdSaKXxLiT1yNVw1yeM3uYzIzrsyRgz/DUEvfGXRdPb4MChqMO6/0ZAlXCllwJLQQro0ztcyf9zkSzJMyDPrnFgRDQns30GZKQAp/07URovTeQuLbF+9poCcWgjUXHbhdzHk5jGzIdFBuvfyWssnuCYW1bxl+7xvSqI3pE7LbV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749138579; c=relaxed/simple;
-	bh=LvFsdaxHPWfAtXNhvilM+GMJO+IHT2LgmSh63Oc2Iiw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CqlENt9CNfybiDpwfqwtsXtZpCSmIJF5ThBnLIrRvAfKw6ROegoG8Pe7ZgPWUoRsHnJVu+yYtA0mPqTxRYwjzD3NMAaM9hdE6gJzjM60N3z0dohKN0w1AshKokkVkjTREcODirA5Pnkgz/iQNsoVFm8RFGJPZSaZ/nEUMeQIQ/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=wEKIWEMW; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1749138575;
-	bh=LvFsdaxHPWfAtXNhvilM+GMJO+IHT2LgmSh63Oc2Iiw=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=wEKIWEMWMLix1gCeR7BCRqWrKZRYWqd4+SuuyYw69QhR4hDPkMuBmWt5ThebYuiLo
-	 GDcjvdZ2b6uEYk1lrxLwlpjFLjKLuH+PwZPh4IrF4SCtLWHrzBA2dGdDDZGO2p1yu+
-	 JUNLqPQLVqXmf/dMlerQzKX5Fcx63vsjm2/VsKyw=
-Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 048AD1C0315;
-	Thu, 05 Jun 2025 11:49:34 -0400 (EDT)
-Message-ID: <a9bb8b0cfd1af85443ff8ee615b3be0fc705ce02.camel@HansenPartnership.com>
-Subject: Re: [PATCH RFC 0/1] module: Optionally use .platform keyring for
- signatures verification
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>, Eric Snowberg
-	 <eric.snowberg@oracle.com>
-Cc: "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, "linux-integrity@vger.kernel.org"
- <linux-integrity@vger.kernel.org>, "linux-modules@vger.kernel.org"
- <linux-modules@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
- <linux-doc@vger.kernel.org>, "keyrings@vger.kernel.org"
- <keyrings@vger.kernel.org>, David Howells <dhowells@redhat.com>, David
- Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, Luis
- Chamberlain <mcgrof@kernel.org>,  Petr Pavlu <petr.pavlu@suse.com>, Sami
- Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,  Paul Moore
- <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
- <serge@hallyn.com>,  Peter Jones <pjones@redhat.com>, Robert Holmes
- <robeholmes@gmail.com>, Jeremy Cline <jcline@redhat.com>,  Coiby Xu
- <coxu@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>
-Date: Thu, 05 Jun 2025 11:49:33 -0400
-In-Reply-To: <87tt4unw1w.fsf@redhat.com>
-References: <20250602132535.897944-1-vkuznets@redhat.com>
-	 <0FD18D05-6114-4A25-BD77-C32C1D706CC3@oracle.com>
-	 <f0b37bc55ed3c02569c74f0fbdb6afa8efd329e2.camel@HansenPartnership.com>
-	 <87zfemoc76.fsf@redhat.com>
-	 <e4e838d03b3619df5523d429e0cd8160a8aef9f8.camel@HansenPartnership.com>
-	 <87tt4unw1w.fsf@redhat.com>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1749156582; c=relaxed/simple;
+	bh=SA9LwLv4OTP57A/TZlK6BnROG3g+5FbkckDxFV1uqQ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CiR500I5GuOXK1K3UaDwQfYY5sUO9PpW/DFnV5NBKFgJWRCzKwROZl4M1oI/MI+zzq8PZRCNdV8djVGpy3xPeZC/dqjPSsVk5FzcE/lXa1BwlbacUEgCf4KvxzXXvU/mWy396qs+bHsXzs6z1e1nk1yDRhOc8zaubf5N7ra9av4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ScOsjFYl; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 555GPosL030925;
+	Thu, 5 Jun 2025 20:49:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=iBMPUZ
+	BpDFsc6gfy03c++YYDiwHCoN78oz1YYmnfzPs=; b=ScOsjFYlLX4ojzq9wu7fOB
+	PziGl8xRQG7ZDzXusPec9tx6xyxhlcGc+eW23d8mBj1C0AzN0ze32GVwYVmN+WH1
+	QtyzEdtU3xmhZcAHM7WNFsQ6t9vXe5/XSUViHbXVmdxp2vKcbDLR+R+Akbzx2JQT
+	eJk//y9aJSfye/hhAPOxjVBilw6kJx8L8xTzXdaEgO6MKAr03o7ycxKhk860iL+3
+	h64YeMs/Rr8q3FN5QUYTtG1I73F73hBeb7iGv8CY/wMVlQZIuAwnJQr+ZJ6yRdxr
+	Umfi/Zl0nANxMNSmUeZvuPzdG0KE44KZeEsb1MXQAhtiJYASI2inAZGIRuiahuxg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 471gf032ss-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Jun 2025 20:49:21 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 555Kl6FX006954;
+	Thu, 5 Jun 2025 20:49:21 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 471gf032sn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Jun 2025 20:49:21 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 555KQtlC028434;
+	Thu, 5 Jun 2025 20:49:20 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 470eakp9aa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Jun 2025 20:49:20 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 555KnIQZ9306626
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 5 Jun 2025 20:49:18 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0E3A158056;
+	Thu,  5 Jun 2025 20:49:18 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7B0645803F;
+	Thu,  5 Jun 2025 20:49:14 +0000 (GMT)
+Received: from [9.124.215.100] (unknown [9.124.215.100])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  5 Jun 2025 20:49:14 +0000 (GMT)
+Message-ID: <f4c7d9b6-38fe-452b-af8f-d18c2b506fe6@linux.ibm.com>
+Date: Fri, 6 Jun 2025 02:19:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] powerpc/secvar: Expose secvars relevant to the key
+ management mode
+To: =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
+Cc: linux-integrity@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, ajd@linux.ibm.com,
+        zohar@linux.ibm.com, nayna@linux.ibm.com, linux-kernel@vger.kernel.org
+References: <20250521105759.8408-1-ssrish@linux.ibm.com>
+ <20250521105759.8408-3-ssrish@linux.ibm.com>
+ <aDATahmPIsOmiFAK@kitsune.suse.cz>
+ <7dcd0f77-852b-4f4c-9842-f1d96e1d8b65@linux.ibm.com>
+ <aEB3MPAYeAaFVpTc@kitsune.suse.cz>
+Content-Language: en-US
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+In-Reply-To: <aEB3MPAYeAaFVpTc@kitsune.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: pUIT8FN7lu5-ekz5hH9QnVn6SpUS0kxz
+X-Authority-Analysis: v=2.4 cv=DYMXqutW c=1 sm=1 tr=0 ts=684202d1 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VnNF1IyMAAAA:8 a=1AcIt4NcVLqilGCoAC8A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: N22Eis7WxtDybmoRU2gulXHpm56H0ggW
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjA1MDE4NSBTYWx0ZWRfXzmfK3PG1NOg0 3BqY2a6RE013zT5DGBrTHsLfC4K9AxsUvLZZHNr6JkLE1Hl1ulWPu/7csZp3lsbcdg7m/Fv1M36 2GGAc1RWCXO0KKXI4YxDYvtvPtxl7Jxt7jT/ndz1PT3JZgs387OkgNR6DxHUqCGqfqxtYxtiGwk
+ +pUZoeXDAfb3gz8T8X3EkIV8vNk8WzWaVFjN13GZAyxADmWw4L11rY6pi5X/D7RuQnhe+yo/1BZ Mttj+v4/AvTWAhzPXtMRcUjgvU4l2Ql5GNH7kapvy5Zs32G9XzWm3G/wtQ/zYxds00PdLZ75G/w zXu5nyEf9+t7G+8aDWPJFPb2xygEgy5SQHJmls5xrL7AQJPTmAS6/qwYqgnmqoASNfnfWfAMfIH
+ qAZYODz2biUHsSFYU9Z8ZQL0XfnXqb3je529/IwXJ99Xpr2l7ShkLdtD/Ggcw/IJReJgkFyD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-05_06,2025-06-05_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 spamscore=0 mlxscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 mlxlogscore=999 adultscore=0
+ malwarescore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506050185
 
-On Thu, 2025-06-05 at 15:43 +0200, Vitaly Kuznetsov wrote:
-> James Bottomley <James.Bottomley@HansenPartnership.com> writes:
->=20
-> > On Thu, 2025-06-05 at 09:54 +0200, Vitaly Kuznetsov wrote:
-> > > One additional consideration is the fact that we already trust
-> > > 'db' for dm-verity (since 6fce1f40e951) and kexec (since
-> > > 278311e417be) and especially the later gives someone who is able
-> > > to control 'db' access to CPL0; a 'db'-signed module (IMO)
-> > > wouldn't change much.
-> >=20
-> > Well, the kexec case is because kexec has to verify the new kernel
-> > as shim would and shim would use the UEFI keys.=C2=A0 The dm-verity one
-> > was added for a cloud use case by pressuring the maintainers in
-> > spite of the objection to using the platform keyring (it went to
-> > dm-devel only so not many integrity people saw it):
-> >=20
-> > https://lore.kernel.org/all/20240617220037.594792-1-luca.boccassi@gmail=
-.com/
-> >=20
-> > The point here is I do think the cloud use case is legitimate, but
-> > it can't be supported simply by ignoring the bare metal security
-> > domain separation concerns of the integrity community.=C2=A0 The
-> > argument that distros have done it so it must be safe isn't really
-> > a winning one (especially as there's no clear explanation of why
-> > they did it).=C2=A0 So either you need a better argument or we need a
-> > way to support both sets of communities ... which is why I was
-> > wondering about a runtime differentiator.
->=20
-> So far, I got two 'runtime' ideas:
-> - Observe MokListTrustedRT and distrust .platform when it is
-> non-empty. This can, of course, be combine with a Kconfig for those,
-> who do not want it at all.
 
-Well, not sure about that specific variable.  It seems to be set but
-not used by shim (however it is used in the kernel to decide whether to
-import the MoK list), so how would someone with a current distrusted db
-get it set?  But there's also MokIgnoreDB (which is actually a RT
-import of MokDBState) which is used to prevent importing the db certs
-into the platform keyring in the first place.
+On 6/4/25 10:11 PM, Michal Suchánek wrote:
+> On Thu, May 29, 2025 at 10:39:58PM +0530, Srish Srinivasan wrote:
+>> On 5/23/25 11:49 AM, Michal Suchánek wrote:
+>>> Hello,
+>>>
+>>> On Wed, May 21, 2025 at 04:27:58PM +0530, Srish Srinivasan wrote:
+>>>> The PLPKS enabled PowerVM LPAR sysfs exposes all of the secure boot
+>>>> secvars irrespective of the key management mode.
+>>>>
+>>>> The PowerVM LPAR supports static and dynamic key management for secure
+>>>> boot. The key management option can be updated in the management
+>>>> console. Only in the dynamic key mode can the user modify the secure
+>>>> boot secvars db, dbx, grubdb, grubdbx, and sbat, which are exposed via
+>>>> the sysfs interface. But the sysfs interface exposes these secvars even
+>>>> in the static key mode. This could lead to errors when reading them or
+>>>> writing to them in the static key mode.
+>>> would it cause an error when reading these variables or only when
+>>> writing them?
+>>>
+>>> Thanks
+>>>
+>>> Michal
+>> Hi Michal,
+>> Thanks for taking a look.
+>>
+>>
+>> Yes, when PKS is enabled without enabling dynamic key secure boot, the
+>> secvars
+>> are NOT yet initialized with the default keys built into the binaries, and
+>> therefore
+>> reading them will result in an error.
+> That suggests that 'cannot be written' as said in the documentation and
+> commit message, which would imply readonly, is misleading. The value is
+> not accessible at all.
 
-I think the reason this is so fragmented is because we didn't really
-co-ordinate with shim when all the variables and switches were added.=20
-Perhaps we should document all the variables and expectations before
-deciding on a mechanism?=20
+Hi Michal.
 
-The one thing we can guarantee is if the cloud use case is booting
-without shim (is it?) then none of the RT variables will get created,
-so checking any (or a set) of them would work.
+Yes, this seems to be misleading.
 
-> and/or
-> - Sysctl toggle. Keep things as they are by default but make
-> .platform trusted (either for modules or for everything) when
-> switched 'on'. This can (optionally) by combined with a previous idea
-> and have e.g. an 'auto' state for the toggle which follows
-> MokListTrustedRT.
+Will address this.
 
-I'm less keen on user specifiable runtime because the security policy
-of the system using a lockdown to make root less privileged than ring 0
-can't allow a malicious root to weaken it.  However, let's see if we
-can get a proposal that would mitigate that concern.
+>
+>> Now, while in static key management mode with PKS enabled, if one tries to
+>> populate secvars that are relevant to dynamic key management, the write does
+>> not fail as long as the "Platform KeyStore Signed Update Infrastructure"
+>> flag on
+>> the HMC is enabled and the signed updates are authorized by valid PK/KEK
+>> keys.
+> Which suggests that some variables can if fact be written
+>
+>> However, secvars like db and grubdb populated while in static key management
+>> mode are not used by the Partition Firmware or grub as SB_VERSION is not
+>> present,
+> but are not used until the key management is switched to dynamic
+>
+>> i.e dynamic key secure boot has not been enabled yet. In this case, when
+>> there is a
+>> transition from static key management to dynamic key management, secvars
+>> with
+>> the signed update policy bit set will not be overwritten by the hypervisor
+>> with the
+>> default keys. Now, if the keys written into these secvars were not the ones
+>> that were
+>> used to sign the grub and kernel, it would fail to verify them.
+> Which is the case even for the case the system is already in dynamic key
+> mode, unless the variables are append-only.
 
-Ideally, if we can get to something that works for everyone at runtime,
-we can remove the current Kconfig explosion which is definitely adding
-to the confusion (as shown in the Debian bug reports).
+Yes, that is correct. The main intention of this patch is to not expose 
+secvars that are
 
-Regards,
+to be consumed only in the dynamic key management mode while in static key
 
-James
+management mode.
 
+
+I will post v4 with the updated patch description and documentation.
+
+> Thanks
+>
+> Michal
+>
+>> These are the reasons behind the decision to expose only those secvars that
+>> are
+>> relevant to the key management mode.
+>>
+>>>
+>>>> Expose only PK, trustedcadb, and moduledb in the static key mode to
+>>>> enable loading of signed third-party kernel modules.
+>>>>
+>>>> Co-developed-by: Souradeep <soura@imap.linux.ibm.com>
+>>>> Signed-off-by: Souradeep <soura@imap.linux.ibm.com>
+>>>> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
+>>>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>>>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>> Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+>>>> Reviewed-by: Andrew Donnellan <ajd@linux.ibm.com>
+>>>> ---
+>>>>    Documentation/ABI/testing/sysfs-secvar        |  6 ++++
+>>>>    arch/powerpc/platforms/pseries/plpks-secvar.c | 28 ++++++++++++++++---
+>>>>    2 files changed, 30 insertions(+), 4 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/ABI/testing/sysfs-secvar b/Documentation/ABI/testing/sysfs-secvar
+>>>> index 45281888e520..948df3446a03 100644
+>>>> --- a/Documentation/ABI/testing/sysfs-secvar
+>>>> +++ b/Documentation/ABI/testing/sysfs-secvar
+>>>> @@ -37,6 +37,12 @@ Description:	Each secure variable is represented as a directory named as
+>>>>    		representation. The data and size can be determined by reading
+>>>>    		their respective attribute files.
+>>>> +		Only secvars relevant to the key management mode are exposed.
+>>>> +		Only in the dynamic key mode can the user modify the secure boot
+>>>> +		secvars db, dbx, grubdb, grubdbx, and sbat. PK, trustedcadb and
+>>>> +		moduledb are the secvars common to both static and dynamic key
+>>>> +		management modes.
+>>>> +
+>>>>    What:		/sys/firmware/secvar/vars/<variable_name>/size
+>>>>    Date:		August 2019
+>>>>    Contact:	Nayna Jain <nayna@linux.ibm.com>
+>>>> diff --git a/arch/powerpc/platforms/pseries/plpks-secvar.c b/arch/powerpc/platforms/pseries/plpks-secvar.c
+>>>> index 767e5e8c6990..f9e9cc40c9d0 100644
+>>>> --- a/arch/powerpc/platforms/pseries/plpks-secvar.c
+>>>> +++ b/arch/powerpc/platforms/pseries/plpks-secvar.c
+>>>> @@ -59,7 +59,14 @@ static u32 get_policy(const char *name)
+>>>>    		return PLPKS_SIGNEDUPDATE;
+>>>>    }
+>>>> -static const char * const plpks_var_names[] = {
+>>>> +static const char * const plpks_var_names_static[] = {
+>>>> +	"PK",
+>>>> +	"moduledb",
+>>>> +	"trustedcadb",
+>>>> +	NULL,
+>>>> +};
+>>>> +
+>>>> +static const char * const plpks_var_names_dynamic[] = {
+>>>>    	"PK",
+>>>>    	"KEK",
+>>>>    	"db",
+>>>> @@ -213,21 +220,34 @@ static int plpks_max_size(u64 *max_size)
+>>>>    	return 0;
+>>>>    }
+>>>> +static const struct secvar_operations plpks_secvar_ops_static = {
+>>>> +	.get = plpks_get_variable,
+>>>> +	.set = plpks_set_variable,
+>>>> +	.format = plpks_secvar_format,
+>>>> +	.max_size = plpks_max_size,
+>>>> +	.config_attrs = config_attrs,
+>>>> +	.var_names = plpks_var_names_static,
+>>>> +};
+>>>> -static const struct secvar_operations plpks_secvar_ops = {
+>>>> +static const struct secvar_operations plpks_secvar_ops_dynamic = {
+>>>>    	.get = plpks_get_variable,
+>>>>    	.set = plpks_set_variable,
+>>>>    	.format = plpks_secvar_format,
+>>>>    	.max_size = plpks_max_size,
+>>>>    	.config_attrs = config_attrs,
+>>>> -	.var_names = plpks_var_names,
+>>>> +	.var_names = plpks_var_names_dynamic,
+>>>>    };
+>>>>    static int plpks_secvar_init(void)
+>>>>    {
+>>>> +	u8 mode;
+>>>> +
+>>>>    	if (!plpks_is_available())
+>>>>    		return -ENODEV;
+>>>> -	return set_secvar_ops(&plpks_secvar_ops);
+>>>> +	mode = plpks_get_sb_keymgmt_mode();
+>>>> +	if (mode)
+>>>> +		return set_secvar_ops(&plpks_secvar_ops_dynamic);
+>>>> +	return set_secvar_ops(&plpks_secvar_ops_static);
+>>>>    }
+>>>>    machine_device_initcall(pseries, plpks_secvar_init);
+>>>> -- 
+>>>> 2.47.1
+>>>>
+>>>>
 
