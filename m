@@ -1,76 +1,77 @@
-Return-Path: <linux-integrity+bounces-6367-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6368-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 405B9ACEEE6
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 14:06:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FB53ACEF1B
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 14:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C78A189A13E
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 12:06:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17F3618960CC
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Jun 2025 12:22:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1AC213236;
-	Thu,  5 Jun 2025 12:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9DA21507F;
+	Thu,  5 Jun 2025 12:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="NoZDFlLz"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="CeygizHW"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE0017B50F;
-	Thu,  5 Jun 2025 12:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4575517B50F;
+	Thu,  5 Jun 2025 12:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749125161; cv=none; b=swspkK+gMRS+HlqyPgdwWr0NDUW8KaZlKs32qkCxGIdPwnVuiPxT3oM9adc1it6XlhMOos16hcR3cYjbIFcRiu4O7K76P47a5x3Hnpw6otq5A16wR9QnCXgLCTWn9DW7qOoldZMyQeD53p1N+8UbqJSAE6YfBvQy8BOsT2JpU/g=
+	t=1749126144; cv=none; b=Vei/UvXStXeRuz5rJvga51GlCCGCv2ZU3V7Jkqct5VflUwoz5uFgg+6k3mJYmAG+mRhbnFV4pLjtgbMNKLSfvAtDNUS/zopENQRbZ9I6oPpCpVXL1seXPRnLDuQetD8Yi3JFRkTz3IRPdvmO7YkfXcz8uaByh8ZgqPGYuyUb2Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749125161; c=relaxed/simple;
-	bh=W/K6WUde67pV1S2+vj6A5axx74vdbK/tbL7ISfn9qWM=;
+	s=arc-20240116; t=1749126144; c=relaxed/simple;
+	bh=u9OCLNQeWEEsiLhWKXJ6VTlAtli3OhGnd5wDh69fqeI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=X3mVtv5rs/fZYbUXQbYMLOsYHTQi7FHCB04Yr2m4cCA0MLlZovxJJcxt+NDIe0QU+spQNvll2aZj4cYqmYYUROfuVdEpHDtHjZo4ytik7iz2G2F7FoByoQU7MibDG9R+bJraC3hWsBM/BCKzgG2PaE7JwMJs7FdCDYuQwPIgkAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=NoZDFlLz; arc=none smtp.client-ip=198.37.111.173
+	 Content-Type:MIME-Version; b=iPLA7tZJPGaVleqR4yos0EJ2YGAg1jpIZNLdKAEkWXJPjVlJLUlAEJDVIll+V9aML9ZbSKcONexyYP0M9SKNtkZZM2agiiSzVXCqIQErCRmAxCpTYxk6PToyxtPwoqFVlTnqXLcovJUiLboycPCO3dvEv615J3u9nFnKFv8jIsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=CeygizHW; arc=none smtp.client-ip=198.37.111.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1749125157;
-	bh=W/K6WUde67pV1S2+vj6A5axx74vdbK/tbL7ISfn9qWM=;
+	d=hansenpartnership.com; s=20151216; t=1749126130;
+	bh=u9OCLNQeWEEsiLhWKXJ6VTlAtli3OhGnd5wDh69fqeI=;
 	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=NoZDFlLzxBpV1gj6rDUHTx4zUXoDiQD7rMVA/ke+qC43Q3lAYkaTG6jlA0rPRF3Nv
-	 Wfn84bPmtPkrElxCv0rMojlrnS14jSrtq6+Om/E9AMjogJzWCOnu5p2p2wQQncyoIH
-	 xX9+uRfrs4ughPPU5kZ9Umm8Gy8fOlrdrBDQNfYo=
+	b=CeygizHWYkXbN0qo8qQUrbpQqQQ3EbGuqas3RRPYHyJmvYphcVC/CAmG4YODFxwgU
+	 XEKWXLp3OUdU7fhmPzpuN/B9tgjC68F7eSwwV2IsgwTdcD/9BqCgmsJAFN8oX69ZMR
+	 sHL9alzsj+qS3jiQ0Ep4VoYik+d+iZLDRxZTzvE0=
 Received: from [IPv6:2601:5c4:4302:c21::a774] (unknown [IPv6:2601:5c4:4302:c21::a774])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 11DAE1C016C;
-	Thu, 05 Jun 2025 08:05:57 -0400 (EDT)
-Message-ID: <bec46b16778d9292ab90b3e1c71be6c56c8a5a50.camel@HansenPartnership.com>
-Subject: Re: [PATCH RFC 1/1] module: Make use of platform keyring for module
- signature verify
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 23A4F1C02FB;
+	Thu, 05 Jun 2025 08:22:10 -0400 (EDT)
+Message-ID: <e4e838d03b3619df5523d429e0cd8160a8aef9f8.camel@HansenPartnership.com>
+Subject: Re: [PATCH RFC 0/1] module: Optionally use .platform keyring for
+ signatures verification
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Coiby Xu <coxu@redhat.com>
-Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, 
- linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, keyrings@vger.kernel.org, David Howells
- <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, Jonathan
- Corbet <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu
- <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, Daniel
- Gomez <da.gomez@samsung.com>, Mimi Zohar <zohar@linux.ibm.com>, Roberto
- Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin
- <dmitry.kasatkin@gmail.com>,  Eric Snowberg <eric.snowberg@oracle.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,  "Serge
- E. Hallyn" <serge@hallyn.com>, Peter Jones <pjones@redhat.com>, Robert
- Holmes <robeholmes@gmail.com>, Jeremy Cline <jcline@redhat.com>, Gerd
- Hoffmann <kraxel@redhat.com>
-Date: Thu, 05 Jun 2025 08:05:56 -0400
-In-Reply-To: <ibosm332sa2kz6vqrru5qsfk4tybsxepo4vascc3zsetmyckvv@pml7puc5jyl6>
+To: Vitaly Kuznetsov <vkuznets@redhat.com>, Eric Snowberg
+	 <eric.snowberg@oracle.com>
+Cc: "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, "linux-integrity@vger.kernel.org"
+ <linux-integrity@vger.kernel.org>, "linux-modules@vger.kernel.org"
+ <linux-modules@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-doc@vger.kernel.org"
+ <linux-doc@vger.kernel.org>, "keyrings@vger.kernel.org"
+ <keyrings@vger.kernel.org>, David Howells <dhowells@redhat.com>, David
+ Woodhouse <dwmw2@infradead.org>, Jonathan Corbet <corbet@lwn.net>, Luis
+ Chamberlain <mcgrof@kernel.org>,  Petr Pavlu <petr.pavlu@suse.com>, Sami
+ Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,  Paul Moore
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"
+ <serge@hallyn.com>,  Peter Jones <pjones@redhat.com>, Robert Holmes
+ <robeholmes@gmail.com>, Jeremy Cline <jcline@redhat.com>,  Coiby Xu
+ <coxu@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>
+Date: Thu, 05 Jun 2025 08:22:09 -0400
+In-Reply-To: <87zfemoc76.fsf@redhat.com>
 References: <20250602132535.897944-1-vkuznets@redhat.com>
-	 <20250602132535.897944-2-vkuznets@redhat.com>
-	 <948f5567fe4d9ae39aa2528965f123e42bf82b46.camel@HansenPartnership.com>
-	 <87r001yzob.fsf@redhat.com>
-	 <d34555e2b0c4746fc01d5295959a434befcf8b18.camel@HansenPartnership.com>
-	 <ibosm332sa2kz6vqrru5qsfk4tybsxepo4vascc3zsetmyckvv@pml7puc5jyl6>
+	 <0FD18D05-6114-4A25-BD77-C32C1D706CC3@oracle.com>
+	 <f0b37bc55ed3c02569c74f0fbdb6afa8efd329e2.camel@HansenPartnership.com>
+	 <87zfemoc76.fsf@redhat.com>
 Autocrypt: addr=James.Bottomley@HansenPartnership.com;
  prefer-encrypt=mutual;
  keydata=mQENBE58FlABCADPM714lRLxGmba4JFjkocqpj1/6/Cx+IXezcS22azZetzCXDpm2MfNElecY3qkFjfnoffQiw5rrOO0/oRSATOh8+2fmJ6el7naRbDuh+i8lVESfdlkoqX57H5R8h/UTIp6gn1mpNlxjQv6QSZbl551zQ1nmkSVRbA5TbEp4br5GZeJ58esmYDCBwxuFTsSsdzbOBNthLcudWpJZHURfMc0ew24By1nldL9F37AktNcCipKpC2U0NtGlJjYPNSVXrCd1izxKmO7te7BLP+7B4DNj1VRnaf8X9+VIApCi/l4Kdx+ZR3aLTqSuNsIMmXUJ3T8JRl+ag7kby/KBp+0OpotABEBAAG0N0phbWVzIEJvdHRvbWxleSA8SmFtZXMuQm90dG9tbGV5QEhhbnNlblBhcnRuZXJzaGlwLmNvbT6JAVgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAhkBFiEE1WBuc8i0YnG+rZrfgUrkfCFIVNYFAmBLmY0FCRs1hL0ACgkQgUrkfCFIVNaEiQgAg18F4G7PGWQ68xqnIrccke7Reh5thjUz6kQIii6Dh64BDW6/UvXn20UxK2uSs/0TBLO81k1mV4c6rNE+H8b7IEjieGR9frBsp/+Q01JpToJfzzMUY7ZTDV1IXQZ+AY9L7vRzyimnJHx0Ba4JTlAyHB+Ly5i4Ab2+uZcnNfBXquWrG3oPWz+qPK88LJLya5Jxse1m1QT6R/isDuPivBzntLOooxPk+Cwf5sFAAJND+idTAzWzslexr9j7rtQ1UW6FjO4CvK9yVNz7dgG6FvEZl6J/HOr1rivtGgpCZTBzKNF8jg034n49zGfKkkzWLuXbPUOp3/oGfsKv8pnEu1c2GbQpSmFtZXMgQm90dG9tbGV5IDxqZWpiQGxpbnV4LnZuZXQuaWJtLmNvbT6JAVYEEwEIAEACGwMHCwkIBwMCAQYVC
@@ -91,71 +92,34 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2025-06-05 at 16:34 +0800, Coiby Xu wrote:
-> On Tue, Jun 03, 2025 at 09:03:22AM -0400, James Bottomley wrote:
-> > On Tue, 2025-06-03 at 10:52 +0200, Vitaly Kuznetsov wrote:
-> > > James Bottomley <James.Bottomley@HansenPartnership.com> writes:
-> > [...]
-> > > > Also, are you sure a config option is the right thing?=C2=A0
-> > > > Presumably Red Hat wants to limit its number of kernels and the
-> > > > design of just linking the machine keyring (i.e. MoK) was for
-> > > > the use case where trust is being pivoted away from db by shim,
-> > > > so users don't want to trust the db keys they don't control.=C2=A0
-> > > > If the same kernel gets used for both situations (trusted and
-> > > > untrusted db) you might want a runtime means to distinguish
-> > > > them.
-> > >=20
-> > > I was not personally involved when RH put the patch downstream
-> > > (and wasn't very successful in getting the background story) but
-> > > it doesn't even have an additional Kconfig, e.g.:
-> > > https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-10/-=
-/commit/03d4694fa6511132989bac0da11fa677ea5d29f6
-> > > so apparently there's no desire to limit anything, basically,
-> > > .platform is always trusted on Fedora/RHEL systems (for a long
-> > > time already).
-> >=20
-> > It sounds like that's just distro politics:=C2=A0 RH wants to enable
-> > binary modules (by allowing them to be signed) but doesn't want to
-> > be seen to be signing them (so they can't be signed with the
-> > embedded RH key) so that gamers can have performant graphics
-> > drivers and the like.=C2=A0 Thus it mixes in the db keyring, which
-> > usually contains several Microsoft certificates and also one from
-> > the ODM manufacturer, so now it can send would be shippers of
-> > binary modules to those groups to get them signed. If you only have
-> > the built in and MoK keyrings, the only possible signers are either
-> > RH or the machine owner ... who isn't a single entity to deal
-> > with.=C2=A0 Personally I think this is a bit daft: Debian manages an ou=
-t
-> > of tree module infrastructure using DKMS and MoK signing, so I
-> > can't see why RH can't get it to work in the same way.
->=20
-> It's interesting to find that although Debian's wiki page [1] only
-> mentions DKMS and MOK, it actually has the same downstream kernel
-> patch [2][3] as Fedora/RHEL to allow using db keys to verify kernel
-> modules.=20
-> [1] https://wiki.debian.org/SecureBoot
-> [2]
-> https://salsa.debian.org/kernel-team/linux/-/blob/debian/latest/debian/pa=
-tches/features/all/db-mok-keyring/KEYS-Make-use-of-platform-keyring-for-mod=
-ule-signature.patch?ref_type=3Dheads
-> [3]
-> https://sources.debian.org/patches/linux/6.12.30-1/features/all/db-mok-ke=
-yring/KEYS-Make-use-of-platform-keyring-for-module-signature.patch/
->=20
+On Thu, 2025-06-05 at 09:54 +0200, Vitaly Kuznetsov wrote:
+> One additional consideration is the fact that we already trust 'db'
+> for dm-verity (since 6fce1f40e951) and kexec (since 278311e417be) and
+> especially the later gives someone who is able to control 'db' access
+> to CPL0; a 'db'-signed module (IMO) wouldn't change much.
 
-Well if you read the attached bug reports:
+Well, the kexec case is because kexec has to verify the new kernel as
+shim would and shim would use the UEFI keys.  The dm-verity one was
+added for a cloud use case by pressuring the maintainers in spite of
+the objection to using the platform keyring (it went to dm-devel only
+so not many integrity people saw it):
 
-https://bugs.debian.org/935945
-https://bugs.debian.org/1030200
+https://lore.kernel.org/all/20240617220037.594792-1-luca.boccassi@gmail.com=
+/
 
-You can see that it's people trying to get an external module to work
-(actually zfs locally signed) by adding keys to MoK and it failed
-because of a configuration error (CONFIG_INTEGRITY_MACHINE_KEYRING
-wasn't set).  They added this patch as part of the thrashing around
-trying to fix the problem because they found it in Fedora.
-
+The point here is I do think the cloud use case is legitimate, but it
+can't be supported simply by ignoring the bare metal security domain
+separation concerns of the integrity community.  The argument that
+distros have done it so it must be safe isn't really a winning one
+(especially as there's no clear explanation of why they did it).  So
+either you need a better argument or we need a way to support both sets
+of communities ... which is why I was wondering about a runtime
+differentiator.
+'
 Regards,
 
 James
+
+
 
 
