@@ -1,238 +1,207 @@
-Return-Path: <linux-integrity+bounces-6379-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6380-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 873CDAD07E9
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Jun 2025 20:13:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB700AD11E2
+	for <lists+linux-integrity@lfdr.de>; Sun,  8 Jun 2025 13:15:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4781A173BF9
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Jun 2025 18:13:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4260A188B3F6
+	for <lists+linux-integrity@lfdr.de>; Sun,  8 Jun 2025 11:16:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 541E5289E19;
-	Fri,  6 Jun 2025 18:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50587210F5D;
+	Sun,  8 Jun 2025 11:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ldw4Cuh/";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ldw4Cuh/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AcITBCoA"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010032.outbound.protection.outlook.com [52.101.69.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF2E28C2B1;
-	Fri,  6 Jun 2025 18:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.32
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749233610; cv=fail; b=aFZH/DkWQMPTN399GDdmI+PrNpPqjx+kkf+cuZlgA9fjeogAhR3wCaNobys1yWXWB8hU8anUEfX28FRwmL9jCIlzr+o53ucH/eVrCzpFS13WC87tFOgZw+V4aB/XBTcKBWsWX8gYEUymaQUc73NcWsoaG2+WbOwO1X3dkhpJ9LE=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749233610; c=relaxed/simple;
-	bh=9fKv+jSnmrkCzNdltPVhwRNNKrxBspls6baCPhLAGk8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=oMWAaZm31LKz17v5I1SfBvoFkPsh0lqex+pgqS0sXBxr9Ltyer1zBJIyKBahHaXeadB4c4jG+mAVfFMRwh7tjp0XlB0Tjs/wyo/n5z8rFV07KQUPT8x4Sob2VZw1UueTN7io4PhJPH3c3jW03DG4NSgvJwSoXdwqgXM53XYmMkM=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ldw4Cuh/; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ldw4Cuh/; arc=fail smtp.client-ip=52.101.69.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=xhx1JKEp24qMjXgcUJQD2Ho6qttoi2dDCRzRwUBwXivswgXli8ImbMlAX550+40V//bxcsfSidGph1xA6Gii7sLP3MkorSk9ya47TUc8664ao12vHJCc+GN59HmdhMD8ezF5Gfm9I/tmaOVh63oOYg3eusCU1WrvoZgjdcq5z7kbKW9TaBdwJmNm/NfaucTBM/SixJSAijgbTxvrQLO9f+98c4QHJ3xl8DOpyxqXlhb5/j0x9M4car7UEJgxpri5ClNB6JlA828vhAdBSTuMYelOMjs0CmcTST0E3eXCxG4OaFzE1AbvsgU5bCwIkacrRYv8O/958M074M+2olu9dg==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7mX9wSQ4BfnYuSVvhmOK3/1tdxGEs4gabJOjVgbP57Q=;
- b=v0Tzlm95dvpgTACG4KtP8mibEvgtM7DSxWblzEzr8IHDMzDyvgQxGuF8g1B4tq2zLn/QJQ3l5QQ/38G3dsrCqBofndhP0m5LOItDiXGB5y6uIFphWRxj3qGo96u/E288kvMexlEPGWHyfUWCEi2iFZ1HVPRSYUtwcMwQ1p4PYCGOjU90XYXpyWWrzQwxTgsKEya2+338jKo6yx3+Q2kE5yrtYRhDXpiLlWa+RRjv722um1nv91NSPVw26f3LqtJifi/BsF46Obaw0MA3bWJTRctMlVXlPbiGmV57MkKVgk8m1tKnAiz0KhZjtT/uLDUs7AOvwfNRqwE2ZkYzoOhVvQ==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7mX9wSQ4BfnYuSVvhmOK3/1tdxGEs4gabJOjVgbP57Q=;
- b=ldw4Cuh/H582xul/0bHn63pT6IOVa9VZKy5r/QK1GSmnHZOxAf2UDqwFaw5DVSDTacPzutfmOZVC7B7ogGlNHnHG0JFSrrdKufDM+HCOSRUdIfwvS+LfrQ2e9VM+B1qsARTMLHgBheXhXOq72BMJgVZXJsAkkoT7kQ+zonMPQAw=
-Received: from AM6P192CA0102.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:8d::43)
- by AS8PR08MB6232.eurprd08.prod.outlook.com (2603:10a6:20b:296::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8813.20; Fri, 6 Jun
- 2025 18:13:20 +0000
-Received: from AM3PEPF00009B9F.eurprd04.prod.outlook.com
- (2603:10a6:209:8d:cafe::a2) by AM6P192CA0102.outlook.office365.com
- (2603:10a6:209:8d::43) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8792.28 via Frontend Transport; Fri,
- 6 Jun 2025 18:13:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AM3PEPF00009B9F.mail.protection.outlook.com (10.167.16.24) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8792.29
- via Frontend Transport; Fri, 6 Jun 2025 18:13:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KCOSK/ss5Y5hcsjIpfFkDwzoGm7wCd/qY0iHiZiPN466WIRUO6WYNQUhd5nv61zPXo68IJ+zYXV0ox3L6HfgbLrx1xrxJyGQj+cIu2q0Owkf/iBb/BjgkZT3pqTcnoEx/8+S9/LrcfGeoqMAp41uzBo3N1OoaQiBl/ZgRxVBoClAUWaGV2tB8MBCVB9BhBrbOvZn0JUy3xx9gKKMehCd3is96xniLDdngRjapD3U4zITwvowvs4tuv91E5lkTXie244jGAmdidSSr7YtDg0iPwo3V928KODDyDVaRBglI0J/uITdXRYh7xr2i/L9PPLJsW7PdFSF59rz9T3GBhoqPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7mX9wSQ4BfnYuSVvhmOK3/1tdxGEs4gabJOjVgbP57Q=;
- b=MAWAUETOWBQyILMX6xaXCaHABCMhvtwlpbISSRfr6CDf2DYaxoSX4gKhy2IECCgfE4tWF7iUnDyUcrmv5wieuvgGgiqYNq6FVVmu2v8MCsf0PikL4qcHs59ugDmKC4adW8SMDuHaQanzobzUElKA2S7qNt7WbXgnjGua4N6z0P/w4wsdUjuEkxKjAVd9AWWGNB1+hG11UeElgoqqAbogabwYTXWsV+DgYoEMpiOv4yy72Y32AlYoj+cKvhyEZ6E7nO7eu8gVTDqhRyF3EEGz2YaUUPZCfAH7KYDP6AiiHjwEuKWy/HEeSXPcYe/d+nGJSmls0/D1R8W7+pa1t6QJ3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7mX9wSQ4BfnYuSVvhmOK3/1tdxGEs4gabJOjVgbP57Q=;
- b=ldw4Cuh/H582xul/0bHn63pT6IOVa9VZKy5r/QK1GSmnHZOxAf2UDqwFaw5DVSDTacPzutfmOZVC7B7ogGlNHnHG0JFSrrdKufDM+HCOSRUdIfwvS+LfrQ2e9VM+B1qsARTMLHgBheXhXOq72BMJgVZXJsAkkoT7kQ+zonMPQAw=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20) by PA4PR08MB7433.eurprd08.prod.outlook.com
- (2603:10a6:102:2a4::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8813.21; Fri, 6 Jun
- 2025 18:12:47 +0000
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::d430:4ef9:b30b:c739]) by GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::d430:4ef9:b30b:c739%7]) with mapi id 15.20.8813.020; Fri, 6 Jun 2025
- 18:12:46 +0000
-Date: Fri, 6 Jun 2025 19:12:43 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: sudeep.holla@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-	stuart.yoder@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 2/2] tpm: tpm_crb_ffa: maunally register tpm_crb_ffa
- driver when it's built-in
-Message-ID: <aEMvm2MW9bBXf2gM@e129823.arm.com>
-References: <20250606105754.1202649-1-yeoreum.yun@arm.com>
- <20250606105754.1202649-3-yeoreum.yun@arm.com>
- <aEMdGXXBSym7cXmK@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aEMdGXXBSym7cXmK@kernel.org>
-X-ClientProxiedBy: LO4P123CA0329.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:18c::10) To GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2FC1F17E8
+	for <linux-integrity@vger.kernel.org>; Sun,  8 Jun 2025 11:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749381343; cv=none; b=ADmwXebRypNyvnl/N5LZGPRNNrR2uKuz2OtlgsN8KPR5l33Hl7atnhZHW16z0DXQkNulrU9fZag5LyBEUoaW4F73g2joR1Yhtnr5pba906/vf4a/qmruKQ9HjYitkI5CfUUTNUGr0v9e1xOVwV5vlXcVfVNMsozvASFo5YPVszM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749381343; c=relaxed/simple;
+	bh=s44Ig4kD0uOE75vgxSLhr3DyJEpmo23BSCxo3Cwy50U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MeGclKbpR84AuY1mgsOxoAJQZl0N2jvXYHWajf0GEpPtUM6zsZTPjLvad+sUT6/T6uEqC3IdwkNEFpTDv8jzevt55nqdbbBm2xg+9Y3dlkA4uGRtwv6lb9gwFSmfNCyEEGc7GsxrL0TeyR8H8Qz1nTgyhgXExWOEaJb/1FpHeTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AcITBCoA; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749381339;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cGxQhYTVWXecvAAHBQvF+aNN/9v/2PuaedzbvW3oVXc=;
+	b=AcITBCoAwlYIvOSkxmvSzIFTybqfiGP52WHkUuwtvxp2jyyNrKzm5AvqWVa5unf5a61T+C
+	z0sN6IxFDSWdDU+HEpkRxN7fGgEoHb+Jp0aAnsaEv9Wg8ZvxwhXXC+3nqYlhD2HGIsPVJ3
+	x5jMirVjIMc2X9/hvUkwLlYdH5j+uy8=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-227-9lpuHfF5P6yb1y_q4O18xA-1; Sun, 08 Jun 2025 07:15:38 -0400
+X-MC-Unique: 9lpuHfF5P6yb1y_q4O18xA-1
+X-Mimecast-MFC-AGG-ID: 9lpuHfF5P6yb1y_q4O18xA_1749381337
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-311ae2b6647so2580073a91.0
+        for <linux-integrity@vger.kernel.org>; Sun, 08 Jun 2025 04:15:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749381337; x=1749986137;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cGxQhYTVWXecvAAHBQvF+aNN/9v/2PuaedzbvW3oVXc=;
+        b=ZAXg8ejrc3T7J/FYHbe+z+kVHQ8pwEd7ijL7rOKFvJ67Vdg9n+Zd4/vlA9TrZk0wW3
+         BhuUxSq0dmLlX9fpC+1uZviou3A6nja2Vcm3FeDnqDnWnpw/oHtjGVhB/LJ69HG6yvEC
+         IgBH2Daj8VyAMkBIC3ZbtU+wScf1jgfbvnY1poZzdJSjH9KcmVeTMK+DV/IzSOMDiqlo
+         kSn0WK1kZO55uIfTQ6W4/OnQiIAtgm9sEgXLgxJTe+4QhIGiGHFYUK2KC4kFgV3hrtv+
+         9t4d88qvvw+AIQxdsGRPxLQjBexRqRItxLZ0XmsVombbDRB4FvxluLV93pOsT80z0X1m
+         ca7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWEnUx5wj4+7JSGxqUQzHfT60ndCh3ZV4+QsetFiEFmVV0oPhyZP++c2rZpVMnH+NbP6X7wf3HJYvj/i42VdG0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnIhMde8dyoNgPlujvBWM9QhYlm0fs9R3g6nXgLf3/MGoRamRn
+	pqoed3vz2ZOo/CgLVJnoRMfP/BrvxpItMPVaDcNx8FxRVri9NGa+bWfasLC8e2Ha8R3M1OdiqDh
+	FoGLWUBAOvUz4F95MMESA+aM7xb3COPBonSrSn16k9cUM6GDTFyXarZHFhtVH9aj5Ts/9ZQ==
+X-Gm-Gg: ASbGncu83fRQ7xIJTL1NS3VYYo4vcWE9+lh88bWHVnXsOas0fNdQMMACQqaHhR6Vf9+
+	at8+la164Pxbts+YdWf3lOGbsSxtx8fWUWE3gCgUd0A2sYK86RwFVw23E1CVHQN3eh8tv0CQcTA
+	GBieQFxaDyFDin5UQGz/g7dqMPW8dsEKfb3LgTbX6UFYvZLhz5hW4tYQ/oCQCUsqi4JnFF9NywA
+	PHXcQDFMWOY/gOY51ofrx8QpSYQ0htE3iw626qyAxBmMq9FBSXrQKyfnSvsPAhG+FRWyd86Iblw
+	9XE=
+X-Received: by 2002:a17:90b:274a:b0:312:1b53:5e98 with SMTP id 98e67ed59e1d1-31347695f46mr10946848a91.34.1749381337369;
+        Sun, 08 Jun 2025 04:15:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHm1tY9duQEiqT3DInIdSJiLgysCyNwHiX31kI2nR++f2zCJN2MhXR/VhrT6h4PgjvT4OdRdw==
+X-Received: by 2002:a17:90b:274a:b0:312:1b53:5e98 with SMTP id 98e67ed59e1d1-31347695f46mr10946804a91.34.1749381336969;
+        Sun, 08 Jun 2025 04:15:36 -0700 (PDT)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23603092f21sm38098935ad.66.2025.06.08.04.15.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jun 2025 04:15:36 -0700 (PDT)
+Date: Sun, 8 Jun 2025 19:14:40 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, keyrings@vger.kernel.org, 
+	David Howells <dhowells@redhat.com>, David Woodhouse <dwmw2@infradead.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Peter Jones <pjones@redhat.com>, Robert Holmes <robeholmes@gmail.com>, 
+	Jeremy Cline <jcline@redhat.com>, Gerd Hoffmann <kraxel@redhat.com>
+Subject: Re: [PATCH RFC 1/1] module: Make use of platform keyring for module
+ signature verify
+Message-ID: <mqciidnqf3itdh6fzz53nxvoqg3zhc2fjiwpvz46ytunsmmzrx@r3vhrnrgi637>
+References: <20250602132535.897944-1-vkuznets@redhat.com>
+ <20250602132535.897944-2-vkuznets@redhat.com>
+ <948f5567fe4d9ae39aa2528965f123e42bf82b46.camel@HansenPartnership.com>
+ <87r001yzob.fsf@redhat.com>
+ <d34555e2b0c4746fc01d5295959a434befcf8b18.camel@HansenPartnership.com>
+ <ibosm332sa2kz6vqrru5qsfk4tybsxepo4vascc3zsetmyckvv@pml7puc5jyl6>
+ <bec46b16778d9292ab90b3e1c71be6c56c8a5a50.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	GV1PR08MB10521:EE_|PA4PR08MB7433:EE_|AM3PEPF00009B9F:EE_|AS8PR08MB6232:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63a3b9cf-6640-4060-f220-08dda525d101
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info-Original:
- =?us-ascii?Q?tJG74Rt6jW/pn4Kx6qRILKHPrHfZaDXdvM6jIjFmF5OcSk6WrarurcfSKbBi?=
- =?us-ascii?Q?b/7w4TtwlL+HlirtGNReu0fqfN1XkLz1uvdTTP1n8QBcGfZER4GlmcuEqBSB?=
- =?us-ascii?Q?lvP4XzmhwzNmydZDbMw4lX4VN4J+ZJ65Qqwcysl/3X8xkVBV2GZNnKUyasSp?=
- =?us-ascii?Q?OXOw8+25vq4YOw19lxgNJQavT16+j3Zcf4cu0zRp37r+1W2Ddjwul8lVURkM?=
- =?us-ascii?Q?W4VXRKrfTF5dy67OAaLo+LPGbUSN9Wi1OZFd6+m89JVIBGT4MsoLt3imWaXc?=
- =?us-ascii?Q?b7yUxvr0x1ldn5KFA+Xkmz79JT1JlYnkIiVhAQELAFsRY2ij8CLLdQbAcr8E?=
- =?us-ascii?Q?gSDVt7n164bskxPcx5SHpKLukOSwzOQYYCrBwNdkNvO6mtbO+WIBIFQT8MHg?=
- =?us-ascii?Q?9qO+tbTO6PHmuyNvB4jMSWJApL51RYA3FrgQo4UbNn3KIP8fUKNz0x1cuPu0?=
- =?us-ascii?Q?8F2XEIuaxAaaywe1fZjzB1mlZt5mCayMAfmE0LSCEdoyd2RMWaFl3xFi/4pC?=
- =?us-ascii?Q?Bl+KFgWAjqAlij7apCrfBFHbycJcr2CClUlDPqpC7EM/6h8Qb4UGEVZhBbOb?=
- =?us-ascii?Q?PcrV/81wx2F8ZI4r9nu77tc14QO4CRLkejB511Jxp3DV1znf7mNPlm5KXFTA?=
- =?us-ascii?Q?CfOG94gKtbWA17PsPA2OxTtSan/TN/rJcJ99IWgQ+k4GoxjWvc3eWDSOKfVD?=
- =?us-ascii?Q?IAZkdQtS+MwfUBwNVE71+1/86RM8ghbYK8CRZisXjIWiyyawbZLsrUBd9q7w?=
- =?us-ascii?Q?KdaE1Sbs9L4/LBOV/JZQvW7C/tNzM0wj75pShOKte0Jw2K4ie0K+WOhOP4MJ?=
- =?us-ascii?Q?6JqpqMrMsn+d3T9rf8/gQcmbWYfutdzlT/RamtZfZT/OkGZFjPaegXxYdiaL?=
- =?us-ascii?Q?Kr1g7/JJG0QLi16xTIWH+f/eIqWbWxWTFNgcLgtBd1ZCskuww8q8MYeFWzSo?=
- =?us-ascii?Q?qjp6b39pMlAdb3nBd5vyNHti2UYIVqsHv/7T43MlSqfYwaMKreXjjLbyZPpK?=
- =?us-ascii?Q?0iKPftbtZ1YPf6/vIWjuhAMyfkM4kysT6jDDzWK8tDN/ABTiYjouiuBbXIdE?=
- =?us-ascii?Q?nc5ZlJrOhYVfOLMY84uJT3125K64nuSZ7MHP3+sQl4nYQ2RNM/FkuhfXY08M?=
- =?us-ascii?Q?MiiKnRP1Ax0HzarJ4K9+1ytynAnRi0yNaTrTz8q04apbpnkAV3+oupd9dY1C?=
- =?us-ascii?Q?0StfIFp+nug8vJbZrpj4jR75qWrpqaIp4dlAzuj+usXmDSzX6tC5cYiUPOX8?=
- =?us-ascii?Q?ZtCXOHsdhkOhgKkI5uu7hjAZf/LDm0CO7pxkxoMsZV3IDbIbOj0fqO8ik2dz?=
- =?us-ascii?Q?99ERYNnPdfSVTL3ZAZt9mMieIxd32yXaMki6zrgOqExCD0mA0gyE5wvrkPS2?=
- =?us-ascii?Q?O0TNnTDwiNbYnJUaG/0M/y0G/BYofXGjPOLilZEBNWpfLf2w/rwJozeKVL47?=
- =?us-ascii?Q?AGnK7LzTVZs=3D?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB7433
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AM3PEPF00009B9F.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	eb0886b1-f48f-4a8d-feab-08dda525bd6e
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|35042699022|82310400026|36860700013|1800799024|14060799003;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?s+2WCFVVc57gvc2tiwWwOrfiQk3cKHUfN07GSdu8DsIdy+BbBKOXowIkGusq?=
- =?us-ascii?Q?XpwYn6SJV+nvKnr6/7rV6cisAUc5oegu3me7xfkEGtstuzhV0kE5zi5QyJqk?=
- =?us-ascii?Q?0saCAvT+qg4ssmQqm58mTrf5+dCocRTUtB7AaAzdt0iA4WOBbh+FVOoXTBqV?=
- =?us-ascii?Q?PH6be/PoWFHOgbysq7VVMJx0u23TaNZA9KFU91nS04PYRyOlaMeD5YppN/gD?=
- =?us-ascii?Q?6b3QHi5SLrGiu0PlIQg1wzRVC3QnRII5rZteQJ/WDrEIakNJuTtJMEp1qbZM?=
- =?us-ascii?Q?PzHPP2Twco7lOEBTBvh04kk1qYnxXbnT03Z9cPUurhemr1sHKMSeofNygcNT?=
- =?us-ascii?Q?yLuV/BbSFA7EPe4SsR6liFBOVbjJka4NiOz8NoauYaI6xcFJg4mUGWCiVVNq?=
- =?us-ascii?Q?6zxzEXf86KaFIHcaMd2k4FaNFwMYlrK730LAl9iKDGls6IeUhBI9a0jEFNaT?=
- =?us-ascii?Q?vUactpzVGFSnxi2HpLXfS1Jd2JNvnlYfBWGT4rdknKhbXGIyyOfGG011IbTV?=
- =?us-ascii?Q?8nib/4Hiputx8dL85hu1QxxtW7tN/HcdBkgZwu6slayBWjYFWp/cT8Wj3hry?=
- =?us-ascii?Q?vLePcNPEx5r+0W9h7DWpT0tQha2kcjFnf/CL7Tr9oHGLoSr4LzDNBF6rRew6?=
- =?us-ascii?Q?BpAxTh9Yf06Tqao2rTP/3iyHVil+of2+XPDaffalHYypZ4zwoqA0SPZ1Vmcv?=
- =?us-ascii?Q?lF7QvWnnn6PhtBofq+9uk8M851sHRsGY2AwOjXaeptdTK9B4WmyOeTM7tPgj?=
- =?us-ascii?Q?q8o+LmYWLIrQhjQmKJ9C9sNq9YJk5SttB2NVcEAMAaDOIvv8MSewOxJ23hMD?=
- =?us-ascii?Q?/dR9R7apWQQkb6lORFKuKM9zTdwoycpeabzAo2XpAB+UpsBRdezNXrAhNegT?=
- =?us-ascii?Q?N2iJ/Dl+ybp+mD1IvYxBopvTxOS0OiycA4zhXTStm3dHhPkysGrlcoKZ6U4k?=
- =?us-ascii?Q?Ab17n6Y/BvObr2aGkmtcbRotKOXz4lrBvU0cgP6FOf+CZS5GO1TnhLs/tCht?=
- =?us-ascii?Q?63t0zU82B95pr+RQTghoKlcysT6NrVzfuW0/fKg20IAzasXpXBPFH4XaewWo?=
- =?us-ascii?Q?1R34sEN8WnWL9DrOv/kxBboLfjN9Xp97kGXvPU4JX6aC+d70AOwGlk4do4HC?=
- =?us-ascii?Q?D1hBGvHYIE8jbGXYta1vn15EBbItrQ0P6J5OKeKnb90OYZBDINQJ+1To2lnO?=
- =?us-ascii?Q?pwR1ovPUrAcb3K8c0Ron7WaRVmtSq8RjamiTMk3druIAGcsv+jNQiujfe0bl?=
- =?us-ascii?Q?oN5uwacX82uikj+JIT5vF6gRTP1VESS+egUSndGAaHARwIX3ypfvXqWz1c3c?=
- =?us-ascii?Q?VHy0jpeGWWg5MvKrUVJYeunGldW8q0aEkZUqFuKS136v3wSLk4x/TVcEt9Ct?=
- =?us-ascii?Q?SYISP+AWtRLfZ1mnZqpNZM+tj5q2mDTayHmc76PcDkhYdbQmRODrdWUE4jsd?=
- =?us-ascii?Q?7Vb53VWUFawUigC/8IkGQXCrTrvFlEY7Ep5DYMQ78jhGQS/3dLeWx5rMG2H9?=
- =?us-ascii?Q?Cb8+VCPuz6NxMZiogu/Qt4bBR0pptnDAeQLj?=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(35042699022)(82310400026)(36860700013)(1800799024)(14060799003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2025 18:13:19.4472
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63a3b9cf-6640-4060-f220-08dda525d101
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM3PEPF00009B9F.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6232
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bec46b16778d9292ab90b3e1c71be6c56c8a5a50.camel@HansenPartnership.com>
 
-Hi Jarkko,
-
-> > To integrate tpm_event_log with IMA subsystem,
-> > tpm_crb and tpm_crb_ffa driver should be built as built-in
-> > (CONFIG_TCG_CRB=y && CONFIG_TCG_CRB_FFA=y).
-> >
-> > However, this could make failure for ima_init() gets tpm chip when
-> > each initcall function deployed like:
-> >
-> > 0000000000000888 l       .initcall6.init	0000000000000000 crb_acpi_driver_init
-> > 000000000000088c l       .initcall6.init	0000000000000000 tpm_crb_ffa_driver_init
+On Thu, Jun 05, 2025 at 08:05:56AM -0400, James Bottomley wrote:
+>On Thu, 2025-06-05 at 16:34 +0800, Coiby Xu wrote:
+>> On Tue, Jun 03, 2025 at 09:03:22AM -0400, James Bottomley wrote:
+>> > On Tue, 2025-06-03 at 10:52 +0200, Vitaly Kuznetsov wrote:
+>> > > James Bottomley <James.Bottomley@HansenPartnership.com> writes:
+>> > [...]
+>> > > > Also, are you sure a config option is the right thing? 
+>> > > > Presumably Red Hat wants to limit its number of kernels and the
+>> > > > design of just linking the machine keyring (i.e. MoK) was for
+>> > > > the use case where trust is being pivoted away from db by shim,
+>> > > > so users don't want to trust the db keys they don't control. 
+>> > > > If the same kernel gets used for both situations (trusted and
+>> > > > untrusted db) you might want a runtime means to distinguish
+>> > > > them.
+>> > >
+>> > > I was not personally involved when RH put the patch downstream
+>> > > (and wasn't very successful in getting the background story) but
+>> > > it doesn't even have an additional Kconfig, e.g.:
+>> > > https://gitlab.com/redhat/centos-stream/src/kernel/centos-stream-10/-/commit/03d4694fa6511132989bac0da11fa677ea5d29f6
+>> > > so apparently there's no desire to limit anything, basically,
+>> > > .platform is always trusted on Fedora/RHEL systems (for a long
+>> > > time already).
+>> >
+>> > It sounds like that's just distro politics:  RH wants to enable
+>> > binary modules (by allowing them to be signed) but doesn't want to
+>> > be seen to be signing them (so they can't be signed with the
+>> > embedded RH key) so that gamers can have performant graphics
+>> > drivers and the like.  Thus it mixes in the db keyring, which
+>> > usually contains several Microsoft certificates and also one from
+>> > the ODM manufacturer, so now it can send would be shippers of
+>> > binary modules to those groups to get them signed. If you only have
+>> > the built in and MoK keyrings, the only possible signers are either
+>> > RH or the machine owner ... who isn't a single entity to deal
+>> > with.  Personally I think this is a bit daft: Debian manages an out
+>> > of tree module infrastructure using DKMS and MoK signing, so I
+>> > can't see why RH can't get it to work in the same way.
+>>
+>> It's interesting to find that although Debian's wiki page [1] only
+>> mentions DKMS and MOK, it actually has the same downstream kernel
+>> patch [2][3] as Fedora/RHEL to allow using db keys to verify kernel
+>> modules.
+>> [1] https://wiki.debian.org/SecureBoot
+>> [2]
+>> https://salsa.debian.org/kernel-team/linux/-/blob/debian/latest/debian/patches/features/all/db-mok-keyring/KEYS-Make-use-of-platform-keyring-for-module-signature.patch?ref_type=heads
+>> [3]
+>> https://sources.debian.org/patches/linux/6.12.30-1/features/all/db-mok-keyring/KEYS-Make-use-of-platform-keyring-for-module-signature.patch/
+>>
 >
-> The only failure I see is the patch 1/2 which changes init call level,
-> and leaves kernel Git to a broken state.
+>Well if you read the attached bug reports:
+
+Thanks for listing the bug reports!
+
 >
-> It breaks the famous "zero regressions policy".
+>https://bugs.debian.org/935945
+
+This bug was filed on Aug 2019 and the downstream patch was merged on
+Nov 20219 whereas Eric's machine keyring work was merged on Mar 2022. So
+I don't think it has anything to do with
+CONFIG_INTEGRITY_MACHINE_KEYRING despite the bug reporter used MOK key
+to sign an external module. And before Eric's work, all MOK keys were
+loaded to the .platform keyring.
+
+>https://bugs.debian.org/1030200
+
+For this second bug which titled ".platform keyring (EFI DB variable) no
+longer trusted to sign modules, regression against 6.0", the bug
+reporter was requesting to allow DB keys to verify kernel modules
+(again).
+
 >
-> BR, Jarkko
+>You can see that it's people trying to get an external module to work
+>(actually zfs locally signed) by adding keys to MoK and it failed
+>because of a configuration error (CONFIG_INTEGRITY_MACHINE_KEYRING
+>wasn't set).  They added this patch as part of the thrashing around
+>trying to fix the problem because they found it in Fedora.
 
-Sorry, would you let me know what is broken more detail?
-IMHO, by changing the init call level for ffa_init()
-it's called early than before device_initcall() and it seems not to
-break anything.
+So I think Debian includes the downstream patch exactly to allow using
+platform keys to verify custom/third-party kernel modules.
 
-What breaks do you mean?
+>
+>Regards,
+>
+>James
+>
 
-Thanks.
+-- 
+Best regards,
+Coiby
 
---
-Sincerely,
-Yeoreum Yun
 
