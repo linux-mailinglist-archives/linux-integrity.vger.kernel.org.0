@@ -1,177 +1,108 @@
-Return-Path: <linux-integrity+bounces-6383-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6384-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C689BAD20B3
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jun 2025 16:17:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EC25AD283D
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jun 2025 22:59:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C184169875
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jun 2025 14:17:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2D2E18867A0
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Jun 2025 21:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 862D7253933;
-	Mon,  9 Jun 2025 14:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF37221DB0;
+	Mon,  9 Jun 2025 20:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UvJlV8Fk"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA3D6137C2A;
-	Mon,  9 Jun 2025 14:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EAE207A20;
+	Mon,  9 Jun 2025 20:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749478607; cv=none; b=Ba4ymhvAIHbSqRJc5ZcKVvx9Rxg7Q/TunFgFtdZFvljkHlgbPuzWwTBYU+bbj0aGoDIGcL4wLCqZADys72rVOwOO5RChm/XPMq7kZ7BF9xi5WuK93KloPPtMXwtrafotvrBSdG3HOrqtMJv6v9RxMOhwrxPj3H+edlNaWs6q+6s=
+	t=1749502781; cv=none; b=Y9stBw2RPy3+9xEJKTPpJ9xdxF+FVppSpB2KWJnmzpxYwdEC/Sgl0caZifVr+BCHHXr8vdqOogFcoXO3+JMWdBRKuM/atxF17u+DscFYnmEi59GCcaOSh7+RZbjv+On8Cceg7rnYrh5gG4VDBcJFW2mXiEYDCmfATJdY6iqYKP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749478607; c=relaxed/simple;
-	bh=KJtqNOaw0hT/sT9zpcXOR25EPvmlDm7S0LsXAzpPIz8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XhVjaEx6zyRfNbAMadOdzNSYh5zn3EN2Q1F0mrqdWG7VpbcphB4NLeRO2Sjkg2UNjwQfLHpz/oQhgbOHLW9ZYQw0wTUfwTlSjQ4B6m/ZA/o0s9kBqXbDa5wqhiQWyi/phq2H2X8JueB7Vyk3wdF6JXklhc72KA6tPQcq71wARUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F0A8150C;
-	Mon,  9 Jun 2025 07:16:26 -0700 (PDT)
-Received: from u103485.austin.arm.com (u103485.arm.com [10.118.30.35])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD6233F673;
-	Mon,  9 Jun 2025 07:16:44 -0700 (PDT)
-From: Prachotan Bathi <prachotan.bathi@arm.com>
-To: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prachotan Bathi <prachotan.bathi@arm.com>
-Subject: [PATCH v1 1/1] tpm_ffa_crb: handle tpm busy return code
-Date: Mon,  9 Jun 2025 09:16:00 -0500
-Message-ID: <20250609141600.3601340-2-prachotan.bathi@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250609141600.3601340-1-prachotan.bathi@arm.com>
-References: <20250609141600.3601340-1-prachotan.bathi@arm.com>
+	s=arc-20240116; t=1749502781; c=relaxed/simple;
+	bh=Q8wlcxSfI2C49/3WlyqJcY/1pWE9xD8JeXXXOkS61Eg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IAgIdh4aLCzqjiy0oMZU+BRAUwcmwQh/cPY3pNijndWNlq2hh6cCP90qNzzN0XpRI2r6Z5Aiz6O1F3FGSY7aTms9jLMyAcMRftCr02zF86LoAn+Sh/K1q74ExRThVB2IivvpCU97Fih3BwkaezrgdhAr8SDHcLMsIU+sP2BT/UI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UvJlV8Fk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897AEC4CEEB;
+	Mon,  9 Jun 2025 20:59:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749502780;
+	bh=Q8wlcxSfI2C49/3WlyqJcY/1pWE9xD8JeXXXOkS61Eg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UvJlV8FkqEHOwffmigf9MVhomFOyzEqxs99x41Zi6PcTsgfOcCp/7yI7ZrFQHgjHM
+	 sZ77HvPjPHRMgjGRhKPqfeB6jl2H+x5cEX9Zufj00QY7aiRC6qKfmCsz0+iAkalLd+
+	 oUKf7OKBQ+bfJhct2DK/RPSdhefLG3Arng8x7b9E5migJp8p8Ij+BtaWWk304522Ww
+	 GyIZtLDWA316nC2c2o2kfmtHK0EOCKfH0Z9St6VmTCNIcpC6qtZAda2notHVQndouY
+	 n0iRb/Q6xoT00NoFbfb67cyC6mfOEfUwUJLTS5fcWmD7/eP26e1zJoQdcabI6IyDTN
+	 c46/LMxGH/vpw==
+Date: Mon, 9 Jun 2025 23:59:37 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: sudeep.holla@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+	stuart.yoder@arm.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 2/2] tpm: tpm_crb_ffa: maunally register tpm_crb_ffa
+ driver when it's built-in
+Message-ID: <aEdLOb3V3EgBZJof@kernel.org>
+References: <20250606105754.1202649-1-yeoreum.yun@arm.com>
+ <20250606105754.1202649-3-yeoreum.yun@arm.com>
+ <aEMdGXXBSym7cXmK@kernel.org>
+ <aEMvm2MW9bBXf2gM@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aEMvm2MW9bBXf2gM@e129823.arm.com>
 
-Platforms supporting direct message request v2 can
-support SPs that support multiple services.
-If the TPM service is sharing the SP with another service,
-it could get an error code of BUSY if the other service is
-in process.
-This patch adds a parameterized variable (default 2000ms)
- that indicates the maximum time to keep retrying for.
+On Fri, Jun 06, 2025 at 07:12:43PM +0100, Yeoreum Yun wrote:
+> Hi Jarkko,
+> 
+> > > To integrate tpm_event_log with IMA subsystem,
+> > > tpm_crb and tpm_crb_ffa driver should be built as built-in
+> > > (CONFIG_TCG_CRB=y && CONFIG_TCG_CRB_FFA=y).
+> > >
+> > > However, this could make failure for ima_init() gets tpm chip when
+> > > each initcall function deployed like:
+> > >
+> > > 0000000000000888 l       .initcall6.init	0000000000000000 crb_acpi_driver_init
+> > > 000000000000088c l       .initcall6.init	0000000000000000 tpm_crb_ffa_driver_init
+> >
+> > The only failure I see is the patch 1/2 which changes init call level,
+> > and leaves kernel Git to a broken state.
+> >
+> > It breaks the famous "zero regressions policy".
+> >
+> > BR, Jarkko
+> 
+> Sorry, would you let me know what is broken more detail?
+> IMHO, by changing the init call level for ffa_init()
+> it's called early than before device_initcall() and it seems not to
+> break anything.
+> 
+> What breaks do you mean?
 
-Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
----
- drivers/char/tpm/tpm_crb_ffa.c | 74 +++++++++++++++++++++++-----------
- 1 file changed, 50 insertions(+), 24 deletions(-)
+Your description in the cover letter and commit messages in unclear
+and convoluted. Please describe exact causalities instead of something
+not defined could cause "failure" (which is also abstract concept).
 
-diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-index 4ead61f01299..e47e110bac9e 100644
---- a/drivers/char/tpm/tpm_crb_ffa.c
-+++ b/drivers/char/tpm/tpm_crb_ffa.c
-@@ -10,6 +10,8 @@
- #define pr_fmt(fmt) "CRB_FFA: " fmt
- 
- #include <linux/arm_ffa.h>
-+#include <linux/delay.h>
-+#include <linux/moduleparam.h>
- #include "tpm_crb_ffa.h"
- 
- /* TPM service function status codes */
-@@ -178,6 +180,17 @@ int tpm_crb_ffa_init(void)
- }
- EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
- 
-+static unsigned int busy_timeout = 2000;
-+/**
-+ * busy_timeout - Maximum time to retry before giving up on busy
-+ *
-+ * This parameter defines the maximum time in milliseconds to retry
-+ * sending a message to the TPM service before giving up.
-+ */
-+module_param(busy_timeout, uint, 0644);
-+MODULE_PARM_DESC(busy_timeout,
-+		 "Maximum time to retry before giving up on busy");
-+
- static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
- 				      unsigned long a0,
- 				      unsigned long a1,
-@@ -191,34 +204,47 @@ static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
- 
- 	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
- 
--	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
--		memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
--		       sizeof(struct ffa_send_direct_data2));
-+	ktime_t start;
-+	ktime_t stop;
-+
-+	start = ktime_get();
-+	stop = ktime_add(start, ms_to_ktime(busy_timeout));
-+
-+	do {
-+		if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-+			memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
-+			       sizeof(struct ffa_send_direct_data2));
- 
--		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
--		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
--		tpm_crb_ffa->direct_msg_data2.data[2] = a1;
--		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
-+			tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
-+			tpm_crb_ffa->direct_msg_data2.data[1] = a0;
-+			tpm_crb_ffa->direct_msg_data2.data[2] = a1;
-+			tpm_crb_ffa->direct_msg_data2.data[3] = a2;
- 
--		ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
-+			ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
- 				&tpm_crb_ffa->direct_msg_data2);
--		if (!ret)
--			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
--	} else {
--		memset(&tpm_crb_ffa->direct_msg_data, 0x00,
--		       sizeof(struct ffa_send_direct_data));
--
--		tpm_crb_ffa->direct_msg_data.data1 = func_id;
--		tpm_crb_ffa->direct_msg_data.data2 = a0;
--		tpm_crb_ffa->direct_msg_data.data3 = a1;
--		tpm_crb_ffa->direct_msg_data.data4 = a2;
--
--		ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
--				&tpm_crb_ffa->direct_msg_data);
--		if (!ret)
--			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
--	}
-+			if (!ret)
-+				ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
-+		} else {
-+			memset(&tpm_crb_ffa->direct_msg_data, 0x00,
-+			       sizeof(struct ffa_send_direct_data));
- 
-+			tpm_crb_ffa->direct_msg_data.data1 = func_id;
-+			tpm_crb_ffa->direct_msg_data.data2 = a0;
-+			tpm_crb_ffa->direct_msg_data.data3 = a1;
-+			tpm_crb_ffa->direct_msg_data.data4 = a2;
-+
-+			ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
-+				&tpm_crb_ffa->direct_msg_data);
-+			if (!ret)
-+				ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
-+		}
-+		if (ret == -EBUSY)
-+			pr_err("TPM says busy, trying again, value, ret: %d\n",
-+			       ret);
-+		else
-+			break;
-+		usleep_range(50, 100);
-+	} while (ktime_before(ktime_get(), stop));
- 
- 	return ret;
- }
--- 
-2.43.0
+I'll check the next round.
 
+> 
+> Thanks.
+> 
+> --
+> Sincerely,
+> Yeoreum Yun
+
+BR, Jarkko
 
