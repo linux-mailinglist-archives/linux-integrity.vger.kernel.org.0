@@ -1,155 +1,84 @@
-Return-Path: <linux-integrity+bounces-6396-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6397-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2545DAD3BA9
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Jun 2025 16:50:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FD33AD3BF4
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Jun 2025 16:59:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC6BA7AE1BB
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Jun 2025 14:49:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 641913AAF98
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Jun 2025 14:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2F220A5E5;
-	Tue, 10 Jun 2025 14:50:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D9023498F;
+	Tue, 10 Jun 2025 14:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b="PufwEyW3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TDmztUpV"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from borehabit.cfd (ip160.ip-51-81-179.us [51.81.179.160])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769AD186A
-	for <linux-integrity@vger.kernel.org>; Tue, 10 Jun 2025 14:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.179.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7112343C2;
+	Tue, 10 Jun 2025 14:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749567036; cv=none; b=ZVq6WYHnSgG+9vzTwZNUmq1Ct7r2dfWxP442w+hbsEO1ajisfekCfoXZ9rj+JYrtWrZR9zdb835SVbfpp3GgdSzditBDJPxIppMP2Y01rchkZXWFZsxWI3A4cM887tsHUKkOQ3NNmZahdcgYmmf0m1aWBTqi8955jYANAhmlo4Y=
+	t=1749567552; cv=none; b=LV6lV9GQdVm2RxGMmNWhqqV+SXmgwQAQivmcCTi9YvX+7Wm35xCfV/YYx0ZPDBgKwZh4LBMoH+M1qoLzL9rmAtNSV4/h6JwvPJ2hNCfiY4cT+1ZjNHgkR62jfQ15xDVmM0mJ3iW8GZdWS7eIGNY87sUBmLhUDZsUMvEgjtEiZd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749567036; c=relaxed/simple;
-	bh=j/qZ6nCFDOcbnwIbag40JF9HDzOLw0n9TJz9U1mz3X8=;
-	h=To:Subject:Date:From:Message-ID:MIME-Version:Content-Type; b=Xeg8hOot2geqPvU/ko18+3ngy8fiABG5uYgI5pFXimobxosbeSFdYeMMogU26MId+ofbCcsRaAWNxuROObJ0cO5AKM5AvkQ1KVqBVDnTFJWaaEeihpQffFV8Ry/d1Q25jOHB/9dMaPMUiU/6N2rM22mM5znBMhcJwmej5RSpX1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd; spf=pass smtp.mailfrom=borehabit.cfd; dkim=pass (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b=PufwEyW3; arc=none smtp.client-ip=51.81.179.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=borehabit.cfd
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=borehabit.cfd; s=mail; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Reply-To:From:Date:Subject:To:Sender:Cc:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CFYjPvEUim5mD5QwWelE+Axpgk7p2gwnF2M5gpb++Rg=; b=PufwEyW3NcmmTHV6Cv7y/B1Woc
-	8YH1D6XBpkxTo6aZvhvRQxgxMySyOlmFPlW+0+tIKojplyno15sjf1t0qC1D5CGC0mrVq1rpgB1s6
-	IiCHtidJBjwzbSYRDz2/E+VZ7uHqeI7Dr17Wv1JdmkwWePyT13xlfmntUIgSp1gmC2ks=;
-Received: from admin by borehabit.cfd with local (Exim 4.90_1)
-	(envelope-from <support@borehabit.cfd>)
-	id 1uP0J8-000R7y-DY
-	for linux-integrity@vger.kernel.org; Tue, 10 Jun 2025 21:50:34 +0700
-To: linux-integrity@vger.kernel.org
-Subject: WTS Available laptops and Memory
-Date: Tue, 10 Jun 2025 14:50:34 +0000
-From: Exceptional One PC <support@borehabit.cfd>
-Reply-To: info@exceptionalonepc.com
-Message-ID: <2cba1e6e506fef282f9ded673a505911@borehabit.cfd>
+	s=arc-20240116; t=1749567552; c=relaxed/simple;
+	bh=K3ckKoOxDuvv4TatnpC5VMgUIUhUlljKqOBxiBCiL24=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RoOGFypLRuTSms4PJiLN0T7hgAxlwneQDN3rHyXlTSGKFePvN6lsncvV1cd8QD15MzvZk/nMEOyc02TXj5GN3tClh6G+Pcp8KF1gaPdwrtn0fwKs+g+99l8TFR8I+APPDOQXfF0+kV8AOzFprxkZiO3+GUbysaHz6LPemAn6Vv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TDmztUpV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AA8C4CEED;
+	Tue, 10 Jun 2025 14:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749567552;
+	bh=K3ckKoOxDuvv4TatnpC5VMgUIUhUlljKqOBxiBCiL24=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TDmztUpV+pmuz2CDYqmmwZhJsmv96tBvw6sVQgLo6Y4mZf07iW7vN2aqNf2W+ZI+J
+	 9Ah2vpwvf+4pr1UqAerNoO63vgwvsq9gR7m2UDWs1BsR3mX2DxpYFZFzINkEDhw/u1
+	 RnJaRGVpYEaFrnuMIo5N/ZvLNLswE+F9zFhHJAwN/hx48gjiCL1eN3wPeiImJeRnX+
+	 Ym3jIXTk/ywZ40Q6lQSbs1eu8JfDPfQXx1mfCX0qoSFXvY/1xoMA/CntLARBrt8ovF
+	 1Wvu1uCNZakBBfOVVcM6FMM1MPaOsvbCMJ07vHHoo6fSrLbItsBOtw3QMeNfMVm6UR
+	 jzG/AaYG9caAg==
+Date: Tue, 10 Jun 2025 17:59:08 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: sudeep.holla@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
+	stuart.yoder@arm.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] fix failure of integration IMA with tpm_crb_ffa
+Message-ID: <aEhIPC95FisptBO5@kernel.org>
+References: <20250610060334.2149041-1-yeoreum.yun@arm.com>
+ <aEgmhwu1RP27yBpw@kernel.org>
+ <aEgwpXXftXW6JNRy@e129823.arm.com>
+ <aEg6Bgh8TqzK5nSu@kernel.org>
+ <aEhDY4VlkIPYAjPE@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aEhDY4VlkIPYAjPE@e129823.arm.com>
 
-Hello,
+On Tue, Jun 10, 2025 at 03:38:27PM +0100, Yeoreum Yun wrote:
+> Unfortunately, when these components are built as built-in drivers,
+> the functions ffa_init(), tpm_crb_ffa_init(), and crb_acpi_driver_init() are
+> all executed during the device_initcall phase.
+> As a result, if crb_acpi_driver_init() is called before the ffa_device exists or
+> has been probed, it returns -EPROBE_DEFER,
 
-Looking for a buyer to move any of the following Items located in USA.
+Please mention exactly this in the commit explicitly and then it should
+be in detail enough.
 
+> causing the probe to be deferred and retried later
+> during the deferred_probe_initcall phase.
 
-Used MICRON SSD 7300 PRO 3.84TB 
-U.2 HTFDHBE3T8TDF SSD 2.5" NVMe 3480GB
-Quantity 400, price $100 EACH 
+OK, if ffa_init() is leveled up in the initcall hierarchy, shouldn't
+that be enough as long as ko's can be found from initramfs?
 
-
- 005052112 _ 7.68TB HDD -$200 PER w/ caddies refurbished 
- Quantity 76, price $100
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2000 EACH
-
-
-Brand New C9200L-48T-4X-E
-$1,200 EACH
-QTY4
-
-HP 1040G3 Elite Book Folio Processor :- Intel Core i5
-◻Processor :- Intel Core i5
-◻Generation :- 6th
-◻RAM :- 16GB
-◻Storage :- 256G SSD
-◻Display :- 14 inch" Touch Screen 
-QTY 340 $90 EA
-
-
-
-SK HYNIX 16GB 2RX4 PC4 - 2133P-RAO-10
-HMA42GR7AFR4N-TF TD AB 1526
-QTY560 $20 EA
-
-
-Xeon Gold 6442Y (60M Cache, 2.60 GHz)	
- PK8071305120500	 
- QTY670 700 each 
-
-
-SAMSUNG 64GB 4DRX4 PC4-2666V-LD2-12-MAO
-M386A8K40BM2-CTD60 S
-QTY 320 $42 each
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2500 EACH
-
-
-Core i3-1315U (10M Cache, up to 4.50 GHz)	
- FJ8071505258601
-QTY50  $80 EA
-
-Intel Xeon Gold 5418Y Processors
-QTY28 $780 each
-
-
-Brand New C9200L-48T-4X-E  
-$1000 EACH
-QTY4
-
-
-Brand New Gigabyte NVIDIA GeForce RTX 5090 AORUS
-MASTER OC Graphics Card GPU 32GB GDDR7
-QTY50 $1,300
-
-
- Brand New N9K-C93108TC-FX-24 Nexus
-9300-FX w/ 24p 100M/1/10GT & 6p 40/100G
-Available 4
-$3000 each
-
-
-
-Brand New NVIDIA GeForce RTX 4090 Founders
-Edition 24GB - QTY: 56 - $700 each
-
-
-
-
-Charles Lawson
-Exceptional One PC
-3645 Central Ave, Riverside
-CA 92506, United States
-www.exceptionalonepc.com
-info@exceptionalonepc.com
-Office: (951)-556-3104
-
+BR, Jarkko
 
