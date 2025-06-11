@@ -1,34 +1,34 @@
-Return-Path: <linux-integrity+bounces-6408-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6409-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 530B3AD4F7B
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Jun 2025 11:13:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D186DAD4FA3
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Jun 2025 11:24:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE8587A32E6
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Jun 2025 09:11:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30CDC18979A1
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Jun 2025 09:24:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9127B257427;
-	Wed, 11 Jun 2025 09:12:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF6A25B319;
+	Wed, 11 Jun 2025 09:23:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="D8OgeHrj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="fIA1Ythm"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EA0253F08;
-	Wed, 11 Jun 2025 09:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AE9221708;
+	Wed, 11 Jun 2025 09:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749633169; cv=none; b=s+/T2NYEZBCXhJYfTNjtOnfmdljFokJuf0BFGO9i9bRar4e4YvmwR7ow4JA9eYUv2s/B6l84TERyKSESxPOibHHdU/Ly8vcrjmqjsS2EQ/GUvz/tDnWeQXbp7GbaLD9VJpsT+VkXyxXCg7CuwMPEsnN/GG4y6hfbWo7HrdzC734=
+	t=1749633836; cv=none; b=T9dQdChnRWuMLp23BncIUYbAhlx287gMY7LTCpUg9FlUFt2B7n0EWEklukOCPISvXI3imK4pWQa8psD6DIF5Hd2gXYpg1l+sZ7rNErKy2S8TWcOSYpGBNVEBRx/pwbbZRLqDZnUZ2WjLq9vprExhxszl+m9zem3Aap/Q+iKJ9kk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749633169; c=relaxed/simple;
-	bh=xlBoLeA27Ui6WGsh8ZmVHswrzc1rv4auLqQ9zzcn4tY=;
+	s=arc-20240116; t=1749633836; c=relaxed/simple;
+	bh=qKs2rXCD0kRLf2iapx2r9Tgv95LwvPC2wN8BZQGoz3E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K34k0U5G5BoGEJXVWLNe8BrjVRwO6ZXwUZGFio5yO+dS3r0VOOSjj2afVCEhrqdQCMXKbydK2TOfV+TT5YdFE0eq1/gzt72F6BQmwZHusqaqyC/t7GaP4OoQ0oPRqYJwm4/zAyzFpfMZA4STd7MEcCJRDl5oS4UeU9e3RdvelMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=D8OgeHrj; arc=none smtp.client-ip=144.6.53.87
+	 Content-Type:Content-Disposition:In-Reply-To; b=jzU3uKXagsPlkHITPNTYVuPuWKGTNTsNUbGHtn/ZnuymNJK0QihEtW7/a72VaCZsnzNhUZr5/VQcBz/1JpmQyzXnOyv461ALDugSVWq0SmQxh/zYcnd32x2HbtxFpOA0JKpeXuAQ+YbD5aLjOxAP7hY+wc1Q0Zhb6QEWralnTUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=fIA1Ythm; arc=none smtp.client-ip=144.6.53.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
@@ -37,28 +37,31 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=99wMk3+pm8AzqEe+0Ig4DL/SSC/eQ1+ARzyWflo5WPY=; b=D8OgeHrjOh/CpRXMb3xgi6H05u
-	XYebrImz+ffpUjbQ4D2j1z9/J20hGh2JOZA794iKUNlrLB99zxP+9PvqzdrjviXEQVq5SIxa6HI3A
-	H9T9UKqEVMuD2t2+pQg6PqmXHZJSFK3LU6FgXLmCfdFBWtf5ISW3DdlB31M7fvVX/NexIUjcC/F+U
-	3pO5vU1TwUSzBsC208dXxpWM3KQ2ig1Er0ZP62T4zJcN3RkQbYWmTxX4Wc/cpt2cSgH3Wdh/ddyPN
-	R9BKPpT/6MYB0eDFn2DVxLZxHnOw8IkYdSP++PYYZil6TE4FLcXjJIKVPofWuyAGyKWImzyhVQSCP
-	UQRXjmRQ==;
+	bh=5MvjPaR0xlmnGQTOLXVKPuHYfW/FxurPRTBaqohXJ/o=; b=fIA1YthmoTPvZEC40yWITQnVfn
+	lqFPz13KrKnFdT8nUh1UZc3ndvAgOfB9P7alUJPkx59jzIR2eFYFSIxbk7wTKRVUcep3NLJGJbmoN
+	uGYoAG/cheINwFVkH5mXWzALvlppYwvg5BwRxOaGBbUiodeJ/hfD8h8XDl7wBd7gRGTdRie0zgGve
+	4Grt9Qpp2opWJQ9T9eTU9JI60Ut+yCGz85qA6bcot7YyaFKL7lybgo1ubzAzPMvF45l0NBjMo8cFx
+	dCD05c77hmS6kcH04RuKnwWNk1IVMmDUHeHBz/PCpL+TWnxwiWPzKHDdpZ1vYJfHObHrSKHTgWxtI
+	au6EoLEw==;
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
 	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uPHVa-00CJ72-0D;
-	Wed, 11 Jun 2025 17:12:35 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 11 Jun 2025 17:12:34 +0800
-Date: Wed, 11 Jun 2025 17:12:34 +0800
+	id 1uPHgT-00CJES-0p;
+	Wed, 11 Jun 2025 17:23:50 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 11 Jun 2025 17:23:49 +0800
+Date: Wed, 11 Jun 2025 17:23:49 +0800
 From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Paul Moore <paul@paul-moore.com>
-Cc: David Howells <dhowells@redhat.com>, torvalds@linux-foundation.org,
-	Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KEYS: Invert FINAL_PUT bit
-Message-ID: <aElIgixaHGuHEnb8@gondor.apana.org.au>
-References: <301015.1748434697@warthog.procyon.org.uk>
- <CAHC9VhRn=EGu4+0fYup1bGdgkzWvZYpMPXKoARJf2N+4sy9g2w@mail.gmail.com>
+To: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: lee@kernel.org, jarkko@kernel.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, davem@davemloft.net,
+	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	Yinggang Gu <guyinggang@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v10 2/5] crypto: loongson - add Loongson RNG driver
+ support
+Message-ID: <aElLJY9MnkEQx935@gondor.apana.org.au>
+References: <20250528065944.4511-1-zhaoqunqin@loongson.cn>
+ <20250528065944.4511-3-zhaoqunqin@loongson.cn>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,15 +70,23 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHC9VhRn=EGu4+0fYup1bGdgkzWvZYpMPXKoARJf2N+4sy9g2w@mail.gmail.com>
+In-Reply-To: <20250528065944.4511-3-zhaoqunqin@loongson.cn>
 
-On Tue, Jun 10, 2025 at 08:22:59PM -0400, Paul Moore wrote:
+On Wed, May 28, 2025 at 02:59:41PM +0800, Qunqin Zhao wrote:
 >
-> It doesn't look like this has made its way to Linus.  David or Jarkko,
-> do one of you want to pick this up into a tree and send this to Linus
-> properly?
+> +	if (!rng_devices.is_init) {
+> +		ret = crypto_register_rng(&loongson_rng_alg);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "failed to register crypto(%d)\n", ret);
+> +			return ret;
+> +		}
+> +		INIT_LIST_HEAD(&rng_devices.list);
+> +		mutex_init(&rng_devices.lock);
+> +		rng_devices.is_init = true;
+> +	}
 
-I can pick it up for the next merge window.
+This doesn't look right.  What stops two devices from both entering
+this code path when is_init == false?
 
 Cheers,
 -- 
