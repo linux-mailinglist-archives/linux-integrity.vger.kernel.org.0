@@ -1,224 +1,230 @@
-Return-Path: <linux-integrity+bounces-6443-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6444-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 754E4AD6E05
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 12:41:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A560AD6E79
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 13:00:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0C2A3A3802
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 10:40:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCF33188DAEE
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 11:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53BB7233D9E;
-	Thu, 12 Jun 2025 10:40:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8661B23C384;
+	Thu, 12 Jun 2025 11:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WOdWp8b2"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="THqkDFYU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6BB1F92E;
-	Thu, 12 Jun 2025 10:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9862A23A9AD;
+	Thu, 12 Jun 2025 11:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749724859; cv=none; b=u/k+YhYb4cOuDGuYDQ0PBMrMEfnlirEE012yzG1wS6TYXLtbraj4rgssOzsQJGb9JphV/jHigHb3tzvWSZIWll5xpw5OEQs4uyvRGIut2iUz/fJiVRvy1M6JKuCokbSCRGce4/bk+S0U5eIPepI2299dDJm+UdxGtxQFpmI1rkA=
+	t=1749726004; cv=none; b=ZDoNEKfpiANQZSavBnEbQIeIlH4cCWmeM23YGkIvOfx0pIIS7T5qt2PrhML/xtHUKLKyTeWcKXJF/9hj/2bsOngJVeoRc1nyrVxfNuALuXlH89cXXFmO7+ck2a4EFvEBdUSJYlM2aymgHGseZIdDAEX4P4nK/oxW4/sK/mFqSDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749724859; c=relaxed/simple;
-	bh=IGseCNuZuDaz/lm8jRoy5U/gC1+Grl0hSR0NO4hnO+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X3U32MuoxZn3Alx6jCmtD15v9EnwoEk0DjCIIdYNPBhtYS1GUYQPFKyDVfPPqiFlujXMCbysJO9k8/y3n+iCjASeoxtpbGlkeHUOGEVVfHeF+6my+BGMNHQcybYrgHr4YTD6xvnW3mEJbPW/VvHzo8VFWLy5+v+yV69lorCstI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WOdWp8b2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B8E4C4CEEA;
-	Thu, 12 Jun 2025 10:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749724858;
-	bh=IGseCNuZuDaz/lm8jRoy5U/gC1+Grl0hSR0NO4hnO+U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WOdWp8b2U+M5RbBcY3ywIRDDW/JsQXJluubRcvguCDgshaBzfJIz6/unl5tzio3Mv
-	 9w9NzmQTU2sslCY1SLRIPVuD64Qry3+/BkmQgq6XzAMUKDDV83R5pqQmUBOHc4aEAL
-	 oeHok690Ge4pb1rslSQ+vDy1mvRSnboU7a1w/JX0BtTxIMdnVCLZQe4J1QfLlqBcuP
-	 Uaqjt5ntBISmdVZl8lYi5afoMjKoFQkO3ESzKtmAW3yTFK3cbdS1DHMJFbw7b7cGse
-	 YfO+ZG0Nw1HpzP+bsPdJpaRN/ql+GgcesjM6s8pO7Bj/XpCgnMoy+QsO4hSSbcVCZ/
-	 iKPJL1dM7M4qw==
-Date: Thu, 12 Jun 2025 13:40:55 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Prachotan Bathi <prachotan.bathi@arm.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Stuart Yoder <stuart.yoder@arm.com>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] tpm_crb_ffa: handle tpm busy return code
-Message-ID: <aEqut7qHnugl_vN_@kernel.org>
-References: <20250611193009.3941971-1-prachotan.bathi@arm.com>
- <20250611193009.3941971-2-prachotan.bathi@arm.com>
+	s=arc-20240116; t=1749726004; c=relaxed/simple;
+	bh=k/q2tI+7tEP2C7OO0lBGT+8cI/YxCdHD6IQB3wGd958=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=Lznkj3zq2t4FzvU4SKFEKtOuF9bx7v1lqhFiJtaHHgxU8XA8p7lC5aagC2JoJ/Qd9nDNJYE7uIhfOQGvI4cit8hpyFx23K9DPgvH+1td4Kw3/lA+41GKNoliTRh3THQkbbZO1ol7bBtZdPwP3ghOsZYWPy+19hpDGnANksr25Gk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=THqkDFYU; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55C10IWf032084;
+	Thu, 12 Jun 2025 10:59:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=upoG1H
+	Xm/JgEgq2xUA+z8prMKZNeNeTVb2PMDEyK4/c=; b=THqkDFYUxUixVyqMFytTsc
+	Kw2NlUJVFAZxK39IyYulgJeQy4oHlqexfWQGKM1tlz79ovJxtPcyUNEb+fp8j/Rt
+	sYWfBEo4RX2zBXN0eQ3QGjrkpD+UJdkJh6yOH/X2reBrVPUUZGGk68LS+0w5+fCU
+	j03D8iE9+hZAVV3wIhMJoZRCnegcRoneXMzi7REl+/2mBzlArnmr40jt9yRXNRJ7
+	od73LjI5V9vzD+BC4hVcsuip2AwnuArOd9bEn7y+z1C15mStFwVC9jAa5U2o7IbY
+	KiXylep25zrjcwiQOI66OBQDwxDfOh3dgE+2Ef1wR22ubgeuYV1yyJGhjyNy2fqg
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 474dv7t4w6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Jun 2025 10:59:47 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55CAjXTJ014948;
+	Thu, 12 Jun 2025 10:59:46 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4750rpccsk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Jun 2025 10:59:46 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55CAxjcv30933674
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 12 Jun 2025 10:59:45 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C133858056;
+	Thu, 12 Jun 2025 10:59:45 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4A9035803F;
+	Thu, 12 Jun 2025 10:59:45 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.181.231])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 12 Jun 2025 10:59:45 +0000 (GMT)
+Message-ID: <c1ad06ef84170633bdcc7f49b06d646ddbbdc763.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: add a knob ima= to make IMA be able to be
+ disabled
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Baoquan He <bhe@redhat.com>, linux-integrity@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, coxu@redhat.com, piliu@redhat.com,
+        pmenzel@molgen.mpg.de, chenste@linux.microsoft.com
+In-Reply-To: <20250611082535.127759-1-bhe@redhat.com>
+References: <20250611082535.127759-1-bhe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 12 Jun 2025 06:59:44 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250611193009.3941971-2-prachotan.bathi@arm.com>
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: LbV20D_8XnbYyJkmnamk7MuArxadswEI
+X-Proofpoint-GUID: LbV20D_8XnbYyJkmnamk7MuArxadswEI
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEyMDA4MiBTYWx0ZWRfX06WKXTLE7AeP HWo1oKuXzPvrRbnVFBo90alyOVO22qjqoGv2G3tg0iKFto1S0UQAwJCSuNCLmYSl4H5PKlSHbC3 fIR9wwHH6uu3DA/cB7h744tyzFLiDADS9QTpn3POPs86+bIdI/nF9UtjtcPQmqI7YgJASSuALdR
+ lgRiTlOai7aI4iRHa/PKCE2M3VDQw3AypL16iIMuKcSl7yja2lkN27pJsX0L1tVwQV28rfZFoVJ n8JlPeFuuNUxGc1urJc7D/ztZG/zXySuiz/PBVS11AKT+NseIaVve0JFlLASxeNwOwj4PT8Hr0R XqSWc3BFsyAi+2gvfQQ7t0RRrSe7xfOev1jhllhg52KMgSYvXhOEWe9Z3ZO65w1058gBrBvKhS0
+ sHuCpWynaQzI+FmiQ0/r937hNLTdOm5eVwsGgDeKT6uEo5m6WLQj1J7E8lF/FBaSGFOjV/xu
+X-Authority-Analysis: v=2.4 cv=CfMI5Krl c=1 sm=1 tr=0 ts=684ab323 cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=UeMwZWw34uBX8khp:21 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=BtPcbq9k6-QGU93c7UYA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-12_07,2025-06-10_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 impostorscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506120082
 
-On Wed, Jun 11, 2025 at 02:30:09PM -0500, Prachotan Bathi wrote:
-> Platforms supporting direct message request v2 can
-> support SPs that support multiple services.
-> If the TPM service is sharing the SP with another service,
+Hi Baoquan,
 
-What is "TPM service" and "SP"?
+As discussed
+https://lore.kernel.org/linux-integrity/aC6ezNcUZ%2FulKgpv@MiWiFi-R3L-srv/ =
+the
+Subject line should indicate disabling IMA is limited to kdump.
 
-> it could get an error code of BUSY if the other service is
-> in process.
-> This adds a parameterized variable (default 2000ms)
+On Wed, 2025-06-11 at 16:25 +0800, Baoquan He wrote:
+> Kdump kernel doesn't need IMA functionality, and enabling IMA will cost
+> extra memory. It would be very helpful to allow IMA to be disabled for
+> kdump kernel.
+>=20
+> Hence add a knob ima=3Don|off here to allow turning IMA off in kdump
+> kernel if needed.
+>=20
+> Note that this IMA disabling is only limited to kdump kernel, please don'=
+t
+> abuse it in other kernel and thus serious consequences are caused.
 
-What is "this"?
+Remove the word 'only', here, and in other places.
 
-"Add a ..."
-
->  that indicates the maximum time to keep retrying for.
-> When the TPM service returns a BUSY error code, we sleep
-
-s/we sleep/sleep/
-
-
->  50-100us before retrying again, until we are over the
-> busy timeout.
-> 
-> Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
-
-I'd consider rewriting the commit message as it lacks any explanation
-of the code change. You replace condition statement with a loop. Start
-with that.
-
-I'd strip some of the comments too i.e, those that state the obvious.
-
+>=20
+> Signed-off-by: Baoquan He <bhe@redhat.com>
 > ---
->  drivers/char/tpm/tpm_crb_ffa.c | 78 +++++++++++++++++++++++-----------
->  1 file changed, 54 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-> index 4ead61f01299..5f0a30a20b57 100644
-> --- a/drivers/char/tpm/tpm_crb_ffa.c
-> +++ b/drivers/char/tpm/tpm_crb_ffa.c
-> @@ -10,6 +10,8 @@
->  #define pr_fmt(fmt) "CRB_FFA: " fmt
->  
->  #include <linux/arm_ffa.h>
-> +#include <linux/delay.h>
-> +#include <linux/moduleparam.h>
->  #include "tpm_crb_ffa.h"
->  
->  /* TPM service function status codes */
-> @@ -178,6 +180,17 @@ int tpm_crb_ffa_init(void)
->  }
->  EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
->  
-> +static unsigned int busy_timeout = 2000;
-> +/**
-> + * busy_timeout - Maximum time to retry before giving up on busy
-> + *
-> + * This parameter defines the maximum time in milliseconds to retry
-> + * sending a message to the TPM service before giving up.
-> + */
-> +module_param(busy_timeout, uint, 0644);
-> +MODULE_PARM_DESC(busy_timeout,
-> +		 "Maximum time to retry before giving up on busy");
+> v1->v2:
+> - Improve patch log and doc description;
+> - Make slight adjustment in code;=20
+> These are all made according to Mimi's great suggestions.=20
+>=20
+>  .../admin-guide/kernel-parameters.txt         |  5 ++++
+>  security/integrity/ima/ima_main.c             | 26 +++++++++++++++++++
+>  2 files changed, 31 insertions(+)
+>=20
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index b3d62f4c370a..1de67b9c20b4 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -2214,6 +2214,11 @@
+>  			different crypto accelerators. This option can be used
+>  			to achieve best performance for particular HW.
+> =20
+> +	ima=3D		[IMA] Enable or disable IMA
+> +			Format: { "off" | "on" }
+> +			Default: "on"
+> +			Note that this is only limited to kdump kernel.
+
+Remove the word 'only' ->  Note that disabling IMA is limited to kdump kern=
+el.
+
 > +
->  static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
->  				      unsigned long a0,
->  				      unsigned long a1,
-> @@ -191,34 +204,51 @@ static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
->  
->  	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
->  
-> -	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-> -		memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
-> -		       sizeof(struct ffa_send_direct_data2));
-> +	ktime_t start;
-> +	ktime_t stop;
+>  	indirect_target_selection=3D [X86,Intel] Mitigation control for Indirec=
+t
+>  			Target Selection(ITS) bug in Intel CPUs. Updated
+>  			microcode is also required for a fix in IBPB.
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index f99ab1a3b0f0..c38f3881d72f 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -27,6 +27,7 @@
+>  #include <linux/fs.h>
+>  #include <linux/iversion.h>
+>  #include <linux/evm.h>
+> +#include <linux/crash_dump.h>
+> =20
+>  #include "ima.h"
+> =20
+> @@ -38,11 +39,30 @@ int ima_appraise;
+> =20
+>  int __ro_after_init ima_hash_algo =3D HASH_ALGO_SHA1;
+>  static int hash_setup_done;
+> +static int ima_disabled __ro_after_init;
+> =20
+>  static struct notifier_block ima_lsm_policy_notifier =3D {
+>  	.notifier_call =3D ima_lsm_policy_change,
+>  };
+> =20
+> +static int __init ima_setup(char *str)
+> +{
+> +	if (!is_kdump_kernel()) {
+> +		pr_info("Warning: ima setup option only permitted in kdump");
+> +		return 1;
+> +	}
 > +
-> +	start = ktime_get();
-> +	stop = ktime_add(start, ms_to_ktime(busy_timeout));
+> +	if (strncmp(str, "off", 3) =3D=3D 0)
+> +		ima_disabled =3D 1;
+> +	else if (strncmp(str, "on", 2) =3D=3D 0)
+> +		ima_disabled =3D 0;
+> +	else
+> +		pr_err("Invalid ima setup option: \"%s\" , please specify ima=3Don|off=
+.", str);
 > +
-> +	do {
-> +		if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-> +			memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
-> +			       sizeof(struct ffa_send_direct_data2));
->  
-> -		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
-> -		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
-> -		tpm_crb_ffa->direct_msg_data2.data[2] = a1;
-> -		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
-> +			tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
-> +			tpm_crb_ffa->direct_msg_data2.data[1] = a0;
-> +			tpm_crb_ffa->direct_msg_data2.data[2] = a1;
-> +			tpm_crb_ffa->direct_msg_data2.data[3] = a2;
->  
-> -		ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
-> +			ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
->  				&tpm_crb_ffa->direct_msg_data2);
-> -		if (!ret)
-> -			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
-> -	} else {
-> -		memset(&tpm_crb_ffa->direct_msg_data, 0x00,
-> -		       sizeof(struct ffa_send_direct_data));
-> -
-> -		tpm_crb_ffa->direct_msg_data.data1 = func_id;
-> -		tpm_crb_ffa->direct_msg_data.data2 = a0;
-> -		tpm_crb_ffa->direct_msg_data.data3 = a1;
-> -		tpm_crb_ffa->direct_msg_data.data4 = a2;
-> -
-> -		ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
-> -				&tpm_crb_ffa->direct_msg_data);
-> -		if (!ret)
-> -			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
-> -	}
-> +			if (!ret)
-> +				ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
-> +		} else {
-> +			memset(&tpm_crb_ffa->direct_msg_data, 0x00,
-> +			       sizeof(struct ffa_send_direct_data));
->  
-> +			tpm_crb_ffa->direct_msg_data.data1 = func_id;
-> +			tpm_crb_ffa->direct_msg_data.data2 = a0;
-> +			tpm_crb_ffa->direct_msg_data.data3 = a1;
-> +			tpm_crb_ffa->direct_msg_data.data4 = a2;
+> +	return 1;
+> +}
+> +__setup("ima=3D", ima_setup);
 > +
-> +			ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
-> +				&tpm_crb_ffa->direct_msg_data);
-> +			if (!ret)
-> +				ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
-> +		}
-> +		/* Check if the TPM service returned busy */
+>  static int __init hash_setup(char *str)
+>  {
+>  	struct ima_template_desc *template_desc =3D ima_template_desc_current()=
+;
+> @@ -1186,6 +1206,12 @@ static int __init init_ima(void)
+>  {
+>  	int error;
+> =20
+> +	/*Note that turning IMA off is only limited to kdump kernel.*/
 
-Strip.
+Remove the word "only"  -> Note that turning IMA off is intentionally limit=
+ed to
+kdump kernel."
 
-> +		if (ret == -EBUSY)
-> +			pr_err("TPM says busy, trying again, value, ret: %d\n",
-> +			       ret);
-> +		else
-> +			/* If TPM did not return busy, we are done, exit the loop */
+> +	if (ima_disabled && is_kdump_kernel()) {
+> +		pr_info("IMA functionality is disabled");
+> +		return 0;
+> +	}
+> +
+>  	ima_appraise_parse_cmdline();
+>  	ima_init_template_list();
+>  	hash_setup(CONFIG_IMA_DEFAULT_HASH);
 
-Ditto.
+Mimi
 
-> +			break;
-> +		/* Sleep for a short time before retrying to avoid busy looping */
-
-Ditto.
-
-> +		usleep_range(50, 100);
-> +	} while (ktime_before(ktime_get(), stop));
-> +	/* If we are here, we either got a valid response or over the busy timeout */
-
-Ditto.
-
->  
->  	return ret;
->  }
-> -- 
-> 2.43.0
-> 
-
-BR, Jarkko
 
