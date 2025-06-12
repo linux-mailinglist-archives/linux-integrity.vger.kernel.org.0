@@ -1,63 +1,58 @@
-Return-Path: <linux-integrity+bounces-6441-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6442-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3608DAD6DBC
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 12:31:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6994AD6DF3
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 12:37:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C440A3A34C9
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 10:30:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51FAE3A19CA
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Jun 2025 10:36:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE7222FAC3;
-	Thu, 12 Jun 2025 10:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB89280A20;
+	Thu, 12 Jun 2025 10:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RoppQeLr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Adhe+qAt"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7850422DF95;
-	Thu, 12 Jun 2025 10:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3922828032E;
+	Thu, 12 Jun 2025 10:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749724259; cv=none; b=DLEQMgi43CYvQkBi1aePje5pX+N8K7x2NJNc4gM58MkVt5mY2vb5piwLi2ebtq7l2TxAxhXkyIbUh9oocQN/7EtgZ4cMFf5h4Vnokw08Wyw8nR2vZhemTC5Ypwdqz2JiTO9Emymi/RoJmdjNA4/XiSWJke+me77lmspw5dCTHh8=
+	t=1749724356; cv=none; b=HR9vd4/OWcXL9bplXwWjJ2oD9+HN8DI+PtDVGZJCu6v05tPbnIch8bLPM40V1C3fT8+RuT4b1YVjLHOvlJDUNsHBCxzWHVmrfC1v7wQ4Taj7CO6ZvjpUPVGkzGUeOczQxRobRIEzSJVvnDj9gfrf2xrtlnYkZSSpNTYKqmG5SVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749724259; c=relaxed/simple;
-	bh=UptZCHL/SIqqhiJnZoOAivvnbhhBVRs8nh2meH1TAcc=;
+	s=arc-20240116; t=1749724356; c=relaxed/simple;
+	bh=YMnRaTUFakFJLPvl7q3vCoMeTDEm9FrrLwyT1W/42nk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AFF/i4L+7W13AGFlZx8BJcqOX47cbzjt5jV8IITOgCSdyezUKcAloJtJtBqzI2FdWgdHUcT2ItETIoGMXV5Auwgqlk907Qnq8VBT3B3TdqmpS46dEjzpZ8I7kxnKYyq9MqFVUpEzNuNcvKnyxNzr0xVQqngqa44xWtc1kjH9UJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RoppQeLr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0929C4CEEA;
-	Thu, 12 Jun 2025 10:30:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QWGyARZ/hqdTuX+eYNO+aUBuR5YhUiifhjERTQXoGJ6cdvpmMvFEx1tK3rR4TcuOc2TCQjYNM/VagVGQi8o0gNab0pFfcjMA4ddmA7KNpupwpc5p1BIsXULW5erHBowMapr7Hm/wOwFAfZEkulbv5DvcPCAhIrjx/fhJ3TXcvCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Adhe+qAt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B59C7C4CEEA;
+	Thu, 12 Jun 2025 10:32:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749724259;
-	bh=UptZCHL/SIqqhiJnZoOAivvnbhhBVRs8nh2meH1TAcc=;
+	s=k20201202; t=1749724356;
+	bh=YMnRaTUFakFJLPvl7q3vCoMeTDEm9FrrLwyT1W/42nk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RoppQeLrgwYBS3NtzwQCtg9PLDtH/IW+ZdBAiOqEUnLKHV7xetiRSWhnJCL+5ufcr
-	 TLeO5n8ZYUTLCEvR/bpqNXAckoT3PD8OstCVmnSkcaacWAbQsqFbjhxXKXjml9hGx0
-	 g3gSZuma6ldoBoH5tCj1cqwYsBg2wt9X1kp5GrcAf4TiSTpkVKYjM+D3rKXThm2kxd
-	 prCk207kuuLlS4HyEGVy5tHgKTtw4uBDlBdiwDjwHvU1wLmKsvzQab0rtIAj96qAz3
-	 VHItFaOFe64btH1Wmli7MOVyhz4OR9jLZe/OH0J0Mk5NXu+XyRzR9n0F+9KokdT4vT
-	 Y798ZykDBKcQQ==
-Date: Thu, 12 Jun 2025 13:30:55 +0300
+	b=Adhe+qAttboQeqrW31YXMRcpFEw+Cfjk/7Dd3/UlW2It87CK+vAw8qc/6foHLRNyV
+	 k7clu4nQLf4qyHiFyBAkROiQ71bragstzHznsC1EFlSU3kX0B2mIIUwkTe5DgfNxtO
+	 ZSzFeJyAaK53rmb66VND8EZguN+12wAIe1ZWu7IWzjZL3V8VA64/ElHHnxEbl6DPPB
+	 WO/pWpTY3ky2JQfCfKvqKvwvuzKX5Na2ls9bCTaL2LfsC16MWqY4xsQIERQZWRqAJt
+	 QI1CGvBzv2vYovhuI/2UsIdAzmkmZUFdQeU/ipvF8p+VmvSjFsXAJRJun08ICb6VaC
+	 LLFf5mqV/c41w==
+Date: Thu, 12 Jun 2025 13:32:32 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: sudeep.holla@arm.com, peterhuewe@gmx.de, jgg@ziepe.ca,
-	stuart.yoder@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] fix failure of integration IMA with tpm_crb_ffa
-Message-ID: <aEqsX0hBKb7ZC1qZ@kernel.org>
-References: <20250610060334.2149041-1-yeoreum.yun@arm.com>
- <aEgmhwu1RP27yBpw@kernel.org>
- <aEgwpXXftXW6JNRy@e129823.arm.com>
- <aEg6Bgh8TqzK5nSu@kernel.org>
- <aEhDY4VlkIPYAjPE@e129823.arm.com>
- <aEhIPC95FisptBO5@kernel.org>
- <aEhNnAxlToRMteA2@e129823.arm.com>
- <aEmxaJQNfYJwSCd0@kernel.org>
- <aEm+gqyp0aa4ULYa@e129823.arm.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Paul Moore <paul@paul-moore.com>, David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>, keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KEYS: Invert FINAL_PUT bit
+Message-ID: <aEqswAc8nkXVAJH7@kernel.org>
+References: <301015.1748434697@warthog.procyon.org.uk>
+ <CAHC9VhRn=EGu4+0fYup1bGdgkzWvZYpMPXKoARJf2N+4sy9g2w@mail.gmail.com>
+ <CAHk-=wjY7b0gDcXiecsimfmOgs0q+aUp_ZxPHvMfdmAG_Ex_1Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,61 +61,24 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aEm+gqyp0aa4ULYa@e129823.arm.com>
+In-Reply-To: <CAHk-=wjY7b0gDcXiecsimfmOgs0q+aUp_ZxPHvMfdmAG_Ex_1Q@mail.gmail.com>
 
-On Wed, Jun 11, 2025 at 06:36:02PM +0100, Yeoreum Yun wrote:
-> Hi Jarkko,
-> 
-> > On Tue, Jun 10, 2025 at 04:22:04PM +0100, Yeoreum Yun wrote:
-> > > > OK, if ffa_init() is leveled up in the initcall hierarchy, shouldn't
-> > > > that be enough as long as ko's can be found from initramfs?
-> > >
-> > > As you mentioned, this is handled in Patch #1.
-> > > However, although ffa_init() is called first,
-> > > unless tpm_crb_ffa_init() is also invoked,
-> > > crb_acpi_driver_init() will fail with -EPROBE_DEFER.
-> > >
-> > > Please note that IMA is always built-in and cannot be built as a module.
+On Wed, Jun 11, 2025 at 10:50:46AM -0700, Linus Torvalds wrote:
+> On Tue, 10 Jun 2025 at 17:23, Paul Moore <paul@paul-moore.com> wrote:
 > >
-> > Sure but if one needs IMA, then tpm_crb_ffa can be compiled as built-in
-> > with zero code changes.
+> > It doesn't look like this has made its way to Linus.
 > 
-> All of my describtion based on all things are built as "built-in".
-> in case of ffa_init() changes the init level to root_initcall,
-> so, the ffa_device will be produced first before the trial of TPM probe.
+> Bah. It "made it" in the sense that sure, it's in my inbox.
 > 
-> Note that tpm_crb_ffa_init() which is the "ffa_driver" is called in
-> device_initcall level. I mean
+> But particularly during the the early merge window I end up heavily
+> limiting my emails to pull requests. And then it ended up composted at
+> the bottom of my endless pile of emails.
 > 
->     ffa_init() -> arm_ffa -> root_initcall
->     tpm_crb_ffa_init() -> device_initcall
->     crb_acpi_driver_init() -> device_initcall
+> I guess I can still take it if people just say "do it".
 > 
-> therefore, "crb_acpi_driver_init()" can be call first before
-> tpm_crb_ffa_init() since they're deployed in device_initcall.
-> If this happen, "crb_acpi_driver_init()" failed with -EPROBE_DEFER.
-> 
-> That's why this patch is required to probe "tpm_crb_ffa" when
-> crb_acpi_driver_init() called to complete the TPM device probe before
-> IMA subsystem initailization.
+>             Linus
 
-Yep, and you sort it out by not compiling it as a module.
-
-+	ret = ffa_register(&tpm_crb_ffa_driver);
-+	BUG_ON(!ret && !tpm_crb_ffa);
-
-These lines struck me in your patch. The commit message has nothing
-about ffa_register().
-
-Also, please remove BUG_ON(). That said, I don't think 2/2 is needed.
-
-> 
-> Thanks.
-> 
-> --
-> Sincerely,
-> Yeoreum Yun
-
++1 for picking it.
 
 BR, Jarkko
 
