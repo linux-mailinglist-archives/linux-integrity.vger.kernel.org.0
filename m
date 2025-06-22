@@ -1,217 +1,222 @@
-Return-Path: <linux-integrity+bounces-6494-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6495-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40092AE2FCF
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 14:24:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D42D4AE31FE
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 22:38:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DD343B3A5F
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 12:23:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 640EF3AE062
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 20:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890A01DE884;
-	Sun, 22 Jun 2025 12:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B461F4E39;
+	Sun, 22 Jun 2025 20:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="efjBIm44"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFMghYCb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044FD18BC3D;
-	Sun, 22 Jun 2025 12:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707731E0DEA;
+	Sun, 22 Jun 2025 20:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750595046; cv=none; b=HRzy2H7oHN6icc+bLL7FcwfAAP8lEDZkhsUjnWydSASuBZ8ckDCLjgkN4zd2sSdivEhYOfOzuQQwENwBur/WwYB/KpRhgZKTRYvPIQP1OwG+sBvFvjkxyx8awu74G51BHzZdy734HM9D0+mrIpJG5QGsM7iY8YTx+VoW4GgOrmQ=
+	t=1750624720; cv=none; b=m5roqYA6gS8W56FuNKDS5k3d7xF9oxWmskiBgcG2SwZTPcGVCf0eJtqKySWjK2RZmKbkRMX5RFEoH/KZOp7OrG9eTdfQnklpPQNr13EMvZAmrd17IHlLr9Tc34ZOcvupVI2ueDNt6oaHqvbxfptr7Py5NoLIIR78kvui8ZQIikw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750595046; c=relaxed/simple;
-	bh=fdRTmHnZjrd/Y2Yy2A93S0bYYm0T0zmIFgpz+WeulNI=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=XUT4No5CjMdTOIpmcMS4iux5ctxQKM127BjKNrafSBf8ZeII/FsbEZwa0MZYB+Ju85Tf0bKgXfs/MiJYhKh5njVB17mmmO8pFToYgIRd/a674LV4s1aHiwnMUS54uiHu9u6cOgGo1ZaZfDHk9FDgTamKW+F0oneRBa1sh03kOlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=efjBIm44; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55M2t9VA032052;
-	Sun, 22 Jun 2025 12:23:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Q7F8/U
-	+mi73XJ2L7J7qWmJE6+y5i8b44RdJ+g6ZHMcI=; b=efjBIm44OX5HPReK0KT8gO
-	/Y0LeLWtO8RgrRMimsgifSaxZQqFFoYVTi4gfbhFcdyJzg37hRbofMoD7ikLkvLq
-	VXeWTClN/YMP4EvVgR8jrIPI8X5p+NLVOy5tsZ6qY1A1cov2aarhrG+/nmTCIe2C
-	mDpPMH2+kvi5n3eYc6WGyBhIVTmmCSnxJh3SshnCziEsO6acTFT/ZXO+vmtrT4/c
-	7vuEPXfWpBZiakjbXuNarqPzGKnVDP5i0muotY4oZusU1aJh7WX1/KOlROKOKncC
-	JR78Vub+laygydGRLvBDKswrlAafnaDq0iqa2tVas9XcxOaF5Ah9ZTGCA5/RyzhQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dm8hvpp9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Jun 2025 12:23:57 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55MCNv1O024687;
-	Sun, 22 Jun 2025 12:23:57 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47dm8hvpp6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Jun 2025 12:23:57 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55M7eBw1002568;
-	Sun, 22 Jun 2025 12:23:56 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47e8jksmua-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Jun 2025 12:23:55 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55MCNtAA24118004
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 22 Jun 2025 12:23:55 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 35A2558056;
-	Sun, 22 Jun 2025 12:23:55 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8B7C158052;
-	Sun, 22 Jun 2025 12:23:54 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.92.25])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 22 Jun 2025 12:23:54 +0000 (GMT)
-Message-ID: <82acbfc071095da7cc153ec8f2fbdca6316c82bd.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 2/2] tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when
- it's built-in
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>, jarkko@kernel.org, sudeep.holla@arm.com,
-        peterhuewe@gmx.de, jgg@ziepe.ca, stuart.yoder@arm.com
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-In-Reply-To: <20250618102302.2379029-3-yeoreum.yun@arm.com>
-References: <20250618102302.2379029-1-yeoreum.yun@arm.com>
-	 <20250618102302.2379029-3-yeoreum.yun@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 22 Jun 2025 08:23:54 -0400
+	s=arc-20240116; t=1750624720; c=relaxed/simple;
+	bh=FsM9pggermSvNQPAiZXur5A/W3HYmPYGCh5koS2k+cA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zf3hI2fLcymTr3PgCJOOsHQajbA1xbS9Q86v5yF5j25we0d5lFm1HEVVkBneYEJsEzjmkfxxwU96F/SRP5OieBvGw31slGD8mIHtQPNg7J1Y7pFHRfwZL0Gqd199eDNSbr4QYFgVwDYoxGV5VqVkxLUhC5WB5Oi8moK/zRm6ZAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFMghYCb; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7d094ef02e5so369791585a.1;
+        Sun, 22 Jun 2025 13:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750624717; x=1751229517; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vldq3wxBKVz1slyoTUjG7bsKsHFPjugjSfGiRDEW8yk=;
+        b=YFMghYCbFQ+fcSpIoJmarAVXMdRBUCEk21HyblDnwlx0bYveH1yJ1pYJQ5CK3TDYXO
+         jVmbL1QKrof8wg+UaQCfb1bWTq3wxIovX8NVLenMHoVViGl/okAKLhBtYTEapEKVE70G
+         Rp+hWDRfj7Srj9BLUgrplLQ2gFLD4Jc4kCkGFESwkzvdwN0EGL/KVRshfKU6d+q0z56A
+         0vhy+rV3SG0iTju4KbGVoPhoqla/DmiJV6LpjCsftlo21Plxqr92j+WZ0odVkVeWCGt0
+         c6LjsZuO6E9B/uKAdi0f+LipSaUEog9M2yirSBl2uXTxSnzaDkum27UazNvmOVfF/Gnm
+         dANA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750624717; x=1751229517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vldq3wxBKVz1slyoTUjG7bsKsHFPjugjSfGiRDEW8yk=;
+        b=wZJtcMu+pdVh9sgHV1ZZs1j5ENMQYomeBvmUQ1wW2UsEmKB7lV1XYTPo6znLz+uZt8
+         yvT11X2qdHC+ewvrOp8Fv/pJI6XZy3N8XGW+dmWt9YJmrNHMhBU7AyYPPG71kQ2mU6IR
+         YwSRPCo7Bv6l7+G7nCwTX91lqE6qZa1+SkA5jPdN90AYdq2ntXqfZFp5rrX+0gqciARP
+         hb1rLI+2uUcr3QiPwY2KjD9vXttMWxtb93OYpO7azWxKeI4c44m2p3dRCVdGkBsnfG2X
+         APXsvy0gex919JqLLWPbflzG8ICvuc0YMMVou06ezTE9Ps3bvY+rBVAANjK55lYGmFnF
+         On7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW9aF7MO5z6/6MlBdsVl54NIAUq4UfU+PulTS79FyyQEFrHHOQK4mGFHkxZ5Nvh8giz3mdS/ygPZJgl+/r/@vger.kernel.org, AJvYcCXvJ8BSQifsvn2Ts1NbCvRX8kHaLudvb094aMyFOps7E314NyrWBtI7ER6FaM3Mm7RYRRwkxpdKAWrgtAWNIFk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRCSO6PWXtSkoF2h+HdELB9FsQpR8Wp478g1YApIRilWnZo5lz
+	MsFa0zq2mYbUk2haPM9IrZlZvKEe42lu0Vue3T0ujMI0GAATCWv4WaYi
+X-Gm-Gg: ASbGnctOx/1SFB/J+HsqXmXSyFOfmdmjH469IcfdiiTtb5kNjyq7ogF2CWSDU+hiMFe
+	sjvnYmPQ/fuRBlWG1DEValHcVoon89gAUKy3LHpZwef3n4MgpUvew35Zf9M+n10qELb3zTY32bH
+	sMOSdySWPwAYFnr3t6XdKYf1/dgh0pOst/qGyLGiJH9Y9HFMtqjDMeznAuMm6npAWvmBQg/gyR6
+	Q45spcsM8R4VRTfWLhs//XK9AyS3EU1UFrIqpQhuCar8JquVZWkPkZ5WXXV/3YErZ/yAMTs9i8v
+	XJzUyA/aWrVNhUIdRYZDfvtf7Jv92Y9SQ9lVfxmu1DYdfrPAtrM3P2TU9edEvN398xD5Lp2LUFM
+	4MvmkLnXyZgBb3bil4UJRcyir+lg0
+X-Google-Smtp-Source: AGHT+IGf2xdhN2hJXlXhg+b+LtU16QsWc8owUzTcVQ7v+4pWQIPT1GW7q7GpCZh0d4w8DSMFLa7nRQ==
+X-Received: by 2002:a05:620a:24d4:b0:7d3:d8c8:1e32 with SMTP id af79cd13be357-7d3fbf74499mr1409978685a.3.1750624717212;
+        Sun, 22 Jun 2025 13:38:37 -0700 (PDT)
+Received: from fyre-x-redhat96-client-2.fyre.ibm.com ([129.41.87.1])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a779e5d257sm32384341cf.45.2025.06.22.13.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Jun 2025 13:38:36 -0700 (PDT)
+From: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+Subject: [PATCH v3] tpm: Replace scnprintf() with sysfs_emit() and sysfs_emit_at() in sysfs show functions
+Date: Sun, 22 Jun 2025 13:38:28 -0700
+Message-ID: <20250622203828.193163-1-chelsyratnawat2001@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjIyMDA3NiBTYWx0ZWRfX8TnzgF/9CxZc 4VXGQ3mJdEYXHR0EbygG6IMVeHVAyZhhAipmbftjbNOQqK/MItklH8swl7LDw4XOzFgtpvD29vX bbDLGr2ZrCUuJ0JlgqrBOhDAd6jmHJKrELYolZc6yrESr71T3vuE/GZrsHG51/gnIZIgARFvZNc
- 6xteH/mlCins3SZkgmPsG2QDLbL0f61d6hYacBlMjQZfoNOV8mNZStDLWPhkQTTr6ZH+MMCLiIz pxukxj1fTADDUYsHKfWDlKEPe+jqWi5wr7axE6AmJRU6+49Hf0TNpc9pSHJukT7WGZF1gnXJveR G0DLlousKZFm8Odg18s9hdo/Og7FDsfHn2mqkztuNQeTvnky/JxWKseWhVMyFFEBtOr67ewhQ38
- i1sOMYKHiH9tqHLGwOgMUwDV241YMuuVaJbHoxTkDJLrljQWzJphlf98n5yYG5zAPWjwyhF+
-X-Proofpoint-GUID: FtRl5aB2iy992nm6u0N62rVbDKcdzle8
-X-Proofpoint-ORIG-GUID: BWgFVlbVuMyff2u4xjoRrzmut-6DCtPI
-X-Authority-Analysis: v=2.4 cv=combk04i c=1 sm=1 tr=0 ts=6857f5dd cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=IkcTkHD0fZMA:10 a=6IFa9wvqVegA:10 a=7CQSdrXTAAAA:8 a=VnNF1IyMAAAA:8 a=dY7dXPFekxP_jGxdfwkA:9 a=QEXdDO2ut3YA:10
- a=a-qgeE7W1pNrGK8U0ZQC:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-22_04,2025-06-20_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 spamscore=0 adultscore=0 mlxlogscore=999 clxscore=1015
- impostorscore=0 suspectscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506220076
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2025-06-18 at 11:23 +0100, Yeoreum Yun wrote:
-> To generate the boot_aggregate log in the IMA subsystem using TPM PCR val=
-ues,
-> the TPM driver must be built as built-in and must be probed before
-> the IMA subsystem is initialized.
->=20
-> However, when the TPM device operates over the FF-A protocol using the CR=
-B interface,
-> probing fails and returns -EPROBE_DEFER
-> if the tpm_crb_ffa device =E2=80=94 an FF-A device that provides
-> the communication interface to the tpm_crb driver =E2=80=94 has not yet b=
-een probed.
->=20
-> This issue occurs because both crb_acpi_driver_init() and
-> tpm_crb_ffa_driver_init() are registered with device_initcall.
-> As a result, crb_acpi_driver_init() may be invoked before
-> tpm_crb_ffa_driver_init(), which is responsible for probing the tpm_crb_f=
-fa device.
->=20
-> When this happens, IMA fails to detect the TPM device and
-> logs the following message:
->=20
->   | ima: No TPM chip found, activating TPM-bypass!
->=20
-> Consequently, it cannot generate the boot_aggregate log with
-> the PCR values provided by the TPM.
->=20
-> To resolve this issue, the tpm_crb_ffa_init() function explicitly attempt=
-s to
-> probe the tpm_crb_ffa by register tpm_crb_ffa driver so that
-> when tpm_crb_ffa device is created before tpm_crb_ffa_init(),
-> probe the tpm_crb_ffa device in tpm_crb_ffa_init() to finish probe the
-> TPM device completely.
->=20
-> This ensures that the TPM device using CRB over FF-A
-> can be successfully probed, even if crb_acpi_driver_init() is called firs=
-t.
->=20
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
->  drivers/char/tpm/tpm_crb_ffa.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ff=
-a.c
-> index 4ead61f01299..462fcf610020 100644
-> --- a/drivers/char/tpm/tpm_crb_ffa.c
-> +++ b/drivers/char/tpm/tpm_crb_ffa.c
-> @@ -115,6 +115,7 @@ struct tpm_crb_ffa {
->  };
-> =20
->  static struct tpm_crb_ffa *tpm_crb_ffa;
-> +static struct ffa_driver tpm_crb_ffa_driver;
-> =20
->  static int tpm_crb_ffa_to_linux_errno(int errno)
->  {
-> @@ -168,13 +169,23 @@ static int tpm_crb_ffa_to_linux_errno(int errno)
->   */
->  int tpm_crb_ffa_init(void)
->  {
-> +	int ret =3D 0;
-> +
-> +	if (!IS_MODULE(CONFIG_TCG_ARM_CRB_FFA)) {
-> +		ret =3D ffa_register(&tpm_crb_ffa_driver);
-> +		if (ret) {
-> +			tpm_crb_ffa =3D ERR_PTR(-ENODEV);
-> +			return ret;
-> +		}
-> +	}
-> +
->  	if (!tpm_crb_ffa)
-> -		return -ENOENT;
-> +		ret =3D -ENOENT;
-> =20
->  	if (IS_ERR_VALUE(tpm_crb_ffa))
-> -		return -ENODEV;
-> +		ret =3D -ENODEV;
-> =20
-> -	return 0;
-> +	return ret;
->  }
->  EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
-> =20
-> @@ -369,7 +380,9 @@ static struct ffa_driver tpm_crb_ffa_driver =3D {
->  	.id_table =3D tpm_crb_ffa_device_id,
->  };
-> =20
-> +#ifdef MODULE
->  module_ffa_driver(tpm_crb_ffa_driver);
-> +#endif
-> =20
->  MODULE_AUTHOR("Arm");
->  MODULE_DESCRIPTION("TPM CRB FFA driver");
+Replace calls to scnprintf() with sysfs_emit() and sysfs_emit_at() in
+sysfs show functions. These helpers are preferred in sysfs callbacks
+because they automatically handle buffer sizing (PAGE_SIZE) and
+improve safety and readability.
 
-LGTM.  Using ifndef/ifdef MODULE is similar to how module_init() works for =
-both
-builtin and loadable kernel modules. Except module_init() is on the
-device_initcall().
+Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+---
+Changes in v3
+- Replace char *str with int len in show_ppi_operations() 
+- Update sysfs_emit_at() usage to use len as the offset
+- Fix alignment
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+ drivers/char/tpm/tpm_ppi.c | 48 ++++++++++++++++++--------------------
+ 1 file changed, 23 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+index bc7b1b4501b3..50f64d9b53c8 100644
+--- a/drivers/char/tpm/tpm_ppi.c
++++ b/drivers/char/tpm/tpm_ppi.c
+@@ -52,7 +52,7 @@ static ssize_t tpm_show_ppi_version(struct device *dev,
+ {
+ 	struct tpm_chip *chip = to_tpm_chip(dev);
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", chip->ppi_version);
++	return sysfs_emit(buf, "%s\n", chip->ppi_version);
+ }
+ 
+ static ssize_t tpm_show_ppi_request(struct device *dev,
+@@ -87,12 +87,10 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
+ 		else {
+ 			req = obj->package.elements[1].integer.value;
+ 			if (tpm_ppi_req_has_parameter(req))
+-				size = scnprintf(buf, PAGE_SIZE,
+-				    "%llu %llu\n", req,
++				size = sysfs_emit(buf, "%llu %llu\n", req,
+ 				    obj->package.elements[2].integer.value);
+ 			else
+-				size = scnprintf(buf, PAGE_SIZE,
+-						"%llu\n", req);
++				size = sysfs_emit(buf, "%llu\n", req);
+ 		}
+ 	} else if (obj->package.count == 2 &&
+ 	    obj->package.elements[0].type == ACPI_TYPE_INTEGER &&
+@@ -100,7 +98,7 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
+ 		if (obj->package.elements[0].integer.value)
+ 			size = -EFAULT;
+ 		else
+-			size = scnprintf(buf, PAGE_SIZE, "%llu\n",
++			size = sysfs_emit(buf, "%llu\n",
+ 				 obj->package.elements[1].integer.value);
+ 	}
+ 
+@@ -211,10 +209,10 @@ static ssize_t tpm_show_ppi_transition_action(struct device *dev,
+ 	}
+ 
+ 	if (ret < ARRAY_SIZE(info) - 1)
+-		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret, info[ret]);
++		status = sysfs_emit(buf, "%d: %s\n", ret, info[ret]);
+ 	else
+-		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret,
+-				   info[ARRAY_SIZE(info)-1]);
++		status = sysfs_emit(buf, "%d: %s\n", ret,
++				    info[ARRAY_SIZE(info)-1]);
+ 	return status;
+ }
+ 
+@@ -255,23 +253,23 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
+ 	res = ret_obj[2].integer.value;
+ 	if (req) {
+ 		if (res == 0)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+-					   "0: Success");
++			status = sysfs_emit(buf, "%llu %s\n", req,
++					    "0: Success");
+ 		else if (res == 0xFFFFFFF0)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+-					   "0xFFFFFFF0: User Abort");
++			status = sysfs_emit(buf, "%llu %s\n", req,
++					    "0xFFFFFFF0: User Abort");
+ 		else if (res == 0xFFFFFFF1)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+-					   "0xFFFFFFF1: BIOS Failure");
++			status = sysfs_emit(buf, "%llu %s\n", req,
++					    "0xFFFFFFF1: BIOS Failure");
+ 		else if (res >= 1 && res <= 0x00000FFF)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
+-					   req, res, "Corresponding TPM error");
++			status = sysfs_emit(buf, "%llu %llu: %s\n",
++					    req, res, "Corresponding TPM error");
+ 		else
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
+-					   req, res, "Error");
++			status = sysfs_emit(buf, "%llu %llu: %s\n",
++					    req, res, "Error");
+ 	} else {
+-		status = scnprintf(buf, PAGE_SIZE, "%llu: %s\n",
+-				   req, "No Recent Request");
++		status = sysfs_emit(buf, "%llu: %s\n",
++				    req, "No Recent Request");
+ 	}
+ 
+ cleanup:
+@@ -284,7 +282,7 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+ {
+ 	int i;
+ 	u32 ret;
+-	char *str = buf;
++	int len = 0;
+ 	union acpi_object *obj, tmp;
+ 	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
+ 
+@@ -314,11 +312,11 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+ 		}
+ 
+ 		if (ret > 0 && ret < ARRAY_SIZE(info))
+-			str += scnprintf(str, PAGE_SIZE, "%d %d: %s\n",
+-					 i, ret, info[ret]);
++			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
++					     i, ret, info[ret]);
+ 	}
+ 
+-	return str - buf;
++	return len;
+ }
+ 
+ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+-- 
+2.47.1
+
 
