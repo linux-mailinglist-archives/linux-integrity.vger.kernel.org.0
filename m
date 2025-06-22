@@ -1,222 +1,164 @@
-Return-Path: <linux-integrity+bounces-6495-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6496-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D42D4AE31FE
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 22:38:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62753AE3217
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 22:53:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 640EF3AE062
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 20:38:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 232EA188DF93
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Jun 2025 20:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B461F4E39;
-	Sun, 22 Jun 2025 20:38:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EC141F0991;
+	Sun, 22 Jun 2025 20:53:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFMghYCb"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="DfX1QEZH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from the.earth.li (the.earth.li [93.93.131.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707731E0DEA;
-	Sun, 22 Jun 2025 20:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F356C30E841;
+	Sun, 22 Jun 2025 20:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750624720; cv=none; b=m5roqYA6gS8W56FuNKDS5k3d7xF9oxWmskiBgcG2SwZTPcGVCf0eJtqKySWjK2RZmKbkRMX5RFEoH/KZOp7OrG9eTdfQnklpPQNr13EMvZAmrd17IHlLr9Tc34ZOcvupVI2ueDNt6oaHqvbxfptr7Py5NoLIIR78kvui8ZQIikw=
+	t=1750625591; cv=none; b=hwQ/IfCi+E+oChrAiBxXXhtYhUOOv1jDyP6dQprxhcp7eZ0NnLk/3Fm77N0eAPCXidXoTcck4h8pwGOgi2rreuE2XLsAZYJjgVpQtsdC8Cp3RTIvRYJS6dXK4VIsqJRQc+N6BAt/4zVNXcOXBV8W8B8mLGYBz4x7sLe31Mv3cQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750624720; c=relaxed/simple;
-	bh=FsM9pggermSvNQPAiZXur5A/W3HYmPYGCh5koS2k+cA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zf3hI2fLcymTr3PgCJOOsHQajbA1xbS9Q86v5yF5j25we0d5lFm1HEVVkBneYEJsEzjmkfxxwU96F/SRP5OieBvGw31slGD8mIHtQPNg7J1Y7pFHRfwZL0Gqd199eDNSbr4QYFgVwDYoxGV5VqVkxLUhC5WB5Oi8moK/zRm6ZAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFMghYCb; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7d094ef02e5so369791585a.1;
-        Sun, 22 Jun 2025 13:38:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750624717; x=1751229517; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vldq3wxBKVz1slyoTUjG7bsKsHFPjugjSfGiRDEW8yk=;
-        b=YFMghYCbFQ+fcSpIoJmarAVXMdRBUCEk21HyblDnwlx0bYveH1yJ1pYJQ5CK3TDYXO
-         jVmbL1QKrof8wg+UaQCfb1bWTq3wxIovX8NVLenMHoVViGl/okAKLhBtYTEapEKVE70G
-         Rp+hWDRfj7Srj9BLUgrplLQ2gFLD4Jc4kCkGFESwkzvdwN0EGL/KVRshfKU6d+q0z56A
-         0vhy+rV3SG0iTju4KbGVoPhoqla/DmiJV6LpjCsftlo21Plxqr92j+WZ0odVkVeWCGt0
-         c6LjsZuO6E9B/uKAdi0f+LipSaUEog9M2yirSBl2uXTxSnzaDkum27UazNvmOVfF/Gnm
-         dANA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750624717; x=1751229517;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vldq3wxBKVz1slyoTUjG7bsKsHFPjugjSfGiRDEW8yk=;
-        b=wZJtcMu+pdVh9sgHV1ZZs1j5ENMQYomeBvmUQ1wW2UsEmKB7lV1XYTPo6znLz+uZt8
-         yvT11X2qdHC+ewvrOp8Fv/pJI6XZy3N8XGW+dmWt9YJmrNHMhBU7AyYPPG71kQ2mU6IR
-         YwSRPCo7Bv6l7+G7nCwTX91lqE6qZa1+SkA5jPdN90AYdq2ntXqfZFp5rrX+0gqciARP
-         hb1rLI+2uUcr3QiPwY2KjD9vXttMWxtb93OYpO7azWxKeI4c44m2p3dRCVdGkBsnfG2X
-         APXsvy0gex919JqLLWPbflzG8ICvuc0YMMVou06ezTE9Ps3bvY+rBVAANjK55lYGmFnF
-         On7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW9aF7MO5z6/6MlBdsVl54NIAUq4UfU+PulTS79FyyQEFrHHOQK4mGFHkxZ5Nvh8giz3mdS/ygPZJgl+/r/@vger.kernel.org, AJvYcCXvJ8BSQifsvn2Ts1NbCvRX8kHaLudvb094aMyFOps7E314NyrWBtI7ER6FaM3Mm7RYRRwkxpdKAWrgtAWNIFk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRCSO6PWXtSkoF2h+HdELB9FsQpR8Wp478g1YApIRilWnZo5lz
-	MsFa0zq2mYbUk2haPM9IrZlZvKEe42lu0Vue3T0ujMI0GAATCWv4WaYi
-X-Gm-Gg: ASbGnctOx/1SFB/J+HsqXmXSyFOfmdmjH469IcfdiiTtb5kNjyq7ogF2CWSDU+hiMFe
-	sjvnYmPQ/fuRBlWG1DEValHcVoon89gAUKy3LHpZwef3n4MgpUvew35Zf9M+n10qELb3zTY32bH
-	sMOSdySWPwAYFnr3t6XdKYf1/dgh0pOst/qGyLGiJH9Y9HFMtqjDMeznAuMm6npAWvmBQg/gyR6
-	Q45spcsM8R4VRTfWLhs//XK9AyS3EU1UFrIqpQhuCar8JquVZWkPkZ5WXXV/3YErZ/yAMTs9i8v
-	XJzUyA/aWrVNhUIdRYZDfvtf7Jv92Y9SQ9lVfxmu1DYdfrPAtrM3P2TU9edEvN398xD5Lp2LUFM
-	4MvmkLnXyZgBb3bil4UJRcyir+lg0
-X-Google-Smtp-Source: AGHT+IGf2xdhN2hJXlXhg+b+LtU16QsWc8owUzTcVQ7v+4pWQIPT1GW7q7GpCZh0d4w8DSMFLa7nRQ==
-X-Received: by 2002:a05:620a:24d4:b0:7d3:d8c8:1e32 with SMTP id af79cd13be357-7d3fbf74499mr1409978685a.3.1750624717212;
-        Sun, 22 Jun 2025 13:38:37 -0700 (PDT)
-Received: from fyre-x-redhat96-client-2.fyre.ibm.com ([129.41.87.1])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a779e5d257sm32384341cf.45.2025.06.22.13.38.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jun 2025 13:38:36 -0700 (PDT)
-From: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
-To: peterhuewe@gmx.de,
-	jarkko@kernel.org
-Cc: jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
-Subject: [PATCH v3] tpm: Replace scnprintf() with sysfs_emit() and sysfs_emit_at() in sysfs show functions
-Date: Sun, 22 Jun 2025 13:38:28 -0700
-Message-ID: <20250622203828.193163-1-chelsyratnawat2001@gmail.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1750625591; c=relaxed/simple;
+	bh=JJyj3mo8oKEq4wZ4Dv10w5hdo1/sXliZGlZgrk5/K3M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fr49PyM4HDV8TiijttvDVzvmOtVyz5Jz3YWwj6+2C71yQQ5fL2lWJGDPyBwjNfwU5q9DZIiwoYHe5ziMro2Gvy59y/oaK8zdF1Enx8zcWP5UHUadeY46X7v8tEYPSEOWiGWRqhKxJdv3TeqKSdHDLNQx6ORdhy3+JZ8WG+dcHc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=DfX1QEZH; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=D3O7Y2Dq8XWvhCk7TsV976q3evuoHtvC9Y/E+MQrHn0=; b=DfX1QEZH7Ptiv4qhoqSdtKXqHM
+	4F2V7bhJK9praia6z+rjV6ZwRHSca9SoGMQltZQyPL1Jtkx4qhNGRGoDYCsKki3FmIt36pOsbca5H
+	3zjlSuLg4ywuLP11REUXei4kDqJIkuA6WQmGzRxdwoXxRo6v0BII2atdPP45KVg7uibZtusFz44RE
+	RpkR+0s4Kw3RmeV2yLEAnpMB/DmBJZLebSdTtJVlFfvrtAXDuvyXkTEmRVyK+nH9v1Znus2YB4asX
+	WR4+urJs73PoSq2X9Tn68D8LW5HEZCBcVdZI6woRQZB6AhZoA4787IWl/cteC6l18ANXQsMmhRwd/
+	BnbD8Sew==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1uTRgQ-00GUWB-1U;
+	Sun, 22 Jun 2025 21:52:58 +0100
+Date: Sun, 22 Jun 2025 21:52:58 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: "Orlov, Ivan" <iorlov@amazon.co.uk>
+Cc: "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+	"jarkko@kernel.org" <jarkko@kernel.org>,
+	"jgg@ziepe.ca" <jgg@ziepe.ca>,
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Woodhouse, David" <dwmw@amazon.co.uk>
+Subject: Re: [PATCH v2] tpm: Fix the timeout & use ktime
+Message-ID: <aFhtKrWTDzZbpTSh@earth.li>
+References: <20250620180828.98413-1-iorlov@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20250620180828.98413-1-iorlov@amazon.com>
 
-Replace calls to scnprintf() with sysfs_emit() and sysfs_emit_at() in
-sysfs show functions. These helpers are preferred in sysfs callbacks
-because they automatically handle buffer sizing (PAGE_SIZE) and
-improve safety and readability.
+On Fri, Jun 20, 2025 at 06:08:31PM +0000, Orlov, Ivan wrote:
+>The current implementation of timeout detection works in the following
+>way:
+>
+>1. Read completion status. If completed, return the data
+>2. Sleep for some time (usleep_range)
+>3. Check for timeout using current jiffies value. Return an error if
+>   timed out
+>4. Goto 1
+>
+>usleep_range doesn't guarantee it's always going to wake up strictly in
+>(min, max) range, so such a situation is possible:
+>
+>1. Driver reads completion status. No completion yet
+>2. Process sleeps indefinitely. In the meantime, TPM responds
+>3. We check for timeout without checking for the completion again.
+>   Result is lost.
+>
+>Such a situation also happens for the guest VMs: if vCPU goes to sleep
+>and doesn't get scheduled for some time, the guest TPM driver will
+>timeout instantly after waking up without checking for the completion
+>(which may already be in place).
+>
+>Perform the completion check once again after exiting the busy loop in
+>order to give the device the last chance to send us some data.
+>
+>Since now we check for completion in two places, extract this check into
+>a separate function.
+>
+>Signed-off-by: Ivan Orlov <iorlov@amazon.com>
+>---
+>V1 -> V2:
+>- Exclude the jiffies -> ktime change from the patch
+>- Instead of recording the time before checking for completion, check
+>  for completion once again after leaving the loop
+>
+> drivers/char/tpm/tpm-interface.c | 17 +++++++++++++++--
+> 1 file changed, 15 insertions(+), 2 deletions(-)
+>
+>diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+>index 8d7e4da6ed53..6960ee2798e1 100644
+>--- a/drivers/char/tpm/tpm-interface.c
+>+++ b/drivers/char/tpm/tpm-interface.c
+>@@ -82,6 +82,13 @@ static bool tpm_chip_req_canceled(struct tpm_chip *chip, u8 status)
+> 	return chip->ops->req_canceled(chip, status);
+> }
+>
+>+static bool tpm_transmit_completed(struct tpm_chip *chip)
+>+{
+>+	u8 status_masked = tpm_chip_status(chip) & chip->ops->req_complete_mask;
+>+
+>+	return status_masked == chip->ops->req_complete_val;
+>+}
+>+
+> static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+> {
+> 	struct tpm_header *header = buf;
+>@@ -129,8 +136,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+> 	stop = jiffies + tpm_calc_ordinal_duration(chip, ordinal);
+> 	do {
+> 		u8 status = tpm_chip_status(chip);
+>-		if ((status & chip->ops->req_complete_mask) ==
+>-		    chip->ops->req_complete_val)
+>+		if (tpm_transmit_completed(chip))
+> 			goto out_recv;
 
-Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
----
-Changes in v3
-- Replace char *str with int len in show_ppi_operations() 
-- Update sysfs_emit_at() usage to use len as the offset
-- Fix alignment
+The only thing I'd point out here is we end up doing a double status 
+read one after the other (once here, once in tpm_transmit_completed), 
+and I'm pretty sure I've seen instances where that caused a problem.
 
- drivers/char/tpm/tpm_ppi.c | 48 ++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 25 deletions(-)
+> 		if (tpm_chip_req_canceled(chip, status)) {
+>@@ -142,6 +148,13 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+> 		rmb();
+> 	} while (time_before(jiffies, stop));
+>
+>+	/*
+>+	 * Check for completion one more time, just in case the device reported
+>+	 * it while the driver was sleeping in the busy loop above.
+>+	 */
+>+	if (tpm_transmit_completed(chip))
+>+		goto out_recv;
+>+
+> 	tpm_chip_cancel(chip);
+> 	dev_err(&chip->dev, "Operation Timed out\n");
+> 	return -ETIME;
 
-diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-index bc7b1b4501b3..50f64d9b53c8 100644
---- a/drivers/char/tpm/tpm_ppi.c
-+++ b/drivers/char/tpm/tpm_ppi.c
-@@ -52,7 +52,7 @@ static ssize_t tpm_show_ppi_version(struct device *dev,
- {
- 	struct tpm_chip *chip = to_tpm_chip(dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", chip->ppi_version);
-+	return sysfs_emit(buf, "%s\n", chip->ppi_version);
- }
- 
- static ssize_t tpm_show_ppi_request(struct device *dev,
-@@ -87,12 +87,10 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
- 		else {
- 			req = obj->package.elements[1].integer.value;
- 			if (tpm_ppi_req_has_parameter(req))
--				size = scnprintf(buf, PAGE_SIZE,
--				    "%llu %llu\n", req,
-+				size = sysfs_emit(buf, "%llu %llu\n", req,
- 				    obj->package.elements[2].integer.value);
- 			else
--				size = scnprintf(buf, PAGE_SIZE,
--						"%llu\n", req);
-+				size = sysfs_emit(buf, "%llu\n", req);
- 		}
- 	} else if (obj->package.count == 2 &&
- 	    obj->package.elements[0].type == ACPI_TYPE_INTEGER &&
-@@ -100,7 +98,7 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
- 		if (obj->package.elements[0].integer.value)
- 			size = -EFAULT;
- 		else
--			size = scnprintf(buf, PAGE_SIZE, "%llu\n",
-+			size = sysfs_emit(buf, "%llu\n",
- 				 obj->package.elements[1].integer.value);
- 	}
- 
-@@ -211,10 +209,10 @@ static ssize_t tpm_show_ppi_transition_action(struct device *dev,
- 	}
- 
- 	if (ret < ARRAY_SIZE(info) - 1)
--		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret, info[ret]);
-+		status = sysfs_emit(buf, "%d: %s\n", ret, info[ret]);
- 	else
--		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret,
--				   info[ARRAY_SIZE(info)-1]);
-+		status = sysfs_emit(buf, "%d: %s\n", ret,
-+				    info[ARRAY_SIZE(info)-1]);
- 	return status;
- }
- 
-@@ -255,23 +253,23 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
- 	res = ret_obj[2].integer.value;
- 	if (req) {
- 		if (res == 0)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
--					   "0: Success");
-+			status = sysfs_emit(buf, "%llu %s\n", req,
-+					    "0: Success");
- 		else if (res == 0xFFFFFFF0)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
--					   "0xFFFFFFF0: User Abort");
-+			status = sysfs_emit(buf, "%llu %s\n", req,
-+					    "0xFFFFFFF0: User Abort");
- 		else if (res == 0xFFFFFFF1)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
--					   "0xFFFFFFF1: BIOS Failure");
-+			status = sysfs_emit(buf, "%llu %s\n", req,
-+					    "0xFFFFFFF1: BIOS Failure");
- 		else if (res >= 1 && res <= 0x00000FFF)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
--					   req, res, "Corresponding TPM error");
-+			status = sysfs_emit(buf, "%llu %llu: %s\n",
-+					    req, res, "Corresponding TPM error");
- 		else
--			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
--					   req, res, "Error");
-+			status = sysfs_emit(buf, "%llu %llu: %s\n",
-+					    req, res, "Error");
- 	} else {
--		status = scnprintf(buf, PAGE_SIZE, "%llu: %s\n",
--				   req, "No Recent Request");
-+		status = sysfs_emit(buf, "%llu: %s\n",
-+				    req, "No Recent Request");
- 	}
- 
- cleanup:
-@@ -284,7 +282,7 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
- {
- 	int i;
- 	u32 ret;
--	char *str = buf;
-+	int len = 0;
- 	union acpi_object *obj, tmp;
- 	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
- 
-@@ -314,11 +312,11 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
- 		}
- 
- 		if (ret > 0 && ret < ARRAY_SIZE(info))
--			str += scnprintf(str, PAGE_SIZE, "%d %d: %s\n",
--					 i, ret, info[ret]);
-+			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
-+					     i, ret, info[ret]);
- 	}
- 
--	return str - buf;
-+	return len;
- }
- 
- static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+J.
+
 -- 
-2.47.1
-
+She's the one for me. She's all I really need, oh yeah.
+This .sig brought to you by the letter K and the number  3
+Product of the Republic of HuggieTag
 
