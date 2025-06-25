@@ -1,396 +1,95 @@
-Return-Path: <linux-integrity+bounces-6529-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6530-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A6FAE8E21
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 21:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 780BAAE8E70
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 21:20:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A9101C26D76
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 19:11:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CB59189E31A
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 19:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16CD02DFA42;
-	Wed, 25 Jun 2025 19:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 224C9158218;
+	Wed, 25 Jun 2025 19:20:03 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35482DBF66;
-	Wed, 25 Jun 2025 19:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB664275B04;
+	Wed, 25 Jun 2025 19:20:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750878605; cv=none; b=seflYlYJ1ZUnPHJTQ5f5C39/LM9PwHzwD0jWfjz7GumwRhiSZLSLbz2sLMuZRaN7orXS5gkEqIbhiAAlbWx6g1FAUf/TPj03PFab+ZzdmI89I5RlYVszI2Dh/66RGGAtjrqbrMhyDVkvIIMUg8zFiohORUUlrfuvaNlPRxcWPkY=
+	t=1750879203; cv=none; b=sDK0wyZZZS5C/uN24+HFr232hUWoc0apOkcKMtDl92tbUFS4KdWe5dJSGn5owaAct+OVKRpBVyyGY+kqMFOIWyxGMBk/DSUczv6f4tid0/cp6GN3x8Xvu/4Al5N3YIvr7sBu6Jqxyg4qZt/E1jy+Jbz1Drpi6ILyuKoQVRVxeSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750878605; c=relaxed/simple;
-	bh=FnMYmoSUgheFarqpQRcfgwPFxcfdXrUXOM0r5RbD6pA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K7d4Qp60QI3Mgoi/5kUFehnraPJqDaNYUul0dGxg0kGTJlY+tQYJas415jfHYzAFp+rmXWkSLZcBkumAqMcScvgy/FB+6ap48/yMGzRWE/SD64G9eTZVbRbTCJMkQJiGLnC+OEwzp+v+hXdbD8twTRrfg+pLXmWlfpr8TON7xTk=
+	s=arc-20240116; t=1750879203; c=relaxed/simple;
+	bh=q61iirmjI3RzzKZK8M+lsr+ig5IRizqQYOb9ZLsVqsA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MWuVzko+ew9UhA7v7xhTHvmpl30kUMxsoRYPpBdbFXs2f4upGJL0F4JJ5C0vQo0aNO3RqosLZ9/xyRl2rwMB/RN/2NFGbuoWs4QavNkYMHMKH18IZMZJSrnLdylF1Uh4BezLgX3IhctOx4yb/Ldwjn9i3YCmMMHFtih+taHIo5w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1FBF106F;
-	Wed, 25 Jun 2025 12:09:41 -0700 (PDT)
-Received: from [10.118.109.149] (Prachotans-MBP.austin.arm.com [10.118.109.149])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0BB23F58B;
-	Wed, 25 Jun 2025 12:09:59 -0700 (PDT)
-Message-ID: <a9c6e8b2-ddd4-4bf9-bbe4-a6a691837672@arm.com>
-Date: Wed, 25 Jun 2025 14:09:50 -0500
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F532106F;
+	Wed, 25 Jun 2025 12:19:42 -0700 (PDT)
+Received: from u103485.austin.arm.com (u103485.arm.com [10.118.30.35])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09DF73F58B;
+	Wed, 25 Jun 2025 12:20:00 -0700 (PDT)
+From: Prachotan Bathi <prachotan.bathi@arm.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Stuart Yoder <stuart.yoder@arm.com>
+Cc: linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prachotan Bathi <prachotan.bathi@arm.com>
+Subject: [PATCH v7 0/2] tpm_crb_ffa: handle tpm busy return code
+Date: Wed, 25 Jun 2025 14:19:41 -0500
+Message-ID: <20250625191943.1009830-1-prachotan.bathi@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 2/2] tpm_crb_ffa: handle tpm busy return code
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
- Stuart Yoder <stuart.yoder@arm.com>, linux-integrity@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250617160544.444321-1-prachotan.bathi@arm.com>
- <20250617160544.444321-3-prachotan.bathi@arm.com>
- <aFsy8wFnmm6usEDH@kernel.org>
-Content-Language: en-US
-From: Prachotan Bathi <prachotan.bathi@arm.com>
-In-Reply-To: <aFsy8wFnmm6usEDH@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/24/25 6:21 PM, Jarkko Sakkinen wrote:
+Platforms that support FF-A direct message request v2 can implement
+Secure Partitions (SPs) that host multiple services. When the TPM
+service shares its SP with other services, message requests from the
+driver may fail with a BUSY response if another service is currently
+active.
 
-> On Tue, Jun 17, 2025 at 11:05:44AM -0500, Prachotan Bathi wrote:
->> Platforms supporting direct message request v2 [1] can support secure
->> partitions that support multiple services. For CRB over FF-A interface,
->> if the firmware TPM or TPM service [1] shares its Secure Partition (SP)
->> with another service, message requests may fail with a -EBUSY error.
->>
->> To handle this, replace the single check and call with a retry loop
->> that attempts the TPM message send operation until it succeeds or a
->> configurable timeout is reached. Implement a _try_send_receive function
->> to do a single send/receive and modify the existing send_receive to
->> add this retry loop.
->> The retry mechanism introduces a module parameter (`busy_timeout_ms`,
->> default: 2000ms) to control how long to keep retrying on -EBUSY
->> responses. Between retries, the code waits briefly (50-100 microseconds)
->> to avoid busy-waiting and handling TPM BUSY conditions more gracefully.
->>
->> The parameter can be modified at run-time as such:
->> echo 3000 | tee /sys/module/tpm_crb_ffa/parameters/busy_timeout_ms
->> This changes the timeout from the default 2000ms to 3000ms.
->>
->> [1] TPM Service Command Response Buffer Interface Over FF-A
->> https://developer.arm.com/documentation/den0138/latest/
->>
->> Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
->> ---
->>   drivers/char/tpm/tpm_crb_ffa.c | 66 +++++++++++++++++++++++++++-------
->>   1 file changed, 53 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
->> index 089d1e54bb46..4615347795fa 100644
->> --- a/drivers/char/tpm/tpm_crb_ffa.c
->> +++ b/drivers/char/tpm/tpm_crb_ffa.c
->> @@ -10,8 +10,12 @@
->>   #define pr_fmt(fmt) "CRB_FFA: " fmt
->>   
->>   #include <linux/arm_ffa.h>
->> +#include <linux/delay.h>
->> +#include <linux/moduleparam.h>
->>   #include "tpm_crb_ffa.h"
->>   
->> +#define memzero(s, n) memset((s), 0, (n))
->> +
->>   /* TPM service function status codes */
->>   #define CRB_FFA_OK			0x05000001
->>   #define CRB_FFA_OK_RESULTS_RETURNED	0x05000002
->> @@ -178,22 +182,18 @@ int tpm_crb_ffa_init(void)
->>   }
->>   EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
->>   
->> -static int __tpm_crb_ffa_send_receive(unsigned long func_id,
->> -				      unsigned long a0,
->> -				      unsigned long a1,
->> -				      unsigned long a2)
->> +static int __tpm_crb_ffa_try_send_receive(unsigned long func_id,
->> +					  unsigned long a0, unsigned long a1,
->> +					  unsigned long a2)
->>   {
->>   	const struct ffa_msg_ops *msg_ops;
->>   	int ret;
->>   
->> -	if (!tpm_crb_ffa)
->> -		return -ENOENT;
->> -
->>   	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
->>   
->>   	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
->> -		memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
->> -		       sizeof(struct ffa_send_direct_data2));
->> +		memzero(&tpm_crb_ffa->direct_msg_data2,
->> +			sizeof(struct ffa_send_direct_data2));
->>   
->>   		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
->>   		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
->> @@ -201,12 +201,12 @@ static int __tpm_crb_ffa_send_receive(unsigned long func_id,
->>   		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
->>   
->>   		ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
->> -				&tpm_crb_ffa->direct_msg_data2);
->> +						&tpm_crb_ffa->direct_msg_data2);
->>   		if (!ret)
->>   			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
->>   	} else {
->> -		memset(&tpm_crb_ffa->direct_msg_data, 0x00,
->> -		       sizeof(struct ffa_send_direct_data));
->> +		memzero(&tpm_crb_ffa->direct_msg_data,
->> +			sizeof(struct ffa_send_direct_data));
->>   
->>   		tpm_crb_ffa->direct_msg_data.data1 = func_id;
->>   		tpm_crb_ffa->direct_msg_data.data2 = a0;
->> @@ -214,11 +214,51 @@ static int __tpm_crb_ffa_send_receive(unsigned long func_id,
->>   		tpm_crb_ffa->direct_msg_data.data4 = a2;
->>   
->>   		ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
->> -				&tpm_crb_ffa->direct_msg_data);
->> +						 &tpm_crb_ffa->direct_msg_data);
->>   		if (!ret)
->>   			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
->>   	}
->>   
->> +	return ret;
->> +}
->> +
->> +static unsigned int busy_timeout_ms = 2000;
->> +/**
->> + * busy_timeout_ms - Maximum time to retry before giving up on busy
-> nit: s/busy_timeout_ms/busy_timeout_ms()/
->
->> + *
->> + * This parameter defines the maximum time in milliseconds to retry
->> + * sending a message to the TPM service before giving up.
->> + */
->> +module_param(busy_timeout_ms, uint, 0644);
->> +MODULE_PARM_DESC(busy_timeout_ms,
->> +		 "Maximum time(in ms) to retry before giving up on busy");
-> Patch lacks update to Documentation/admin-guide/kernel-parameters.rst
-> (and also document that the default value is two seconds).
->
->> +
->> +static int __tpm_crb_ffa_send_receive(unsigned long func_id, unsigned long a0,
->> +				      unsigned long a1, unsigned long a2)
->> +{
->> +	ktime_t start, stop;
->> +	int ret;
->> +
->> +	if (!tpm_crb_ffa)
->> +		return -ENOENT;
->> +
->> +	start = ktime_get();
->> +	stop = ktime_add(start, ms_to_ktime(busy_timeout_ms));
->> +
->> +	for (;;) {
->> +		ret = __tpm_crb_ffa_try_send_receive(func_id, a0, a1, a2);
->> +
->> +		if (ret == -EBUSY) {
-> This loop would be less convoluted if you instead:
->
-> 	if (ret != -EBUSY)
-> 		break;
->
-> 	/* ... */
->
->> +			usleep_range(50, 100);
-> I wonder where this range comes from.
-This range comes from a similar timeout defined in the 
-crb_wait_for_reg_32 function.
-See:
+To improve robustness in such scenarios, we need to introduce retry
+logic in the driver. When a BUSY error is received, the driver will
+re-attempt the TPM request until it succeeds or a run-time configurable 
+timeout(default: 2000 ms) is reached. This ensures reliable TPM access 
+under shared-SP conditions.
 
-https://github.com/torvalds/linux/blob/c4dce0c094a89b1bc8fde1163342bd6fe29c0370/drivers/char/tpm/tpm_crb.c#L153
+Add a module parameter, `busy_timeout_ms`, which specifies the
+maximum amount of time (in milliseconds) to retry on BUSY before giving
+up.
 
-A TPM Service might have a discrete TPM (dtpm) that it communicates 
-with, a busy SP might become available again and be able to proxy 
-commands to a dtpm within a similar retry window. This window works well 
-with current internal implementations and can be changed as future 
-implementations and specifications evolve and define a more 
-sophisticated retry window.
+This change builds on top of commit a85b55ee64a5, which introduced
+support for TPM service communication using the FF-A direct message v2
+path, in accordance with section 3.3 of the TPM Service Command
+Response Buffer Interface specification.
+https://developer.arm.com/documentation/den0138/latest/
 
->> +			if (ktime_after(ktime_get(), stop)) {
->> +				dev_warn(&tpm_crb_ffa->ffa_dev->dev,
->> +					 "Busy retry timed out\n");
->> +				break;
->> +			}
->> +		} else {
->> +			break;
->> +		}
->> +	}
->>   
->>   	return ret;
->>   }
->> -- 
->> 2.43.0
->>
-> BR, Jarkko
+This was tested with an FF-A based fTPM currently not publicly available. 
+There are plans to open source the fTPM.
 
+Changes in v7:
+- Updated Documentation/admin-guide/kernel-parameters with busy_timeout_ms.
+- Used a less convoluted break condition to exit the retry loop.
 
-On 6/24/25 6:21 PM, Jarkko Sakkinen wrote:
-> On Tue, Jun 17, 2025 at 11:05:44AM -0500, Prachotan Bathi wrote:
->> Platforms supporting direct message request v2 [1] can support secure
->> partitions that support multiple services. For CRB over FF-A interface,
->> if the firmware TPM or TPM service [1] shares its Secure Partition (SP)
->> with another service, message requests may fail with a -EBUSY error.
->>
->> To handle this, replace the single check and call with a retry loop
->> that attempts the TPM message send operation until it succeeds or a
->> configurable timeout is reached. Implement a _try_send_receive function
->> to do a single send/receive and modify the existing send_receive to
->> add this retry loop.
->> The retry mechanism introduces a module parameter (`busy_timeout_ms`,
->> default: 2000ms) to control how long to keep retrying on -EBUSY
->> responses. Between retries, the code waits briefly (50-100 microseconds)
->> to avoid busy-waiting and handling TPM BUSY conditions more gracefully.
->>
->> The parameter can be modified at run-time as such:
->> echo 3000 | tee /sys/module/tpm_crb_ffa/parameters/busy_timeout_ms
->> This changes the timeout from the default 2000ms to 3000ms.
->>
->> [1] TPM Service Command Response Buffer Interface Over FF-A
->> https://developer.arm.com/documentation/den0138/latest/
->>
->> Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
->> ---
->>   drivers/char/tpm/tpm_crb_ffa.c | 66 +++++++++++++++++++++++++++-------
->>   1 file changed, 53 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
->> index 089d1e54bb46..4615347795fa 100644
->> --- a/drivers/char/tpm/tpm_crb_ffa.c
->> +++ b/drivers/char/tpm/tpm_crb_ffa.c
->> @@ -10,8 +10,12 @@
->>   #define pr_fmt(fmt) "CRB_FFA: " fmt
->>   
->>   #include <linux/arm_ffa.h>
->> +#include <linux/delay.h>
->> +#include <linux/moduleparam.h>
->>   #include "tpm_crb_ffa.h"
->>   
->> +#define memzero(s, n) memset((s), 0, (n))
->> +
->>   /* TPM service function status codes */
->>   #define CRB_FFA_OK			0x05000001
->>   #define CRB_FFA_OK_RESULTS_RETURNED	0x05000002
->> @@ -178,22 +182,18 @@ int tpm_crb_ffa_init(void)
->>   }
->>   EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
->>   
->> -static int __tpm_crb_ffa_send_receive(unsigned long func_id,
->> -				      unsigned long a0,
->> -				      unsigned long a1,
->> -				      unsigned long a2)
->> +static int __tpm_crb_ffa_try_send_receive(unsigned long func_id,
->> +					  unsigned long a0, unsigned long a1,
->> +					  unsigned long a2)
->>   {
->>   	const struct ffa_msg_ops *msg_ops;
->>   	int ret;
->>   
->> -	if (!tpm_crb_ffa)
->> -		return -ENOENT;
->> -
->>   	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
->>   
->>   	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
->> -		memset(&tpm_crb_ffa->direct_msg_data2, 0x00,
->> -		       sizeof(struct ffa_send_direct_data2));
->> +		memzero(&tpm_crb_ffa->direct_msg_data2,
->> +			sizeof(struct ffa_send_direct_data2));
->>   
->>   		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
->>   		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
->> @@ -201,12 +201,12 @@ static int __tpm_crb_ffa_send_receive(unsigned long func_id,
->>   		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
->>   
->>   		ret = msg_ops->sync_send_receive2(tpm_crb_ffa->ffa_dev,
->> -				&tpm_crb_ffa->direct_msg_data2);
->> +						&tpm_crb_ffa->direct_msg_data2);
->>   		if (!ret)
->>   			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data2.data[0]);
->>   	} else {
->> -		memset(&tpm_crb_ffa->direct_msg_data, 0x00,
->> -		       sizeof(struct ffa_send_direct_data));
->> +		memzero(&tpm_crb_ffa->direct_msg_data,
->> +			sizeof(struct ffa_send_direct_data));
->>   
->>   		tpm_crb_ffa->direct_msg_data.data1 = func_id;
->>   		tpm_crb_ffa->direct_msg_data.data2 = a0;
->> @@ -214,11 +214,51 @@ static int __tpm_crb_ffa_send_receive(unsigned long func_id,
->>   		tpm_crb_ffa->direct_msg_data.data4 = a2;
->>   
->>   		ret = msg_ops->sync_send_receive(tpm_crb_ffa->ffa_dev,
->> -				&tpm_crb_ffa->direct_msg_data);
->> +						 &tpm_crb_ffa->direct_msg_data);
->>   		if (!ret)
->>   			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
->>   	}
->>   
->> +	return ret;
->> +}
->> +
->> +static unsigned int busy_timeout_ms = 2000;
->> +/**
->> + * busy_timeout_ms - Maximum time to retry before giving up on busy
-> nit: s/busy_timeout_ms/busy_timeout_ms()/
->
->> + *
->> + * This parameter defines the maximum time in milliseconds to retry
->> + * sending a message to the TPM service before giving up.
->> + */
->> +module_param(busy_timeout_ms, uint, 0644);
->> +MODULE_PARM_DESC(busy_timeout_ms,
->> +		 "Maximum time(in ms) to retry before giving up on busy");
-> Patch lacks update to Documentation/admin-guide/kernel-parameters.rst
-> (and also document that the default value is two seconds).
->
->> +
->> +static int __tpm_crb_ffa_send_receive(unsigned long func_id, unsigned long a0,
->> +				      unsigned long a1, unsigned long a2)
->> +{
->> +	ktime_t start, stop;
->> +	int ret;
->> +
->> +	if (!tpm_crb_ffa)
->> +		return -ENOENT;
->> +
->> +	start = ktime_get();
->> +	stop = ktime_add(start, ms_to_ktime(busy_timeout_ms));
->> +
->> +	for (;;) {
->> +		ret = __tpm_crb_ffa_try_send_receive(func_id, a0, a1, a2);
->> +
->> +		if (ret == -EBUSY) {
-> This loop would be less convoluted if you instead:
->
-> 	if (ret != -EBUSY)
-> 		break;
->
-> 	/* ... */
->
->> +			usleep_range(50, 100);
-> I wonder where this range comes from.
->
->> +			if (ktime_after(ktime_get(), stop)) {
->> +				dev_warn(&tpm_crb_ffa->ffa_dev->dev,
->> +					 "Busy retry timed out\n");
->> +				break;
->> +			}
->> +		} else {
->> +			break;
->> +		}
->> +	}
->>   
->>   	return ret;
->>   }
->> -- 
->> 2.43.0
->>
-> BR, Jarkko
+Prachotan Bathi (2):
+  tpm_crb_ffa: Fix typos in function name
+  tpm_crb_ffa: handle tpm busy return code
+
+ .../admin-guide/kernel-parameters.txt         |  8 +++
+ drivers/char/tpm/tpm_crb_ffa.c                | 69 +++++++++++++++----
+ 2 files changed, 62 insertions(+), 15 deletions(-)
+
+-- 
+2.43.0
+
 
