@@ -1,108 +1,219 @@
-Return-Path: <linux-integrity+bounces-6508-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6509-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98117AE74A8
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 04:08:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28E13AE7649
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 07:04:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B98885A5AE1
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 02:07:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB3D1189126B
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 05:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB60C1A08BC;
-	Wed, 25 Jun 2025 02:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4B7156228;
+	Wed, 25 Jun 2025 05:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aCu1mQrG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="St5kISov"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B02A190676
-	for <linux-integrity@vger.kernel.org>; Wed, 25 Jun 2025 02:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2419F3074BC;
+	Wed, 25 Jun 2025 05:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750817283; cv=none; b=qaqcwHSva7Ap8kKp8h210AdvkcnC4c0JxlO14cBE7HD3aAU0p/TZ7tKpTh+zt5zu+XJ2JVp3YqgyZxuZJ98wdFn95NUEK0Lr3Z6lgd2xjGKmq9FXhc1tbWfKv4+IrSzO5w+4KB8dVv6mwK7uiQBYYj9e7EJAILbDzaPbk1DYfYo=
+	t=1750827845; cv=none; b=FxmV57832W4FW5Fs6bF7pHqEuk6tL/0NSh1qEW7pmtg9JdZKjUFK/sb0NJ8qmEZbUJNGgxFSA4Ei7dgI0VvtPWMiycnpANKo1w2tf63q0ZqRVsjTc5kW6pCWlx5zJXDDVO0j62FyqcCQZn79uFIW+TgScTxtYVdmAelx/lt7IPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750817283; c=relaxed/simple;
-	bh=ma+88H5VpAOifU7fHtlXxdBKdlhmSUKKZ8A91So9mGM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ll5FDtGd/yzaAZRo41fGeewJoNIyQze+bHOpWgcnhZUt69xXbL8xwlL8EEDNblpboxk4AEAY6zHTMbdbSU00TtnE/brTL6sXPNU5Ayi4+1qndjquEsRyG0X32zRs+UJvUJ/dF6YiYUK6ORYNBRW3zMERzq/Q5Q5Ci3WHB0NCRxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aCu1mQrG; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-70e77831d68so59837727b3.2
-        for <linux-integrity@vger.kernel.org>; Tue, 24 Jun 2025 19:08:00 -0700 (PDT)
+	s=arc-20240116; t=1750827845; c=relaxed/simple;
+	bh=y5MCvutvHcvNX4Keb63b3B7N/mP9uFUORXHB07+l9GM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sByZT/n1Oyl9z5LL7pYSHXgxUlxjPQiuvAgcFN3Fh0XVd6c1T5lBMSbpqnCPVFX2Lr2mdujGYsheuvxYAxNeFcRyKwWJ/Ms+wnBAa86dDGOg80eGnSV0jzynF0kd+wHRzK8EpEZ2alrufPSRUhrTT9QUpiOLA/Vqg5PvYlR64YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=St5kISov; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6fac7147cb8so21438866d6.1;
+        Tue, 24 Jun 2025 22:04:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1750817279; x=1751422079; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ma+88H5VpAOifU7fHtlXxdBKdlhmSUKKZ8A91So9mGM=;
-        b=aCu1mQrGTrvIeygS6AxuH3K2HUUERSjtj4eyshr4PdYU6DEjweIS7AdEeHfW1Rcfel
-         NzeRw2llw+41r9aAyX6jQRlJpPuhGc9sX4bkMJN3PSq2wfUCwbs9/Sfy9QKgaT12ha03
-         6eVU3bguO6Oll/5C8Zc3gWxSDRWuxI81r/P0rJIf8bzeIDoD7RRNonjonehOKpNxZIWb
-         TLwJ3TCmVAq0byBuFhWj6bmtN21IdogFWjn8bFYiKQrK4LKfulmn0VjJan/YV4SXESDz
-         WLJkmX+lcN767Pf7KkeamVsL8jo5j0UVsCVOCDita6KOGOnQEVG6qgNkEROglhWh6vwp
-         CpIQ==
+        d=gmail.com; s=20230601; t=1750827842; x=1751432642; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vmXcK6k38h6eC0gVXkVzWpNIJ0ZgWlljLA2mlEbIcz8=;
+        b=St5kISovzHMHKVLvedc+QERpo9Bq/xgshfvECzlIcKFpUJuHHsO4A3r5xafQFZf80o
+         atxE0j9Z4nkEnRpPJe13eV+ItRNQ1SiFrTyDtC/B2mTZzDlAUVJmzLiGLAH3lmuqpHYr
+         NwTIFvBmxF2qIYy7qqg2lf5McR2yuApV/etj7BMGZXYO0hi2pZuPqlzM2fiqh5wD1pmP
+         O4YMKaeEyxGguset9orju1qPYCzA6q/YceKInlJwd4ZE0AFSD6/pbmPFPSQNQjVVzwFX
+         h7cgN19JzjUUy8EtdohY0yPccoOoRezUKjoeGqgwZKOYuROZMQ1ZdwDe4GDj2NVy4ZS2
+         lhwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750817279; x=1751422079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ma+88H5VpAOifU7fHtlXxdBKdlhmSUKKZ8A91So9mGM=;
-        b=ucyp2apDKCO8z7yNl3/tCyVYGuRY1rgkcwfImn7zDHI6JsZrgcmk5ywAEUUxKAkziW
-         Z3EQ5DlejWTKAgtpYEHMGfvGW+mDEcrBUoeGTMCgCxGk40W2vkJUp5XtFq+nvyYEWO3v
-         GzAtsUACiIkOrBo4noNJVztcEenpOY8Gc4eBkPKxjXabV1tyVgXIK69ZwMbvAMNqZCOX
-         fNNv92xwWue6K2RLziE7twtF35jDpfyyFznQ1f5BrfyY6drmUWHdZCNEX+uwK+ewCd3P
-         AaSMkAoCSjGfjQm4dHk4zNezd0feJoXgKMbZWHPpnIbCl3mnZCsS5+Y50/cV7mAnL4Yy
-         ftgw==
-X-Forwarded-Encrypted: i=1; AJvYcCWBT3ySwVTrEmpOLnab/fWVUvOhUcjDJCApwPkUImtacsfufcrehGtru7wh6NI6n9Oz02O/kmGRDE9sX1WeEcQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7no8Oyvg3hni28dkq/+IYtWWKsnhAiiHy+EwTpSqHfqj566na
-	WZvhY2r1Vgeg+dW6GKywg1itLJML+kRDOlaPqVr8aKcyyFhhc+cGXOKsJH5N49rq6LG1f+8WSgd
-	f5NGHbCSH44dbMgAzOBWhLrqfHEILp2t5eUqqjQUEYzo7Nqw5Zrs=
-X-Gm-Gg: ASbGncv+KyZfRlVCdmWPbCYI73oRXTPJTMbtUimwUv/TJVZB2pjLxY6MTy8ImUFlsDg
-	AlwHXf/hfSfPlRvoSpPDJIqTliU/3/ikJ1Q/AaaZQkfKuc7MXFdSSFNS2C1tylzHs0zZeAxZJz+
-	GHx9lIj7Uar9i56U3cWnzZzrX2S6FtlAWQb5hXUz5GdYk=
-X-Google-Smtp-Source: AGHT+IGlJ3+t50Dx73mM8Air5bfcWg1IIPvwg/Vg5HkXBBKOKiLaOFTVUfjQ8shi4PBm0CiACEhKPb3fm1gsyHDeyKc=
-X-Received: by 2002:a05:690c:3693:b0:70c:90af:154 with SMTP id
- 00721157ae682-71406dd05f1mr17609477b3.20.1750817279444; Tue, 24 Jun 2025
- 19:07:59 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1750827842; x=1751432642;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vmXcK6k38h6eC0gVXkVzWpNIJ0ZgWlljLA2mlEbIcz8=;
+        b=BNttp1aL0jw4JH7qkJgMB6LZOTJY4XAY0Ik66cIMEarOIzjKKsOEn2pkhr5QfKW2Lz
+         r1yDMcCj2mlYq/mLWcZgqoALO+JT4YynTgV+jr2/Lv0m6BrQv2dd+2MuVZIraYrD1inm
+         1piFaqmx3tGNKWdacfyYjqiuz2ItOLPUhAf+OwNOEr4xVxBgyip6rLge+Vy4xZ4KQqTA
+         9/4yrp5NnCTppZzhfMtSLx56sxXBRN3nFMSLdwnRlBJRZCGBRdIk7jpNI/5qQThJxq0d
+         7UuyS9a9mboszMkdANIsxZhD8F7xby++lK1lY4kUnrMVKg1Hz/K0KM5SZygjj2oCM40d
+         yYFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVa2c1FyRWpJktV3hbgCANSpJCVlovuDPWkYlG1GNfxVTs0Ny8uXgQsk7kdVJ2Iq9CMkhfXbyNSBlksvP4vRwg=@vger.kernel.org, AJvYcCXtCo/rO7jTXBYmEQlXCeLxq508HyxdNX4cjYEuPjuBVPOa/Qg+WOP7vfVA5xy9LIrGZ4dl6Zb0brHQIvSR@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZJ9ycfCny06oOBgGz0k3oKU37KtzqVlOMjbHGpbfI7bV/XS8/
+	QPVHYVovmYviFt3TlUPKK3dH3TvlN9KtlInUCmBO+f2WzG8BfBobv4UI
+X-Gm-Gg: ASbGncuaAIWUc8/0vLrgJxO4tpGx7otJmrYuqHm5lBNmTg1v4MXgczBZ9NgvUD4v+VK
+	lmzzD70IkMXxDfWDrDiNWgQULgvtB5XyJIypLPZ4hR7u8IuvuMDUzXIwWVbq3bE4SIP7Gy/kkWD
+	VUVeMsV4CYNwIh8wJ1798wpvgXf0PL/oQ0mQj/xFkEMPjmcEFwM3O8dtP6idiwCEqGeMGnRJkxm
+	Jppif9LonCbYmmtndl5zZ6MJKe76mASDqrCCa4ySeiLr+iUDwMll0PmM+SU5iAUoMrlJMF0BYEF
+	/WUao7QcdcXHysFl6Nej9DJqGq8Rf4uNf0LpyFY28r+DXYZbMbmLSI1b7xamaalyrf/ReEoMTD2
+	qB3ErYfLGFgflYKk3LXzbHjDNHx+x
+X-Google-Smtp-Source: AGHT+IHFiUnt/9yqS8qbgYpDfozkJ+jkoQIKcpL8XgHkZUa+KLljdHbvDsB/7fAE6hG29v5mnBYmww==
+X-Received: by 2002:a05:6214:20cb:b0:6e8:ddf6:d11e with SMTP id 6a1803df08f44-6fd5ef83852mr25510976d6.21.1750827841892;
+        Tue, 24 Jun 2025 22:04:01 -0700 (PDT)
+Received: from fyre-x-redhat96-client-2.fyre.ibm.com ([129.41.87.1])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd0959d85asm64173416d6.107.2025.06.24.22.04.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jun 2025 22:04:01 -0700 (PDT)
+From: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+Subject: [PATCH v4] tpm: Replace scnprintf() with sysfs_emit() and sysfs_emit_at() in sysfs show functions
+Date: Tue, 24 Jun 2025 22:03:46 -0700
+Message-ID: <20250625050346.11500-1-chelsyratnawat2001@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250612030951.GC1647736@ZenIV> <20250625014709.GQ1880847@ZenIV>
-In-Reply-To: <20250625014709.GQ1880847@ZenIV>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 24 Jun 2025 22:07:48 -0400
-X-Gm-Features: Ac12FXxDWMVHh8x3oQC-oksHsfE97o8MSwUkJxZcBW8YhsT9RmghUSqQlA1JLeI
-Message-ID: <CAHC9VhSTzc-KZyd1RSOaFDMjmiXCQBscLE=d1wGvc=DWnfz6gQ@mail.gmail.com>
-Subject: Re: [PATCHES][CFR][CFT] securityfs cleanups and fixes
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 24, 2025 at 9:47=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
-rote:
-> On Thu, Jun 12, 2025 at 04:09:51AM +0100, Al Viro wrote:
->
-> > Branch (6.16-rc1-based) lives in
-> > git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.securi=
-tyfs
-> > Individual patches in followups.
-> >
-> > Help with testing and review would be very welcome.
->
-> Seeing that no complaints have materialized, into -next it goes (with
-> Acked-by/Tested-by attached)...
+Documentation/filesystems/sysfs.rst mentions that show() should only
+use sysfs_emit() or sysfs_emit_at() when formating the value to be
+returned to user space. So replace scnprintf() with sysfs_emit().
 
-Thanks Al, I appreciate the help cleaning this up.
+Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+---
+Changes in v4: 
+- updated the commit message.
+ 
+ drivers/char/tpm/tpm_ppi.c | 48 ++++++++++++++++++--------------------
+ 1 file changed, 23 insertions(+), 25 deletions(-)
 
---=20
-paul-moore.com
+diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+index bc7b1b4501b3..50f64d9b53c8 100644
+--- a/drivers/char/tpm/tpm_ppi.c
++++ b/drivers/char/tpm/tpm_ppi.c
+@@ -52,7 +52,7 @@ static ssize_t tpm_show_ppi_version(struct device *dev,
+ {
+ 	struct tpm_chip *chip = to_tpm_chip(dev);
+ 
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", chip->ppi_version);
++	return sysfs_emit(buf, "%s\n", chip->ppi_version);
+ }
+ 
+ static ssize_t tpm_show_ppi_request(struct device *dev,
+@@ -87,12 +87,10 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
+ 		else {
+ 			req = obj->package.elements[1].integer.value;
+ 			if (tpm_ppi_req_has_parameter(req))
+-				size = scnprintf(buf, PAGE_SIZE,
+-				    "%llu %llu\n", req,
++				size = sysfs_emit(buf, "%llu %llu\n", req,
+ 				    obj->package.elements[2].integer.value);
+ 			else
+-				size = scnprintf(buf, PAGE_SIZE,
+-						"%llu\n", req);
++				size = sysfs_emit(buf, "%llu\n", req);
+ 		}
+ 	} else if (obj->package.count == 2 &&
+ 	    obj->package.elements[0].type == ACPI_TYPE_INTEGER &&
+@@ -100,7 +98,7 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
+ 		if (obj->package.elements[0].integer.value)
+ 			size = -EFAULT;
+ 		else
+-			size = scnprintf(buf, PAGE_SIZE, "%llu\n",
++			size = sysfs_emit(buf, "%llu\n",
+ 				 obj->package.elements[1].integer.value);
+ 	}
+ 
+@@ -211,10 +209,10 @@ static ssize_t tpm_show_ppi_transition_action(struct device *dev,
+ 	}
+ 
+ 	if (ret < ARRAY_SIZE(info) - 1)
+-		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret, info[ret]);
++		status = sysfs_emit(buf, "%d: %s\n", ret, info[ret]);
+ 	else
+-		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret,
+-				   info[ARRAY_SIZE(info)-1]);
++		status = sysfs_emit(buf, "%d: %s\n", ret,
++				    info[ARRAY_SIZE(info)-1]);
+ 	return status;
+ }
+ 
+@@ -255,23 +253,23 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
+ 	res = ret_obj[2].integer.value;
+ 	if (req) {
+ 		if (res == 0)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+-					   "0: Success");
++			status = sysfs_emit(buf, "%llu %s\n", req,
++					    "0: Success");
+ 		else if (res == 0xFFFFFFF0)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+-					   "0xFFFFFFF0: User Abort");
++			status = sysfs_emit(buf, "%llu %s\n", req,
++					    "0xFFFFFFF0: User Abort");
+ 		else if (res == 0xFFFFFFF1)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+-					   "0xFFFFFFF1: BIOS Failure");
++			status = sysfs_emit(buf, "%llu %s\n", req,
++					    "0xFFFFFFF1: BIOS Failure");
+ 		else if (res >= 1 && res <= 0x00000FFF)
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
+-					   req, res, "Corresponding TPM error");
++			status = sysfs_emit(buf, "%llu %llu: %s\n",
++					    req, res, "Corresponding TPM error");
+ 		else
+-			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
+-					   req, res, "Error");
++			status = sysfs_emit(buf, "%llu %llu: %s\n",
++					    req, res, "Error");
+ 	} else {
+-		status = scnprintf(buf, PAGE_SIZE, "%llu: %s\n",
+-				   req, "No Recent Request");
++		status = sysfs_emit(buf, "%llu: %s\n",
++				    req, "No Recent Request");
+ 	}
+ 
+ cleanup:
+@@ -284,7 +282,7 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+ {
+ 	int i;
+ 	u32 ret;
+-	char *str = buf;
++	int len = 0;
+ 	union acpi_object *obj, tmp;
+ 	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
+ 
+@@ -314,11 +312,11 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+ 		}
+ 
+ 		if (ret > 0 && ret < ARRAY_SIZE(info))
+-			str += scnprintf(str, PAGE_SIZE, "%d %d: %s\n",
+-					 i, ret, info[ret]);
++			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
++					     i, ret, info[ret]);
+ 	}
+ 
+-	return str - buf;
++	return len;
+ }
+ 
+ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+-- 
+2.47.1
+
 
