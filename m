@@ -1,219 +1,214 @@
-Return-Path: <linux-integrity+bounces-6509-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6510-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28E13AE7649
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 07:04:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AF26AE7974
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 10:05:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB3D1189126B
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 05:04:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E9CC7A3747
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Jun 2025 08:04:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF4B7156228;
-	Wed, 25 Jun 2025 05:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4CA1EDA09;
+	Wed, 25 Jun 2025 08:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="St5kISov"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hRKEbPeK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2419F3074BC;
-	Wed, 25 Jun 2025 05:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9CA17A2F8;
+	Wed, 25 Jun 2025 08:05:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750827845; cv=none; b=FxmV57832W4FW5Fs6bF7pHqEuk6tL/0NSh1qEW7pmtg9JdZKjUFK/sb0NJ8qmEZbUJNGgxFSA4Ei7dgI0VvtPWMiycnpANKo1w2tf63q0ZqRVsjTc5kW6pCWlx5zJXDDVO0j62FyqcCQZn79uFIW+TgScTxtYVdmAelx/lt7IPQ=
+	t=1750838733; cv=none; b=PbEuX5vAGkN3BbkI17eim/Bia3iKrcnMSLR6dMwfcrt8KZpBq0BnDHzLQfwYogdQMknMYmiivmydTCVBpAjosKB9TLKYNoGIa7EfJkA+RAxiQJOrhx3CHyVtUKXDKe35xp7YUFbj18dbgFPfA6P/WJ16jSRCGEzJNbZCDall71A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750827845; c=relaxed/simple;
-	bh=y5MCvutvHcvNX4Keb63b3B7N/mP9uFUORXHB07+l9GM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sByZT/n1Oyl9z5LL7pYSHXgxUlxjPQiuvAgcFN3Fh0XVd6c1T5lBMSbpqnCPVFX2Lr2mdujGYsheuvxYAxNeFcRyKwWJ/Ms+wnBAa86dDGOg80eGnSV0jzynF0kd+wHRzK8EpEZ2alrufPSRUhrTT9QUpiOLA/Vqg5PvYlR64YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=St5kISov; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6fac7147cb8so21438866d6.1;
-        Tue, 24 Jun 2025 22:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750827842; x=1751432642; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vmXcK6k38h6eC0gVXkVzWpNIJ0ZgWlljLA2mlEbIcz8=;
-        b=St5kISovzHMHKVLvedc+QERpo9Bq/xgshfvECzlIcKFpUJuHHsO4A3r5xafQFZf80o
-         atxE0j9Z4nkEnRpPJe13eV+ItRNQ1SiFrTyDtC/B2mTZzDlAUVJmzLiGLAH3lmuqpHYr
-         NwTIFvBmxF2qIYy7qqg2lf5McR2yuApV/etj7BMGZXYO0hi2pZuPqlzM2fiqh5wD1pmP
-         O4YMKaeEyxGguset9orju1qPYCzA6q/YceKInlJwd4ZE0AFSD6/pbmPFPSQNQjVVzwFX
-         h7cgN19JzjUUy8EtdohY0yPccoOoRezUKjoeGqgwZKOYuROZMQ1ZdwDe4GDj2NVy4ZS2
-         lhwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750827842; x=1751432642;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vmXcK6k38h6eC0gVXkVzWpNIJ0ZgWlljLA2mlEbIcz8=;
-        b=BNttp1aL0jw4JH7qkJgMB6LZOTJY4XAY0Ik66cIMEarOIzjKKsOEn2pkhr5QfKW2Lz
-         r1yDMcCj2mlYq/mLWcZgqoALO+JT4YynTgV+jr2/Lv0m6BrQv2dd+2MuVZIraYrD1inm
-         1piFaqmx3tGNKWdacfyYjqiuz2ItOLPUhAf+OwNOEr4xVxBgyip6rLge+Vy4xZ4KQqTA
-         9/4yrp5NnCTppZzhfMtSLx56sxXBRN3nFMSLdwnRlBJRZCGBRdIk7jpNI/5qQThJxq0d
-         7UuyS9a9mboszMkdANIsxZhD8F7xby++lK1lY4kUnrMVKg1Hz/K0KM5SZygjj2oCM40d
-         yYFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVa2c1FyRWpJktV3hbgCANSpJCVlovuDPWkYlG1GNfxVTs0Ny8uXgQsk7kdVJ2Iq9CMkhfXbyNSBlksvP4vRwg=@vger.kernel.org, AJvYcCXtCo/rO7jTXBYmEQlXCeLxq508HyxdNX4cjYEuPjuBVPOa/Qg+WOP7vfVA5xy9LIrGZ4dl6Zb0brHQIvSR@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZJ9ycfCny06oOBgGz0k3oKU37KtzqVlOMjbHGpbfI7bV/XS8/
-	QPVHYVovmYviFt3TlUPKK3dH3TvlN9KtlInUCmBO+f2WzG8BfBobv4UI
-X-Gm-Gg: ASbGncuaAIWUc8/0vLrgJxO4tpGx7otJmrYuqHm5lBNmTg1v4MXgczBZ9NgvUD4v+VK
-	lmzzD70IkMXxDfWDrDiNWgQULgvtB5XyJIypLPZ4hR7u8IuvuMDUzXIwWVbq3bE4SIP7Gy/kkWD
-	VUVeMsV4CYNwIh8wJ1798wpvgXf0PL/oQ0mQj/xFkEMPjmcEFwM3O8dtP6idiwCEqGeMGnRJkxm
-	Jppif9LonCbYmmtndl5zZ6MJKe76mASDqrCCa4ySeiLr+iUDwMll0PmM+SU5iAUoMrlJMF0BYEF
-	/WUao7QcdcXHysFl6Nej9DJqGq8Rf4uNf0LpyFY28r+DXYZbMbmLSI1b7xamaalyrf/ReEoMTD2
-	qB3ErYfLGFgflYKk3LXzbHjDNHx+x
-X-Google-Smtp-Source: AGHT+IHFiUnt/9yqS8qbgYpDfozkJ+jkoQIKcpL8XgHkZUa+KLljdHbvDsB/7fAE6hG29v5mnBYmww==
-X-Received: by 2002:a05:6214:20cb:b0:6e8:ddf6:d11e with SMTP id 6a1803df08f44-6fd5ef83852mr25510976d6.21.1750827841892;
-        Tue, 24 Jun 2025 22:04:01 -0700 (PDT)
-Received: from fyre-x-redhat96-client-2.fyre.ibm.com ([129.41.87.1])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd0959d85asm64173416d6.107.2025.06.24.22.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 22:04:01 -0700 (PDT)
-From: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
-To: peterhuewe@gmx.de,
-	jarkko@kernel.org
-Cc: jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
-Subject: [PATCH v4] tpm: Replace scnprintf() with sysfs_emit() and sysfs_emit_at() in sysfs show functions
-Date: Tue, 24 Jun 2025 22:03:46 -0700
-Message-ID: <20250625050346.11500-1-chelsyratnawat2001@gmail.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1750838733; c=relaxed/simple;
+	bh=aFMZBNy3/VRl880erNtl5opyOHksS+udQxCFuFgNaxU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jeJlk7LmagRaEuJdwxS5zobnH0DIodj3USDe5fTlsJS1A8jQ1n2JN6Nc8I2vVx9/icRm2pF+EESxfuXhEEZ/3e2501IkjT3P8dXZmt4dYsK9Ci5OC7hwUvl84qDfrSAqHyvzVyi7D9ELfnkzlJFUB2r8QZMbZ3uPTdk9HJyeBSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hRKEbPeK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48974C4CEEA;
+	Wed, 25 Jun 2025 08:05:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750838732;
+	bh=aFMZBNy3/VRl880erNtl5opyOHksS+udQxCFuFgNaxU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hRKEbPeK1kwVm+G+hspXLeZ8xLB+3tMDsuA08YEYENPK1HySl0Vhm0NYzCNBZyv9J
+	 V+6Cf6I1sxRdXMrkn6JxVaaCBh2tq/li/ti5kZrMeawfDg2SAA4mxNcPqtC4bj1c+V
+	 2O++TTxJLqXy3dGCsq5DeBWHbotd26bF9JixcD0KxlQ0Ou+0zcf5dDGIi992xbHd/6
+	 xE5W4TRJhwJt4VE+QPuNiDXgfV/UtM75t04uNiAHwxKKo/znEIuvNv8Z2zUDHccnAI
+	 sdSQuHZEeIWBw74b/2OKHNiLQzmJPYk1PT31U+3qd3cXyWkOQYkX5C0QksPghp4Wyb
+	 DSpBt1Xj8zq6w==
+Date: Wed, 25 Jun 2025 09:05:27 +0100
+From: Lee Jones <lee@kernel.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, herbert@gondor.apana.org.au,
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+	davem@davemloft.net, linux-crypto@vger.kernel.org,
+	peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	Yinggang Gu <guyinggang@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v11 3/4] tpm: Add a driver for Loongson TPM device
+Message-ID: <20250625080527.GN795775@google.com>
+References: <20250619025138.2854-1-zhaoqunqin@loongson.cn>
+ <20250619025138.2854-4-zhaoqunqin@loongson.cn>
+ <aFs2RDOeOKvWUN2L@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aFs2RDOeOKvWUN2L@kernel.org>
 
-Documentation/filesystems/sysfs.rst mentions that show() should only
-use sysfs_emit() or sysfs_emit_at() when formating the value to be
-returned to user space. So replace scnprintf() with sysfs_emit().
+On Wed, 25 Jun 2025, Jarkko Sakkinen wrote:
 
-Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
----
-Changes in v4: 
-- updated the commit message.
- 
- drivers/char/tpm/tpm_ppi.c | 48 ++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 25 deletions(-)
+> On Thu, Jun 19, 2025 at 10:51:37AM +0800, Qunqin Zhao wrote:
+> > Loongson Security Engine supports random number generation, hash,
+> > symmetric encryption and asymmetric encryption. Based on these
+> > encryption functions, TPM2 have been implemented in the Loongson
+> > Security Engine firmware. This driver is responsible for copying data
+> > into the memory visible to the firmware and receiving data from the
+> > firmware.
+> > 
+> > Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
+> > Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
+> > Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
+> > Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  drivers/char/tpm/Kconfig        |  9 ++++
+> >  drivers/char/tpm/Makefile       |  1 +
+> >  drivers/char/tpm/tpm_loongson.c | 84 +++++++++++++++++++++++++++++++++
+> >  3 files changed, 94 insertions(+)
+> >  create mode 100644 drivers/char/tpm/tpm_loongson.c
+> > 
+> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > index dddd702b2..ba3924eb1 100644
+> > --- a/drivers/char/tpm/Kconfig
+> > +++ b/drivers/char/tpm/Kconfig
+> > @@ -189,6 +189,15 @@ config TCG_IBMVTPM
+> >  	  will be accessible from within Linux.  To compile this driver
+> >  	  as a module, choose M here; the module will be called tpm_ibmvtpm.
+> >  
+> > +config TCG_LOONGSON
+> > +	tristate "Loongson TPM Interface"
+> > +	depends on MFD_LOONGSON_SE
+> > +	help
+> > +	  If you want to make Loongson TPM support available, say Yes and
+> > +	  it will be accessible from within Linux. To compile this
+> > +	  driver as a module, choose M here; the module will be called
+> > +	  tpm_loongson.
+> > +
+> >  config TCG_XEN
+> >  	tristate "XEN TPM Interface"
+> >  	depends on TCG_TPM && XEN
+> > diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
+> > index 9de1b3ea3..5b5cdc0d3 100644
+> > --- a/drivers/char/tpm/Makefile
+> > +++ b/drivers/char/tpm/Makefile
+> > @@ -46,3 +46,4 @@ obj-$(CONFIG_TCG_ARM_CRB_FFA) += tpm_crb_ffa.o
+> >  obj-$(CONFIG_TCG_VTPM_PROXY) += tpm_vtpm_proxy.o
+> >  obj-$(CONFIG_TCG_FTPM_TEE) += tpm_ftpm_tee.o
+> >  obj-$(CONFIG_TCG_SVSM) += tpm_svsm.o
+> > +obj-$(CONFIG_TCG_LOONGSON) += tpm_loongson.o
+> > diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loongson.c
+> > new file mode 100644
+> > index 000000000..5cbdb37f8
+> > --- /dev/null
+> > +++ b/drivers/char/tpm/tpm_loongson.c
+> > @@ -0,0 +1,84 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
+> > +
+> > +#include <linux/device.h>
+> > +#include <linux/mfd/loongson-se.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/wait.h>
+> > +
+> > +#include "tpm.h"
+> > +
+> > +struct tpm_loongson_cmd {
+> > +	u32 cmd_id;
+> > +	u32 data_off;
+> > +	u32 data_len;
+> > +	u32 pad[5];
+> > +};
+> > +
+> > +static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+> > +{
+> > +	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
+> > +	struct tpm_loongson_cmd *cmd_ret = tpm_engine->command_ret;
+> > +
+> > +	if (cmd_ret->data_len > count)
+> > +		return -EIO;
+> > +
+> > +	memcpy(buf, tpm_engine->data_buffer, cmd_ret->data_len);
+> > +
+> > +	return cmd_ret->data_len;
+> > +}
+> > +
+> > +static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
+> > +{
+> > +	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
+> > +	struct tpm_loongson_cmd *cmd = tpm_engine->command;
+> > +
+> > +	if (count > tpm_engine->buffer_size)
+> > +		return -E2BIG;
+> > +
+> > +	cmd->data_len = count;
+> > +	memcpy(tpm_engine->data_buffer, buf, count);
+> > +
+> > +	return loongson_se_send_engine_cmd(tpm_engine);
+> > +}
+> > +
+> > +static const struct tpm_class_ops tpm_loongson_ops = {
+> > +	.flags = TPM_OPS_AUTO_STARTUP,
+> > +	.recv = tpm_loongson_recv,
+> > +	.send = tpm_loongson_send,
+> > +};
+> > +
+> > +static int tpm_loongson_probe(struct platform_device *pdev)
+> > +{
+> > +	struct loongson_se_engine *tpm_engine;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct tpm_loongson_cmd *cmd;
+> > +	struct tpm_chip *chip;
+> > +
+> > +	tpm_engine = loongson_se_init_engine(dev->parent, SE_ENGINE_TPM);
+> > +	if (!tpm_engine)
+> > +		return -ENODEV;
+> > +	cmd = tpm_engine->command;
+> > +	cmd->cmd_id = SE_CMD_TPM;
+> > +	cmd->data_off = tpm_engine->buffer_off;
+> > +
+> > +	chip = tpmm_chip_alloc(dev, &tpm_loongson_ops);
+> > +	if (IS_ERR(chip))
+> > +		return PTR_ERR(chip);
+> > +	chip->flags = TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
+> > +	dev_set_drvdata(&chip->dev, tpm_engine);
+> > +
+> > +	return tpm_chip_register(chip);
+> > +}
+> > +
+> > +static struct platform_driver tpm_loongson = {
+> > +	.probe   = tpm_loongson_probe,
+> > +	.driver  = {
+> > +		.name  = "loongson-tpm",
+> 
+> This patch looks otherwise great but I'd prefer here tho use
+> "tpm_loongson_probe" for the value of the name field.
 
-diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-index bc7b1b4501b3..50f64d9b53c8 100644
---- a/drivers/char/tpm/tpm_ppi.c
-+++ b/drivers/char/tpm/tpm_ppi.c
-@@ -52,7 +52,7 @@ static ssize_t tpm_show_ppi_version(struct device *dev,
- {
- 	struct tpm_chip *chip = to_tpm_chip(dev);
- 
--	return scnprintf(buf, PAGE_SIZE, "%s\n", chip->ppi_version);
-+	return sysfs_emit(buf, "%s\n", chip->ppi_version);
- }
- 
- static ssize_t tpm_show_ppi_request(struct device *dev,
-@@ -87,12 +87,10 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
- 		else {
- 			req = obj->package.elements[1].integer.value;
- 			if (tpm_ppi_req_has_parameter(req))
--				size = scnprintf(buf, PAGE_SIZE,
--				    "%llu %llu\n", req,
-+				size = sysfs_emit(buf, "%llu %llu\n", req,
- 				    obj->package.elements[2].integer.value);
- 			else
--				size = scnprintf(buf, PAGE_SIZE,
--						"%llu\n", req);
-+				size = sysfs_emit(buf, "%llu\n", req);
- 		}
- 	} else if (obj->package.count == 2 &&
- 	    obj->package.elements[0].type == ACPI_TYPE_INTEGER &&
-@@ -100,7 +98,7 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
- 		if (obj->package.elements[0].integer.value)
- 			size = -EFAULT;
- 		else
--			size = scnprintf(buf, PAGE_SIZE, "%llu\n",
-+			size = sysfs_emit(buf, "%llu\n",
- 				 obj->package.elements[1].integer.value);
- 	}
- 
-@@ -211,10 +209,10 @@ static ssize_t tpm_show_ppi_transition_action(struct device *dev,
- 	}
- 
- 	if (ret < ARRAY_SIZE(info) - 1)
--		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret, info[ret]);
-+		status = sysfs_emit(buf, "%d: %s\n", ret, info[ret]);
- 	else
--		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret,
--				   info[ARRAY_SIZE(info)-1]);
-+		status = sysfs_emit(buf, "%d: %s\n", ret,
-+				    info[ARRAY_SIZE(info)-1]);
- 	return status;
- }
- 
-@@ -255,23 +253,23 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
- 	res = ret_obj[2].integer.value;
- 	if (req) {
- 		if (res == 0)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
--					   "0: Success");
-+			status = sysfs_emit(buf, "%llu %s\n", req,
-+					    "0: Success");
- 		else if (res == 0xFFFFFFF0)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
--					   "0xFFFFFFF0: User Abort");
-+			status = sysfs_emit(buf, "%llu %s\n", req,
-+					    "0xFFFFFFF0: User Abort");
- 		else if (res == 0xFFFFFFF1)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
--					   "0xFFFFFFF1: BIOS Failure");
-+			status = sysfs_emit(buf, "%llu %s\n", req,
-+					    "0xFFFFFFF1: BIOS Failure");
- 		else if (res >= 1 && res <= 0x00000FFF)
--			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
--					   req, res, "Corresponding TPM error");
-+			status = sysfs_emit(buf, "%llu %llu: %s\n",
-+					    req, res, "Corresponding TPM error");
- 		else
--			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
--					   req, res, "Error");
-+			status = sysfs_emit(buf, "%llu %llu: %s\n",
-+					    req, res, "Error");
- 	} else {
--		status = scnprintf(buf, PAGE_SIZE, "%llu: %s\n",
--				   req, "No Recent Request");
-+		status = sysfs_emit(buf, "%llu: %s\n",
-+				    req, "No Recent Request");
- 	}
- 
- cleanup:
-@@ -284,7 +282,7 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
- {
- 	int i;
- 	u32 ret;
--	char *str = buf;
-+	int len = 0;
- 	union acpi_object *obj, tmp;
- 	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
- 
-@@ -314,11 +312,11 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
- 		}
- 
- 		if (ret > 0 && ret < ARRAY_SIZE(info))
--			str += scnprintf(str, PAGE_SIZE, "%d %d: %s\n",
--					 i, ret, info[ret]);
-+			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
-+					     i, ret, info[ret]);
- 	}
- 
--	return str - buf;
-+	return len;
- }
- 
- static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+Where does this stipulation come from?  No other driver does this [0].
+driver.name should be a nicely formatted, human readable string
+describing the name of the device.  Not a function name.
+
+[0] git grep -A15 "static struct platform_driver" | grep ".name = .*probe"
+
 -- 
-2.47.1
-
+Lee Jones [李琼斯]
 
