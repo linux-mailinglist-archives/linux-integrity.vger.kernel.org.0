@@ -1,93 +1,96 @@
-Return-Path: <linux-integrity+bounces-6554-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6555-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D624AEA569
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 20:30:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6671AAEA5A0
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 20:45:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 906161C4297E
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 18:30:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9959564A9D
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 18:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 749D42EE610;
-	Thu, 26 Jun 2025 18:29:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="obXnOxuW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96D5A2ED86E;
+	Thu, 26 Jun 2025 18:45:34 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439072EE5FD;
-	Thu, 26 Jun 2025 18:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506612ED860;
+	Thu, 26 Jun 2025 18:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750962596; cv=none; b=kOJrNLa55dSILCQ9Fk3fm866sc1qxLmgQrqCDuN2HkL+sGuBiJF0bMawHhXoKrk7RmD1LCD8n13y5Mf4VvStZaktRD2sQyjbOTsGL3Fqi0irI2EVEZDsBQaSYuGpoi8IrWLioXix6+CET4YRc2dNq7fEdYnBQ1K+NE4UdXttL7k=
+	t=1750963534; cv=none; b=GmcNn5PrdKijpaIN4mLPw34/yqGpV7zzmsasENYRSbKrbivD2WqIINvX208N541dbW8qhTX+sWwhqGQuYPd0Z0aTYmFyZ4UTRrI7Rt6xzt3Q3MFNZRdkWuU492/SUrnyO/NdRE89DwK94Q7YwPtHj05TyxoLQnPNezFGY23ftN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750962596; c=relaxed/simple;
-	bh=HK6QzKIhv05JjZJ7L2Ck5DIM4l7O08A9SI3fi89DW5E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YJXKAVR8AWuxM3bhPsLkMU0WuacHno4AEkXd6jrbwzB7Z6GCGcer41IW4P+kJjkPvwak7HI/y7mwhsbMq6Wua2USPqKv9yzCOMGIBm82wK1zawOCKecu1HgeipLTeB2c/Q3mhtRXlmeU/q2mlMzv6e5gzfAEPfSosLqaC2+HqVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=obXnOxuW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530E8C4CEEF;
-	Thu, 26 Jun 2025 18:29:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750962595;
-	bh=HK6QzKIhv05JjZJ7L2Ck5DIM4l7O08A9SI3fi89DW5E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=obXnOxuWOpRsPXLqtzOhtEbGgxKFSUsWykj07WB7WD9L1LRdROhvew3rnSywPA1uV
-	 jHyC+rml3/9bvz+l3uc5iRuQhzUGflBycOYmpv1b/fShuCXmGcO0w1Q4S9AEN9SsMP
-	 y7YAhMudzTqyS5+Php+Xb5USN3HbXxKQ2CvTjoWYl+hMDGHZzM33dlABJcLaEe6UD8
-	 cocNBb+WHrhR023BtK20XVVA1Cm1uJzyI3Gd0qSMLmm0FkPtJMrNydE346X9vJoMI5
-	 W69JKp0bzo0iVos2V0bcCw7Tw2kQDjyIN18HJmat8MKtiwB2rn1p381NqUFpgxXevl
-	 mTcCTL4LGqA0w==
-Date: Thu, 26 Jun 2025 21:29:51 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, Qunqin Zhao <zhaoqunqin@loongson.cn>,
-	herbert@gondor.apana.org.au, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, davem@davemloft.net,
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	Yinggang Gu <guyinggang@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v11 3/4] tpm: Add a driver for Loongson TPM device
-Message-ID: <aF2Rn0R4AlopEwz8@kernel.org>
-References: <20250619025138.2854-1-zhaoqunqin@loongson.cn>
- <20250619025138.2854-4-zhaoqunqin@loongson.cn>
- <aFs2RDOeOKvWUN2L@kernel.org>
- <20250625080527.GN795775@google.com>
- <aFvhorr3kZSuzVpv@kernel.org>
- <20250625134047.GX795775@google.com>
- <aFwsIs6ri3HZictC@kernel.org>
- <20250626103030.GA10134@google.com>
- <aF0oHDVQKVfGZNV2@kernel.org>
- <CAAhV-H7nyKHS70BGh7nwjuGwSWayCbUY=1-zWMU4N3bJZtH1gQ@mail.gmail.com>
+	s=arc-20240116; t=1750963534; c=relaxed/simple;
+	bh=1CUSM+lfuLzOsSC+bX+I/lNB4T5n24SrRpc6lG9DhZs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nF9ezh9uvfDljERpN7CwWi1afpNvME7jm3vpKTgcsW340rifiaVOwmK+OVStaOy5Z0TuD6ugLZ6U5a4RbPA98pz9FD8xoRPQgBXKIv+TCWKuZuL8QZgVuvckSKi9KBFzVlX/YdmqaboWH7p+W/CHusWFJfs/6UMsIb1F0plgjm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B39131692;
+	Thu, 26 Jun 2025 11:45:13 -0700 (PDT)
+Received: from u103485.austin.arm.com (u103485.arm.com [10.118.30.35])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2658D3F66E;
+	Thu, 26 Jun 2025 11:45:31 -0700 (PDT)
+From: Prachotan Bathi <prachotan.bathi@arm.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Stuart Yoder <stuart.yoder@arm.com>
+Cc: linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Prachotan Bathi <prachotan.bathi@arm.com>
+Subject: [PATCH v8 0/3] tpm_crb_ffa: handle tpm busy return code
+Date: Thu, 26 Jun 2025 13:45:18 -0500
+Message-ID: <20250626184521.1079507-1-prachotan.bathi@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAhV-H7nyKHS70BGh7nwjuGwSWayCbUY=1-zWMU4N3bJZtH1gQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jun 26, 2025 at 08:48:35PM +0800, Huacai Chen wrote:
-> But there is another coherency, you can see this in the 1st patch:
-> 
-> +static const struct mfd_cell engines[] = {
-> + { .name = "loongson-rng" },
-> + { .name = "loongson-tpm" },
-> +};
+Platforms that support FF-A direct message request v2 can implement
+Secure Partitions (SPs) that host multiple services. When the TPM
+service shares its SP with other services, message requests from the
+driver may fail with a BUSY response if another service is currently
+active.
 
-I thought already after ffa driver from ARM that I need to fix up
-the naming a bit before it explodes. Thus, I'll stick to this.
+To improve robustness in such scenarios, we need to introduce retry
+logic in the driver. When a BUSY error is received, the driver will
+re-attempt the TPM request until it succeeds or a run-time configurable 
+timeout(default: 2000 ms) is reached. This ensures reliable TPM access 
+under shared-SP conditions.
 
-And e.g., I could easily find DRM driver with opposite order.
+Add a module parameter, `busy_timeout_ms`, which specifies the
+maximum amount of time (in milliseconds) to retry on BUSY before giving
+up.
 
-> 
-> Huacai
+This change builds on top of commit a85b55ee64a5, which introduced
+support for TPM service communication using the FF-A direct message v2
+path, in accordance with section 3.3 of the TPM Service Command
+Response Buffer Interface specification.
+https://developer.arm.com/documentation/den0138/latest/
 
-BR, Jarkko
+This was tested with an FF-A based fTPM currently not publicly available. 
+There are plans to open source the fTPM.
+
+Changes in v8:
+- Moved memzero macro to a separate patch.
+- Changes to inline comments for consistency.
+
+Prachotan Bathi (3):
+  tpm_crb_ffa: Fix typos in function name
+  tpm_crb_ffa:Introduce memzero macro to replace memset
+  tpm_crb_ffa: handle tpm busy return code
+
+ .../admin-guide/kernel-parameters.txt         |  8 +++
+ drivers/char/tpm/tpm_crb_ffa.c                | 59 +++++++++++++++----
+ 2 files changed, 56 insertions(+), 11 deletions(-)
+
+-- 
+2.43.0
+
 
