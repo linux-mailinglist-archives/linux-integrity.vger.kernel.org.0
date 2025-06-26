@@ -1,43 +1,43 @@
-Return-Path: <linux-integrity+bounces-6537-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6538-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B85AE93FE
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 04:20:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 481D6AE9407
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 04:24:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E80E71895BF0
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 02:20:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F4096A11D0
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 02:24:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A6B1DE8BB;
-	Thu, 26 Jun 2025 02:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 186FB1DEFE8;
+	Thu, 26 Jun 2025 02:24:28 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7A554BC6;
-	Thu, 26 Jun 2025 02:20:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB65415ADB4;
+	Thu, 26 Jun 2025 02:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750904424; cv=none; b=C/gBgeAoYgA6SR79k92GKcLwLwrwVm40cCG2Q1Zi3RQem0QEA/BGUa597O6cW0onoE/nYTYTzCLHGAqoljiwjf6/5RHhCIB8vON+C7n2QY9flSNRj2sx9HlO6lYV0mqMXpS8n/+G+/xnQA2bmuqRiQORy0L0SC6A0dDO7a4F9s8=
+	t=1750904668; cv=none; b=hD/i94CV1jaIcGnslr6yHuL7TEBvpfTb6RKFGfvnF6BpFBKx6AyNDQgJhTHa1hqZLVaCOsALY8RMagVxsQpAxx4DGJLVlrDq+vDPdZ5HGBxjHIt6H33CZ61XRpA+56ijRqF7cHs2HRbDvHcST8CrOVO3ie2VExdQK7imfr0gChY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750904424; c=relaxed/simple;
-	bh=KGCZu5L/HCH+DqvNmQZxHbm9u2jMHUudIJCjhnbERfE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D9PswJzHGKWjcBWeRhx3LXjUghTZab2rm36xp3dKOB5dCWih86txTZmWFbD1rQoikJ6BoiHl5Ec0FCCcvndaUSYPnAGjrCcJDe4/lIbDQU/37OHdcJjO9YalE3M5pN/uJfFSkw9cfKQwScrA9NWrdPSJj/cUIDo2tXU0uQnpvQs=
+	s=arc-20240116; t=1750904668; c=relaxed/simple;
+	bh=OZQ3H/JIEn8bCjBlXw94lDCSHn31RGiofhuJjyb66Fc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hRshQ+IhSBJKAI7dhYn61e2TV/knaFlQAMtst9Ld4hInIKHtfeK16eCnTXoiVJdhhMLE8kB+IJge/t5i/OsixcO3bapcvG6ZEsGASoNJs6yietP9T8d3h3fc3qVTPogDuEdLGxxOKAb6gWNcAeRfDlU+0R3QLa+ew88+PzBOAjA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4bSMlz6cfHz1W3Rc;
-	Thu, 26 Jun 2025 10:17:51 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4bSMrf0sY6z1W3Vj;
+	Thu, 26 Jun 2025 10:21:54 +0800 (CST)
 Received: from kwepemg100016.china.huawei.com (unknown [7.202.181.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 219E8140109;
-	Thu, 26 Jun 2025 10:20:20 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 4C4471400E8;
+	Thu, 26 Jun 2025 10:24:22 +0800 (CST)
 Received: from huawei.com (10.67.174.33) by kwepemg100016.china.huawei.com
  (7.202.181.57) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 26 Jun
- 2025 10:20:19 +0800
+ 2025 10:24:21 +0800
 From: GONG Ruiqi <gongruiqi1@huawei.com>
 To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
 	<roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
@@ -52,9 +52,9 @@ CC: Eric Snowberg <eric.snowberg@oracle.com>, Christophe Leroy
 	<linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
 	<linux-integrity@vger.kernel.org>, <keyrings@vger.kernel.org>, Lu Jialin
 	<lujialin4@huawei.com>, <gongruiqi1@huawei.com>
-Subject: [PATCH] integrity: Extract secure boot enquiry function out of IMA
-Date: Thu, 26 Jun 2025 10:31:51 +0800
-Message-ID: <20250626023151.3884988-1-gongruiqi1@huawei.com>
+Subject: [PATCH RESEND] integrity: Extract secure boot enquiry function out of IMA
+Date: Thu, 26 Jun 2025 10:36:17 +0800
+Message-ID: <20250626023617.3885806-1-gongruiqi1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -80,16 +80,14 @@ rename it to arch_integrity_get_secureboot(), decouple its functionality
 from IMA and extract it to be a integrity subsystem helper, so that both
 certificate loading and IMA can make use of it.
 
-Given that arch_ima_get_secureboot() is just a helper to retrieve info
-about secure boot via EFI and doesn't necessarily be a part of IMA,
-rename it to arch_integrity_get_secureboot(), decouple its functionality
-from IMA and transform it into a helper for the overall integrity
-subsystem, so that both certificate loading and IMA can make use of it.
-
 Compile-tested for powerpc, s390 and x86, all with allmodconfig.
 
 Signed-off-by: GONG Ruiqi <gongruiqi1@huawei.com>
 ---
+
+RESEND: Remove duplicated paragraph in commit message. Apology for the
+mistake.
+
  arch/powerpc/kernel/ima_arch.c                |  3 +-
  arch/s390/kernel/ima_arch.c                   |  3 +-
  include/linux/ima.h                           |  6 ---
