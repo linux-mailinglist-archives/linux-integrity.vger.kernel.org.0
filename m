@@ -1,91 +1,115 @@
-Return-Path: <linux-integrity+bounces-6559-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6560-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC254AEA76A
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 21:54:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 487F0AEA9AE
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Jun 2025 00:33:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C6C33BC910
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 19:53:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C187556341F
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Jun 2025 22:32:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F8442EFD8D;
-	Thu, 26 Jun 2025 19:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C323A21ABA4;
+	Thu, 26 Jun 2025 22:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iq8E9cXE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2182EF675;
-	Thu, 26 Jun 2025 19:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926A82F1FC9;
+	Thu, 26 Jun 2025 22:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750967631; cv=none; b=pUIH1oi2DgPKQXd+enKbmcnvPg0MUFklcliywuQQXuFOMp43FAYBc1OrM2LWw1Mw/0OWsxWL/sQTP7VE5u1HWCrTEc2YSprPbbxTze4rUt+QKQFMFAFIFn7fORC3ayzCyd1V+VQdm9lKhhnHXYnyKqQKgNzQQLsqxYlAH5Fhvps=
+	t=1750977188; cv=none; b=C2MYXC6Z/Mx1psnB7XmyerkjQWRBp/TXafAlv62qWEgnRVcS2B0y6lV83MIPGHBi6eq2kU6FoZbQdy8WJORT4BzunnMRbXUfRZAxhy2X7lKk5uw3mkz+pR3FvQvVXQBG4j8XwTj/Yew9dkdntCBUButg7pSpkqCtD4jO3qeIZ7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750967631; c=relaxed/simple;
-	bh=ocTxTQdSlRlIX/Oz1YeVB2u+FVPPYJAajkZvda+GVWM=;
+	s=arc-20240116; t=1750977188; c=relaxed/simple;
+	bh=oYEdw6H3I4g+axHYIfU1xMFRXCvU8uB8d1u0c0O3u2c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kNGAb9qEG5JKSjmll5R+IMrZ2mqWQHISCTiVXVjCkMHgWPAiJvkV0pzLoddvXMOrOL+84sZxLHto/8UhWBGWAMmH7tcSAqdu24jpunpLxKOu/FWhu0RWsx8aYWDt87u21byxV7loWV2fBzqNn36ffrEDJTumBW6U3ola1m1ezFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F3661692;
-	Thu, 26 Jun 2025 12:53:31 -0700 (PDT)
-Received: from bogus (unknown [10.57.50.223])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8DB83F66E;
-	Thu, 26 Jun 2025 12:53:46 -0700 (PDT)
-Date: Thu, 26 Jun 2025 20:53:39 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, peterhuewe@gmx.de, jgg@ziepe.ca,
-	stuart.yoder@arm.com, linux-arm-kernel@lists.infradead.org,
-	Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] generate boot_aggregate log in IMA with TPM using
- CRB over FF-A
-Message-ID: <20250626-busy-hilarious-octopus-47c2fc@sudeepholla>
-References: <20250618102302.2379029-1-yeoreum.yun@arm.com>
- <aFs0of3uZdoMEJXc@kernel.org>
- <aFvRI5OwSLLKz300@e129823.arm.com>
- <aFwrBU4H0w9AXyQM@kernel.org>
- <aFwrf1HnsilrASzX@kernel.org>
- <20250625-chital-of-infinite-proficiency-fee4dc@sudeepholla>
- <aFxuZV3lwd2Uc90g@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LRUMmxldsQ3t3itqmSuTcBdW5nHLzbv5izfpF/hcSRpHpsJ4/0ZktybPDgDWYouI5PupLt6Mue4gMBXw5vnkwpJaTok+J2TMyVcN5QEjRMNoINVAc8YdyRtYf5kcKxq5qPbWwhnv7EraL5qegtZLyO1tZTMYYLKFh76O1Hp2Bgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iq8E9cXE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFAC0C4CEEB;
+	Thu, 26 Jun 2025 22:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750977188;
+	bh=oYEdw6H3I4g+axHYIfU1xMFRXCvU8uB8d1u0c0O3u2c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Iq8E9cXEGHuglNY/d27sdNwpBv5ZwCg/+z79mTAUM+uovm+evzPKmyaDQyDjfHPEp
+	 IP0qN2Xhip7DHA+YJMcxsC0bWG76/qOn0H8sh/96jJc6G5LKh1+3ZcIO1xytnw4zLu
+	 MO9BgufVyOXJ/mhvLPgkbEp11WBBGR9xXpEE4djy9GxfGti66Y3jhokh4D+boyjeYE
+	 EUGgdJhVbQQtlqxV0/oDWvgWjZQLSWmEGt6M2DgKc2lHPlfww4d8vBGqn78+jc9+H7
+	 PVy2+Hpw8YwEsX9ySlcKNrTGTxtOmD+7ALETgMrZS7HcXf+ylLoNN6AB7Up/MIYgkn
+	 e0bcrrIR5RLPg==
+Date: Fri, 27 Jun 2025 01:33:04 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	"open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH] tpm: Create cleanup class for tpm_buf
+Message-ID: <aF3KoHdo6dY6nYbw@kernel.org>
+References: <20250625213757.1236570-1-jarkko@kernel.org>
+ <20250626144915.GD213144@ziepe.ca>
+ <aF2QbDmxzGJS903j@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aFxuZV3lwd2Uc90g@kernel.org>
+In-Reply-To: <aF2QbDmxzGJS903j@kernel.org>
 
-On Thu, Jun 26, 2025 at 12:47:17AM +0300, Jarkko Sakkinen wrote:
-> On Wed, Jun 25, 2025 at 08:35:33PM +0100, Sudeep Holla wrote:
+On Thu, Jun 26, 2025 at 09:24:48PM +0300, Jarkko Sakkinen wrote:
+> > At least I would add the class and drop the tpm_buf_destroy() as one
+> > patch, and another would be to cleanup any empty gotos.
 > > 
-> > If you are applying 1/2 too, feel free to add
+> > Also, I think the style guide for cleanup.h is to not use the
+> > variable block, so it should be more like:
 > > 
-> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > CLASS(tpm_buf, buf)();
+> > if (!tpm_buf)
+> >    return -ENOMEM;
 > > 
-> > I was initially thinking of taking it separately as there is no strict
-> > build dependency. But I am fine if you can take them together.
+> > AFAICT, but that seems to be some kind of tribal knowledge.
 > 
-> Hmm.. Yeah, if you insist to take them, that's fine for me too.
-> 
+> This was improved in v2 :-) If you have some proposal how you'd
+> liked that version to be splitted, please give feedback.
 
-Ignore me 😄
+After a bit of thought, II could split v2 e.g., into to the following
+list of patches (a draft, along the lines):
 
-> That said, I'm also happy to take care of them :-)
-> 
+1. Prepare internals for API changes.
+2. Implement tpm_buf_alloc().
+3. Implement CLASS_TPM_BUF() macro.
+4. Changes for tpm{1,2}-cmd.c.
+6. Changes for tpm2-sessions.c.
+7. Changes for tpm2-space.c.
+8. Changes for trusted_tpm{1,2}.c
+9. Remove stuff left w/o a call site.
 
-Yes, please take them via your tree.
+It's pretty good exercise for v2 actually as it is already somewhat
+functional code. By doing this split this update will get already
+reasonably well verified.
 
-> I'll append your review.
+I should also probably emphasize the motivation better in the next
+version.  Especially with multiple tpm_buf instances in the same
+function scope, things do something are messy to backtrack. In addition,
+this complexity might cap the motivation for someone to contribute a
+useful feature.
 
-Thanks!
+I don't really have even followed Linus' opinions in this topic per se
+I personally just think that since I have a measured argument for this.
+I got with that and talk with Linus if he wants to bring it up :-)
 
--- 
-Regards,
-Sudeep
+BR, Jarkko
 
