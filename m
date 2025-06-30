@@ -1,196 +1,99 @@
-Return-Path: <linux-integrity+bounces-6571-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6575-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 148B5AEDD64
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Jun 2025 14:47:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F208EAEE055
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Jun 2025 16:17:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 162CF3AFAB2
-	for <lists+linux-integrity@lfdr.de>; Mon, 30 Jun 2025 12:47:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FA791884F4E
+	for <lists+linux-integrity@lfdr.de>; Mon, 30 Jun 2025 14:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A520C286D48;
-	Mon, 30 Jun 2025 12:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D5D28C2D0;
+	Mon, 30 Jun 2025 14:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="cFssam5m"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D3826F463;
-	Mon, 30 Jun 2025 12:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6C728EA62;
+	Mon, 30 Jun 2025 14:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751287660; cv=none; b=ml+Wen7MGUKX/9wlDdEXywWwVpEiZyYyGdje9VIiIC7WMllrvkcHU/QNeS+FzN2Qrx8c3zESlK8UqzK5b9+MuVj+90XH9NJ6SdTrVODdI1Y4CapVfs4Og5W9OZ67TQJ+bZDM27a0NTQRxNTW1wcsbWbFccLSpr4E4blJ+XwbNiU=
+	t=1751292799; cv=none; b=d3u1+A0QVa9mLGNXzPWvO49MYKEKLAJWUiCL0fgjAdHjIekV/U8CLTY7/zjH5wWv5WMipWd6oaxX4FwJ6oAthB4hGOnC10wPdNCx3GnbLJroWpw9F4mQjoZ+fcgxq2dBh+dAjCDg1Wrsr0ItJ5dDKKZvnAGlz4eVXflzMmkBYlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751287660; c=relaxed/simple;
-	bh=2j7p5gpf+8wtNYLLVp46XrGSopcKtlZ1X8i8OTr8ApA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Xc4Y65PRYvWrQ0qpRv8xANzygPApa00xbGxUMm+90waz5YU9a6R4hN9w6q2XB2xVC+97J1ifLqibvLJODXfIhGghWoFzuCiJBkD3+HtWeOwnXgRS4/Ov8XDPJnr4dPmDXiw5aHyZV40PvIO9WCXoXt4UY5TBnFFWVF0EqBhS7I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4bW5Rj6qMjzCsMV;
-	Mon, 30 Jun 2025 20:43:13 +0800 (CST)
-Received: from kwepemg100016.china.huawei.com (unknown [7.202.181.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id BB175180237;
-	Mon, 30 Jun 2025 20:47:35 +0800 (CST)
-Received: from huawei.com (10.67.174.33) by kwepemg100016.china.huawei.com
- (7.202.181.57) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 30 Jun
- 2025 20:47:35 +0800
-From: GONG Ruiqi <gongruiqi1@huawei.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
-	<roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-CC: Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore
-	<paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E . Hallyn"
-	<serge@hallyn.com>, <linux-kernel@vger.kernel.org>,
-	<linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
-	Lu Jialin <lujialin4@huawei.com>, <gongruiqi1@huawei.com>
-Subject: [PATCH -next RFC 4/4] ima: rot: Involve per-RoT default PCR index
-Date: Mon, 30 Jun 2025 20:59:28 +0800
-Message-ID: <20250630125928.765285-5-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1751292799; c=relaxed/simple;
+	bh=mU2HSC07Vz5zt5zmOeuBuEsM5Ot1wlDckDHo/LIuo+A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ecdGKVinFSDXKKcck5B3n6L9K9b1IcAVAsdLF41ATtrEkkIYqWOzCzjBJU7uVH6zjPWW/yBYDAYfAIrdPSPTaTXQpb7ccsFV5Ut1Pm7vysO2j3RraR37NJoWv56QSNkE5dYguOWWChKCUaizKaL1nBpyHGQjtAa/SPp7J+mo4M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=cFssam5m; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1751292796;
+	bh=mU2HSC07Vz5zt5zmOeuBuEsM5Ot1wlDckDHo/LIuo+A=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=cFssam5m/JH/9bHoTxXdBgyHUVpSTf+eTbrF5Moe5yS7Y79ioUN/yJ7oJ0Of6twtc
+	 6R8YyVQkqSUCKwHjYP6mswFkaGUv16CGLnzRB1lbE5cPbxEd7lT9zsJtofDHcQjzHg
+	 X9breVRYGu2aRDQPIhKf2UDuYkhWF5bGGCaonZyQ=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 0E1FA1C02FD;
+	Mon, 30 Jun 2025 10:13:16 -0400 (EDT)
+Message-ID: <6692fd251851b80b5d94d3804508473451185e78.camel@HansenPartnership.com>
+Subject: Re: [PATCH -next RFC 0/4] IMA Root of Trust (RoT) Framework
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: GONG Ruiqi <gongruiqi1@huawei.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>
+Cc: Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore
+ <paul@paul-moore.com>,  James Morris <jmorris@namei.org>, "Serge E .
+ Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org, 
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, Lu
+ Jialin <lujialin4@huawei.com>, linux-coco@lists.linux.dev
+Date: Mon, 30 Jun 2025 10:13:15 -0400
 In-Reply-To: <20250630125928.765285-1-gongruiqi1@huawei.com>
 References: <20250630125928.765285-1-gongruiqi1@huawei.com>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemg100016.china.huawei.com (7.202.181.57)
 
-As both the extend operation and the measurement list require a PCR
-index, the concept of PCR needs to be somehow applied to RoTs besides
-TPM as well, and each type of RoT device should have its own PCR index,
-no matter it's actually used or not.
+[+cc linux-coco]
+On Mon, 2025-06-30 at 20:59 +0800, GONG Ruiqi wrote:
+[...]
+> This patch set provides an implementation of the aforementioned IMA
+> RoT framework, which can facilitate easier adaptation for new devices
+> such as Intel TDX and Huawei VirtCCA, as well as the classic TPM, to
+> be an RoT that IMA can utilize to maintain system's integrity.
 
-The original CONFIG_IMA_MEASURE_PCR_IDX in fact has two roles:
+This is inventing a separate but parallel system to the Coco TSM one.=20
+If IMA is going to measure to TDX RTMRs, there should at least be some
+integration.  In theory the TSM backend can also do TPMs, so it looks
+like it should become what you're calling the ROT for IMA subsystem and
+IMA should simply make use of it.
 
-  1. It specifies the default index of TPM's PCR that IMA will use.
-  2. It provides a dummy PCR index (as a placeholder in the measurement
-     list) when TPM (now generalized to RoT) is unavailable.
+Regards,
 
-Now rename this config to emphasize its first role, and create another
-macro, IMA_DEFAULT_PCR_IDX, to take up the second role.
-
-Signed-off-by: GONG Ruiqi <gongruiqi1@huawei.com>
----
- security/integrity/ima/Kconfig    | 12 ++++++++----
- security/integrity/ima/ima.h      |  3 +++
- security/integrity/ima/ima_api.c  |  2 +-
- security/integrity/ima/ima_init.c |  2 +-
- security/integrity/ima/ima_main.c |  4 ++--
- security/integrity/ima/ima_rot.c  |  2 +-
- 6 files changed, 16 insertions(+), 9 deletions(-)
-
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 976e75f9b9ba..5e3b4ddea9ab 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -44,14 +44,18 @@ config IMA_KEXEC
- 	   Depending on the IMA policy, the measurement list can grow to
- 	   be very large.
- 
--config IMA_MEASURE_PCR_IDX
-+config IMA_ROT_TPM_PCR_IDX
- 	int
- 	range 8 14
- 	default 10
- 	help
--	  IMA_MEASURE_PCR_IDX determines the TPM PCR register index
--	  that IMA uses to maintain the integrity aggregate of the
--	  measurement list.  If unsure, use the default 10.
-+	  IMA_ROT_TPM_PCR_IDX determines the index of PCR that IMA, when
-+	  choosing TPM as the Root of Trust (RoT), would use to maintain
-+	  the integrity aggregate of the measurement list. Its value is
-+	  also used as a dummy PCR index IMA would use in the absence of
-+	  RoT.
-+
-+	  If unsure, use the default 10.
- 
- config IMA_LSM_RULES
- 	bool
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 31e3f76cdda6..f64fde127006 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -42,6 +42,9 @@ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
- #define IMA_TEMPLATE_IMA_NAME "ima"
- #define IMA_TEMPLATE_IMA_FMT "d|n"
- 
-+#define IMA_DEFAULT_PCR_IDX CONFIG_IMA_ROT_TPM_PCR_IDX
-+#define IMA_MEASURE_PCR_IDX (ima_rot_inst ? ima_rot_inst->default_pcr : IMA_DEFAULT_PCR_IDX)
-+
- #define NR_BANKS(rot) ((rot != NULL) ? rot->nr_allocated_banks : 0)
- 
- /* current content of the policy */
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 65cf5b2400f2..94201216225d 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -152,7 +152,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
- 		goto err_out;
- 	}
- 	result = ima_store_template(entry, violation, inode,
--				    filename, CONFIG_IMA_MEASURE_PCR_IDX);
-+				    filename, IMA_MEASURE_PCR_IDX);
- 	if (result < 0)
- 		ima_free_template_entry(entry);
- err_out:
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index 096eaa7a7666..a63a5d8355df 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -87,7 +87,7 @@ static int __init ima_add_boot_aggregate(void)
- 
- 	result = ima_store_template(entry, violation, NULL,
- 				    boot_aggregate_name,
--				    CONFIG_IMA_MEASURE_PCR_IDX);
-+				    IMA_MEASURE_PCR_IDX);
- 	if (result < 0) {
- 		ima_free_template_entry(entry);
- 		audit_cause = "store_entry";
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index cdd225f65a62..ed13966dc562 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -245,7 +245,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 	char filename[NAME_MAX];
- 	const char *pathname = NULL;
- 	int rc = 0, action, must_appraise = 0;
--	int pcr = CONFIG_IMA_MEASURE_PCR_IDX;
-+	int pcr = IMA_MEASURE_PCR_IDX;
- 	struct evm_ima_xattr_data *xattr_value = NULL;
- 	struct modsig *modsig = NULL;
- 	int xattr_len = 0;
-@@ -1060,7 +1060,7 @@ int process_buffer_measurement(struct mnt_idmap *idmap,
- 	}
- 
- 	if (!pcr)
--		pcr = CONFIG_IMA_MEASURE_PCR_IDX;
-+		pcr = IMA_MEASURE_PCR_IDX;
- 
- 	iint.ima_hash = hash_hdr;
- 	iint.ima_hash->algo = ima_hash_algo;
-diff --git a/security/integrity/ima/ima_rot.c b/security/integrity/ima/ima_rot.c
-index 0083d9c4e64e..ed32a48bef8d 100644
---- a/security/integrity/ima/ima_rot.c
-+++ b/security/integrity/ima/ima_rot.c
-@@ -38,7 +38,7 @@ static struct ima_rot ima_rots[] = {
- #ifdef CONFIG_TCG_TPM
- 	{
- 		.name = "tpm",
--		.default_pcr = CONFIG_IMA_MEASURE_PCR_IDX,
-+		.default_pcr = CONFIG_IMA_ROT_TPM_PCR_IDX,
- 		.init = ima_tpm_init,
- 		.extend = ima_tpm_extend,
- 		.calc_boot_aggregate = ima_tpm_calc_boot_aggregate,
--- 
-2.25.1
+James
 
 
