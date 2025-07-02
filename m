@@ -1,64 +1,54 @@
-Return-Path: <linux-integrity+bounces-6592-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6593-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4786AAF657C
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jul 2025 00:42:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57DBEAF659D
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jul 2025 00:47:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD2853BD6A3
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 22:41:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE1651C462F5
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 22:47:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBAC2245022;
-	Wed,  2 Jul 2025 22:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D291247298;
+	Wed,  2 Jul 2025 22:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e5BagjG5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c2TOkb76"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7F01DED52;
-	Wed,  2 Jul 2025 22:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA6E24679A
+	for <linux-integrity@vger.kernel.org>; Wed,  2 Jul 2025 22:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751496133; cv=none; b=CY2hcd2bYgtM8dq6he3hex9lPhvATuCaNZaGOK7iy6ggWdbmtcYLwwsI88wxACD5MLFoF6fFuIemBLzBgDsw6a59kYQUD8wOnxoOT2Iv5aO3qQ90e2jPoiUfvWs4YMCGL0O6xTuU6CurZZCFLfhJqBJ3+wUOZcbPAU9/d/PaPiI=
+	t=1751496391; cv=none; b=CpJkRtASRtlzvS7EGAukin/+R9MfM4/c2Yj/jmSq4NAbIpPqLIa21+QnUllaVdEgb3dg72QynZEIUge8B+y+3LKx8lnsr/zzB1XmWFZ8yUpqNoxY30vr5pyBlezBuXsnesWDE/jnglD47IRJRIE5knrhZfXuElW3hm5AIHJA6fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751496133; c=relaxed/simple;
-	bh=Qlex3J95n7fWXidhlCTd4uELRhp1holqYUtR8DTuccA=;
+	s=arc-20240116; t=1751496391; c=relaxed/simple;
+	bh=YJZDpJ4WPdgUAWJ8luDJqi5MpU/82ToTDmJsSuKzI9o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f1R+g6KhRvrG5/OkjRnBECnQYbahXsHrjfSR/GFV47qEjx7Gc/16rgZdaIb0n11MR6/dRbvFoQdOhTkmB3nEzOA5avU2DkooLIGFW6xt2xQSQWCmbdJQqcll5pq5MWYNmo3Q1M9kErosPOwdPLQnTPP7/qEFCazu2XPgIEIcGWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e5BagjG5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D6CC4CEE7;
-	Wed,  2 Jul 2025 22:42:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=O0phPw5aEH4hGzN8iU8+0OS02kIX1tJEdW7DEqE5CJQLOWqyIdvepi1cm0Y2GTsDQWPexnlwzNhVZDg1EisoctHbU7GV0+53boicnC86mke+keTElaDaXXYLURSoayxUz0u3C/sEIN393+ndlKh4OJzM057MgwXoIMjYIX3nA9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c2TOkb76; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F6BEC4CEEE;
+	Wed,  2 Jul 2025 22:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751496133;
-	bh=Qlex3J95n7fWXidhlCTd4uELRhp1holqYUtR8DTuccA=;
+	s=k20201202; t=1751496389;
+	bh=YJZDpJ4WPdgUAWJ8luDJqi5MpU/82ToTDmJsSuKzI9o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e5BagjG5whxkRyCMsdar2lYqammWFThALos8csRvFrpzACoGEqBPupv9MLdOCh7cZ
-	 Q1CcMjUpev3bQb3W6rH3DHMrvmy8hVGcqHdUenkA+eDJxIJO+RaR8zGSHf5y+rD06T
-	 +A7jLI0zxLcqnW4iaEm0Y/+S0aMX1/2EpobYAkjyJPYcIHO/diVGWiakMy5IhYpNI+
-	 CX7ym/gHNeiywWrQJOjT2mbBVJarbfBVla0YbXeVgzNrrp3huCFIDpk2MzMeYQ3Rod
-	 oWjUTkQJATermMWTiwLeGAivlgniTH74KAJE+0YF0uApPXx+2Wcun1wMhazjBZyZ2R
-	 DM4III4UYxzUg==
-Date: Thu, 3 Jul 2025 01:42:09 +0300
+	b=c2TOkb76ewCVkkx7NNu12g2zQmmF1eGq5WUsNDrxx+vGyDPuaRfuMIJ/j2D1o7l6/
+	 lxtkGpXFpqkmGa2oLCjN/YByPSc6hKkzOtZx90JX2NjS7+6z/ht8Mu7aLbFSwZUuSy
+	 eUkf714kvWhBjGeLxw0/zOXHYN8YAui57XnhXvPFyIU9LxONBT8NhFhC4t2P3x3H5x
+	 aG5SGqnOfz6WAyEGDDLn7hbaIPtDSYczPCaaq71Jmf/RfMS80FJfka4iF/Tj4JyJZD
+	 uwWiJAUwYU14KIyYTDZbJYQWhoEdj4WhrSvd563bTFHDPv4KnZos3MwHS/N0pK+YO/
+	 yABPfpS5IMlVg==
+Date: Thu, 3 Jul 2025 01:46:25 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	"open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v4] tpm: Managed allocations for tpm_buf instances
-Message-ID: <aGW1wdJQ2oFpGQwq@kernel.org>
-References: <20250701145136.82726-1-jarkko@kernel.org>
- <20250702125725.GA904431@ziepe.ca>
+To: Denis Aleksandrov <daleksan@redhat.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	Jan Stancek <jstancek@redhat.com>
+Subject: Re: [PATCH] tpm: prevents local DOS via tpm/tpm0/ppi/*operations
+Message-ID: <aGW2wabMXtdBEQxR@kernel.org>
+References: <20250702202851.33344-1-daleksan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,40 +57,60 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250702125725.GA904431@ziepe.ca>
+In-Reply-To: <20250702202851.33344-1-daleksan@redhat.com>
 
-On Wed, Jul 02, 2025 at 09:57:25AM -0300, Jason Gunthorpe wrote:
-> On Tue, Jul 01, 2025 at 05:51:35PM +0300, Jarkko Sakkinen wrote:
-> > @@ -32,28 +32,30 @@ struct tpm_readpubek_out {
-> >  static ssize_t pubek_show(struct device *dev, struct device_attribute *attr,
-> >  			  char *buf)
-> >  {
-> > -	struct tpm_buf tpm_buf;
-> > +	struct tpm_buf *tpm_buf __free(kfree) = NULL;
-> >  	struct tpm_readpubek_out *out;
-> >  	int i;
-> >  	char *str = buf;
-> >  	struct tpm_chip *chip = to_tpm_chip(dev);
-> >  	char anti_replay[20];
-> >  
-> > +	tpm_buf = tpm_buf_alloc();
-> > +	if (!tpm_buf)
-> > +		return -ENOMEM;
+On Wed, Jul 02, 2025 at 04:28:51PM -0400, Denis Aleksandrov wrote:
+> This bug is not seen on most machines. Reads on tpm/tpm0/ppi/*operations
+> can become very long on misconfigured systems. Reading the TPM is a
+> blocking operation, thus a user could effectively trigger a DOS.
 > 
-> apprently this isn't the style guide, you are supposed to write:
-> 
->   	char anti_replay[20];
-> 
-> 	struct tpm_buf *tpm_buf __free(kfree) =  tpm_buf_alloc();
-> 	if (!tpm_buf)
-> 		return -ENOMEM;
+> Resolve this by restricting unprivileged user from reading the
+> above-mentioned device files.
 
-Sounds fair to me. I'll shift to this direction in the next revision.
+I suppose we can do this. I'm going to holiday for one week next
+week so I'll hold for additional feedback for that period and
+apply this if nothing comes up.
+
+There's no use case for unprivileged user, or app that stops
+working because of this. If you cut hairs, with patch shifting
+uapi you have to we always prepared that tree falls down
+somewhere but I'm willing to take risk with this :-)
+
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 > 
-> Jason
-
-BR, Jarkko
+> Reported-by: Jan Stancek <jstancek@redhat.com>
+> Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
+> ---
+> 
+> Running scripts/checkpatch.pl suggested that the permissions be
+> changed to octal format. What do the maintainers think of this?
+> The rest of the permissions in the file are macros.
+> 
+> Lastly, this bug was reproduced and the fix was tested accordingly.
+> 
+>  drivers/char/tpm/tpm_ppi.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> index bc7b1b4501b3..ac6e0aee566e 100644
+> --- a/drivers/char/tpm/tpm_ppi.c
+> +++ b/drivers/char/tpm/tpm_ppi.c
+> @@ -347,8 +347,8 @@ static DEVICE_ATTR(request, S_IRUGO | S_IWUSR | S_IWGRP,
+>  static DEVICE_ATTR(transition_action, S_IRUGO,
+>  		   tpm_show_ppi_transition_action, NULL);
+>  static DEVICE_ATTR(response, S_IRUGO, tpm_show_ppi_response, NULL);
+> -static DEVICE_ATTR(tcg_operations, S_IRUGO, tpm_show_ppi_tcg_operations, NULL);
+> -static DEVICE_ATTR(vs_operations, S_IRUGO, tpm_show_ppi_vs_operations, NULL);
+> +static DEVICE_ATTR(tcg_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_tcg_operations, NULL);
+> +static DEVICE_ATTR(vs_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_vs_operations, NULL);
+>  
+>  static struct attribute *ppi_attrs[] = {
+>  	&dev_attr_version.attr,
+> -- 
+> 2.48.1
+> 
 
 BR, Jarkko
 
