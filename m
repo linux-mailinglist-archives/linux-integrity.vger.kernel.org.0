@@ -1,461 +1,98 @@
-Return-Path: <linux-integrity+bounces-6579-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6580-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1E7DAF05E1
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Jul 2025 23:43:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 182CDAF08B1
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 04:52:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEE0B48501F
-	for <lists+linux-integrity@lfdr.de>; Tue,  1 Jul 2025 21:43:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47F1B1BC1D52
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 02:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2BC42701D6;
-	Tue,  1 Jul 2025 21:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC54119F49E;
+	Wed,  2 Jul 2025 02:52:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VPvIxuxS"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="ISk6Ebl9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC3C2652BF;
-	Tue,  1 Jul 2025 21:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F81646BF;
+	Wed,  2 Jul 2025 02:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751406205; cv=none; b=ZFD3+e6twSorddCHmknMqqm2x6TbVOx7t3EoZVBSPN3T9tWdb/MB5CLOlqvT8K5FmRhXYWYvDjvXjy9RWugpTYZX97PvtHa1pI0Mbk+qa9R62WksdNWM9lE8f/5YtGKiPPkcQCGFcmvuRtdNv4Ji50o6Oz7C+6HF+97DZpg191s=
+	t=1751424720; cv=none; b=RXthdaMH94UNZRjZ9jzKDzOfsUe7P1ONzxL0tsbO6nudv9YJjcngR/o/Wg22TmJeQEwLWwoyWne7B7yrVW0CtOAOo6S9ldw51jq6AIUzK9Fw79DTrq5TB7CtQdaGzERIJQ3LaIhbmaPA5X93XlCx/6iS2l3fgbrSkZ88+EmeRhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751406205; c=relaxed/simple;
-	bh=vromciS9HYSh8lr7oFcSyGlFwxSrQwZOMiP6JjeHiOU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hGLdch09M1brIU4Mtr2J3Ajk+ofwZPDfOeefUUAk9ekTjzjevU2l7QSHgTkUpwBuhKcJ9rEFkDJR/TkAPtbA/JpCUaC0t6PbyZ24m4FjER5NzFv8v6BO3rPa+mGdIb+xXmCtcs0JKnUBCbxC3vwI42/vZzDk7KevsDgumkDr48I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VPvIxuxS; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 561F1tmh019886;
-	Tue, 1 Jul 2025 21:42:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=rPNeGP
-	oPozXxtz9O4rF0CE5O1zQ2C5dXoEzmDgpE/L8=; b=VPvIxuxSEvUJgLOLQ9pUXL
-	wBFKk/0DdcnpubaBVIr+U4nBimh376HJMooNRH1dIuuGOeF+QAkCSQASE7hinuvd
-	gS2FBk0Jb4HaXvi8siDtffX1NX0i3/AJxuM0gnsItpn3MhDKN7TTdysmcDdwayPR
-	e80Qt56glb/pvDmG8Oit/IcvxuEx7B66ulPFT/C1Xjc/4OsBNEV3vaMg0jQT3EFQ
-	+1YLnLdJeEGpDjuEPVbcHlcxvqw/Um55/aFSE0MW/azvtgvaeqcvK4n67tLqtt9L
-	VzfUvt6oahNm2JQPFvECC5JcVvO+IX4H724WlRhcDuuEZZwPA4l1Y7vZ70Frrp3A
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j830subn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Jul 2025 21:42:51 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 561LfZls007006;
-	Tue, 1 Jul 2025 21:42:51 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j830subk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Jul 2025 21:42:51 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 561KD1fQ021928;
-	Tue, 1 Jul 2025 21:42:49 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47juqpmkdd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 01 Jul 2025 21:42:49 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 561LgnoA25953006
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 1 Jul 2025 21:42:49 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0EDB55805A;
-	Tue,  1 Jul 2025 21:42:49 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1716C58056;
-	Tue,  1 Jul 2025 21:42:48 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  1 Jul 2025 21:42:48 +0000 (GMT)
-Message-ID: <29f206ec-1d9e-4c2f-b051-3af458173692@linux.ibm.com>
-Date: Tue, 1 Jul 2025 17:42:47 -0400
+	s=arc-20240116; t=1751424720; c=relaxed/simple;
+	bh=eTg0AJG64Mucqd7JwgbohkOyVxEbLJ6gWChf1vaz4lU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FCg7N77B90sBaVoinaFISqyUtI+us77TmGeRN8wNWoToHPUHQJ8ytCDhwVNqY7crwPcQMTHFE3nsV+XyYaFdYCASccYNJRDr8vP/+otl5coSx8hpYf4k1o3UhC4wssD1tR7I3xs7/TzExk6Jsxm4FQp6WDfy8P4xINgp+uOstnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=ISk6Ebl9; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1751424716;
+	bh=eTg0AJG64Mucqd7JwgbohkOyVxEbLJ6gWChf1vaz4lU=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=ISk6Ebl9KXLboZ72Sh4YkA5+b+G8IKB2hwuDU9mIdsUhohw4HSDKfBVpD4l71SO3l
+	 +2vkN3rBV/aIRtqMX5AV3r6zRhEEiFAMC7toSLJzolvFBaaTNB/4IZ0oQ9py0bsA5h
+	 h7LxJiWKSGeUoovbjHg/PpNFxqU1Kn4TBZTrl3Oc=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 84E021C02E3;
+	Tue, 01 Jul 2025 22:51:56 -0400 (EDT)
+Message-ID: <7316e17a4d8dba36a4a773f87dc4f516697dd402.camel@HansenPartnership.com>
+Subject: Re: [PATCH v4] tpm: Managed allocations for tpm_buf instances
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org
+Cc: keyrings@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>, Jarkko
+ Sakkinen <jarkko.sakkinen@opinsys.com>, Peter Huewe <peterhuewe@gmx.de>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Mimi Zohar <zohar@linux.ibm.com>, David
+ Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, James
+ Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, "open
+ list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>, "open
+ list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
+Date: Tue, 01 Jul 2025 22:51:55 -0400
+In-Reply-To: <20250701145136.82726-1-jarkko@kernel.org>
+References: <20250701145136.82726-1-jarkko@kernel.org>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] tpm: Managed allocations for tpm_buf instances
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org
-Cc: keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        "open list:TPM DEVICE DRIVER" <linux-integrity@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-References: <20250701145136.82726-1-jarkko@kernel.org>
-Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20250701145136.82726-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: muQJF8qVxDSkTzYcvafRx4hdvJ-3M3-I
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAxMDE1MSBTYWx0ZWRfX1pGSpLWact9m YS+isWA/3acIgArjx/f8tgmnyOsEfyy1bf2FnMsif7UPQnI1ZJA1SiFLAmGj15ua9xzJKeFFoT3 crJTpvHgnMdpINDnhvmwI1vRxoonUvhvyAzsD24BxnxAiuVRwjuIu0wBOhmgnSgsz9Uwvhi/w4R
- jqXFpgWV7ePksfBTLom7W3xdhNZDnT9trev9t62iV5EVPjx94X3dLw+DEcH/r6CxQ9cI9N+X9pr CljU1d0oSo/7908262rvS4dE/JkzXiYPsk10OJIktV1LqA+NFUS8Pboh7VWo4mVYVlL0ddmV6eu 5iB+9VWmvEGFRQWW/Ovc7FhASLSMZDc8e1HAbM67hwZwxDVzZZQS/hZhG4p+bp0LrmTWitXT+yy
- KYHz/gqK7PRD0A9kPsROdxkmEmhYkFJUOYPwQTb/168tDcF+FWh4owB+y15zJYs8oVVKdO66
-X-Authority-Analysis: v=2.4 cv=MOlgmNZl c=1 sm=1 tr=0 ts=6864565b cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=rMIA4TsMAAAA:8 a=H16EuEqh4d1CqoSb5zkA:9 a=QEXdDO2ut3YA:10
- a=hVBJ2aql8SDTymIzffKL:22
-X-Proofpoint-GUID: s97CyYwZVXvh-Pk6CyGoyFaFbHHeooGt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-01_02,2025-06-27_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
- adultscore=0 suspectscore=0 bulkscore=0 clxscore=1011 impostorscore=0
- priorityscore=1501 mlxlogscore=999 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507010151
 
-
-
-On 7/1/25 10:51 AM, Jarkko Sakkinen wrote:
-> From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> 
+On Tue, 2025-07-01 at 17:51 +0300, Jarkko Sakkinen wrote:
 > Repeal and replace tpm_buf_init() and tpm_buf_init_sized() with
-> tpm_buf_alloc(), which returns a buffer of  memory with the struct tpm_buf
-> header at the beginning of the returned buffer. This leaves 4090 bytes of
-> free space for the payload.
-> 
-> Given that kfree() is now the destructor for struct tpm_buf instances,
-> tpm_buf_destroy() becomes obsolete, and can be safely wiped of too.
+> tpm_buf_alloc(), which returns a buffer of=C2=A0 memory with the struct
+> tpm_buf header at the beginning of the returned buffer. This leaves
+> 4090 bytes of free space for the payload.
 
-s/of/off/  or s/wiped of/remove,/
+Shouldn't this be accounted for in tpm_buf_append()? right now it will
+let us run off the end of the allocation by six bytes before it signals
+overflow because it's checking final length against PAGE_SIZE not
+PAGE_SIZE - sizeof(struct tpm_buf).  I realise this should be an
+impossible condition in production, but it's useful for debugging so we
+should be accurate about it to avoid hard to detect bugs.
 
-> 
-> The actual gist is that now a tpm_buf can be now declared using
+Regards,
 
-s/that now a/that a/
+James
 
-> __free(kfree) declared in linux/slab.h:
-> 
-> 	struct tpm_buf *buf __free(kfree) = NULL;
-> 
-> 	/* ... */
-> 
-> 	buf = tpm_buf_alloc();
-> 
-> Doing this has two-folded benefits:
-> 
-> 1. Yet to be discoverd memory leaks in the pre-existing code base.
-
--> discovered
-
-
-A couple of nits below and one stray 'return rc;' that should not be 
-there...
-
-> 2. Memory leaks concerning  new features and other contributions.
-> 
-> In addition, the barrier to contribute is lowered given that managing
-> memory is a factor easier.
-> 
-> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 524d802ede26..86b961f4027b 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -165,14 +165,18 @@ struct tpm2_pcr_read_out {
->   int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
->   		  struct tpm_digest *digest, u16 *digest_size_ptr)
->   {
-> +	struct tpm_buf *buf __free(kfree) = NULL;
->   	int i;
->   	int rc;
-> -	struct tpm_buf buf;
->   	struct tpm2_pcr_read_out *out;
->   	u8 pcr_select[TPM2_PCR_SELECT_MIN] = {0};
->   	u16 digest_size;
->   	u16 expected_digest_size = 0;
->   
-> +	buf = tpm_buf_alloc();
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
->   	if (pcr_idx >= TPM2_PLATFORM_PCR)
->   		return -EINVAL;
->   
-> @@ -187,23 +191,21 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
->   		expected_digest_size = chip->allocated_banks[i].digest_size;
->   	}
->   
-> -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
-> -	if (rc)
-> -		return rc;
-> +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
->   
->   	pcr_select[pcr_idx >> 3] = 1 << (pcr_idx & 0x7);
->   
-> -	tpm_buf_append_u32(&buf, 1);
-> -	tpm_buf_append_u16(&buf, digest->alg_id);
-> -	tpm_buf_append_u8(&buf, TPM2_PCR_SELECT_MIN);
-> -	tpm_buf_append(&buf, (const unsigned char *)pcr_select,
-> +	tpm_buf_append_u32(buf, 1);
-> +	tpm_buf_append_u16(buf, digest->alg_id);
-> +	tpm_buf_append_u8(buf, TPM2_PCR_SELECT_MIN);
-> +	tpm_buf_append(buf, (const unsigned char *)pcr_select,
->   		       sizeof(pcr_select));
->   
-> -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to read a pcr value");
-> +	rc = tpm_transmit_cmd(chip, buf, 0, "attempting to read a pcr value");
->   	if (rc)
->   		goto out;
-
-nit: -> return rc; ?
-
->   
-> -	out = (struct tpm2_pcr_read_out *)&buf.data[TPM_HEADER_SIZE];
-> +	out = (struct tpm2_pcr_read_out *)&buf->data[TPM_HEADER_SIZE];
->   	digest_size = be16_to_cpu(out->digest_size);
->   	if (digest_size > sizeof(digest->digest) ||
->   	    (!digest_size_ptr && digest_size != expected_digest_size)) {
-> @@ -216,7 +218,6 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
->   
->   	memcpy(digest->digest, out->digest, digest_size);
->   out:
-
-probably can remove this label
-
-> -	tpm_buf_destroy(&buf);
->   	return rc;
->   }
->   
-> @@ -574,8 +569,8 @@ struct tpm2_pcr_selection {
->   
->   ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
->   {
-> +	struct tpm_buf *buf __free(kfree) = NULL;
->   	struct tpm2_pcr_selection pcr_selection;
-> -	struct tpm_buf buf;
->   	void *marker;
->   	void *end;
->   	void *pcr_select_offset;
-> @@ -587,41 +582,39 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
->   	int rc;
->   	int i = 0;
->   
-> -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> -	if (rc)
-> -		return rc;
-> +	buf = tpm_buf_alloc();
-> +	if (!buf)
-> +		return -ENOMEM;
->   
-> -	tpm_buf_append_u32(&buf, TPM2_CAP_PCRS);
-> -	tpm_buf_append_u32(&buf, 0);
-> -	tpm_buf_append_u32(&buf, 1);
-> +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> +	tpm_buf_append_u32(buf, TPM2_CAP_PCRS);
-> +	tpm_buf_append_u32(buf, 0);
-> +	tpm_buf_append_u32(buf, 1);
->   
-> -	rc = tpm_transmit_cmd(chip, &buf, 9, "get tpm pcr allocation");
-> +	rc = tpm_transmit_cmd(chip, buf, 9, "get tpm pcr allocation");
->   	if (rc)
-> -		goto out;
-> +		return rc;
->   
->   	nr_possible_banks = be32_to_cpup(
-> -		(__be32 *)&buf.data[TPM_HEADER_SIZE + 5]);
-> +		(__be32 *)&buf->data[TPM_HEADER_SIZE + 5]);
->   
->   	chip->allocated_banks = kcalloc(nr_possible_banks,
->   					sizeof(*chip->allocated_banks),
->   					GFP_KERNEL);
-> -	if (!chip->allocated_banks) {
-> -		rc = -ENOMEM;
-> -		goto out;
-> -	}
-> +	if (!chip->allocated_banks)
-> +		return -ENOMEM;
->   
-> -	marker = &buf.data[TPM_HEADER_SIZE + 9];
-> +	marker = &buf->data[TPM_HEADER_SIZE + 9];
->   
-> -	rsp_len = be32_to_cpup((__be32 *)&buf.data[2]);
-> -	end = &buf.data[rsp_len];
-> +	rsp_len = be32_to_cpup((__be32 *)&buf->data[2]);
-> +	end = &buf->data[rsp_len];
->   
-> +	return rc;
-
-
-this doesn't look right...
-
-
->   	for (i = 0; i < nr_possible_banks; i++) {
->   		pcr_select_offset = marker +
->   			offsetof(struct tpm2_pcr_selection, size_of_select);
-> -		if (pcr_select_offset >= end) {
-> -			rc = -EFAULT;
-> -			break;
-> -		}
-> +		if (pcr_select_offset >= end)
-> +			return -EFAULT;
->   
->   		memcpy(&pcr_selection, marker, sizeof(pcr_selection));
->   		hash_alg = be16_to_cpu(pcr_selection.hash_alg);
-> @@ -633,7 +626,7 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
-> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> index 024be262702f..54bcd8d0621e 100644
-> --- a/security/keys/trusted-keys/trusted_tpm2.c
-> +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> @@ -241,14 +241,23 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->   		      struct trusted_key_payload *payload,
->   		      struct trusted_key_options *options)
->   {
-> +	struct tpm_buf *buf __free(kfree) = NULL;
-> +	struct tpm_buf *sized __free(kfree) = NULL;
-
-Revert order of the above two lines.
-
->   	off_t offset = TPM_HEADER_SIZE;
-> -	struct tpm_buf buf, sized;
->   	int blob_len = 0;
->   	u32 hash;
->   	u32 flags;
->   	int i;
->   	int rc;
->   
-> +	buf = tpm_buf_alloc();
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	sized = tpm_buf_alloc();
-> +	if (!sized)
-> +		return -ENOMEM;
-> +
- >   	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {>   		if 
-(options->hash == tpm2_hash_map[i].crypto_id) {
->   			hash = tpm2_hash_map[i].tpm_id;
-> @@ -270,89 +279,76 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
->   	if (rc)
->   		goto out_put;
->   
-> -	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
-> -	if (rc) {
-> -		tpm2_end_auth_session(chip);
-> -		goto out_put;
-> -	}
-> -
-> -	rc = tpm_buf_init_sized(&sized);
-> -	if (rc) {
-> -		tpm_buf_destroy(&buf);
-> -		tpm2_end_auth_session(chip);
-> -		goto out_put;
-> -	}
-> -
-> -	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
-> -	tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_DECRYPT,
-> +	tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
-> +	tpm_buf_reset_sized(sized);
-> +	tpm_buf_append_name(chip, buf, options->keyhandle, NULL);
-> +	tpm_buf_append_hmac_session(chip, buf, TPM2_SA_DECRYPT,
->   				    options->keyauth, TPM_DIGEST_SIZE);
->   
->   	/* sensitive */
-> -	tpm_buf_append_u16(&sized, options->blobauth_len);
-> +	tpm_buf_append_u16(sized, options->blobauth_len);
->   
->   	if (options->blobauth_len)
-> -		tpm_buf_append(&sized, options->blobauth, options->blobauth_len);
-> +		tpm_buf_append(sized, options->blobauth, options->blobauth_len);
->   
-> -	tpm_buf_append_u16(&sized, payload->key_len);
-> -	tpm_buf_append(&sized, payload->key, payload->key_len);
-> -	tpm_buf_append(&buf, sized.data, sized.length);
-> +	tpm_buf_append_u16(sized, payload->key_len);
-> +	tpm_buf_append(sized, payload->key, payload->key_len);
-> +	tpm_buf_append(buf, sized->data, sized->length);
->   
->   	/* public */
-> -	tpm_buf_reset_sized(&sized);
-> -	tpm_buf_append_u16(&sized, TPM_ALG_KEYEDHASH);
-> -	tpm_buf_append_u16(&sized, hash);
-> +	tpm_buf_reset_sized(sized);
-> +	tpm_buf_append_u16(sized, TPM_ALG_KEYEDHASH);
-> +	tpm_buf_append_u16(sized, hash);
->   
->   	/* key properties */
->   	flags = 0;
->   	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
->   	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT);
-> -	tpm_buf_append_u32(&sized, flags);
-> +	tpm_buf_append_u32(sized, flags);
->   
->   	/* policy */
-> -	tpm_buf_append_u16(&sized, options->policydigest_len);
-> +	tpm_buf_append_u16(sized, options->policydigest_len);
->   	if (options->policydigest_len)
-> -		tpm_buf_append(&sized, options->policydigest, options->policydigest_len);
-> +		tpm_buf_append(sized, options->policydigest, options->policydigest_len);
->   
->   	/* public parameters */
-> -	tpm_buf_append_u16(&sized, TPM_ALG_NULL);
-> -	tpm_buf_append_u16(&sized, 0);
-> +	tpm_buf_append_u16(sized, TPM_ALG_NULL);
-> +	tpm_buf_append_u16(sized, 0);
->   
-> -	tpm_buf_append(&buf, sized.data, sized.length);
-> +	tpm_buf_append(buf, sized->data, sized->length);
->   
->   	/* outside info */
-> -	tpm_buf_append_u16(&buf, 0);
-> +	tpm_buf_append_u16(buf, 0);
->   
->   	/* creation PCR */
-> -	tpm_buf_append_u32(&buf, 0);
-> +	tpm_buf_append_u32(buf, 0);
->   
-> -	if (buf.flags & TPM_BUF_OVERFLOW) {
-> +	if (buf->flags & TPM_BUF_OVERFLOW) {
->   		rc = -E2BIG;
->   		tpm2_end_auth_session(chip);
->   		goto out;
->   	}
->   
-> -	tpm_buf_fill_hmac_session(chip, &buf);
-> -	rc = tpm_transmit_cmd(chip, &buf, 4, "sealing data");
-> -	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
-> +	tpm_buf_fill_hmac_session(chip, buf);
-> +	rc = tpm_transmit_cmd(chip, buf, 4, "sealing data");
-> +	rc = tpm_buf_check_hmac_response(chip, buf, rc);
->   	if (rc)
->   		goto out;
->   
-> -	blob_len = tpm_buf_read_u32(&buf, &offset);
-> -	if (blob_len > MAX_BLOB_SIZE || buf.flags & TPM_BUF_BOUNDARY_ERROR) {
-> +	blob_len = tpm_buf_read_u32(buf, &offset);
-> +	if (blob_len > MAX_BLOB_SIZE || buf->flags & TPM_BUF_BOUNDARY_ERROR) {
->   		rc = -E2BIG;
->   		goto out;
->   	}
-> -	if (buf.length - offset < blob_len) {
-> +	if (buf->length - offset < blob_len) {
->   		rc = -EFAULT;
->   		goto out;
->   	}
->   
-> -	blob_len = tpm2_key_encode(payload, options, &buf.data[offset], blob_len);
-> +	blob_len = tpm2_key_encode(payload, options, &buf->data[offset],
-> +				   blob_len);
->   
->   out:
-> -	tpm_buf_destroy(&sized);
-> -	tpm_buf_destroy(&buf);
-> -
->   	if (rc > 0) {
->   		if (tpm2_rc_value(rc) == TPM2_RC_HASH)
->   			rc = -EINVAL;
 
