@@ -1,55 +1,56 @@
-Return-Path: <linux-integrity+bounces-6584-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6585-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4D50AF6416
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 23:36:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD13AF6439
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 23:39:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4337A3A3BD7
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 21:36:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 924384E4340
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 21:38:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402FF242D7F;
-	Wed,  2 Jul 2025 21:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701892BE630;
+	Wed,  2 Jul 2025 21:38:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LOkCzqY0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCV11yrS"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166422DE705;
-	Wed,  2 Jul 2025 21:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486EA2BE62F;
+	Wed,  2 Jul 2025 21:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751492188; cv=none; b=Lc3H6qHISWk3Zci3LAj71hUWoIc6JvG3rG8jnqC7fFqG3HUt0YYBgztnXB+kLw6tyq3jUtSC6gzXSqH7tDrsrNE4vHwMXwFTLVqktHXxwvnKN6e+Di2C8h9AedsZe/TKPhLaI7p5NVGW9aC8q2OWT5B8P6MXoBg8BgsxyVQmL00=
+	t=1751492305; cv=none; b=SmVYg9AxkYjT//Pxvf+VUvqzIx1IzWLvXkgvk50azC9dYD7jPucoOcGPlUOEgH2jJVB+cFuW/c7Hh37ChdEC8r5PtkhlPvraD1Gny3HBlmoIQ06hasuDDvLsiF6kigOU2DkZj1owWRByrb1PX+KUNM5a34J1wZfTsATYueptMCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751492188; c=relaxed/simple;
-	bh=+Q7ow2BtQ9RPcDzD+75SZg1MSy+L7HBftUp7mch2u8k=;
+	s=arc-20240116; t=1751492305; c=relaxed/simple;
+	bh=Y91bfcFboLc9TQFnlee0SCl5WcJl4J9e4VfYgvhJPB4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tV5hkdQImcMb64k8AXeLDgfYxhRwDyxVNt3AxoinsR6ZaWWPloZJJFAYcRTfBR95Sqvz+7d/WPP26K5nhQLO8gMFbIexYONAEgyIz9jndFOUFlelwpkMSd3wOtylwMcFt1ikNUA4mXj074gxrTWuj36nzY0gpoIUZC3kUI0Ubyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LOkCzqY0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F04AC4CEE7;
-	Wed,  2 Jul 2025 21:36:27 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fWdaQRE0qgTuXy3ajoxcHJPxuz8GXOsADOQXLdy6GvABDJRA/6Hru2Kw67kMWNDq6cROwV4uSZByvA8QGgaVu3Sbrz96YXO929CjgTKHCQtztpl18JTDPovCzIm8A070kZIykCdg2HeSd12qLUCyn8XcAvvEYmccHsLhau+BTeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCV11yrS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA71C4CEEE;
+	Wed,  2 Jul 2025 21:38:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751492187;
-	bh=+Q7ow2BtQ9RPcDzD+75SZg1MSy+L7HBftUp7mch2u8k=;
+	s=k20201202; t=1751492304;
+	bh=Y91bfcFboLc9TQFnlee0SCl5WcJl4J9e4VfYgvhJPB4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LOkCzqY05hTeL/CZ/jvQECf60LY51dIf8nFMAr9nszpNCCbchQe80uWwdYcks3icL
-	 5MSt9Wg8F/woBfkio/l1ExdV8xS97d28BORKH/sKEUk3PhiUl0IqNWI1w6XI8YEjGP
-	 VgtFwCrxgQwPZiKPBMBsOVug9WCugQjhs4Ejqs/WBhiPACPHe+d0zlv+5mSQh9T8li
-	 LW8HZvV8JzXp0bdqOKI4lC3bQDIvyQZGPwoi2R+PXt565vHmhAC0Zwa+LuWqZmEzNB
-	 nyLaF5wznDa6VOsu055KAjBYceHhA+4cavod6taRuSRfTW9gfCb2wm+lk7ui8GaK46
-	 UlwZYw5J7s2Yw==
-Date: Thu, 3 Jul 2025 00:36:23 +0300
+	b=DCV11yrSHut1diowD+L/PUReBbtxNktGuyl0SgTGXq8utvJApU00amIwYe7HhMxkk
+	 mTh4kTc+YXmv1aE7XDFx9N5RWdub1qovyVxNEURWJxu8CE6Ocjd9C1vsAL0PJQdxK8
+	 TAXQiTLxErzzWbmpmb3v8VYmfappRbdiB3Y39VFAMNjKWYcmNUJT6bnLpSEegvLdY2
+	 U1ibbCIQ6UvvZ4+JSatNOB8LO3Jed9xQpp/YOTqIbxxNKB/ycZFQjlMhteARnuY8u/
+	 C3mIiLz5c8OQX2iq7/efOEjcU8fymkJfGMnT+bFb6QNy3Rv/pxfPas3UkZ28W4pBcO
+	 dkR+pXan8U8jA==
+Date: Thu, 3 Jul 2025 00:38:20 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
-Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] tpm: Replace scnprintf() with sysfs_emit() and
- sysfs_emit_at() in sysfs show functions
-Message-ID: <aGWmV6DLiIc8f7N6@kernel.org>
-References: <20250626125130.28553-1-chelsyratnawat2001@gmail.com>
+To: Prachotan Bathi <prachotan.bathi@arm.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Stuart Yoder <stuart.yoder@arm.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 1/3] tpm_crb_ffa: Fix typos in function name
+Message-ID: <aGWmzF8_dMP9As_3@kernel.org>
+References: <20250626184521.1079507-1-prachotan.bathi@arm.com>
+ <20250626184521.1079507-2-prachotan.bathi@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -58,140 +59,50 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250626125130.28553-1-chelsyratnawat2001@gmail.com>
+In-Reply-To: <20250626184521.1079507-2-prachotan.bathi@arm.com>
 
-On Thu, Jun 26, 2025 at 05:51:30AM -0700, Chelsy Ratnawat wrote:
-> Documentation/filesystems/sysfs.rst mentions that show() should only
-> use sysfs_emit() or sysfs_emit_at() when formating the value to be
-> returned to user space. So replace scnprintf() with sysfs_emit().
+On Thu, Jun 26, 2025 at 01:45:19PM -0500, Prachotan Bathi wrote:
+> s/recieve/receive in __tpm_crb_ffa_send_receive
 > 
-> Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+> Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
 > ---
-> Changes in v5 : 
-> - Fix alignment and coding style problems
+>  drivers/char/tpm/tpm_crb_ffa.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
->  drivers/char/tpm/tpm_ppi.c | 52 ++++++++++++++++++--------------------
->  1 file changed, 25 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-> index bc7b1b4501b3..d53fce1c9d6f 100644
-> --- a/drivers/char/tpm/tpm_ppi.c
-> +++ b/drivers/char/tpm/tpm_ppi.c
-> @@ -52,7 +52,7 @@ static ssize_t tpm_show_ppi_version(struct device *dev,
->  {
->  	struct tpm_chip *chip = to_tpm_chip(dev);
->  
-> -	return scnprintf(buf, PAGE_SIZE, "%s\n", chip->ppi_version);
-> +	return sysfs_emit(buf, "%s\n", chip->ppi_version);
+> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+> index 4ead61f01299..089d1e54bb46 100644
+> --- a/drivers/char/tpm/tpm_crb_ffa.c
+> +++ b/drivers/char/tpm/tpm_crb_ffa.c
+> @@ -178,7 +178,7 @@ int tpm_crb_ffa_init(void)
 >  }
+>  EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
 >  
->  static ssize_t tpm_show_ppi_request(struct device *dev,
-> @@ -87,12 +87,10 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
->  		else {
->  			req = obj->package.elements[1].integer.value;
->  			if (tpm_ppi_req_has_parameter(req))
-> -				size = scnprintf(buf, PAGE_SIZE,
-> -				    "%llu %llu\n", req,
-> -				    obj->package.elements[2].integer.value);
-> +				size = sysfs_emit(buf, "%llu %llu\n", req,
-> +						  obj->package.elements[2].integer.value);
->  			else
-> -				size = scnprintf(buf, PAGE_SIZE,
-> -						"%llu\n", req);
-> +				size = sysfs_emit(buf, "%llu\n", req);
->  		}
->  	} else if (obj->package.count == 2 &&
->  	    obj->package.elements[0].type == ACPI_TYPE_INTEGER &&
-> @@ -100,8 +98,8 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
->  		if (obj->package.elements[0].integer.value)
->  			size = -EFAULT;
->  		else
-> -			size = scnprintf(buf, PAGE_SIZE, "%llu\n",
-> -				 obj->package.elements[1].integer.value);
-> +			size = sysfs_emit(buf, "%llu\n",
-> +					  obj->package.elements[1].integer.value);
->  	}
+> -static int __tpm_crb_ffa_send_recieve(unsigned long func_id,
+> +static int __tpm_crb_ffa_send_receive(unsigned long func_id,
+>  				      unsigned long a0,
+>  				      unsigned long a1,
+>  				      unsigned long a2)
+> @@ -251,7 +251,7 @@ int tpm_crb_ffa_get_interface_version(u16 *major, u16 *minor)
 >  
->  	ACPI_FREE(obj);
-> @@ -211,10 +209,10 @@ static ssize_t tpm_show_ppi_transition_action(struct device *dev,
->  	}
+>  	guard(mutex)(&tpm_crb_ffa->msg_data_lock);
 >  
->  	if (ret < ARRAY_SIZE(info) - 1)
-> -		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret, info[ret]);
-> +		status = sysfs_emit(buf, "%d: %s\n", ret, info[ret]);
->  	else
-> -		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret,
-> -				   info[ARRAY_SIZE(info)-1]);
-> +		status = sysfs_emit(buf, "%d: %s\n", ret,
-> +				    info[ARRAY_SIZE(info) - 1]);
->  	return status;
+> -	rc = __tpm_crb_ffa_send_recieve(CRB_FFA_GET_INTERFACE_VERSION, 0x00, 0x00, 0x00);
+> +	rc = __tpm_crb_ffa_send_receive(CRB_FFA_GET_INTERFACE_VERSION, 0x00, 0x00, 0x00);
+>  	if (!rc) {
+>  		if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
+>  			*major = CRB_FFA_MAJOR_VERSION(tpm_crb_ffa->direct_msg_data2.data[1]);
+> @@ -289,7 +289,7 @@ int tpm_crb_ffa_start(int request_type, int locality)
+>  
+>  	guard(mutex)(&tpm_crb_ffa->msg_data_lock);
+>  
+> -	return __tpm_crb_ffa_send_recieve(CRB_FFA_START, request_type, locality, 0x00);
+> +	return __tpm_crb_ffa_send_receive(CRB_FFA_START, request_type, locality, 0x00);
 >  }
+>  EXPORT_SYMBOL_GPL(tpm_crb_ffa_start);
 >  
-> @@ -255,23 +253,23 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
->  	res = ret_obj[2].integer.value;
->  	if (req) {
->  		if (res == 0)
-> -			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
-> -					   "0: Success");
-> +			status = sysfs_emit(buf, "%llu %s\n", req,
-> +					    "0: Success");
->  		else if (res == 0xFFFFFFF0)
-> -			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
-> -					   "0xFFFFFFF0: User Abort");
-> +			status = sysfs_emit(buf, "%llu %s\n", req,
-> +					    "0xFFFFFFF0: User Abort");
->  		else if (res == 0xFFFFFFF1)
-> -			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
-> -					   "0xFFFFFFF1: BIOS Failure");
-> +			status = sysfs_emit(buf, "%llu %s\n", req,
-> +					    "0xFFFFFFF1: BIOS Failure");
->  		else if (res >= 1 && res <= 0x00000FFF)
-> -			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
-> -					   req, res, "Corresponding TPM error");
-> +			status = sysfs_emit(buf, "%llu %llu: %s\n",
-> +					    req, res, "Corresponding TPM error");
->  		else
-> -			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
-> -					   req, res, "Error");
-> +			status = sysfs_emit(buf, "%llu %llu: %s\n",
-> +					    req, res, "Error");
->  	} else {
-> -		status = scnprintf(buf, PAGE_SIZE, "%llu: %s\n",
-> -				   req, "No Recent Request");
-> +		status = sysfs_emit(buf, "%llu: %s\n",
-> +				    req, "No Recent Request");
->  	}
->  
->  cleanup:
-> @@ -284,7 +282,7 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
->  {
->  	int i;
->  	u32 ret;
-> -	char *str = buf;
-> +	int len = 0;
->  	union acpi_object *obj, tmp;
->  	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
->  
-> @@ -314,11 +312,11 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
->  		}
->  
->  		if (ret > 0 && ret < ARRAY_SIZE(info))
-> -			str += scnprintf(str, PAGE_SIZE, "%d %d: %s\n",
-> -					 i, ret, info[ret]);
-> +			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
-> +					     i, ret, info[ret]);
->  	}
->  
-> -	return str - buf;
-> +	return len;
->  }
->  
->  static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
 > -- 
-> 2.47.1
+> 2.43.0
 > 
-
-Looks good to me.
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
