@@ -1,137 +1,199 @@
-Return-Path: <linux-integrity+bounces-6583-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6584-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1DC9AF6352
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 22:29:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4D50AF6416
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 23:36:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBB891885309
-	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 20:29:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4337A3A3BD7
+	for <lists+linux-integrity@lfdr.de>; Wed,  2 Jul 2025 21:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C442DE71E;
-	Wed,  2 Jul 2025 20:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 402FF242D7F;
+	Wed,  2 Jul 2025 21:36:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jHCvhg7s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LOkCzqY0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9942D1C1F12
-	for <linux-integrity@vger.kernel.org>; Wed,  2 Jul 2025 20:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166422DE705;
+	Wed,  2 Jul 2025 21:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751488140; cv=none; b=KlhKAL3M+wrSp0LP7ckCC5FKSVMQfScErhZbSIG9SCtzID7UnAWVwLEFS2iTIRCDQSg2g1inrWF+o5dIU8bVr0miEUVQqxwElW5gYPTNIzANOsnX6dL11+T5hXhFirPXn0MK1GMFab9cL+BlL+SL+oVJJivjr/AAUEsLiXSsHQA=
+	t=1751492188; cv=none; b=Lc3H6qHISWk3Zci3LAj71hUWoIc6JvG3rG8jnqC7fFqG3HUt0YYBgztnXB+kLw6tyq3jUtSC6gzXSqH7tDrsrNE4vHwMXwFTLVqktHXxwvnKN6e+Di2C8h9AedsZe/TKPhLaI7p5NVGW9aC8q2OWT5B8P6MXoBg8BgsxyVQmL00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751488140; c=relaxed/simple;
-	bh=Z+8+o7E9FsUdbR0qGHtdZso7wtng2PNvnJ2nJmhhRlg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oxMQ6z+CAF7neLkDYZPpR1sRRFfeXNffNJVD9fUVkJeUFU2WH16Yz+Z7+PuXeG+VWUo24D3zSvRig8vFgB44GCIFd44ESqhwDn4ohqoiIGdl7X5DiMNONJz/kJYd0z95lH/TdxRtgKWuI/Y2wX+40HQj5a1i9AWMNkqJfAdNJ58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jHCvhg7s; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751488137;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=UT8T665UTTveBTA8Fo0NAEBN2xUQCc2LvkRF4QTZEq0=;
-	b=jHCvhg7s/LO0Mx2n1GWsGlJFZyV3F0cr3NHI+EZB3+FjqTeoIOAw+9Q5vfamDtNwy8aazc
-	koMel97gEthwSM8zGdjkaagcu2I0ayBhQMQiz3SncviQ2o9aCsELkHGv8q2uOXfGgHRE9z
-	K0oiAfnVjDYxpvvitXnbjekaZbKsmKA=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-457-FqsJ5l2dM6GRwuesb041TA-1; Wed, 02 Jul 2025 16:28:56 -0400
-X-MC-Unique: FqsJ5l2dM6GRwuesb041TA-1
-X-Mimecast-MFC-AGG-ID: FqsJ5l2dM6GRwuesb041TA_1751488136
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4a823b5320cso56652871cf.0
-        for <linux-integrity@vger.kernel.org>; Wed, 02 Jul 2025 13:28:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751488136; x=1752092936;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UT8T665UTTveBTA8Fo0NAEBN2xUQCc2LvkRF4QTZEq0=;
-        b=xLsg6cLX7DY19kIVBkAQ93AqIF4hysDhcqOxokZYSDULgc+GSWGzWo+CjJ8GUhb+YD
-         k6jzmLeGmAWsB0EIaYGuVJwAWo/5+WunMx2HZh6rQGQs9sjU/I/rpz0L4jJxXTqBOUWf
-         VOXsBfI9kYNMvIsRvibVvyH9e13LN89ufXi94GzHkUxplL51ZEuPdIESWLjXBUoSl3IF
-         9J8hoaPhqgE4l9a3AxMezTqCv1BYD4PdvO3/azgaQHxadOcXEW5NrPWhZWfBt+BJHsYH
-         a3WVH3EI5I2pbVR7IprP+PtV9TENkjBXYAF0xpOf75srimzIs32wFVzGB328ITf0apTF
-         y61A==
-X-Forwarded-Encrypted: i=1; AJvYcCUZkFlmX+zK3XdcCvD0Yoyuo9E/wbi7JXDi6qdJCbuX/xIHUdgD4H6w6s8pYHIbfpjMijbdDM2H88jqdzeZPi0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXLg5Mxi40xeXmtIJ/90Wfab47is6MZIV0GqYeJpskeWn9AHWN
-	ZEPTnRjGuawTYu3fdUJKije3+uUaX6wvxF8VBFDaKsqhYiP3TI8jk5rrXGtc8MdN7I3NbvpXBT/
-	7ydQt1ChqTc28y4orxlX+5BB6VCxvbF5XLumiDgLhaHAp/5sqZiiAnJYCqELgmiAIcCt8Rw==
-X-Gm-Gg: ASbGncvxlD576YUf7FnVuVKPKR7k/mSluj1GsMhesSuAr+NeuBeUnl4g2F8hV2aBbxv
-	Rr22Ab2IbOnWzwPZ2MENYxDAguedJsr9SVuov0sZFgbwjYFUb/yhsz4DyfZwio+EUIXv7O9DXBC
-	YSkRnAX8z+xhz22Uwtf16g3jTdWaEmancTEb3fet2g6kVTPCazUaoGYaV6pr8A/s+43ImJor6n1
-	zfqZFmxOjJwn3xnVxgLuCs1P13VfjDYxBmNQkqu/2/M7CoJMSGzBOQ92kjSREVwT4XXj3zMYjm2
-	qI7fwWBCAOk68WFLZtmNohm08TQHwWH8gqDD08vT3Upqw7p7Bu9RkjM=
-X-Received: by 2002:a05:622a:2c5:b0:4a3:fcc7:c73c with SMTP id d75a77b69052e-4a98796ac11mr12318791cf.8.1751488135704;
-        Wed, 02 Jul 2025 13:28:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEowkrYDNh1f8UR4Edcldpooh92BuqBWo9qQdkerGzX6FXDPIT0L+uWqI0YasteTTu/p2Q3rA==
-X-Received: by 2002:a05:622a:2c5:b0:4a3:fcc7:c73c with SMTP id d75a77b69052e-4a98796ac11mr12318351cf.8.1751488135245;
-        Wed, 02 Jul 2025 13:28:55 -0700 (PDT)
-Received: from daleksan-thinkpadp1gen3.boston.csb ([2601:19b:4186:1bc0:780a:22af:8f37:f438])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a7fc10bec2sm96732301cf.13.2025.07.02.13.28.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jul 2025 13:28:54 -0700 (PDT)
-From: Denis Aleksandrov <daleksan@redhat.com>
-To: peterhuewe@gmx.de,
-	jarkko@kernel.org
-Cc: jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	Denis Aleksandrov <daleksan@redhat.com>,
-	Jan Stancek <jstancek@redhat.com>
-Subject: [PATCH] tpm: prevents local DOS via tpm/tpm0/ppi/*operations
-Date: Wed,  2 Jul 2025 16:28:51 -0400
-Message-ID: <20250702202851.33344-1-daleksan@redhat.com>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1751492188; c=relaxed/simple;
+	bh=+Q7ow2BtQ9RPcDzD+75SZg1MSy+L7HBftUp7mch2u8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tV5hkdQImcMb64k8AXeLDgfYxhRwDyxVNt3AxoinsR6ZaWWPloZJJFAYcRTfBR95Sqvz+7d/WPP26K5nhQLO8gMFbIexYONAEgyIz9jndFOUFlelwpkMSd3wOtylwMcFt1ikNUA4mXj074gxrTWuj36nzY0gpoIUZC3kUI0Ubyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LOkCzqY0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F04AC4CEE7;
+	Wed,  2 Jul 2025 21:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751492187;
+	bh=+Q7ow2BtQ9RPcDzD+75SZg1MSy+L7HBftUp7mch2u8k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LOkCzqY05hTeL/CZ/jvQECf60LY51dIf8nFMAr9nszpNCCbchQe80uWwdYcks3icL
+	 5MSt9Wg8F/woBfkio/l1ExdV8xS97d28BORKH/sKEUk3PhiUl0IqNWI1w6XI8YEjGP
+	 VgtFwCrxgQwPZiKPBMBsOVug9WCugQjhs4Ejqs/WBhiPACPHe+d0zlv+5mSQh9T8li
+	 LW8HZvV8JzXp0bdqOKI4lC3bQDIvyQZGPwoi2R+PXt565vHmhAC0Zwa+LuWqZmEzNB
+	 nyLaF5wznDa6VOsu055KAjBYceHhA+4cavod6taRuSRfTW9gfCb2wm+lk7ui8GaK46
+	 UlwZYw5J7s2Yw==
+Date: Thu, 3 Jul 2025 00:36:23 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] tpm: Replace scnprintf() with sysfs_emit() and
+ sysfs_emit_at() in sysfs show functions
+Message-ID: <aGWmV6DLiIc8f7N6@kernel.org>
+References: <20250626125130.28553-1-chelsyratnawat2001@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250626125130.28553-1-chelsyratnawat2001@gmail.com>
 
-This bug is not seen on most machines. Reads on tpm/tpm0/ppi/*operations
-can become very long on misconfigured systems. Reading the TPM is a
-blocking operation, thus a user could effectively trigger a DOS.
+On Thu, Jun 26, 2025 at 05:51:30AM -0700, Chelsy Ratnawat wrote:
+> Documentation/filesystems/sysfs.rst mentions that show() should only
+> use sysfs_emit() or sysfs_emit_at() when formating the value to be
+> returned to user space. So replace scnprintf() with sysfs_emit().
+> 
+> Signed-off-by: Chelsy Ratnawat <chelsyratnawat2001@gmail.com>
+> ---
+> Changes in v5 : 
+> - Fix alignment and coding style problems
+> 
+>  drivers/char/tpm/tpm_ppi.c | 52 ++++++++++++++++++--------------------
+>  1 file changed, 25 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> index bc7b1b4501b3..d53fce1c9d6f 100644
+> --- a/drivers/char/tpm/tpm_ppi.c
+> +++ b/drivers/char/tpm/tpm_ppi.c
+> @@ -52,7 +52,7 @@ static ssize_t tpm_show_ppi_version(struct device *dev,
+>  {
+>  	struct tpm_chip *chip = to_tpm_chip(dev);
+>  
+> -	return scnprintf(buf, PAGE_SIZE, "%s\n", chip->ppi_version);
+> +	return sysfs_emit(buf, "%s\n", chip->ppi_version);
+>  }
+>  
+>  static ssize_t tpm_show_ppi_request(struct device *dev,
+> @@ -87,12 +87,10 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
+>  		else {
+>  			req = obj->package.elements[1].integer.value;
+>  			if (tpm_ppi_req_has_parameter(req))
+> -				size = scnprintf(buf, PAGE_SIZE,
+> -				    "%llu %llu\n", req,
+> -				    obj->package.elements[2].integer.value);
+> +				size = sysfs_emit(buf, "%llu %llu\n", req,
+> +						  obj->package.elements[2].integer.value);
+>  			else
+> -				size = scnprintf(buf, PAGE_SIZE,
+> -						"%llu\n", req);
+> +				size = sysfs_emit(buf, "%llu\n", req);
+>  		}
+>  	} else if (obj->package.count == 2 &&
+>  	    obj->package.elements[0].type == ACPI_TYPE_INTEGER &&
+> @@ -100,8 +98,8 @@ static ssize_t tpm_show_ppi_request(struct device *dev,
+>  		if (obj->package.elements[0].integer.value)
+>  			size = -EFAULT;
+>  		else
+> -			size = scnprintf(buf, PAGE_SIZE, "%llu\n",
+> -				 obj->package.elements[1].integer.value);
+> +			size = sysfs_emit(buf, "%llu\n",
+> +					  obj->package.elements[1].integer.value);
+>  	}
+>  
+>  	ACPI_FREE(obj);
+> @@ -211,10 +209,10 @@ static ssize_t tpm_show_ppi_transition_action(struct device *dev,
+>  	}
+>  
+>  	if (ret < ARRAY_SIZE(info) - 1)
+> -		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret, info[ret]);
+> +		status = sysfs_emit(buf, "%d: %s\n", ret, info[ret]);
+>  	else
+> -		status = scnprintf(buf, PAGE_SIZE, "%d: %s\n", ret,
+> -				   info[ARRAY_SIZE(info)-1]);
+> +		status = sysfs_emit(buf, "%d: %s\n", ret,
+> +				    info[ARRAY_SIZE(info) - 1]);
+>  	return status;
+>  }
+>  
+> @@ -255,23 +253,23 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
+>  	res = ret_obj[2].integer.value;
+>  	if (req) {
+>  		if (res == 0)
+> -			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+> -					   "0: Success");
+> +			status = sysfs_emit(buf, "%llu %s\n", req,
+> +					    "0: Success");
+>  		else if (res == 0xFFFFFFF0)
+> -			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+> -					   "0xFFFFFFF0: User Abort");
+> +			status = sysfs_emit(buf, "%llu %s\n", req,
+> +					    "0xFFFFFFF0: User Abort");
+>  		else if (res == 0xFFFFFFF1)
+> -			status = scnprintf(buf, PAGE_SIZE, "%llu %s\n", req,
+> -					   "0xFFFFFFF1: BIOS Failure");
+> +			status = sysfs_emit(buf, "%llu %s\n", req,
+> +					    "0xFFFFFFF1: BIOS Failure");
+>  		else if (res >= 1 && res <= 0x00000FFF)
+> -			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
+> -					   req, res, "Corresponding TPM error");
+> +			status = sysfs_emit(buf, "%llu %llu: %s\n",
+> +					    req, res, "Corresponding TPM error");
+>  		else
+> -			status = scnprintf(buf, PAGE_SIZE, "%llu %llu: %s\n",
+> -					   req, res, "Error");
+> +			status = sysfs_emit(buf, "%llu %llu: %s\n",
+> +					    req, res, "Error");
+>  	} else {
+> -		status = scnprintf(buf, PAGE_SIZE, "%llu: %s\n",
+> -				   req, "No Recent Request");
+> +		status = sysfs_emit(buf, "%llu: %s\n",
+> +				    req, "No Recent Request");
+>  	}
+>  
+>  cleanup:
+> @@ -284,7 +282,7 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+>  {
+>  	int i;
+>  	u32 ret;
+> -	char *str = buf;
+> +	int len = 0;
+>  	union acpi_object *obj, tmp;
+>  	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
+>  
+> @@ -314,11 +312,11 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+>  		}
+>  
+>  		if (ret > 0 && ret < ARRAY_SIZE(info))
+> -			str += scnprintf(str, PAGE_SIZE, "%d %d: %s\n",
+> -					 i, ret, info[ret]);
+> +			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> +					     i, ret, info[ret]);
+>  	}
+>  
+> -	return str - buf;
+> +	return len;
+>  }
+>  
+>  static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+> -- 
+> 2.47.1
+> 
 
-Resolve this by restricting unprivileged user from reading the
-above-mentioned device files.
+Looks good to me.
 
-Reported-by: Jan Stancek <jstancek@redhat.com>
-Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
----
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Running scripts/checkpatch.pl suggested that the permissions be
-changed to octal format. What do the maintainers think of this?
-The rest of the permissions in the file are macros.
-
-Lastly, this bug was reproduced and the fix was tested accordingly.
-
- drivers/char/tpm/tpm_ppi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-index bc7b1b4501b3..ac6e0aee566e 100644
---- a/drivers/char/tpm/tpm_ppi.c
-+++ b/drivers/char/tpm/tpm_ppi.c
-@@ -347,8 +347,8 @@ static DEVICE_ATTR(request, S_IRUGO | S_IWUSR | S_IWGRP,
- static DEVICE_ATTR(transition_action, S_IRUGO,
- 		   tpm_show_ppi_transition_action, NULL);
- static DEVICE_ATTR(response, S_IRUGO, tpm_show_ppi_response, NULL);
--static DEVICE_ATTR(tcg_operations, S_IRUGO, tpm_show_ppi_tcg_operations, NULL);
--static DEVICE_ATTR(vs_operations, S_IRUGO, tpm_show_ppi_vs_operations, NULL);
-+static DEVICE_ATTR(tcg_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_tcg_operations, NULL);
-+static DEVICE_ATTR(vs_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_vs_operations, NULL);
- 
- static struct attribute *ppi_attrs[] = {
- 	&dev_attr_version.attr,
--- 
-2.48.1
-
+BR, Jarkko
 
