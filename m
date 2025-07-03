@@ -1,198 +1,186 @@
-Return-Path: <linux-integrity+bounces-6604-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6605-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3297FAF7200
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jul 2025 13:24:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A70DAF7325
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jul 2025 14:01:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59C027A5F9B
-	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jul 2025 11:22:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33E06540EEF
+	for <lists+linux-integrity@lfdr.de>; Thu,  3 Jul 2025 12:00:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 279AE2E3B16;
-	Thu,  3 Jul 2025 11:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFC2D24DD07;
+	Thu,  3 Jul 2025 12:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="FLua1SpB"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i3RA8Col"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B082E3AFF;
-	Thu,  3 Jul 2025 11:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EFA523BCF1
+	for <linux-integrity@vger.kernel.org>; Thu,  3 Jul 2025 12:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751541826; cv=none; b=NzjX2yy/VJrWdgzL9/ZApDFFkUl/IAVcrue9sQRKL0arxOGnva85my+fCJakiOYyn42Taz0xNHtnZZacLaWWmD/KfWYkok/qrFDgPR5Yimfw+e0eTAKL9vB+DbhH7jejKRdYbTVcFO9C8/mTUSP9GY1GymZwZuEXqqn93JsEVPU=
+	t=1751544072; cv=none; b=cdQG0PXX7WZuTxfAJZWQmmBvSHfft9jrjr6YvVfdM+wxsZKFoyaDanGuf6eu7Swo/NG8nHc/cbafm7hmERMabI6fT5wYHxF3oYOmh+CVzlS2qbz4VpJN255EOtTwc6rSie1kPsLiiKE7gqzhgQoYqLhZLUXdWMNNnsAR/3RFgXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751541826; c=relaxed/simple;
-	bh=oLOZlkz4/kMnU9rgSW96ifr6RqN12imGk9bUzWGFcuU=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=NpcKrbmo5Er+pgAUsRmkihASYAJxy5YfQYBQCMmbhRx4u/IvOjp3QiQ8bZI94kzVIY+xuiaEOo5IzXcA2ZzvqvCGEgYRqXJwNPerMijvcKOZwVOvrTCKtic1ndIS2seMpA9h2cilJprtgzKDtoFWoAStk4D0pdUQ+H+c/JLCvsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=FLua1SpB; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56307CLS009905;
-	Thu, 3 Jul 2025 11:23:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=4emJw4
-	ErehVOKAjtCy8M8j74Pv47NHFVJ+00dCO9c8g=; b=FLua1SpBxBfqAYVTSreT6f
-	SVKfMdpkHUd1jIeU0LcbAKHhzNRLOcVsJQBsmb5LRdrAMu++uvjdI2HXrbbJs1Ix
-	0C5TjBsV7FMJmdDfRvYbSfhtXA0RfkpXPNIe+mtk4TglE0gZC567BGj5b8ahrqEv
-	pzmn4iggUrr79ycaSBCXCOTo2cVggXGCvuhYBA3GKPJj5JjKjovIf9DuOJQ5nwuN
-	oF3ZSRlpl/QV3YzdOBb5jmsl0qT6hpICkUyaejrij0spaBSpezkgZiAx7rYVJ/k8
-	3/nh8FNcF3zr7saIjPiK+rAniGmYYvozsznSZgTkWhvXvt/k5OOjNnv+W/vD3Y2g
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j5ttk553-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 11:23:26 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 563BHdQd025413;
-	Thu, 3 Jul 2025 11:23:26 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j5ttk551-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 11:23:26 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 563AmEmC011873;
-	Thu, 3 Jul 2025 11:23:25 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47jv7n4ex4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Jul 2025 11:23:25 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 563BNOQS28115516
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 3 Jul 2025 11:23:24 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6FB2558043;
-	Thu,  3 Jul 2025 11:23:24 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 18DA858061;
-	Thu,  3 Jul 2025 11:23:23 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.102.16])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  3 Jul 2025 11:23:22 +0000 (GMT)
-Message-ID: <8401c23009db3b8447b0b06710b37b1585a081ab.camel@linux.ibm.com>
-Subject: Re: [PATCH] Revert "integrity: Do not load MOK and MOKx when
- secure boot be disabled"
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Lennart Poettering <mzxreary@0pointer.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-        Roberto Sassu	
- <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn"	 <serge@hallyn.com>, linux-integrity@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Lee,
- Chun-Yi" <joeyli.kernel@gmail.com>
-In-Reply-To: <aGYurikYK1ManAp3@gardel-login>
-References: <Z9wDxeRQPhTi1EIS@gardel-login>
-	 <1a6cf2097487816e4b93890ad760f18fe750bd70.camel@linux.ibm.com>
-	 <aGYurikYK1ManAp3@gardel-login>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 03 Jul 2025 07:23:22 -0400
+	s=arc-20240116; t=1751544072; c=relaxed/simple;
+	bh=BE7NpfSxuT8aRoWOiPKwFaS1w+KBmnJ1TI+18HzW7t0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cqdrklnkyJEeuiSY3vAB75uTvg9YdfGD+esJehD9MxEuFE8XzP6aTUDI+TBrenOpzUMUo/nXP0OneSvIa8Rtt2CpcyO3/poHsUVsi0zxry6xgRHin5aI7VE2F3X9T/GQO+vwRq/DzNs7SoN9uBZGtsnjnV0+p2a16yJMBFIW4b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i3RA8Col; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751544070;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bPoX57YK7LoNIu5pswW1pE5MCRhCthGYL+5iTRSZhnI=;
+	b=i3RA8Coln6ADqflHsVc2GBtRrt6toqOG1W/bxX+RbBSrUSzwGXygnL2xR09Q9v/UWHuOuM
+	iqlMe+VSriXpx+faTzeJCHeVcEciPYSTsOUtRhz3JK4uoJtS4m+jQYHna7OJOtd2vj9VA8
+	cTwsrtV2Af3k8+nhXumNuZVLElFLJgA=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-64-s5idvJVQM5m0IYEIvSWsvQ-1; Thu, 03 Jul 2025 08:01:08 -0400
+X-MC-Unique: s5idvJVQM5m0IYEIvSWsvQ-1
+X-Mimecast-MFC-AGG-ID: s5idvJVQM5m0IYEIvSWsvQ_1751544067
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-70e5e6ab756so77259927b3.2
+        for <linux-integrity@vger.kernel.org>; Thu, 03 Jul 2025 05:01:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751544067; x=1752148867;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bPoX57YK7LoNIu5pswW1pE5MCRhCthGYL+5iTRSZhnI=;
+        b=oZyXVhtvI6e9GUkOUN5qyosa0IJiyVAsjM+w3jzizXEznO7qQy3G1BCyZxfGbEQfN8
+         LuJZeEC1A4eG24lu8QNtYDyIwwRROKpEP+OgJC7bJhQDwYv7cGJ3ci7bndpQnA+sFp2k
+         TErXr+6PJiefJTLs9O/u/m77Di2XEwvsnYvRJCKr5S+0+fhNShZ+c9aROmCfK93skNCI
+         XnaWv45nUYO7XzaKQ7f2w3EgSsb0ld9Seg3Xw3C259/78k4CTAem9TPgAw7wqYdIQ7/l
+         qzojdnW8qykvpT8cEeY8eP5xt+5IVsUH2L44ZDmivzLBGg+F/n9hrOi1zuNk0nYA2Rs0
+         Z8mg==
+X-Forwarded-Encrypted: i=1; AJvYcCUwcN52tGQZaUW2/PZJnKKkNO9qNwnahUbDnWbsYO9j0DWmnodfLAh7uTvBuY2kTw+W5p0zLNCRKU28RYB1Pnc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSJxuXW3tdrB/m0NDhvcQaz/IwAgxvSAnKFJYrcbDIfjefuMig
+	MNMgimgAKMnKSUegVZMpsUOILdEJu/9+GOKOahPfaDqGRO9xGIWy8fKksw32CLdlwOsBPx38zQT
+	GZq/pjWvUGNucL8vzOCLw/g9O7oEMV25sUxfORuN6Tch1f76Y/Khr4cFYvh+VD0s2DcBx4zPN+h
+	sFLoo8IS+lCeEdx8pl+CrwoXDpqjGkPWkES8vnpB7S26ic
+X-Gm-Gg: ASbGnctQeKjJKycAuuIBWLon84zAksxbxnYZarpylBhDbFtbkW0YFyr+HljFwBN0KpY
+	DuPlZbiOaW3UnRzDueW7NaDB58fNJjnHRU1r71HvhmCEui8ECDvg4JUhIICvgsa4ZDrhq/xo+4O
+	bcZDy0+OUgCOlQSuCT1S12w6RujEqOjUIO5MHl
+X-Received: by 2002:a05:690c:7012:b0:70f:83af:7dab with SMTP id 00721157ae682-71658fd788cmr43087857b3.4.1751544067531;
+        Thu, 03 Jul 2025 05:01:07 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG26rBqu0QTdXURnTxVDVstDMG//Mh8XuMdlWYtR+O8nu0h4UWT0gOd8dv7a4Atlh4YhzcVtX6p4ARdT4a5lCw=
+X-Received: by 2002:a05:690c:7012:b0:70f:83af:7dab with SMTP id
+ 00721157ae682-71658fd788cmr43087407b3.4.1751544066997; Thu, 03 Jul 2025
+ 05:01:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HZ8B1dRlKfYZ0lNGt2l8fRKVvedpbDAT
-X-Authority-Analysis: v=2.4 cv=UtNjN/wB c=1 sm=1 tr=0 ts=6866682e cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=JnBA2F1U-474F7nXX6wA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: d21f4K65zcBRJYncthFVJkaJrlCK98v8
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzAzMDA5MyBTYWx0ZWRfXz9kgAsO/VuU/ QlEYHcaC7527+wF/Gjc7B7bcEuYcXOswmwfVT/uppKPb3b9CFXOyBic0T9k07+xPC3VMZ+mc6sz YDiJVF/V4nrlQRssFQZprr1L5WGCaDgMedCc7MyR1l7owP+TGZkaw38zqzL/aLReMzF/NWXDKtT
- BZCiS1RVZj5Lsg+/Azk+y0LJXI/tc8rih+GlkV2K3wyzJgXwNa5lkyFH9BgTFlQXSfIeUgWOOGz jdRK36T9AYAtec1FdZKbw/3QBfGeyunzx8FYz1ko7UOl/DTxXMEJNmGnwDszNxAYibooEZiQn6Y 2FVyjGsN8PFDC9sSKkO/5ihyZeGPE8+sAvVP3SWkNz/SgBs6Ph8sCujQmXUOtsE4ts5o4v4b7DJ
- lMcqHSSOGnqaxDHPTdU9O9Sc93eC9dAq/jPnS+tmAgsUHny+EqwT/K3K6EtP8jRCggNRvxTA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-03_03,2025-07-02_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 spamscore=0 mlxlogscore=999
- adultscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507030093
+References: <20250702202851.33344-1-daleksan@redhat.com> <aGW2wabMXtdBEQxR@kernel.org>
+ <CAG+gbFfKLCQND-TT8DEZ09T=Nhb39_CJfM5imv341Pen03bHjw@mail.gmail.com>
+In-Reply-To: <CAG+gbFfKLCQND-TT8DEZ09T=Nhb39_CJfM5imv341Pen03bHjw@mail.gmail.com>
+From: Denis Aleksandrov <daleksan@redhat.com>
+Date: Thu, 3 Jul 2025 08:00:54 -0400
+X-Gm-Features: Ac12FXxLLeO8nKN6jrfnmu9Ej8R3Z4PfPKr86w8SuKNqc2v8fZ4sdQeKB9noZtQ
+Message-ID: <CAG+gbFfLP1Y=HgRfzjhT4uJ121keQ0ZKo=4saB3uqnZYyoV8JA@mail.gmail.com>
+Subject: Re: [PATCH] tpm: prevents local DOS via tpm/tpm0/ppi/*operations
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org, 
+	Jan Stancek <jstancek@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2025-07-03 at 09:18 +0200, Lennart Poettering wrote:
-> On Mi, 02.07.25 21:40, Mimi Zohar (zohar@linux.ibm.com) wrote:
->=20
-> > On Thu, 2025-03-20 at 13:02 +0100, Lennart Poettering wrote:
-> > > This reverts commit 92ad19559ea9a8ec6f158480934ae26ebfe2c14f.
-> > >=20
-> > > This original commit this reverts creates a strange situation: it
-> > > ensures more restrictive behaviour if SecureBoot is off then when it
-> > > is on, which is the opposite of what one would expect.
-> > >=20
-> > > Typically, one would expect that if SB is off the validation of
-> > > resources during the pre-kernel and kernel initialization is less
-> > > restrictive, not more restrictive. But this check turned the world on
-> > > its head.
-> >=20
-> > Hi Lennart,
-> >=20
-> > I'm really sorry for the long delay ...
-> >=20
-> > > From an IMA perspective, the default is to only trust keys built into=
- the kernel
-> > or certificates signed by the builtin keys and loaded onto the
-> > .secondary_trusted_keys keyring.
-> >=20
-> > The ability of loading MOK keys onto the .machine keyring and linked to=
- the
-> > .secondary_trusted_keys keyring is an exception based on the assumption=
- that
-> > that there is a secure boot chain of trust.  Allowing untrusted keys on=
-to or
-> > linked to the .secondary_trusted_keys keyring, would potentially allow =
-loading
-> > code signing keys onto the IMA keyring signed by untrusted MOK keys.
-> >=20
-> > I was really hesitant to allow this exception of loading MOK keys onto =
-the
-> > .machine keyring in the first place.  I'm now even more concerned.
-> >=20
-> > This is not just an issue of being more or less restrictive, but of add=
-ing a new
-> > integrity gap when one didn't exist previously.
->=20
-> But we are talking of the case here where SecureBoot is *off*,
+Hi Jarkko,
 
-Exactly, so there is no trust in any keys other than those built into the
-kernel. True that is of course dependent on trusting the kernel.  In the ca=
-se of
-MOK, trusting additional keys requires at minimum a "safe" secure boot
-environment and other things to prevent its abuse.
+Thank you for the review. I'll add your Reviewed-by tag to my local commit.
+Please let me know if you would like me to send a v2 version of the
+patch with your tag included.
 
-> i.e. there is a concious decision in place that there is no trust
-> chain, and that the firmware *happily* *already* accepts unsigned boot
-> loaders/kernels and just runs with them. If SecureBoot is already off,
-> then an attacker can patch around in the kernel invoked at boot
-> completely freely anyway, there is *no* authentication done. Hence
-> it's really weird to then insist that the path into the kernel keyring
-> via mok keys is off in *only* this case, because an attacker can get
-> into that anyway in this case, it's just a lot more cumbersome.
->=20
-> It's really strange that currently when people ask for tight security
-> (i.e. SB on) the linux kernel is super relaxed and allows any keys to
-> be inserted, but if people ask for security checks to be off (i.e. SB
-> off) the kernel starts being super strict and doesn't allow any keys
-> to propagate into mok. That's really confusing and contradictory, no?
+Best,
+Denis
 
-That all may be true, but you're ignoring what I said about only "trusting"=
- MOK
-in certain situations.  If you have another safer, better mechanism for
-establishing a new root of trust for keys (e.g. TPM), then by all means sha=
-re it
-and we can make additional exceptions.
 
-Mimi
+On Thu, Jul 3, 2025 at 7:56=E2=80=AFAM Denis Aleksandrov <daleksan@redhat.c=
+om> wrote:
+>
+> Hi Jarkko,
+>
+> Thank you for the review. I'll add your Reviewed-by tag to my local commi=
+t.
+> Please let me know if you would like me to send a v2 version of the patch=
+ with your tag included.
+>
+> Best,
+> Denis
+>
+> On Wed, Jul 2, 2025 at 6:46=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org=
+> wrote:
+>>
+>> On Wed, Jul 02, 2025 at 04:28:51PM -0400, Denis Aleksandrov wrote:
+>> > This bug is not seen on most machines. Reads on tpm/tpm0/ppi/*operatio=
+ns
+>> > can become very long on misconfigured systems. Reading the TPM is a
+>> > blocking operation, thus a user could effectively trigger a DOS.
+>> >
+>> > Resolve this by restricting unprivileged user from reading the
+>> > above-mentioned device files.
+>>
+>> I suppose we can do this. I'm going to holiday for one week next
+>> week so I'll hold for additional feedback for that period and
+>> apply this if nothing comes up.
+>>
+>> There's no use case for unprivileged user, or app that stops
+>> working because of this. If you cut hairs, with patch shifting
+>> uapi you have to we always prepared that tree falls down
+>> somewhere but I'm willing to take risk with this :-)
+>>
+>>
+>> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>>
+>> >
+>> > Reported-by: Jan Stancek <jstancek@redhat.com>
+>> > Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
+>> > ---
+>> >
+>> > Running scripts/checkpatch.pl suggested that the permissions be
+>> > changed to octal format. What do the maintainers think of this?
+>> > The rest of the permissions in the file are macros.
+>> >
+>> > Lastly, this bug was reproduced and the fix was tested accordingly.
+>> >
+>> >  drivers/char/tpm/tpm_ppi.c | 4 ++--
+>> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+>> > index bc7b1b4501b3..ac6e0aee566e 100644
+>> > --- a/drivers/char/tpm/tpm_ppi.c
+>> > +++ b/drivers/char/tpm/tpm_ppi.c
+>> > @@ -347,8 +347,8 @@ static DEVICE_ATTR(request, S_IRUGO | S_IWUSR | S_=
+IWGRP,
+>> >  static DEVICE_ATTR(transition_action, S_IRUGO,
+>> >                  tpm_show_ppi_transition_action, NULL);
+>> >  static DEVICE_ATTR(response, S_IRUGO, tpm_show_ppi_response, NULL);
+>> > -static DEVICE_ATTR(tcg_operations, S_IRUGO, tpm_show_ppi_tcg_operatio=
+ns, NULL);
+>> > -static DEVICE_ATTR(vs_operations, S_IRUGO, tpm_show_ppi_vs_operations=
+, NULL);
+>> > +static DEVICE_ATTR(tcg_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_tc=
+g_operations, NULL);
+>> > +static DEVICE_ATTR(vs_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_vs_=
+operations, NULL);
+>> >
+>> >  static struct attribute *ppi_attrs[] =3D {
+>> >       &dev_attr_version.attr,
+>> > --
+>> > 2.48.1
+>> >
+>>
+>> BR, Jarkko
+>>
+
 
