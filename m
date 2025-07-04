@@ -1,139 +1,116 @@
-Return-Path: <linux-integrity+bounces-6620-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6617-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B413AF89EB
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 09:47:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FA57AF89B1
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 09:40:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17F604872EA
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 07:47:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15FF61898439
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 07:40:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8DA2857F1;
-	Fri,  4 Jul 2025 07:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D30E2820A0;
+	Fri,  4 Jul 2025 07:40:35 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from gardel.0pointer.net (gardel.0pointer.net [85.214.157.71])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A9C282F5;
-	Fri,  4 Jul 2025 07:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.157.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83D1281366;
+	Fri,  4 Jul 2025 07:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751615234; cv=none; b=I2ykW4EfQUNT7CwnPHLEoBKZ2l52oRGAQv8hHPe+xqubn0F0TuOooIaMWq518ijBS929h0dedalJMP/+VbXB3n+iaLfjKEEFJUbY5b0+CuMtTJf31e/0ck82iQesXGIjkTnU9HhN8bFD43/Q9ElATLOxEqqiC8k0nWzqRla34iM=
+	t=1751614835; cv=none; b=uxUOViY+DM0BMeCatpnJAiNzvLNTogtymUlgfRIV8zWDQWMRMj2G59H0fFZliSIKq1ZY8LscomS6DmX7/JK9Z46x9rRCWtnAoYaJwHkP8WuIFsf3t9jsZUxTlPGO38GfNrk4IKMuX12wR1+3fffdIArt3iIhR6sBYYXjY16lt/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751615234; c=relaxed/simple;
-	bh=f5bUyETWuLf21xHjox/tbacH4YnaGKFp9ktsm1YeJpI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XTZKQWBUid95ecls9Tt4BWQIcF00rIhhf3sljXyAe/iZKX/AYRotn3bXc6jws3NU9WZ7KjgALw/06f6WFJQHiRrR/vKXsbQZT6DAtfYzMinHnk7NsblTGgP+jRCGYVOK07in8VNz1BhOjUgPv2QU7Uu7r0Dj3/+AGBQzFbd+5do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0pointer.de; spf=pass smtp.mailfrom=0pointer.de; arc=none smtp.client-ip=85.214.157.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0pointer.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0pointer.de
-Received: from gardel-login.0pointer.net (gardel-mail [IPv6:2a01:238:43ed:c300:10c3:bcf3:3266:da74])
-	by gardel.0pointer.net (Postfix) with ESMTP id 103F1E81788;
-	Fri,  4 Jul 2025 09:47:10 +0200 (CEST)
-Received: by gardel-login.0pointer.net (Postfix, from userid 1000)
-	id 1F09416005E; Fri,  4 Jul 2025 09:47:09 +0200 (CEST)
-Date: Fri, 4 Jul 2025 09:47:08 +0200
-From: Lennart Poettering <mzxreary@0pointer.de>
-To: GONG Ruiqi <gongruiqi1@huawei.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Lee, Chun-Yi" <joeyli.kernel@gmail.com>
-Subject: Re: [PATCH] Revert "integrity: Do not load MOK and MOKx when secure
- boot be disabled"
-Message-ID: <aGeG_C2fcWqpgo1O@gardel-login>
-References: <Z9wDxeRQPhTi1EIS@gardel-login>
- <1a6cf2097487816e4b93890ad760f18fe750bd70.camel@linux.ibm.com>
- <aGYurikYK1ManAp3@gardel-login>
- <8401c23009db3b8447b0b06710b37b1585a081ab.camel@linux.ibm.com>
- <aGZ_x8Ar6iwzt2zV@gardel-login>
- <c74b5581-b5a5-4f71-a4da-2cef73351715@huawei.com>
+	s=arc-20240116; t=1751614835; c=relaxed/simple;
+	bh=EhK+9hAf8j3eh4CjyTaHOFdygunU/xE6sAbakQJe0fY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jHWSw91Rx/ryKX9OLGkxRwswkhDy4wMxDBZBcfx10Qu3SM7o3UriLneZ9kOmE8CwSJlCoTJc91kKQGfy3YB0gmgENsW4AdpKfPDfdc81ufEXus/dv+FPU91RuLRapZ3ixWgmxfDavGVPzjWHtMfK6whG7pBDN6WKYiOS+Sz8lSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4bYQWF3k8PztS35;
+	Fri,  4 Jul 2025 15:39:21 +0800 (CST)
+Received: from kwepemg100016.china.huawei.com (unknown [7.202.181.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id F298D140258;
+	Fri,  4 Jul 2025 15:40:28 +0800 (CST)
+Received: from huawei.com (10.67.174.33) by kwepemg100016.china.huawei.com
+ (7.202.181.57) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 4 Jul
+ 2025 15:40:28 +0800
+From: GONG Ruiqi <gongruiqi1@huawei.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+	<roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>, Ard Biesheuvel <ardb@kernel.org>
+CC: Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore
+	<paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E . Hallyn"
+	<serge@hallyn.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+	<mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H . Peter Anvin"
+	<hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
+	<linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+	<linux-efi@vger.kernel.org>, <keyrings@vger.kernel.org>, Lu Jialin
+	<lujialin4@huawei.com>, <gongruiqi1@huawei.com>
+Subject: [PATCH v4 0/2] integrity: Extract secure boot enquiry function out of IMA
+Date: Fri, 4 Jul 2025 15:51:12 +0800
+Message-ID: <20250704075114.3709609-1-gongruiqi1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c74b5581-b5a5-4f71-a4da-2cef73351715@huawei.com>
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemg100016.china.huawei.com (7.202.181.57)
 
-On Fr, 04.07.25 09:30, GONG Ruiqi (gongruiqi1@huawei.com) wrote:
+v4:
+- Rename secureboot.c to efi_secureboot.c, as Mimi suggested.
+v3:
+- Redesign the implementation. Keep the name of arch_ima_get_secureboot
+  to escape from the morass consisted of multiple arch and configs.
+- Rephrase the commit message.
+v2:
+- Fix compile errors for CONFIG_IMA_ARCH_POLICY=n on s390 & powerpc
 
-> > patch arbitrary keys into the ELF image of the kernel before starting
-> > it, and everything will look perfect later on, because the image is
-> > not authenticated after all via SB. So there *already* is a way into
-> > the kernel keyring with this – it's just really messy to parse and
-> > patch ELF at runtime like this from the bootloader. My hope with just
-> > relaxing the rules on MOK keys when SB is off is to just make this
-> > stuff cleaner and more elegant (and also to leave the ELF image intact
-> > so that we get clean measurements, both of the kernel and of the keys
-> > we add).
->
-> Just curious: if an attacker takes control of the boot phase earlier
-> than the kernel, then not just this check has no value, but any check in
-> the kernel has no value, right? Anything that got loaded early enough
-> could theoretically patch the kernel with anything on anywhere. So shall
-> we just remove them all?
+---
 
-Measured boot protects you against that, as I explained: what we do in
-our model is lock the full disk encryption to a key in the TPM that
-enforces an local attestation policy: only if a all measurements match
-that policy the FDE key is released to the OS. Hence yes, if SB is off
-*any* code can run, but if it's not the right code then it cannot
-unlock the disk. If it *is* able to unlock the FDE however, then this
-is proof that the boot chain is in order, and hence the kernel can be
-trusted, and it makes sense for it to defend itself from later steps.
+Hi,
 
-> Certainly the answer is no, and they are still meaningful somehow and
-> somewhere. IMHO I think the concern behind the check is reasonable, but
-> the actual code could be an overkill. It would be better if it does:
->
->   if (arch_ima_get_secureboot() && ima_mok_verify()) // hypothetical
->
-> , and in the future we could extend the ima policy for the boot phase
-> chain of trust and perform the check here accordingly, i.e. let the
-> users decide how things should go.
->
-> While for the current situation, my personal advice would be to add a
-> config to control whether or not the check is conducted. Let's call it
-> CONFIG_LOAD_UEFI_KEYS_STRICT temporarily:
->
-> #ifdef CONFIG_LOAD_UEFI_KEYS_STRICT
->   /* the MOK/MOKx can not be trusted when secure boot is disabled */
->   if (!arch_ima_get_secureboot())
->           return 0;
-> #endif
->
-> so that both sides are happy, and we can think of more fine-grained
-> verification methods, like the one I said above, for the strict mode
-> afterwards.
+We encountered a boot failure issue in an in-house testing, where the
+kernel refused to load its modules since it couldn't verify their
+signature. The root cause turned out to be the early return of
+load_uefi_certs(), where arch_ima_get_secureboot() returned false
+unconditionally due to CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT=n, even
+though the secure boot was enabled.
 
-Having an option for this would be better than nothing of course, but
-I seriously wonder what the value of the check is supposed to be at
-all. SecureBoot=off tells the system: hey, please accept any boot-time
-resource without validation, and firmware and boot loaders honour that,
-but Linux then does the opposite, invents some artificial checks not
-even done if SB is on!
+This patch set attempts to remove this implicit dependency by shifting
+the functionality of efi secure boot enquiry from IMA to the integrity
+subsystem, so that both certificate loading and IMA can make use of it
+independently.
 
-I mean, a boot trust chain means: trust what comes before, and
-authenticate/measure what comes next before you pass control to it.
+The code has been compile-tested on x86/arm64/powerpc/s390, with as much
+as config combinations I can think of.
 
-But for some reason Linux makes up a different model, where if told to
-not authenticate it suddenly doesn't trust half of what comes before
-anymore, but the other half it does. And that's just bogus, and
-illogical.
+-Ruiqi
 
-Lennart
+GONG Ruiqi (2):
+  x86/efi: Rename IMA-related function and macro of boot mode
+  integrity: Extract secure boot enquiry function out of IMA
 
---
-Lennart Poettering, Berlin
+ arch/x86/include/asm/efi.h                    |  4 +-
+ arch/x86/platform/efi/efi.c                   |  2 +-
+ include/linux/integrity.h                     |  1 +
+ security/integrity/Makefile                   |  1 +
+ security/integrity/efi_secureboot.c           | 46 +++++++++++++++++++
+ security/integrity/ima/ima_efi.c              | 42 +----------------
+ security/integrity/platform_certs/load_uefi.c |  3 +-
+ 7 files changed, 54 insertions(+), 45 deletions(-)
+ create mode 100644 security/integrity/efi_secureboot.c
+
+-- 
+2.25.1
+
 
