@@ -1,170 +1,168 @@
-Return-Path: <linux-integrity+bounces-6623-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6624-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78EE9AF8C90
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 10:48:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1499CAF8EBA
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 11:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCEED1C213F6
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 08:49:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F73B17772B
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 09:33:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7647128C021;
-	Fri,  4 Jul 2025 08:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7951B27E077;
+	Fri,  4 Jul 2025 09:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eDDY/TPx"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="uKxsXHdj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76B5285C8A;
-	Fri,  4 Jul 2025 08:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1A129A308;
+	Fri,  4 Jul 2025 09:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751618619; cv=none; b=E9T0wb7pwqlwp8M6Ewc9DGV1l2VrRpEYyxl9akngEme6SdbOw4rtny4f3F+lceqXKxG9he+NVU6PEOb30e1jvoF8APgI8Bj/KADJz49Ttk8D1HqPb/AR8frZ4c4Ijgsn1XltBm4mXQCdwbP+BbcWZFGqWQkKk5FFbfS2FiozrAY=
+	t=1751621616; cv=none; b=OFtaXp7K8h50B8dHQasuSacSBAB1qTL7WUlAxWdeNUv/gEVZH//xUQxhLRAalR4iekZCsnfXouEbJqQfNzilmHTbXcWS3QyGTwNosrx+qJUqibmQoPLTxXCxuTN9IVUwYbGZqBz3UGFeQmMt7j8F5agk9DSUctBjr5Np2ZS+NUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751618619; c=relaxed/simple;
-	bh=8aHbxl0SC5zB0gIjMnVsmix9VhjLAaULIEOwWSkVAj0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o/NCOxrSVeWoBJc3cm+sJ0Kd+z/O30iX8RgWHA+9W2Db3wbhTzGAP5/5AROiwFYH4f0DNWaucFcqfK+goZl4WM+qtqjAK3Wz5etgW/riNvTEqHvBqhch0CSy2qIrHbsFSw4PjtVvMRjjpMeyCNGbcSvYKjKuqGM1epnaVOx1vUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eDDY/TPx; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5642UeVR005891;
-	Fri, 4 Jul 2025 08:43:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=MuMYGj
-	4U9gATUdSjJQP490GKgcaR/4clHo3zdD3uLr8=; b=eDDY/TPxvEx/E6O/YIZlyg
-	9Crwmm7QJmyHkkMmiYiDdH4lEnGi8BCQAYH0EvYuSLk5XEig1YmxoQ1/fup9OLlI
-	YMjv3ZcuLpWGG8wSsLyRnF2Im2snDGa+Vn7FVtb9ptzRLZqh8G6noYptRHjA3MBL
-	MCG5QP1njdtxGRTNcLqWfEz4rWaAmg9Uv2JYdKhHQuyPGFDS/99mlsDE1mYlNc7/
-	g91u6AD1vIjigkgfLghbkzdTFbbrE75khdpwdqzP9dT9ozT1RgXO15VNbMUpTI6W
-	zL1BY3dp0G0peymOfMl4AQaZXWrduDmQhsWbSBBN9Zonq/arCw5CP6AKS5K34NQg
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j7ws0w2p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Jul 2025 08:43:22 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 5648dH50001948;
-	Fri, 4 Jul 2025 08:43:22 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47j7ws0w2m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Jul 2025 08:43:21 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5646VH06021914;
-	Fri, 4 Jul 2025 08:43:20 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 47juqq1406-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 04 Jul 2025 08:43:20 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5648hG0N25100844
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 4 Jul 2025 08:43:16 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BD6072004B;
-	Fri,  4 Jul 2025 08:43:16 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9846120040;
-	Fri,  4 Jul 2025 08:43:11 +0000 (GMT)
-Received: from [9.61.253.3] (unknown [9.61.253.3])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri,  4 Jul 2025 08:43:11 +0000 (GMT)
-Message-ID: <6dfdc950-fe2c-4311-b53a-9c1439783d3a@linux.ibm.com>
-Date: Fri, 4 Jul 2025 14:13:08 +0530
+	s=arc-20240116; t=1751621616; c=relaxed/simple;
+	bh=fHcJeLxd3czLO7BU7brQAuvBtgPi8QsgFNuxt0mkEqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J74H/hneYxGuaHDGzNv1SBRy7BfhWJKjcjxuQE775VAd4H/wwnBQ+/5uObSr9awtEpjQeLZuJbt10azvY7lNU6+P0rJg1k4BKRiCr2xqwHwWjH/ksTgQgxYo/UYauUCvR0LBJIr0NpR3bZvfGUkp054T8DS56BzHV5ReciUCsJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=uKxsXHdj; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=+ugYoCt4pJwQ2pOWir6Edta+6ErzUvYTIgWTgVQ/3MQ=; b=uKxsXHdj6Ne/ZaRoOuewi5ciYi
+	8fwgDW1KbupmKAcb4xGGFmTeQi1OzdjLFFhRKbQWak0cxynu3yV6kBA3QjNIfX9xZ8o2QYnvNfLZK
+	Ih1F/sNvLjZzuq4/q1FpTrL/6Yn4t/vk7Kmy2k5k4U9u+PWKdCPr5DsxRWp0mm8wQ2Jp/LpKW4Zbl
+	PEfWzem+TeDVHfbNdf8ak+Hdxua2egOzivAl28wvaWi2mWDdMwMvgQYMwj4byMzq5ZcxdMNqGzt3p
+	6+8/OvF5dV8Za+/THlftghSXRMuR6U7kHkUd/yRS0xUdqvvnCCwS5QhjZblkSbMTQpWHfpCDXIPq2
+	NG8bCTrg==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1uXcJV-00F2KC-2R;
+	Fri, 04 Jul 2025 10:02:33 +0100
+Date: Fri, 4 Jul 2025 10:02:33 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: "Orlov, Ivan" <iorlov@amazon.co.uk>,
+	"peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+	"jgg@ziepe.ca" <jgg@ziepe.ca>,
+	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Woodhouse, David" <dwmw@amazon.co.uk>
+Subject: Re: [PATCH v2] tpm: Fix the timeout & use ktime
+Message-ID: <aGeYqQG15lb2_NaU@earth.li>
+References: <20250620180828.98413-1-iorlov@amazon.com>
+ <aFhtKrWTDzZbpTSh@earth.li>
+ <aFwnG--lzZO0mQgc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] integrity/platform_certs: Allow loading of keys in
- the static key management mode
-To: Srish Srinivasan <ssrish@linux.ibm.com>, linux-integrity@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, ajd@linux.ibm.com,
-        zohar@linux.ibm.com, nayna@linux.ibm.com, msuchanek@suse.de,
-        linux-kernel@vger.kernel.org
-References: <20250610211907.101384-1-ssrish@linux.ibm.com>
- <20250610211907.101384-4-ssrish@linux.ibm.com>
-Content-Language: en-US
-From: R Nageswara Sastry <rnsastry@linux.ibm.com>
-In-Reply-To: <20250610211907.101384-4-ssrish@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=E/PNpbdl c=1 sm=1 tr=0 ts=6867942a cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=NvCG-ebki-3VrmPakVEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: hBUyKwWUPpP25JebkuKlcVWl5zZacEw0
-X-Proofpoint-ORIG-GUID: S4zUZkPr5byYyvq0hyiqAQzRlh0-nxqU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzA0MDA2NCBTYWx0ZWRfX4ok3QQ4bhhAd MRLiLEXSplfAsCtn7pSzDdqJc6ge6NrJQxSmFA5UQ5Qw0kNdMF+EhKGSLQtAgJkb86zJyBefUTu AAdOxK9L7uy+NoE0DXFz1rzENm7qInTL/lc+51rEwQ/xXUC/h2p5nH7nwPItHeq33G/lpfGfdgi
- h7O2zRUg92nTADbshhgFaacxc57yFqOl4dSl7KQgyQFQqr5Zw+pRLXN5LKNqUwx6+wzh9Vlezza 7nZ/Y8efy1TlhWDyGOuq7gpdYJogi7gOk4ZzpbSkhzVACzDKGU+1Gzq+j03z33sN/oSp6gp/Q+H pugFSJ34I8HZm4biagAUBAnZ0NKYhM++39g14LOC2KiXsjCpC2C1cGdVNlJV85Yj9dsPXsuDyOu
- +f3ySv7CAv031Us1tw/IiYnfYlwEuynOQoQu+qx5bmq21SlO8Q6uSOnL5WXhkjGJjT19R5RS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-04_03,2025-07-02_04,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- bulkscore=0 priorityscore=1501 phishscore=0 suspectscore=0 mlxlogscore=999
- lowpriorityscore=0 mlxscore=0 clxscore=1015 adultscore=0 impostorscore=0
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507040064
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <aFwnG--lzZO0mQgc@kernel.org>
 
+On Wed, Jun 25, 2025 at 07:43:07PM +0300, Jarkko Sakkinen wrote:
+>On Sun, Jun 22, 2025 at 09:52:58PM +0100, Jonathan McDowell wrote:
+>> On Fri, Jun 20, 2025 at 06:08:31PM +0000, Orlov, Ivan wrote:
+>> > The current implementation of timeout detection works in the following
+>> > way:
+>> >
+>> > 1. Read completion status. If completed, return the data
+>> > 2. Sleep for some time (usleep_range)
+>> > 3. Check for timeout using current jiffies value. Return an error if
+>> >   timed out
+>> > 4. Goto 1
+>> >
+>> > usleep_range doesn't guarantee it's always going to wake up strictly in
+>> > (min, max) range, so such a situation is possible:
+>> >
+>> > 1. Driver reads completion status. No completion yet
+>> > 2. Process sleeps indefinitely. In the meantime, TPM responds
+>> > 3. We check for timeout without checking for the completion again.
+>> >   Result is lost.
+>> >
+>> > Such a situation also happens for the guest VMs: if vCPU goes to sleep
+>> > and doesn't get scheduled for some time, the guest TPM driver will
+>> > timeout instantly after waking up without checking for the completion
+>> > (which may already be in place).
+>> >
+>> > Perform the completion check once again after exiting the busy loop in
+>> > order to give the device the last chance to send us some data.
+>> >
+>> > Since now we check for completion in two places, extract this check into
+>> > a separate function.
+>> >
+>> > Signed-off-by: Ivan Orlov <iorlov@amazon.com>
+>> > ---
+>> > V1 -> V2:
+>> > - Exclude the jiffies -> ktime change from the patch
+>> > - Instead of recording the time before checking for completion, check
+>> >  for completion once again after leaving the loop
+>> >
+>> > drivers/char/tpm/tpm-interface.c | 17 +++++++++++++++--
+>> > 1 file changed, 15 insertions(+), 2 deletions(-)
+>> >
+>> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+>> > index 8d7e4da6ed53..6960ee2798e1 100644
+>> > --- a/drivers/char/tpm/tpm-interface.c
+>> > +++ b/drivers/char/tpm/tpm-interface.c
+>> > @@ -82,6 +82,13 @@ static bool tpm_chip_req_canceled(struct tpm_chip *chip, u8 status)
+>> > 	return chip->ops->req_canceled(chip, status);
+>> > }
+>> >
+>> > +static bool tpm_transmit_completed(struct tpm_chip *chip)
+>> > +{
+>> > +	u8 status_masked = tpm_chip_status(chip) & chip->ops->req_complete_mask;
+>> > +
+>> > +	return status_masked == chip->ops->req_complete_val;
+>> > +}
+>> > +
+>> > static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+>> > {
+>> > 	struct tpm_header *header = buf;
+>> > @@ -129,8 +136,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+>> > 	stop = jiffies + tpm_calc_ordinal_duration(chip, ordinal);
+>> > 	do {
+>> > 		u8 status = tpm_chip_status(chip);
+>> > -		if ((status & chip->ops->req_complete_mask) ==
+>> > -		    chip->ops->req_complete_val)
+>> > +		if (tpm_transmit_completed(chip))
+>> > 			goto out_recv;
+>>
+>> The only thing I'd point out here is we end up doing a double status read
+>> one after the other (once here, once in tpm_transmit_completed), and I'm
+>> pretty sure I've seen instances where that caused a problem.
+>
+>It would be easy to to prevent at least double reads after completion
+>e.g., in tpm_chip_status():
 
-On 11/06/25 2:49 AM, Srish Srinivasan wrote:
-> On PLPKS enabled PowerVM LPAR, there is no provision to load signed
-> third-party kernel modules when the key management mode is static. This
-> is because keys from secure boot secvars are only loaded when the key
-> management mode is dynamic.
->
-> Allow loading of the trustedcadb and moduledb keys even in the static
-> key management mode, where the secvar format string takes the form
-> "ibm,plpks-sb-v0".
->
-> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
-> Reviewed-by: Andrew Donnellan <ajd@linux.ibm.com>
-Tested-by: R Nageswara Sastry <rnsastry@linux.ibm.com>
-With the following scenarios:
-1. With and with out secure boot by enabling keystore_signed_updates and 
-keystore_kbytes
-2. With Dynamic Key Guest Secure Boot
-3. With Static Key Guest Secure Boot
-> ---
->   security/integrity/platform_certs/load_powerpc.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/security/integrity/platform_certs/load_powerpc.c b/security/integrity/platform_certs/load_powerpc.c
-> index c85febca3343..714c961a00f5 100644
-> --- a/security/integrity/platform_certs/load_powerpc.c
-> +++ b/security/integrity/platform_certs/load_powerpc.c
-> @@ -75,12 +75,13 @@ static int __init load_powerpc_certs(void)
->   		return -ENODEV;
->   
->   	// Check for known secure boot implementations from OPAL or PLPKS
-> -	if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-sb-v1", buf)) {
-> +	if (strcmp("ibm,edk2-compat-v1", buf) && strcmp("ibm,plpks-sb-v1", buf) &&
-> +	    strcmp("ibm,plpks-sb-v0", buf)) {
->   		pr_err("Unsupported secvar implementation \"%s\", not loading certs\n", buf);
->   		return -ENODEV;
->   	}
->   
-> -	if (strcmp("ibm,plpks-sb-v1", buf) == 0)
-> +	if (strcmp("ibm,plpks-sb-v1", buf) == 0 || strcmp("ibm,plpks-sb-v0", buf) == 0)
->   		/* PLPKS authenticated variables ESL data is prefixed with 8 bytes of timestamp */
->   		offset = 8;
->   
+Or just take the simple approach and make the check after the while 
+loop:
+
+	if ((tpm_chip_status(chip) & chip->ops->req_complete_mask) ==
+	    chip->ops->req_complete_val)
+		goto out_recv;
+
+There might be potential for a longer term cleanup using chip->status to 
+cache things, but I'm little concerned that's going to open paths where 
+we might not correctly update it, so I think it should be a separate 
+piece.
+
+(I'm motivated by the fact we've started to see the "Operation Canceled" 
+error and I'd like us to close on the best way to fix it. :) )
+
+J.
 
 -- 
-Thanks and Regards
-R.Nageswara Sastry
-
+I am afraid of the dark.
 
