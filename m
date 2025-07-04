@@ -1,168 +1,140 @@
-Return-Path: <linux-integrity+bounces-6624-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6625-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1499CAF8EBA
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 11:34:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF281AF90CB
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 12:40:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F73B17772B
-	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 09:33:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 598931C8479C
+	for <lists+linux-integrity@lfdr.de>; Fri,  4 Jul 2025 10:40:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7951B27E077;
-	Fri,  4 Jul 2025 09:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E682BD019;
+	Fri,  4 Jul 2025 10:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="uKxsXHdj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PSEJ3/xZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1A129A308;
-	Fri,  4 Jul 2025 09:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39C5286418;
+	Fri,  4 Jul 2025 10:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751621616; cv=none; b=OFtaXp7K8h50B8dHQasuSacSBAB1qTL7WUlAxWdeNUv/gEVZH//xUQxhLRAalR4iekZCsnfXouEbJqQfNzilmHTbXcWS3QyGTwNosrx+qJUqibmQoPLTxXCxuTN9IVUwYbGZqBz3UGFeQmMt7j8F5agk9DSUctBjr5Np2ZS+NUc=
+	t=1751625616; cv=none; b=TbpC13zlmPJ4X2ERh46GzQ38f0TrRDIieSuQ5uHCKhN0ee3idPDmmbEL7J60ipu7mHnmnjIKuvpLWctQ7yoiuo+3XNSXTJusV+EGCbbGrC815vNoymIvFOHO721x8pO7jPv9RLXsu0KkMyNeXtGBJH/z/6C2an+dcWPmx2gxe04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751621616; c=relaxed/simple;
-	bh=fHcJeLxd3czLO7BU7brQAuvBtgPi8QsgFNuxt0mkEqM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J74H/hneYxGuaHDGzNv1SBRy7BfhWJKjcjxuQE775VAd4H/wwnBQ+/5uObSr9awtEpjQeLZuJbt10azvY7lNU6+P0rJg1k4BKRiCr2xqwHwWjH/ksTgQgxYo/UYauUCvR0LBJIr0NpR3bZvfGUkp054T8DS56BzHV5ReciUCsJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=uKxsXHdj; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=+ugYoCt4pJwQ2pOWir6Edta+6ErzUvYTIgWTgVQ/3MQ=; b=uKxsXHdj6Ne/ZaRoOuewi5ciYi
-	8fwgDW1KbupmKAcb4xGGFmTeQi1OzdjLFFhRKbQWak0cxynu3yV6kBA3QjNIfX9xZ8o2QYnvNfLZK
-	Ih1F/sNvLjZzuq4/q1FpTrL/6Yn4t/vk7Kmy2k5k4U9u+PWKdCPr5DsxRWp0mm8wQ2Jp/LpKW4Zbl
-	PEfWzem+TeDVHfbNdf8ak+Hdxua2egOzivAl28wvaWi2mWDdMwMvgQYMwj4byMzq5ZcxdMNqGzt3p
-	6+8/OvF5dV8Za+/THlftghSXRMuR6U7kHkUd/yRS0xUdqvvnCCwS5QhjZblkSbMTQpWHfpCDXIPq2
-	NG8bCTrg==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1uXcJV-00F2KC-2R;
-	Fri, 04 Jul 2025 10:02:33 +0100
-Date: Fri, 4 Jul 2025 10:02:33 +0100
-From: Jonathan McDowell <noodles@earth.li>
+	s=arc-20240116; t=1751625616; c=relaxed/simple;
+	bh=9UXDUg8PAd5tYI7z6Z+7INFUZp8wOl7XFwS2K9NVrHA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fqoKyd9CorigJNfA2XzEHAWjtqL0qfflqWeQp6k6vWUe9S5iVO0bQCb4INzkAzRA6Hs4S1Te44+HsOBOzUKNNRo3HI3YcROOScXm9tujrKmQVT6o+3z3YYHktBppXGWz6fzf+QDPhdBY3poH6FxfyVy5Z7sJnhb61HlxWGSRi1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PSEJ3/xZ; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-453749af004so3619835e9.1;
+        Fri, 04 Jul 2025 03:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751625613; x=1752230413; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t6Iq3/+8plHi10Ss9ehAabmq+DIYKcedVFnHzqlluoU=;
+        b=PSEJ3/xZWuoqdSIerUxo0dHf0t9WNeXMrJfDQWtHoGqJsmeHth5tRi0rVcarlIv1ld
+         QTlcK8le/14GZaM8kWx8h6MoDafsElmos3kFjVItPdCwDRHkr+EDRHYJl/l0EA+mqKDC
+         qVd4sDQ/aJmVCyjvTCJ0uzGTBA6SdvP9DRt4rzOYqwgjyEl9BJRf1QoTXHJIuMERyxod
+         rHihRbDIrJvwTt3WfPkAOH18nn7yeJZYDbxRcmHWajPzBQyTUxdMYGp4aOZ18sjdYl7n
+         YFNGkLWe1XKhoILZLWlMm0/xCDxRgBtgXs0BB6HIRIVIrsYU9TZgiW/TAb77qhrfZ6oP
+         maXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751625613; x=1752230413;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t6Iq3/+8plHi10Ss9ehAabmq+DIYKcedVFnHzqlluoU=;
+        b=F2ua51J2ZRBJWG3S2G8EoptIB47Y7Sf7wlyP65p/UCEqlDlGIzzwvO32Ox5t3Wz224
+         dw8tVLt33gT/b4eKGW/GhFke5FSwOFk2SDdxATqq8HGhLulKlm63Ub/6X927gaaDOe71
+         3A453r7/cKaz3RHEzJQkelX7BhKEEgtoq2j0ZOudYJEwwRrUwbqWOImTmtCtBO8WZ2p2
+         0UUmJueZxNl8iPFZr7xK2/0+rIZDCriiWcNmef2FZYXNdNmZXAE4z90MGbzRX57BoGEl
+         ZhtE1L/s6ChqeWeBO0AguvZ+afBVEvQAjCmhUEQorWwNRQqltdoB8wAXkIgV1Y2RsSau
+         v/MQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUrP+V5is9Egagk3Ym9owvHc+9jZPxQ/i2lrn2OC4KKX3JXAhOftU6XRWgBH2tZfYHUaSSYxSNRgSFWdBtC@vger.kernel.org, AJvYcCWk0SNh1lDxMLTFfNeIso2cj7sd6vnfpx8ESdPJa3izgWlvKT5Fggjkjvuh4bvrxWgoI989G38bZTXJh/JJuq0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjpMAFX+B+LYWRwZJt8zHaJrerwu9g6wbW07K3V9bjpOnqL4/g
+	s6kTIM0wc3r+wFwgnILfsD47dtbnWRuTyu6jtWY6FA7jngMDOBe5YvhY
+X-Gm-Gg: ASbGncsxOOoepZvifOorzO0qdln8GWSrgldmJQGSI264iXV+g8Mu82M9zp1YPdGrxTZ
+	IUeq9+WYRwYF911KNQbxpFdWSqcxdBBK5RY690DkDbimpLEklsbcLvotkVFNwzz7PpzCGW6Wdo4
+	6BChkAHwXZk4nytPSjcSsQurqqLrE7l+eDK6a7j2j+mnOAzRjdc0sJWKLX23cSmkwbwvPWLAzor
+	zsvCIVHqJCygLFflSw20zhqBVHEPj7CnHjSjbIj88NeWjieaf823USSnfojdn67j2hWBAhZrMVc
+	lHq0zDaHrQ8t6fLHtMVAOq1wTwiav6+UjLI3aMxggwnWv0fERh5xLtLJJq1GoVaaugEwu0FhOZn
+	7v6VXw/Nk46IQZooJgQ==
+X-Google-Smtp-Source: AGHT+IH3FPFahV2LWODXrm0judCjRbWI2BLLJZkrPEdqsujvImFUOAeEFcDrKBUXbFsNn3a6NYrTSw==
+X-Received: by 2002:a05:600c:620b:b0:451:833f:483c with SMTP id 5b1f17b1804b1-454b306fa68mr19923165e9.7.1751625612692;
+        Fri, 04 Jul 2025 03:40:12 -0700 (PDT)
+Received: from pumpkin (host-92-21-58-28.as13285.net. [92.21.58.28])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b47225a4e1sm2150193f8f.74.2025.07.04.03.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jul 2025 03:40:12 -0700 (PDT)
+Date: Fri, 4 Jul 2025 11:40:10 +0100
+From: David Laight <david.laight.linux@gmail.com>
 To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: "Orlov, Ivan" <iorlov@amazon.co.uk>,
-	"peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Woodhouse, David" <dwmw@amazon.co.uk>
-Subject: Re: [PATCH v2] tpm: Fix the timeout & use ktime
-Message-ID: <aGeYqQG15lb2_NaU@earth.li>
-References: <20250620180828.98413-1-iorlov@amazon.com>
- <aFhtKrWTDzZbpTSh@earth.li>
- <aFwnG--lzZO0mQgc@kernel.org>
+Cc: Prachotan Bathi <prachotan.bathi@arm.com>, Peter Huewe
+ <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, Stuart Yoder
+ <stuart.yoder@arm.com>, linux-integrity@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 2/3] tpm_crb_ffa:Introduce memzero macro to replace
+ memset
+Message-ID: <20250704114010.0d210c31@pumpkin>
+In-Reply-To: <aGdC8gyO00AB_aPr@kernel.org>
+References: <20250626184521.1079507-1-prachotan.bathi@arm.com>
+	<20250626184521.1079507-3-prachotan.bathi@arm.com>
+	<aGWvtzhs5ksKgaYo@kernel.org>
+	<151a612b-198a-4f7e-94e7-10426831ab94@arm.com>
+	<aGdAMg43nHPwgeKn@kernel.org>
+	<aGdC8gyO00AB_aPr@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <aFwnG--lzZO0mQgc@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jun 25, 2025 at 07:43:07PM +0300, Jarkko Sakkinen wrote:
->On Sun, Jun 22, 2025 at 09:52:58PM +0100, Jonathan McDowell wrote:
->> On Fri, Jun 20, 2025 at 06:08:31PM +0000, Orlov, Ivan wrote:
->> > The current implementation of timeout detection works in the following
->> > way:
->> >
->> > 1. Read completion status. If completed, return the data
->> > 2. Sleep for some time (usleep_range)
->> > 3. Check for timeout using current jiffies value. Return an error if
->> >   timed out
->> > 4. Goto 1
->> >
->> > usleep_range doesn't guarantee it's always going to wake up strictly in
->> > (min, max) range, so such a situation is possible:
->> >
->> > 1. Driver reads completion status. No completion yet
->> > 2. Process sleeps indefinitely. In the meantime, TPM responds
->> > 3. We check for timeout without checking for the completion again.
->> >   Result is lost.
->> >
->> > Such a situation also happens for the guest VMs: if vCPU goes to sleep
->> > and doesn't get scheduled for some time, the guest TPM driver will
->> > timeout instantly after waking up without checking for the completion
->> > (which may already be in place).
->> >
->> > Perform the completion check once again after exiting the busy loop in
->> > order to give the device the last chance to send us some data.
->> >
->> > Since now we check for completion in two places, extract this check into
->> > a separate function.
->> >
->> > Signed-off-by: Ivan Orlov <iorlov@amazon.com>
->> > ---
->> > V1 -> V2:
->> > - Exclude the jiffies -> ktime change from the patch
->> > - Instead of recording the time before checking for completion, check
->> >  for completion once again after leaving the loop
->> >
->> > drivers/char/tpm/tpm-interface.c | 17 +++++++++++++++--
->> > 1 file changed, 15 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
->> > index 8d7e4da6ed53..6960ee2798e1 100644
->> > --- a/drivers/char/tpm/tpm-interface.c
->> > +++ b/drivers/char/tpm/tpm-interface.c
->> > @@ -82,6 +82,13 @@ static bool tpm_chip_req_canceled(struct tpm_chip *chip, u8 status)
->> > 	return chip->ops->req_canceled(chip, status);
->> > }
->> >
->> > +static bool tpm_transmit_completed(struct tpm_chip *chip)
->> > +{
->> > +	u8 status_masked = tpm_chip_status(chip) & chip->ops->req_complete_mask;
->> > +
->> > +	return status_masked == chip->ops->req_complete_val;
->> > +}
->> > +
->> > static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
->> > {
->> > 	struct tpm_header *header = buf;
->> > @@ -129,8 +136,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
->> > 	stop = jiffies + tpm_calc_ordinal_duration(chip, ordinal);
->> > 	do {
->> > 		u8 status = tpm_chip_status(chip);
->> > -		if ((status & chip->ops->req_complete_mask) ==
->> > -		    chip->ops->req_complete_val)
->> > +		if (tpm_transmit_completed(chip))
->> > 			goto out_recv;
->>
->> The only thing I'd point out here is we end up doing a double status read
->> one after the other (once here, once in tpm_transmit_completed), and I'm
->> pretty sure I've seen instances where that caused a problem.
->
->It would be easy to to prevent at least double reads after completion
->e.g., in tpm_chip_status():
+On Fri, 4 Jul 2025 05:56:50 +0300
+Jarkko Sakkinen <jarkko@kernel.org> wrote:
 
-Or just take the simple approach and make the check after the while 
-loop:
+> On Fri, Jul 04, 2025 at 05:45:11AM +0300, Jarkko Sakkinen wrote:
+...
+> > Well, that was some truly misguided advice from my side so all the shame
+> > here is on me :-) There's no global memzero() and neither explicit
+> > version makes much sense here. Sorry about that.
+> > 
+> > I gave it now (actual) thought, and here's what I'd propose:
+> > 
+> > diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+> > index 96746d5b03e3..e769f6143a7c 100644
+> > --- a/drivers/char/tpm/tpm_crb_ffa.c
+> > +++ b/drivers/char/tpm/tpm_crb_ffa.c
+> > @@ -203,26 +203,20 @@ static int __tpm_crb_ffa_try_send_receive(unsigned long func_id,
+> >  	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
+> >  
+> >  	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
+> > -		memzero(&tpm_crb_ffa->direct_msg_data2,
+> > -		       sizeof(struct ffa_send_direct_data2));
+> > -
+> > -		tpm_crb_ffa->direct_msg_data2.data[0] = func_id;
+> > -		tpm_crb_ffa->direct_msg_data2.data[1] = a0;
+> > -		tpm_crb_ffa->direct_msg_data2.data[2] = a1;
+> > -		tpm_crb_ffa->direct_msg_data2.data[3] = a2;
+> > +		tpm_crb_ffa->direct_msg_data2 = (struct ffa_send_direct_data2){
+> > +			.data = { func_id, a0, a1, a2 },
+> > +		};
 
-	if ((tpm_chip_status(chip) & chip->ops->req_complete_mask) ==
-	    chip->ops->req_complete_val)
-		goto out_recv;
+clang has a habit of compiling that as an un-named on-stack structure that
+is initialised and then memcpy() used to copy it into place.
+Often not was intended and blows the stack when the structure is large.
 
-There might be potential for a longer term cleanup using chip->status to 
-cache things, but I'm little concerned that's going to open paths where 
-we might not correctly update it, so I think it should be a separate 
-piece.
+So probably not a pattern that should be encouraged.
 
-(I'm motivated by the fact we've started to see the "Operation Canceled" 
-error and I'd like us to close on the best way to fix it. :) )
-
-J.
-
--- 
-I am afraid of the dark.
+	David
 
