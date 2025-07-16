@@ -1,52 +1,67 @@
-Return-Path: <linux-integrity+bounces-6644-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6645-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B60FAFDB68
-	for <lists+linux-integrity@lfdr.de>; Wed,  9 Jul 2025 00:52:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C42CB07570
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Jul 2025 14:18:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9DC4585041
-	for <lists+linux-integrity@lfdr.de>; Tue,  8 Jul 2025 22:52:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB8F1166951
+	for <lists+linux-integrity@lfdr.de>; Wed, 16 Jul 2025 12:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A2822A7E6;
-	Tue,  8 Jul 2025 22:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5D612F3C3F;
+	Wed, 16 Jul 2025 12:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q/Fau8LZ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592702367BF;
-	Tue,  8 Jul 2025 22:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922CB22068F;
+	Wed, 16 Jul 2025 12:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752015150; cv=none; b=l7NH3e0TFlS5ZNuFEVzz5HeMaqXOV9PeGSLN9/IJSEarHu95Ls2tifx02q//hDM1Pr2+M82tmiu0n4vO1GJLZWtmNqWLys7/2UMHYnbKlclo72RpmcGRIm8myc814L7Lol1FX7zLX2YtZikH9W63nWIOkJskKlqqd2D/VT5S8UA=
+	t=1752668308; cv=none; b=soiDDyw1GoS6wRGoDw8LyCh4fC1sgBOyhVZKyohyu/OWu/twUokeonE7/Oh8/d/Fq/jC1SyUbJZzUUDwwoRfiRqFyzkujvOH4/vYvnL698+6X5t9YrLaS+8Vcl4Yv/L06CXNVpK5RXfy16Q4/jtJhjtXwA5LaUNeY8KIIHAB/8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752015150; c=relaxed/simple;
-	bh=yfifoK1lCQIBGtO4PIoaGuKMpw1ve2V3EflpM9EmCY0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FX9LRQvZMrdOcmzAn7eAwFePxK2djuvs2W+k0O39P/kljOhsUwF9S7DjW6oUMugqayVZkH8gCNelzb+NbuzJCWBTO8lzsFQatm/vY/ZO3kwHJJ5CvtJ2CM2tW3N1+ucy/KAGzkTNdwyBZD8uuj8wpn4pIPo1cvjIIOaOx1iJq6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4FA41764;
-	Tue,  8 Jul 2025 15:52:15 -0700 (PDT)
-Received: from u103485.austin.arm.com (u103485.arm.com [10.118.30.35])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8F9EE3F66E;
-	Tue,  8 Jul 2025 15:52:27 -0700 (PDT)
-From: Prachotan Bathi <prachotan.bathi@arm.com>
-To: Peter Huewe <peterhuewe@gmx.de>,
+	s=arc-20240116; t=1752668308; c=relaxed/simple;
+	bh=fQcg0JlR4emu2uqamRjb41I2ds1ijPQIV210NDtKJfQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tc6dKzjcPL8prUcg6kowNBobAUyg50NEjM/ka+mC0JmQSGhlkgqmM4J9dNB+GcLiY3Jd3r9mBXY8g2ilcLWnW1oq+9QT+jXf0vsDJwflVxRue/UrC89coID6PU2SnKzdVTwJFBFVyEwqYVN8jeP3oxfp9fBd+B6cpUPAW6tfRdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q/Fau8LZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F413C4CEF0;
+	Wed, 16 Jul 2025 12:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752668308;
+	bh=fQcg0JlR4emu2uqamRjb41I2ds1ijPQIV210NDtKJfQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q/Fau8LZwsYpFWjTtkoODCUUvYqy6y1JVVGNCVtKXKFsd7eZsMRwwpRTrx0ki8Hp8
+	 3NOEJaUR75BluMyf6T7louSyrEt5GETx++fTLDAnOTnwMyE8DPW5UB67vuQ1cKDNLJ
+	 4VH3NA663e50WSvFZ7aG0v0c83Tdu2xsZ0SxcV24IzaZNYklYeDfl9ErR3IYcmA9XJ
+	 PEjdBXkss2dEWfLKrzB0ivnqu9QbGttP/OervA/0pX50Zd3bL6kdMrgtjWRsnSDjP4
+	 kbK2nvpX3hPsy85yYPDoT7v6bG7/lcAnB2td/pPA0ikr4f2nDVRSoAevbjXyqhTl2s
+	 WtnQ5ioQkBb9g==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: keyrings@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Peter Huewe <peterhuewe@gmx.de>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
-	Stuart Yoder <stuart.yoder@arm.com>
-Cc: linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Prachotan Bathi <prachotan.bathi@arm.com>
-Subject: [PATCH v9 3/3] tpm_crb_ffa: handle tpm busy return code
-Date: Tue,  8 Jul 2025 17:51:51 -0500
-Message-ID: <20250708225151.2473657-4-prachotan.bathi@arm.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250708225151.2473657-1-prachotan.bathi@arm.com>
-References: <20250708225151.2473657-1-prachotan.bathi@arm.com>
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Frank van der Linden <fvdl@google.com>,
+	linux-doc@vger.kernel.org (open list:DOCUMENTATION)
+Subject: [RFC PATCH] tpm, tpm_vtpm_proxy: boot-time TPM
+Date: Wed, 16 Jul 2025 15:18:21 +0300
+Message-Id: <20250716121823.173949-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -55,130 +70,122 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Platforms supporting direct message request v2 [1] can support secure
-partitions that support multiple services. For CRB over FF-A interface,
-if the firmware TPM or TPM service [1] shares its Secure Partition (SP)
-with another service, message requests may fail with a -EBUSY error.
+From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-To handle this, replace the single check and call with a retry loop
-that attempts the TPM message send operation until it succeeds or a
-configurable timeout is reached. Implement a _try_send_receive function
-to do a single send/receive and modify the existing send_receive to
-add this retry loop.
-The retry mechanism introduces a module parameter (`busy_timeout_ms`,
-default: 2000ms) to control how long to keep retrying on -EBUSY
-responses. Between retries, the code waits briefly (50-100 microseconds)
-to avoid busy-waiting and handling TPM BUSY conditions more gracefully.
+Provide a kernel command-line parameter named as `supplicant`, which
+contains a path to an TPM emulator binary. When defind, the kernel will
+launch the program during boot-time.
 
-The parameter can be modified at run-time as such:
-echo 3000 | tee /sys/module/tpm_crb_ffa/parameters/busy_timeout_ms
-This changes the timeout from the default 2000ms to 3000ms.
+This feature is most useful in feature testing e.g., in environments
+where other means are not possible, such as CI runners. Its original use
+case highlights also quite well of its applicability for pre-production
+hardware: it was used to provide a TPM implemnentation for a RISC-V SoC
+running on FPGA with no TPM HW implementation at the time.
 
-[1] TPM Service Command Response Buffer Interface Over FF-A
-https://developer.arm.com/documentation/den0138/latest/
-
-Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 ---
- .../admin-guide/kernel-parameters.txt         |  8 ++++
- drivers/char/tpm/tpm_crb_ffa.c                | 45 ++++++++++++++++---
- 2 files changed, 46 insertions(+), 7 deletions(-)
+Bumped into this in my archives so thought to make it available just in
+case anyone is interested.
+---
+ .../admin-guide/kernel-parameters.txt         | 14 +++++
+ drivers/char/tpm/tpm_vtpm_proxy.c             | 51 +++++++++++++++++++
+ 2 files changed, 65 insertions(+)
 
 diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 07e22ba5bfe3..343377538fe9 100644
+index f1f2c0874da9..e062de99480e 100644
 --- a/Documentation/admin-guide/kernel-parameters.txt
 +++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -7214,6 +7214,14 @@
- 			causing a major performance hit, and the space where
- 			machines are deployed is by other means guarded.
+@@ -7230,6 +7230,20 @@
+ 			defined by Trusted Computing Group (TCG) see
+ 			https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
  
-+	tpm_crb_ffa.busy_timeout_ms= [ARM64,TPM]
-+			Maximum time in milliseconds to retry sending a message
-+			to the TPM service before giving up. This parameter controls
-+			how long the system will continue retrying when the TPM
-+			service is busy.
-+			Format: <unsigned int>
-+			Default: 2000 (2 seconds)
++	tpm_vtpm_proxy.supplicant= [TPM]
++			When defined, this field must contain a legit path to a
++			program emulating a TPM chip, which will be started
++			during the driver initialization, thus providing a
++			mechanism for the user space have an emulated TPM from
++			the get go. Kernel prepares the process with a file
++			pre-opened file descriptor in the index 3 for
++			/dev/vtpmx.
 +
- 	tpm_suspend_pcr=[HW,TPM]
- 			Format: integer pcr id
- 			Specify that at suspend time, the tpm driver
-diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-index 7faed6f3bf66..06599c07b746 100644
---- a/drivers/char/tpm/tpm_crb_ffa.c
-+++ b/drivers/char/tpm/tpm_crb_ffa.c
-@@ -10,8 +10,16 @@
- #define pr_fmt(fmt) "CRB_FFA: " fmt
- 
- #include <linux/arm_ffa.h>
-+#include <linux/delay.h>
-+#include <linux/moduleparam.h>
- #include "tpm_crb_ffa.h"
- 
-+static unsigned int busy_timeout_ms = 2000;
++			An emulator can optionally provide support for
++			localities by reacting to the vendor command defined
++			by the driver: 0x20001000. Its payload is a single
++			byte containing the new locality.
 +
-+module_param(busy_timeout_ms, uint, 0644);
-+MODULE_PARM_DESC(busy_timeout_ms,
-+		 "Maximum time in ms to retry before giving up on busy");
+ 	tp_printk	[FTRACE]
+ 			Have the tracepoints sent to printk as well as the
+ 			tracing ring buffer. This is useful for early boot up
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index 0818bb517805..612f5251fdc0 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -51,6 +51,8 @@ struct proxy_dev {
+ #define VTPM_PROXY_FLAGS_ALL  (VTPM_PROXY_FLAG_TPM2)
+ 
+ static struct workqueue_struct *workqueue;
++static char *supplicant;
++module_param(supplicant, charp, 0);
+ 
+ static void vtpm_proxy_delete_device(struct proxy_dev *proxy_dev);
+ 
+@@ -678,6 +680,55 @@ static const struct file_operations vtpmx_fops = {
+ 	.llseek = noop_llseek,
+ };
+ 
++static int vtpmx_supplicant_setup(struct subprocess_info *info, struct cred *new)
++{
++	struct vtpm_proxy_new_dev dev = { .flags = VTPM_PROXY_FLAG_TPM2 };
++	struct file *file = vtpm_proxy_create_device(&dev);
 +
- /* TPM service function status codes */
- #define CRB_FFA_OK			0x05000001
- #define CRB_FFA_OK_RESULTS_RETURNED	0x05000002
-@@ -178,17 +186,13 @@ int tpm_crb_ffa_init(void)
- }
- EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
- 
--static int __tpm_crb_ffa_send_receive(unsigned long func_id,
--				      unsigned long a0,
--				      unsigned long a1,
--				      unsigned long a2)
-+static int __tpm_crb_ffa_try_send_receive(unsigned long func_id,
-+					  unsigned long a0, unsigned long a1,
-+					  unsigned long a2)
- {
- 	const struct ffa_msg_ops *msg_ops;
- 	int ret;
- 
--	if (!tpm_crb_ffa)
--		return -ENOENT;
--
- 	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
- 
- 	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
-@@ -214,6 +218,33 @@ static int __tpm_crb_ffa_send_receive(unsigned long func_id,
- 			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
- 	}
- 
-+	return ret;
++	if (IS_ERR(file))
++		return PTR_ERR(file);
++
++	fd_install(dev.fd, file);
++	return 0;
 +}
 +
-+static int __tpm_crb_ffa_send_receive(unsigned long func_id, unsigned long a0,
-+				      unsigned long a1, unsigned long a2)
++static void vtpmx_supplicant_cleanup(struct subprocess_info *info)
 +{
-+	ktime_t start, stop;
++}
++
++static int vtpmx_supplicant_init(void)
++{
++	static const char * const argv[] = { supplicant, NULL };
++	struct subprocess_info *info;
 +	int ret;
 +
-+	if (!tpm_crb_ffa)
-+		return -ENOENT;
++	if (!supplicant)
++		return 0;
 +
-+	start = ktime_get();
-+	stop = ktime_add(start, ms_to_ktime(busy_timeout_ms));
++	info = call_usermodehelper_setup(argv[0], (char **)argv, NULL,
++					 GFP_KERNEL, vtpmx_supplicant_setup,
++					 vtpmx_supplicant_cleanup, NULL);
++	if (!info)
++		return -ENOMEM;
 +
-+	for (;;) {
-+		ret = __tpm_crb_ffa_try_send_receive(func_id, a0, a1, a2);
-+		if (ret != -EBUSY)
-+			break;
++	ret = call_usermodehelper_exec(info, UMH_KILLABLE | UMH_NO_WAIT);
++	if (ret)
++		return ret;
 +
-+		usleep_range(50, 100);
-+		if (ktime_after(ktime_get(), stop)) {
-+			dev_warn(&tpm_crb_ffa->ffa_dev->dev,
-+				 "Busy retry timed out\n");
-+			break;
-+		}
-+	}
- 
- 	return ret;
- }
++	return 0;
++}
++
++static int vtpmx_init(void)
++{
++	int ret;
++
++	ret = vtpmx_supplicant_init();
++	if (ret)
++		return ret;
++
++	return misc_register(&vtpmx_miscdev);
++}
++
+ static struct miscdevice vtpmx_miscdev = {
+ 	.minor = MISC_DYNAMIC_MINOR,
+ 	.name = "vtpmx",
 -- 
-2.43.0
+2.39.5
 
 
