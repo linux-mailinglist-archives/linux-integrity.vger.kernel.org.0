@@ -1,149 +1,183 @@
-Return-Path: <linux-integrity+bounces-6653-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6654-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E63EB0B060
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Jul 2025 16:17:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B0CFB0B1B9
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Jul 2025 22:13:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A0E91AA1FE2
-	for <lists+linux-integrity@lfdr.de>; Sat, 19 Jul 2025 14:17:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7280E7A1D3D
+	for <lists+linux-integrity@lfdr.de>; Sat, 19 Jul 2025 20:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1547170A37;
-	Sat, 19 Jul 2025 14:17:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D1221FF27;
+	Sat, 19 Jul 2025 20:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVUdM+0K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIZCNDL8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E717881E;
-	Sat, 19 Jul 2025 14:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651331422DD;
+	Sat, 19 Jul 2025 20:13:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752934644; cv=none; b=n9nFkoODNn1fj084wa6EhWRMwi9NWfW2ENLLkGyP0hp3Hv9gzd6LbCDxxtf76sdRMAI64PhXbD2Agb63MtD/PJAQHfoWB1pHDEY4B9FD7tgl0eR8Oaqh1xhJ74GJLCdjHvRYeOiUyIba6UfViPyyf5BNz0Oa4HcUtnPPHSC7Go0=
+	t=1752956029; cv=none; b=Hv704P4sDIkV1VpOD0nGwQWe/cj6sJdMrBeO3bMwybjcRjV4ziM6UfyXry+MY4ckRNWKTw7ezVIMyJ5TY11dwIvENivf12hsfHE667+OFb4pwmYwVk8OclE0LicXHdD4jvKZ0tn1DH7NjeVbMH2+PUDHxqHgf7MjN5yBamNhlYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752934644; c=relaxed/simple;
-	bh=KUofb521B8AZVG1D7BsR/ikz80zn5hGl17C7QpRR16o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nyjWhbSltVZlQ6nz4nl7bkY2EvnU62K2dRVC3nDilO3y0EF+lrac2eZDrPpe2x2Bk0r4/yCnoVx7hPzWEFKMBHxBgpCL6G1DPYXYLlUwtTyIoFUT2OemMPLW9PgTCCNRim/8eNpS+lqvd+hgvE+1mDB96Lu4WKfcb3tDYW44Ph4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVUdM+0K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F87AC4CEE7;
-	Sat, 19 Jul 2025 14:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752934644;
-	bh=KUofb521B8AZVG1D7BsR/ikz80zn5hGl17C7QpRR16o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SVUdM+0K0jGe4rVqrY0b0y344DhaNF/P4l5qjcxHDZvjs1Sz5lEaHuUgqbvaNEk53
-	 qQnUBOgvlrcAm4zN71fyfN0akPvw/r1ml61YT3oGeexTcYdu/yhx9FzkdMacNyRNTE
-	 zyv+HGIXmcJ0L36rHQzw5SOny2Rg8llXUoO/L8Si1gfO5eJCm5+HS+FjpcPSHzj46P
-	 wwH+vlfJORYkYA65kjGqarey6/GIYwgDIS+PBmngoO9/dqd8SZTjQXQ77/y7bSQnem
-	 2aXfilZYH0Gma9kVAdLA7hP3yS6+DftAVDwDHFrwttCgKK6fRvpP/mcsYh6NPp0qYL
-	 8r1iJCcLOAHyw==
-Date: Sat, 19 Jul 2025 17:17:20 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
+	s=arc-20240116; t=1752956029; c=relaxed/simple;
+	bh=BJuiJFxFWen1mX2O9kqsVBAVZ9G5deeY8gE9u2WXPQU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g8620LmjFPn61rZ1a216lL7II1+iclzaSrCVmhNrItaa02O2Nuq4uuhUoymYvGdY3unbY0NlVrBJnRfZ/uYaOCwoTQgJt8A8xf5WUXGezh07YmMf+yOdZPP6jOb98I/hTgN5/TBqvN+SjOpgmyDOJmE5xxfOQCx9aflVjrTaMD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIZCNDL8; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3b611665b96so1735873f8f.2;
+        Sat, 19 Jul 2025 13:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752956026; x=1753560826; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=in+3wMalymhyd0mcNEzfURo1USS+50XS18ZabbbVbQ0=;
+        b=TIZCNDL8nu+KPtrtz2CjYT+TJEl0FckFq6h3pW6vnEpTD9/owZTnBArepm1xJmg3IB
+         xkiwMipHrhED34CXAQRtzrf0QPM14pvD5qWSxwRaUUzzn4BhcAtaOUB2tLl32f0cP6ZL
+         VXniN6GmEgxKoF5LvizFE9enk+alWOKX8peyVjGVrqhE9gIVRPNIYT+8LSTX/+opiOs5
+         KHGzKeowkJhXEx6cPNEwox1zXDZfP8UeMPUVAxjjUd4v1rV2DPZa4pPm4GoWicQI2Khm
+         UlOpXWMyeo2W3YnHqFeVv7TUKK0MP+iMYW3w5ZsthWDwFaRmrfgciu64autLtq6r4R2Z
+         WJQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752956026; x=1753560826;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=in+3wMalymhyd0mcNEzfURo1USS+50XS18ZabbbVbQ0=;
+        b=drmwUr7lVnVS4W0CLAx0/y/Eq98wsT8BvZcgWgiJ12PXAz9Xe4sWV47+6wvBCLeXwG
+         tlD1o+r3w4AsyNOkSK/S0C+z9mEhpe4PZjKf87Owc59LAlmtDy0ocfi5vNA1TtPmmf86
+         Ia730Dpc9NzcZrhq0pc8kh+oIw2lDh0nTS+xslq6P5l5/qyCXysIk3ISkH1qKv/xRkYt
+         XRllO6TZNpZ0zpy5z7s5sBBoZvC2sT3eFGu/3u5mcE3Jgc8pll9lCaz84JVvqivA9WZk
+         KBhsqmPudzUv262SAieVGON4nCv9c1Vd+4Pjt8SvY1TozRhvgv+oNZQhm2Xd0/42cY49
+         eVxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ8yA/LRs2ttGy7PiAZXRIpsCG6YdlSXb2+Vc9el76iR4Qg6s9llYOlHSwPgTauNW8HYVQ/+zLOe+77Fa3@vger.kernel.org, AJvYcCXzR4xdolqaK+D2ANApcEP9Ct4Y+UhI6d6jl/fBwYbubWk9MBCAEdjPowdXJS6wbDuim9ZdpMKfsQRInxnBtXM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzTbpu+laDBm/uzH0HfMz0FI9egKR9lkiwHBol3/Gb0ecZ8BKz
+	BITYcoNCZU7x5gK3MZJ1c37B26XiEJuvCE+1Sdt2K7sWLp5w9TdVEeLAurB2U8PJhkU=
+X-Gm-Gg: ASbGnctExvU7Fqouo9zZPgydOJb3Fzo8Un7LRVe+DAqjHCA6fIVYbwL3kG34Z99Xjgt
+	468SBXGHRolVK0Gy6z9tNepksSzSPWulEzIRngU9ACLGIhwksD5Sph5m+K0dZWg/x7d3lsMzPkj
+	2mG8Wa6UVVxvdru7kjAmojrRdibT7IMiUy09zuN7wiHjSrxGk3GxkJY2V+oWzAOna+cMad6Ybu3
+	T1faTyQLIuYgXQK6btck7es1cFQn66l65jX7bh5B5oxV4sQZTyRfbAVeJK2d7uxAFp3HcQ58BAE
+	zMnQZYFjHyGIqPzlkRcnz9NIMLk69iEtOmCd2PavPRcEILQjCvxaeMcykTU+AfgmE6PFY3oWCgD
+	OMd2IwX29Z+HjSJsTwH/1lsiu8Vdgi1WJWwan0OyriHNSJLMO7QbakazBlq0w4u/vGD93NBAFiU
+	Z7UT1uHos4I6Wb6JbiW3FAQ9LWYXaNdBOp1CyN2GEpbSHoej9X
+X-Google-Smtp-Source: AGHT+IEeVEAp37YnmoMBm7w59WNgzIG7isklWQTZZWVzH29omb+dgi0uRxWJL8sxVIM9C8IO8+tt+Q==
+X-Received: by 2002:adf:e193:0:b0:3a3:7987:945f with SMTP id ffacd0b85a97d-3b60e5242a1mr13227365f8f.57.1752956025568;
+        Sat, 19 Jul 2025 13:13:45 -0700 (PDT)
+Received: from ip-172-31-24-186.eu-west-1.compute.internal (ec2-18-202-80-98.eu-west-1.compute.amazonaws.com. [18.202.80.98])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b61ca48c40sm5674576f8f.58.2025.07.19.13.13.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Jul 2025 13:13:45 -0700 (PDT)
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	iorlov@amazon.co.uk,
+	jgg@ziepe.ca,
 	linux-integrity@vger.kernel.org,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
-	Jonathan Corbet <corbet@lwn.net>, Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Frank van der Linden <fvdl@google.com>,
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Subject: Re: [RFC PATCH] tpm, tpm_vtpm_proxy: boot-time TPM
-Message-ID: <aHuo8Fh_S8aEi7VM@kernel.org>
-References: <20250716121823.173949-1-jarkko@kernel.org>
- <bfcc3a24-b48c-48a6-8280-07f7a2669e6b@infradead.org>
+	linux-kernel@vger.kernel.org,
+	dwmw@amazon.co.uk,
+	noodles@earth.li
+Subject: [PATCH v3] tpm: Check for completion after timeout
+Date: Sat, 19 Jul 2025 20:13:39 +0000
+Message-ID: <20250719201340.24447-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bfcc3a24-b48c-48a6-8280-07f7a2669e6b@infradead.org>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 16, 2025 at 11:44:02AM -0700, Randy Dunlap wrote:
-> (mostly nits, along with Paul's comments)
-> 
-> 
-> On 7/16/25 5:18 AM, Jarkko Sakkinen wrote:
-> > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> > 
-> > Provide a kernel command-line parameter named as `supplicant`, which
-> > contains a path to an TPM emulator binary. When defind, the kernel will
-> 
->                   to a TPM
-> 
-> > launch the program during boot-time.
-> > 
-> > This feature is most useful in feature testing e.g., in environments
-> 
->                                          testing, e.g.,
-> 
-> > where other means are not possible, such as CI runners. Its original use
-> > case highlights also quite well of its applicability for pre-production
-> > hardware: it was used to provide a TPM implemnentation for a RISC-V SoC
-> > running on FPGA with no TPM HW implementation at the time.
-> > 
-> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> > ---
-> > Bumped into this in my archives so thought to make it available just in
-> > case anyone is interested.
-> > ---
-> >  .../admin-guide/kernel-parameters.txt         | 14 +++++
-> >  drivers/char/tpm/tpm_vtpm_proxy.c             | 51 +++++++++++++++++++
-> >  2 files changed, 65 insertions(+)
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index f1f2c0874da9..e062de99480e 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -7230,6 +7230,20 @@
-> >  			defined by Trusted Computing Group (TCG) see
-> >  			https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
-> >  
-> > +	tpm_vtpm_proxy.supplicant= [TPM]
-> > +			When defined, this field must contain a legit path to a
-> 
-> 			                                        legitimate
-> or			                                        valid
-> 
-> > +			program emulating a TPM chip, which will be started
-> > +			during the driver initialization, thus providing a
-> > +			mechanism for the user space have an emulated TPM from
-> > +			the get go. Kernel prepares the process with a file
-> 
-> 			    get-go.
-> or just don't use slang terms.
-> 
-> > +			pre-opened file descriptor in the index 3 for
-> > +			/dev/vtpmx.
-> > +
-> > +			An emulator can optionally provide support for
-> > +			localities by reacting to the vendor command defined
-> > +			by the driver: 0x20001000. Its payload is a single
-> > +			byte containing the new locality.
-> > +
-> >  	tp_printk	[FTRACE]
-> >  			Have the tracepoints sent to printk as well as the
-> >  			tracing ring buffer. This is useful for early boot up
-> 
-> thanks.
-> -- 
-> ~Randy
-> 
+The current implementation of timeout detection works in the following
+way:
 
-Thank you for reviewing this (especially given how bad shape it was)!
+1. Read completion status. If completed, return the data
+2. Sleep for some time (usleep_range)
+3. Check for timeout using current jiffies value. Return an error if
+   timed out
+4. Goto 1
 
-BR, Jarkko
+usleep_range doesn't guarantee it's always going to wake up strictly in
+(min, max) range, so such a situation is possible:
+
+1. Driver reads completion status. No completion yet
+2. Process sleeps indefinitely. In the meantime, TPM responds
+3. We check for timeout without checking for the completion again.
+   Result is lost.
+
+Such a situation also happens for the guest VMs: if vCPU goes to sleep
+and doesn't get scheduled for some time, the guest TPM driver will
+timeout instantly after waking up without checking for the completion
+(which may already be in place).
+
+Perform the completion check once again after exiting the busy loop in
+order to give the device the last chance to send us some data.
+
+Since now we check for completion in two places, extract this check into
+a separate function.
+
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+V1 -> V2:
+- Exclude the jiffies -> ktime change from the patch
+- Instead of recording the time before checking for completion, check
+  for completion once again after leaving the loop
+V2 -> V3:
+- Avoid reading the chip status twice in the inner loop by passing
+  status into tpm_transmit_completed
+
+ drivers/char/tpm/tpm-interface.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index 8d7e4da6ed53..8d18b33aa62d 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -82,6 +82,13 @@ static bool tpm_chip_req_canceled(struct tpm_chip *chip, u8 status)
+ 	return chip->ops->req_canceled(chip, status);
+ }
+ 
++static bool tpm_transmit_completed(u8 status, struct tpm_chip *chip)
++{
++	u8 status_masked = status & chip->ops->req_complete_mask;
++
++	return status_masked == chip->ops->req_complete_val;
++}
++
+ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ {
+ 	struct tpm_header *header = buf;
+@@ -129,8 +136,7 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ 	stop = jiffies + tpm_calc_ordinal_duration(chip, ordinal);
+ 	do {
+ 		u8 status = tpm_chip_status(chip);
+-		if ((status & chip->ops->req_complete_mask) ==
+-		    chip->ops->req_complete_val)
++		if (tpm_transmit_completed(status, chip))
+ 			goto out_recv;
+ 
+ 		if (tpm_chip_req_canceled(chip, status)) {
+@@ -142,6 +148,13 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ 		rmb();
+ 	} while (time_before(jiffies, stop));
+ 
++	/*
++	 * Check for completion one more time, just in case the device reported
++	 * it while the driver was sleeping in the busy loop above.
++	 */
++	if (tpm_transmit_completed(tpm_chip_status(chip), chip))
++		goto out_recv;
++
+ 	tpm_chip_cancel(chip);
+ 	dev_err(&chip->dev, "Operation Timed out\n");
+ 	return -ETIME;
+-- 
+2.43.0
+
 
