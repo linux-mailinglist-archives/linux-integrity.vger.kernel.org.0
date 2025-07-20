@@ -1,244 +1,337 @@
-Return-Path: <linux-integrity+bounces-6656-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6657-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0AF8B0B30B
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Jul 2025 03:05:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58E78B0B90B
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jul 2025 01:06:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F45F3B92F0
-	for <lists+linux-integrity@lfdr.de>; Sun, 20 Jul 2025 01:05:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2CC91895EF0
+	for <lists+linux-integrity@lfdr.de>; Sun, 20 Jul 2025 23:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7F028E3F;
-	Sun, 20 Jul 2025 01:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="laNYqIxM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFAC91EE019;
+	Sun, 20 Jul 2025 23:06:10 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC68195;
-	Sun, 20 Jul 2025 01:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6FD1DE3BA;
+	Sun, 20 Jul 2025 23:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752973539; cv=none; b=NOPYVWIzVlQkQaiuimazDhc4ZJHp4x5rdJLQGgAYZKiS03vgklsNLxlyNPDLZ1U2RbspbqG8Jipa2WZqM79jywyhidAVhfnJwJ9fc+/svw52nMRLlGPyn6bPJav0a4qXdXojOQUwrKXLtfOj5ADhZAnEm+aTEt1MdGTIkSRNeRg=
+	t=1753052770; cv=none; b=Q0tIhniei+bK6PKDHot41mrcGjb//yBNLDOd2TZEuyaYCXuW7LhcUeNjg9p8ggUucnSyqYxUXz6qzENmS947syKPI36LGDzC5ZuDcuLAtwOgzcQnYP4j+X46TeYpAcnK9qgJFiN/OFNAbC2Wg5LkE64YA4Lh45zZxupUSlFmlHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752973539; c=relaxed/simple;
-	bh=Wy9HvyjMJcyUHBXYT+6hVFplod28t8tELh5gG/virg0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=euUW3xIxlDE9OeFmx2lRYSUkbz2rTMz3m2CPfv6Mi6K3067DRY3E8M2GNfYfVBBSkZW023QoroFRQ6jzvCsFZfEeWNQcL1kJQ8Q8Ty2RhGvZWq5tVC0TdBR0RvgZhIKgbO3p3+7Tv2GRCgB81kgGfSQeM2PU5w6YD0KXb6HwEto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=laNYqIxM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27613C4CEF7;
-	Sun, 20 Jul 2025 01:05:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752973538;
-	bh=Wy9HvyjMJcyUHBXYT+6hVFplod28t8tELh5gG/virg0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=laNYqIxMUIk/CS0ctv5qm4hOATPNtM+oT1fWYrvd0Sv4KzxzDD408YV7yaA4KlR0O
-	 VsDCA6nCNTG3dQPZos32HpypexbWG/lyd1Hx6miwxekMQ0ULuFKJ6z1+814M0qJL4Z
-	 fhr3o74m+4V5q59bCXTv+sSR4PJrOPDnHnf/2DrqFf7LOH/qeY355Zo9n47CzCvvNq
-	 5TPEOvGjDr57yBcHvFffVq0J8RYLeW0xI8JTa78mbpZBE1tfcWLi1G/oilUoAwtQY3
-	 N9a/l1VwJJxpxNEV1YU8NIamNurrH1b3w06WiIrzrqfGkp0Th1U4o7nO9kWnuy6GYQ
-	 M62bH31bIGpYQ==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-60c01f70092so5632605a12.3;
-        Sat, 19 Jul 2025 18:05:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUHKhVOzmHyeowWIPOG4AaJwB7jpMdfyqpns07llLmREIoS7Fe1cYbpeqA2Q5W5vQohGT4byS2j2WzfqHMs@vger.kernel.org, AJvYcCUxgYtuCoGORDP2weBcJlK6kFbTrZjrYSjzYT2LyihjQESM/cMuyKpR2OxVrYKcG0+jl34YDeUtpl0+x+I=@vger.kernel.org, AJvYcCXQmaA8ccHVNSI7pieA39316CD2Wk6nNr/pd2zRQaLWKJdXK19QwFL5avc7dTWopn97VYHBY6fXHhcjvnn2MIj5@vger.kernel.org
-X-Gm-Message-State: AOJu0YytJHE3sNNEoUVJ3Evl9xvQHXDvGKEfJ5uSdt0EBx2o1Ha+8RwM
-	PKY+lQObL8vV9i9Odke2Q/S/62Lvcqa0c5Jm8c/ODGNPrjqDkHymzQqbj+t0EDtKbn7oo23V9+y
-	bNSbKfnm6r5opGx2y2JYoRPgOQ81CsMw=
-X-Google-Smtp-Source: AGHT+IHk2PDp/9RmO2oo5L5BlV0YU4G/MBjwLeBhRCBEXyekkN4nrhj/X2Qev3Fn+qiq8dTMwSJCxqz2UBE51GvfA70=
-X-Received: by 2002:a05:6402:2749:b0:5f6:fab2:9128 with SMTP id
- 4fb4d7f45d1cf-612a4ed19e0mr9835314a12.19.1752973536619; Sat, 19 Jul 2025
- 18:05:36 -0700 (PDT)
+	s=arc-20240116; t=1753052770; c=relaxed/simple;
+	bh=vHvoB3e4D6hWq9C0Ss1Oq+RJ+ypW8an1UjK/yS2GH7U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HWdrcarF1yCfvEBCSgd/x1pOx9h3NDqpAZWeMl1dgfjDCP5TP8V2Txm5AEgB3x8WS4Xi14+5sVf+qKNDxfLvvEKlMmp7BEp/NiJPp+/6IbJ5YdfNoPWIHh1eEXBhKxe1BU4iKsnERe9zFurkPExbhBEE9o1bzjp5iikGiw4Qfwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11D211595;
+	Sun, 20 Jul 2025 16:05:55 -0700 (PDT)
+Received: from [192.168.1.8] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA71C3F59E;
+	Sun, 20 Jul 2025 16:06:00 -0700 (PDT)
+Message-ID: <4113b3de-918c-4140-9f0d-d1699d2efc32@arm.com>
+Date: Sun, 20 Jul 2025 18:05:59 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250705072045.1067-1-zhaoqunqin@loongson.cn> <20250705072045.1067-4-zhaoqunqin@loongson.cn>
- <aHuK_pY2Ap4B7JWZ@kernel.org>
-In-Reply-To: <aHuK_pY2Ap4B7JWZ@kernel.org>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sun, 20 Jul 2025 09:05:24 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5QKBunqL0qnW8t+LJ+SJRHd5nUrPo1_fvKMvmw_oUosQ@mail.gmail.com>
-X-Gm-Features: Ac12FXwPTh_AWmjx_VYa-G3YFiNCHCAsuwAzvh2TsFofH01f_AUGA7am5vgSG8I
-Message-ID: <CAAhV-H5QKBunqL0qnW8t+LJ+SJRHd5nUrPo1_fvKMvmw_oUosQ@mail.gmail.com>
-Subject: Re: [PATCH v12 3/4] tpm: Add a driver for Loongson TPM device
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 3/3] tpm_crb_ffa: handle tpm busy return code
 To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, lee@kernel.org, herbert@gondor.apana.org.au, 
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev, davem@davemloft.net, 
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, 
-	linux-integrity@vger.kernel.org, Yinggang Gu <guyinggang@loongson.cn>, 
-	Huacai Chen <chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Stuart Yoder <stuart.yoder@arm.com>, linux-integrity@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250708225151.2473657-1-prachotan.bathi@arm.com>
+ <20250708225151.2473657-4-prachotan.bathi@arm.com>
+ <aHukoB5Xz4wyx7Yw@kernel.org>
+Content-Language: en-US
+From: Prachotan Bathi <prachotan.bathi@arm.com>
+In-Reply-To: <aHukoB5Xz4wyx7Yw@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi, Jarkko,
+On 7/19/25 8:58 AM, Jarkko Sakkinen wrote:
 
-On Sat, Jul 19, 2025 at 8:09=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
- wrote:
+> On Tue, Jul 08, 2025 at 05:51:51PM -0500, Prachotan Bathi wrote:
+>> Platforms supporting direct message request v2 [1] can support secure
+>> partitions that support multiple services. For CRB over FF-A interface,
+>> if the firmware TPM or TPM service [1] shares its Secure Partition (SP)
+>> with another service, message requests may fail with a -EBUSY error.
+>>
+>> To handle this, replace the single check and call with a retry loop
+>> that attempts the TPM message send operation until it succeeds or a
+>> configurable timeout is reached. Implement a _try_send_receive function
+>> to do a single send/receive and modify the existing send_receive to
+>> add this retry loop.
+>> The retry mechanism introduces a module parameter (`busy_timeout_ms`,
+>> default: 2000ms) to control how long to keep retrying on -EBUSY
+>> responses. Between retries, the code waits briefly (50-100 microseconds)
+>> to avoid busy-waiting and handling TPM BUSY conditions more gracefully.
+>>
+>> The parameter can be modified at run-time as such:
+>> echo 3000 | tee /sys/module/tpm_crb_ffa/parameters/busy_timeout_ms
+>> This changes the timeout from the default 2000ms to 3000ms.
+>>
+>> [1] TPM Service Command Response Buffer Interface Over FF-A
+>> https://developer.arm.com/documentation/den0138/latest/
+>>
+>> Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
+>> ---
+>>   .../admin-guide/kernel-parameters.txt         |  8 ++++
+>>   drivers/char/tpm/tpm_crb_ffa.c                | 45 ++++++++++++++++---
+>>   2 files changed, 46 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 07e22ba5bfe3..343377538fe9 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -7214,6 +7214,14 @@
+>>   			causing a major performance hit, and the space where
+>>   			machines are deployed is by other means guarded.
+>>   
+>> +	tpm_crb_ffa.busy_timeout_ms= [ARM64,TPM]
+>> +			Maximum time in milliseconds to retry sending a message
+>> +			to the TPM service before giving up. This parameter controls
+>> +			how long the system will continue retrying when the TPM
+>> +			service is busy.
+>> +			Format: <unsigned int>
+>> +			Default: 2000 (2 seconds)
+>> +
+>>   	tpm_suspend_pcr=[HW,TPM]
+>>   			Format: integer pcr id
+>>   			Specify that at suspend time, the tpm driver
+>> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+>> index 7faed6f3bf66..06599c07b746 100644
+>> --- a/drivers/char/tpm/tpm_crb_ffa.c
+>> +++ b/drivers/char/tpm/tpm_crb_ffa.c
+>> @@ -10,8 +10,16 @@
+>>   #define pr_fmt(fmt) "CRB_FFA: " fmt
+>>   
+>>   #include <linux/arm_ffa.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/moduleparam.h>
+>>   #include "tpm_crb_ffa.h"
+>>   
+>> +static unsigned int busy_timeout_ms = 2000;
+>> +
+>> +module_param(busy_timeout_ms, uint, 0644);
+>> +MODULE_PARM_DESC(busy_timeout_ms,
+>> +		 "Maximum time in ms to retry before giving up on busy");
+>> +
+>>   /* TPM service function status codes */
+>>   #define CRB_FFA_OK			0x05000001
+>>   #define CRB_FFA_OK_RESULTS_RETURNED	0x05000002
+>> @@ -178,17 +186,13 @@ int tpm_crb_ffa_init(void)
+>>   }
+>>   EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
+>>   
+>> -static int __tpm_crb_ffa_send_receive(unsigned long func_id,
+>> -				      unsigned long a0,
+>> -				      unsigned long a1,
+>> -				      unsigned long a2)
+>> +static int __tpm_crb_ffa_try_send_receive(unsigned long func_id,
+>> +					  unsigned long a0, unsigned long a1,
+>> +					  unsigned long a2)
+>>   {
+>>   	const struct ffa_msg_ops *msg_ops;
+>>   	int ret;
+>>   
+>> -	if (!tpm_crb_ffa)
+>> -		return -ENOENT;
+>> -
+>>   	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
+>>   
+>>   	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
+>> @@ -214,6 +218,33 @@ static int __tpm_crb_ffa_send_receive(unsigned long func_id,
+>>   			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
+>>   	}
+>>   
+>> +	return ret;
+>> +}
+>> +
+>> +static int __tpm_crb_ffa_send_receive(unsigned long func_id, unsigned long a0,
+>> +				      unsigned long a1, unsigned long a2)
+>> +{
+>> +	ktime_t start, stop;
+>> +	int ret;
+>> +
+>> +	if (!tpm_crb_ffa)
+>> +		return -ENOENT;
+>> +
+>> +	start = ktime_get();
+>> +	stop = ktime_add(start, ms_to_ktime(busy_timeout_ms));
+>> +
+>> +	for (;;) {
+>> +		ret = __tpm_crb_ffa_try_send_receive(func_id, a0, a1, a2);
+>> +		if (ret != -EBUSY)
+>> +			break;
+>> +
+>> +		usleep_range(50, 100);
+>> +		if (ktime_after(ktime_get(), stop)) {
+>> +			dev_warn(&tpm_crb_ffa->ffa_dev->dev,
+>> +				 "Busy retry timed out\n");
+>> +			break;
+>> +		}
+>> +	}
+>>   
+>>   	return ret;
+>>   }
+>> -- 
+>> 2.43.0
+>>
+> I think these patches look totally fine now. If you don't mind I'll add
+> suggested-by to 2/3?
 >
-> On Sat, Jul 05, 2025 at 03:20:44PM +0800, Qunqin Zhao wrote:
-> > Loongson Security Engine supports random number generation, hash,
-> > symmetric encryption and asymmetric encryption. Based on these
-> > encryption functions, TPM2 have been implemented in the Loongson
-> > Security Engine firmware. This driver is responsible for copying data
-> > into the memory visible to the firmware and receiving data from the
-> > firmware.
-> >
-> > Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
-> > Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
-> > Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
-> > Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  drivers/char/tpm/Kconfig        |  9 ++++
-> >  drivers/char/tpm/Makefile       |  1 +
-> >  drivers/char/tpm/tpm_loongson.c | 84 +++++++++++++++++++++++++++++++++
-> >  3 files changed, 94 insertions(+)
-> >  create mode 100644 drivers/char/tpm/tpm_loongson.c
-> >
-> > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-> > index dddd702b2..ba3924eb1 100644
-> > --- a/drivers/char/tpm/Kconfig
-> > +++ b/drivers/char/tpm/Kconfig
-> > @@ -189,6 +189,15 @@ config TCG_IBMVTPM
-> >         will be accessible from within Linux.  To compile this driver
-> >         as a module, choose M here; the module will be called tpm_ibmvt=
-pm.
-> >
-> > +config TCG_LOONGSON
-> > +     tristate "Loongson TPM Interface"
-> > +     depends on MFD_LOONGSON_SE
-> > +     help
-> > +       If you want to make Loongson TPM support available, say Yes and
-> > +       it will be accessible from within Linux. To compile this
-> > +       driver as a module, choose M here; the module will be called
-> > +       tpm_loongson.
-> > +
-> >  config TCG_XEN
-> >       tristate "XEN TPM Interface"
-> >       depends on TCG_TPM && XEN
-> > diff --git a/drivers/char/tpm/Makefile b/drivers/char/tpm/Makefile
-> > index 9de1b3ea3..5b5cdc0d3 100644
-> > --- a/drivers/char/tpm/Makefile
-> > +++ b/drivers/char/tpm/Makefile
-> > @@ -46,3 +46,4 @@ obj-$(CONFIG_TCG_ARM_CRB_FFA) +=3D tpm_crb_ffa.o
-> >  obj-$(CONFIG_TCG_VTPM_PROXY) +=3D tpm_vtpm_proxy.o
-> >  obj-$(CONFIG_TCG_FTPM_TEE) +=3D tpm_ftpm_tee.o
-> >  obj-$(CONFIG_TCG_SVSM) +=3D tpm_svsm.o
-> > +obj-$(CONFIG_TCG_LOONGSON) +=3D tpm_loongson.o
-> > diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loo=
-ngson.c
-> > new file mode 100644
-> > index 000000000..a4ec23639
-> > --- /dev/null
-> > +++ b/drivers/char/tpm/tpm_loongson.c
-> > @@ -0,0 +1,84 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
-> > +
-> > +#include <linux/device.h>
-> > +#include <linux/mfd/loongson-se.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/wait.h>
-> > +
-> > +#include "tpm.h"
-> > +
-> > +struct tpm_loongson_cmd {
-> > +     u32 cmd_id;
-> > +     u32 data_off;
-> > +     u32 data_len;
-> > +     u32 pad[5];
-> > +};
-> > +
-> > +static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t co=
-unt)
-> > +{
-> > +     struct loongson_se_engine *tpm_engine =3D dev_get_drvdata(&chip->=
-dev);
-> > +     struct tpm_loongson_cmd *cmd_ret =3D tpm_engine->command_ret;
-> > +
-> > +     if (cmd_ret->data_len > count)
-> > +             return -EIO;
-> > +
-> > +     memcpy(buf, tpm_engine->data_buffer, cmd_ret->data_len);
-> > +
-> > +     return cmd_ret->data_len;
-> > +}
-> > +
-> > +static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t co=
-unt)
-> > +{
-> > +     struct loongson_se_engine *tpm_engine =3D dev_get_drvdata(&chip->=
-dev);
-> > +     struct tpm_loongson_cmd *cmd =3D tpm_engine->command;
-> > +
-> > +     if (count > tpm_engine->buffer_size)
-> > +             return -E2BIG;
-> > +
-> > +     cmd->data_len =3D count;
-> > +     memcpy(tpm_engine->data_buffer, buf, count);
-> > +
-> > +     return loongson_se_send_engine_cmd(tpm_engine);
-> > +}
-> > +
-> > +static const struct tpm_class_ops tpm_loongson_ops =3D {
-> > +     .flags =3D TPM_OPS_AUTO_STARTUP,
-> > +     .recv =3D tpm_loongson_recv,
-> > +     .send =3D tpm_loongson_send,
-> > +};
-> > +
-> > +static int tpm_loongson_probe(struct platform_device *pdev)
-> > +{
-> > +     struct loongson_se_engine *tpm_engine;
-> > +     struct device *dev =3D &pdev->dev;
-> > +     struct tpm_loongson_cmd *cmd;
-> > +     struct tpm_chip *chip;
-> > +
-> > +     tpm_engine =3D loongson_se_init_engine(dev->parent, SE_ENGINE_TPM=
-);
-> > +     if (!tpm_engine)
-> > +             return -ENODEV;
-> > +     cmd =3D tpm_engine->command;
-> > +     cmd->cmd_id =3D SE_CMD_TPM;
-> > +     cmd->data_off =3D tpm_engine->buffer_off;
-> > +
-> > +     chip =3D tpmm_chip_alloc(dev, &tpm_loongson_ops);
-> > +     if (IS_ERR(chip))
-> > +             return PTR_ERR(chip);
-> > +     chip->flags =3D TPM_CHIP_FLAG_TPM2 | TPM_CHIP_FLAG_IRQ;
-> > +     dev_set_drvdata(&chip->dev, tpm_engine);
-> > +
-> > +     return tpm_chip_register(chip);
-> > +}
-> > +
-> > +static struct platform_driver tpm_loongson =3D {
-> > +     .probe   =3D tpm_loongson_probe,
-> > +     .driver  =3D {
-> > +             .name  =3D "tpm_loongson",
-> > +     },
-> > +};
-> > +module_platform_driver(tpm_loongson);
-> > +
-> > +MODULE_ALIAS("platform:tpm_loongson");
-> > +MODULE_LICENSE("GPL");
-> > +MODULE_DESCRIPTION("Loongson TPM driver");
-> > --
-> > 2.45.2
-> >
->
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-> Can you take this through loongson tree? It's highly unlikely to
-> conflict with anything.
-It is better to get upstream through the tpmdd tree, and Stefano's
-suggestions should be addressed first.
-
-Huacai
-
+> Anyhow, I can pick these to my tree. Just coming from holiday but
+> they'll end up the 6.17 PR.
 >
 > BR, Jarkko
+
+Yes, of course, thanks for catching these and suggesting the needed changes.
+
+Best
+
+Prachotan.
+
+On 7/19/25 8:58 AM, Jarkko Sakkinen wrote:
+> On Tue, Jul 08, 2025 at 05:51:51PM -0500, Prachotan Bathi wrote:
+>> Platforms supporting direct message request v2 [1] can support secure
+>> partitions that support multiple services. For CRB over FF-A interface,
+>> if the firmware TPM or TPM service [1] shares its Secure Partition (SP)
+>> with another service, message requests may fail with a -EBUSY error.
+>>
+>> To handle this, replace the single check and call with a retry loop
+>> that attempts the TPM message send operation until it succeeds or a
+>> configurable timeout is reached. Implement a _try_send_receive function
+>> to do a single send/receive and modify the existing send_receive to
+>> add this retry loop.
+>> The retry mechanism introduces a module parameter (`busy_timeout_ms`,
+>> default: 2000ms) to control how long to keep retrying on -EBUSY
+>> responses. Between retries, the code waits briefly (50-100 microseconds)
+>> to avoid busy-waiting and handling TPM BUSY conditions more gracefully.
+>>
+>> The parameter can be modified at run-time as such:
+>> echo 3000 | tee /sys/module/tpm_crb_ffa/parameters/busy_timeout_ms
+>> This changes the timeout from the default 2000ms to 3000ms.
+>>
+>> [1] TPM Service Command Response Buffer Interface Over FF-A
+>> https://developer.arm.com/documentation/den0138/latest/
+>>
+>> Signed-off-by: Prachotan Bathi <prachotan.bathi@arm.com>
+>> ---
+>>   .../admin-guide/kernel-parameters.txt         |  8 ++++
+>>   drivers/char/tpm/tpm_crb_ffa.c                | 45 ++++++++++++++++---
+>>   2 files changed, 46 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 07e22ba5bfe3..343377538fe9 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -7214,6 +7214,14 @@
+>>   			causing a major performance hit, and the space where
+>>   			machines are deployed is by other means guarded.
+>>   
+>> +	tpm_crb_ffa.busy_timeout_ms= [ARM64,TPM]
+>> +			Maximum time in milliseconds to retry sending a message
+>> +			to the TPM service before giving up. This parameter controls
+>> +			how long the system will continue retrying when the TPM
+>> +			service is busy.
+>> +			Format: <unsigned int>
+>> +			Default: 2000 (2 seconds)
+>> +
+>>   	tpm_suspend_pcr=[HW,TPM]
+>>   			Format: integer pcr id
+>>   			Specify that at suspend time, the tpm driver
+>> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+>> index 7faed6f3bf66..06599c07b746 100644
+>> --- a/drivers/char/tpm/tpm_crb_ffa.c
+>> +++ b/drivers/char/tpm/tpm_crb_ffa.c
+>> @@ -10,8 +10,16 @@
+>>   #define pr_fmt(fmt) "CRB_FFA: " fmt
+>>   
+>>   #include <linux/arm_ffa.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/moduleparam.h>
+>>   #include "tpm_crb_ffa.h"
+>>   
+>> +static unsigned int busy_timeout_ms = 2000;
+>> +
+>> +module_param(busy_timeout_ms, uint, 0644);
+>> +MODULE_PARM_DESC(busy_timeout_ms,
+>> +		 "Maximum time in ms to retry before giving up on busy");
+>> +
+>>   /* TPM service function status codes */
+>>   #define CRB_FFA_OK			0x05000001
+>>   #define CRB_FFA_OK_RESULTS_RETURNED	0x05000002
+>> @@ -178,17 +186,13 @@ int tpm_crb_ffa_init(void)
+>>   }
+>>   EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
+>>   
+>> -static int __tpm_crb_ffa_send_receive(unsigned long func_id,
+>> -				      unsigned long a0,
+>> -				      unsigned long a1,
+>> -				      unsigned long a2)
+>> +static int __tpm_crb_ffa_try_send_receive(unsigned long func_id,
+>> +					  unsigned long a0, unsigned long a1,
+>> +					  unsigned long a2)
+>>   {
+>>   	const struct ffa_msg_ops *msg_ops;
+>>   	int ret;
+>>   
+>> -	if (!tpm_crb_ffa)
+>> -		return -ENOENT;
+>> -
+>>   	msg_ops = tpm_crb_ffa->ffa_dev->ops->msg_ops;
+>>   
+>>   	if (ffa_partition_supports_direct_req2_recv(tpm_crb_ffa->ffa_dev)) {
+>> @@ -214,6 +218,33 @@ static int __tpm_crb_ffa_send_receive(unsigned long func_id,
+>>   			ret = tpm_crb_ffa_to_linux_errno(tpm_crb_ffa->direct_msg_data.data1);
+>>   	}
+>>   
+>> +	return ret;
+>> +}
+>> +
+>> +static int __tpm_crb_ffa_send_receive(unsigned long func_id, unsigned long a0,
+>> +				      unsigned long a1, unsigned long a2)
+>> +{
+>> +	ktime_t start, stop;
+>> +	int ret;
+>> +
+>> +	if (!tpm_crb_ffa)
+>> +		return -ENOENT;
+>> +
+>> +	start = ktime_get();
+>> +	stop = ktime_add(start, ms_to_ktime(busy_timeout_ms));
+>> +
+>> +	for (;;) {
+>> +		ret = __tpm_crb_ffa_try_send_receive(func_id, a0, a1, a2);
+>> +		if (ret != -EBUSY)
+>> +			break;
+>> +
+>> +		usleep_range(50, 100);
+>> +		if (ktime_after(ktime_get(), stop)) {
+>> +			dev_warn(&tpm_crb_ffa->ffa_dev->dev,
+>> +				 "Busy retry timed out\n");
+>> +			break;
+>> +		}
+>> +	}
+>>   
+>>   	return ret;
+>>   }
+>> -- 
+>> 2.43.0
+>>
+> I think these patches look totally fine now. If you don't mind I'll add
+> suggested-by to 2/3?
 >
+> Anyhow, I can pick these to my tree. Just coming from holiday but
+> they'll end up the 6.17 PR.
+>
+> BR, Jarkko
 
