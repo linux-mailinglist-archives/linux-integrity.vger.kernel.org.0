@@ -1,78 +1,79 @@
-Return-Path: <linux-integrity+bounces-6686-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6687-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC1BCB0CDF5
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Jul 2025 01:25:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6FFFB0CDFD
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Jul 2025 01:25:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E746417C383
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jul 2025 23:25:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9DBB6C4AD3
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jul 2025 23:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E5E254849;
-	Mon, 21 Jul 2025 23:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6096F2550A4;
+	Mon, 21 Jul 2025 23:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="BgK0qDBf"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="QUDlghoc"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6CD24729A
-	for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 23:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE40524679F
+	for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 23:24:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753140269; cv=none; b=Vt5cGdo/jsQN70RXQUavhJA/o0CrCTNinPJedLIKWh4BsbsTvBmGr0M9DWH+BKYDM3LVPCioft1EFAjwF77dePTvDPorPzqas5A2Unbifm7cGFNh2CRL0CXpcK2DZO9XXn/aIIzoEv92bX14KUxV6OcRVIaH5EguDgw5mh1fxIY=
+	t=1753140270; cv=none; b=Msat7ue6XDG3XhxNMsGHrws4BhcfotQiLwWdpI0HZPVy6kvtB9B4DR1WWAyvalspK95zK4ntLEwG4pl1anUyNLyT3SkcOx/GDPQblNCsh+Ojpf6gX+m4CRWZwJUBN3Pf2AYApcBNLTJDKStgdZ41fdPQsr1R+PakeVMbdmB0EdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753140269; c=relaxed/simple;
-	bh=B134/zRHtlL58bjVcbvW0Phl+TZp3TNRoB775vnMRoc=;
+	s=arc-20240116; t=1753140270; c=relaxed/simple;
+	bh=8+Yydcda6gliFzIbMQ67RWaGm58avhDYOeg3/XQTpM4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J/1zVz4BcHj/c1CbzOJwnI1DduX5oHnYtiRnZ5HooTJNV2gah0svHHUxGLakSEQqmC+7efwkE9IZVoITzD9XREUxSNQ9qSXXSFGeqQdIwV14QDUdjW3mgRiGAqwetIPF5IoiiNOZbhaZt7/VifHcdGXpDGU4yqso3J5GNEDUtpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=BgK0qDBf; arc=none smtp.client-ip=209.85.219.49
+	 MIME-Version; b=VYO35dJZ1WyevVAWwljkP0nLf784obvWkATL/jEPsdqZ/o4eAhRp4xy0gXlW2a6x/43mG97t2uaiqGrlmi5GrvPmsOcq37hQKyX8a9oN9zal1xoFSeodCrMacs+JcgOboucHdO6JUIqV9xSly6HZYZP2cU20/5G03tVEhXj9QAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=QUDlghoc; arc=none smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-701046cfeefso77125276d6.2
-        for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 16:24:27 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7e278d8345aso481583185a.0
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 16:24:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1753140266; x=1753745066; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1753140268; x=1753745068; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4VE9Gz5X5rdXslwTaTGKKll5oZCtBH2VN2kjyo7ucTc=;
-        b=BgK0qDBf5ZYgOoOmxEficwhEc8Ypw3vWgl31gAh2OMlRSBqu/q/LX36Ps05ritQ0M0
-         kH+fY91trJ7zTLZditOMEsrojg4vMlqFFNU+2bY5cLPj7gLKy5rFJQDkQVNgTIa+mSmR
-         aK4+Lj3uUJeNS1TbK2Zneqfz5iARieoeAJU7DFPERyelx4D6n4R34QHkQdPR4vlqCvtb
-         G9ZzV8XnesDiBY24JGPojqdZGvx5ewE+z+ZMvrMfne41a2nxlVf0a76LsCQcYXw7qcNl
-         YBfjCHQGkZSNS27t6bvdXZBgwkExGmCkrS9HRU9SEKb2pTIZsenqouVJjIZN4B3GSTn1
-         iEjQ==
+        bh=mLTyhJDYMSyoHFCFlVi497HntNvu8sDWshQggyDb5II=;
+        b=QUDlghocR5KWTObSbpmm81ZI0gThksittSJW87ClipV7gopwxfZL8k3nO+SjNfCQRb
+         jd/Ue7HrH+os4ysUJBdmJNSYqXSmDW3/ClcnVc79nDmtlfH7r5rOej5QS35ZrzrySuOv
+         PUYJ8XhZrBkHQXP3hFJ6J49nr3J1Rt8UIlktstUqDP+0yPoz4niExzwJySdwPtOcVj2t
+         W3lfC7jovmqLzk4qTLxJb87aPC+fkXjZNfnFF7ujz2ZcEXCzHtmlPBK50P/3H9cLfpTe
+         fzxx9Glvg53j6e67BCWyPs9I/MSzaQjD+dJVl0l1pQPepCOC7zOfPrScT5lZYGnzrmsY
+         cR3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753140266; x=1753745066;
+        d=1e100.net; s=20230601; t=1753140268; x=1753745068;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4VE9Gz5X5rdXslwTaTGKKll5oZCtBH2VN2kjyo7ucTc=;
-        b=SNswZ31J1C79p8QHmyPqNUgywFryL+NHeP3eGpB3/mf3RG3OzxRt1L95hiO+T/mh06
-         x9VAU5YRNUVlW4Oq9V0KQH5hR20S/fS26P4MBmWNuzS0ky3z8yFjahSEnUNvMf8J/2Bm
-         7gRYsWVg16mVW+tDnQxe9bJ33TaQ2G3Jr2UYxlgJKvsrDCylPGbP1HWYbIEltCcmR0Jj
-         X6GIieDh2tFQM140C5w0qoSRRQurcpbmVOe4yvDhpVrmvBmeZMCvYa0bk0Sttdj7//92
-         hOmxywaIWJ6XI6WkaCxu2hkssMiTFUOOk7p0Ea8VXbigCGXJzz97Nzv26pP6uwbfPCq8
-         w5yg==
-X-Forwarded-Encrypted: i=1; AJvYcCUrbZ9aAt68Iy8GSYMPtq/eBbGm2ShYrRdcAFe4ElMpC2Mo7P7D4iNog54LU0awkThDq1BiGouoCksPwPXHAyM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPSOw5W7v9SIBmmQCmNHDgzh3cu2vz9/g29dRRjWpNMGsMdBA1
-	e9zOSbdvAdqk5QmgrgNm0uky6iu2M75IMcqwohm1cZSzxhLXmUbFz2ZqczNJf2+Usw==
-X-Gm-Gg: ASbGncvOUbla6qSP/LEDbOCB5P3p88yw8FwMk1GODH/LfgHVG6oWcWWSTIBu0cBiRXn
-	EMOjFwgaT4v39NM1pZS/7J+J8AoXFTHNnuvur5YJ/IZWs0N/bAdZKSDDyM8aCbqJANEnfjf7tk1
-	Zqrogw0gTz1DaXVEOvqRxC+TVLWYJGa1QQfjFrL+gkHiWaodLizEmrbc/iItWGAJRJi84d7miOC
-	4WiH0i8Juplx2+f7cB+WtvORB93hU1yZwqcff3fDvAeZ5zwuIDZ2AGMVyRgZC0j3YXlZxAooEeY
-	rtFrhetEQRdTpUp8xQFmb0QPpDSi12y6yWdUCNfrZFxtj0J78Z8U0aQdngy+6WD+wUxOmrX5ID6
-	UY8G/9PyBqVn0THHvktGEyPawuTmRYH8I5715OcSdhpB3xFfVU2vXChFz1vS8q+HKviU=
-X-Google-Smtp-Source: AGHT+IGv0NYDUq8rwcxWrFNBf1D5JMT4Wh6HXrqlXRiD++qIeRcnGjBN5BjjKOWpQkR3xgEt5JgB6Q==
-X-Received: by 2002:a05:6214:2421:b0:701:945:68a0 with SMTP id 6a1803df08f44-7051a11473amr254014246d6.26.1753140266593;
-        Mon, 21 Jul 2025 16:24:26 -0700 (PDT)
+        bh=mLTyhJDYMSyoHFCFlVi497HntNvu8sDWshQggyDb5II=;
+        b=JniZKRKgPG+HdorbM4Nfg6JgShnSYPUGjvtvxcILjmbGHYaU/SsQIDcDXDRlb2rL4W
+         ItSjK6gPo0ZuuQvxjriG7tAwTNn3MBFkb2tuw3oG4piyecbGGrk76gSdF/lLCKm1Gnsw
+         pacnJgY3bSohl/xmOEiaJoynEkjAqjp1MKymy+pIyawhVYpXnXQOxxqUYY/4M/3UsUkH
+         F8H4kteQZEYtDleoaIdNTukRumB/58GytNX/76dlfTKO+KFogEOyjLSopMTPbz1GvTyR
+         /RNeGWUBOEnjouWRUXOy9JjVBfwNWihs69vu5AlDzo+WCWHa3QMipgghtiCDEoTA9B3/
+         tDdg==
+X-Forwarded-Encrypted: i=1; AJvYcCVQBMO4YLXCIG5AcemXYDk29/b21+AOggCtMw/SRyOVUqPH8QxRk+ifFbBnDVlWJrGYaFqHyOLEj/vU4hCl/2k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQWkCfldiFgSwjvW3ilaNunitC8QAmpZ64Z3xd9znpDF2JubDB
+	WoYuIyPRwDzApuFJVLeSkzRDKIr/Pl1J3IAefkAwfb+uC94JD9jeEZB72CFeHp0F/g==
+X-Gm-Gg: ASbGncsMWjf4goUNI4d3jdfWz/QNNf3/p/h4qoeq5XPd9nA4CE+lU3yDim9F/AmaJja
+	QD+cevXemzeNUOhThVSobUn90COpRCR/aduoXxth1FOT0M6OMxIyXMu9K/5OK8qCTVrg1GEukoY
+	W7LituESeTfwtQrfqnJCaa/rbKtlNOm6kYez5HWPfs6SC6+FOA44qPGKd1Vy/Zua/lLYOggW6sA
+	zseW4gLnpp2knGuSE/zknTz3BQXQwQMt3niH52XMK60rjIUP3nJqnQb5REZJv7obgGFXfQ5P7Bv
+	nMVrx+EaZQNkVrl3QS81o8JVUhnBEKfSY4hgxDFziv/5Q32A8B+In7VShh5k+WSBPnQPWYK1i9c
+	b5Syc7T/nd3hoIOQqvoUSMvpFkzAZOIpG+YVO+LYVvZu8A0HgPbbrS6oRrPLupj4jVUXUtS0euQ
+	fHoA==
+X-Google-Smtp-Source: AGHT+IFz4ooTAIJ0loj0UJgGkHM1OmScswyrchamBua5mK/t4M9KPAHsfs57yfem5Wuu+uaZcRII+A==
+X-Received: by 2002:a05:620a:46a6:b0:7e1:5efc:6f6 with SMTP id af79cd13be357-7e343633b0bmr3192892985a.47.1753140267679;
+        Mon, 21 Jul 2025 16:24:27 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-7051b8df533sm44467846d6.26.2025.07.21.16.24.25
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7e356c938bfsm465516685a.96.2025.07.21.16.24.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 16:24:26 -0700 (PDT)
+        Mon, 21 Jul 2025 16:24:27 -0700 (PDT)
 From: Paul Moore <paul@paul-moore.com>
 To: linux-security-module@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
@@ -89,9 +90,9 @@ Cc: John Johansen <john.johansen@canonical.com>,
 	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
 	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
 	Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: [RFC PATCH v2 25/34] ipe: move initcalls to the LSM framework
-Date: Mon, 21 Jul 2025 19:21:28 -0400
-Message-ID: <20250721232142.77224-61-paul@paul-moore.com>
+Subject: [RFC PATCH v2 26/34] smack: move initcalls to the LSM framework
+Date: Mon, 21 Jul 2025 19:21:29 -0400
+Message-ID: <20250721232142.77224-62-paul@paul-moore.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250721232142.77224-36-paul@paul-moore.com>
 References: <20250721232142.77224-36-paul@paul-moore.com>
@@ -101,60 +102,104 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1600; i=paul@paul-moore.com; h=from:subject; bh=B134/zRHtlL58bjVcbvW0Phl+TZp3TNRoB775vnMRoc=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBofsvhxtLgE+LO3UQh1Im04NbOkPNN05CgdGeJT V4UFbxyEJKJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaH7L4QAKCRDqIPLalzeJ c9LhD/9uuxuxZhRTxPKiman0g6ufoe+zV/8DKkaAzTtOFVGELZepaX1z7y4ok2fbpwWH99XBoQA uvF4cSLDJIlURin3VUJ+dYaTnMOLbc9fGQT7TfkflRmwvMjI/4gBqolwhPROFZZGnOSFHR3JZeU dPq5pioPDWV5i7tnkBr55LV9dvc/MNO8vuLDp03Cnf8uYQnozaU8ULkZebs9581PpY5hRmaXNMK WobhWUl3fPqnogh3g9RV3o0rtLXIaWY8gHyp15YdAoy2BeiUFSM0iFP7+G/bM70M9nUvQD8dTKN DeLxGBcGkqNUJbTkApHasOCFq6/FKkg6vB8+YiagF0mqEXWgWPudZcFsgE7FS1X15e0499VpfNU VxnY8xTBqR3gAUHpFCPamZZfKmkY5ZL4LLhavlzycx1jFKhuXrF6yd3dktAZos0W/Zk9oPzR1Nr IO0PDMzDmwlyjC5lfdty6IqMiTlF9wlatWifZREsuow9CQ+krHY4b1GXPoRYqfME6pmJMTk870W nqc/9/z4yPFQz1DbPwv1GCtq46KV26Q2u7DLD0nJIG74n9I/TtnMDJd9HKQ66UxncGbClopfaid kpKE7O7sgaqwadvK3J0Ki7B7ijEKRz4y93UvmfVROT8UITaP+2v7hoBNM+ptV8c7ZaKRt/cDcFr c8zWrcB4pmW6MOQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2864; i=paul@paul-moore.com; h=from:subject; bh=8+Yydcda6gliFzIbMQ67RWaGm58avhDYOeg3/XQTpM4=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBofsvkM5n0lxEDdn41/FJQIR1J//6q3uKF00SFT phtrEz862iJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaH7L5AAKCRDqIPLalzeJ c3VqD/9uI/8y3pyN2MnwHHeLYUW5vxFR0IbPKzpoc1agz2QTp2oda9iSR9SFj/WPfMQ1mvIARbr uLvFv7QEf80gY2ZZzgbeo7fPV+XXEDYrHVlc1Yx1c1q3nF7vs6kgYCSAkAxRWfBmQ3c3QsChYMq SydeiOIa54unH1XjEEpAPmplmi5MaSg3PkRDCy0UYfapNf7hWGtW6TeXheP6JS/+laS9HDosJRq ekhz4oH9TE79twH4b3ieN6/T19qZVWcL7/kMvc6J6HNc7Bpn6Lit0YTC7zAZoebC1kbxt9h8L+7 tLSfw7G/pftR9QeM7L7mC72iDaO581wbdvf393DpM5/lm+epbhj+VxJIGvbrrDoi+qNueT7mW/t 3pa3ebdOY5eM6r898YXhyobde6swNLUgVRYu/sgEcn8Hyk0+09lI5t0kDpsWucNhTQW20tTV0kg BmMR4u7M0KAy7+C35vVK2I4JQXYYqzPbqIHoNXD4lTjOnLxWVX4Ti3a2w9Ld2z4kU3sWs8y7Q+F qysf0xftizGhudfE6AYRuFPDD3jg4ZuX75V+aB7P7pU6eR4TcJGxy5r7x0BZ+/803eBgeRC8s1j 8VyOfu+suUKTJvaRXrLAts9i9THPtXSjLlifrCXJzSEIw3TMykvRbcPSnW6A4AOKQrvCUk5VrnQ 21UDky/BQ6mzcsQ==
 X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
 
-Reviewed-by: Kees Cook <kees@kernel.org>
-Tested-by: Fan Wu <wufan@kernel.org>
-Acked-by: Fan Wu <wufan@kernel.org>
+As the LSM framework only supports one LSM initcall callback for each
+initcall type, the init_smk_fs() and smack_nf_ip_init() functions were
+wrapped with a new function, smack_initcall() that is registered with
+the LSM framework.
+
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- security/ipe/fs.c  | 4 +---
- security/ipe/ipe.c | 1 +
- security/ipe/ipe.h | 2 ++
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ security/smack/smack.h           | 7 +++++++
+ security/smack/smack_lsm.c       | 9 +++++++++
+ security/smack/smack_netfilter.c | 4 +---
+ security/smack/smackfs.c         | 4 +---
+ 4 files changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/security/ipe/fs.c b/security/ipe/fs.c
-index f40e50bfd2e7..395e62700055 100644
---- a/security/ipe/fs.c
-+++ b/security/ipe/fs.c
-@@ -196,7 +196,7 @@ static const struct file_operations enforce_fops = {
-  * Return: %0 on success. If an error occurs, the function will return
-  * the -errno.
+diff --git a/security/smack/smack.h b/security/smack/smack.h
+index bf6a6ed3946c..885a2f2929fd 100644
+--- a/security/smack/smack.h
++++ b/security/smack/smack.h
+@@ -275,6 +275,13 @@ struct smk_audit_info {
+ #endif
+ };
+ 
++/*
++ * Initialization
++ */
++int init_smk_fs(void);
++int smack_nf_ip_init(void);
++int smack_initcall(void);
++
+ /*
+  * These functions are in smack_access.c
   */
--static int __init ipe_init_securityfs(void)
-+int __init ipe_init_securityfs(void)
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index e09490c75f59..f14d536c516b 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -5270,6 +5270,14 @@ static __init int smack_init(void)
+ 	return 0;
+ }
+ 
++int __init smack_initcall(void)
++{
++	int rc_fs = init_smk_fs();
++	int rc_nf = smack_nf_ip_init();
++
++	return rc_fs ? rc_fs : rc_nf;
++}
++
+ /*
+  * Smack requires early initialization in order to label
+  * all processes and objects when they are created.
+@@ -5279,4 +5287,5 @@ DEFINE_LSM(smack) = {
+ 	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
+ 	.blobs = &smack_blob_sizes,
+ 	.init = smack_init,
++	.initcall_device = smack_initcall,
+ };
+diff --git a/security/smack/smack_netfilter.c b/security/smack/smack_netfilter.c
+index 8fd747b3653a..17ba578b1308 100644
+--- a/security/smack/smack_netfilter.c
++++ b/security/smack/smack_netfilter.c
+@@ -68,7 +68,7 @@ static struct pernet_operations smack_net_ops = {
+ 	.exit = smack_nf_unregister,
+ };
+ 
+-static int __init smack_nf_ip_init(void)
++int __init smack_nf_ip_init(void)
  {
- 	int rc = 0;
- 	struct ipe_policy *ap;
-@@ -252,5 +252,3 @@ static int __init ipe_init_securityfs(void)
- 	securityfs_remove(root);
- 	return rc;
+ 	if (smack_enabled == 0)
+ 		return 0;
+@@ -76,5 +76,3 @@ static int __init smack_nf_ip_init(void)
+ 	printk(KERN_DEBUG "Smack: Registering netfilter hooks\n");
+ 	return register_pernet_subsys(&smack_net_ops);
  }
 -
--fs_initcall(ipe_init_securityfs);
-diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
-index 2426441181dc..71644748ed56 100644
---- a/security/ipe/ipe.c
-+++ b/security/ipe/ipe.c
-@@ -95,4 +95,5 @@ DEFINE_LSM(ipe) = {
- 	.id = &ipe_lsmid,
- 	.init = ipe_init,
- 	.blobs = &ipe_blobs,
-+	.initcall_fs = ipe_init_securityfs,
- };
-diff --git a/security/ipe/ipe.h b/security/ipe/ipe.h
-index fb37513812dd..25cfdb8f0c20 100644
---- a/security/ipe/ipe.h
-+++ b/security/ipe/ipe.h
-@@ -23,4 +23,6 @@ struct ipe_bdev *ipe_bdev(struct block_device *b);
- struct ipe_inode *ipe_inode(const struct inode *inode);
- #endif /* CONFIG_IPE_PROP_FS_VERITY_BUILTIN_SIG */
+-__initcall(smack_nf_ip_init);
+diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+index b1e5e62f5cbd..405ace6db109 100644
+--- a/security/smack/smackfs.c
++++ b/security/smack/smackfs.c
+@@ -2978,7 +2978,7 @@ static struct vfsmount *smackfs_mount;
+  * Returns true if we were not chosen on boot or if
+  * we were chosen and filesystem registration succeeded.
+  */
+-static int __init init_smk_fs(void)
++int __init init_smk_fs(void)
+ {
+ 	int err;
+ 	int rc;
+@@ -3021,5 +3021,3 @@ static int __init init_smk_fs(void)
  
-+int ipe_init_securityfs(void);
-+
- #endif /* _IPE_H */
+ 	return err;
+ }
+-
+-__initcall(init_smk_fs);
 -- 
 2.50.1
 
