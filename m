@@ -1,79 +1,78 @@
-Return-Path: <linux-integrity+bounces-6667-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6666-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1780B0CDC9
-	for <lists+linux-integrity@lfdr.de>; Tue, 22 Jul 2025 01:24:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BAF1B0CDBF
+	for <lists+linux-integrity@lfdr.de>; Tue, 22 Jul 2025 01:24:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98A14189D2B4
-	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jul 2025 23:24:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 630F96C3673
+	for <lists+linux-integrity@lfdr.de>; Mon, 21 Jul 2025 23:23:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A7C9246BCD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428CF246BBD;
 	Mon, 21 Jul 2025 23:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="aEfS4R3a"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="UdAlQkmm"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A959323C8D3
-	for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 23:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962D324678D
+	for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 23:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753140248; cv=none; b=FaR2ErjuYxGMY0xlwU2uHPixJdxxVmCCmA6qoxxgvRrlY1zX5PVgXtVahDWm9CARrj3APSgCze5zHqet1v/U9bSkB8djWfU6nDa8Qw43chVeh+vbY4OgO04mPdShVejg6OLduIhlkjYiKnE6LjnWEhGRumGwGvcJpE/eh9EXv/Y=
+	t=1753140248; cv=none; b=gNqkLVXFVQCLg7XDS3n1H4aaT72vEByAY7gfRExFm6DcMmYQSUp9XEYodomuivHOnz8seyYBtfWw+l9KPfMKQsA51FtHbd87TvgLg+Vf5hYwSbWVtKUxlnatSMv+Ff8NGTbjRVePph8k1/AfrW+n14/Z/SB0IzcqExQlvUcp5jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753140248; c=relaxed/simple;
-	bh=sJ3xHy7C70p8eD3qfM5ogSJFTU3Y5lkGyavDif9LnjE=;
+	bh=rdBPCXy4+zMMahAP+JfAAcpjXp+SK/yo0e3ExJHaW6Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oaoXrzRUhTJyQgTZvnIWxAeOoNH0KU1uO7Dp68RD25uGz4V5NQ+p/XVd49uJiM0gDUOl6kMVD6fGwXXYkuaWwW6o8QuEp9MwqZGblh7eHzCAFj/4XNHE9XWh6SMC/7nQ0dcezbhryaW9Yo3gxJi05pgU6Vx5lIECQaeM0+6XYOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=aEfS4R3a; arc=none smtp.client-ip=209.85.160.174
+	 MIME-Version; b=b74mbqkv7x5IihdX5efw/khik8qRbDSmJu25o76LY+f3ONukhVy3zj+9AWW88IDnN/6xlKxw34hMffhdZvx2/IzlpUaqF3fUW6T+3ek3dxUnht1hbSrgw0IT+GcT0GTq/MeDXmw0JSE5F0nKFGNyI5k37qJX1uTPfHCqCI+VRk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UdAlQkmm; arc=none smtp.client-ip=209.85.222.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4ab8403b6daso50413221cf.2
-        for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 16:24:05 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7d7f2600c17so721924685a.0
+        for <linux-integrity@vger.kernel.org>; Mon, 21 Jul 2025 16:24:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1753140244; x=1753745044; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1753140245; x=1753745045; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=beo6MFDAYtua5/S2j8GARDSQ9e3HZAx0UoA8dvN4IVI=;
-        b=aEfS4R3amkdLjnuTFHH5tfqsryHrdK9knZt4KLi4mlQM4f8uHYFdSJrSrFf+zUtEmt
-         8ze2CNUSNJptJMg8dt2j0OV8EN4y2Llpn+eVKIDmXvrAyAFZtgRcb3xL2Ce4OR5aWlAo
-         ZTlX1vkdJiqOJbMKSPyowoIDkCsWh5VoUyPH2w3vWDWL2yKKPczcv/fS+7aDwY/+IrF8
-         MhPiLq149mEBQi8sIm1qjYgGmSsn1++3kHeevVqtXdMut2VI1U61Lk0h9+gpLh3/YDwh
-         K+ERgyjyKzeEhyapQIl9KLjK3qy02HtSC8BYA1sOKz6gwpovgRGUPSF3IqiT6s72ZSm1
-         qimw==
+        bh=cr+5XluOiiRdnmU0yLT3prhxmj6Bm+YlSZyG9UsMSgw=;
+        b=UdAlQkmmn4uTGuwRe/hUpxzNCxgwW+P7aIY0uAJInL3jQNrWsxDdSC1Ir8Uo++wzhx
+         SLczswux54kZzhHCi4bBQUBEVFDjzUp85CJt3qU9WqTZkXKiRMYYogXLrIOZ92v2Qw+W
+         xoaob7neAVreHobJIv2ot40W24XgdR3sjXjio4AbFKj/SSKPotLPIk5ACOXuQF8/A/TH
+         otQaXkeqqXeL3oiMJ4QnAlCoWH4lZX1BAHnpjWccH6UBieVzc4has9/4odv49dlCTgyt
+         0R23kO7k2jS/DECwpWpHXBVrGjzmtI1L/B6XIRp4SkWbE9I7dWxuJ/DxNSlRK+NcS6bh
+         NjHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753140244; x=1753745044;
+        d=1e100.net; s=20230601; t=1753140245; x=1753745045;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=beo6MFDAYtua5/S2j8GARDSQ9e3HZAx0UoA8dvN4IVI=;
-        b=IThvvDOf4llYBH4tDxRhmw/tJEQD0m47d5uLdQng/MKAb5J/Gxw7xkBu89RGFZbznG
-         y0PzGZTzHA7gQl0I3HKStqBmcFzUh8KrmIveTr6FWB2h8ywSnB5X7dQZRgYfy9awPGyn
-         S2mGhmFcZhbP0S5cYOgZ2nxYGyagIP6UzjW4EQmLYzI2arhxy0VEP9YHqr8Ri33weSUR
-         q8PpWA4PPTF48DEGWo39WqmNlx8aJCczrzdpRQh9nk7Ub8pee2wO2xB6t3siKlo+J6XE
-         f5tdGteKVvyvz3PK39eA8uqPwpjQlAFBQi2fwCsPdDSQezMW5c8V1rl2sFHbJbXBP6pr
-         J2pw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRJHyOWq4nRFHsr1PQIpwN2ul+OOOmi6arihJqj/YolyZealrsfQfNdL86m+tsRTZD2hRxPoG8mKYFH5ChIsw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzPZWEh2epmwU33IsoEXk/CAM5WikgISk+KYfIB0tpU7oeHOZI
-	r9ts2iYJ1v4WX0mp5WjGDBIrdEWnxf5h7jMtMNyJn9o0PY1niVVnQkEoRlntVhTOTw==
-X-Gm-Gg: ASbGncsmG1PBgSZJWFsopN1v7TnKJxsHMZJimIJrxukUenA5OdpLcF9IJgTJXGPa6+k
-	Z/Pem5JmHpqUtSki1T9dNc9VE3cSY5ZE7IT1j0hRzVkdG6FpJWG+9Oke1W2TjglAaJ7C6w4Rzyp
-	hN1IhYqb3/Lhg27EjPzKylL8Yo7ycauoiUEEBkSHV0/zvgHyhpy+szl+h37b/ECAFK6D0hm5B3d
-	J9HZFjzdd9uChnrvWW8udPN/zSAdkyJzmmQuxxqTrxpMzEFOEPR0BH7CcyfR9m8HrnlgShL8MJ4
-	VMiNCNd/N11aK9UFXO7q1uC7ioDem/gdZtfeFdT7Ha/twAdrMYYfRoaLJUEvIPvFmbmxjurTrCK
-	Uim13yqGsJa3OVIxVTVnfYKli+f7de0LnYd+MukWVxBSJ3bsyCERk/CEFG6xOwkVQMHtPTw06Mc
-	SGJA==
-X-Google-Smtp-Source: AGHT+IFoonNJzWXgnH/3KtOAD2gWtOBkFOgNqS2pzH1PLI/hnzTpsgw4zYDsrF7GZ3mUmkB7iYo2nw==
-X-Received: by 2002:a05:622a:1187:b0:4aa:a5c8:8645 with SMTP id d75a77b69052e-4abd0622ee4mr82574031cf.22.1753140244576;
-        Mon, 21 Jul 2025 16:24:04 -0700 (PDT)
+        bh=cr+5XluOiiRdnmU0yLT3prhxmj6Bm+YlSZyG9UsMSgw=;
+        b=GzhTM4VGuyAkQtdg2urcsMaRHdWN6KQcweUKkRvl+5h3MtOeHA2BAdlmL7APiq0Xim
+         I3WqbSLrAWlKsNMGv4WOwhEk9UPtzqbX9fP+wuqY4Y5HVmbyRDakBvNVnol0u991xvd/
+         EyJ6y8ekICKWbWuq+2p/+pNboO/BtoQ3jfPS+EszcN2hjrtyO7eYf+csZ0OpMUG7pQeJ
+         C8VNFZMMWZojqSZAxzzQcgklK6X5OAoxdeeSaGWG/cVvrIKsZQ80trYLbP/tHYoL4GDa
+         GHUcrJOsaqBNCjMttj6euUWPfCiV9CuCDISGhVuDK1WZoioTxTIIFfZN/qgbN5KjxrMt
+         8c2g==
+X-Forwarded-Encrypted: i=1; AJvYcCUyji8IsNzveYhw2ryw8a82Zc/rRdjzr9nbh5OW4aid5PfUNPR9ZRHwsuGet4bg1yNr0tYJVemZnj6+SLfw+VQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+2UqufM1CGP0IIXJxRJHfIkfGLD9wqw4S1GO0qJkx7FlXAmbj
+	VK3s54bd01c0YKACjC16S8vyZ2vQEhfmFMBWQ3cg0ESH3V9oLNrWD8xtU2uxKTty/A==
+X-Gm-Gg: ASbGnctdvjLybdhRFpQjxSY3sCyT7loObA/wx+M2VqgyQk9Ow1dTrs+aPAuuAcghu2N
+	GpSvawGXD83TjycDO/lcHSRUJT+XqTDe5COWHj0BI5Ks1hwMZge3Y8Y2q0gdeJbZ4+nnUfzF9Pq
+	KJ5p8LUxEEqrs3+LkwzDXoSBscPmDlJE2cUyzmGI37oT514fcHqusheDdkUNyzs/7X3WpgbwklB
+	yzHqrd3w9cdliPkPqR3NtACOSg8u+qJVff0n4SbdgFSeUSzxt5zm3ZJu0xGbDQ9zGUDReI98X96
+	zO8EGMzvFR2ZzDFsfXW2vKS9/sDsmVR+yYx+QjAjm80lz0mAP39kh5ijNQXOFiv/N5fS4/TvF01
+	BEXbQxfMyXyyGppwhGYkLVGmyBREEIQhD6w8HQs7C3iRhcKOtwzuiZdZA3GzNrQF5qoY=
+X-Google-Smtp-Source: AGHT+IH2/awtgbdd9HS8F8qdKLvqQLxCU+tNuju4p23IFiYiJXPedSeAn1ufJcSLiXNam+ak1ZbEJg==
+X-Received: by 2002:a05:620a:4623:b0:7d3:9260:6dc7 with SMTP id af79cd13be357-7e356a24654mr2055990985a.6.1753140245593;
+        Mon, 21 Jul 2025 16:24:05 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4abb49a95c9sm48093881cf.27.2025.07.21.16.24.04
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-7e356c649cbsm480552585a.75.2025.07.21.16.24.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jul 2025 16:24:04 -0700 (PDT)
+        Mon, 21 Jul 2025 16:24:05 -0700 (PDT)
 From: Paul Moore <paul@paul-moore.com>
 To: linux-security-module@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
@@ -90,9 +89,9 @@ Cc: John Johansen <john.johansen@canonical.com>,
 	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
 	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
 	Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: [RFC PATCH v2 05/34] lsm: integrate report_lsm_order() code into caller
-Date: Mon, 21 Jul 2025 19:21:08 -0400
-Message-ID: <20250721232142.77224-41-paul@paul-moore.com>
+Subject: [RFC PATCH v2 06/34] lsm: integrate lsm_early_cred() and lsm_early_task() into caller
+Date: Mon, 21 Jul 2025 19:21:09 -0400
+Message-ID: <20250721232142.77224-42-paul@paul-moore.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250721232142.77224-36-paul@paul-moore.com>
 References: <20250721232142.77224-36-paul@paul-moore.com>
@@ -102,77 +101,72 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2003; i=paul@paul-moore.com; h=from:subject; bh=sJ3xHy7C70p8eD3qfM5ogSJFTU3Y5lkGyavDif9LnjE=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBofsubFQ02x5okQRnLfJFXEQBTRBCEH72Si1g+0 fLnIqLHo7KJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaH7LmwAKCRDqIPLalzeJ c9MID/4qbI6LBQ3r9eKYM4n1dbbBZ6t6cl22UVk/Mc5X7k8EJE1Asvptpk859IaZjQ8tKIKK2J2 9MIPFX6RtOszP9ahTFS+fRFwksTjND4eg3TsBnh6AlBMGgTlKqqDZsOIPZ5y+JLmSiC9x9riUmE QgSQIxrhwHDVI0YXMHriKAoyAaq3Wc9Pw5wDi7zQZFQRAVCXd+VG9PHF0/14lg4bgA5HxqUPSD5 ANjscsCuUjvXqUF3qcLifLDAbcjbEunLgIkmkjqyBBbH96rZls6jDn2ZKINPU76Eix+NxklqQ5X ISEzI2VSvsPs+UYu44L8JUVw1Lf2f0kXf5Iy+P1/7/UsStmsOJrbrUojWWs7EXMT7On2xz1rHKW UAKdgF2BdZT06dGjuh6n666fc+G6pOwmAqewxAbQceKztR7ee0MmIpVC/DAlHlJbmPQqjKc+pRB PrXDN7zxRq85FOh1dwvyYY3nfmxIyNmJmaiTZ6X/lIevIPMe0z8nuDRi8EGp9U443KVtkbg3OnJ 8WBcUQKsREBTbbChr46E0Nw5rIq9lDq0jm29RbaCWd7HZcW36u6Z+qiPm4LP8GGowdhaFGHKwuL hhIoZSpZrgsIWQjRzZTEGdfQztGzAeHGq/wDBWLTOW7gyBYz8Hu9y0GBXsiTHPkwRc/IlNJbMVl +Sw27+ahg1cAB+w==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1881; i=paul@paul-moore.com; h=from:subject; bh=rdBPCXy4+zMMahAP+JfAAcpjXp+SK/yo0e3ExJHaW6Y=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBofsufmFIlee/a09i1WUsF6musLpbaGAIzsUhLh bf7XqM30TKJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaH7LnwAKCRDqIPLalzeJ c/LSEACInaP2nWSEqMsoqyI+RYT4mS1nDgi2/sUYsDAxrqW8kwPeDLig8a+c20/0YzPUnEo8BG+ 8y1jyITSKzE57ahgHD05zJbi8s1Vu72lyGxQ7FdDNL4hqYt5eHcJfiSrXh0SHIz6DBQRmv3lv9x r5dcu9OyggScOlbgLu4Ms+Ofk31sZFB5Of9GPWnpzQw89j6S/x1kjYwockWptx4lMlW+XUXQoPN EbskUvFG/UiuF6q4Hbhrtd/fjqn8AGQnuo0dXjrFkkSg+hq5+qOUcbo32zqR6jEeeLFWwt1UfCo 0qy3eaGjibr/LTSv+7s+UUT/az4ytlY/JgOQOj+pYnKbZatt3UyTkpokZw54dYN1E4F792RWSyW wSaB2PX+NAW4lKVUIJKNmEYX/tDhN+DchBU10olu/DBN/k+fQLE9W+PEEHmKJ44TTCXcGFjjjeH HjLEdZfTh587IQSEGlPsfelkkMD/or0EMAsxQqqrmXEhDoWFoS2I3K/5IvHovn2BOrcJT+m3wC3 qd/glUGSa8AOnkxPcV1JiDXmHBq4B78oUkRM00Ee/7B/8rqfvNGz27NkXyZi15J9A2W+yy0H0yX nrkPE7gf6LBV5GUEdSe7a/A4RBQA2BAEwV9ex1rOkeFqT1E3XLfH8Ni9pZ672ceJOz8SaigQ0v9 BYtGtcWcm7AE3nA==
 X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
 
-With only one caller of report_lsm_order(), insert the function's code
-directly into the caller and ger rid of report_lsm_order().
+With only one caller of lsm_early_cred() and lsm_early_task(), insert
+the functions' code directly into the caller and ger rid of the two
+functions.
 
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- security/lsm_init.c | 33 ++++++++++++---------------------
- 1 file changed, 12 insertions(+), 21 deletions(-)
+ security/lsm_init.c | 35 +++++------------------------------
+ 1 file changed, 5 insertions(+), 30 deletions(-)
 
 diff --git a/security/lsm_init.c b/security/lsm_init.c
-index a73c3769dfea..d20c6df55e7d 100644
+index d20c6df55e7d..7e736c20458a 100644
 --- a/security/lsm_init.c
 +++ b/security/lsm_init.c
-@@ -288,26 +288,6 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+@@ -288,34 +288,6 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
  	kfree(sep);
  }
  
--static void __init report_lsm_order(void)
+-/**
+- * lsm_early_cred - during initialization allocate a composite cred blob
+- * @cred: the cred that needs a blob
+- *
+- * Allocate the cred blob for all the modules
+- */
+-static void __init lsm_early_cred(struct cred *cred)
 -{
--	struct lsm_info **lsm, *early;
--	int first = 0;
+-	int rc = lsm_cred_alloc(cred, GFP_KERNEL);
 -
--	pr_info("initializing lsm=");
--
--	/* Report each enabled LSM name, comma separated. */
--	lsm_early_for_each_raw(early) {
--		if (is_enabled(early))
--			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
--	}
--	lsm_order_for_each(lsm) {
--		if (is_enabled(*lsm))
--			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
--	}
--
--	pr_cont("\n");
+-	if (rc)
+-		panic("%s: Early cred alloc failed.\n", __func__);
 -}
 -
- /**
-  * lsm_early_cred - during initialization allocate a composite cred blob
-  * @cred: the cred that needs a blob
-@@ -338,7 +318,9 @@ static void __init lsm_early_task(struct task_struct *task)
- 
+-/**
+- * lsm_early_task - during initialization allocate a composite task blob
+- * @task: the task that needs a blob
+- *
+- * Allocate the task blob for all the modules
+- */
+-static void __init lsm_early_task(struct task_struct *task)
+-{
+-	int rc = lsm_task_alloc(task);
+-
+-	if (rc)
+-		panic("%s: Early task alloc failed.\n", __func__);
+-}
+-
  static void __init ordered_lsm_init(void)
  {
-+	unsigned int first = 0;
- 	struct lsm_info **lsm;
-+	struct lsm_info *early;
+ 	unsigned int first = 0;
+@@ -376,8 +348,11 @@ static void __init ordered_lsm_init(void)
+ 						    blob_sizes.lbs_inode, 0,
+ 						    SLAB_PANIC, NULL);
  
- 	if (chosen_lsm_order) {
- 		if (chosen_major_lsm) {
-@@ -354,7 +336,16 @@ static void __init ordered_lsm_init(void)
- 		lsm_prepare(*lsm);
+-	lsm_early_cred((struct cred *) current->cred);
+-	lsm_early_task(current);
++	if (lsm_cred_alloc((struct cred *)current->cred, GFP_KERNEL))
++		panic("%s: early cred alloc failed.\n", __func__);
++	if (lsm_task_alloc(current))
++		panic("%s: early task alloc failed.\n", __func__);
++
+ 	lsm_order_for_each(lsm) {
+ 		initialize_lsm(*lsm);
  	}
- 
--	report_lsm_order();
-+	pr_info("initializing lsm=");
-+	lsm_early_for_each_raw(early) {
-+		if (is_enabled(early))
-+			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
-+	}
-+	lsm_order_for_each(lsm) {
-+		if (is_enabled(*lsm))
-+			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
-+	}
-+	pr_cont("\n");
- 
- 	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
- 	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
 -- 
 2.50.1
 
