@@ -1,197 +1,135 @@
-Return-Path: <linux-integrity+bounces-6733-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6734-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32F40B1223A
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jul 2025 18:43:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D5E1B1224F
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jul 2025 18:51:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DA697BE3FE
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jul 2025 16:41:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 456951668AF
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jul 2025 16:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4161B2EF282;
-	Fri, 25 Jul 2025 16:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C0224468B;
+	Fri, 25 Jul 2025 16:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="L4jAhkKB"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Z2Z6akvx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A5632EF28E
-	for <linux-integrity@vger.kernel.org>; Fri, 25 Jul 2025 16:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 454EA2459FE
+	for <linux-integrity@vger.kernel.org>; Fri, 25 Jul 2025 16:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753461782; cv=none; b=hSdfKqX6/eSHuRN/gja6ns7o+T13k4SR1wcqsWN7OjgnS9zVtpJ850X4VYbbkdgu+XMfIQd8ntxqT/Nni5l+QQtqcSNE8DHNf1VbjD7twYHEFF6C4AIVOuPO7Zh3sIVVnXaTTsblx9zhhyPLvemw+peh61FWczXbBGYeSq1iGRw=
+	t=1753462275; cv=none; b=uGvukfgCMR2nnLTrGsGgVo0bDmLhD7hLWgMXmqLy7u/92S40G70wjnoImiEwoy7iHqWW2KQQefpLZqhx6WYU26Ve+1yVBr6uYbnD2MzDyYdh1TRSNTeuUUInzXn3fPuOcMrUO1yx5jTV057KCtyu23o7goElf5kvzN/nJ5TdhAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753461782; c=relaxed/simple;
-	bh=hhtlTKXXECi8yi5iXycyKR9shLCwOKiYr5xEdB0jQpY=;
+	s=arc-20240116; t=1753462275; c=relaxed/simple;
+	bh=sUq90Sh6cl0YhbPvlnrOqL37+dCf0oAyETbneVq/h1s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=INIeqBVE+IhWwmtFKGsa275omzKxNGurV97gq6u25jkOPPHQlX96utpHooPlvWVLEpDhJunY2nwZaLWwMaWeD6l9RVJD3QaC8gIGfmwAX8Gv/tjv4jgn7AaGSVe8hl6MUOaxQ3BsMxtaKrMT119ZJgbxSLFG+FTb+Uk2XLy/Qdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=L4jAhkKB; arc=none smtp.client-ip=209.85.219.176
+	 To:Cc:Content-Type; b=lqL6NoLwmMsG3Jqss/ZDacwXvYdsYrlso9RKLnNp43849/A3qSh+RzbPxVry+ryrfHbZG6YFMEkmnO0PCpmYUDZs/68rYxVpqWuo/Py8e77+0JKMJndaoggRQIXEJc+pTgDvR3/BOJ5lqdve8ytxAdk53WxupvTeGDSWDLx3xH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Z2Z6akvx; arc=none smtp.client-ip=209.85.219.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e8d2c331bb5so2634792276.1
-        for <linux-integrity@vger.kernel.org>; Fri, 25 Jul 2025 09:42:59 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e75668006b9so2272623276.3
+        for <linux-integrity@vger.kernel.org>; Fri, 25 Jul 2025 09:51:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1753461778; x=1754066578; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1753462272; x=1754067072; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lJzRqhe+x1DhI6Hy5VLKk5oBTrst/YcQYkVXjLnnM6c=;
-        b=L4jAhkKBoJMuMXC9u1RsjBdJG7LPDmsUParFxp7tg2e951gGEBiypKbYWYA3C+5ERg
-         3d0hupBGQTEfzoxQnTTqo7vq9dYZyYPQjt9c7rLMb6w/Gt10+jaKamR0bDeG/VVeXQI7
-         T18xrTnnIZT0k7/GTymY6bimvCfa6/ccFYt+x5C+qO2O62TmnKWMB7o8R2BzHG8olMeE
-         bPU1JZCla6S0UBqTKR3ghgpJlzvh851wBNIMmEf/GnnwAXZ7p/K+GvN3F+SNLh9MXgdh
-         vYfHO+s7L/rskIXo+s7gdnhN62PNcNnu09CIsliUHngJGcs+/aBOD53iNySU/Tui1U75
-         D86g==
+        bh=E+TS3X9vskWtrzO1Cy8NLFMGD99SvsurX0COyWC4lWI=;
+        b=Z2Z6akvxCs7zsjjGqlwApNHOOVFDG3Z/Wk/9THwVETAk65VYon/mc8Ymll+1shwiO1
+         AgQ9Ik4kt3E90I/31RVw9RybXw1ZzQqH6V3Xvpb960WloAfoE12sc8UERkQ7xN734qyS
+         k1fNV6Q/jgS8qb3ZjGTbmzWDZoigdeKUI3C3s+OPsvDd3xCEUqVuGHP2Ywva+pv5vsjf
+         DTE5b0fexS5iOSkmL/uCW/mHrlKZuD0fdCI0dF5OPIgvw7Ibjiw/LJSPIwzSUO7lThfk
+         NWqtu4nkyc8vChpn+PIkMRb6T12bgyWJNK40Jn3kTv+MAgBvgB/PJHS/9oQpuG/W7sed
+         14QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753461778; x=1754066578;
+        d=1e100.net; s=20230601; t=1753462272; x=1754067072;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lJzRqhe+x1DhI6Hy5VLKk5oBTrst/YcQYkVXjLnnM6c=;
-        b=s6hDju+lKA+C0ffeekVCPPhjkuCMU4X/vBeXz1v3um0iktXUgZa7rujYlN5lEy+7hj
-         K9dDOBkkblgU0imhDbuS4LK1PKTYWGlcDqq6mG9D6WvQeSL2tkwvlIQHSg+jSBgRIu0v
-         DrH01HGmtGMutNMUYgmkAM3WKQKycywbHA5UXPgVgIySN6Q/Pr6wMCSooM3kYGnrPDTL
-         WMlXJmrk+/viJcGjXC6GPDRmb3kBRVBDTLJb2p1GdajfqkW5gfJ5z8Cm22leedfsLMgl
-         6o494U7VZdxrCnciaDvLvRiJoc+EzIABhzdjICljgEQEunfIOdC2o8672pQPFEumicO6
-         Ggkw==
-X-Forwarded-Encrypted: i=1; AJvYcCXliA9lvdTWSKt4BqzjbvdzjoOwDZwmEXmaQCq1MOVRG/AXxn7TTttGTW6efqciOmbGYAoMhnCTmXWuTe5DRBk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGYtXBavc5TLK4YWn1J56VrnWZ4sUdoYgF/klmsy/zy6qTNQCk
-	BclpxrfrURiWG0kOWYs/w63pil6l8KZ6w7dnbFt62R5zyXclZDQ5S3fN8ytljGqLHbItLHaD5sM
-	TkYX5/+EnbVyRxzxpVZ+27RJX8iiw2Eg2/8nw9x3T
-X-Gm-Gg: ASbGncua2hQEuYBKleFLLJOMuiTkSpDrlO4MPXBBGpbm9VkwIB536EyMmpPyvJ449XS
-	z2pCB79rN3ehCeZG4eYJ+HLXOQ+GXEFXlyBZzf/d3Pa4X3GWlvjkwb8V+ibcrWae6ZKTGnzgesd
-	tXcnOlufvgxilsPk2qCNmSAUT1G0un67iZUbuNhCG2Aic9j9BLD11mEIqx//rQnlNNl6AiopshB
-	gYMOH6/2oKjuIb7sA==
-X-Google-Smtp-Source: AGHT+IF1faD5g6+XnhuNEv7CBYvFQPNcZ+LK70Kcbf62OUhg6COOmvkNfui8ej3LxKAZeu2xE91uB+0DguYnF971Bic=
-X-Received: by 2002:a05:6902:18d4:b0:e8d:7904:f065 with SMTP id
- 3f1490d57ef6-e8defb397acmr2712573276.15.1753461778426; Fri, 25 Jul 2025
- 09:42:58 -0700 (PDT)
+        bh=E+TS3X9vskWtrzO1Cy8NLFMGD99SvsurX0COyWC4lWI=;
+        b=DD2U5lgKqjEYo07e1DoOjnKEiGhP1fUVTyX8dOF/uVN8MVnKH/zKVNlxR/ZakdA3Eo
+         92Wlp/ki68eA8r2mi5uCf4j+vQ5GC2jaEM/Vxlv7EccPmVj01vouo6GKymegzSIh+667
+         x/QNvwAHPyvzJbz77bE4rENZlaWn0oDaknWNrJ/+h2nA50UrRxnuUruVPujeBtIOtTbx
+         HBb4DqFt1uZnD57hMznMnAxyXGMRH3OuGED9UIvAt8ZdJA+qzSXhfq4BV9/RUillwG4o
+         Pah8MzeDZZeCLfYaHov4SqH+S/NOYBzcMAD4IRcI/XnHCfFZB74wA+O13fwI7fM3+Fa+
+         5wNw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6gtB0SNtcOD9R9vDLHzAzA29HkaC8tLzlFHY2CWnz0Yz9U11J10PSLWfEF8CapNi6r6pMbM/3c2+9WdeKhoM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyE2nqmIGA0iL6FLKk5BTmDxcE+IL8EhhUvwSy0dzMllvAGaI3p
+	VuicEzeNeYh1CcLUp8MFXzwSIaIQH9x8QDsh1AeUmIlSA2tDKn9k8o/BNtiWp4/IjK9TX6FzHL4
+	1O1uOgCbhGE3cbaxUX50OiRqwlEsdWYys4WGKUlNd
+X-Gm-Gg: ASbGncuwtFd57xJS8c/jkB8qjQotfDKftSk24HFrsKF8z9xWC4NOugCT3Tah1Y+F3zb
+	LDVHmw29l9TS/vB3mgIjf9uHg1I6A6pZlj4DPnAzJTbl9le7wYNlVvShK3HVyANZPnbfEczg0W4
+	gQkCaNqoRp1GVa1qZtBO+abffz9lwMMFN8Q6S0dlskmRC73EKLyHk0h4uP+GltPFpjEvRuoK40q
+	obySFw=
+X-Google-Smtp-Source: AGHT+IHIMUcpn26HcyO0g3+tumAw+yRrAoF1TB10X+w5SEyTELp5aINmD8gCkp03hjGDmEB3Xc56OmNEC7+ABlOi7z8=
+X-Received: by 2002:a05:6902:c0f:b0:e8b:d37b:86fa with SMTP id
+ 3f1490d57ef6-e8df121068emr2599450276.37.1753462272003; Fri, 25 Jul 2025
+ 09:51:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250721232142.77224-36-paul@paul-moore.com> <20250721232142.77224-47-paul@paul-moore.com>
- <6e5422c4-0458-4a15-8833-462e318f283d@schaufler-ca.com> <CAHC9VhThNtGCA-jmjRagJfzPJaTh9myqFcwqA4J5Zv3ojEFDfQ@mail.gmail.com>
- <6621fbb0-fb66-4aa0-b77b-1cd0db195660@schaufler-ca.com>
-In-Reply-To: <6621fbb0-fb66-4aa0-b77b-1cd0db195660@schaufler-ca.com>
+References: <20250721232142.77224-36-paul@paul-moore.com> <20250721232142.77224-66-paul@paul-moore.com>
+ <3101077d-a5e2-d08b-03c2-2ed064a35b54@huaweicloud.com>
+In-Reply-To: <3101077d-a5e2-d08b-03c2-2ed064a35b54@huaweicloud.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 25 Jul 2025 12:42:47 -0400
-X-Gm-Features: Ac12FXzZH4VsZDsAGPbKQw8Kv6dIfR7tsNmxsQ9bEltpRC2GFe7Nt38l4hGhaAY
-Message-ID: <CAHC9VhSdLO-TdMp+oZjxb-jzuqoQX0sD-84G+SoqNwn2i3VZaA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 11/34] lsm: get rid of the lsm_names list and do
- some cleanup
-To: Casey Schaufler <casey@schaufler-ca.com>
+Date: Fri, 25 Jul 2025 12:51:00 -0400
+X-Gm-Features: Ac12FXyb2UHoFwiiWMxd4QzB2ubVseAs_bHPNy40Qx4LAoNpddjuNEjTQFYhh_o
+Message-ID: <CAHC9VhR_24Zv7u0Btz8pSk420Totnx2uRyVdoHU1tXevWKw5mA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 30/34] lockdown: move initcalls to the LSM framework
+To: Xiu Jianfeng <xiujianfeng@huaweicloud.com>
 Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
 	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
 	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
 	Fan Wu <wufan@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
 	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
 	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
 	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 25, 2025 at 10:27=E2=80=AFAM Casey Schaufler <casey@schaufler-c=
-a.com> wrote:
-> On 7/24/2025 7:28 PM, Paul Moore wrote:
-> > On Thu, Jul 24, 2025 at 11:39=E2=80=AFAM Casey Schaufler <casey@schaufl=
-er-ca.com> wrote:
-> >> On 7/21/2025 4:21 PM, Paul Moore wrote:
-> >>> The LSM currently has a lot of code to maintain a list of the current=
-ly
-> >>> active LSMs in a human readable string, with the only user being the
-> >>> "/sys/kernel/security/lsm" code.  Let's drop all of that code and
-> >>> generate the string on first use and then cache it for subsequent use=
-.
-> >>>
-> >>> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> >>> ---
-> >>>  include/linux/lsm_hooks.h |  1 -
-> >>>  security/inode.c          | 59 +++++++++++++++++++++++++++++++++++++=
---
-> >>>  security/lsm_init.c       | 49 --------------------------------
-> >>>  3 files changed, 57 insertions(+), 52 deletions(-)
-> > ..
-> >
-> >>> +/* NOTE: we never free the string below once it is set. */
-> >>> +static DEFINE_SPINLOCK(lsm_read_lock);
-> >>> +static char *lsm_read_str =3D NULL;
-> >>> +static ssize_t lsm_read_len =3D 0;
-> >>> +
-> >>>  static ssize_t lsm_read(struct file *filp, char __user *buf, size_t =
-count,
-> >>>                       loff_t *ppos)
-> >>>  {
-> >>> -     return simple_read_from_buffer(buf, count, ppos, lsm_names,
-> >>> -             strlen(lsm_names));
-> >>> +     int i;
-> >>> +     char *str;
-> >>> +     ssize_t len;
-> >>> +
-> >>> +restart:
-> >>> +
-> >>> +     rcu_read_lock();
-> >>> +     if (!lsm_read_str) {
-> >>> +             /* we need to generate the string and try again */
-> >>> +             rcu_read_unlock();
-> >>> +             goto generate_string;
-> >>> +     }
-> >>> +     len =3D simple_read_from_buffer(buf, count, ppos,
-> >>> +                                   rcu_dereference(lsm_read_str),
-> >>> +                                   lsm_read_len);
-> >>> +     rcu_read_unlock();
-> >>> +     return len;
-> >>> +
-> >>> +generate_string:
-> >>> +
-> >>> +     for (i =3D 0; i < lsm_active_cnt; i++)
-> >>> +             /* the '+ 1' accounts for either a comma or a NUL */
-> >>> +             len +=3D strlen(lsm_idlist[i]->name) + 1;
-> >>> +
-> >>> +     str =3D kmalloc(len, GFP_KERNEL);
-> >>> +     if (!str)
-> >>> +             return -ENOMEM;
-> >>> +     str[0] =3D '\0';
-> >>> +
-> >>> +     for (i =3D 0; i < lsm_active_cnt; i++) {
-> >>> +             if (i > 0)
-> >>> +                     strcat(str, ",");
-> >>> +             strcat(str, lsm_idlist[i]->name);
-> >>> +     }
-> >>> +
-> >>> +     spin_lock(&lsm_read_lock);
-> >>> +     if (lsm_read_str) {
-> >>> +             /* we raced and lost */
-> >>> +             spin_unlock(&lsm_read_lock);
-> >>> +             kfree(str);
-> >>> +             goto restart;
-> >>> +     }
-> >>> +     lsm_read_str =3D str;
-> >>> +     lsm_read_len =3D len;
-> >> You're going to get a nul byte at the end of the string because
-> >> you accounted for the ',' above, but there isn't one at the end
-> >> of the string.
-> > I'm not sure I understand your concern here, can you phrase it differen=
-tly?
+On Fri, Jul 25, 2025 at 4:12=E2=80=AFAM Xiu Jianfeng
+<xiujianfeng@huaweicloud.com> wrote:
+> On 2025/7/22 7:21, Paul Moore wrote:
+> > Reviewed-by: Kees Cook <kees@kernel.org>
+> > Signed-off-by: Paul Moore <paul@paul-moore.com>
 >
-> "lockdown,capability,...,evm\0" You get the '\0' because you always expec=
-t
-> a trailing ','. On the last element there is no ',' but the length is add=
-ed
-> as if there is.
->
-> +       lsm_read_len =3D len - 1;
->
-> will fix the problem.
+> Reviewed-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-Ah, yes, gotcha.  Thanks for catching this, the fix will be in the
-next revision.
+Thank you for reviewing this patch.  As you are a Lockdown maintainer,
+can I change your reviewed-by into an acked-by tag?
+
+> > ---
+> >  security/lockdown/lockdown.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.=
+c
+> > index 4813f168ff93..8d46886d2cca 100644
+> > --- a/security/lockdown/lockdown.c
+> > +++ b/security/lockdown/lockdown.c
+> > @@ -161,8 +161,6 @@ static int __init lockdown_secfs_init(void)
+> >       return PTR_ERR_OR_ZERO(dentry);
+> >  }
+> >
+> > -core_initcall(lockdown_secfs_init);
+> > -
+> >  #ifdef CONFIG_SECURITY_LOCKDOWN_LSM_EARLY
+> >  DEFINE_EARLY_LSM(lockdown) =3D {
+> >  #else
+> > @@ -170,4 +168,5 @@ DEFINE_LSM(lockdown) =3D {
+> >  #endif
+> >       .id =3D &lockdown_lsmid,
+> >       .init =3D lockdown_lsm_init,
+> > +     .initcall_core =3D lockdown_secfs_init,
+> >  };
 
 --=20
 paul-moore.com
