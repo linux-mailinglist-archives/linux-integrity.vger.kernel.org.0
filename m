@@ -1,143 +1,132 @@
-Return-Path: <linux-integrity+bounces-6723-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6729-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA86FB114CC
-	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jul 2025 01:40:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3659B11535
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jul 2025 02:26:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E6D31CE6699
-	for <lists+linux-integrity@lfdr.de>; Thu, 24 Jul 2025 23:40:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA65E581052
+	for <lists+linux-integrity@lfdr.de>; Fri, 25 Jul 2025 00:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C777A246BA4;
-	Thu, 24 Jul 2025 23:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955D3341AA;
+	Fri, 25 Jul 2025 00:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="dkKmAMd3"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="QL95pT9n"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sonic310-31.consmr.mail.ne1.yahoo.com (sonic310-31.consmr.mail.ne1.yahoo.com [66.163.186.212])
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380E124677E
-	for <linux-integrity@vger.kernel.org>; Thu, 24 Jul 2025 23:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.212
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F064E4502F
+	for <linux-integrity@vger.kernel.org>; Fri, 25 Jul 2025 00:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753400291; cv=none; b=hv6yrv54Q2Ynb1GY12iqw9JHNAYXn6WosBuW+mPijrxHJdB5QCyGRAXdzXeZ5mRQBWWq5lm4tqMXO81+egymURIBjqeOGWDR/rx0REix6ceHrBqmXoFbuGHdQcmNKVD88nfRE9ZXkEDl343nXBkZWogt70LgM8sqTh5dHBIOPGo=
+	t=1753403183; cv=none; b=Imv3KD+tVvHSVpCpDjomXR3VFUbWEyqfcDYMdbE2iMMRid0eztsdTgIYO+UpiWBDyDmn7JX1I7Khx2ChXZeHXX9+cHbZGYyPxriz9/vAhqxU+4Ej+pKWRLTQ30bqmFRP2ONBOY56kXYxXgb5DXGu5JuPIQJe7H5fBInD5K1jGgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753400291; c=relaxed/simple;
-	bh=XHYHudj1zGIHsgf8QKwaE+KHtRAovlH9b4mhcpUL+bs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cOZ8ZATL2NYRbF+RPVIWBqOY36ZqF98oIS1cT0gjBG0KNXd/ZyDd5ZabcRA45xFbTEpb30KN2JAu5jqZHmEwyngNtepf2/q/uWREYZ8fgokJ01kxkKNSN5txLGDROhhwTZFN2tEBzMsiDWdQwYgEG0clKR6LRhU4s4OvoWoMdiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=dkKmAMd3; arc=none smtp.client-ip=66.163.186.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1753400289; bh=uZgpN1Km88LdCIqp+CIBcJROA9HsWTJ5tGp4QJ800AA=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=dkKmAMd3cRuvcQbNVZtHFs/fNs+wf6JEiiy8ZH14ZiDEhQbfF6suNliXQWtTTBcpbD2M20Q2fa2/XusKOI1liNwnI2HjHWLd4IAMR4gu88+6jdsVGN4DsSCza4vunRG5xaCns5d8je6uz23pCBcZb9dtwvgGP1dhzUsIPJ4GDoPny52C9Y3yKQwlyRBVKs4pAG3X9Pf4rBLJBe1FJ0gSXHO504CkjHCLuVjJchSz+aoPOsOyuPtpMCJU9getVOOjmAm6E029MNCzmpFdVdV7iruOA1Irg8nCiGirPWNvtRoHJcoyvoegz5Hq005FwqSud/u8zh0XdpmS664+lFDmpw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1753400289; bh=yHpH1OBhYjkZ+HRVd17d9g9VlBxg0xcEvvzOnbJ4U7+=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WEuckNEPd+8/j0pN6o8w0BAdh637pr6NLGr+1XJNrJenLMpK5Ak7c+B+6KkMRdUQYfhQRyHLWSExq2bnaaH8LN0iRNSePBCsNZTtfUzYO013lQ2dxGEf82ZYF7xmnh94AU1RI5sioIg559kCs93ryRTOwZp47EVmi5hNmWI5zF33vPRUsXyUKX1lPZ11QB7UY8i9/EUS71zy14PtBL3wqQPbaeDHYrMxspjSIAAJPGyZ+PmwEvhRfhwvZ18JGDhH9q2vsjQS3fcIUYUBsZBtV/DxkJwq0ylTw9gqKYFBRhSI24ZwBlv4C5q/LNBAIBqRq0rptmL7eLSCVR8JxUh3qQ==
-X-YMail-OSG: nUl6nR0VM1mFh8JWPUoEiK79GVfACEJpxSjjjs5bOQcYdNGQi7M_zmQyLmtyufP
- A0ZEllH0y1yDLQ8n4Uq46GuEZblZ2e5GppS7OU04Jn7piQSsj0PIFYGJlPzWe7390ByowS6fMOyL
- LGRxjczARp74eLGn66767gGY_NzXdPnTnkzXmFDJq0bf6o2gtwGNGxv1QfsvTmgLQpZ_KwpKJ.Rv
- kEUIO59FTrglVcDuIRHvcO_1.EgWTxW_3Tx278l0PVGNSav7slZghT.XapiBRx5nHKiyQklNFK25
- okHzAaq7kesMlOSp5W.lUt3uZzQNoZb8VHruZGCuDbnIbPpFqfQr2ewp3y2j3GGw9U2BFK81twE9
- HWtOzs7AG6SwZAI1Fel0ELFbw9_QBhqs1hoCOA5ItF1UHmkuhOJ00PnmbritoIOwKfrjmgsgHPac
- aoWokViefgYpG6EWLO8yYc3NVvbc9JJN3yVBMzNa4sjK2I4MEBGF7ExytYtWRaQQvrl4Lkj4tdLD
- Z8_9USjGmz0djwDXQ13Gr7m8vO1EXyWOJFADCy42XE6KOfT9bOaTdASmh_wIY2.AJc3GPG5GKd8I
- XP3.de0_XutZUnHD_k07ETT5VA.a_EcGqRguKTChdpDwF3_HEL8Ww6q._aUTkAy.98C89NROFBDr
- mK0RNUQCHJg_wqD9GzWzPvnVt0QlaZnEAhridFztKyrYoDheUdRQJGEb4IcuRBDgO.HQ4T.q5.v7
- S9kEDSD.hzHk7vAyB_OTWZWLMLMFDXzR89j_35ACo0U4O7xbBjFIDAXZiE7YmUmpmBxbk9wtnNhO
- FjWljoRV0uIawanrSntyKh9VLAbah4G2ui.5SwpwaF6Wlh2MAd7MvgslNyOF1x94KZyzlrUwJkm2
- cRV.JYvXsHiD336JZg6gZUlw8qmiTgPGjiCA34PbInvi1q2pGHEVhjS4cfAyeypbU6ibOQzeC7Xu
- 850qeR9HOeiNksVSw68HTSNpUDrhia6TMHcOwQ1z4UrkPWsnW1F99QG0H5SvhIIGR7.9omwgCSGC
- vlVTEOFP_koyDRik_NDgf0cVJNcfP0QzJmH6asCRXdhbJN9KggxfThDaYJsJUH2phsirriaPwm4e
- BKB2Fq3C8aoc28ynGF0YH45iLioIvjRcO8_NLXvqAAqvoQm_YFNjOEex2fRjvolcTjvb3z7rZJdD
- DsZD_9FKGTh69gcO9YITjs3AWtdRLb8wRQmX6tsxPPGK4emI.G0diUlSK7ZKR2HnOwwBB81GgZAQ
- PNF217RB_lTFyCiV7VyXi5FaQ6srY4vBhEqptl2Fs.dUD6IVaImSppcCJVgKggKnrJJU8EvC7G.b
- CpoQYmPPhbUpwznhscqkHReUwxsmCH_xVKc7Jjpk5_aC3wsJQP.fkiLUlzwZyRHjY59WTPXEeV_T
- 1o4fII4Ux_BHFzfAeZBhvzOlHtJg4ekbOsjClpyxDR4wGr9cvQORoRqRO9549qa8lDeDvzlQukXN
- jDWvNThiggZ8cQAYGUj84A9oZOCzndglnLrQJFfjbwwZyKyEv4J6E6LwaFS3tSi1HgBc67dacdpW
- pmml7Ony9fr1zyer2k7oolFWVmRoAkT.9dpdqmvOA3zqNnqn6YEdzCS2Ssf5sVbF_9GoF.GodslH
- eCkruUhGw7dOLEEXsUpKFX1QcUsMk5tjauyZR62pUNqWtfzeZpxdNVXm8JAVcjJDHX3rvBRfgWb1
- pL0oFLL9Hg_F2XK6yFa0FNRJug708Y6SII5AfUh.MIFlYLC_12cpRu41UaQLIpUFlbMBYT06JFEN
- zblVPxK3anxFDzjNk5zhD8.IwwfYflKJ2N1PbVUUx9jXnOn1KIZi1KTGH9Nc8fo.uzu6pMfY4lI7
- lAvhzpS26pAAaoXJHaBwcYqF_yexqnXsWft.PbBLc2x6nmagKP.SKSJsYBYNPK21Ksrz_TrdTAdk
- NbzC6_sOxKnG.qT9WR97Gl2zsby_fGoIic.CZ0uA.04bENGRxgAQVoc_H5DQoHtJWkdMOcgYEfi5
- 0w8tCi6qyyy2HY7o4mgBc05O3ql.8zyS0wqbvo88qcLUwbj39zTm52zrFtYajkxVmZHtDg4R6hcp
- stYNhyB8wwaKg5E7LutGR47ATz2JXA3.nVAAVd_Y0dHMugQb_L3yXV0fY.7CXtAuINeAYgPc0EyU
- xzL932.F2Y1AH3bgP0Eq32uwz6P0Z6VLkJijcyzjAo.XPzko_CPZaSjACLQKQdmUyYE5GWhQA7GG
- 7pEX.wB4J25PuYYUSsgfGqPmuQunsECDdiosKZM0VFK5uK4VXp_1fjNSFQXs3HTwUN7Qm24HrBq5
- nk949YzVJx7YoTy.mjs.x0OBg88K8ae_O9HdC9nL4Aivciw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: bf546b7e-2dfc-46c1-aa85-601ade6a41ac
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Thu, 24 Jul 2025 23:38:09 +0000
-Received: by hermes--production-gq1-74d64bb7d7-lwch7 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 8ec1eeaa68ac2fad6105d502852c9335;
-          Thu, 24 Jul 2025 23:38:05 +0000 (UTC)
-Message-ID: <d701e258-7623-4afb-b5a5-5548613928e8@schaufler-ca.com>
-Date: Thu, 24 Jul 2025 16:38:03 -0700
+	s=arc-20240116; t=1753403183; c=relaxed/simple;
+	bh=l6KU0Ym47gpo/4+gkXeck9uuSdoJ+qGh859kPbrOGxo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Mzj8R1c3KuDFZx7tgZ5rSDqdTeqcnaypjR8MrdiK47lvkFR4Mw6XiyA9dg+1/plRLj1a9qwLJ2jLgTfmQK+3GT7G2KaCcUOXcoVmDA4q+5osoLNGanpWCYTx9ifdOqJldBES6Q08JktOPS+pzpKitsxoSDJU+FeAoyLlI1Tnfy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=QL95pT9n; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e8bd2eae9e0so1421059276.1
+        for <linux-integrity@vger.kernel.org>; Thu, 24 Jul 2025 17:26:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1753403179; x=1754007979; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uBJLs/PJJpZNnfbuzOicwNBmKO4/LfqUB+w9NcUKQoI=;
+        b=QL95pT9nNEUuLj5YIn8J968lin62mEs8NsAxep0uc80xD58yjg+QAEu0hyVdff3bTy
+         2V+TuRY/rDd8wCtME6VGwi++mN5YN8mdlqF2yhJwHsB9pej45Mksj1JdjPGFzQqwt+xp
+         GZFjNl6++t+OD/gKZdk8ZLSLMKKIDDMAMZ5ugpO6n3j/AXc9h1/1NyN7PLJMtaKWpezX
+         QyhWbS5TSEEDlidavpE0MMKwQfZ3ZKBJuosFgjAjePOUNSMM31MQvFRPDDjiN34kRRvB
+         Rmt5LJpNbDTTwOiyQaiUmWvwjiPWGTIUKjhiG8tXsEZeEy5/Hq7R0FAwQIyrYSdR1ljO
+         17cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753403179; x=1754007979;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uBJLs/PJJpZNnfbuzOicwNBmKO4/LfqUB+w9NcUKQoI=;
+        b=sunBCmME5PRQEcYuG4Duuej4wW1lFac5yHw3uEvswKZDgboxmmDvh4bc/BYcB3NqaG
+         n4jdQHZmE8g39JfAg4Dh0lT+8Ddwj2BjP5CNa+s848cD5YAGYuGVb66iQHdXva2Fqlej
+         TZYNAorV9+O3M8UUPYuSY9oWvFYnJuOIxEofInvjfSg/giXMh+uhKbIfATFIjDhGDXVh
+         ND50pDM/nayyDKVCcQJUJLlDG3aT/JdMYyiDl2fRbK2I0YVTgV8zNSpw6EpgjxMYKHOf
+         lyAnX7FGuS/CSolnBfVzxXcaQnJYBvjwLk1PkIraUBiECWorAkI54m8AKFGoXnDOn0CW
+         iRTA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgucjyjkSytB+X0qf3dQRwJnmeqjYN1Z4jbrTCSrDkEsNFveGgKRe7ZM26ArtdIGZxBRVUQm2UZaVSxiqPU1Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzewNqj5TZHW//QPGlhO+4pA+LawpX+BsR5g7+SS5uHyONxgvPE
+	0YAj9duasLTMndDJBuDX8ZPwGM3+rE0+7atsBiQV4nfKJdmftlYOwMbyo/ax9YnuDCCeAOAX9w/
+	iHUlrL4PgXKgJwaVdXBmgqn3kEfGfNKxXJaXWMhN/
+X-Gm-Gg: ASbGncvghdGqByaAwlNflDVMe3GYxJtPrs2+S+3RiiPjc4lDT0NYb0Ovl9lstKTpLqY
+	DVPJMEFcXmLdcikgUXpQdepor+hxMNqPmP9Dg56yYU1vzJQuH0F8QcbUjDdxx33tQD2/5O+xgwD
+	N5Sta3/1exreBcGqyDI9l01z8wy1+KMHEzMD7rz0YSjXklJleu0dGPbUMKXrql/ekO+D4Hi8PeJ
+	gqOjVY=
+X-Google-Smtp-Source: AGHT+IG4xX28wZoJE5JbFJ1OTlVa2IhSG6LUzyalZVXihO1W5jvkr82mHUzmVqX4OTGOr9Xttp4WAF0/MiDAQgFmyD0=
+X-Received: by 2002:a05:6902:13ca:b0:e8d:ed1b:3186 with SMTP id
+ 3f1490d57ef6-e8ded1b3c48mr1253952276.39.1753403178849; Thu, 24 Jul 2025
+ 17:26:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 34/34] lsm: add a LSM_STARTED_ALL notification
- event
-To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Cc: John Johansen <john.johansen@canonical.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Fan Wu <wufan@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
- Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20250721232142.77224-36-paul@paul-moore.com>
- <20250721232142.77224-70-paul@paul-moore.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20250721232142.77224-70-paul@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.24187 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+References: <20250721232142.77224-36-paul@paul-moore.com> <20250721232142.77224-46-paul@paul-moore.com>
+ <4ad43ad6-97b9-462f-af17-6d6db8ba3bf6@schaufler-ca.com>
+In-Reply-To: <4ad43ad6-97b9-462f-af17-6d6db8ba3bf6@schaufler-ca.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Thu, 24 Jul 2025 20:26:07 -0400
+X-Gm-Features: Ac12FXxzx9eoUQimi8ooqCkQhXmAgNy1LksHgxSM-xb0VeXwFZGGkkiSgXURJwg
+Message-ID: <CAHC9VhSV=e6aM1raofn-WWRJLS8aMYxi9kEsmL4BuTWLxXWLvQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 10/34] lsm: rework lsm_active_cnt and lsm_idlist[]
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Fan Wu <wufan@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/21/2025 4:21 PM, Paul Moore wrote:
-> Add a new LSM notifier event, LSM_STARTED_ALL, which is fired once at
-> boot when all of the LSMs have been started.
+On Thu, Jul 24, 2025 at 11:34=E2=80=AFAM Casey Schaufler <casey@schaufler-c=
+a.com> wrote:
+> On 7/21/2025 4:21 PM, Paul Moore wrote:
+> > Move the LSM active count and lsm_id list declarations out of a header
+> > that is visible across the kernel and into a header that is limited to
+> > the LSM framework.  This not only helps keep the include/linux headers
+> > smaller and cleaner, it helps prevent misuse of these variables.
+> >
+> > Signed-off-by: Paul Moore <paul@paul-moore.com>
+
+...
+
+> > diff --git a/security/lsm_init.c b/security/lsm_init.c
+> > index cbdfac31ede4..03d3e140e0b1 100644
+> > --- a/security/lsm_init.c
+> > +++ b/security/lsm_init.c
+> > @@ -22,8 +22,8 @@ static __initdata const char *lsm_order_cmdline;
+> >  static __initdata const char *lsm_order_legacy;
+> >
+> >  /* Ordered list of LSMs to initialize. */
+> > -static __initdata struct lsm_info *lsm_order[MAX_LSM_COUNT + 1];
+> >  static __initdata struct lsm_info *lsm_exclusive;
+> > +static __initdata struct lsm_info *lsm_order[MAX_LSM_COUNT + 1];
 >
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> I can't see there's a good reason for the reordering. I'm not
+> objecting to it, but it's curious.
 
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+I'm pretty sure this is one of those things that came about while I
+was upset with the state of this code and was going through it with a
+hatchet; a lot of code was ripped out and put back, so it's likely
+just an artifact of that.  I'll flip it back around.
 
-
-> ---
->  include/linux/security.h | 1 +
->  security/lsm_init.c      | 1 +
->  2 files changed, 2 insertions(+)
->
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index c57a9a7499ea..b9cace094f0f 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -85,6 +85,7 @@ struct timezone;
->  
->  enum lsm_event {
->  	LSM_POLICY_CHANGE,
-> +	LSM_STARTED_ALL,
->  };
->  
->  struct dm_verity_digest {
-> diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index f178a9a2f9d4..6812a13f64c9 100644
-> --- a/security/lsm_init.c
-> +++ b/security/lsm_init.c
-> @@ -550,6 +550,7 @@ static int __init security_initcall_late(void)
->  
->  	rc = lsm_initcall(late);
->  	lsm_pr_dbg("all enabled LSMs fully activated\n");
-> +	call_blocking_lsm_notifier(LSM_STARTED_ALL, NULL);
->  
->  	return rc;
->  }
+--=20
+paul-moore.com
 
