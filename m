@@ -1,79 +1,90 @@
-Return-Path: <linux-integrity+bounces-6750-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6751-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F554B17677
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Jul 2025 21:08:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4A47B17811
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Jul 2025 23:24:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8077A1C224D3
-	for <lists+linux-integrity@lfdr.de>; Thu, 31 Jul 2025 19:08:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A61D93A84EA
+	for <lists+linux-integrity@lfdr.de>; Thu, 31 Jul 2025 21:24:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98E792459F6;
-	Thu, 31 Jul 2025 19:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01BFC264615;
+	Thu, 31 Jul 2025 21:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rb76o1mt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SAogXx0q"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C292459D0;
-	Thu, 31 Jul 2025 19:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C355E2641E3;
+	Thu, 31 Jul 2025 21:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753988843; cv=none; b=aOMMkUB7N5JunwvoZ15je+GrcNdbmaut5AHO0feQv/zyBl96UjSW+2T5A1EzoMCzn/+DNrV2qdUd92z24iovHQZ8oCERzMdDcoMo2n5JdMnE2M/gGS7y7rGRR+8HUJcVLtzmQgYZy0yHITGjzQgSH4wlAjvKBrVvfZsm8hAiGg4=
+	t=1753997047; cv=none; b=WByW2zvqk07t/lrHky3b17uFXxDLMHDRT/VFN58dituK3Yo+Kw2UDb5FqOz1h5Yp9gsv85p6ZgZsVGczdV6DuVuizh5LkHu8elV2U9w0OL1+6ClP8rZS8Gn4XW6jZrV3zJdZFGxpd5IbzgkWX1h42RsMxPDIGugpVJEWYaI+Wao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753988843; c=relaxed/simple;
-	bh=X2Ksqqo+uOegE07rui5sIopMBb2BzNUaNOngKnaLpYQ=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FHncFp1r+GxnugsQciZ40jorldcOiPgw/zowrekp9I66l7P5JYNrsw1l+ZGJvn3JEjqiIxz29cuJVceNdfFmeooVoj2mZQM5Fj8OT7cXb99RynMakm3c//t7PhmnYaPzFw++CdqeOUjlX8/FVyeg049Wvc1DF5BNhTumQvNdXJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rb76o1mt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 519B8C4CEEF;
-	Thu, 31 Jul 2025 19:07:23 +0000 (UTC)
+	s=arc-20240116; t=1753997047; c=relaxed/simple;
+	bh=UL7oPBmm/2o9dRG3W1uktjE4qXZumpiZOugTd+UoTAQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=s1Q8Ka9hO4YUxWRO5gHZoJUYIPA5UmlQcETVUytwR0cA6UkAyx0Dg5qw1WrlwW1XNpGHpB/we2iXqkNlJp67nxQQmmgWaeD60gjcLekNU39xYA0frfjJ94IQu/G9bQfDRrgsAKSMjOq9fl/3NdZNZSDMAC7nYfy9DLWKXQLNlW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SAogXx0q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03CF4C4CEEF;
+	Thu, 31 Jul 2025 21:24:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753988843;
-	bh=X2Ksqqo+uOegE07rui5sIopMBb2BzNUaNOngKnaLpYQ=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=rb76o1mtfoq+2NM8S3MzJ9g1X2Pbpw3F9LDI0pus8ic2EnmfF4zSu01Jywyh5LS+c
-	 t6APCeqbexwDy3fh5hlDb9xaWf6IoqsCIuTzZWUwcCnGBByqY4ov2UX1x2XfFPsilH
-	 CXo2yATrPCEYmZQYLOeOcI/SQzTAmSD1OW5W8FAc2nTN+TCGOW9xDk8wgQsJazKI8E
-	 9BUE9I9b+Gcx+xLn3jDNGTHkn4frojOsoQZgP5QE4kn+aSEAKYc1InIIPBMehWuIjR
-	 ziFhQP0YfTbT3HLdt40/3xlOz/TXTalpZqZ9DD5o4sGbPqJFGB10VM2gUC+X8mNpcx
-	 SSdl26vo/BZRw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C09383BF51;
-	Thu, 31 Jul 2025 19:07:40 +0000 (UTC)
-Subject: Re: [GIT PULL] integrity: subsystem fixes for v6.17
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <807ead8fdb2761721a4d79b89efb385420a0d6f0.camel@linux.ibm.com>
-References: <807ead8fdb2761721a4d79b89efb385420a0d6f0.camel@linux.ibm.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <807ead8fdb2761721a4d79b89efb385420a0d6f0.camel@linux.ibm.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/ tags/integrity-v6.17
-X-PR-Tracked-Commit-Id: aa9bb1b32594cd67cafd29b330b158128b503882
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 02523d2d93b9c825dadc0f93cf77c1622cd64a86
-Message-Id: <175398885886.3259326.8836108501359435438.pr-tracker-bot@kernel.org>
-Date: Thu, 31 Jul 2025 19:07:38 +0000
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-integrity <linux-integrity@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>
+	s=k20201202; t=1753997047;
+	bh=UL7oPBmm/2o9dRG3W1uktjE4qXZumpiZOugTd+UoTAQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=SAogXx0quX+hQweAx8DxuQrAVA/V6971OG5LXkiv2R7epalX8E57If8GoLpPuyMdg
+	 dhMkQ+nLcC6zUfoDVMLnBdWvqNXG6WL12UzA3Cdczy0GpU1kooKv96mpGf63bNxIZL
+	 CVo+Iqj9r0LeTVUJWwdj70brdwLYhCC6n3B6a/j5bM3/v6N0OY2ScXeLrY04M+LRTq
+	 xUxOCjVn0HuSXd/Pii8IcrCroo3xxqfgm5pCz1s/DUvUQb/Rz13fpAg7rcHC9eDERI
+	 GQefiqGY1edTD9pI/Gx80fQlAHjjL255pLY61XE22SZSv/m9wOJ47RWD9Gxwv2+Wi3
+	 2pmICkpcCnmsg==
+From: Eric Biggers <ebiggers@kernel.org>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	keyrings@vger.kernel.org
+Cc: David Howells <dhowells@redhat.com>,
+	linux-integrity@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH 0/3] KEYS: trusted_tpm1: HMAC fix and cleanup
+Date: Thu, 31 Jul 2025 14:23:51 -0700
+Message-ID: <20250731212354.105044-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Thu, 31 Jul 2025 08:52:07 -0400:
+Patch 1 fixes the HMAC-SHA1 comparison in trusted_tpm1 to be
+constant-time.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/ tags/integrity-v6.17
+Patch 2 simplifies the SHA-1 and HMAC-SHA1 computation in trusted_tpm1
+by using library APIs instead of crypto_shash.  Note that this depends
+on the SHA-1 and HMAC-SHA1 library APIs that were merged for v6.17-rc1.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/02523d2d93b9c825dadc0f93cf77c1622cd64a86
+Patch 3 is a trusted_tpm1 cleanup that moves private functionality out
+of a public header.
 
-Thank you!
+Eric Biggers (3):
+  KEYS: trusted_tpm1: Compare HMAC values in constant time
+  KEYS: trusted_tpm1: Use SHA-1 library instead of crypto_shash
+  KEYS: trusted_tpm1: Move private functionality out of public header
 
+ include/keys/trusted_tpm.h                |  79 ------
+ security/keys/trusted-keys/Kconfig        |   5 +-
+ security/keys/trusted-keys/trusted_tpm1.c | 284 ++++++++--------------
+ 3 files changed, 100 insertions(+), 268 deletions(-)
+
+
+base-commit: d6084bb815c453de27af8071a23163a711586a6c
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.50.1
+
 
