@@ -1,45 +1,46 @@
-Return-Path: <linux-integrity+bounces-6769-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6770-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 049EDB188AE
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Aug 2025 23:26:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEBC5B188B0
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Aug 2025 23:26:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A7BA1C82110
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 Aug 2025 21:26:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B9D63ABBCF
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 Aug 2025 21:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1BE28D829;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F77C28DF2B;
 	Fri,  1 Aug 2025 21:26:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PMG8srM3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjc5EfQL"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117F814AD2B;
-	Fri,  1 Aug 2025 21:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738F328DB73;
+	Fri,  1 Aug 2025 21:26:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754083579; cv=none; b=p6K93vLVvThZiMzjKWJywg5HVKlcoqhYimc2OusXXzxHN9MDOFXg3fo9izv/De45bD8z5UgLTeCDqoRE5z6SsAHYIaCZcZU8TFZ/mVVWjaygm/1EQj7wOFis5M30fRg+e/kq9SEScZnpvk3QCth+B3YbKtoWFlBegh/fYNYgbu4=
+	t=1754083579; cv=none; b=Fv41IdACoMQRcneN8x93hgc1Aa0gYR/SzIAUU5UfiARapfZbtiCTyIrm8uwEH4h3mhSbIyjbDRZzAXnk4ZoxUL5gIrtV3hCXw/gCwGeR7cgb/vJnVsENkLvP5vtBVzYFKgt0IDVIkdQAlPKD5jwUrhe75caX7O/67zp23U7c2fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754083579; c=relaxed/simple;
-	bh=f4b9XfkA3nNYriclhoabu7l9n3q5dohUeAnWJVMju7Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bs9TcNABMJnkMC/7+hO/RKTAyjNV/EdKaSMnfruFS81MFTB4wGIlUuJqORHUswDhtYMrc48xKzP0cpT7yUWpxc4gBtmn4QCXuK4oWUcCs2NpsfNBUbjtme9QoS3DrJGDqn2rEC4H3xOqib8uxwqRXNwAVB5P3Vm0AtjCBzP7zAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PMG8srM3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D238C4CEE7;
+	bh=HZz9PkWbnw0uEcgraqNFNb8Xwl9CJAZ11ClEKIyhBfA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TD/pg1WuWYFnLM/JBBUfFX71Va9V3wK2ggHdIizZcXHHXTvaQ5xe99AigkW9hmOaDtzyqD4UA8xzhdw7JlkNhFIYAeJmucI3QBGEA2RxpcEz3fHypZpUD5GMez66zvfajaus+iNQTYR+4upSfHefrei4GlDAn09B0fsakMN49lE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjc5EfQL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B669FC4CEF9;
 	Fri,  1 Aug 2025 21:26:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754083578;
-	bh=f4b9XfkA3nNYriclhoabu7l9n3q5dohUeAnWJVMju7Y=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PMG8srM364lN4emJ3qvQpxqV+4ACvg5A7le4FrKzBNOaJt8fiQo1JA6rbBGVC3xj2
-	 Ys3M83cQ8llW0FSW4EtdvUvUJD8F7bIr9FB4NeELwNl+7zHfIQ38wjqnRfEgWJOdQr
-	 Di9OzrOJJ5SS6evzfiTyuDPPwnogO48oEwoBQPhag0Ms3U+NXlUiq/6OHaBVvq3pR4
-	 5Fkn2K1cWtQTmpw8+HEeXZIbLIYwtUeCRSNrlcVBFqPWHKIjDCGLyM/wdDirDaSeIu
-	 Tj7xtAvTySiUe+kPrEkBHIM6NG789CDLCjX46dnb7uGlJ+rlpAtvr29pX5HzCymtvt
-	 5HuMiACNvlC6Q==
+	s=k20201202; t=1754083579;
+	bh=HZz9PkWbnw0uEcgraqNFNb8Xwl9CJAZ11ClEKIyhBfA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gjc5EfQLF0Lavcpd6bo993onkSQIShmF9OxdhcwMeqioCFxuTRm6y+pbF0bsUG5Wp
+	 T+0ud3y4ui4iGXbVv1xuE4T6bUJ+G/XGScyMp886tqvEVHPa4FUvgwfhXga75cajkv
+	 ektCer2lWM+hW6rDYiPNWc8Ykb1sT/hbPbUxw5WmtGZMGfAhAcgxOUfdIdRxSVaUqf
+	 SPYg9w8beB39av38Hwxcvb/HEZGCpqd39miKSg210BcnYvXzfe13LhJK3TPWsEz5us
+	 XiCNVHtCeFxRHkJ8wptJQWCHv541Khr4YKgD8DlJ2gaKs//7fKYWd9UriyZrel9LOW
+	 a4uih01XtwRzg==
 From: Eric Biggers <ebiggers@kernel.org>
 To: Peter Huewe <peterhuewe@gmx.de>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
@@ -49,10 +50,12 @@ Cc: Jason Gunthorpe <jgg@ziepe.ca>,
 	linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v2 0/2] tpm: Clean up HMAC validation and computation
-Date: Fri,  1 Aug 2025 14:24:20 -0700
-Message-ID: <20250801212422.9590-1-ebiggers@kernel.org>
+Subject: [PATCH v2 1/2] tpm: Compare HMAC values in constant time
+Date: Fri,  1 Aug 2025 14:24:21 -0700
+Message-ID: <20250801212422.9590-2-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250801212422.9590-1-ebiggers@kernel.org>
+References: <20250801212422.9590-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -61,26 +64,75 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Patch 1 updates the tpm driver to compare HMAC values in constant time.
+In tpm_buf_check_hmac_response(), compare the HMAC values in constant
+time using crypto_memneq() instead of in variable time using memcmp().
 
-Patch 2 simplifies the HMAC computation in the tpm driver by using the
-library API instead of an open-coded HMAC implementation.  Note that
-this depends on the HMAC library API that was merged for v6.17-rc1.
+This is worthwhile to follow best practices and to be consistent with
+MAC comparisons elsewhere in the kernel.  However, in this driver the
+side channel seems to have been benign: the HMAC input data is
+guaranteed to always be unique, which makes the usual MAC forgery via
+timing side channel not possible.  Specifically, the HMAC input data in
+tpm_buf_check_hmac_response() includes the "our_nonce" field, which was
+generated by the kernel earlier, remains under the control of the
+kernel, and is unique for each call to tpm_buf_check_hmac_response().
 
-Changed in v2:
-  - Updated commit message of patch 1 to no longer characterize it as a
-    fix.  Explained why the side channel seems to have been benign.
+Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+---
+ drivers/char/tpm/Kconfig         | 1 +
+ drivers/char/tpm/tpm2-sessions.c | 6 +++---
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Eric Biggers (2):
-  tpm: Compare HMAC values in constant time
-  tpm: Use HMAC-SHA256 library instead of open-coded HMAC
-
- drivers/char/tpm/Kconfig         |   1 +
- drivers/char/tpm/tpm2-sessions.c | 104 +++++++++----------------------
- 2 files changed, 31 insertions(+), 74 deletions(-)
-
-
-base-commit: d6084bb815c453de27af8071a23163a711586a6c
+diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+index dddd702b2454a..f9d8a4e966867 100644
+--- a/drivers/char/tpm/Kconfig
++++ b/drivers/char/tpm/Kconfig
+@@ -31,10 +31,11 @@ config TCG_TPM2_HMAC
+ 	bool "Use HMAC and encrypted transactions on the TPM bus"
+ 	default X86_64
+ 	select CRYPTO_ECDH
+ 	select CRYPTO_LIB_AESCFB
+ 	select CRYPTO_LIB_SHA256
++	select CRYPTO_LIB_UTILS
+ 	help
+ 	  Setting this causes us to deploy a scheme which uses request
+ 	  and response HMACs in addition to encryption for
+ 	  communicating with the TPM to prevent or detect bus snooping
+ 	  and interposer attacks (see tpm-security.rst).  Saying Y
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index bdb119453dfbe..5fbd62ee50903 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -69,10 +69,11 @@
+ #include <linux/unaligned.h>
+ #include <crypto/kpp.h>
+ #include <crypto/ecdh.h>
+ #include <crypto/hash.h>
+ #include <crypto/hmac.h>
++#include <crypto/utils.h>
+ 
+ /* maximum number of names the TPM must remember for authorization */
+ #define AUTH_MAX_NAMES	3
+ 
+ #define AES_KEY_BYTES	AES_KEYSIZE_128
+@@ -827,16 +828,15 @@ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
+ 	sha256_update(&sctx, auth->our_nonce, sizeof(auth->our_nonce));
+ 	sha256_update(&sctx, &auth->attrs, 1);
+ 	/* we're done with the rphash, so put our idea of the hmac there */
+ 	tpm2_hmac_final(&sctx, auth->session_key, sizeof(auth->session_key)
+ 			+ auth->passphrase_len, rphash);
+-	if (memcmp(rphash, &buf->data[offset_s], SHA256_DIGEST_SIZE) == 0) {
+-		rc = 0;
+-	} else {
++	if (crypto_memneq(rphash, &buf->data[offset_s], SHA256_DIGEST_SIZE)) {
+ 		dev_err(&chip->dev, "TPM: HMAC check failed\n");
+ 		goto out;
+ 	}
++	rc = 0;
+ 
+ 	/* now do response decryption */
+ 	if (auth->attrs & TPM2_SA_ENCRYPT) {
+ 		/* need key and IV */
+ 		tpm2_KDFa(auth->session_key, SHA256_DIGEST_SIZE
 -- 
 2.50.1
 
