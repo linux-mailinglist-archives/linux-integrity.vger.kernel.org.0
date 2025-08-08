@@ -1,202 +1,199 @@
-Return-Path: <linux-integrity+bounces-6786-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6787-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 413ACB1E333
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Aug 2025 09:29:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0261DB1EE60
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Aug 2025 20:32:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05D96188E6B5
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 Aug 2025 07:29:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B14423B3F0B
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 Aug 2025 18:32:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C407423C8A4;
-	Fri,  8 Aug 2025 07:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6756E1E1A33;
+	Fri,  8 Aug 2025 18:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="k7bBY8xL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="K7sB95iA";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="k7bBY8xL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="K7sB95iA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OjSZYVl+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA536225415
-	for <linux-integrity@vger.kernel.org>; Fri,  8 Aug 2025 07:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E801DA3D
+	for <linux-integrity@vger.kernel.org>; Fri,  8 Aug 2025 18:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754637413; cv=none; b=o3KsON1rnfJTgcBQfeHJU5utY9/TbtzECjuIIIJpfr/gWNr0UbSnPePCbe5/rOb4WjNjyig4H+3e3s/zpD0p+ndat4/+JxHoBxmggQto2n6pduAEXCl6KG1O5fZsj+WyMIvelB1G9Sbx/JQmZUAlibaQ1h1v9S95d4RKft5NZXc=
+	t=1754677938; cv=none; b=EWRz4XgzYi17rithaXu7BFJZ3Sxg8cxRBO3o0XWF+0zJWZtDwTP/TDWVnloWBtRBy10zLK4EpN5BF/QYeuUeh7X+fCBdocu9aLYeI/5gPUU6FcmliFJ3/1xwMo98Zt7XjCkSNvaJR2fyFFFKmEWkEZoFXH5Ec9J/8NayeoCJz60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754637413; c=relaxed/simple;
-	bh=/RMT7NTp1oEFoLLROxxuFlP024+37FuV4HdTXu/aOV4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e/rJl+IkdEPnBDSHJp3yHnQzpfxsfMDaGh2DJtZ+Zd4K54SS2phdST/yw+N37Y2vM6u0HuaIrhryBCZOV6heZnnSRdQ66PROXBlUH5pi5oRiZW3+mD8ejqKA0bc0mO7gT9bT2sSENQuTVr/jZ49pgKrGDoMloFjbnaZyGiXW2ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=k7bBY8xL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=K7sB95iA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=k7bBY8xL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=K7sB95iA; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id C5DCC5BDB8;
-	Fri,  8 Aug 2025 07:16:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1754637403;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1754677938; c=relaxed/simple;
+	bh=1sBkBv2JSJwPy5/yx1Qzp9+Vs119uU18uu3/qZjuZ6E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i43BlqiI95DkZT6AmwjfhsmtyNnbovE2YepGZ95Y3TgCjeLDX+oLkPKkdg55h1GFC3Om8JIlmQZozhsKylysp28jCO3ksOpBXJ1ra/IR9DqSIoT5RH6q19wpDD0tgcm9DGorAqIRHzdgUH+SZ2hukFGiy+JSMr8DqTePRGDkjRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OjSZYVl+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1754677935;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=St0Eh41srmPo5Myog46kRVAv2peqCfbBZggyHocAocw=;
-	b=k7bBY8xL+Kr4ECaQ5f/3I8Kizo2JMds238KUeeBUC/f5mu2QDiB9s0DRrbVVX9DEEYi8/U
-	GJ/mmfGww5pEvaTqeYyt0btSKosdnYFZvThMNOMCzAPEwKk5SW2b58YqvtCmlt9Jyh2/Gf
-	hx3f1bcqp8f0Lm/6L0FLpnfUc0InX+0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1754637403;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=St0Eh41srmPo5Myog46kRVAv2peqCfbBZggyHocAocw=;
-	b=K7sB95iAmVh/48NcKZwsIZCE2rzmXIpjT6YJw0xkTUhARSx0vmOu29cV4lCh7R6cMG8t+p
-	Awdw8RESjTprCLBA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=k7bBY8xL;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=K7sB95iA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1754637403;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=St0Eh41srmPo5Myog46kRVAv2peqCfbBZggyHocAocw=;
-	b=k7bBY8xL+Kr4ECaQ5f/3I8Kizo2JMds238KUeeBUC/f5mu2QDiB9s0DRrbVVX9DEEYi8/U
-	GJ/mmfGww5pEvaTqeYyt0btSKosdnYFZvThMNOMCzAPEwKk5SW2b58YqvtCmlt9Jyh2/Gf
-	hx3f1bcqp8f0Lm/6L0FLpnfUc0InX+0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1754637403;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=St0Eh41srmPo5Myog46kRVAv2peqCfbBZggyHocAocw=;
-	b=K7sB95iAmVh/48NcKZwsIZCE2rzmXIpjT6YJw0xkTUhARSx0vmOu29cV4lCh7R6cMG8t+p
-	Awdw8RESjTprCLBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8531113A7E;
-	Fri,  8 Aug 2025 07:16:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id t5/PHVuklWhnKwAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Fri, 08 Aug 2025 07:16:43 +0000
-Date: Fri, 8 Aug 2025 09:16:32 +0200
-From: Petr Vorel <pvorel@suse.cz>
-To: ltp@lists.linux.it
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: Re: [PATCH] tst_security.sh: Use the same value for checkreqprot
-Message-ID: <20250808071632.GA406350@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20250425125057.38992-1-pvorel@suse.cz>
+	bh=zgG5v91IC+h9Qh6j+aVM27VlbcIM9DWdAjhCTJxxeWs=;
+	b=OjSZYVl+BCFq8pBlXGj7pbzobXHER+QF7SuDDoq1HdBFtcIniaVjzIf2A1CRaOP307g/oo
+	BjapSNuMKk22Ddng5OCxJfdfRUu0GTRHhHeNDKuHa3H+7UXIjFdY4NrdF97eoAUSjkcZXO
+	NsYo84rjQMyNrCKuWtogkFJ0qmNA3v0=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-DFUUYBmCNOaWoz1IOBFAvA-1; Fri, 08 Aug 2025 14:32:14 -0400
+X-MC-Unique: DFUUYBmCNOaWoz1IOBFAvA-1
+X-Mimecast-MFC-AGG-ID: DFUUYBmCNOaWoz1IOBFAvA_1754677934
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-713e879bd7cso35769587b3.0
+        for <linux-integrity@vger.kernel.org>; Fri, 08 Aug 2025 11:32:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754677934; x=1755282734;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zgG5v91IC+h9Qh6j+aVM27VlbcIM9DWdAjhCTJxxeWs=;
+        b=kgpTjy/7S4W/dzR50Z1JwwlYA2FYTbhpCJWW7uDiuFL/Tw1TlTzKNUmIaJbeI5jTGY
+         VdyhbZ+m7CQsydB6gX9gTavMXtC+js78jbKydx9NGhkdcVTCvyj2vswSA61qufDHzRhc
+         RLgbLWCmHYAUlVoAQXNpK26GmeNpPceNeT6u5eEZUW+PVceN3NbxSBMmOdE0R2m/Vb/6
+         x9KndpaSgZjURNM1dJe9CMWxOFQ21CUGpjcLAUorhemCFcG6/Goo4GzuwaljqZCGxjCb
+         ZU4n48F35fl3QtEC/5Zs82lUE/wkVA8XFKgIjnzcLfg3L/jGQf3PtFGDmeEJxg3J1zVc
+         9RAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXi3tF3c4ExFRa8+y7JBnMynWIEhWxAWdyHCQk5qOherBSTX7e1TgtGDwOc6rltew/+gRUZBR0bpncXbS+mj08=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1GwEQtU1ER7NV8Qji59xrS6FARXQS4oS81dPIxmEPCvnVDp78
+	9FmFL6mmJIarol7yxVo+d0O6X5N+NAi/tww3MWGLfFK5bjj3mmSEZSd+fQDtLQ7O7cWwwDl40bI
+	wmXdYtCRPh5+umEtN6bFS64Zcqp7KXSIlhvTi2Op4s2ciu+s72RMvOJGCm6HrD98eybV5O/2UBb
+	6knCAQLI8LbSks1rZgy3yeBHeS5ntu4oUY1duSDJa40eT3
+X-Gm-Gg: ASbGncsTpv91sve/WJdp6UUO066m8Zq6QTDc5p4m5ycrwXcXD3NHATz+AHmaIluhasX
+	sC6M/qYqd5yy17wrb0FgNDrfXynEEFzULqLMzISq9SS4g+QI0qZPyj4K0QlxZeHES6tEsWm3o8U
+	nx9r7lskjkytx95uwLskw/
+X-Received: by 2002:a0d:e502:0:b0:71b:f19a:8851 with SMTP id 00721157ae682-71bf19a91a3mr40240597b3.36.1754677933664;
+        Fri, 08 Aug 2025 11:32:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEHtZQ1cO6S7GJpjmt/FUcJKNP6ODHpvJjwsSGpFe8T+ftyH+MbgfsJT28OcYWzjWNPXMURrLpDgl9f8YSJsBc=
+X-Received: by 2002:a0d:e502:0:b0:71b:f19a:8851 with SMTP id
+ 00721157ae682-71bf19a91a3mr40240397b3.36.1754677933244; Fri, 08 Aug 2025
+ 11:32:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250425125057.38992-1-pvorel@suse.cz>
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: C5DCC5BDB8
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-2.21 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[linux.ibm.com,paul-moore.com,vger.kernel.org,linux.microsoft.com,gmail.com];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	TAGGED_RCPT(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Spam-Score: -2.21
+References: <20250702202851.33344-1-daleksan@redhat.com> <aGW2wabMXtdBEQxR@kernel.org>
+ <CAG+gbFfKLCQND-TT8DEZ09T=Nhb39_CJfM5imv341Pen03bHjw@mail.gmail.com> <CAG+gbFfLP1Y=HgRfzjhT4uJ121keQ0ZKo=4saB3uqnZYyoV8JA@mail.gmail.com>
+In-Reply-To: <CAG+gbFfLP1Y=HgRfzjhT4uJ121keQ0ZKo=4saB3uqnZYyoV8JA@mail.gmail.com>
+From: Denis Aleksandrov <daleksan@redhat.com>
+Date: Fri, 8 Aug 2025 14:32:02 -0400
+X-Gm-Features: Ac12FXxCqvZ84YiVVjMeH0w_k6wBn1YSHG7h8ihKbEMEbBEYdOxkUoN1BX20AEs
+Message-ID: <CAG+gbFcgfZALHCAxaMmWkNQX2sKgkc-HBJrYXdmehsqLidG_tA@mail.gmail.com>
+Subject: Re: [PATCH] tpm: prevents local DOS via tpm/tpm0/ppi/*operations
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org, 
+	Jan Stancek <jstancek@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Ping.
 
-FYI patch merged.
+Just checking in on this patch.
+It has received a "Reviewed-by" tag, and I was wondering if there is
+anything else needed from my side for it to be picked up.
 
-Kind regards,
-Petr
+Thanks,
+Denis
 
-> kernel commit e9c38f9fc2cc ("Documentation,selinux: deprecate setting
-> checkreqprot to 1") from v5.10-rc1 deprecated checkreqprot value 1
-> (emit warning in dmesg). Code is used only in ima_selinux.sh
-> which requires 5.12. Touching /sys/fs/selinux/checkreqprot is required
-> to trigger the measurement via selinux_ima_measure_state().
+On Thu, Jul 3, 2025 at 8:00=E2=80=AFAM Denis Aleksandrov <daleksan@redhat.c=
+om> wrote:
+>
+> Hi Jarkko,
+>
+> Thank you for the review. I'll add your Reviewed-by tag to my local commi=
+t.
+> Please let me know if you would like me to send a v2 version of the
+> patch with your tag included.
+>
+> Best,
+> Denis
+>
+>
+> On Thu, Jul 3, 2025 at 7:56=E2=80=AFAM Denis Aleksandrov <daleksan@redhat=
+.com> wrote:
+> >
+> > Hi Jarkko,
+> >
+> > Thank you for the review. I'll add your Reviewed-by tag to my local com=
+mit.
+> > Please let me know if you would like me to send a v2 version of the pat=
+ch with your tag included.
+> >
+> > Best,
+> > Denis
+> >
+> > On Wed, Jul 2, 2025 at 6:46=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.o=
+rg> wrote:
+> >>
+> >> On Wed, Jul 02, 2025 at 04:28:51PM -0400, Denis Aleksandrov wrote:
+> >> > This bug is not seen on most machines. Reads on tpm/tpm0/ppi/*operat=
+ions
+> >> > can become very long on misconfigured systems. Reading the TPM is a
+> >> > blocking operation, thus a user could effectively trigger a DOS.
+> >> >
+> >> > Resolve this by restricting unprivileged user from reading the
+> >> > above-mentioned device files.
+> >>
+> >> I suppose we can do this. I'm going to holiday for one week next
+> >> week so I'll hold for additional feedback for that period and
+> >> apply this if nothing comes up.
+> >>
+> >> There's no use case for unprivileged user, or app that stops
+> >> working because of this. If you cut hairs, with patch shifting
+> >> uapi you have to we always prepared that tree falls down
+> >> somewhere but I'm willing to take risk with this :-)
+> >>
+> >>
+> >> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> >>
+> >> >
+> >> > Reported-by: Jan Stancek <jstancek@redhat.com>
+> >> > Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
+> >> > ---
+> >> >
+> >> > Running scripts/checkpatch.pl suggested that the permissions be
+> >> > changed to octal format. What do the maintainers think of this?
+> >> > The rest of the permissions in the file are macros.
+> >> >
+> >> > Lastly, this bug was reproduced and the fix was tested accordingly.
+> >> >
+> >> >  drivers/char/tpm/tpm_ppi.c | 4 ++--
+> >> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >> >
+> >> > diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> >> > index bc7b1b4501b3..ac6e0aee566e 100644
+> >> > --- a/drivers/char/tpm/tpm_ppi.c
+> >> > +++ b/drivers/char/tpm/tpm_ppi.c
+> >> > @@ -347,8 +347,8 @@ static DEVICE_ATTR(request, S_IRUGO | S_IWUSR | =
+S_IWGRP,
+> >> >  static DEVICE_ATTR(transition_action, S_IRUGO,
+> >> >                  tpm_show_ppi_transition_action, NULL);
+> >> >  static DEVICE_ATTR(response, S_IRUGO, tpm_show_ppi_response, NULL);
+> >> > -static DEVICE_ATTR(tcg_operations, S_IRUGO, tpm_show_ppi_tcg_operat=
+ions, NULL);
+> >> > -static DEVICE_ATTR(vs_operations, S_IRUGO, tpm_show_ppi_vs_operatio=
+ns, NULL);
+> >> > +static DEVICE_ATTR(tcg_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_=
+tcg_operations, NULL);
+> >> > +static DEVICE_ATTR(vs_operations, S_IRUSR | S_IRGRP, tpm_show_ppi_v=
+s_operations, NULL);
+> >> >
+> >> >  static struct attribute *ppi_attrs[] =3D {
+> >> >       &dev_attr_version.attr,
+> >> > --
+> >> > 2.48.1
+> >> >
+> >>
+> >> BR, Jarkko
+> >>
 
-> Using the same value (0 by default) works on recent 6.14, it should be
-> safe changing to use the same value. This way misleading warning is
-> avoided and hopefully kept working in the future.
-
-> Also, this way it does not modify SUT setting (don't influence other
-> tests), which is always better.
-
-> Fixes: 36c695e497 ("tst_security.sh: Add helper tst_update_selinux_state()")
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> ---
-> @SELinux developers: FYI tst_security.sh is used in LTP test in
-> ima_selinux.sh [1] test.
-
-> Kind regards,
-> Petr
-
-> [1] https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/security/integrity/ima/tests/ima_selinux.sh
-
->  testcases/lib/tst_security.sh | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-
-> diff --git a/testcases/lib/tst_security.sh b/testcases/lib/tst_security.sh
-> index 4e2d34ca98..820736c723 100644
-> --- a/testcases/lib/tst_security.sh
-> +++ b/testcases/lib/tst_security.sh
-> @@ -142,11 +142,10 @@ tst_get_enforce()
-
->  tst_update_selinux_state()
->  {
-> -	local cur_val new_val
-> +	local val
->  	local dir=$(tst_get_selinux_dir)
->  	[ -n "$dir" ] || return 1
-
-> -	cur_val=$(cat $dir/checkreqprot)
-> -	[ $cur_val = 1 ] && new_val=0 || new_val=1
-> -	echo $new_val > $dir/checkreqprot
-> +	val=$(cat $dir/checkreqprot)
-> +	echo $val > $dir/checkreqprot
->  }
 
