@@ -1,59 +1,61 @@
-Return-Path: <linux-integrity+bounces-6788-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6789-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A206B1F42A
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Aug 2025 12:36:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61812B1F42E
+	for <lists+linux-integrity@lfdr.de>; Sat,  9 Aug 2025 12:37:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 377C217DB61
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Aug 2025 10:36:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 764DF18C2741
+	for <lists+linux-integrity@lfdr.de>; Sat,  9 Aug 2025 10:38:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E653242D9B;
-	Sat,  9 Aug 2025 10:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EE02571C2;
+	Sat,  9 Aug 2025 10:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s9xXoNJX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g9opte3N"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D393F17BBF;
-	Sat,  9 Aug 2025 10:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19E31F2BBB;
+	Sat,  9 Aug 2025 10:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754735810; cv=none; b=QJc7cQOWJfxICV9ZVxHWHTy/wkNsB2LOvpzQgib8eb7LlN/CBNEvaYpOdrKthOYrmU0FMw6jrNu/hB5v0H0HEUpU6gJSIR/wuzNCgMIH2axEculbRpkLviWHt4ney1ZocMwaADr87xWWqtfjuvRbED5Ze4HjESwLVN6Qd382beE=
+	t=1754735873; cv=none; b=pJWFhaSaSpqxk45aN+fvCBLChzcxCqSrsminJQP9SKG9diW8C3V++5ymxFqT9zgjRJuBpZzvcBt05Y8Ab4EM/qF2l303OFXZLpHYzZ2tOfvLaG0llS+ilcB8MouwKusakSNW9o7xCaHpuSsHEPNepmuHwCBbQ5KZt+PvnHFGyWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754735810; c=relaxed/simple;
-	bh=irkFrpvguBFdjMkE8ph+mR64/d+gfVlxX7KDzV2t3yk=;
+	s=arc-20240116; t=1754735873; c=relaxed/simple;
+	bh=zY+Mbp/vFQgswJcSFUKAGN3Zbairo6pF7DPIzdp5+Ww=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ms3tvf9eKMcZx0b7OKsAa0RBb2YyrC4DZYfe1Vw15UbX7Ous95whx9sRuRFEJQ6SF6PWtaGO8XYg1tHQuCZEL+Sv+GAo+oG/T8eI4noIKgJxSR9PHQukPEV3bHt94xdq3mPIAf02VutGjtSUkDD8lbj3ivi5m6UOPWSYMdMP3Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s9xXoNJX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 019A6C4CEE7;
-	Sat,  9 Aug 2025 10:36:49 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=OHdeH0WOVsSklGFnpJgJx+pMNSrD+pLs0Bi10KkAba1BVGj+HM8b/F1Ro40k4JSUJunWtEJtCoI4pg+OrAzsfiDZNZFNDfY32S3rNgSndyiiHTfxPyD8sKT57IBNR5BCVvbB6sC1CsboYU4+ypYMmINiSzZ9vOayeVePZH6ZE6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g9opte3N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3BC9C4CEE7;
+	Sat,  9 Aug 2025 10:37:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754735810;
-	bh=irkFrpvguBFdjMkE8ph+mR64/d+gfVlxX7KDzV2t3yk=;
+	s=k20201202; t=1754735873;
+	bh=zY+Mbp/vFQgswJcSFUKAGN3Zbairo6pF7DPIzdp5+Ww=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s9xXoNJXOHYgRiemWRZfdeU0oAObyeUNBfBDclo4M0XzhgDVNpi12+OxBRQZJq0IX
-	 c8jciddohCZtCwRIYoO2NNIRaDuzJkDDSTiDc2d5sv8F8XMmo2+5qN6+5va8BncJtI
-	 Kne+ccbWNjuCXoPnSAwQaJkd0ihA3hFWaU5B4cmUQogJ4rV7ninqzbzhWLnBQtWbzG
-	 PViWYdeJFYBSWt6bp+eztUJIbeEX4EStSLax6/ZSG7yx/Hi8zL07v+U4J4t4erri27
-	 SJ2weEtmpg8hxEmZ3VARhpZv+3HZ5ebRnsNTUNZ71dXCALc7iOr3LXG6SQIoGlMPJ9
-	 pvN1Bs21QSGDw==
-Date: Sat, 9 Aug 2025 13:36:46 +0300
+	b=g9opte3NX0dXCK4XlI7v7BLZOseECSof9maiLkidaf61jHaGbMUhm0qxOUfoP0EmW
+	 RqGpW7dh1ne+465Lymu6WEYGTy14mDEt79ASRs2LaHVi+e+DkMIeanenKF1o4P3ZVD
+	 r/NFgb4TFTroW0OD2DYFl8NTsbQWjsO0EKSq67Y4qiWjdvhE9wS7y8vjzx5NJ2+GSJ
+	 RNCutxHfgoP45AJdIAPx9h9Ul57hqw+t9i7vKaBsGBLOpmF/65OU1gh5EMUoLN74Ii
+	 nD8XuYJlaPaDoDOZZJ3ktfUPiSMHu8LQceZBWZr6igs705e46VpErtcj7I6R2Fb4XZ
+	 vO3AgSo1rqEdA==
+Date: Sat, 9 Aug 2025 13:37:49 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Eric Biggers <ebiggers@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tpm: Compare HMAC values in constant time
-Message-ID: <aJckvs9mIO_BscPQ@kernel.org>
-References: <20250801212422.9590-1-ebiggers@kernel.org>
- <20250801212422.9590-2-ebiggers@kernel.org>
- <aJIMGWFDZejNwAVP@kernel.org>
- <20250805160740.GA1286@sol>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>, keyrings@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/3] KEYS: trusted_tpm1: Compare HMAC values in constant
+ time
+Message-ID: <aJck_YVdFqZoRk--@kernel.org>
+References: <20250731212354.105044-1-ebiggers@kernel.org>
+ <20250731212354.105044-2-ebiggers@kernel.org>
+ <aJIKu7uD-nYQERKW@kernel.org>
+ <20250805173227.GD1286@sol>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -62,18 +64,25 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250805160740.GA1286@sol>
+In-Reply-To: <20250805173227.GD1286@sol>
 
-On Tue, Aug 05, 2025 at 09:07:40AM -0700, Eric Biggers wrote:
-> On Tue, Aug 05, 2025 at 04:50:17PM +0300, Jarkko Sakkinen wrote:
+On Tue, Aug 05, 2025 at 10:32:27AM -0700, Eric Biggers wrote:
+> On Tue, Aug 05, 2025 at 04:44:27PM +0300, Jarkko Sakkinen wrote:
+> > On Thu, Jul 31, 2025 at 02:23:52PM -0700, Eric Biggers wrote:
+> > > To prevent timing attacks, HMAC value comparison needs to be constant
+> > > time.  Replace the memcmp() with the correct function, crypto_memneq().
+> > > 
+> > > Fixes: d00a1c72f7f4 ("keys: add new trusted key-type")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 > > 
-> > I think we might want to also backport this to stables.
-> > 
+> > Was crypto_memneq() available at the time?
 > 
-> That's what I did originally, but on v1 James complained about it being
-> characterized as a fix.
+> No.  The Fixes commit is still correct, though, as it's the commit that
+> introduced the memcmp().  Technically it was still a bug at that time,
+> even if there wasn't a helper function available yet.
 
-Please put out v3 with backporting shenanigans and I can apply these.
+Add a remark to the commit message.
 
 > 
 > - Eric
