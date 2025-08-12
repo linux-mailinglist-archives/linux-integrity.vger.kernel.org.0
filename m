@@ -1,60 +1,52 @@
-Return-Path: <linux-integrity+bounces-6797-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6798-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF5C1B1F5AD
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Aug 2025 19:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4005BB227C2
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Aug 2025 15:08:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 687B6625675
-	for <lists+linux-integrity@lfdr.de>; Sat,  9 Aug 2025 17:38:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0545A68109A
+	for <lists+linux-integrity@lfdr.de>; Tue, 12 Aug 2025 13:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9E729E0E7;
-	Sat,  9 Aug 2025 17:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BF9270ED7;
+	Tue, 12 Aug 2025 12:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A2B7AgyM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nX526Aho"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92877242D89;
-	Sat,  9 Aug 2025 17:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B654B26D4EB;
+	Tue, 12 Aug 2025 12:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754761121; cv=none; b=R+RW3KcRstQqwKT4Np+g9ilaNiKF1noMzxQWvF9O85Ole5qJ0UAsjQhuLp5nmsCIcEG7Vai65ToQPmS7lzHx+IN9gAUkCwU6JHBIoVhkuaozdP8Z32FgCeesqH7ETmuFDZU2jmPqfRsaUWTwi2uE/OxDi/ed8GIZcrU7PVHQsd8=
+	t=1755003569; cv=none; b=sTp6E0/aj3HJnwv5SxKeRqNkvWOnMtXWIxZgpRtZKAg1UO7BoR6SHnnAtFY9l9TRQV4wLW+vDbmmtjvpMBLfStzd9yXU/CZnz263SwKeJAFY4TVQhPYMV2d1YI+wOdne4CahTlM8UdnzsO2arG0IVZz2LQu+klBSmNZrZ3v3amQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754761121; c=relaxed/simple;
-	bh=I/5KKgloMSjSDFntx1RmPBKXjAroRhWAXfp0tye4A5s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TzJ/0RPDYSOyxYyDSZdO5xHjzOQIB4Z3Jt3qD6qle0KObUHp1/jeJ1QX2B0DGxVrFcc0LnD44+b9Di2jmAw1kenm/QaUD0aNfpmrd+uyuPFnsna52MMjmi7HVfCwCmgPPhKj0Yianx79Rm0szyVg3yHVPG0IizPMJ8AKzONH5Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A2B7AgyM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA951C4CEE7;
-	Sat,  9 Aug 2025 17:38:40 +0000 (UTC)
+	s=arc-20240116; t=1755003569; c=relaxed/simple;
+	bh=RZ5vAmJOYVLCS14bnkVli5Uta59ZRHvEqdzwAnsg0y0=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=j6hYia75hT7fLIOENOCg1jid4wDey1xdrTac1Li5Mshu3KQdFkpY50sKAs0zjJ+LbXlHExoUWNqDZIjUgSw7FhHKK9Ie495kh0K7bR9y53eY0EW2i0vpV52aL9V1k2dOpUmBzxRMUsmQyjXTTutOkJ99WhVxLJbC8w40oEYmhV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nX526Aho; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBF7C4CEF0;
+	Tue, 12 Aug 2025 12:59:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754761121;
-	bh=I/5KKgloMSjSDFntx1RmPBKXjAroRhWAXfp0tye4A5s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A2B7AgyMkDzuEVrcUMJItbwYpctKX27jv158ph/hQQdjMh0u3FkN21Z88ahuYlRq1
-	 PtPxE81VhOw6zzJBKucLVkDh3H0qB7D+01z07a4+xTfmX3/oZuR6Q0GZfaK+wrShfC
-	 jSisV7D/gkUGPyNDHrItgcohuB0+ZgPAcbW8mpXLXw4VEbKJ963YFlhB4svZPIUfhU
-	 DlcyGjnMP1UOOygwLbdtfXz86j985Ti5Bfk5sW+eJtacbDKCgtVakum2MeoL2sNSjw
-	 Fkm5mFCqaVG7lXIMfywMZGsNeJyZ6r7zpuEUedezYBajwy26+nL+qE0z3aviQqWsh1
-	 v/dczx79ov9IQ==
-Date: Sat, 9 Aug 2025 10:38:39 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, linux-integrity@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] tpm: Compare HMAC values in constant time
-Message-ID: <20250809173839.GB3339@quark>
-References: <20250801212422.9590-1-ebiggers@kernel.org>
- <20250801212422.9590-2-ebiggers@kernel.org>
- <aJIMGWFDZejNwAVP@kernel.org>
- <20250805160740.GA1286@sol>
- <aJckvs9mIO_BscPQ@kernel.org>
+	s=k20201202; t=1755003569;
+	bh=RZ5vAmJOYVLCS14bnkVli5Uta59ZRHvEqdzwAnsg0y0=;
+	h=Date:From:To:Subject:From;
+	b=nX526AhoiX6elZGKSBGuOGpaLgak/3OjIduyWkF3skZdeg8KfM04ZxMJ41peZd/ZY
+	 9Gad/pXO7qXXrG4OvkavyerV9l+ls79yUDcPszwIZlEpPcBKxV4EdFz36HRLDpSKbK
+	 zJFyWSopOIYTaRQgZ8CF2MGQ8/1KWaYbRI2F3noxGzfMmEX+TZYmOEGU0ARkW7yeAl
+	 0EJGn4/6yZc+2Jlw/w8xELBt7A/j5hZ+qPKmFNSG0jPg3RbtUo2bEIg5mcUEmDQpbA
+	 8c9zIteTIGn5ETtIki+kHBGtoUfCRSTWjye+gULQEOYHow6qR3ZiBkt1OWCTHuME4z
+	 TRy1bPvOKDU/Q==
+Date: Tue, 12 Aug 2025 15:59:25 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: tpm2@lists.linux.dev, linux-integrity@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: tpm2_protocol
+Message-ID: <aJs6rWexGNsH45_Z@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -63,26 +55,57 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aJckvs9mIO_BscPQ@kernel.org>
 
-On Sat, Aug 09, 2025 at 01:36:46PM +0300, Jarkko Sakkinen wrote:
-> On Tue, Aug 05, 2025 at 09:07:40AM -0700, Eric Biggers wrote:
-> > On Tue, Aug 05, 2025 at 04:50:17PM +0300, Jarkko Sakkinen wrote:
-> > > 
-> > > I think we might want to also backport this to stables.
-> > > 
-> > 
-> > That's what I did originally, but on v1 James complained about it being
-> > characterized as a fix.
-> 
-> Please put out v3 with backporting shenanigans and I can apply these.
-> 
+I came up with this within 1,5 weeks not much sleep, and thought that
+this might be interesting to all of the three lists:
 
-v1 had Fixes and Cc stable
-(https://lore.kernel.org/r/20250731215255.113897-2-ebiggers@kernel.org/).
-Again, I removed them in response to James' complaint about it being
-characterized as a fix.  If you want them back, please go ahead and add
-them back in when committing.  I'm not going to go around in circles.
+tpm_struct!(
+    #[derive(Debug, PartialEq, Eq, Clone)]
+    TpmPcrEventCommand,
+    TpmCc::PcrEvent,
+    TpmSt::Sessions,
+    1,
+    {
+        pub event_data: Tpm2b,
+    }
+);
 
-- Eric
+tpm_response!(
+    #[derive(Debug, Default, PartialEq, Eq, Clone)]
+    TpmPcrEventResponse,
+    TpmCc::PcrEvent,
+    TpmSt::Sessions,
+    {
+        pub digests: TpmlDigestValues,
+    }
+);
+
+[tpm_struct is also used for data types, it so just happend that it
+equally works for commands, every single type in depth shares the
+same core marshalling and unmarshalling infrastructure]
+
+It's a zero deps, no-alloc and no_st crate which unamrshals the full TCG
+specification to both directions. I.e. you can build a TPM emulator
+alike thing  "in a day", and not just interface with a chip.  As it runs
+also on bare-metal (it's a stack allocated entity), it would scale even
+to chip firmware.
+
+I targeted this for Linux kernel, and thus the design choices. I just
+thought what would be the part that would trigger me most if someone
+submitted a Rust driver, and implemented it myself. Learning from what
+I've seen basically :-) I totally support someone making a Rust driver
+and I thought this in-depth understanding of the protocol is my best
+possible contribution for such effort (binding IO shenanigans not so
+much).  E.g. you could use this to do a way better /dev/tpmrm0 than what
+exists today with high-fidelity filtering and shit.
+
+Obviously I hope to be a co-maintainer if such thing ever happens.
+
+Since it is also independent crate it can be e.g., used to build
+interoperability layers and stuff like that.
+
+There's also a cli called simply "tpm2". I'll probably make it alll
+available today or tomorrow.
+
+BR, Jarkko
 
