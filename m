@@ -1,187 +1,242 @@
-Return-Path: <linux-integrity+bounces-6817-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6818-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67560B26C86
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Aug 2025 18:29:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4AE1B27247
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 00:54:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEFA9176983
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Aug 2025 16:23:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 175311CC77CF
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Aug 2025 22:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DC221B9FC;
-	Thu, 14 Aug 2025 16:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458B2281357;
+	Thu, 14 Aug 2025 22:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RBQo99wL"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="AogRvOMz"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F9B226173
-	for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 16:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB4F245023
+	for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 22:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755188589; cv=none; b=o9afnHWkUhZumsMZKHUHoFy01hmmeQ6rnxW1DQ0WdK6SJohaEL7XGrx0xfanP58I74PULFxynYRRvgYNcbPxY4RW5RxgIHWL/GmVz57XQ/qQuDIAqNESQMlqDTaZaiJwIFj9WQAiVniIleOzlebkebuKr5+u2mrkl1BdcIZYEKc=
+	t=1755212045; cv=none; b=DRF8vttC3sXq3RhvJJP9QWOvpHo/Z+L/6Ot2nFBYFRVxs7xTQZp/ppygP6njvXGIBnYmIK5U7bMjdBn3Wlkab6Abuyqf7qVF5FXPEgv88PkdkE+ZS7ait1VggHAQv7NT3DTdgtLYduFUBnH+qFiV7jJBy5CarHBsWeu2pKboU9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755188589; c=relaxed/simple;
-	bh=AEN36PmgyN9jzCWiDGkGUayCiskyZP+8KyliUZDm/Jk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=h9tyyBGbMOMxoVMPPl/x43otHg1aWBzYEzDrtb3GK5xdqwfZSkdJ7PxphtSAML5wm6e9ZAMJe1JFlSsDO2+B0SoRGb4fLbfSG8XdfW/gVNXwjJ535QM7e+pceJy8lOYrFJxrBo6GxvNUzyGLGzYEq0D7XJ5qlEH/0/Y6cd6qaZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cfenn.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RBQo99wL; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cfenn.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-76e2e614e73so1151536b3a.0
-        for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 09:23:08 -0700 (PDT)
+	s=arc-20240116; t=1755212045; c=relaxed/simple;
+	bh=lPdhiCA/2A43VbIVwb+6dc6qvHinv/k9x8LvcHDmb0k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nmWYRw93nOR2fz9htdR5glVs8YrNHG2E+SIsG+tBXGq+Hy3yGFF+0GotXMnZQVFML5cal3h5WRTKbd0eAJUsysNdqLr128cz7ITObU/A64zbEbB+AWRUFIdJn5JuvyaLu+8NlNPyiCxh4G7ha/JzJ3TJjuzybrf31/t/wHiMcFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=AogRvOMz; arc=none smtp.client-ip=209.85.160.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4b109c4af9eso13203131cf.3
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 15:54:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755188587; x=1755793387; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zFmrZCX1rf8ycDJAIRjNPjQ9vGNsMosDYblKELZGZ2U=;
-        b=RBQo99wLXfCM4cURsBTQ1ZcIMHEm0LtdmszEaQ/t/EWx5hCL9jDPTKw2Ot91NgSzhs
-         Uvq8Sb5PZ/CBrwVxU1Kl5LgtbnoDX3WIFoggBo3Ev1qY9/2jOUz0GxCnu47FfTqgY1N1
-         zOSppWwqgAZNzt8kOWjbwXLzVc6Gh8tpVhrDM/WHI3FgqKixmIplpthaxf0I21XGP0ZN
-         yO+M7KkbEfzXkhp35aJ8Li1minGEyZQN/pgGP6XlThVu6PgBUu3HA5dcmZeNlNJkQZA8
-         MgCau5UISlDsJ/+ZFM0ucWkRYBgvFx6SpsX5uYegoR+APgjbk4pq3cOJSx52/o/sCkig
-         d4Vw==
+        d=paul-moore.com; s=google; t=1755212041; x=1755816841; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rU+UOhNaqwsjYUe9zCIc66XJqDaw1SHKCGrAl1D5PcE=;
+        b=AogRvOMzaFUZ51nWudmhtAvLKQCPMxqJUq+rBRtFaD2riJZxFdRHldR2u/TgsOUSf/
+         Kx7zSQQ4429F+1g88MMVWsnzgE5aEjKFmLiVOiARaJmci/9GfiUKf7nize1TPAZSs90h
+         KD3To7XCDJSUGXCsSjGyjrJh55+6ZbJVj6AmDY3MVqjWGolPJ/3aEckmxKv+++Pr7RyJ
+         rsG7WdOXGb8P2Di//vFkJP3oDMugQ8Tfu1VKnnDqQLpbsFGAR0pO/Sv7n0nTdsVa+BFj
+         FNChCiWMkjapDGL2clII37p0oM+d6Qb1nJVJPdcPPBXwAsYuFzH0qEmBOmBeIcZDPXw8
+         bYdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755188587; x=1755793387;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zFmrZCX1rf8ycDJAIRjNPjQ9vGNsMosDYblKELZGZ2U=;
-        b=jcTs/9K6bDtvwkEO2thamngmROqQaVtjxhVxtpOblRs9BLAQbh49uqE43xVCvbg5rN
-         bEpSTQ6pvoRoEQ0HTJcYCtGKnSphONKx/QT/LfsDGGL0O1jOhbdPzvxBkVNR6p0pnEbA
-         emjApCoAghJp0IfS3BBlTYAENJ+FvMN+w1Z/ilNH3asQmJbuSB1S2IfWdMJB1j+3+mlG
-         et7Sw3J6BzEjvG8MPhvI65hiccY3mki9VHpKo4Ur0+M9pmPN0JqGT9fCoihN01M16TfU
-         qLRJ3g3h641hfFYMWpfsrPzsLGibuGDZP3BHhZRImVHPSN4VdSGEPPZKsgIUhpb14MZc
-         NZBA==
-X-Gm-Message-State: AOJu0Yzveid7iRIB5Y1xa6jUCf2i6sz43xPtvnjJ5Hojv6m59FG2wB64
-	hAwooqBuFEO7Fdw6Jzx91xcTpA2tJeXDOoyQx0XBGRAjmzhwuTOnNVFb8BhjI5zhKovNmnBonEV
-	oXw==
-X-Google-Smtp-Source: AGHT+IGcd07zjsRHCN+6GTJdRqh4GjZhv/t7J1/kavBrrK68F0NKZTofb+1eiVL2rNI7gfhN5uqB3IK/jw==
-X-Received: from pfnv9.prod.google.com ([2002:aa7:8509:0:b0:76b:8c3c:6179])
- (user=cfenn job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4b52:b0:76b:ef8f:c292
- with SMTP id d2e1a72fcca58-76e2fd9259fmr5310386b3a.16.1755188587488; Thu, 14
- Aug 2025 09:23:07 -0700 (PDT)
-Date: Thu, 14 Aug 2025 09:22:52 -0700
+        d=1e100.net; s=20230601; t=1755212041; x=1755816841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rU+UOhNaqwsjYUe9zCIc66XJqDaw1SHKCGrAl1D5PcE=;
+        b=VLKu6VvYxZAQZ4v21gfYlq4F2Tz4ssjPiE879ZkgR1ImcP26DOOZP/QNcQjtMMLBoE
+         3PnbzUFw6bQ6BXgThX3KV0xfYUQWnzGQOIoKDBoI9TspShOKlnwY4qXSsSUbXG44enzK
+         U5MyazDoeBTIIECBjaL2LRpioZ/lGcirNM8veBrt7EBP6UsOv9W1EvfnUUUnx094BI6q
+         bavXxOQEwpOicmSB9RrL7+smbkPdAcazga2vVc1tb9RbKtgCOgwFnoO3L/d78ogD21ZV
+         c0Wn9Bfn/l5HITY4a79eWnual+Id1DISoAVbhRY8OjGBpPGCZ3SbcLYEuSlJj/yMWupa
+         hBbA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9zsdxorsg0NX8vk4eF167Ukg5mZpwlL4y+RVyp6k4snyKjnwFRwVCxc9OzbQMwwFf6OdjoenpTf+c004R2+s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrSVSGGEgK0tTreHzH7VKXlgCUFxAtgpD5n/JckdMbLKT6l/TQ
+	epoQDF3MLt+XbpOvkH2xAkuJeI+RqtcPd0XabsI5Xc08dxo4SPQTjAy5I5ug59qg3A==
+X-Gm-Gg: ASbGncuj1kFBWX730dtvI2o2GqEZj+xRHJ4YiyNtjGzzZxkzy2X81xmueUv+FaVNfB0
+	q3Qr1D386g/uZ/abv0K+fgtmMg6HjdOLBkiPN+NQKuV+QfRqbL55G/RdTJSOM6l2xNbCkJPajI+
+	gbIlat/brLKN4Lv4AiabXTh2yjHyDdtjr4yvgRCQQAwvh69Xlno6DMxlMzNgWc/SSOBJZ2C8UHk
+	jDmg2BZxGENoszLjhf+xn6vddwrFlSL/hi3aHj8FenNESbt/HlsGpL+3ealcUXVBKDG42UeSVa3
+	epJ+SD2uBTDOtxX8wLEaoxXo+k3VdGWK1/9P4S+hkvKXq3pvchhdR+PNeOUgfAdHQCE1X2IezgQ
+	Fuf0n9aIiXCjfkW3pNoIano39ALpos6VgahaMGzbWSclXGHVnBWl5xeuaafhQVMOdorU=
+X-Google-Smtp-Source: AGHT+IEjObLWGd1F0gHvu1/FHumZZNzME/HV+XYLewREMJxt9Y3k5V3pQZrwrK7pJHvmnr4LC13rqQ==
+X-Received: by 2002:a05:6214:5013:b0:709:dff6:9b8e with SMTP id 6a1803df08f44-70af5ccd897mr83782626d6.36.1755212041097;
+        Thu, 14 Aug 2025 15:54:01 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-70adc1cd165sm19419346d6.8.2025.08.14.15.53.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Aug 2025 15:54:00 -0700 (PDT)
+From: Paul Moore <paul@paul-moore.com>
+To: linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Fan Wu <wufan@kernel.org>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Micah Morton <mortonm@chromium.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>
+Subject: [RFC PATCH v3 0/34] Rework the LSM initialization
+Date: Thu, 14 Aug 2025 18:50:09 -0400
+Message-ID: <20250814225159.275901-36-paul@paul-moore.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.0.rc0.215.g125493bb4a-goog
-Message-ID: <20250814162252.3504279-1-cfenn@google.com>
-Subject: [PATCH] tpm: Disable TCG_TPM2_HMAC by default
-From: Chris Fenner <cfenn@google.com>
-To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Chris Fenner <cfenn@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-This change disables the TCG_TPM2_HMAC feature by default to resolve
-some driver initialization failures (with certain TPMs) and performance
-regressions (with all TPMs). See "Security remarks" below for why this
-does not meaningfully downgrade security.
+The third revision of the LSM initialization rework patchset.  While
+there was a good deal of change between RFC/v1 and RFC/v2, the number
+of changes in the v3 revision are relatively minor; I think the biggest
+change is simply bringing it up to date with the current lsm/dev branch.
 
-When the TCG_TPM2_HMAC feature fails to initialize the "null key" (see
-tpm-security.rst), it will cause tpm_tis_core_init to bail out early and
-skip device registration, causing all userspace requests to /dev/tpm0 to
-return ENODEV ("No such device").
+Please take a look if you haven't already, and to my fellow LSM
+maintainers, please focus on the patch associated with your LSM and
+either send me an ACK or reply back with the changes you would like to
+see before this is merged.  I think we're in a good place with this
+patchset, and I'd like to get this merged during this dev cycle if
+possible.
 
-TCG_TPM2_HMAC depends on the following being implemented in the TPM:
+The RFC/v2 patchset:
+https://lore.kernel.org/linux-security-module/20250721232142.77224-36-paul@paul-moore.com/
 
-- TPM_RH_NULL
-- TPM2_CreatePrimary
-- TPM2_ContextSave
-- ECDH-P256
-- AES-128-CFB
+The RFC/v1 patchset is below, the cover letter provides some background
+and motivation for this series which still applies:
+https://lore.kernel.org/linux-security-module/20250409185019.238841-31-paul@paul-moore.com/
 
-While the majority of TPMs in the ecosystem conform to the PC Client
-Platform TPM Profile, which currently mandates most of these, not all
-versions of that profile did, and not all other TPM profiles (e.g.,
-Mobile, Automotive, Server) will. The TPM 2.0 specification itself is a
-"Library" specification and does not mandate any particular commands
-(and very few features) in order to maximize flexibility for
-implementors.
+CHANGELOG
+v3:
+- rebased to lsm/dev branch
+- fixed IMA/EVM initcall comment (Roberto)
+- fixed CONFIG_IMA and CONFIG_EVM problems (Nicolas, Roberto)
+- fixed CONFIG_SECURITY_SMACK_NETFILTER problems (Roberto)
+- fixed the IMA/EVM header file include macro protections
+- fixed an off-by-one string length issue in lsm_read() (Casey)
+RFC/v2:
+- rename lsm_prep_single() to lsm_prepare()
+- drop the lsm_prop counting patch
+- drop the platform_certs changes from the IMA/EVM patch (Mimi)
+- split/reorder anough patches in the patchset that I lost track
+- added missing function comment blocks in the SELinux patches
+- split patch 04/29 into smaller patches (Kees)
+- fix an LSM list output problem in an intermediate patch (Kees)
+- preserve the "lsm_active_cnt" variable name (Casey)
+- cache the lsm_read() string (Kees)
+- squashed, split, and reordered the enabled/ordering patches
+- reworked the Smack patch (Casey)
+- conditionalized the SELinux IB init code (Stephen)
+- fixed missing Smack "__init" annotation (Fan)
+- fixed a potential unused variable warning in IMA/EVM (John)
+- fixed the placeholder commit descriptions (various)
+RFC/v1:
+- initial version
 
-The TPM driver should not break userspace for a TPM that conforms to an
-atypical profile, therefore this change makes TCG_TPM2_HMAC disabled by
-default. It also adds a remark about what will happen if this feature is
-enabled and used with a non-supporting TPM to the Kconfig.
+--
+Paul Moore (34):
+      lsm: split the notifier code out into lsm_notifier.c
+      lsm: split the init code out into lsm_init.c
+      lsm: consolidate lsm_allowed() and prepare_lsm() into
+         lsm_prepare()
+      lsm: introduce looping macros for the initialization code
+      lsm: integrate report_lsm_order() code into caller
+      lsm: integrate lsm_early_cred() and lsm_early_task() into caller
+      lsm: rename ordered_lsm_init() to lsm_init_ordered()
+      lsm: replace the name field with a pointer to the lsm_id struct
+      lsm: rename the lsm order variables for consistency
+      lsm: rework lsm_active_cnt and lsm_idlist[]
+      lsm: get rid of the lsm_names list and do some cleanup
+      lsm: rework the LSM enable/disable setter/getter functions
+      lsm: rename exists_ordered_lsm() to lsm_order_exists()
+      lsm: rename/rework append_ordered_lsm() into lsm_order_append()
+      lsm: rename/rework ordered_lsm_parse() to lsm_order_parse()
+      lsm: cleanup the LSM blob size code
+      lsm: cleanup initialize_lsm() and rename to lsm_init_single()
+      lsm: fold lsm_init_ordered() into security_init()
+      lsm: add/tweak function header comment blocks in lsm_init.c
+      lsm: cleanup the debug and console output in lsm_init.c
+      lsm: output available LSMs when debugging
+      lsm: group lsm_order_parse() with the other lsm_order_*()
+         functions
+      lsm: introduce an initcall mechanism into the LSM framework
+      loadpin: move initcalls to the LSM framework
+      ipe: move initcalls to the LSM framework
+      smack: move initcalls to the LSM framework
+      tomoyo: move initcalls to the LSM framework
+      safesetid: move initcalls to the LSM framework
+      apparmor: move initcalls to the LSM framework
+      lockdown: move initcalls to the LSM framework
+      ima,evm: move initcalls to the LSM framework
+      selinux: move initcalls to the LSM framework
+      lsm: consolidate all of the LSM framework initcalls
+      lsm: add a LSM_STARTED_ALL notification event
 
-Some real-world public examples of problems posed by this feature:
-
-TPMs that do not support the feature result in broken userspace starting
-from 6.10:
-
-https://wiki.archlinux.org/title/Trusted_Platform_Module\
-
-Significant (around 200%) boot up latency due to all the added TPM
-private key operations:
-
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2080322
-
-Security remarks:
-
-tpm-security.rst describes the threat model of the TPM2_HMAC feature,
-wherein an active interposer adversary on the TPM (e.g., SPI) bus
-tampers with TPM commands and/or responses to interfere with the booting
-or running system. The TPM2_HMAC feature uses something called "salted
-sessions" to establish per-request keys that can be used to protect TPM
-traffic.
-
-Because the kernel does not have a priori knowledge of a cryptographic
-identity for the correct TPM for the system, and because the kernel does
-not have any cryptographic identity of its own with which to
-authenticate itself to the TPM, the session is established using a
-one-sided, unauthenticated key establishment protocol, wherein the
-kernel asks the TPM for the so-called "null key" and uses it to
-establish the shared session secret.
-
-This poses a serious problem for the threat model of the TCG_TPM2_HMAC
-feature, which it resolves by asserting that userspace will attest to
-the "null key" using the EK after boot and compare it to the contents of
-/sys/class/tpm/tpm0/null_name, exposed by the TPM driver. However, this
-creates a trust cycle: we do not trust userspace to perform this action
-correctly, because we do not trust that kernel correctly measured
-userspace, because nobody has checked the null key yet. An implicitly
-trusted remote attestation verifier also cannot be relied upon to do
-this check, because it has no way of knowing for certain which key the
-kernel actually used to establish the TPM sessions during the boot.
-
-This should probably be discussed in tpm-security.rst in the future.
-
-Signed-off-by: Chris Fenner <cfenn@google.com>
----
- drivers/char/tpm/Kconfig | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index dddd702b2454..ad419ca97b8d 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -29,7 +29,7 @@ if TCG_TPM
- 
- config TCG_TPM2_HMAC
- 	bool "Use HMAC and encrypted transactions on the TPM bus"
--	default X86_64
-+	default n
- 	select CRYPTO_ECDH
- 	select CRYPTO_LIB_AESCFB
- 	select CRYPTO_LIB_SHA256
-@@ -39,7 +39,10 @@ config TCG_TPM2_HMAC
- 	  communicating with the TPM to prevent or detect bus snooping
- 	  and interposer attacks (see tpm-security.rst).  Saying Y
- 	  here adds some encryption overhead to all kernel to TPM
--	  transactions.
-+	  transactions.  If the TPM does not implement a command or
-+	  algorithm required by the feature, it will not be registered
-+	  during initialization, and userspace will fail to open the
-+	  TPM with ENODEV.
- 
- config HW_RANDOM_TPM
- 	bool "TPM HW Random Number Generator support"
--- 
-2.51.0.rc0.215.g125493bb4a-goog
+ include/linux/lsm_hooks.h              |   73 +-
+ include/linux/security.h               |    3 
+ security/Makefile                      |    2 
+ security/apparmor/apparmorfs.c         |    4 
+ security/apparmor/crypto.c             |    3 
+ security/apparmor/include/apparmorfs.h |    2 
+ security/apparmor/include/crypto.h     |    1 
+ security/apparmor/lsm.c                |   11 
+ security/bpf/hooks.c                   |    2 
+ security/commoncap.c                   |    2 
+ security/inode.c                       |   62 ++
+ security/integrity/Makefile            |    2 
+ security/integrity/evm/evm_main.c      |    8 
+ security/integrity/iint.c              |    4 
+ security/integrity/ima/ima_main.c      |    8 
+ security/integrity/initcalls.c         |   41 +
+ security/integrity/initcalls.h         |   28 +
+ security/ipe/fs.c                      |    4 
+ security/ipe/ipe.c                     |    3 
+ security/ipe/ipe.h                     |    2 
+ security/landlock/setup.c              |    2 
+ security/loadpin/loadpin.c             |   15 
+ security/lockdown/lockdown.c           |    5 
+ security/lsm.h                         |   42 +
+ security/lsm_init.c                    |  563 ++++++++++++++++++++++
+ security/lsm_notifier.c                |   31 +
+ security/lsm_syscalls.c                |    2 
+ security/min_addr.c                    |    5 
+ security/safesetid/lsm.c               |    3 
+ security/safesetid/lsm.h               |    2 
+ security/safesetid/securityfs.c        |    3 
+ security/security.c                    |  623 +------------------------
+ security/selinux/Makefile              |    2 
+ security/selinux/hooks.c               |   11 
+ security/selinux/ibpkey.c              |    5 
+ security/selinux/include/audit.h       |    9 
+ security/selinux/include/initcalls.h   |   19 
+ security/selinux/initcalls.c           |   52 ++
+ security/selinux/netif.c               |    5 
+ security/selinux/netlink.c             |    5 
+ security/selinux/netnode.c             |    5 
+ security/selinux/netport.c             |    5 
+ security/selinux/selinuxfs.c           |    5 
+ security/selinux/ss/services.c         |   26 -
+ security/smack/smack.h                 |   14 
+ security/smack/smack_lsm.c             |   11 
+ security/smack/smack_netfilter.c       |    4 
+ security/smack/smackfs.c               |    4 
+ security/tomoyo/common.h               |    2 
+ security/tomoyo/securityfs_if.c        |    4 
+ security/tomoyo/tomoyo.c               |    3 
+ security/yama/yama_lsm.c               |    2 
+ 52 files changed, 1043 insertions(+), 711 deletions(-)
 
 
