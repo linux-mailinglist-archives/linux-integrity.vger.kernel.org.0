@@ -1,79 +1,78 @@
-Return-Path: <linux-integrity+bounces-6848-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6849-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B161B272A2
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 00:55:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54497B272A6
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 00:55:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B10518811A3
-	for <lists+linux-integrity@lfdr.de>; Thu, 14 Aug 2025 22:55:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2B44B61318
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 Aug 2025 22:53:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7247827D784;
-	Thu, 14 Aug 2025 22:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 539AD28504D;
+	Thu, 14 Aug 2025 22:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NTkqa9QI"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="VvLDY7Jx"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D14285057
-	for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 22:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6E72857CA
+	for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 22:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755212102; cv=none; b=CKUEJUUURYP4qfl+qu5cH6nIyjyKgbf72B7GhOfvDjhwiiKkNVoz6MOPEXATU2EyJBsliwzqT58SBjfkwLGwX2j96sz47PwLudAZ25ZiIVf+Et9RJWcyHFWqZnlaXyX3qUbpXPFXvUgzO86cjtYmSqtKfxVBD+gybRXJ5vk+9lQ=
+	t=1755212104; cv=none; b=KcLX86S+BDOxPBowfcNxdz/8jK7UlBvYYQXLW3dTV/lIeozgDCz28QujS8hhypGymdK3osZflJprgMo7VqVdlifObxAxQ4bYxfTMd27B0KZLIbIuoOKa0zO/B+7Vs8YAD2mktp6uLIWY5L6EvoTpohhClTS8rIO3wnbQm4AGE3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755212102; c=relaxed/simple;
-	bh=URVWxfK85fttW3+Th+J6RoO8v/wxk5dtKWR/04cDVZ4=;
+	s=arc-20240116; t=1755212104; c=relaxed/simple;
+	bh=5ePB1z1LHpqcu5bUggxBp8iGK8/pZ3MulZuVWVNh2Zk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y2+edVfGg1vdcBkCVimOz6de6I1QIx30p29egosHdhKow3sbhhOANDcHrnfpdS41j6ru4ykHFiip4FvD4EpH3RPVpJvU+M25FTJyBnnlZXA45wvlywHZd98a6SwRMMRFuw0zb1yXWai2dToSMeVnzo5jKXK1Jfoybyv5Un4WarY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=NTkqa9QI; arc=none smtp.client-ip=209.85.160.170
+	 MIME-Version; b=Day/7ngTaDlj60a5RXwn0KZM1iGM7tBEq+Q9pKwhzcnIb/ILBypF0Silts/NODsr4WDxKAACv4mqC9B6XCg5wLfZDgOqmpO40s1Jp+MCItS+yyIpJKBErpc7v+1GlzwCl0llBktLKiU7LmALnmUflm9ztr141iPfqZP7x2CErgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=VvLDY7Jx; arc=none smtp.client-ip=209.85.160.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4b109c4af9eso13206511cf.3
-        for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 15:55:00 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-4b1098f9ed9so10052161cf.0
+        for <linux-integrity@vger.kernel.org>; Thu, 14 Aug 2025 15:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1755212100; x=1755816900; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1755212101; x=1755816901; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b4D+dMcKUsP+TdRIF7gesTZPNDJ8YR+vx6kSTZ1U4BY=;
-        b=NTkqa9QItvAzpM9XUZ0SPdxDiqtP6Q8/jrMyGL+AeC4tdoiwFzbTc8gZf/YXWsAznB
-         tE3Wapd4O8FsPttE9jtY6+ceiiaKbQ0t/Bq22ypkpQ4v8b3yQCfLDs7T+UPfJ8uFn14Q
-         2T8dBDpnleFi2F+GqyP/kps5Yncxpu/COIHBbl6jKY2hZtoMQNiT8Qd/j/vXQhdpxt/g
-         TpDe4llZBRgcFzPgVl6mpr36t9Pts51/rBqaAT8Idq9ua7lrfFk3zr26OTphs8kej168
-         ri8v4tSpv35u3+QmXu7rnlEsBFZ9sCf/Gf24S/pclNGrhXJly+fm2xRw+9V1Vc1BzezP
-         rVXw==
+        bh=jFpPicRcqPRHR+SQPgLiIX1xx0gbGO8ikejKEmnVBDU=;
+        b=VvLDY7JxTJQEdene23y16ncWBD6kDzKbCbwjwdd8RYKzEjZya5h+ljwW+Psao6boeU
+         QYyaD8Yaag34kqcJLImDnNSmrPNWXtiC00mQg7Hi9C+auF4CDXjlO7W6MhrvFAHY3L1s
+         59tbks78J1PBJfV8nMuEVxb/bxIxySRuw8/EBNZ8SXvuoM6QY/iYe/4xSY5b4aWK1AN5
+         Si5UcpyDPWYw35CFUNwWxx/4bjlgmJLjL2SOtKGDhUDRdj7XZVsIYpt2wyK1hsQhbvSo
+         czYcOI5yFLAXQZc5c6l4d80Y/6Kd9Zu+8gMVV9qPI3vISWW8acGuguq2XC9fUOsobMFe
+         66OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755212100; x=1755816900;
+        d=1e100.net; s=20230601; t=1755212101; x=1755816901;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b4D+dMcKUsP+TdRIF7gesTZPNDJ8YR+vx6kSTZ1U4BY=;
-        b=JwEyW+pk31FARNRQzcbS20sx4KkmY1N3PHsG6YDt9D4r4u07xL7QZGn0zpQY7w3Lw/
-         aDegok94dEtZ8TqJ+9muv6SFPQvyoNs5Vl+7ml7a0f5BhVe/vV6tDg2cbV+eUQFTj4wd
-         4nKD7o+aMSD/AQK32gseOCbHBadGChbZR3rgZpPL58z5SK3vLmQfgKjc7fTA+rwoqtYg
-         WFP8E9NPi6WgVQ/G7sJvzECD7RriG3gnW0NOdvuzBDO2KiQabhmZzJCooMeLkmzAvJ8W
-         mj9bnmj7bOJC4NPcek7sW9pOBHX8RVFuCCEvSYhvTnToZORXdP073F7gv9KSUjHJDvLX
-         b6BA==
-X-Forwarded-Encrypted: i=1; AJvYcCWGfLnuZzNljfKanGLnNV5/e2afj28uU6vcHXMZOqCn3VHqB/2mfz4020eJ+veHQrfW+k79AJfM8VaDuKjgPVs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyxweslq4E57F9YdV3OjMSS6JbxccyifekVwSIu6aPqMJJwk0co
-	o/HTiQ4AicBO+s1f4BK6B5GVyegfOKiJdyJY4s4TbJYHwndFGheWjFkTcx42aMvZew==
-X-Gm-Gg: ASbGncuJ2dDv4af4NAo37vTC6878u2QjPai7/LwOVCt+Q6xqlYSJlr354/pvl744fUo
-	YEX0eS8fjNzlGp6LSKPSFoPl9LtDh5CT1w0DTcMqAZcFdQnbRSEqgZSYzpqKUZDKnVOEAt9VQyx
-	M3sOM6OjCmqyEQjmo26SomG8BXU2D4MOBfQSPNbud5xw+UAxShQ49EHamTJfya1Dmn5Tf+a3eti
-	phfMUfdhRuyy0S63gyYeVwOXOmBVPmYU9+B9uDqPhm3q/EYZLBlK81PZD+BSn507JcadONyUmVQ
-	Zq8hUIa35py82ErWtz72TltjjAhw++sNGRIPbRyljLHJytGiexYvVIDusGYbfi1PTKb7SR9zhRd
-	LUo5RyZvbSNcq903K+bXCqeXo+5sn+CQ1pHpI1dTnDzyDZpNHerMVkx35S1Zvuz/6B7l24O0HLx
-	6T3A==
-X-Google-Smtp-Source: AGHT+IEEDKJm+l79Dx5z529UddvGnLjKvYxEwgpaywZhanewYGh2aS0aUs91oxzAAMjw0E1QYschiA==
-X-Received: by 2002:ac8:594a:0:b0:4b0:7435:4243 with SMTP id d75a77b69052e-4b10ab02801mr62861771cf.49.1755212099684;
-        Thu, 14 Aug 2025 15:54:59 -0700 (PDT)
+        bh=jFpPicRcqPRHR+SQPgLiIX1xx0gbGO8ikejKEmnVBDU=;
+        b=dVCnrLaKFSo0az9JrM/gWNfWSRN6b5QpwT/KAqMPbv1O93gHThhLHQomhpi2gM8rxH
+         RzOaIviH4SGwooRhbJpJBD4WBmjwKhHu1P7JsjPdIOtWKRQLEImxeKtuBd9T1fcp4AKU
+         ZNPxXZzPBOiU1FkmO56V4I/Airf4NTXmrqMbaxC8zQtlEr1HHxtnq/WldWe2K2UdQ5qT
+         r2c7PJK+0mGBxdrSY6Wu5jJ81sfvuoxsQM5VUbSBr4tnQX0t+8/NF1OzKLgRMqEMKVy4
+         B1Qim2RskErbQqXMblMj2PRwoaB2PuWT/2eJgMUPLMtBZF7tbKdZYgdkCoGkWdxnvz3V
+         +tuA==
+X-Forwarded-Encrypted: i=1; AJvYcCVbc71H6HNr4zzrdSAweupB8dIMGhN061e4VHwalrB35E0v/N606/jFLDdBIY9bgZLzqgToBezRPurp5C7Y+Z0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxllGyVw33tBS/lA+nz7MfhlVGCnbBHnLthlJgIqJ3PcVCIXBLi
+	3amuo4on8JC6Ccw0KE2xgucGFXMeDXous2GJyQ4TOknry9XWUKWoplzUnVz1zp5tVw==
+X-Gm-Gg: ASbGncstjKhOxj8V1ip+Vp48/feplMr7M2cFHV0smLFLVYx5RLSAMtCKOFuQIHFIaTS
+	CZxbBirEudWqpyRqqLJMjVehJoA96/tUFHGP+i6zp15HkQVigRgQ9KQ2dAFZljc9liUuUhOqA4h
+	2LiXvMI2M3Aa/9zHgnHcvmhqfQ/FLo48T2IZ770my8qBpHrjxznoKde3NrKqHuaxKCywaljDi4K
+	H72fMdiFhCM1xvN+LJm271F3VEFDVZThuC1WqFUxghgLg/pOWbLdsfZIMLc+LNLzNK/IiMs11xW
+	2m2SPtou64tl0EX8FtxP5KSx6XPnUqPagYmvDTFUim2rioWmMkwd9bg/6AmY8bPGPEsXTKmNBXs
+	46LlIvRc3dyHsw2R2RBcsttmpH450iNRpGiIssu32a7qvbsLAJjCsEmLlLJZXQuCj1hk=
+X-Google-Smtp-Source: AGHT+IFH5dzKkU7yWdy46pzimsh9GBBStW9L5OVdb2n8/NAg21qKxVr07gBX/93WaT0YVxi9JAASUA==
+X-Received: by 2002:ad4:576f:0:b0:709:cf54:2cb6 with SMTP id 6a1803df08f44-70af5b055aemr87250166d6.16.1755212101407;
+        Thu, 14 Aug 2025 15:55:01 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4b11aa11d85sm2325431cf.35.2025.08.14.15.54.58
+        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-70af5c0d80fsm18581586d6.80.2025.08.14.15.55.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Aug 2025 15:54:58 -0700 (PDT)
+        Thu, 14 Aug 2025 15:55:00 -0700 (PDT)
 From: Paul Moore <paul@paul-moore.com>
 To: linux-security-module@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
@@ -90,9 +89,9 @@ Cc: John Johansen <john.johansen@canonical.com>,
 	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
 	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
 	Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: [PATCH v3 30/34] lockdown: move initcalls to the LSM framework
-Date: Thu, 14 Aug 2025 18:50:39 -0400
-Message-ID: <20250814225159.275901-66-paul@paul-moore.com>
+Subject: [PATCH v3 31/34] ima,evm: move initcalls to the LSM framework
+Date: Thu, 14 Aug 2025 18:50:40 -0400
+Message-ID: <20250814225159.275901-67-paul@paul-moore.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250814225159.275901-36-paul@paul-moore.com>
 References: <20250814225159.275901-36-paul@paul-moore.com>
@@ -102,36 +101,214 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=825; i=paul@paul-moore.com; h=from:subject; bh=URVWxfK85fttW3+Th+J6RoO8v/wxk5dtKWR/04cDVZ4=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBonmjuthZ1t1lTxmuY+UtzM+a7e6/s2EZ6P5DW0 Or7Vw5YKZ2JAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaJ5o7gAKCRDqIPLalzeJ c5fpEADDTwwkicUA6WRpdxsVirRfXxD6DnrC4rPBYSNiF2GMMN8k+zQOa4fetmFb3trSpXcJI0K z0UtocoE7nNyfqat072Ynfy9vQUz4kkMouvklXBUcJhVIXmmBP7q5+9i2zsLV9TBFdcpUsWkk31 D6MjthQPLEKfch0QlXHiWohjzWqu8o8oQ7QMqVHoLvXrEDeiHimACEoQQNMkZQ3O4M5gmeeJOnB uL1BVA4VqcB8HQZCqHjOt0QJCTmLuhZiuSHz5ytlHgkTF4CddZXRE4LDc2oG4vBGIZNuIATfVNP S/vVIlbm8qX49wYD7hocVRgmKSgWjvSa4RTbm5NZYl3f9o+21QUClU+pFMMP7mYE6vhG/E0tTU3 NHt07Q30kQJQh1mKxHy80g/acZzX6aZ3hMFqnoRZDZXSfbbkLylqPeouvDyi+2bQrUW5QlsIj83 UIl7O7adtvjLvTXBeM6WRTMF0z2wTGt6Xdba6ZT07PUEy8GNP1CvAlStz7QjAJynILqvjcuJeUW FEKdx14QdCPieNAuxOBN3VcjarXqGhe3Pc5pjNGabWCdQdcGRM03RO+2l9GkvIcOm8QzgEm0hBo jUNF+yzJAtbel0vjD46jenD8akmIhs+txWQ4mJGW1LYozW9xTC+WS2cx04DMg6xZKhdRDq2WFS7 Fi9SVYD4IrJoxVQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5807; i=paul@paul-moore.com; h=from:subject; bh=5ePB1z1LHpqcu5bUggxBp8iGK8/pZ3MulZuVWVNh2Zk=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBonmjxJlObw7mncXL+i3yW6XPsYVkZ6OoSHvRgt 28PYlPUYoyJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaJ5o8QAKCRDqIPLalzeJ c0ZoD/0TlWf5epuF/m+VeiJx0pcTh7L7tjBRzJFkG1h2HzbpTqQQuAtOgqZz44i3iHuPaGGsy+7 E6yJYTbe7iXIu5eKvciE0XEBfaUSuFmdA8PPn+ddsbhzMZhHwmgWtzQVuvGPdO/oSJvhCBW5PXx rKjnqha2JmEy4fMu6Tt3TYxbvBLvUF/Vt/sVOIAr9/wa7utNkcDWUUPpqX+CbrBZRS39q8Fs9zx sMrckdPvM3a97nbXI8VNT1XpWEhJo3nZtEeKeUkCgEamev9t9QRF4wBe1oagT9fgnaTzK/5qdEV BBCy1+fBnvFtUANZds+3ECYkjku8ta5jqMb4mEayr61afT32FHjuOQcbiHt1wYTgngwRKR3m7Gh y4+b/+8FzAPnl87GAHut79DOLLNsSoKsqqvdFIkFtVXlzbmCulviAn6L5e4n/T19qWIInU+wfpz 7sKOFvEu1MiTj1gjCczg0SOGgmlXDH+X5xOfyVEHeVLPYp05GzQimvqDM5utj4Lfaam3UlGH5J5 yzkXWJ4pYHeQlPRJvoY7F0eJgo/PMiOfir7DN8Ue8sQfv5xUB704BYRDO1aMtuO04ai0vDOi8at Zg+MmeKeZBM5YArYEQaXntKywb0z7Y2zaMIN8CxrDScDzW8EOTkxAFVaxbqIyjWJdpK7L1hICml uwlZjR9kxrpPoLA==
 X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
 
-Reviewed-by: Kees Cook <kees@kernel.org>
-Acked-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+This patch converts IMA and EVM to use the LSM frameworks's initcall
+mechanism.  There was a minor challenge in this conversion that wasn't
+seen when converting the other LSMs brought about by the resource
+sharing between the two related, yes independent IMA and EVM LSMs.
+This was resolved by registering the same initcalls for each LSM and
+including code in each registered initcall to ensure it only executes
+once during each boot.
+
+It is worth mentioning that this patch does not touch any of the
+"platform certs" code that lives in the security/integrity/platform_certs
+directory as the IMA/EVM maintainers have assured me that this code is
+unrelated to IMA/EVM, despite the location, and will be moved to a more
+relevant subsystem in the future.
+
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- security/lockdown/lockdown.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ security/integrity/Makefile       |  2 +-
+ security/integrity/evm/evm_main.c |  6 ++---
+ security/integrity/iint.c         |  4 +--
+ security/integrity/ima/ima_main.c |  6 ++---
+ security/integrity/initcalls.c    | 41 +++++++++++++++++++++++++++++++
+ security/integrity/initcalls.h    | 28 +++++++++++++++++++++
+ 6 files changed, 78 insertions(+), 9 deletions(-)
+ create mode 100644 security/integrity/initcalls.c
+ create mode 100644 security/integrity/initcalls.h
 
-diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
-index 4813f168ff93..8d46886d2cca 100644
---- a/security/lockdown/lockdown.c
-+++ b/security/lockdown/lockdown.c
-@@ -161,8 +161,6 @@ static int __init lockdown_secfs_init(void)
- 	return PTR_ERR_OR_ZERO(dentry);
+diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+index 92b63039c654..6ea330ea88b1 100644
+--- a/security/integrity/Makefile
++++ b/security/integrity/Makefile
+@@ -5,7 +5,7 @@
+ 
+ obj-$(CONFIG_INTEGRITY) += integrity.o
+ 
+-integrity-y := iint.o
++integrity-y := iint.o initcalls.o
+ integrity-$(CONFIG_INTEGRITY_AUDIT) += integrity_audit.o
+ integrity-$(CONFIG_INTEGRITY_SIGNATURE) += digsig.o
+ integrity-$(CONFIG_INTEGRITY_ASYMMETRIC_KEYS) += digsig_asymmetric.o
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index db8e324ed4e6..823573bcaa27 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -25,6 +25,7 @@
+ #include <crypto/hash.h>
+ #include <crypto/hash_info.h>
+ #include <crypto/utils.h>
++#include "../initcalls.h"
+ #include "evm.h"
+ 
+ int evm_initialized;
+@@ -1112,7 +1113,7 @@ void __init evm_load_x509(void)
+ }
+ #endif
+ 
+-static int __init init_evm(void)
++int __init init_evm(void)
+ {
+ 	int error;
+ 	struct list_head *pos, *q;
+@@ -1179,6 +1180,5 @@ DEFINE_LSM(evm) = {
+ 	.init = init_evm_lsm,
+ 	.order = LSM_ORDER_LAST,
+ 	.blobs = &evm_blob_sizes,
++	.initcall_late = integrity_late_init,
+ };
+-
+-late_initcall(init_evm);
+diff --git a/security/integrity/iint.c b/security/integrity/iint.c
+index 068ac6c2ae1e..a4b88d67ff43 100644
+--- a/security/integrity/iint.c
++++ b/security/integrity/iint.c
+@@ -11,6 +11,7 @@
+  */
+ #include <linux/security.h>
+ #include "integrity.h"
++#include "initcalls.h"
+ 
+ struct dentry *integrity_dir;
+ 
+@@ -42,7 +43,7 @@ void __init integrity_load_keys(void)
+ 		evm_load_x509();
  }
  
--core_initcall(lockdown_secfs_init);
--
- #ifdef CONFIG_SECURITY_LOCKDOWN_LSM_EARLY
- DEFINE_EARLY_LSM(lockdown) = {
- #else
-@@ -170,4 +168,5 @@ DEFINE_LSM(lockdown) = {
- #endif
- 	.id = &lockdown_lsmid,
- 	.init = lockdown_lsm_init,
-+	.initcall_core = lockdown_secfs_init,
+-static int __init integrity_fs_init(void)
++int __init integrity_fs_init(void)
+ {
+ 	integrity_dir = securityfs_create_dir("integrity", NULL);
+ 	if (IS_ERR(integrity_dir)) {
+@@ -58,4 +59,3 @@ static int __init integrity_fs_init(void)
+ 	return 0;
+ }
+ 
+-late_initcall(integrity_fs_init)
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index eade8e1e3cb1..06ae59cd77f4 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -28,6 +28,7 @@
+ #include <linux/iversion.h>
+ #include <linux/evm.h>
+ #include <linux/crash_dump.h>
++#include "../initcalls.h"
+ 
+ #include "ima.h"
+ 
+@@ -1202,7 +1203,7 @@ static int ima_kernel_module_request(char *kmod_name)
+ 
+ #endif /* CONFIG_INTEGRITY_ASYMMETRIC_KEYS */
+ 
+-static int __init init_ima(void)
++int __init init_ima(void)
+ {
+ 	int error;
+ 
+@@ -1283,6 +1284,5 @@ DEFINE_LSM(ima) = {
+ 	.init = init_ima_lsm,
+ 	.order = LSM_ORDER_LAST,
+ 	.blobs = &ima_blob_sizes,
++	.initcall_late = integrity_late_init,
  };
+-
+-late_initcall(init_ima);	/* Start IMA after the TPM is available */
+diff --git a/security/integrity/initcalls.c b/security/integrity/initcalls.c
+new file mode 100644
+index 000000000000..6afa411068f2
+--- /dev/null
++++ b/security/integrity/initcalls.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * IMA/EVM initcalls
++ *
++ */
++
++#include <linux/init.h>
++
++#include "initcalls.h"
++
++/**
++ * integrity_late_init - late_initcalls for IMA/EVM
++ *
++ * This helper function wraps all of the late_initcalls for both IMA and EVM.
++ * It can be called multiple times, e.g. once from IMA and once from EVM,
++ * without problem as it maintains an internal static state variable which
++ * ensures that any setup/initialization is only done once.
++ */
++int __init integrity_late_init(void)
++{
++	int rc = 0, rc_tmp;
++	static bool setup = false;
++
++	if (setup)
++		return 0;
++	setup = true;
++
++	rc_tmp = integrity_fs_init();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++	rc_tmp = init_ima();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++	rc_tmp = init_evm();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++	return rc;
++}
+diff --git a/security/integrity/initcalls.h b/security/integrity/initcalls.h
+new file mode 100644
+index 000000000000..b56e9c576505
+--- /dev/null
++++ b/security/integrity/initcalls.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef _INTEGRITY_INITCALLS_H
++#define _INTEGRITY_INITCALLS_H
++
++int integrity_fs_init(void);
++
++#ifdef CONFIG_IMA
++int init_ima(void);
++#else
++static inline int init_ima(void)
++{
++	return 0;
++}
++#endif
++
++#ifdef CONFIG_EVM
++int init_evm(void);
++#else
++static inline int init_evm(void)
++{
++	return 0;
++}
++#endif
++
++int integrity_late_init(void);
++
++#endif
 -- 
 2.50.1
 
