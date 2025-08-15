@@ -1,168 +1,153 @@
-Return-Path: <linux-integrity+bounces-6867-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6868-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 221C9B28578
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 20:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47D72B28597
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 20:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1A543AF57D
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 18:04:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A8573BE9A0
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 18:10:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EAA4307AF6;
-	Fri, 15 Aug 2025 18:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54BAA302770;
+	Fri, 15 Aug 2025 18:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="vhdLnbBA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ml7XGtjj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06921D9A5D;
-	Fri, 15 Aug 2025 18:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755281082; cv=pass; b=Iqu3R5XtXkGFdq5zmvVjiKJX0PRjv7jttbAXFng+4sey7wabVdiU5SC/3DRdSz/j4ioHER1nOTaiN6nfgfQJQDjXHyviZUDcrOjOT1U6vyHMYEaqUwtrzLneEAT2B0J/ToQfvbHMaR/bNJpOn9161W2yl/oqx0xBCNY0XMdObXc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755281082; c=relaxed/simple;
-	bh=N/68Fbwxd3zb5cagkcweb7ryFa2TrDUnrhkJZ9v3sJk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LenjxkXwTFwVHaYmFS2rv80SazrVYYBqj+AUrY+teGOql75QIZZbiuNt6OG0XGFreh3yCK32oiMW98flF7DRpHzVDZFbtSETM6UpLp6Kq7bTvufOtTAAe1j2umJ3bAb4efbZwGfMTOLg8zgkctwaZsQNDhwIEM2Ju5wr+pF8Dro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=vhdLnbBA; arc=pass smtp.client-ip=185.185.170.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
-Received: from localhost (83-245-197-149.elisa-laajakaista.fi [83.245.197.149])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sakkinen)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4c3VP83B2hz49Q5H;
-	Fri, 15 Aug 2025 21:04:28 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1755281068;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4pAhnMtIGVio/fL69TSSu91JNUUbAIp6omknr7h9bO4=;
-	b=vhdLnbBASZwSC4HziNYP6aK29YTBiYEBcemLCi6keAJYTANzverQlFsjNOOgaUD1//2jm2
-	YqRriHhBknUbo94AoQVRpI0pDafuCQ7udb5e9oZBX3Of4ittfG7+min+42etFsITasXyAJ
-	+GWEi7mNRp18E85FhudQVOPq6N5LdFccbCK69YS1QfBlT4g893n1fh3lqJCUMkalBQxAML
-	yW7y6a7cijQ3kaPUlPlzXE+fZaIKZbAc0h7qT1BGrJG5MDDt1g2U+O1BAiMZFSzReVFSDF
-	iG3O3mxTpdgLuatZ3gQ0ky1xmvlBCB+VbQ2TUpHZFVwEbgjw1OjJmrolO7Dcdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1755281068;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4pAhnMtIGVio/fL69TSSu91JNUUbAIp6omknr7h9bO4=;
-	b=Ugp9DTLH/Lefi1IG/1GVSOuE4IzNt1M+TxZKXyjMzvqpUvmfuxMVzQvjVzVEGB76ohtIT/
-	LZkYved2TtPs8PUbTnShiNnOI+QCr/N+Wb1/UETJnkYIWu0cmgrvJnthxbBkhmhbeE6T9/
-	QH2sQljJox5AcP098rP4LDvfXn1VJBP5H0CiTylzuO/dw2eQemH1m3RU+d6RD8R5JuA4Vx
-	HYy4m2OddZRrcCkePnYtI5LycPRfsLaAFO9KREtdrzPnI3F+u1Ih6VPiQh0lOwSaOG0vAp
-	/dPkv55CFmVg70r250ggtS/XQO6jA7DGWRsZrGIDDT/eqqzYlIKq1Gz15c5dzg==
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1755281068; a=rsa-sha256;
-	cv=none;
-	b=PuPGtYSuz1o4ve2WhhaqbxG/EIl+0/1DRlwPzVsW4QJc+kmdnPdkHJgLHfpVNizXqQduFt
-	n4i8r4fG98mxQavajmhJv1hfzf1eC9OWCVTP7EtRQN3hlEhhZj9zhG6sfuAIGm2M3JjoMa
-	J93SFDEtKv1m8C8hkvqNIgyR1k4licD5zMQCO8ez3gmrgaOtx0L0HKrR0wv5Qcz3ehxC01
-	0kGHvxZZm+Pzz9bSEi/fGm2IZYTj+tdOdX7kHhMYadbo5y1jaEnOeRwTWlVpfg0dzKZdDb
-	NoLuAu36c4VzRRx4b3CwQgMXPi7Z+mjpDll7H7hmnv9Veax2YKLSWnO2yHWJeg==
-Date: Fri, 15 Aug 2025 21:04:26 +0300
-From: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Chris Fenner <cfenn@google.com>, Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm: Disable TCG_TPM2_HMAC by default
-Message-ID: <aJ92qt6oSYyRYPZG@iki.fi>
-References: <20250814162252.3504279-1-cfenn@google.com>
- <aJ8iNLwlf4PAC0h1@kernel.org>
- <CAMigqh1RTVzz0ffY8M3mZuc7NDaBKpMmCU4q0LuNyM2eAi+NFg@mail.gmail.com>
- <aJ9fy_sO6tza9qLF@iki.fi>
- <CAMigqh2=Kmnv_rrT-gBtESSXtnMrxU=VJdrYE6_9NGhKBN+ZrA@mail.gmail.com>
- <aJ9ySGv0JZ0DiNgf@kernel.org>
- <aJ9z4OlwvFdEA2Q_@kernel.org>
- <aJ91KX97WVOQ3nVk@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD98301031
+	for <linux-integrity@vger.kernel.org>; Fri, 15 Aug 2025 18:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755281363; cv=none; b=Idv8Hs6Tgd74bU1hGMWyXa96d4rlAtGJHu0xRiL6sxx1GCs4bTGDglJXA5aiXjw6/KMjbB6FRIQSsXitry1VnVng/IApHQqo7tseCHw1myAHw4xvKK2A+GPqk/bYr0NhYA+8+0sExWsHy9eu56WZxeY6Lr+QiGPYwXLDWb1oA8g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755281363; c=relaxed/simple;
+	bh=VAFPFyAfwkotMN5lELbbjxQFE0CyO//yvNt+to9CJMA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FpmePVOFXHipM8wmJFIpkf+J65GkP+Pe4BDLv8MIJB5G9NBIU1nyY9MCruBhrdMWL2unZmHeJJw+5MZS2B0Y1roCqBJAO2QDkYc7IzTf14N3EoKcXYeZ+4/l12n5No0wKPN+QRuO9A9tzkXgAc3j0sRv2rwMUhbRqQKUBqwxhhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ml7XGtjj; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-55ce526ac04so2117180e87.2
+        for <linux-integrity@vger.kernel.org>; Fri, 15 Aug 2025 11:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755281360; x=1755886160; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VAFPFyAfwkotMN5lELbbjxQFE0CyO//yvNt+to9CJMA=;
+        b=ml7XGtjjEUP4fLxMwf7OEcqSeECf82HLil4wwzPJB0D9ysp4Zf/WRT4EmvCykEFJ9C
+         pyrnSMqx1ytyEAaYvp47l2Rn1cT+Cg9lf6TBeI+B0ukqNop+ugeZvLbBtQAXyusb7RE4
+         mMPMA6o+lBUG9lSk79I/YBKdrLaiScIA9oTChCGD4KjuiqUPdWm1j7NejjpevdJYCg0/
+         u+tsL1Gb9PgV94cceLbq4LcFQDIGXG54TrRpF9BtZVXQaTiiDcI73L/JKStcEpP5EEtQ
+         Xe8YN6uOtbF+3UUEo91bHvGS8o+2RSeJ/7gm89u+MqX3rJKqj06Wsl9ZA/f4VHIDYR+n
+         Qa8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755281360; x=1755886160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VAFPFyAfwkotMN5lELbbjxQFE0CyO//yvNt+to9CJMA=;
+        b=EjBUWGHTb7dE2+YRzRksbYklL+eZcq92AYLxKZ+HSBVQjhp0prLhPI4UYB4cAYFPma
+         7yo/wpL1vjclxcO6mYVYqLVxXbRJX02zHRH2YQWMvQ+9OtrKdfqfy8QdP5Dr4wWlThiE
+         hRhxEmJTCej7ddqaWvoD1g/I22JmpE8McmoGzw6MynR68xUiBXE9627kCXtQ7L2IMXwB
+         8N80+mu0A5VDz5nlKGTiLvG3dkq1k1tuD8/ZJt6KrZj22tB4P/yR+4XVMYY7MH9mIVNx
+         G0/oN0iiq1Hun2XI25PWfNCGQ0gxPxZXSCZPURfPSGXzw5CgOTo7wxVa20zfDNC8jhom
+         BdiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWIdKbf5GucAx0yZERvYhDPLBLerkni75WmZQv52LZ9X53jeLzxC2vAxwtf0Toqb0YiR/Od8NWWBDyr8r9Mv8Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW4DmMW8PnRUTx+nB+cDzpAeB+gkNR133GLn3OCFn1ciLoDWm2
+	Y5hyYwV7GHPmXPnnAS++qsEY7fQ+qcVRQJO5EIhF5tYkOFuIz/8U61gkMpl0/g0BBgmsXcc9wSs
+	akRmdjV8u42LDfJ3YIEuuAJRAf+Dk6o7o5OKjv1si
+X-Gm-Gg: ASbGnct00NRuYWULOigJ60/I+biGSWdV13e0I5B3isBMmULXzUpQxEiH7cBomCXA3YY
+	IKpaPoZiUBYury2/15S6rwEGbNfSfYxTY1lL4Qb+9/z7W5RZlNHj2KyptUb0iKwE2V5j8D3j4sw
+	4iqqa1XjBNeDSM7qGKIpPXkCyl0FxfSsmcZ97k11gzVREVOzIk6ELOF/Bu7BCCAGNh+kBmUvd1t
+	QC5Q7QxCWhYjYThwQkqmL4=
+X-Google-Smtp-Source: AGHT+IEqCYHW13TYrFzD3R9yuwCjd58YoB8BOmQK/j4b6qVInQSzYl9DHImFwD09MJFV3aovA6rCWkl3GgDpI67yFUw=
+X-Received: by 2002:a2e:b8cf:0:b0:32b:a9a4:cd4b with SMTP id
+ 38308e7fff4ca-33409809a95mr8565381fa.4.1755281359499; Fri, 15 Aug 2025
+ 11:09:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aJ91KX97WVOQ3nVk@kernel.org>
+References: <20250814162252.3504279-1-cfenn@google.com> <aJ8iNLwlf4PAC0h1@kernel.org>
+ <CAMigqh1RTVzz0ffY8M3mZuc7NDaBKpMmCU4q0LuNyM2eAi+NFg@mail.gmail.com>
+ <aJ9fy_sO6tza9qLF@iki.fi> <CAMigqh2=Kmnv_rrT-gBtESSXtnMrxU=VJdrYE6_9NGhKBN+ZrA@mail.gmail.com>
+ <aJ9ySGv0JZ0DiNgf@kernel.org> <aJ9z4OlwvFdEA2Q_@kernel.org>
+ <aJ91KX97WVOQ3nVk@kernel.org> <aJ92qt6oSYyRYPZG@iki.fi>
+In-Reply-To: <aJ92qt6oSYyRYPZG@iki.fi>
+From: Chris Fenner <cfenn@google.com>
+Date: Fri, 15 Aug 2025 11:09:07 -0700
+X-Gm-Features: Ac12FXyKyx-GCsrnIWEuVzsmwUR80hJX2IJjlIFJ-EPYx70be01fuqQ1Sg5pyjs
+Message-ID: <CAMigqh3yx7S2T=b-gTfdTG5BRs_JbHkXar4DT32AB3v_beNveA@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Disable TCG_TPM2_HMAC by default
+To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 15, 2025 at 08:58:06PM +0300, Jarkko Sakkinen wrote:
-> On Fri, Aug 15, 2025 at 08:52:35PM +0300, Jarkko Sakkinen wrote:
-> > On Fri, Aug 15, 2025 at 08:45:48PM +0300, Jarkko Sakkinen wrote:
-> > > On Fri, Aug 15, 2025 at 10:06:36AM -0700, Chris Fenner wrote:
-> > > > On Fri, Aug 15, 2025 at 9:27 AM Jarkko Sakkinen <jarkko.sakkinen@iki.fi> wrote:
-> > > > 
-> > > > > I'll with shoot another proposal. Let's delete null primary creation
-> > > > > code and add a parameter 'tpm.integrity_handle', which will refers to
-> > > > > persistent primary handle:
-> > > > 
-> > > > I'm not yet sure I understand which handle you mean, or what you're
-> > > > proposing to do with it. Could you elaborate?
-> > > 
-> > > Primary key persistent handle.
-> > > 
-> > > In tpm2_start_auth_session() there's
-> > > 
-> > > 	/* salt key handle */
-> > > 	tpm_buf_append_u32(&buf, null_key);
-> > > 
-> > > Which would become
-> > > 
-> > > 	/* salt key handle */
-> > > 	tpm_buf_append_u32(&buf, integrity_handle);
-> > > 
-> > > And in beginning of exported functions from tpm2-sessions.c:
-> > > 
-> > > 	if (!integrity_handle)
-> > > 		return 0;
-> > > 
-> > > And delete from same file:
-> > > 
-> > > 	1. tpm2_create_*()
-> > > 	2. tpm2_load_null()
-> > > 
-> > > That way the feature makes sense and does not disturb the user who don't
-> > > want it as PCRs and random numbers will be integrity proteced agains an
-> > > unambiguous key that can be certified.
-> > 
-> > E.g., for example that will unquestionably harden IMA exactly for the
-> > same reasons why some user space software might to choose to use HMAC
-> > based integrity protection.
-> > 
-> > At data center, there's guards and guns but for appliences, but there
-> > is also the market appliances, home server products etc. They are not
-> > mobile but neither they are protected in the same as e.g., a data
-> > center is.
-> > 
-> > This is not to admit that right now the feature is no good to anyone
-> > but in a selected set of use cases with this modification it would
-> > make e.g., IMA's security *worse* than it would be with the feature
-> > enabled.
-> 
-> One product example would be "blockchain node as a box" i.e., it carries
-> momentary value inside. I could imagine this type of products exist or
-> to be created (especially given proof-of-stake blockchains).
-> 
-> In such product, you don't have much to measure but you wan to take all
-> of the security that you have to harden the protection of that small
-> amount of data.
+On Fri, Aug 15, 2025 at 10:45=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.org=
+> wrote:
 
-I'm happy to make patch next week for this change too. So probably this
-where I align myself to. It's just the best average IMHO. Everyone gets
-exactly what they want, right?
+> Primary key persistent handle.
 
-BR, Jarkko
+I see, thanks. I think this might make it easier to ensure the driver
+fails-open in the "relaxed" case, but I don't think it would resolve
+much of the performance drawbacks (really we'd just cut out the
+ContextLoads, which in my testing constitute around 30ms of the total
+135ms of overhead). I still don't think it really solves the threat
+model since the adversary can just make sure to interpose all the
+requests instead of just some of them.
+
+That said, it really seems prudent to disable the (seems to be?
+broken) feature by default for now, then re-enable it once this is
+confirmed working.
+
+On Fri, Aug 15, 2025 at 10:52=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.org=
+> wrote:
+
+> This is not to admit that right now the feature is no good to anyone
+> but in a selected set of use cases with this modification it would
+> make e.g., IMA's security *worse* than it would be with the feature
+> enabled.
+
+Under what specific threat model would IMA's security be worse in this
+case? Either there is an interposer, or there isn't, right? If there
+is an interposer, then they can interpose all the commands including
+the CreatePrimary and session establishment(s) and defeat the current
+and proposed version of TCG_TPM2_HMAC. If there is not an interposer,
+then this is moot (I think).
+
+Philosophically, I think there is no such thing as "more secure";
+there is only "solves a stronger threat model." For example, you could
+construct something called "AES-129" that you could argue is "more
+secure" than AES-128, but since nobody's threat model has attackers
+that can break 128-bit keys but not 129-bit keys, we don't use it. I
+try to apply this reasoning to everything I build: all security
+features trade-off against performance, usability, and compatibility,
+and I strive to justify these trade-offs with whatever specific
+threats that they resolve.
+
+On Fri, Aug 15, 2025 at 11:04=E2=80=AFAM Jarkko Sakkinen <jarkko.sakkinen@i=
+ki.fi> wrote:
+
+> I'm happy to make patch next week for this change too. So probably this
+> where I align myself to. It's just the best average IMHO. Everyone gets
+> exactly what they want, right?
+
+To be clear: I already have what I want (the ability to disable this
+feature because it seems broken to me), I'm just making
+recommendations as a TPM abyssal domain expert. I hope my feedback is
+of some use on this -- the work of dealing with interposer attackers
+is quite important and I appreciate the effort already put in by the
+team.
+
+Thanks
+Chris
 
