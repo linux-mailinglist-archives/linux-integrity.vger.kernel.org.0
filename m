@@ -1,77 +1,77 @@
-Return-Path: <linux-integrity+bounces-6861-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6863-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25CD9B2849D
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 19:03:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DCEFB284CE
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 19:15:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF97B188A2AA
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 17:01:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6415317B3BD
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 17:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4402830F801;
-	Fri, 15 Aug 2025 17:01:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2FA32F9C25;
+	Fri, 15 Aug 2025 17:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="nfAmXrth"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="uH/Sa+uv"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CB430AAA2
-	for <linux-integrity@vger.kernel.org>; Fri, 15 Aug 2025 17:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531212F9C21
+	for <linux-integrity@vger.kernel.org>; Fri, 15 Aug 2025 17:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755277261; cv=none; b=WwpuRgxKThpiyKBfAs1AGhkCgj9m3w+6VeobOe8lKryzcS9WbZnhBPMekf+553ybHtvw1gb7WVXaizXcTTgkfmG/zaslmESF6Xy7FIpygzRA/Z5/1gO/f4GcXFiJlmea4jiFkwm8E4/z6XBXL5jeaHBG8mc9FDeVr1NBGBlGL3c=
+	t=1755278151; cv=none; b=VDmvQ/pJW5BhDeIqh+DrwQceKHDWRr7qtTwPKpGkEIxY/MDraQhTKSHVRO/AFxyCeYWB7vIMLAO/B80SAZvRGYqITmHLOr03YiFoDH/WKT5kqURMZMkl/IKmiHhSiBzKrqfH2zht94X7bypknP0S94vuCj8k7ZuzYHcPJ99v0N0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755277261; c=relaxed/simple;
-	bh=lFWa0x7pJ4oX2LkaowGiliGhSLBu6A87s+Kqvhkhds8=;
+	s=arc-20240116; t=1755278151; c=relaxed/simple;
+	bh=PVH45VaS2/Kv67LXl0wYjUW6dY2Wo1zUVDbWzOFnvC8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CIlSjLLcAPyVIwd7QNu2lWievUWMlOp61tt02czxBgQSE0MHdJX7InWhfuwB6jMtOF3+NswOx6MTBjeFvMSXUDt9/Wk8Z7ZMSjWsvCmiwvgSwp9aoooPnbSS75lsamI73RfQpYCIhj51W0wWdueakFoJ1VtEvZ+LgqM0nBPuwmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=nfAmXrth; arc=none smtp.client-ip=66.163.186.211
+	 In-Reply-To:Content-Type; b=DdNGlKWf1wgBHCq7chHbocWgEFqK3abdvIly0n/NCfApQeyd4NazOfX8n4ID6uN7MwTVuIH7O/TMODI/7ipMH7CgM3Ljy+ZLlk0ndqCrwSa89b7Nf1w3tJvRZsZl//RoPgTWh59sSODhfO+2nqToGDHn7pAPqsnARoXc2bJDP3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=uH/Sa+uv; arc=none smtp.client-ip=66.163.186.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755277251; bh=ymqbZq6vmMO00i56GB/E+3scTdF5LBGYevaRRc+yoN0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=nfAmXrthrbEP2y5HxZP85blshLLOHRvk8BPigkZDd3As8teYkssOiNhe1/lhJVYEVjlxCKCpwoZswEEjAvnxCg87M3HnserA5lTrlFy8OORDnEwSg8eNyhj0n4nhkoe3DI4syJektdVhqiSYee2/4jMG9miev3jsqUlFgNA1MPBVXyJRSMbPWAgScTJV9/tWXHVifQubfP6wWC+jlEdsVvQuya2aMc00dte9TbkJYKmTkBh05BTZYdMPlMQBreLXWMsAOPMizq0WAbouG6+4c0PDC1jiGVALNmaOFA0420gplkYDQjB8f7icgLuu+6+m6I4u9UmZJs1wks2woeI+WQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755277251; bh=RUw0IduYY05EXQm3UsqYALI/yCYRnLjhxr4g9xjWtHx=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=oy1WZ1jNjtSIYoSVjUMx8RY9ICAYAUy39SdXawu9Y58RsLZJcga9NSCuI9KkPAqF5GSRSpnBLcROpjmhaGb0gW+FPUKCEMWVM1jL3sLhNw2mWZlhTx/q0IF6KJ5IfrGKvnkbdW++vXz1o9HinOaXC6ZVz3cEU8JnDx0UE9S23cwfXz9eRAQJET8NQQoK4U8QgLeDHIkbFA+41r7BP2iCmY/4+nxbfaM829glFK27S3QpG7uPegoE2HobmpR/juSaKAOF3E/sIloTcNcIOaBN/bOfEWrz5JsqHF5UWLxqWpHwb+2HksyUXrSxoGm2k/letmgHTMNHl/a5IL/K4qy2SA==
-X-YMail-OSG: MsWZsFUVM1m9K3mc.tinv6z2jkiCkUGONceK0ZEQKpBKjXuzvjkkc61XveSYUB7
- 06QLzzYGKwUYJO5v9VyF_.adg1_V.ZBPSAYZzhscNio.miIK_YGZd.RV1loDdcV0bYWreudXGk4I
- lIvDTGdf3rnSKqGl1hVYH.tCZu9IuWtNOiFb7VzBfXmp8YpPDP0467zqV_vBv_FdU1KdlbPjTUDE
- SQU3FG_Wsfo5v7ZfMxNOlJFHJCAlxfWav3tnTDmyeCwA7m087KjcGdDm1HhKbbpZydiJ_D6qVoot
- KazBxOfJ2QvNHPF0Ky77NJCWmwjMRz4ezAEYjXYJ4oeyB.csbNldhuM682KSJ4DYMGy67.F41DS2
- jm39noJlYDr0HHzG28kBx012Ay8bt1GptieGmdFehuhoHunfOzH.XBqwBZSfyt3QEHXPFJ_alGmB
- LfR6p8ZjT8QeJvb3Wwou5PtySjtohPh7e12lOrtK1niLfDlCTYgEN6.MRMcD_Cqr77eA2qoxOnBZ
- MYRgQNNKc4GX5p7dOCIlYFqNSwSW80b82a4KuL3bMO5S__ALDPiNwZPZFIIEkM62WHs2sV7CSiNn
- IrmlPNpkSq6.b6HzqvSpyseZBw4FKWjqj_JIa6tKw3.NjaULl2BgdS86sP035S3TUKyUgRKbluQK
- 7o3nk.qYMZm0EKjEFVjLAGwbquY581dIcmWRuUdJ75_nE77cwOC47ivq_yi7GssozuSB850KSHIQ
- qH0CxIeMA8NrwtTnlqcVu5x5dUNa2G6Gb1ctii7XmyXnos8i1AAIJjx9bczTsP87u0XsSqtSgD5c
- rBo.Ce2dFogCDtB1U6mfqous1ei3zqP6g1UOkfKfNajXw1OcXR3TOgAzI6MPvYHojgRkNDsB7u0E
- HNPTnBPBoIBjFbYA3g8B1HKHWlqTyG8UpaI0dHxhqwj.vUdaypeWA3iTv1OazcI8LSDcCPSIZs_p
- qDyPDIgtqfMDaugnlEzxE2kyTqHhy1N0BtLx2f72D.L2jakYivs4tAxtwp1gqXRxlMIi6U9ISmuL
- 4toJXLQ2IcACpMc_sfnPwLKh9Nt7n9KLWTr7C_Wgc2XFsW70.HLi31uLu.JsGuc55GnBWDWGCRfV
- dzW_2qgs3oCrUp.jouWws3u3c5_SCY0fAwYjdI6_nou7OYuUAUxXKVCCk70U62ofTey8WCH8DJpx
- b6fhO.gczJyB4EDbPcUbtkxARipjM2vm64lKizV3dxhIZ44aMkVGc_ThGr_kNdyXccgXn7iM5Fdw
- Y1WhP0ZPLhowYUzTRwDTiVL0tEqxZF6DqYIzxaudDbQ9eIYYVp10LXnNG2Ju7EnnpYFgRGzBONYD
- EeEVxJltrEiQz8O3w9C94IJxzue5exZlI9gbS8LzVVMYEA6Ep_m3i8qFL8mqb.IPEHX2xYqPPKRB
- Gf.sWqaxRSEoLixUyGO_eV4oYI8TsCz9Oqf1Tb1P6heZEN5IJh26zOzLPhhxO1JZBmeRsyn6FZRe
- sOE.h6DrtL40MzJOB28rJ0F7kBDkmie3CRtthHlJQAXysCjTeqYZePDdgqAhq94ScOS5OTdFG2IW
- i4Ek7wlJxvoMFqL03XNnh6B3_InWRzyN1UE8cQwRk9lYjtQDFRmyxiDX83mep3sdO_U3VCjB2Osl
- 1t6pKNwygN5f7iQFWbqRVfqwMn09UihL2cxqyESq5DLwuo_Ritj6R1p_KzLm0wvYzJlVMfWXyFoP
- .0fpWwmu.15DGd._uzp3TyoT58f3XbCGqvluJz_h_7gKgIpiK6kgVv1MG44575RJnaDXL5DwyCox
- M0HbecJi8.d1kdDN5rtOZeESs6QkaNck9NXTNLywI24VbxmuX6ASUDQESEk7CTZzDQUMREnLwvln
- 806W8.dz.VmRh415APrc_97PkXxBoTMnDmpXJpA6bNNh84AeRoqRCIJwMOW1.ngWr7arHnEPYRuJ
- bYMzxDwO6WxHg0nZPznlLM5xwFPN41ev31XUyRkmvfWXZVGZ3G6ji6f2ysbNzQFE3afdVe1HSGmY
- uH0PvXW3fa9CNxSGBWvx8LrAPqhp1ybLhJ6yN8TpBx8p_shlbtYZzHV05uP6Ia48e5Kc.xNV7EKB
- ULyxegnLsKkVA4n94WwuGmSTMhgdZBK8DSEsSLpLJ0DNOofPmDU8uM_1B5YWig8H1ghwZETN5S4c
- m8hACG7J_lE9BrypfXrlZZIni3mK6fh3EwSFwhAJW24O95nG_MvGPWo18cCC4moHsYvjQvfWhPd0
- I6ifcUNDTU5jkWr4IGylfdYZ27lVa5KeiOw8h7U2tVkS1z7Zywp9VPt81pSKkEaUkz0hwqLE4bOw
- RoDQANeglUh6WxVfRBzi8cg_mqmqN
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755278149; bh=DL8npqFMRALAXsPWptJDF7/QCDl8ai9/3F6574Gpphg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=uH/Sa+uvi4X4ek/poxkyBn1cW8S2CmgtkmtdPOfuOxbcS7m/2GDRrhcezfPhtZ4ZGwMUOpnW/wAXMtign7N+ezWjumMTPAuAT7FCC097gMTddiYFVB7SY9QvrieTzoXC5+ltBLoQeNbWjB1t9o2yY76NyLTYPxELPHMcB/kRy/fVkGjpbO87AJxHVU5UcdEQcmXY6oCivluhlwZCqW84V21Xbf+eS/yGeJ4QIlEQzpG9yn0EJwZTbf7nMivXighE/vhtX0J3N5h9vyuoREbnUtL7nk3rHdP62WS0XEundcGXqDdhRSQAk1lx7qooUo5hUXDArOnGORHnamlLluA+vg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755278149; bh=yqUUOfq/tz0UEnJhOlLU5DcqkC9kbULKn9TC944GIDE=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=F5JxDGbgDCEMk/MEz4nIOuOx/hwyjjgDR6crbLMPHKbYYQTV1g89DD8lAWX+4/VU+9xyYVRw4qnR3zAWGl1NbWN0oRtMifPjz/BUfkATsmk7VXjCU1u+bA1kB6u5wxbB3bYqeD5F44tJm30clFGD9U/LY4kcF03Xfwhsrb3SWBx/LVLlWWpdmGfHxL+Dt1rlW9B8oRyFGppLOdmUxo7pQnAkXbbFHPkWqn9cimufnBSCOPF1BeuntunFzWBLsy+MqZQYUplBCglJjCynVBLSvZn+kugDdbjS0FFb/NarZIVqLvpuzyzE2VACpV0Pr6NRu7ZA5CEY6ofzmW2hVylPHA==
+X-YMail-OSG: W5d9Qc4VM1mGMGKwhQY3lF2i08xMkZk41KGqAsFWM0Zpgq5ekAiksIeuG.cmyLa
+ I0oeYNyrM9OlHsgp0RkdWRxWzoUgIAb4jkxP9KvPYoz3vHQhDMRGfZhOFgIdj3SJrxbQjXFQl0og
+ 1kWu2syuTJVyLs.yF2eftKTEYrelaGShpppnIILSEWYtwWIGbH9t5xwxByq3rksCObSG0BlAf_GO
+ r1yOTy0sAWbZYyu5fN.8vnGhHIpsawS2f5oCes_8iEUbZO3VUFpubkXtpF9vCD0G1HIO4EryRbW0
+ zVydDv9DqId99UF1tPbiHwR90fS4gjmTccDJ79KTi1usXPPFG6S4n7SZtvv4v5btN3xRrwAOz6cl
+ kMdLeqU_ewPvpR9NLV73GiBjarRfk.dHAmJl_XJpyob3QbdWteEGFCGPTvl6CQo1KlfOSXrm5LQ5
+ SkLQILozeSO97x1HWh.8eis1OLxaMtfHqsCUTQ7k_vSnLFdqIc7uiQOeJk.Ew8lUIaTAkWij0Rm2
+ _dtYlIpwK0yml94UkyK0Ve_SnB57Gire8bZtFAaLp81.rNZ5Y8vVLva3Wqvf3Wm2WACptaJbBYjT
+ IhK7sQ.DnmImq9WSbXOMKgzOHkWcLTXCVPyRfUXNrbGa6sgXeS8Nw5s7Bw2gMKT4oRf907aa49tH
+ z3SnW_Lfq_j_dO4b7TfZ4l.mOVNQxB8494DC5DqvNMkaAafWS_IOq4L6SChCX_RqUYFRn0VB.Z96
+ wbCMoaQSAcF3y8dLjQ5SNEbJ3.8GxJvxRrnGgpeW2kGR4tkaw5_5sh6cfC5sTzLyx.fizx_mnm_b
+ GnLwh5Q0GId3loysZMr8yNwnGkE5U7t49_fMuSXu6Fe_gHMt0AZj_Dv4v0xn9EwaiRr.gjgCLiEq
+ Edlyv1iYTkqtvwk41Gjr9PhOkFSxrqeRNaMra3x4OM3DTIzJfSsdOopXCS4kIp3UMMpRREbZfslx
+ kllG4uKj9esggdtEQ_Cv51gQdorDzV8uiDWbS7Grf86gYys3aUSGo_tZxjKizg5Gky1eSgJR6vff
+ wohltwOsuiyIvBYLr8NxtASM5OJXCbrao9mdSsN2wuP3Y1gYqK2wVJWHsgjx83us8i9dAwKvYI4r
+ rPkJz2l8dLeCsbFdZIUyh6IT8CYmJReRG7BhXUCqiNFGNWtB0no1aMfCa3mHgwtXf5jrsBxh7xzb
+ AYBeIdRCn66JUgOaiAG0JZJqUl9iYrfLb0VbkWmH46p0z7kUg_wPFwGs7JlOyGYjxMp7RP_aYtXx
+ ZoaW_LzTAkHNKLZYDvC33ByPgeCJwbPBNJkD6vmzwQ7EQm_MbbxYuUY_u5DfKLckpHlCOQkTdS9g
+ yMObAdDmJCwxrol2R6DgkAqZ_b1_zWvg.cxrQLe4Ow.tRmBfU95S4VMBnTyr_VuoMg40hacYnt9I
+ uwE2X0UjGRCkjolTUZL7BrW6JIgWArfkywf2N0QyqyWzV6jsqPOVKSmStNaxt9P0W2AGiQcUPhyZ
+ l4xXL1_WSwb0CZnWLlWkkJLl0Tquq99p0p8ZssJKtsfqZryyab8XVpV7BsHgN9mtjqJbu0fmtQdN
+ pLwi_RI_Wpd63mkF8Uhvrr03iXv5OkEyBRlRYgr7HVTZB_n0k4QkgS7_nx3tjaaWq5NADopHzruP
+ RSVyu_Eg3WTlOdCKe7qxi_CLUsjoph67MsPI4XQMENx1OWMAnCBYvrFRjXQ_Iqm6yw.AVoJr8heR
+ iFVEpvDImTJaFM3E6J3_CJRJmJa0V28uLX2Yx42dny7_S7qaSPJ2rLUWhU7QynVwJgcCdRcThX8X
+ gRnp1eCapCdX7TUTe_Gp9DeADjvEB.Dj0VCkU4J7LHQqVwMNL97LDC877R2aztRePr97lZCR4VWW
+ tLh6n8n6fdn6tFFjEd2WmYeW7baU94C9Z8gbUqL973ICXYDR5Ax9hnJlkrSOCTxqRSWfq5n9QgJl
+ .tBAyqADhnaeJwzX6SKLSyfEkiWcpGxp3Yh59VV0wsAaMFN4TJ2qKyjCtsPIEz11yAe4JwfhY8PT
+ CB73wSIREJ1WUzT60_wknycJnftK45m.AL5mJX_Xq8PvObw2SozS6icdW3ebZs98tmfAcrOvRaIC
+ axpQ2wg772b6CoGa4jlNs.JHxqt00P46tmPerLc0IW2eEs1jD8uD0Q7qrQkopms.GYZTqoxt1LFc
+ 3TPKAMfQ7mtWNIVhMcdlvCfZ98CzFZSnJCaxycp72jkrugTAXcDVl93EaBzAu8CXsF8gnZWyKPyI
+ gTKYPFPvj4fY1m_PnVk9NQak9je2lrls5ftaJ8MR4xobpkA2UwmYgtF2zbamBBd6v1mz2NIilyXQ
+ pLt66jozoOM9VeNUzjvXaUFYZtanGnwh7
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: a25622e7-0aa0-4ca8-aa97-ce58f2ccebf7
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Fri, 15 Aug 2025 17:00:51 +0000
-Received: by hermes--production-gq1-74d64bb7d7-2dlqg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 6ba083027440a3314da5d2d85ef4a4f3;
-          Fri, 15 Aug 2025 17:00:48 +0000 (UTC)
-Message-ID: <cf1592bc-c1dd-48f1-ba33-8c9c1c41cf57@schaufler-ca.com>
-Date: Fri, 15 Aug 2025 10:00:46 -0700
+X-Sonic-ID: dcf2e2fc-0877-4593-a14d-ec376e2d4843
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Fri, 15 Aug 2025 17:15:49 +0000
+Received: by hermes--production-gq1-74d64bb7d7-74ntb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 23cae23c023c7587df965e14b25c3afe;
+          Fri, 15 Aug 2025 17:05:39 +0000 (UTC)
+Message-ID: <72224da0-46d1-4366-819c-c5e0d9b507e9@schaufler-ca.com>
+Date: Fri, 15 Aug 2025 10:05:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -79,8 +79,8 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 11/34] lsm: get rid of the lsm_names list and do some
- cleanup
+Subject: Re: [PATCH v3 17/34] lsm: cleanup initialize_lsm() and rename to
+ lsm_init_single()
 To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
  linux-integrity@vger.kernel.org, selinux@vger.kernel.org
 Cc: John Johansen <john.johansen@canonical.com>,
@@ -93,202 +93,86 @@ Cc: John Johansen <john.johansen@canonical.com>,
  Xiu Jianfeng <xiujianfeng@huawei.com>,
  Casey Schaufler <casey@schaufler-ca.com>
 References: <20250814225159.275901-36-paul@paul-moore.com>
- <20250814225159.275901-47-paul@paul-moore.com>
+ <20250814225159.275901-53-paul@paul-moore.com>
 Content-Language: en-US
 From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20250814225159.275901-47-paul@paul-moore.com>
+In-Reply-To: <20250814225159.275901-53-paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Mailer: WebService/1.1.24338 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
 On 8/14/2025 3:50 PM, Paul Moore wrote:
-> The LSM currently has a lot of code to maintain a list of the currently
-> active LSMs in a human readable string, with the only user being the
-> "/sys/kernel/security/lsm" code.  Let's drop all of that code and
-> generate the string on first use and then cache it for subsequent use.
+> Rename initialize_lsm() to be more consistent with the rest of the LSM
+> initialization changes and rework the function itself to better fit
+> with the "exit on fail" coding pattern.
 >
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> Reviewed-by: John Johansen <john.johansen@canonical.com>
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
 
 Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 
 > ---
->  include/linux/lsm_hooks.h |  1 -
->  security/inode.c          | 59 +++++++++++++++++++++++++++++++++++++--
->  security/lsm_init.c       | 49 --------------------------------
->  3 files changed, 57 insertions(+), 52 deletions(-)
+>  security/lsm_init.c | 25 +++++++++++++++----------
+>  1 file changed, 15 insertions(+), 10 deletions(-)
 >
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 7343dd60b1d5..65a8227bece7 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -172,7 +172,6 @@ struct lsm_info {
->  
->  
->  /* DO NOT tamper with these variables outside of the LSM framework */
-> -extern char *lsm_names;
->  extern struct lsm_static_calls_table static_calls_table __ro_after_init;
->  
->  /**
-> diff --git a/security/inode.c b/security/inode.c
-> index 43382ef8896e..a5e7a073e672 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -22,6 +22,8 @@
->  #include <linux/lsm_hooks.h>
->  #include <linux/magic.h>
->  
-> +#include "lsm.h"
-> +
->  static struct vfsmount *mount;
->  static int mount_count;
->  
-> @@ -315,12 +317,65 @@ void securityfs_remove(struct dentry *dentry)
->  EXPORT_SYMBOL_GPL(securityfs_remove);
->  
->  #ifdef CONFIG_SECURITY
-> +#include <linux/spinlock.h>
-> +
->  static struct dentry *lsm_dentry;
-> +
-> +/* NOTE: we never free the string below once it is set. */
-> +static DEFINE_SPINLOCK(lsm_read_lock);
-> +static char *lsm_read_str = NULL;
-> +static ssize_t lsm_read_len = 0;
-> +
->  static ssize_t lsm_read(struct file *filp, char __user *buf, size_t count,
->  			loff_t *ppos)
->  {
-> -	return simple_read_from_buffer(buf, count, ppos, lsm_names,
-> -		strlen(lsm_names));
-> +	int i;
-> +	char *str;
-> +	ssize_t len;
-> +
-> +restart:
-> +
-> +	rcu_read_lock();
-> +	if (!lsm_read_str) {
-> +		/* we need to generate the string and try again */
-> +		rcu_read_unlock();
-> +		goto generate_string;
-> +	}
-> +	len = simple_read_from_buffer(buf, count, ppos,
-> +				      rcu_dereference(lsm_read_str),
-> +				      lsm_read_len);
-> +	rcu_read_unlock();
-> +	return len;
-> +
-> +generate_string:
-> +
-> +	for (i = 0; i < lsm_active_cnt; i++)
-> +		/* the '+ 1' accounts for either a comma or a NUL */
-> +		len += strlen(lsm_idlist[i]->name) + 1;
-> +
-> +	str = kmalloc(len, GFP_KERNEL);
-> +	if (!str)
-> +		return -ENOMEM;
-> +	str[0] = '\0';
-> +
-> +	for (i = 0; i < lsm_active_cnt; i++) {
-> +		if (i > 0)
-> +			strcat(str, ",");
-> +		strcat(str, lsm_idlist[i]->name);
-> +	}
-> +
-> +	spin_lock(&lsm_read_lock);
-> +	if (lsm_read_str) {
-> +		/* we raced and lost */
-> +		spin_unlock(&lsm_read_lock);
-> +		kfree(str);
-> +		goto restart;
-> +	}
-> +	lsm_read_str = str;
-> +	lsm_read_len = len - 1;
-> +	spin_unlock(&lsm_read_lock);
-> +
-> +	goto restart;
->  }
->  
->  static const struct file_operations lsm_ops = {
 > diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index 9e495a36a332..87e2147016b3 100644
+> index 5249aa044d9d..1f64222925c1 100644
 > --- a/security/lsm_init.c
 > +++ b/security/lsm_init.c
-> @@ -10,8 +10,6 @@
->  
->  #include "lsm.h"
->  
-> -char *lsm_names;
-> -
->  /* Pointers to LSM sections defined in include/asm-generic/vmlinux.lds.h */
->  extern struct lsm_info __start_lsm_info[], __end_lsm_info[];
->  extern struct lsm_info __start_early_lsm_info[], __end_early_lsm_info[];
-> @@ -371,42 +369,6 @@ static void __init lsm_init_ordered(void)
->  	}
+> @@ -169,6 +169,7 @@ static void __init lsm_order_append(struct lsm_info *lsm, const char *src)
+>  		   lsm_is_enabled(lsm) ? "enabled" : "disabled");
 >  }
 >  
-> -static bool match_last_lsm(const char *list, const char *lsm)
-> -{
-> -	const char *last;
-> -
-> -	if (WARN_ON(!list || !lsm))
-> -		return false;
-> -	last = strrchr(list, ',');
-> -	if (last)
-> -		/* Pass the comma, strcmp() will check for '\0' */
-> -		last++;
-> -	else
-> -		last = list;
-> -	return !strcmp(last, lsm);
-> -}
-> -
-> -static int lsm_append(const char *new, char **result)
-> -{
-> -	char *cp;
-> -
-> -	if (*result == NULL) {
-> -		*result = kstrdup(new, GFP_KERNEL);
-> -		if (*result == NULL)
-> -			return -ENOMEM;
-> -	} else {
-> -		/* Check if it is the last registered name */
-> -		if (match_last_lsm(*result, new))
-> -			return 0;
-> -		cp = kasprintf(GFP_KERNEL, "%s,%s", *result, new);
-> -		if (cp == NULL)
-> -			return -ENOMEM;
-> -		kfree(*result);
-> -		*result = cp;
-> -	}
-> -	return 0;
-> -}
-> -
->  static void __init lsm_static_call_init(struct security_hook_list *hl)
+> +
+>  /**
+>   * lsm_blob_size_update - Update the LSM blob size and offset information
+>   * @sz_req: the requested additional blob size
+> @@ -225,16 +226,20 @@ static void __init lsm_prepare(struct lsm_info *lsm)
+>  	lsm_blob_size_update(&blobs->lbs_bpf_token, &blob_sizes.lbs_bpf_token);
+>  }
+>  
+> -/* Initialize a given LSM, if it is enabled. */
+> -static void __init initialize_lsm(struct lsm_info *lsm)
+> +/**
+> + * lsm_init_single - Initialize a given LSM
+> + * @lsm: LSM definition
+> + */
+> +static void __init lsm_init_single(struct lsm_info *lsm)
 >  {
->  	struct lsm_static_call *scall = hl->scalls;
-> @@ -443,15 +405,6 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
->  		hooks[i].lsmid = lsmid;
->  		lsm_static_call_init(&hooks[i]);
->  	}
-> -
-> -	/*
-> -	 * Don't try to append during early_security_init(), we'll come back
-> -	 * and fix this up afterwards.
-> -	 */
-> -	if (slab_is_available()) {
-> -		if (lsm_append(lsmid->name, &lsm_names) < 0)
-> -			panic("%s - Cannot get early memory.\n", __func__);
+> -	if (lsm_is_enabled(lsm)) {
+> -		int ret;
+> +	int ret;
+>  
+> -		init_debug("initializing %s\n", lsm->id->name);
+> -		ret = lsm->init();
+> -		WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
 > -	}
+> +	if (!lsm_is_enabled(lsm))
+> +		return;
+> +
+> +	init_debug("initializing %s\n", lsm->id->name);
+> +	ret = lsm->init();
+> +	WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
 >  }
 >  
->  int __init early_security_init(void)
-> @@ -488,8 +441,6 @@ int __init security_init(void)
->  	lsm_early_for_each_raw(lsm) {
->  		init_debug("  early started: %s (%s)\n", lsm->id->name,
->  			   is_enabled(lsm) ? "enabled" : "disabled");
-> -		if (lsm->enabled)
-> -			lsm_append(lsm->id->name, &lsm_names);
+>  /**
+> @@ -379,7 +384,7 @@ static void __init lsm_init_ordered(void)
+>  		panic("%s: early task alloc failed.\n", __func__);
+>  
+>  	lsm_order_for_each(lsm) {
+> -		initialize_lsm(*lsm);
+> +		lsm_init_single(*lsm);
+>  	}
+>  }
+>  
+> @@ -429,7 +434,7 @@ int __init early_security_init(void)
+>  		lsm_enabled_set(lsm, true);
+>  		lsm_order_append(lsm, "early");
+>  		lsm_prepare(lsm);
+> -		initialize_lsm(lsm);
+> +		lsm_init_single(lsm);
 >  	}
 >  
->  	/* Load LSMs in specified order. */
+>  	return 0;
 
