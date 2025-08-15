@@ -1,178 +1,104 @@
-Return-Path: <linux-integrity+bounces-6863-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6862-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DCEFB284CE
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 19:15:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B13B9B284A7
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 19:07:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6415317B3BD
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 17:15:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 697803B42B1
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 Aug 2025 17:06:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2FA32F9C25;
-	Fri, 15 Aug 2025 17:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1621309DAB;
+	Fri, 15 Aug 2025 17:06:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="uH/Sa+uv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MMWR2raD"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531212F9C21
-	for <linux-integrity@vger.kernel.org>; Fri, 15 Aug 2025 17:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417FE257844
+	for <linux-integrity@vger.kernel.org>; Fri, 15 Aug 2025 17:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755278151; cv=none; b=VDmvQ/pJW5BhDeIqh+DrwQceKHDWRr7qtTwPKpGkEIxY/MDraQhTKSHVRO/AFxyCeYWB7vIMLAO/B80SAZvRGYqITmHLOr03YiFoDH/WKT5kqURMZMkl/IKmiHhSiBzKrqfH2zht94X7bypknP0S94vuCj8k7ZuzYHcPJ99v0N0=
+	t=1755277612; cv=none; b=I8fXHCbgEcB4hRpdfaX0PMY1iD/Dufz/KpYvtKFqIIuC8lM3aaYH/G+uvE8KrJ5j6qvXX4z0/07WbjJpVBC3h6Fo18gr5rLZHAaqjnXVZmO1s54ptRGFUQRXoP4fgq+3wxw/6OjcDYM4QUpt08KBwQf/oDv3+S2Ytt2qNaEvtx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755278151; c=relaxed/simple;
-	bh=PVH45VaS2/Kv67LXl0wYjUW6dY2Wo1zUVDbWzOFnvC8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DdNGlKWf1wgBHCq7chHbocWgEFqK3abdvIly0n/NCfApQeyd4NazOfX8n4ID6uN7MwTVuIH7O/TMODI/7ipMH7CgM3Ljy+ZLlk0ndqCrwSa89b7Nf1w3tJvRZsZl//RoPgTWh59sSODhfO+2nqToGDHn7pAPqsnARoXc2bJDP3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=uH/Sa+uv; arc=none smtp.client-ip=66.163.186.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755278149; bh=DL8npqFMRALAXsPWptJDF7/QCDl8ai9/3F6574Gpphg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=uH/Sa+uvi4X4ek/poxkyBn1cW8S2CmgtkmtdPOfuOxbcS7m/2GDRrhcezfPhtZ4ZGwMUOpnW/wAXMtign7N+ezWjumMTPAuAT7FCC097gMTddiYFVB7SY9QvrieTzoXC5+ltBLoQeNbWjB1t9o2yY76NyLTYPxELPHMcB/kRy/fVkGjpbO87AJxHVU5UcdEQcmXY6oCivluhlwZCqW84V21Xbf+eS/yGeJ4QIlEQzpG9yn0EJwZTbf7nMivXighE/vhtX0J3N5h9vyuoREbnUtL7nk3rHdP62WS0XEundcGXqDdhRSQAk1lx7qooUo5hUXDArOnGORHnamlLluA+vg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1755278149; bh=yqUUOfq/tz0UEnJhOlLU5DcqkC9kbULKn9TC944GIDE=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=F5JxDGbgDCEMk/MEz4nIOuOx/hwyjjgDR6crbLMPHKbYYQTV1g89DD8lAWX+4/VU+9xyYVRw4qnR3zAWGl1NbWN0oRtMifPjz/BUfkATsmk7VXjCU1u+bA1kB6u5wxbB3bYqeD5F44tJm30clFGD9U/LY4kcF03Xfwhsrb3SWBx/LVLlWWpdmGfHxL+Dt1rlW9B8oRyFGppLOdmUxo7pQnAkXbbFHPkWqn9cimufnBSCOPF1BeuntunFzWBLsy+MqZQYUplBCglJjCynVBLSvZn+kugDdbjS0FFb/NarZIVqLvpuzyzE2VACpV0Pr6NRu7ZA5CEY6ofzmW2hVylPHA==
-X-YMail-OSG: W5d9Qc4VM1mGMGKwhQY3lF2i08xMkZk41KGqAsFWM0Zpgq5ekAiksIeuG.cmyLa
- I0oeYNyrM9OlHsgp0RkdWRxWzoUgIAb4jkxP9KvPYoz3vHQhDMRGfZhOFgIdj3SJrxbQjXFQl0og
- 1kWu2syuTJVyLs.yF2eftKTEYrelaGShpppnIILSEWYtwWIGbH9t5xwxByq3rksCObSG0BlAf_GO
- r1yOTy0sAWbZYyu5fN.8vnGhHIpsawS2f5oCes_8iEUbZO3VUFpubkXtpF9vCD0G1HIO4EryRbW0
- zVydDv9DqId99UF1tPbiHwR90fS4gjmTccDJ79KTi1usXPPFG6S4n7SZtvv4v5btN3xRrwAOz6cl
- kMdLeqU_ewPvpR9NLV73GiBjarRfk.dHAmJl_XJpyob3QbdWteEGFCGPTvl6CQo1KlfOSXrm5LQ5
- SkLQILozeSO97x1HWh.8eis1OLxaMtfHqsCUTQ7k_vSnLFdqIc7uiQOeJk.Ew8lUIaTAkWij0Rm2
- _dtYlIpwK0yml94UkyK0Ve_SnB57Gire8bZtFAaLp81.rNZ5Y8vVLva3Wqvf3Wm2WACptaJbBYjT
- IhK7sQ.DnmImq9WSbXOMKgzOHkWcLTXCVPyRfUXNrbGa6sgXeS8Nw5s7Bw2gMKT4oRf907aa49tH
- z3SnW_Lfq_j_dO4b7TfZ4l.mOVNQxB8494DC5DqvNMkaAafWS_IOq4L6SChCX_RqUYFRn0VB.Z96
- wbCMoaQSAcF3y8dLjQ5SNEbJ3.8GxJvxRrnGgpeW2kGR4tkaw5_5sh6cfC5sTzLyx.fizx_mnm_b
- GnLwh5Q0GId3loysZMr8yNwnGkE5U7t49_fMuSXu6Fe_gHMt0AZj_Dv4v0xn9EwaiRr.gjgCLiEq
- Edlyv1iYTkqtvwk41Gjr9PhOkFSxrqeRNaMra3x4OM3DTIzJfSsdOopXCS4kIp3UMMpRREbZfslx
- kllG4uKj9esggdtEQ_Cv51gQdorDzV8uiDWbS7Grf86gYys3aUSGo_tZxjKizg5Gky1eSgJR6vff
- wohltwOsuiyIvBYLr8NxtASM5OJXCbrao9mdSsN2wuP3Y1gYqK2wVJWHsgjx83us8i9dAwKvYI4r
- rPkJz2l8dLeCsbFdZIUyh6IT8CYmJReRG7BhXUCqiNFGNWtB0no1aMfCa3mHgwtXf5jrsBxh7xzb
- AYBeIdRCn66JUgOaiAG0JZJqUl9iYrfLb0VbkWmH46p0z7kUg_wPFwGs7JlOyGYjxMp7RP_aYtXx
- ZoaW_LzTAkHNKLZYDvC33ByPgeCJwbPBNJkD6vmzwQ7EQm_MbbxYuUY_u5DfKLckpHlCOQkTdS9g
- yMObAdDmJCwxrol2R6DgkAqZ_b1_zWvg.cxrQLe4Ow.tRmBfU95S4VMBnTyr_VuoMg40hacYnt9I
- uwE2X0UjGRCkjolTUZL7BrW6JIgWArfkywf2N0QyqyWzV6jsqPOVKSmStNaxt9P0W2AGiQcUPhyZ
- l4xXL1_WSwb0CZnWLlWkkJLl0Tquq99p0p8ZssJKtsfqZryyab8XVpV7BsHgN9mtjqJbu0fmtQdN
- pLwi_RI_Wpd63mkF8Uhvrr03iXv5OkEyBRlRYgr7HVTZB_n0k4QkgS7_nx3tjaaWq5NADopHzruP
- RSVyu_Eg3WTlOdCKe7qxi_CLUsjoph67MsPI4XQMENx1OWMAnCBYvrFRjXQ_Iqm6yw.AVoJr8heR
- iFVEpvDImTJaFM3E6J3_CJRJmJa0V28uLX2Yx42dny7_S7qaSPJ2rLUWhU7QynVwJgcCdRcThX8X
- gRnp1eCapCdX7TUTe_Gp9DeADjvEB.Dj0VCkU4J7LHQqVwMNL97LDC877R2aztRePr97lZCR4VWW
- tLh6n8n6fdn6tFFjEd2WmYeW7baU94C9Z8gbUqL973ICXYDR5Ax9hnJlkrSOCTxqRSWfq5n9QgJl
- .tBAyqADhnaeJwzX6SKLSyfEkiWcpGxp3Yh59VV0wsAaMFN4TJ2qKyjCtsPIEz11yAe4JwfhY8PT
- CB73wSIREJ1WUzT60_wknycJnftK45m.AL5mJX_Xq8PvObw2SozS6icdW3ebZs98tmfAcrOvRaIC
- axpQ2wg772b6CoGa4jlNs.JHxqt00P46tmPerLc0IW2eEs1jD8uD0Q7qrQkopms.GYZTqoxt1LFc
- 3TPKAMfQ7mtWNIVhMcdlvCfZ98CzFZSnJCaxycp72jkrugTAXcDVl93EaBzAu8CXsF8gnZWyKPyI
- gTKYPFPvj4fY1m_PnVk9NQak9je2lrls5ftaJ8MR4xobpkA2UwmYgtF2zbamBBd6v1mz2NIilyXQ
- pLt66jozoOM9VeNUzjvXaUFYZtanGnwh7
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: dcf2e2fc-0877-4593-a14d-ec376e2d4843
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Fri, 15 Aug 2025 17:15:49 +0000
-Received: by hermes--production-gq1-74d64bb7d7-74ntb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 23cae23c023c7587df965e14b25c3afe;
-          Fri, 15 Aug 2025 17:05:39 +0000 (UTC)
-Message-ID: <72224da0-46d1-4366-819c-c5e0d9b507e9@schaufler-ca.com>
-Date: Fri, 15 Aug 2025 10:05:37 -0700
+	s=arc-20240116; t=1755277612; c=relaxed/simple;
+	bh=pL+KIUNonL6GieFzGfDFgPzMGRCJoSc59aGwIdQvhhI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f8Q9EUQ5uD1U62FlxKR+yrPVbn+8Wny87EucSSjr/L5AmUxaSuHF7FxH4xiF2HW/m3qSw5uwtc5HJBH+PtPxwmP3oU1bljLNHjLe3DtJP6ovjbkpdu2S1D6cAZ9xjcPUh8AmbPoM919jpJc9YTRhFbK2Vj0RU3TnoqtaoWgTF/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MMWR2raD; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-55ce52ab898so2541285e87.3
+        for <linux-integrity@vger.kernel.org>; Fri, 15 Aug 2025 10:06:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755277609; x=1755882409; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pL+KIUNonL6GieFzGfDFgPzMGRCJoSc59aGwIdQvhhI=;
+        b=MMWR2raDt4u+TmwPN8wEaVMqxqOCGxkpfm6MXN5C6iA3BEaDeNf1Tw1CaAtuft3ip7
+         OsmbrRSipsgp5WakIZzZsiZkVkvLNO+PrI5U2EJuuNz1um1yBj+n7V4mM5tSeP5rnI3j
+         eil/VT76nW1i5qVVsk0/OjLuhnZ3fM3/oSusc+ZMpyYYLJtvFTj3XON39jwfSva+RRjA
+         OXNHyCSSJfVQo6UOW7orvZW7OUKliCM7RDQz1PmNxx/0juR/ryFGSIiOShq7PAuEpHRb
+         /v1bo/SlxsqDWU54QqZxHtsrGH/twsQeCLmnAEAD4spRmRzeteWYUAsgKx3MF+lYL9HN
+         yHNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755277609; x=1755882409;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pL+KIUNonL6GieFzGfDFgPzMGRCJoSc59aGwIdQvhhI=;
+        b=HPklM8E92mwgZUKWcGRt1jgJqT4lXzefCtKGliKAWaFtPTp8HT80Wd82yaVKHeHJNE
+         J75YBke7jxtaADrwGMyerID4HUzluHtLC9CRL4UyKbQ/LB1JyOsqoLmcipu5FM7IT+O9
+         DReG3rOLHjj+X+mBJXehJZHSX9tLgigHYiDnFdovic6+wAEGc+P48wW23UDCnqglu+3Y
+         KIaCYdod8O4WSixOrcuNi8oIV5+26Jr+eRWJBAb64vwsohu2wy1JXLMK/ESmAo4Vuw1j
+         vStX9EaHkK1uCNPuA3jkJS5q/TAykyU4iv13rmev1uhP/x1+zYKgIcTMZmzPVvm8EO2a
+         Aqmg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVOzm4JMsNrosD/aqSO5kswp4uvJwIJFZeBGvj68cu2ztVUtfhRB+DtuvqqvahuFOo/9AZgk86qpMbQWnvxTI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzZp6mTyom5Qb7Kmkje++tLxXbeSSmOI54Sb1wZB3IHkGrjUuF
+	Pz3LmKu9yFJ1z2TROYqu00RXT+A3WnC0WEUE5+PdAyvt9FSB0LY0YA0KhhhVeS/GhzHgNM7iqr5
+	oCgSYohfeo1zZ0kn/08mCS3EOrw8i3/6H36Wk49u7
+X-Gm-Gg: ASbGncvngREgOvhX5RYu8x3lye6C+p0yjqZ72JEPxm3/f+ch9ik4yvZtnq+a3WYIzOH
+	oBCck8307WBggkvkl3OU2AMg1a3A27ip2NUcpCDjr3VuByXyKl2E9+hUC6kGdXpPtzYKQ8GEbzD
+	s5j0cnk7FLf/qe8xLiYjqFxwknOrCTyHvk5nLovdq/tMNM4P3fM4OHU+dui/wev59T89YDVfrXV
+	6xs3gCa03qO
+X-Google-Smtp-Source: AGHT+IE00vYYh6yZ2ovM5beTH+9/5iG2gqMZLSk5Mk9qR//MtgKHHWRi+VX3T8bpUsXQfN41PGgiSv5Jgv9nB4pa/qE=
+X-Received: by 2002:a05:6512:3b09:b0:55c:bfee:d959 with SMTP id
+ 2adb3069b0e04-55ceeb8e4a2mr645923e87.55.1755277609209; Fri, 15 Aug 2025
+ 10:06:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 17/34] lsm: cleanup initialize_lsm() and rename to
- lsm_init_single()
-To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Cc: John Johansen <john.johansen@canonical.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Fan Wu <wufan@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
- Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20250814225159.275901-36-paul@paul-moore.com>
- <20250814225159.275901-53-paul@paul-moore.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20250814225159.275901-53-paul@paul-moore.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.24338 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+References: <20250814162252.3504279-1-cfenn@google.com> <aJ8iNLwlf4PAC0h1@kernel.org>
+ <CAMigqh1RTVzz0ffY8M3mZuc7NDaBKpMmCU4q0LuNyM2eAi+NFg@mail.gmail.com> <aJ9fy_sO6tza9qLF@iki.fi>
+In-Reply-To: <aJ9fy_sO6tza9qLF@iki.fi>
+From: Chris Fenner <cfenn@google.com>
+Date: Fri, 15 Aug 2025 10:06:36 -0700
+X-Gm-Features: Ac12FXxi9rDKgCbCPcDjkhN0YzfqTpcE1IQTDtiiLTRyzFymdSe7ALv45u7gK3M
+Message-ID: <CAMigqh2=Kmnv_rrT-gBtESSXtnMrxU=VJdrYE6_9NGhKBN+ZrA@mail.gmail.com>
+Subject: Re: [PATCH] tpm: Disable TCG_TPM2_HMAC by default
+To: Jarkko Sakkinen <jarkko.sakkinen@iki.fi>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/14/2025 3:50 PM, Paul Moore wrote:
-> Rename initialize_lsm() to be more consistent with the rest of the LSM
-> initialization changes and rework the function itself to better fit
-> with the "exit on fail" coding pattern.
->
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Reviewed-by: John Johansen <john.johansen@canonical.com>
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
+On Fri, Aug 15, 2025 at 9:27=E2=80=AFAM Jarkko Sakkinen <jarkko.sakkinen@ik=
+i.fi> wrote:
 
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> I'll with shoot another proposal. Let's delete null primary creation
+> code and add a parameter 'tpm.integrity_handle', which will refers to
+> persistent primary handle:
 
-> ---
->  security/lsm_init.c | 25 +++++++++++++++----------
->  1 file changed, 15 insertions(+), 10 deletions(-)
->
-> diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index 5249aa044d9d..1f64222925c1 100644
-> --- a/security/lsm_init.c
-> +++ b/security/lsm_init.c
-> @@ -169,6 +169,7 @@ static void __init lsm_order_append(struct lsm_info *lsm, const char *src)
->  		   lsm_is_enabled(lsm) ? "enabled" : "disabled");
->  }
->  
-> +
->  /**
->   * lsm_blob_size_update - Update the LSM blob size and offset information
->   * @sz_req: the requested additional blob size
-> @@ -225,16 +226,20 @@ static void __init lsm_prepare(struct lsm_info *lsm)
->  	lsm_blob_size_update(&blobs->lbs_bpf_token, &blob_sizes.lbs_bpf_token);
->  }
->  
-> -/* Initialize a given LSM, if it is enabled. */
-> -static void __init initialize_lsm(struct lsm_info *lsm)
-> +/**
-> + * lsm_init_single - Initialize a given LSM
-> + * @lsm: LSM definition
-> + */
-> +static void __init lsm_init_single(struct lsm_info *lsm)
->  {
-> -	if (lsm_is_enabled(lsm)) {
-> -		int ret;
-> +	int ret;
->  
-> -		init_debug("initializing %s\n", lsm->id->name);
-> -		ret = lsm->init();
-> -		WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
-> -	}
-> +	if (!lsm_is_enabled(lsm))
-> +		return;
-> +
-> +	init_debug("initializing %s\n", lsm->id->name);
-> +	ret = lsm->init();
-> +	WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
->  }
->  
->  /**
-> @@ -379,7 +384,7 @@ static void __init lsm_init_ordered(void)
->  		panic("%s: early task alloc failed.\n", __func__);
->  
->  	lsm_order_for_each(lsm) {
-> -		initialize_lsm(*lsm);
-> +		lsm_init_single(*lsm);
->  	}
->  }
->  
-> @@ -429,7 +434,7 @@ int __init early_security_init(void)
->  		lsm_enabled_set(lsm, true);
->  		lsm_order_append(lsm, "early");
->  		lsm_prepare(lsm);
-> -		initialize_lsm(lsm);
-> +		lsm_init_single(lsm);
->  	}
->  
->  	return 0;
+I'm not yet sure I understand which handle you mean, or what you're
+proposing to do with it. Could you elaborate?
+
+Thanks
+Chris
 
