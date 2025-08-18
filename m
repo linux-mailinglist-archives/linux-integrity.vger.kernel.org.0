@@ -1,147 +1,127 @@
-Return-Path: <linux-integrity+bounces-6870-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6871-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B5B9B29515
-	for <lists+linux-integrity@lfdr.de>; Sun, 17 Aug 2025 22:42:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6869B2ADDB
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Aug 2025 18:13:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA9CD3B8A97
-	for <lists+linux-integrity@lfdr.de>; Sun, 17 Aug 2025 20:42:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7327D1B22B85
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Aug 2025 16:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD03620A5EC;
-	Sun, 17 Aug 2025 20:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547E8322545;
+	Mon, 18 Aug 2025 16:13:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pvDKNSQ+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ONrl+cWu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79F4C15573A;
-	Sun, 17 Aug 2025 20:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF664278146
+	for <linux-integrity@vger.kernel.org>; Mon, 18 Aug 2025 16:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755463369; cv=none; b=csxnHYwkml6rcR+0TnlhcSK7y4RtJJ7DVVRdgh/BMa4DUSVFu7HEyITixSeRX5AYbES1hgEj0E5ASWifIFAbO9YQpTzJvBL6qaEyrUoUMRdmfc7KXscV6HegDVZdpt6ZPUUNjRAVZ8JKhFBsRu3TRPnmJqV8R8hHuYFQ7Wplnxk=
+	t=1755533595; cv=none; b=S63P7M4ADskqUgCNb+tzBPJDo+NEmr+ksBDuSNBhKgZgq2iI/0wi0QI8i2h5Ab4Y4YmaiPWj1EpoCtOl9MOAXlspuZW8V1x1D70xNqDQ7NppOB2brdDKGvi9v1xG9EHoqcqMqLyaPzW7R5oxbpoXRMxQJZWPm4Zw+GSvwQqxnZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755463369; c=relaxed/simple;
-	bh=CBPiooAGnayv+SiYVUC1qFMqyOwK0GLToyiu0GtI0DY=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iEPxBTNzhr2zEbSIVuRTLmpK0f+SxnB/+8hZ8i2CdN6+62Z6VS6HWxRj/WpJ7NVcJyZRLGZkAY5gdpQTjUORULPp6UxiD9JDJVzTVXooeDZCgDULsWKXu6I0TR/EePgeBJGV/sil5sQHbGt8u8DhrCgBDQplMvOXRolaABOqSKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pvDKNSQ+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D8FC4CEEB;
-	Sun, 17 Aug 2025 20:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755463369;
-	bh=CBPiooAGnayv+SiYVUC1qFMqyOwK0GLToyiu0GtI0DY=;
-	h=Date:From:To:Subject:From;
-	b=pvDKNSQ+VSMqZokMerEYMXZ8Y5pIgzOaIG8Vs4n87HYwX+2hNPsPTAPtTzYg6yx2S
-	 yA2TPObli6dTLIWDx5PbEIeiCFNrn5LeIusVLL+etm9TFQ1QORI7frBEN1vQWjv3wx
-	 8ir7e7oI4VFZFaNFdI+oEOiowE82DLsO6JTvYeUR4VNws64KfipjwKp5o/1mccttdi
-	 3o356ekEOFsAnzhCo4o+bTfEE1ONotXP7I4MKJ3pVD9YY4G6yvqnbNqKsykKhkIEKs
-	 ddZeOg3goC+T+rM+5/j6oSURv1stq/W2AFnTwRxYO2ivC5ucDejmijhvo+DXqdRxzd
-	 dgw1dTdGizQiA==
-Date: Sun, 17 Aug 2025 23:42:45 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: tpm2@lists.linux.dev, linux-integrity@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: tpm2_protocol / tpm2sh 0.6.1
-Message-ID: <aKI-xQsBNNvjeBSk@kernel.org>
+	s=arc-20240116; t=1755533595; c=relaxed/simple;
+	bh=qdFUMuUZzhpNzIjokGfrhSFI/4o+Ugep417lW75oSrU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fQgE+x/6Wb06NypEShBGv2GQseSHZMNaVTkl7a6LmrkcHnMDQlXyH7EImEeiRN3CRcF1LTWXNAbmcKT7IExCR1k0Uxq2mISmu9TiPgljihEidEZf+soiSDiGf7rVmHWodhNwAdByNsyms1UISw3RxvSZWROecxYkXZT3O1UPHag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ONrl+cWu; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55ce509f80dso4225987e87.0
+        for <linux-integrity@vger.kernel.org>; Mon, 18 Aug 2025 09:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755533590; x=1756138390; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qdFUMuUZzhpNzIjokGfrhSFI/4o+Ugep417lW75oSrU=;
+        b=ONrl+cWuHvfjucINomm8IVxJqWNA5IVkbDh4HvE3I+WKi3SpwDQs9B5YFZmtE3nFma
+         qliuFz/gHA6m30C5B/NV2BEPBsD5Bo3R44PIeGlo3STeYlmNuiIipK9tn1Uo1br1ssJT
+         aWfkQz5FI1caBaDdHx12O82RM1sht97FUlTS6SkIROmMJrF/jLRvXQ/qhfn4ZCJ7GdQ8
+         ODrYbCzLGF7QKqOUYa3VyTM0GIan+mnaqg5C53LnhM27d1F73pRurOmNw06Cneq3TWrO
+         Z0tJFjuKbrAKsAX1f9L/NRSxqWE4EJ0kaQChwBGjeM+Qx2K+kkQxlxHcxCBhgaXZcYgP
+         O+dA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755533590; x=1756138390;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qdFUMuUZzhpNzIjokGfrhSFI/4o+Ugep417lW75oSrU=;
+        b=hdMoCNuRw4k/zvAIiUjwZNuLmsrh1uETWTbv46yo71orPsqcGlFQ/rSVDcDwEDmklV
+         oBlpN9tnimSReNu8ghzXs0DAzBn9+frbOMzhWLFqQcVRH1eJ9hZdE77WDPQLw2xHKiVR
+         VL8H6WObj5A+xgzv53vNkHGoNn73Or7gE62uFGO6yyfFg4vjPx2au0kHCb5ywlD6XA+q
+         CJ82zL6jIEDSYtZ2o6Ml7oWHiUlcl932WknaxuOpstl2cKbg7w66eyz9xBh+q/Wv3Kty
+         bXEcao4xYrV9X38+/fIlpKtVUuWgtBssyxR7kgTEWwKFLmLqlPNjfoKnWhXY4bQcJKCJ
+         MVCA==
+X-Gm-Message-State: AOJu0YxSk2MyE6wx5SYHZyuVU5yymPau6bmqUU5zdM/5Ca912j9XBsUn
+	Aqz3zHXsodjIaleuQWttSztjaeJsZwNkUSAItSqTlCbGZJUJWXM6xdf40Mfs5h09OKqZnXjtVpH
+	5zGfbisMaBomplrIRnL5JmN+OnNWnsWZEZgiWevtp/GmaUyzgPx9H+oNq5g8=
+X-Gm-Gg: ASbGncvLOgzC6CADXZcVzudDXQokwwDwb80jtHUll4TdyN7vsSZQHSDWEzJLY9jAPjZ
+	/0xAyGMTAxXYeoVdnpzVXB15obFgHyzBznjnehIfc8eNiSNuzUe6PqYrBo5Eh7BXWutBWwIyNdP
+	mTIcjircUcuIdFnrkbtlALrM5XhyOtb80m4176WYLerzpEnvSVFFyiNiEleFgKE5AqKE1O3H9at
+	f+0InTZlpbxIj8GxCETD1Fi/HftVLXFrwbFQCYqbgQ5IY7c
+X-Google-Smtp-Source: AGHT+IFeOqwEhTRIGmYyEPv7VSjkBYt7kJQbYUmkI8p06Ty6Y3cddoOw8158OHMoBTVNzzS1fbyVf2xZHYuraTZb37w=
+X-Received: by 2002:a05:6512:638a:b0:55c:c971:2271 with SMTP id
+ 2adb3069b0e04-55ceeb43b69mr2117899e87.25.1755533589465; Mon, 18 Aug 2025
+ 09:13:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <CAMigqh2nwuRRxaLyOJ+QaTJ+XGmkQj=rMj5K9GP1bCcXp2OsBQ@mail.gmail.com>
+ <8be73a3a6772c61387b93eae808a7e382462c6cc.camel@HansenPartnership.com>
+In-Reply-To: <8be73a3a6772c61387b93eae808a7e382462c6cc.camel@HansenPartnership.com>
+From: Chris Fenner <cfenn@google.com>
+Date: Mon, 18 Aug 2025 09:12:57 -0700
+X-Gm-Features: Ac12FXxy3N2Ufj5gMR7JJkp-Akac78FaCL10gyIJXeqWz6sxlNNfvMYbgF7GX2M
+Message-ID: <CAMigqh019OxTs+VaUjpEN3WoAkJnr1fJaciAELczgM9g1BMZUQ@mail.gmail.com>
+Subject: Re: Questions about CONFIG_TCG_TPM2_HMAC
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I tagged 0.6.0 release as I reached an important milestone i.e., now
-Box<dyn TpmObject> is doable meaning that tpm2_protocol is capable of
-dynamically interpreting on-wire TPM2 protocol traffic. It's proved by
-this test:
+Thanks James,
 
-https://github.com/puavo-org/tpm2_library/blob/main/tpm2sh/tests/dynamic.rs
+On Sun, Aug 17, 2025 at 1:34=E2=80=AFAM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
 
-This matters because it is the essence of being able to work as part
-of driver, TPM emulator/chip or resource manager implementation.
+> Supporting these commands was the reason the TPM2 volatile
+> handle space was reduced to 3.
 
-This has required really going through the whole implementation and
-deocoupling step by step the implementation from lifetime parameters
-and finally implementing 'core::any::Any'.
+I think this may put the cart before the horse: You can do anything
+you want to in the TPM with just 3 handles (actually I think 2 might
+be enough). ContextSave and ContextLoad exist [1] so that you can
+create a resource manager to share the TPM among concurrent
+applications. If you aren't sharing the TPM among concurrent
+applications, you neither need a resource manager nor context
+commands. I want to make sure I'm not misunderstanding your message:
+is it OK to break userspace over this or any other [2] missing
+dependency of TCG_TPM2_HMAC, simply because that implies the TPM is
+not a "mainstream" PC Client profile TPM?
 
-Lot's of bugs have also been fixed in the protocol crate, tpm2sh crypto
-module etc. The TCG specification coverage has increased and it is only
-few dozen command/responses away from full TCG TPM 2.0 spec version 184
-coverage. Given the efficient macro system this is coverage shortage
-is mostly due lack of being more interested on more important matters.
+> The way it is supposed to work is that the system stores (and
+> validates if it can) the signing EK on install (this is constant for
+> the lifetime of the TPM).
 
-My demo for this version is the cool pretty printer in tpm2sh :-)
+Some questions for the threat model here:
+1. Where is the signing EK stored by the system?
+2. When is this system (and its durable storage) validated or measured?
+3. How do we avoid a circular trust dependency between the kernel and
+this system here?
 
-~/work/github.com/jarkkojs/tpm2_library main
-❯ sudo RUST_LOG=trace target/debug/tpm2sh --log-format pretty start-session --session-type policy  > /dev/null
-2025-08-17T20:42:03.866947Z DEBUG cli::device: opening device_path=/dev/tpmrm0
-⠋ Waiting for TPM...                                                                                                                                                   2025-08-17T20:42:03.867174Z TRACE cli::device: TPM_CC_StartAuthSession
-2025-08-17T20:42:03.867205Z TRACE cli::device:   nonceCaller: (size=16) 0ce148fdde03544afc25024c9498ae48
-2025-08-17T20:42:03.867212Z TRACE cli::device:   encryptedSalt: (size=0) 
-2025-08-17T20:42:03.867217Z TRACE cli::device:   sessionType: Policy
-2025-08-17T20:42:03.867221Z TRACE cli::device:   symmetric: TPM_ALG_NULL
-2025-08-17T20:42:03.867225Z TRACE cli::device:   authHash: TPM_ALG_SHA256
-⠏ ✔ TPM operation complete.                                                                                                                                            2025-08-17T20:42:03.899508Z TRACE cli::device: Response (rc=TPM_RC_SUCCESS)
-2025-08-17T20:42:03.899563Z TRACE cli::device:   sessionHandle: 0x03000000
-2025-08-17T20:42:03.899603Z TRACE cli::device:   nonceTpm: (size=16) 77ad71b0272d4d4dee6eee843e84bde1
+Thanks
+Chris
 
-~/work/github.com/jarkkojs/tpm2_library main
-❯ sudo RUST_LOG=trace target/debug/tpm2sh --log-format pretty algorithms > /dev/null
-2025-08-17T20:42:06.423983Z DEBUG cli::device: opening device_path=/dev/tpmrm0
-⠋ Waiting for TPM...                                                                                                                                                   2025-08-17T20:42:06.424174Z TRACE cli::device: TPM_CC_GetCapability
-2025-08-17T20:42:06.424185Z TRACE cli::device:   cap: TPM_CAP_ALGS
-2025-08-17T20:42:06.424193Z TRACE cli::device:   property: 0x00000000
-2025-08-17T20:42:06.424202Z TRACE cli::device:   propertyCount: 0x00000080
-⠏ ✔ TPM operation complete.                                                                                                                                            2025-08-17T20:42:06.428085Z TRACE cli::device: Response (rc=TPM_RC_SUCCESS)
-2025-08-17T20:42:06.428097Z TRACE cli::device:   moreData: TpmiYesNo(false)
-2025-08-17T20:42:06.428105Z TRACE cli::device:   capabilityData:
-2025-08-17T20:42:06.428111Z TRACE cli::device:     capability: TPM_CAP_ALGS
-2025-08-17T20:42:06.428118Z TRACE cli::device:     data: (count=19)
-2025-08-17T20:42:06.428127Z TRACE cli::device:       alg: TPM_ALG_RSA
-2025-08-17T20:42:06.428147Z TRACE cli::device:       algProperties: ASYMMETRIC | OBJECT (0x9)
-2025-08-17T20:42:06.428153Z TRACE cli::device:       alg: TPM_ALG_SHA1
-2025-08-17T20:42:06.428160Z TRACE cli::device:       algProperties: HASH (0x4)
-2025-08-17T20:42:06.428165Z TRACE cli::device:       alg: TPM_ALG_HMAC
-2025-08-17T20:42:06.428172Z TRACE cli::device:       algProperties: HASH | SIGNING (0x104)
-2025-08-17T20:42:06.428176Z TRACE cli::device:       alg: TPM_ALG_AES
-2025-08-17T20:42:06.428184Z TRACE cli::device:       algProperties: SYMMETRIC (0x2)
-2025-08-17T20:42:06.428189Z TRACE cli::device:       alg: TPM_ALG_KEYEDHASH
-2025-08-17T20:42:06.428196Z TRACE cli::device:       algProperties: HASH | OBJECT | SIGNING | ENCRYPTING (0x30c)
-2025-08-17T20:42:06.428204Z TRACE cli::device:       alg: TPM_ALG_XOR
-2025-08-17T20:42:06.428210Z TRACE cli::device:       algProperties: SYMMETRIC | HASH (0x6)
-2025-08-17T20:42:06.428215Z TRACE cli::device:       alg: TPM_ALG_SHA256
-2025-08-17T20:42:06.428223Z TRACE cli::device:       algProperties: HASH (0x4)
-2025-08-17T20:42:06.428229Z TRACE cli::device:       alg: TPM_ALG_RSASSA
-2025-08-17T20:42:06.428236Z TRACE cli::device:       algProperties: ASYMMETRIC | SIGNING (0x101)
-2025-08-17T20:42:06.428242Z TRACE cli::device:       alg: TPM_ALG_RSAES
-2025-08-17T20:42:06.428249Z TRACE cli::device:       algProperties: ASYMMETRIC | ENCRYPTING (0x201)
-2025-08-17T20:42:06.428255Z TRACE cli::device:       alg: TPM_ALG_RSAPSS
-2025-08-17T20:42:06.428262Z TRACE cli::device:       algProperties: ASYMMETRIC | SIGNING (0x101)
-2025-08-17T20:42:06.428267Z TRACE cli::device:       alg: TPM_ALG_OAEP
-2025-08-17T20:42:06.428275Z TRACE cli::device:       algProperties: ASYMMETRIC | ENCRYPTING (0x201)
-2025-08-17T20:42:06.428280Z TRACE cli::device:       alg: TPM_ALG_ECDSA
-2025-08-17T20:42:06.428287Z TRACE cli::device:       algProperties: ASYMMETRIC | SIGNING | METHOD (0x501)
-2025-08-17T20:42:06.428293Z TRACE cli::device:       alg: TPM_ALG_ECDH
-2025-08-17T20:42:06.428300Z TRACE cli::device:       algProperties: ASYMMETRIC | METHOD (0x401)
-2025-08-17T20:42:06.428305Z TRACE cli::device:       alg: TPM_ALG_ECDAA
-2025-08-17T20:42:06.428312Z TRACE cli::device:       algProperties: ASYMMETRIC | SIGNING (0x101)
-2025-08-17T20:42:06.428318Z TRACE cli::device:       alg: TPM_ALG_KDF1_SP800_56A
-2025-08-17T20:42:06.428325Z TRACE cli::device:       algProperties: HASH | METHOD (0x404)
-2025-08-17T20:42:06.428330Z TRACE cli::device:       alg: TPM_ALG_KDF1_SP800_108
-2025-08-17T20:42:06.428337Z TRACE cli::device:       algProperties: HASH | METHOD (0x404)
-2025-08-17T20:42:06.428343Z TRACE cli::device:       alg: TPM_ALG_ECC
-2025-08-17T20:42:06.428350Z TRACE cli::device:       algProperties: ASYMMETRIC | OBJECT (0x9)
-2025-08-17T20:42:06.428355Z TRACE cli::device:       alg: TPM_ALG_SYMCIPHER
-2025-08-17T20:42:06.428362Z TRACE cli::device:       algProperties: OBJECT (0x8)
-2025-08-17T20:42:06.428368Z TRACE cli::device:       alg: TPM_ALG_CFB
-2025-08-17T20:42:06.428375Z TRACE cli::device:       algProperties: SYMMETRIC | ENCRYPTING (0x202)
-
-BR, Jarkko
+[1] https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-M=
+odule-2.0-Library-Part-1-Version-184_pub.pdf,
+see 28: Context Management
+[2] https://wiki.archlinux.org/title/Trusted_Platform_Module#A_TPM_error_(7=
+14)_occurred_attempting_to_create_NULL_primary
 
