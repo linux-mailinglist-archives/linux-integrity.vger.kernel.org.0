@@ -1,127 +1,113 @@
-Return-Path: <linux-integrity+bounces-6871-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6872-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6869B2ADDB
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Aug 2025 18:13:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B767DB2AF9B
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Aug 2025 19:40:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7327D1B22B85
-	for <lists+linux-integrity@lfdr.de>; Mon, 18 Aug 2025 16:13:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A555F2A0AD6
+	for <lists+linux-integrity@lfdr.de>; Mon, 18 Aug 2025 17:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547E8322545;
-	Mon, 18 Aug 2025 16:13:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD842472B9;
+	Mon, 18 Aug 2025 17:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ONrl+cWu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iOwDuITn"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF664278146
-	for <linux-integrity@vger.kernel.org>; Mon, 18 Aug 2025 16:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597F12773ED
+	for <linux-integrity@vger.kernel.org>; Mon, 18 Aug 2025 17:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755533595; cv=none; b=S63P7M4ADskqUgCNb+tzBPJDo+NEmr+ksBDuSNBhKgZgq2iI/0wi0QI8i2h5Ab4Y4YmaiPWj1EpoCtOl9MOAXlspuZW8V1x1D70xNqDQ7NppOB2brdDKGvi9v1xG9EHoqcqMqLyaPzW7R5oxbpoXRMxQJZWPm4Zw+GSvwQqxnZ8=
+	t=1755538806; cv=none; b=a1LU5UVcQfkjdetJvI+6LWtx6rFCM/wqgxhe/jlwFgmHiLD30U7F9jaVdX34GwGmKKHs7hxG3/J/+QMrKwgoRl8wrys+XzarVgaAzbevfXFAp3KBbKewD+2UhYGH+B3EOSKeckAX5asBpjpaomB0KnwhWPCxhkuwF3cLUBB2F+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755533595; c=relaxed/simple;
-	bh=qdFUMuUZzhpNzIjokGfrhSFI/4o+Ugep417lW75oSrU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fQgE+x/6Wb06NypEShBGv2GQseSHZMNaVTkl7a6LmrkcHnMDQlXyH7EImEeiRN3CRcF1LTWXNAbmcKT7IExCR1k0Uxq2mISmu9TiPgljihEidEZf+soiSDiGf7rVmHWodhNwAdByNsyms1UISw3RxvSZWROecxYkXZT3O1UPHag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ONrl+cWu; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55ce509f80dso4225987e87.0
-        for <linux-integrity@vger.kernel.org>; Mon, 18 Aug 2025 09:13:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755533590; x=1756138390; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qdFUMuUZzhpNzIjokGfrhSFI/4o+Ugep417lW75oSrU=;
-        b=ONrl+cWuHvfjucINomm8IVxJqWNA5IVkbDh4HvE3I+WKi3SpwDQs9B5YFZmtE3nFma
-         qliuFz/gHA6m30C5B/NV2BEPBsD5Bo3R44PIeGlo3STeYlmNuiIipK9tn1Uo1br1ssJT
-         aWfkQz5FI1caBaDdHx12O82RM1sht97FUlTS6SkIROmMJrF/jLRvXQ/qhfn4ZCJ7GdQ8
-         ODrYbCzLGF7QKqOUYa3VyTM0GIan+mnaqg5C53LnhM27d1F73pRurOmNw06Cneq3TWrO
-         Z0tJFjuKbrAKsAX1f9L/NRSxqWE4EJ0kaQChwBGjeM+Qx2K+kkQxlxHcxCBhgaXZcYgP
-         O+dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755533590; x=1756138390;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qdFUMuUZzhpNzIjokGfrhSFI/4o+Ugep417lW75oSrU=;
-        b=hdMoCNuRw4k/zvAIiUjwZNuLmsrh1uETWTbv46yo71orPsqcGlFQ/rSVDcDwEDmklV
-         oBlpN9tnimSReNu8ghzXs0DAzBn9+frbOMzhWLFqQcVRH1eJ9hZdE77WDPQLw2xHKiVR
-         VL8H6WObj5A+xgzv53vNkHGoNn73Or7gE62uFGO6yyfFg4vjPx2au0kHCb5ywlD6XA+q
-         CJ82zL6jIEDSYtZ2o6Ml7oWHiUlcl932WknaxuOpstl2cKbg7w66eyz9xBh+q/Wv3Kty
-         bXEcao4xYrV9X38+/fIlpKtVUuWgtBssyxR7kgTEWwKFLmLqlPNjfoKnWhXY4bQcJKCJ
-         MVCA==
-X-Gm-Message-State: AOJu0YxSk2MyE6wx5SYHZyuVU5yymPau6bmqUU5zdM/5Ca912j9XBsUn
-	Aqz3zHXsodjIaleuQWttSztjaeJsZwNkUSAItSqTlCbGZJUJWXM6xdf40Mfs5h09OKqZnXjtVpH
-	5zGfbisMaBomplrIRnL5JmN+OnNWnsWZEZgiWevtp/GmaUyzgPx9H+oNq5g8=
-X-Gm-Gg: ASbGncvLOgzC6CADXZcVzudDXQokwwDwb80jtHUll4TdyN7vsSZQHSDWEzJLY9jAPjZ
-	/0xAyGMTAxXYeoVdnpzVXB15obFgHyzBznjnehIfc8eNiSNuzUe6PqYrBo5Eh7BXWutBWwIyNdP
-	mTIcjircUcuIdFnrkbtlALrM5XhyOtb80m4176WYLerzpEnvSVFFyiNiEleFgKE5AqKE1O3H9at
-	f+0InTZlpbxIj8GxCETD1Fi/HftVLXFrwbFQCYqbgQ5IY7c
-X-Google-Smtp-Source: AGHT+IFeOqwEhTRIGmYyEPv7VSjkBYt7kJQbYUmkI8p06Ty6Y3cddoOw8158OHMoBTVNzzS1fbyVf2xZHYuraTZb37w=
-X-Received: by 2002:a05:6512:638a:b0:55c:c971:2271 with SMTP id
- 2adb3069b0e04-55ceeb43b69mr2117899e87.25.1755533589465; Mon, 18 Aug 2025
- 09:13:09 -0700 (PDT)
+	s=arc-20240116; t=1755538806; c=relaxed/simple;
+	bh=tHS7wqv6PDbHZD6D0zslBdZsTurmCV/xCMPsuVRZ8KY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p7V3/Q8pAXyyst9sumfZnIduLd/TbLa+1fUngZ0Ocybeazw34Pop//siuQ1zZBAgpvyZQNu8OuwBuhtWeBhXf8hJgTEmXZxnsMY7L0NIwO06N/p+B0Avjkv6t7ZLkWQ12stTXUfGSMh6oF07iDq80irFIgLORxvRUSipTm0v8Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iOwDuITn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E821C4CEEB;
+	Mon, 18 Aug 2025 17:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755538805;
+	bh=tHS7wqv6PDbHZD6D0zslBdZsTurmCV/xCMPsuVRZ8KY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iOwDuITn6I4NUK8O/yIdu/xrsgH1BAD+t0bIpeujxSyPEbfwJi1uFZ/YJbzGxpUqF
+	 E4xnCPhRvF+ErGb2j8+MRn1zD/VkBENjNvkwaIRt7uiSun6uFgUv/4xBl+mOpN86oe
+	 Snyqy+TvZLGFpOq2TJXO+WIvSc43yDpAFj0P4xs5o4taqtzI8xzOGGyEQM0YhgZsVS
+	 BHgz9temqGA6dApDBsgFHBnmf0T/MA7RLJEP6w6yeOVaY9CnvtwDx1qbN2w/hMKTm9
+	 UIbZHR1oWTlaJf0WrmJqtvNFly5a5QfX4LRTVg2o3BwiKWlrMc1bP8Oc2i/Qmyx+56
+	 hln0HRuJfbvuw==
+Date: Mon, 18 Aug 2025 20:40:02 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Denis Aleksandrov <daleksan@redhat.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	Jan Stancek <jstancek@redhat.com>
+Subject: Re: [PATCH] tpm: prevents local DOS via tpm/tpm0/ppi/*operations
+Message-ID: <aKNlck45-FF_p40t@kernel.org>
+References: <20250702202851.33344-1-daleksan@redhat.com>
+ <aGW2wabMXtdBEQxR@kernel.org>
+ <CAG+gbFfKLCQND-TT8DEZ09T=Nhb39_CJfM5imv341Pen03bHjw@mail.gmail.com>
+ <CAG+gbFfLP1Y=HgRfzjhT4uJ121keQ0ZKo=4saB3uqnZYyoV8JA@mail.gmail.com>
+ <CAG+gbFcgfZALHCAxaMmWkNQX2sKgkc-HBJrYXdmehsqLidG_tA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMigqh2nwuRRxaLyOJ+QaTJ+XGmkQj=rMj5K9GP1bCcXp2OsBQ@mail.gmail.com>
- <8be73a3a6772c61387b93eae808a7e382462c6cc.camel@HansenPartnership.com>
-In-Reply-To: <8be73a3a6772c61387b93eae808a7e382462c6cc.camel@HansenPartnership.com>
-From: Chris Fenner <cfenn@google.com>
-Date: Mon, 18 Aug 2025 09:12:57 -0700
-X-Gm-Features: Ac12FXxy3N2Ufj5gMR7JJkp-Akac78FaCL10gyIJXeqWz6sxlNNfvMYbgF7GX2M
-Message-ID: <CAMigqh019OxTs+VaUjpEN3WoAkJnr1fJaciAELczgM9g1BMZUQ@mail.gmail.com>
-Subject: Re: Questions about CONFIG_TCG_TPM2_HMAC
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG+gbFcgfZALHCAxaMmWkNQX2sKgkc-HBJrYXdmehsqLidG_tA@mail.gmail.com>
 
-Thanks James,
+On Fri, Aug 08, 2025 at 02:32:02PM -0400, Denis Aleksandrov wrote:
+> Ping.
+> 
+> Just checking in on this patch.
+> It has received a "Reviewed-by" tag, and I was wondering if there is
+> anything else needed from my side for it to be picked up.
 
-On Sun, Aug 17, 2025 at 1:34=E2=80=AFAM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
+"This bug is not seen on most machines. Reads on tpm/tpm0/ppi/*operations
+can become very long on misconfigured systems. Reading the TPM is a
+blocking operation, thus a user could effectively trigger a DOS.
 
-> Supporting these commands was the reason the TPM2 volatile
-> handle space was reduced to 3.
+Resolve this by restricting unprivileged user from reading the
+above-mentioned device files."
 
-I think this may put the cart before the horse: You can do anything
-you want to in the TPM with just 3 handles (actually I think 2 might
-be enough). ContextSave and ContextLoad exist [1] so that you can
-create a resource manager to share the TPM among concurrent
-applications. If you aren't sharing the TPM among concurrent
-applications, you neither need a resource manager nor context
-commands. I want to make sure I'm not misunderstanding your message:
-is it OK to break userspace over this or any other [2] missing
-dependency of TCG_TPM2_HMAC, simply because that implies the TPM is
-not a "mainstream" PC Client profile TPM?
+OK I took some time to revisit this. I think the symptom is correct but
+it should not be fixed the way it is done here. I.e. the fix works as
+a bug report but not as a right type of fix because it will also
+change uapi behavior w/o strong enough reasons to do so.
 
-> The way it is supposed to work is that the system stores (and
-> validates if it can) the signing EK on install (this is constant for
-> the lifetime of the TPM).
+What you should do instead would be to cache the result.
 
-Some questions for the threat model here:
-1. Where is the signing EK stored by the system?
-2. When is this system (and its durable storage) validated or measured?
-3. How do we avoid a circular trust dependency between the kernel and
-this system here?
+I.e. first declare this as static global:
 
-Thanks
-Chris
+static const char *tpm_ppi_info[] = {
+	"Not implemented",
+	"BIOS only",
+	"Blocked for OS by BIOS",
+	"User required",
+	"User not required",
+};
 
-[1] https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-M=
-odule-2.0-Library-Part-1-Version-184_pub.pdf,
-see 28: Context Management
-[2] https://wiki.archlinux.org/title/Trusted_Platform_Module#A_TPM_error_(7=
-14)_occurred_attempting_to_create_NULL_primary
+
+Then declare a spinlock:
+
+static DEFINE_SPINLOCK(tpm_ppi_lock);
+
+And finally static arrays that contain indexes to tpm_ppi_info e.g.,
+tpm_ppi_tcg_operations and tpm_ppi_vs_operations.
+
+Then on first request populate them and after that the results are
+cached.
+
+
+> Thanks,
+> Denis
+
+BR, Jarkko
 
