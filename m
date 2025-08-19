@@ -1,156 +1,137 @@
-Return-Path: <linux-integrity+bounces-6876-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6877-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38668B2C458
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Aug 2025 14:56:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFD60B2C652
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Aug 2025 15:58:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A549189291E
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Aug 2025 12:55:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25D1F3ADACD
+	for <lists+linux-integrity@lfdr.de>; Tue, 19 Aug 2025 13:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81341335BDC;
-	Tue, 19 Aug 2025 12:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE05342CAF;
+	Tue, 19 Aug 2025 13:54:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Op6q3UE7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fxyIppGy"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5207421765B;
-	Tue, 19 Aug 2025 12:55:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACF7342C90
+	for <linux-integrity@vger.kernel.org>; Tue, 19 Aug 2025 13:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755608124; cv=none; b=cne76+bK98/1BpAPIYl79CJimnVjEdROAAbsGLff0cnsuWVQ2/FRecnfGVRJ06dAq8u7TJdEmejBnXi7Ym9glAAE0dFuQV1e9f2WVxD6su2cDaNYHOPrEVh37VhR3AwT91M8Mza7t6ziA/IHNeiDYNETFKD1shGC7w+UbQcFi/Y=
+	t=1755611681; cv=none; b=tU4/Ys15zqToTzG/hBtHeVlUHWBdqe7exUjwgA5/CCPmJih1CvfRtubz7l8YSO5y9cXzSETdrW+3XqVbNtnaOos0R5o4I3txSy5JikTmaU3CmBj/BtoMj5CjByj3edNKa/aFoG0UNS9aVAEkLarWeqaIp3pR6H1PWUiPzkaL57E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755608124; c=relaxed/simple;
-	bh=+1/10nzw4Yf4yiVjA7ztc1dX3OYsmM9+0qlQA3cpdSg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bmmysCGMOOBgDYaicuwibIjas56QYSxSKU54MO4uy7pCD2ZGaA+hZT/A1DgSqN46CE1Z1ud8sHMF3vMqCXLPDW/07IG5hUOeFNQG8qz6SEFFmQeVzL8GVuxf+ZVlNwHLGqUWJduGCOzTgxB3ENtZwXcObU9ti1xMl+PSZ7bDqHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Op6q3UE7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D705C4CEF1;
-	Tue, 19 Aug 2025 12:55:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755608123;
-	bh=+1/10nzw4Yf4yiVjA7ztc1dX3OYsmM9+0qlQA3cpdSg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Op6q3UE7eKv7xYk37W//xhzKMUL2XvdoNTa45dNkDlSf/a0dqxSKLzGkTFjy1ODhC
-	 gOfaNm1m5FpSsq0WGgFhmbTi11oQ5UT2a6utUz25TkBRkYfHfmjB6l9AGbaGLtX5Lg
-	 M9le2ylpxoFrce1kmFrMqwbieVaCIdyb8z0IkNZWiulgV8tw1HqujTHFV4m9QI/fh9
-	 NfJDeVggrWmvGUreyIo4UrBCejq9BOWTOlTae3A4VDfGZWzgGTQKZ/DUNuebOPnlsN
-	 oCL2ady6yZfisD5j5SWcqRBG0XxGb2koSMhhWKBDolwocwJl6wkrI31vjuyARtpBae
-	 yNmxj40rSPOiQ==
-Date: Tue, 19 Aug 2025 13:55:18 +0100
-From: Lee Jones <lee@kernel.org>
-To: Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: herbert@gondor.apana.org.au, jarkko@kernel.org,
-	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-	davem@davemloft.net, linux-crypto@vger.kernel.org,
-	peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-	Yinggang Gu <guyinggang@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>
-Subject: Re: [PATCH v12 2/4] crypto: loongson - add Loongson RNG driver
- support
-Message-ID: <20250819125518.GF7508@google.com>
-References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
- <20250705072045.1067-3-zhaoqunqin@loongson.cn>
+	s=arc-20240116; t=1755611681; c=relaxed/simple;
+	bh=aLowlVBcGtRRCL9gPTX5iTaKpsDILmjJX+HBGaI4ZOg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MzOJ4NWo68dqYRyQJrpRGR1yHvtnEfxADNcPi1ZprplfXyTPgYAhCuhjlfKKyWPxlM1wFb+rhhJpnPisPipO9Ul58+9mJLZCWAr/Eq1E6piL8+3Z3PcUavb0UyHnaiVvs+gU9lI3jE1vBq0/n9dIyWUeyKEOMP2JVdUgcUwApkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fxyIppGy; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55ce5287a47so4839341e87.3
+        for <linux-integrity@vger.kernel.org>; Tue, 19 Aug 2025 06:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755611677; x=1756216477; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KNBz4loD0ODJbS8mAVtRBf281KnoemFubriz2ZPRQmA=;
+        b=fxyIppGyxjYasJ1keGX5g90rNsbSFKD3HNmImny+T4lOR6U3H17ratRt5UbapB5GGu
+         0JDovoVzzwRC2+pca6gBgmUt8wPbz5A8hTO6zGmgE6UJRJX16jPipuVMGCs5HTVUn9dV
+         XFq15DSLP3Ax1akRAwPrVnuS/hSoNNApHiqH38IQ4V5YymuIFF1otDP0NFdrAwm7sky2
+         bs1GhzEf/1AWQbdwcyQSgIrpY/pOmN7FvheVBiqZphljUMbWIAtW4fWA9J5aOS/R4VgG
+         QBK8PvGW8xgm/a9TIYaZPlRC322i04Ulrthf2AHi8EzyPhsNkS8JTTTS2T5rSKF6XV26
+         7/Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755611677; x=1756216477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KNBz4loD0ODJbS8mAVtRBf281KnoemFubriz2ZPRQmA=;
+        b=uOWH5q+fcQXd8NFdOzmQ0Lb2bywYmDZybiDX9d2C+HM6s48mHMLaCFrA1BLlHW/sdf
+         AGimVprX3wF1wYGlZEHuqYOfqFu/evOzxCByrSFViKDuo7N5bF6eskfVHRijkSk00CRC
+         jHpIJ9CPkAiCh5UdOVcFoIGZD56ZGqMVRqORGyG4uRIH0pZAPjT+AG5F48gr34i1xtUE
+         XxUum3a2Cz/VdD6Ouh3a64dwVj3W2gY+s06W7NVjvlgSkSzcssupYFSXTvCezS6SNw4k
+         lgcw8W70wVE7kkwl/7Tmjhc0B+0FWZOgw5QOvmsjGAtgkPvUm7iuGloIqw9SU/7ixVU1
+         DkJQ==
+X-Gm-Message-State: AOJu0YyZcAJdz2uGaQPFJxnsmjuCJsy71zAGitsDZvYOQIAVZNFD4AAg
+	FFhUt0ljhcTdHo9dgwo7dYJ81zlDsPWTytH9Mj5POYXLCK3NpxRIa8ts3Pjjc3sZxZJDsMYUpSi
+	hE3Es4Q4ahh1AMj5r5z1DS/hemnia9XKAYhZhdeArdo+UcRElsN+w4NlWdg8=
+X-Gm-Gg: ASbGnctLa2ItIt2Dp2wv0ZzKT9SdKDWVLDQ5rq5KKQu6Mhtcpc8AVyOCTSphk1kOk5c
+	BeZkDK4bVtApwDi0jlKh7WPJzQu2o/S9amQkiL4FiCw0nFEapwjz14ZJE6JhVKnrMqZsc36UAj7
+	ceYgLl44hwXmkk//JHpEBU+VvfKPtQ7FEq3mG5XsDxDmCH3F3G3mqDa/wHmw7eZo0DWlS3st++O
+	dxEI1iRy1uyy/9Bu10S4i4=
+X-Google-Smtp-Source: AGHT+IGxfFV6xfLcY8QlEbP6Ssh+cXAzfw6XeqOw9QXqdrQkl4I6LdhJ6hH5tA/WeZOaWmqY+2n9oa2/0l+xtfSazDI=
+X-Received: by 2002:a05:6512:3b0c:b0:55b:8f9d:f7a3 with SMTP id
+ 2adb3069b0e04-55e00759588mr831905e87.4.1755611676347; Tue, 19 Aug 2025
+ 06:54:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250705072045.1067-3-zhaoqunqin@loongson.cn>
+References: <CAMigqh2nwuRRxaLyOJ+QaTJ+XGmkQj=rMj5K9GP1bCcXp2OsBQ@mail.gmail.com>
+ <8be73a3a6772c61387b93eae808a7e382462c6cc.camel@HansenPartnership.com>
+ <CAMigqh019OxTs+VaUjpEN3WoAkJnr1fJaciAELczgM9g1BMZUQ@mail.gmail.com> <517db659c835f0856daa7fa22cd4f22089111da3.camel@HansenPartnership.com>
+In-Reply-To: <517db659c835f0856daa7fa22cd4f22089111da3.camel@HansenPartnership.com>
+From: Chris Fenner <cfenn@google.com>
+Date: Tue, 19 Aug 2025 06:54:23 -0700
+X-Gm-Features: Ac12FXxy20EWdKEJDVMNOI8uNqiNe8A5WSm1YDOW89W4QEmEjxkW_sKm8SGBYYI
+Message-ID: <CAMigqh0x+yK25f8J_Yrn9v93969zQxbpevivWWZ6-NLFy4pDHQ@mail.gmail.com>
+Subject: Re: Questions about CONFIG_TCG_TPM2_HMAC
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 05 Jul 2025, Qunqin Zhao wrote:
+Thanks James,
 
-> Loongson's Random Number Generator is found inside Loongson Security
-> Engine chip.
-> 
-> Co-developed-by: Yinggang Gu <guyinggang@loongson.cn>
-> Signed-off-by: Yinggang Gu <guyinggang@loongson.cn>
-> Signed-off-by: Qunqin Zhao <zhaoqunqin@loongson.cn>
-> Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  drivers/crypto/Kconfig                 |   1 +
->  drivers/crypto/Makefile                |   1 +
->  drivers/crypto/loongson/Kconfig        |   5 +
->  drivers/crypto/loongson/Makefile       |   1 +
->  drivers/crypto/loongson/loongson-rng.c | 209 +++++++++++++++++++++++++
->  5 files changed, 217 insertions(+)
->  create mode 100644 drivers/crypto/loongson/Kconfig
->  create mode 100644 drivers/crypto/loongson/Makefile
->  create mode 100644 drivers/crypto/loongson/loongson-rng.c
-> 
-> diff --git a/drivers/crypto/Kconfig b/drivers/crypto/Kconfig
-> index 9f8a3a5be..f6117bc77 100644
-> --- a/drivers/crypto/Kconfig
-> +++ b/drivers/crypto/Kconfig
-> @@ -827,6 +827,7 @@ config CRYPTO_DEV_CCREE
->  	  If unsure say Y.
->  
->  source "drivers/crypto/hisilicon/Kconfig"
-> +source "drivers/crypto/loongson/Kconfig"
->  
->  source "drivers/crypto/amlogic/Kconfig"
->  
-> diff --git a/drivers/crypto/Makefile b/drivers/crypto/Makefile
-> index 22eadcc8f..125b99b24 100644
-> --- a/drivers/crypto/Makefile
-> +++ b/drivers/crypto/Makefile
-> @@ -44,6 +44,7 @@ obj-y += inside-secure/
->  obj-$(CONFIG_CRYPTO_DEV_ARTPEC6) += axis/
->  obj-y += xilinx/
->  obj-y += hisilicon/
-> +obj-y += loongson/
->  obj-$(CONFIG_CRYPTO_DEV_AMLOGIC_GXL) += amlogic/
->  obj-y += intel/
->  obj-y += starfive/
-> diff --git a/drivers/crypto/loongson/Kconfig b/drivers/crypto/loongson/Kconfig
-> new file mode 100644
-> index 000000000..15475da8f
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/Kconfig
-> @@ -0,0 +1,5 @@
-> +config CRYPTO_DEV_LOONGSON_RNG
-> +	tristate "Support for Loongson RNG Driver"
-> +	depends on MFD_LOONGSON_SE
-> +	help
-> +	  Support for Loongson RNG Driver.
-> diff --git a/drivers/crypto/loongson/Makefile b/drivers/crypto/loongson/Makefile
-> new file mode 100644
-> index 000000000..1ce5ec32b
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/Makefile
-> @@ -0,0 +1 @@
-> +obj-$(CONFIG_CRYPTO_DEV_LOONGSON_RNG)  += loongson-rng.o
-> diff --git a/drivers/crypto/loongson/loongson-rng.c b/drivers/crypto/loongson/loongson-rng.c
-> new file mode 100644
-> index 000000000..3a4940260
-> --- /dev/null
-> +++ b/drivers/crypto/loongson/loongson-rng.c
-> @@ -0,0 +1,209 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2019 HiSilicon Limited. */
-> +/* Copyright (c) 2025 Loongson Technology Corporation Limited. */
-> +
-> +#include <linux/crypto.h>
-> +#include <linux/err.h>
-> +#include <linux/hw_random.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/list.h>
-> +#include <linux/mfd/loongson-se.h>
+On Tue, Aug 19, 2025 at 1:51=E2=80=AFAM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
 
-This depends on the first patch in the series.
+> The point being that the kernel TPM2 driver was built to support a
+> standard spec TPM2 with context management.
 
-Does this one have an Ack?
+Which "standard spec"? The PC Client Platform TPM profile? Is the TPM2
+driver intended to break userspace for any other TPM?
 
--- 
-Lee Jones [李琼斯]
+> > 1. Where is the signing EK stored by the system?
+
+> On durable storage.  The threat model being that an interposer attacker
+> is seeking to gain access to keys or boot malicious code undetected (so
+> detection, even after the fact, is good enough).
+
+Nice, we're on the same page here, then. So let's game out this
+attack. The interposer attacker has attempted to boot some malicious
+code undetected, and it used its interposer capability to cause the
+non-malicious firmware/bootloader/kernel code to mis-measure and
+transition to the malicious code.
+
+> > 2. When is this system (and its durable storage) validated or
+> > measured?
+
+> Usually in the initrd before root is decrypted.
+
+I see 2 cases here, either the initrd is malicious or it's not, right?
+If malicious then it will skip the checks, if not malicious what will
+it check against or measure into? The interposed TPM, right?
+
+> > 3. How do we avoid a circular trust dependency between the kernel and
+> > this system here?
+
+> If you're worried the attacker has
+> compromised the system far enough to corrupt a user space crypto
+> operation then you can ship the verification off to a remote system.
+
+Indeed I am worried about this exact case, since we said earlier the
+interposer is trying to boot malicious code undetected. How does the
+remote system know which key the kernel used for all its salted
+sessions?
+
+Thanks
+Chris
 
