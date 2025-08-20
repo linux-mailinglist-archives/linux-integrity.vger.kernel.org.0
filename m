@@ -1,87 +1,128 @@
-Return-Path: <linux-integrity+bounces-6879-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6880-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46487B2CF72
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Aug 2025 00:38:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 362EBB2D092
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Aug 2025 02:13:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CC3516F3A7
-	for <lists+linux-integrity@lfdr.de>; Tue, 19 Aug 2025 22:38:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA6D41B6769F
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Aug 2025 00:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3852F2222B4;
-	Tue, 19 Aug 2025 22:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 165424C9F;
+	Wed, 20 Aug 2025 00:13:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="obP3ZuSD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XDcRuxwG"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150B9221F0A
-	for <linux-integrity@vger.kernel.org>; Tue, 19 Aug 2025 22:38:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1E44A1E;
+	Wed, 20 Aug 2025 00:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755643130; cv=none; b=gs1PMfSO/SNA8K7MYvGQIqBVKP+/qiMHnMCXGC7LqfZP1lGhDb8/oymI1C1sL41qiw6xj8dVONE0O1Cy3cqmEC459fYEL0h9Kdhewr47AJ5Rv6FPZ3PqsxETgfmelveAQJVw7fBn4ODGndKIkg3DwRpKCZj6avlIn2bDvBToOIU=
+	t=1755648795; cv=none; b=qRyVKIdq59lo0eRjGEW73nCfCDp2EjV463a68b3qf9JUKunYpNm5B8/6mmGy0FL+TZETZO3RNOBKYblFOMYGZv1EdIS1vUwhErqlebQNyP6juRQQzUIPD8eo5wUpLLRe+Rxvuum4fTN/AjeUpKG/BSH/3o2RKi9yuAIN2UxGDI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755643130; c=relaxed/simple;
-	bh=GzBivtbgMu7i0vc+VdHkreLxd7ZzWAV1e+MSZhfgl28=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mx9iHgOEiMPjUbS9KTRxX9FGPFUJNLiuo1fe8Jb9WxKuis3nDuaV3G+jJuLsX1LrKObH5+FJqFHjWIVZWrDI2FcjW8fvXaW9Xtqj5kKltu02stQKefsLITC4quJN9O0KGS49UlVodScP24G68NBVK+vTjbf4thrGae4etNw8Uzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=obP3ZuSD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50572C113CF;
-	Tue, 19 Aug 2025 22:38:49 +0000 (UTC)
+	s=arc-20240116; t=1755648795; c=relaxed/simple;
+	bh=gy5IplXc0FL96Ro3IuiifdRSkX7mIGM+aCqIxPwusL0=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XrObL9tfY8hraFLipn8M66Rfsmd2Cf5StmKfxypfYaims2pQfOt5vbzlyi6MXNFNLipo1Bnkltgs3YFkCVlkm3/QtYaQSDPJ7wGZHPMTT9QacwvDLpInpjUdZLTiqbhFAXu4USfDVX8Ql9FWK1AuN7gZFlrBD84ohxD9mpcUn6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XDcRuxwG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219FDC4CEF1;
+	Wed, 20 Aug 2025 00:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755643129;
-	bh=GzBivtbgMu7i0vc+VdHkreLxd7ZzWAV1e+MSZhfgl28=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=obP3ZuSDqoAkQetnEAspfPuhaoApnumiNxTWzwXeYygm2wlD8xs5kM1qhGyzQvenW
-	 gih/5SGw3kCtrudWzMJx5zb2GevGfhNeuhPGtvki/+wbpDjrkYS/WFFCtIkAuLM8qr
-	 1ItvvTnX3ExnTOADcCaY3j0bYHgci7a7N3cPH0Ueo4Jiguq8TOciXZhXjMBS1pZ8IZ
-	 QbOd4I80MUY4bqq0jEK0qRVltwdnZi9ZBLDYSHHaxugS5jnyCTn4zEBMqbc1SYRZk5
-	 t0T0LOjn2v5qyGOB/p3gXwwoWu0Cfj8KU63qDhmWNVLxTwu1p3X/RxJG3y1zBNFOvu
-	 qtZSFwRbgQqvQ==
-Date: Wed, 20 Aug 2025 01:38:46 +0300
+	s=k20201202; t=1755648794;
+	bh=gy5IplXc0FL96Ro3IuiifdRSkX7mIGM+aCqIxPwusL0=;
+	h=Date:From:To:Subject:From;
+	b=XDcRuxwGHqSj3D5V/kZDqFdRPgGU2IcxLRMia/pub7NEm+BEoknWc4bRqu5EUkH6R
+	 OfajYIR8xQ+Md6Jbd9wMp7LrvbM+fG/mI3KYXYhuwpnpr2oH25P5GAvAP+aG53U4FU
+	 f2mYclR8HIr9pd1KQoiGEK3px/I9BQz4l+uVz4ABcHIejEoG3cm08ATJvYLLZBi5/V
+	 mX+3pTBadgkNR8fY4XTwwL4QkBVnspN4N34L8uwOYDiwOP+YPnnlOnftQZTRlIbPcf
+	 iA24uMthtLxEOqb/jzr7k3ZFT30/BvfNE8Qaw/wjfObZo+91A5os4BEqJ/4TL65RF3
+	 1q6ILR0m8DBbw==
+Date: Wed, 20 Aug 2025 03:13:11 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Denis Aleksandrov <daleksan@redhat.com>
-Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-	Jan Stancek <jstancek@redhat.com>
-Subject: Re: [PATCH] tpm: prevents local DOS via tpm/tpm0/ppi/*operations
-Message-ID: <aKT89ojg5bvG4Sr0@kernel.org>
-References: <20250702202851.33344-1-daleksan@redhat.com>
- <aGW2wabMXtdBEQxR@kernel.org>
- <CAG+gbFfKLCQND-TT8DEZ09T=Nhb39_CJfM5imv341Pen03bHjw@mail.gmail.com>
- <CAG+gbFfLP1Y=HgRfzjhT4uJ121keQ0ZKo=4saB3uqnZYyoV8JA@mail.gmail.com>
- <CAG+gbFcgfZALHCAxaMmWkNQX2sKgkc-HBJrYXdmehsqLidG_tA@mail.gmail.com>
- <aKNlck45-FF_p40t@kernel.org>
- <CAG+gbFe07nngs2-2iifeK7usAEo3C07NuSsQU7jVpps0m-3RzA@mail.gmail.com>
+To: tpm2@lists.linux.dev, linux-integrity@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: tpm2_protocol / tpm2sh 0.9.0
+Message-ID: <aKUTF6lu5JetDJxX@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAG+gbFe07nngs2-2iifeK7usAEo3C07NuSsQU7jVpps0m-3RzA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 18, 2025 at 03:12:02PM -0400, Denis Aleksandrov wrote:
-> Hi Jarkko,
-> 
-> Thanks for the detailed review. I will update the fix, test it,
-> and send over a v2.
-> 
-> Hoping to get that over to you this week or early next.
-> 
-> Best,
-> Denis
-> 
-> P.S.
-> Would you like the v2 in a new thread, or keep it here?
+Hi
 
-Please try to quote responses properly.
+0.9.0 is the first "feature complete" version of tpm2_protocol except
+couple of minor glitches.
 
-Yeah, maybe it is better to open a new thread anyhow.
+Errata:
+
+    1. SetCapability due this remark below table 137 in the Structures
+       specification:
+    
+       "The TPMU_SET_CAPABILITIES Structure may be defined by a TCG Registry."
+    
+    2. No TPM_CC_MAC defined as its code conflicts with TPM_CC_HMAC reasoned
+       with the most illogical reasoning ever in the end of section 5.2 of
+       Structures specification:
+    
+       "A TPM can implement either TPM2_HMAC()/TPM2_HMAC_Start() or
+       TPM2_MAC()/TPM2_MAC_Start() but not both, as they have the same command
+       code and there is no way to distinguish them. A TPM that supports
+       TPM2_MAC()/TPM2_MAC_Start() will support any code that was written to
+       use TPM2_HMAC()/TPM2_HMAC_Start(), but a TPM that supports
+       TPM2_HMAC()/TPM2_HMAC_Start() will not support a MAC based on symmetric
+       block ciphers."
+    
+       I.e. reasoning that tells no reasons for overriding a CC, which here
+       is the problem, not the "xor relationship" between these commands.
+       Neither all other commands work on all TPMs but still they don't
+       share the same magic cookie.
+
+I started this project originally in 2024 then I got quickly stuck.
+After one year of processing how to do it the result is no_std, zero
+dependency crate, which does not require memory allocator. It can
+empower both chips, clients, emulators and operating systems. Even tho
+most of the code was written in three weeks (11K of 12K for both
+protocol and client) the ideas have been developing for a long time.
+
+Next steps are of course slimming up and tightening the implementation
+as there must be extra fat scattered here and there, and fix the bugs.
+Response handling has a few scoped rough edges that I will look into
+first. I think also (and have experience on the topic further to
+back it up) that this after maturizing is the solution also for
+Linux kernel.
+
+Unlike other TPM2 tools and alike tpm2sh is not designed for human
+readable output but instead a programming interface for bash and
+similar (e.g. it could be used to enhance tools like 'pass') but
+I've developed a human solution i.e. "print-stack" command so it
+is the demo for this release:
+
+❯ sudo ./target/debug/tpm2sh create-primary --alg rsa:2048:sha256 | sudo ./target/debug/tpm2sh pcr-read "sha256:0" | sudo ./target/debug/tpm2sh print-stack
+
+⠦ Waiting for TPM...
+⠏ ✔ TPM operation complete.                                                                                      Type: pcr-values
+  Update Counter: 86
+  Bank (sha256):
+    PCR 0: b9a5bf5fc2ffbca9b75f75567c84d1f660d4a77d1413f7a4b15de162cd27e6f0
+Type: context
+  Context:
+    Sequence: 0x8b
+    Saved Handle: 0x80000000
+    Hierarchy: TPM_RH_OWNER
+
+Now it's time to a short break (ignored other life to get this
+vomitted out) ... :-)
 
 BR, Jarkko
+
+
 
