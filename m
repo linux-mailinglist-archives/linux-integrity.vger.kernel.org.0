@@ -1,53 +1,68 @@
-Return-Path: <linux-integrity+bounces-6881-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6882-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20039B2D0AE
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Aug 2025 02:28:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F48AB2D1F9
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Aug 2025 04:34:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C459318959CE
-	for <lists+linux-integrity@lfdr.de>; Wed, 20 Aug 2025 00:28:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A8142A63AD
+	for <lists+linux-integrity@lfdr.de>; Wed, 20 Aug 2025 02:34:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1DA14884C;
-	Wed, 20 Aug 2025 00:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69D2125D1E6;
+	Wed, 20 Aug 2025 02:34:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UE2NF5ae"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="nLeBJWY2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90C1C142E83;
-	Wed, 20 Aug 2025 00:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E80E3C38;
+	Wed, 20 Aug 2025 02:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755649683; cv=none; b=FDuXu4lrrAfiqo+bAEtXJc3RsAu354vG8bwG/8uLXEkqIoEdbebwq5cDzcoUVoDRRINa2ipONQzJuEiKdMCFVEcDmD7utItnqBcvDIFwfNe41G+8WkLijUdecXL2V4qYkaeS9vxdhSP97htGFYjYl88gpfmkw0hXMqaKyhLGF44=
+	t=1755657245; cv=none; b=jK4BVIYRoqtg7CQ1dm5fgODj/S1CovdDHcm898klTCq5S/qlkCgZ7aaaM8nbelc1ASJjFJYxC5c1SEC0dT0l7leu0qWvczu6sRlMbcX6L7sn/a1j/xeHVewy8g+YOufuc5hBqKy1i1rbCMt+tSojNiS6hs75sHIQXe8KImF5M94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755649683; c=relaxed/simple;
-	bh=XeskXZIky+PEIWlOP96HY9yCogbLgJ4FHj85WL9QYx0=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nKGMy4JT+TdhuDhEv3Cc8sMzWsgpYBD7ozlxp2udGcD7oTa+leqRjNtuAAgU8L1AJdW0a+NBLsKkop9xrymkZgeMZTNEKEfjkbwzQFOBehJOB2nXJROX3KAlxe/KW3Z1OqSJluC1vmpMTeqeUUHeL4OQwptQL/32/YXZqkKFomY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UE2NF5ae; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B244DC4CEF1;
-	Wed, 20 Aug 2025 00:28:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755649683;
-	bh=XeskXZIky+PEIWlOP96HY9yCogbLgJ4FHj85WL9QYx0=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=UE2NF5aevfeuz7ZZAxgLfrI0fIYfSacTIW0+LHXfuH1xVyqjcteo643jzIldn2Z1K
-	 qAVXmQ4H+Xfjk+u60XCFJI2lG/O+afXd7+DMuT3+I6uwEbrUwOHmg7miRuWVtTnCmU
-	 aHVjdlRteuPPLdB3UCkCWlWMmdUM5KowDbmYpu1x/L3WM0vtWk+aK+xWUvXVp73gnk
-	 YqiVhRvsF2NMu/UPoBevaOKOg6BdEA/WivVlpB263xcdrkLVYkxYeorMNZ8RVJwENk
-	 CmXzqAYwFysj61JUOtSfzkZe23lB2dMdZkSkL5Roci0MBfkWwJfelO3Hjvi615qXrp
-	 ULbfWxmr13Ozg==
-Date: Wed, 20 Aug 2025 03:27:59 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: tpm2@lists.linux.dev, linux-integrity@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: tpm2_protocol / tpm2sh 0.9.0
-Message-ID: <aKUWj-QCsMUnysme@kernel.org>
-References: <aKUTF6lu5JetDJxX@kernel.org>
+	s=arc-20240116; t=1755657245; c=relaxed/simple;
+	bh=+X3h4TnrVhf6EHsT3P84o1wsToV8YCq72tvSy02zTAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Su1cJeSLQJgU70rwY0GTYkjsIPSh228vhzGD7BvMPSi0Qkbf0QLOwsTrp6x1SoHIezrSkclHcwZX+xlWT40Jr/DdYD+EQIWo4gooLWdUYw2kEdLeUlYBdsmRwbhXtK44mcVSOgr/20sWd92oTT6HdhOwWMpzIoi1oEvRqd23P1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=nLeBJWY2; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=y1ZAIG759HT4OXoQdw5pPQnndkLX5MKjmdQRlmFJ9Ug=; b=nLeBJWY2LIS6dPbKblx48IwiFj
+	5Fb9t/36mXHImYnz2DwyCnokR2F2dlwQlhpnum5C5bwMxAQp7sYaiMcygVNQ6n51/0kTWIe3fDsJE
+	lOcEligUlSnNvBfBI3wXkTbRWALB0UcXWJijZrQhfsNMxND+PTVry/lpkTlQdBraLBsXqlqYCIauB
+	8rH1zWBQjUOtH7bT+OkVNue0Cn5yj0Rl5I4j07m2h1Y2NhH+fQ+QUPGmf+pBKEFKLVPee07D5+4wp
+	0rP/IhOsurafEX+y8TeSxTVDxLUjH2ktR/4+adw4T2pe2SpCo5POnxZSWGh3KWzby1D0gi/oLa5z9
+	Y60jVL4Q==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uoYOm-00FgcB-0i;
+	Wed, 20 Aug 2025 10:33:57 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 20 Aug 2025 10:33:56 +0800
+Date: Wed, 20 Aug 2025 10:33:56 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Lee Jones <lee@kernel.org>
+Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, jarkko@kernel.org,
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+	davem@davemloft.net, linux-crypto@vger.kernel.org,
+	peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	Yinggang Gu <guyinggang@loongson.cn>,
+	Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH v12 2/4] crypto: loongson - add Loongson RNG driver
+ support
+Message-ID: <aKU0FKgqRxTn_Zws@gondor.apana.org.au>
+References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
+ <20250705072045.1067-3-zhaoqunqin@loongson.cn>
+ <20250819125518.GF7508@google.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -56,34 +71,21 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aKUTF6lu5JetDJxX@kernel.org>
+In-Reply-To: <20250819125518.GF7508@google.com>
 
-On Wed, Aug 20, 2025 at 03:13:11AM +0300, Jarkko Sakkinen wrote:
-> I started this project originally in 2024 then I got quickly stuck.
-> After one year of processing how to do it the result is no_std, zero
-> dependency crate, which does not require memory allocator. It can
-> empower both chips, clients, emulators and operating systems. Even tho
-> most of the code was written in three weeks (11K of 12K for both
-> protocol and client) the ideas have been developing for a long time.
+On Tue, Aug 19, 2025 at 01:55:18PM +0100, Lee Jones wrote:
+>
+> This depends on the first patch in the series.
+> 
+> Does this one have an Ack?
 
-Also tpm2_protocol byte granular precision in its understanding of the
-protocol.
+I thought I had acked it already.
 
-We don't need to validate anymore just length or trivial metrics like
-that. The power of Rust here is really that we can structurally say
-what "is" and what "is not".
+Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-It's not just a security property. It increases the overall stability
-of the system. One particular benefit that it gives for kernel hacking
-is the ability in some cases to differentiate the stimulus of a bug
-between kernel, hardware and firmware.
-
-My crate takes byte granularity seriously. E.g. day ago I noticed
-that spec had enums with signed discriminants, which I hadn't paid
-attention but compiler reminded  me of that by complaining that
-building and parsing traits were not available for 'i8' :-) (it
-event has separate building and parsing traits for u8).
-
-BR, Jarkko
-
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
