@@ -1,360 +1,142 @@
-Return-Path: <linux-integrity+bounces-6885-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6887-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9D8B3211B
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 Aug 2025 19:08:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86CE9B32324
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 Aug 2025 21:46:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EC101D6175B
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 Aug 2025 17:09:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AA967A14E0
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 Aug 2025 19:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB3B320CB3;
-	Fri, 22 Aug 2025 17:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D4E52D5432;
+	Fri, 22 Aug 2025 19:46:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="APfe4TuR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iUWpPkOs"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-8fad.mail.infomaniak.ch (smtp-8fad.mail.infomaniak.ch [83.166.143.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B408D313554;
-	Fri, 22 Aug 2025 17:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD1C2D543A
+	for <linux-integrity@vger.kernel.org>; Fri, 22 Aug 2025 19:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755882504; cv=none; b=CHAdma42vCmgIAokS0USCsKWozKG08YvdcrSQMgv9FDtbdHba/nOtW/35yCvbFHgupTpHFe5j4E/zV17+5Ufke+qgW7W56V9kY4UOrIyT6vryAVyXg6zmG1wPwuOZauW4ub4fkFzGM49Gl9EfTs6D1/D5nmDYKlQf3LxaGm5/BM=
+	t=1755891972; cv=none; b=QKOt9R/988s7dQPXtYohKC8073nqZYkvMVdtJha/HB/F2H/Yc3fVOinVyoPelKIgCwq72RwtSuWMduqmQlWLmgMFhZPKlhhpXFLVUxKKJjl704sj8AVX8VImwarWhfsrxCZvfokP2pq6S8W0WHNTD2Ea+E5kcl4Iv41GxHtHWJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755882504; c=relaxed/simple;
-	bh=a0bfPIZilwtzdMjRhg2FvF4FRux6GrPkvAFHgegPRWg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FNVOaDo/LlQtXxea1ZvRGnKIkvpmPEA2wtle0cD6BLtY9QNe0UWAfauSPJt8hNleg96I38sv3CWHPHWzD+HnwRd0Th+ZB0p2NHKVqkxOJvBPjAeAqchnk9eAx1FI288/iieYK7U3XJIhMeGaHH2x53HpykMDIVpUoTtSFtB7W9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=APfe4TuR; arc=none smtp.client-ip=83.166.143.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-4-0001.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6c])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4c7mq14Y0Sz1165;
-	Fri, 22 Aug 2025 19:08:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1755882493;
-	bh=4Pohfi350pEoPU/zQg61jutpwKFWUO6VrrmrOVVvjEM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=APfe4TuRZ8GRVIc6wtAriNhinbsnaFb80/g+PAYZK5y1ijvDyKgUrOGg8Z6sMzHBm
-	 XUzd6/DsMx4itm5EMSqx1SxeYAwh4mcvdQnzQz/BLDE6sxYHAQ7GayducB/U4S3NVL
-	 L5Vp0PIJThySseul7YYLSaDqfOgnaBC25FoZbeC0=
-Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4c7mq04JRvznCZ;
-	Fri, 22 Aug 2025 19:08:12 +0200 (CEST)
-From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
-To: Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Kees Cook <keescook@chromium.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <serge@hallyn.com>
-Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Heimes <christian@python.org>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Elliott Hughes <enh@google.com>,
-	Fan Wu <wufan@linux.microsoft.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Jann Horn <jannh@google.com>,
-	Jeff Xu <jeffxu@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Jordan R Abrahams <ajordanr@google.com>,
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-	Luca Boccassi <bluca@debian.org>,
-	Matt Bobrowski <mattbobrowski@google.com>,
-	Miklos Szeredi <mszeredi@redhat.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Robert Waite <rowait@microsoft.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Scott Shell <scottsh@microsoft.com>,
-	Steve Dower <steve.dower@python.org>,
-	Steve Grubb <sgrubb@redhat.com>,
-	kernel-hardening@lists.openwall.com,
-	linux-api@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	Andy Lutomirski <luto@amacapital.net>,
-	Jeff Xu <jeffxu@chromium.org>
-Subject: [RFC PATCH v1 2/2] selftests/exec: Add O_DENY_WRITE tests
-Date: Fri, 22 Aug 2025 19:08:00 +0200
-Message-ID: <20250822170800.2116980-3-mic@digikod.net>
-In-Reply-To: <20250822170800.2116980-1-mic@digikod.net>
-References: <20250822170800.2116980-1-mic@digikod.net>
+	s=arc-20240116; t=1755891972; c=relaxed/simple;
+	bh=XBIUH0wquQctWkgcUJPdSrr7nfWPNHBoFiNbn8Q/vok=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nUvEjEECgdov9BN1RV6zFYN60hNe2hD3+7fFmGr8kbyQ8/RpDpdsb4+s0AgyeADTq40hl/9EKn6WYbOlH+OZcWjJW+j2X7zK6AEUmCinq4ii1A/lKdSLdxROMefr9XuNAe+9rND6HlWEULl6gDrPWTm3WKX9GpLL0J8CjKZJkt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iUWpPkOs; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-618660b684fso2004a12.0
+        for <linux-integrity@vger.kernel.org>; Fri, 22 Aug 2025 12:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755891969; x=1756496769; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eDGPq2QAoamqAsn96zDYfVwrsh9uyHlSfDp4Mt63PH0=;
+        b=iUWpPkOshd2mUXVt+rBH22eNjxhtSdMpQMdXL+Sg76oTxb0XrNSBPb+ygkQQox2iH8
+         RuZziDcm7Omrsv9tS3dEQrMSrhCnRnOWspTBcpkX3TzniYxwfYNUyfkh+H1dRymc0Uur
+         alpwRFGLngP6PYeq6DReukClGyT59aKk5pwR0FtwRahPUDwWliTXwROROw4+kuCMQ+8c
+         XFcjseldZGzUEFLij/x34u7USjHWBLzPN186BEmjtNEo2grwJXOAIvBwWBK8yMWYqnii
+         T+UTquaAiGBJwI4FnYWqHg7W5QemP3VZ9VSOIGJCBvn5UgO767o4GXvpDi1CP9sH6Lh3
+         eW5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755891969; x=1756496769;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eDGPq2QAoamqAsn96zDYfVwrsh9uyHlSfDp4Mt63PH0=;
+        b=BPpfGtg17UVlXECK1mcuZWSdBSdUI5P/ewT2kdqndw5IE1O+pPa9iDD8chlJvM/fQX
+         J9itsi9DRcedpDlrkvGgfAsImbAlQqGxiEZ72Nk6K4Fsb9foc24svDDUL0n5KVXvE3RG
+         qjgaHDNl+kX7BM3SbR6qTIMmwkxD5l42rpuxx5mjoNjh/RXhM6vPYAoOMcZLbUU2YwL5
+         vSs/eD59IsNID55TAdTE6yZqQMZvdhc4y8psib0W1OhJet+y2UG2ypsJ2H1H+JZ9Shx6
+         11wynrW3LY0A+Ipx9qh7+IppHDlX8pw45ZfFq/RQR/3cZjN6MDHF8FMbpRB8BmBI8S28
+         Mosg==
+X-Forwarded-Encrypted: i=1; AJvYcCXaaSBhRdFzyDactiISd/8LdUQuDHZ4obKEPaBABqbKz+G7XghI96jxSvK5rq7Cqgq2qOkvpcpgnT8zxPdQwsg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA48XrQiCO31oFfvKC4QCX9d7C6oEfIw1dZrVvrpoJHF5Qlljh
+	vsQ6XTIlYPXlYVlp05ymmunl8IyUiDQVD5WnQJdxoNjW4xpBV0X7/VIuaHcFgnbD7Ku3uXejlQj
+	YspZKXYJ29rRkil8vtoSjoZ5hSq/2q4FVOv0X6Znn
+X-Gm-Gg: ASbGnct76QCHnlZHgsJKzjxtxGMAyOxZMV76I2aRaK/oSJuGqAoCMnBHpvFJBayyhYq
+	2FVovN+sex0slomB5m5h4aLv7mL3guxg6qeN3v01bbWSVAkYJZQxJ9GkjoxfWoh5GyI9WlgVWAr
+	HIM+A3/NHDWXegLSDecpMeLuz7bEk7UyTU0Eof/5oxStxn9ZNiKTXBCs+hcN4ulLa0XbmeTb6CZ
+	SaM54DZeirzStIvTa3k7QiA/26QDMyruCgPqis=
+X-Google-Smtp-Source: AGHT+IEp5JtOIpLeEMiI4+ZgwDstAGg61BU3UaS/vBzIt/3oQq6zs0o3AsSV2sCxqe1VwQ3ShoALvJizriSBAYLp6Cs=
+X-Received: by 2002:a05:6402:2393:b0:61a:590c:481c with SMTP id
+ 4fb4d7f45d1cf-61c361f8759mr8808a12.6.1755891968513; Fri, 22 Aug 2025 12:46:08
+ -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Infomaniak-Routing: alpha
+References: <20250822170800.2116980-1-mic@digikod.net> <20250822170800.2116980-2-mic@digikod.net>
+In-Reply-To: <20250822170800.2116980-2-mic@digikod.net>
+From: Jann Horn <jannh@google.com>
+Date: Fri, 22 Aug 2025 21:45:32 +0200
+X-Gm-Features: Ac12FXwjpgWQzX75-i1-fxwmf--db3NEnzMzNGlpF6QflXz8uRcHgI7dwyXvzpA
+Message-ID: <CAG48ez1XjUdcFztc_pF2qcoLi7xvfpJ224Ypc=FoGi-Px-qyZw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/2] fs: Add O_DENY_WRITE
+To: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>, 
+	Serge Hallyn <serge@hallyn.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Elliott Hughes <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Luca Boccassi <bluca@debian.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Robert Waite <rowait@microsoft.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Scott Shell <scottsh@microsoft.com>, 
+	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
+	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	Andy Lutomirski <luto@amacapital.net>, Jeff Xu <jeffxu@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add 6 test suites to check O_DENY_WRITE used through open(2) and
-fcntl(2).  Check that it fills its purpose, that it only applies to
-regular files, and that setting this flag several times is not an issue.
+On Fri, Aug 22, 2025 at 7:08=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic@digik=
+od.net> wrote:
+> Add a new O_DENY_WRITE flag usable at open time and on opened file (e.g.
+> passed file descriptors).  This changes the state of the opened file by
+> making it read-only until it is closed.  The main use case is for script
+> interpreters to get the guarantee that script' content cannot be altered
+> while being read and interpreted.  This is useful for generic distros
+> that may not have a write-xor-execute policy.  See commit a5874fde3c08
+> ("exec: Add a new AT_EXECVE_CHECK flag to execveat(2)")
+>
+> Both execve(2) and the IOCTL to enable fsverity can already set this
+> property on files with deny_write_access().  This new O_DENY_WRITE make
 
-The O_DENY_WRITE flag is useful in conjunction with AT_EXECVE_CHECK for
-systems that don't enforce a write-xor-execute policy.  Extend related
-tests to also use them as examples.
+The kernel actually tried to get rid of this behavior on execve() in
+commit 2a010c41285345da60cece35575b4e0af7e7bf44.; but sadly that had
+to be reverted in commit 3b832035387ff508fdcf0fba66701afc78f79e3d
+because it broke userspace assumptions.
 
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Jeff Xu <jeffxu@chromium.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Paul Moore <paul@paul-moore.com>
-Cc: Robert Waite <rowait@microsoft.com>
-Cc: Serge Hallyn <serge@hallyn.com>
-Signed-off-by: Mickaël Salaün <mic@digikod.net>
-Link: https://lore.kernel.org/r/20250822170800.2116980-3-mic@digikod.net
----
- tools/testing/selftests/exec/check-exec.c | 219 ++++++++++++++++++++++
- 1 file changed, 219 insertions(+)
+> it widely available.  This is similar to what other OSs may provide
+> e.g., opening a file with only FILE_SHARE_READ on Windows.
 
-diff --git a/tools/testing/selftests/exec/check-exec.c b/tools/testing/selftests/exec/check-exec.c
-index 55bce47e56b7..9db1d7b9aa97 100644
---- a/tools/testing/selftests/exec/check-exec.c
-+++ b/tools/testing/selftests/exec/check-exec.c
-@@ -30,6 +30,10 @@
- #define _ASM_GENERIC_FCNTL_H
- #include <linux/fcntl.h>
- 
-+#ifndef O_DENY_WRITE
-+#define O_DENY_WRITE 040000000
-+#endif
-+
- #include "../kselftest_harness.h"
- 
- static int sys_execveat(int dirfd, const char *pathname, char *const argv[],
-@@ -319,6 +323,221 @@ TEST_F(access, non_regular_files)
- 	test_exec_fd(_metadata, self->pipefd, EACCES);
- }
- 
-+TEST_F(access, deny_write_check_open)
-+{
-+	int fd_deny, fd_read, fd_write;
-+
-+	fd_deny = open(reg_file_path, O_DENY_WRITE | O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd_deny);
-+
-+	/* Concurrent reads are always allowed. */
-+	fd_read = open(reg_file_path, O_RDONLY | O_CLOEXEC);
-+	EXPECT_LE(0, fd_read);
-+	EXPECT_EQ(0, close(fd_read));
-+
-+	/* Concurrent writes are denied. */
-+	fd_write = open(reg_file_path, O_WRONLY | O_CLOEXEC);
-+	EXPECT_EQ(-1, fd_write);
-+	EXPECT_EQ(ETXTBSY, errno);
-+
-+	/* Drops O_DENY_WRITE. */
-+	EXPECT_EQ(0, close(fd_deny));
-+
-+	/* The restriction is now gone. */
-+	fd_write = open(reg_file_path, O_WRONLY | O_CLOEXEC);
-+	EXPECT_LE(0, fd_write);
-+	EXPECT_EQ(0, close(fd_write));
-+}
-+
-+TEST_F(access, deny_write_check_open_and_fcntl)
-+{
-+	int fd_deny, fd_read, fd_write, flags;
-+
-+	fd_deny = open(reg_file_path, O_DENY_WRITE | O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd_deny);
-+
-+	/* Sets O_DENY_WRITE a "second" time. */
-+	flags = fcntl(fd_deny, F_GETFL);
-+	ASSERT_NE(-1, flags);
-+	EXPECT_EQ(0, fcntl(fd_deny, F_SETFL, flags | O_DENY_WRITE));
-+
-+	/* Concurrent reads are always allowed. */
-+	fd_read = open(reg_file_path, O_RDONLY | O_CLOEXEC);
-+	EXPECT_LE(0, fd_read);
-+	EXPECT_EQ(0, close(fd_read));
-+
-+	/* Concurrent writes are denied. */
-+	fd_write = open(reg_file_path, O_WRONLY | O_CLOEXEC);
-+	EXPECT_EQ(-1, fd_write);
-+	EXPECT_EQ(ETXTBSY, errno);
-+
-+	/* Drops O_DENY_WRITE. */
-+	EXPECT_EQ(0, close(fd_deny));
-+
-+	/* The restriction is now gone. */
-+	fd_write = open(reg_file_path, O_WRONLY | O_CLOEXEC);
-+	EXPECT_LE(0, fd_write);
-+	EXPECT_EQ(0, close(fd_write));
-+}
-+
-+TEST_F(access, deny_write_check_fcntl)
-+{
-+	int fd_deny, fd_read, fd_write, flags;
-+
-+	fd_deny = open(reg_file_path, O_RDONLY | O_CLOEXEC);
-+	ASSERT_LE(0, fd_deny);
-+
-+	/* Sets O_DENY_WRITE a first time. */
-+	flags = fcntl(fd_deny, F_GETFL);
-+	ASSERT_NE(-1, flags);
-+	EXPECT_EQ(0, fcntl(fd_deny, F_SETFL, flags | O_DENY_WRITE));
-+
-+	/* Sets O_DENY_WRITE a "second" time. */
-+	EXPECT_EQ(0, fcntl(fd_deny, F_SETFL, flags | O_DENY_WRITE));
-+
-+	/* Concurrent reads are always allowed. */
-+	fd_read = open(reg_file_path, O_RDONLY | O_CLOEXEC);
-+	EXPECT_LE(0, fd_read);
-+	EXPECT_EQ(0, close(fd_read));
-+
-+	/* Concurrent writes are denied. */
-+	fd_write = open(reg_file_path, O_WRONLY | O_CLOEXEC);
-+	EXPECT_EQ(-1, fd_write);
-+	EXPECT_EQ(ETXTBSY, errno);
-+
-+	/* Drops O_DENY_WRITE. */
-+	EXPECT_EQ(0, fcntl(fd_deny, F_SETFL, flags & ~O_DENY_WRITE));
-+
-+	/* The restriction is now gone. */
-+	fd_write = open(reg_file_path, O_WRONLY | O_CLOEXEC);
-+	EXPECT_LE(0, fd_write);
-+	EXPECT_EQ(0, close(fd_write));
-+
-+	EXPECT_EQ(0, close(fd_deny));
-+}
-+
-+static void test_deny_write_open(struct __test_metadata *_metadata,
-+				 const char *const path, int flags,
-+				 const int err_code)
-+{
-+	int fd;
-+
-+	flags |= O_CLOEXEC;
-+
-+	/* Do not block on pipes. */
-+	if (path == fifo_path)
-+		flags |= O_NONBLOCK;
-+
-+	fd = open(path, flags | O_RDONLY);
-+	if (err_code) {
-+		ASSERT_EQ(-1, fd)
-+		{
-+			TH_LOG("Successfully opened %s", path);
-+		}
-+		EXPECT_EQ(errno, err_code)
-+		{
-+			TH_LOG("Wrong error code for %s: %s", path,
-+			       strerror(errno));
-+		}
-+	} else {
-+		ASSERT_LE(0, fd)
-+		{
-+			TH_LOG("Failed to open %s: %s", path, strerror(errno));
-+		}
-+		EXPECT_EQ(0, close(fd));
-+	}
-+}
-+
-+TEST_F(access, deny_write_type_open)
-+{
-+	test_deny_write_open(_metadata, reg_file_path, O_DENY_WRITE, 0);
-+	test_deny_write_open(_metadata, dir_path, O_DENY_WRITE, EINVAL);
-+	test_deny_write_open(_metadata, block_dev_path, O_DENY_WRITE, EINVAL);
-+	test_deny_write_open(_metadata, char_dev_path, O_DENY_WRITE, EINVAL);
-+	test_deny_write_open(_metadata, fifo_path, O_DENY_WRITE, EINVAL);
-+}
-+
-+static void test_deny_write_fcntl(struct __test_metadata *_metadata,
-+				  const char *const path, int setfl,
-+				  const int err_code)
-+{
-+	int fd, ret;
-+	int getfl, flags = O_CLOEXEC;
-+
-+	/* Do not block on pipes. */
-+	if (path == fifo_path)
-+		flags |= O_NONBLOCK;
-+
-+	fd = open(path, flags | O_RDONLY);
-+	ASSERT_LE(0, fd)
-+	{
-+		TH_LOG("Failed to open %s: %s", path, strerror(errno));
-+	}
-+	getfl = fcntl(fd, F_GETFL);
-+	ASSERT_NE(-1, getfl);
-+	ret = fcntl(fd, F_SETFL, getfl | setfl);
-+	if (err_code) {
-+		ASSERT_EQ(-1, ret)
-+		{
-+			TH_LOG("Successfully updated flags for %s", path);
-+		}
-+		EXPECT_EQ(errno, err_code)
-+		{
-+			TH_LOG("Wrong error code for %s: %s", path,
-+			       strerror(errno));
-+		}
-+	} else {
-+		ASSERT_LE(0, ret)
-+		{
-+			TH_LOG("Failed to update flags for %s: %s", path,
-+			       strerror(errno));
-+		}
-+		EXPECT_EQ(0, close(fd));
-+	}
-+}
-+
-+TEST_F(access, deny_write_type_fcntl)
-+{
-+	int flags;
-+
-+	test_deny_write_fcntl(_metadata, reg_file_path, O_DENY_WRITE, 0);
-+	test_deny_write_fcntl(_metadata, dir_path, O_DENY_WRITE, EINVAL);
-+	test_deny_write_fcntl(_metadata, block_dev_path, O_DENY_WRITE, EINVAL);
-+	test_deny_write_fcntl(_metadata, char_dev_path, O_DENY_WRITE, EINVAL);
-+	test_deny_write_fcntl(_metadata, fifo_path, O_DENY_WRITE, EINVAL);
-+
-+	flags = fcntl(self->socket_fds[0], F_GETFL);
-+	ASSERT_NE(-1, flags);
-+	EXPECT_EQ(-1,
-+		  fcntl(self->socket_fds[0], F_SETFL, flags | O_DENY_WRITE));
-+	EXPECT_EQ(EINVAL, errno);
-+
-+	flags = fcntl(self->pipefd, F_GETFL);
-+	ASSERT_NE(-1, flags);
-+	EXPECT_EQ(-1, fcntl(self->pipefd, F_SETFL, flags | O_DENY_WRITE));
-+	EXPECT_EQ(EINVAL, errno);
-+}
-+
-+TEST_F(access, allow_write_type_fcntl)
-+{
-+	int flags;
-+
-+	test_deny_write_fcntl(_metadata, reg_file_path, 0, 0);
-+	test_deny_write_fcntl(_metadata, dir_path, 0, 0);
-+	test_deny_write_fcntl(_metadata, block_dev_path, 0, 0);
-+	test_deny_write_fcntl(_metadata, char_dev_path, 0, 0);
-+	test_deny_write_fcntl(_metadata, fifo_path, 0, 0);
-+
-+	flags = fcntl(self->socket_fds[0], F_GETFL);
-+	ASSERT_NE(-1, flags);
-+	EXPECT_EQ(0,
-+		  fcntl(self->socket_fds[0], F_SETFL, flags & ~O_DENY_WRITE));
-+
-+	flags = fcntl(self->pipefd, F_GETFL);
-+	ASSERT_NE(-1, flags);
-+	EXPECT_EQ(0, fcntl(self->pipefd, F_SETFL, flags & ~O_DENY_WRITE));
-+}
-+
- /* clang-format off */
- FIXTURE(secbits) {};
- /* clang-format on */
--- 
-2.50.1
+We used to have the analogous mmap() flag MAP_DENYWRITE, and that was
+removed for security reasons; as
+https://man7.org/linux/man-pages/man2/mmap.2.html says:
 
+|        MAP_DENYWRITE
+|               This flag is ignored.  (Long ago=E2=80=94Linux 2.0 and earl=
+ier=E2=80=94it
+|               signaled that attempts to write to the underlying file
+|               should fail with ETXTBSY.  But this was a source of denial-
+|               of-service attacks.)"
+
+It seems to me that the same issue applies to your patch - it would
+allow unprivileged processes to essentially lock files such that other
+processes can't write to them anymore. This might allow unprivileged
+users to prevent root from updating config files or stuff like that if
+they're updated in-place.
 
