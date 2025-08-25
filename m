@@ -1,102 +1,237 @@
-Return-Path: <linux-integrity+bounces-6910-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6911-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34A5DB34E5D
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 23:49:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89895B34E84
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 23:56:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05D46164DFD
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 21:49:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C62B1B22F74
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 21:57:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6014F28469C;
-	Mon, 25 Aug 2025 21:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05272BD00C;
+	Mon, 25 Aug 2025 21:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ImfgHXEy"
+	dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b="sWa0A0Mv"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3637623A9AE;
-	Mon, 25 Aug 2025 21:49:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46162BDC3D
+	for <linux-integrity@vger.kernel.org>; Mon, 25 Aug 2025 21:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756158545; cv=none; b=rfUyTqllHzIFxV2A6zqMwqEUcTq+ejS2XA6wAHd5lHLfzbpZG2BTkcZUgavQe6L3jEf/9qbNpPQRjGUfOhW/9W7KE4AZVn8afX9f12tlik18WNBjYB1XnYoNZR8pi1D7vZ6uOzApKEqcTZbYIIsNDLRBriSmpAh9cvPG1dCwwbA=
+	t=1756158994; cv=none; b=sqq+oqSmVKVKRYn6+3EAZmSB8JXSD+GVPT2iLI9InUUTLunpjyTKsBuzSHnt6cv1d0z4Gj/XwL7RfB193PAnmKfDgFcWYPn6TG+7GMmCs49RPkcz2mjeceioZqt1G+QChGYyBP43WwiN3gevD8OOcbmfuO6AYdJ9vEGniTdslMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756158545; c=relaxed/simple;
-	bh=/siDhazI4u0HQA1+2irWPVHhZ3I4DCCOwg45QoNdROc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=FHZPmq+l2wdiPbI8C8yf3eCjhIdcZoXJJNp/xMybAm4EdaqrVIDOsMB0S874cWeMZ6RzfGqTfUryMyz553at15uo/Fp4Vl0tO7ZER9waLxZYqeyWFKVFBFF+1dEFPEbsoWHzpYY+Vx+ez+PIfhjmEiFTd+KS6M4PNXYuHMHMqAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ImfgHXEy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC33FC4CEED;
-	Mon, 25 Aug 2025 21:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756158545;
-	bh=/siDhazI4u0HQA1+2irWPVHhZ3I4DCCOwg45QoNdROc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ImfgHXEyyqANx9H0ROPFD70G54VBrdVfKlaQE1jgTgYDGS9Kvl0AW2Cvl1mRvxdvc
-	 w8ikd6OqEuC2UqtLpt5gpUb55M6J+v3hs+pwaIj/4ekUrCHJa7TkV/bIvT/OwX1xhy
-	 9nJaKPV+Hhv467F4A0Xp9yYnqmVtE1fNbbeHBfms19Ca8vkF9gLzRt3k7EaTYuHCOp
-	 zzbx4hsnxW9XTJToZVLS3I8xIvoX+LL2qphGbzL4Nw2ucVDCrAAIlAxUaBBWt3lPSU
-	 T+eDC/FYmLdJ8IfOCQeOvSfLasR08nJ1vBgl2AjogxbnYfwoxHZpdlgY2tBYE0MKSC
-	 32qiMoB/Jujpg==
-Date: Tue, 26 Aug 2025 00:49:01 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: tpm2@lists.linux.dev
-Cc: linux-integrity@vger.kernel.org
-Subject: tpm2-protocol: open for patches
-Message-ID: <aKzaTYCI2GO_UPRB@kernel.org>
+	s=arc-20240116; t=1756158994; c=relaxed/simple;
+	bh=E4NpwkGR+z7tCPgrXM61r560kh8CJ5QMAuInswiHxfM=;
+	h=Content-Type:From:Mime-Version:Subject:Message-Id:Date:Cc:To; b=aieOjGT3Xhmoozr76ZSZDShdkzZFQOmKDyA/l3xAa384mZCg+feKaNlYwH2GiTITLPW+s1Uj3EMfK2TIMyw4Uq974/XfAjErtHhyTJteNZ/ploTOz3txpUHLkMlhvfL02MWqmB/qill+2sLKwtsv9c1CgxJfYY2NkTeTbf5Io10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b=sWa0A0Mv; arc=none smtp.client-ip=209.85.210.51
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-74381ee9bc9so3737707a34.1
+        for <linux-integrity@vger.kernel.org>; Mon, 25 Aug 2025 14:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amacapital-net.20230601.gappssmtp.com; s=20230601; t=1756158992; x=1756763792; darn=vger.kernel.org;
+        h=to:cc:date:message-id:subject:mime-version:from
+         :content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0vMUZfpgo6grl0jsKLi/4oV66VhEtUf3p7bHbykWpng=;
+        b=sWa0A0MvK5+P5uaeMOcaaeZpDL2Y6ytjQXSyZTZkXg+xvVVoXEoTN4YGeJubfYcmyB
+         g7edQF+a1SiQualHi5WBULobkH5fTtG6LKkDY2wngITDX+z2M+1DT2OUYJxX9WrHw3Ad
+         mhh/vDlaHjEkWT+mgPGx6/T1vwNlkBeRfb7GeneOGj9uqtZK/Z1PBfv+E7PZVHo7YD6H
+         2W8Tme9LnoJ449eSyRNSDZRNQrV9XGcRtDKxmvTe59lUglpQkeYS7+zaPDfXg8rkl3zk
+         x1pmh9mOOLEuO2UADtj7onjEAPKN5enRnChLRno1AksFToU2pJgpuMG91InYZ8Xc+o91
+         8nhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756158992; x=1756763792;
+        h=to:cc:date:message-id:subject:mime-version:from
+         :content-transfer-encoding:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0vMUZfpgo6grl0jsKLi/4oV66VhEtUf3p7bHbykWpng=;
+        b=UbfJUSk9h64JtA0t0KIbryUHKZPN/2uIVWVueFczWgb8MaLC6MOp+aAJA6UglvPTLI
+         BFy5qs623ArkIDh6/GobY0HaPX8LGWNbIqdj5mKBWCHscvxl4pLz60y+YFha3PILUcGz
+         IsJ3q0QyashfEyj6ICNTqajJWpkNxJZwvI5Oxz3kyMJjh4JwdHX0luaRVNiRMFyO5S5q
+         C6RXBIZoIfk724MVPw3fJ8y0Xu8WHggCab1uUbwqMHVvgV6HvRpqp63Z2aMHDNq4+mkm
+         E0PUlXGDC7p+I3Y5XhRfQPeI7SzQh0bdbVSEotcjO5fIF/M+l7805+Zzw8x/4g1rhXc4
+         OojA==
+X-Forwarded-Encrypted: i=1; AJvYcCXTdLsCj88D6w4WnS+djVPG7ag8V0LQQhr/Cy0Y8NjARnBaoaKAD8in/tAJXIfcjWiAnl707zCV/7ntvu5tdGU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw62VwMlqGN9LDwEs3ywo7ulq65Fuyjo9HqrDpF0DS0hdrWaeON
+	5DSvqkv11s2i6RXjWSQ685tiXtx3u0D6BC7ToTyiZT6DcxN6GqoRw3kI9NaEdUAIDg==
+X-Gm-Gg: ASbGncsndlJtUpUwLQVRHYZ+eFGJnLswRnGBtdZQJ/8v2+lLA2bypRCoAjd3UINBPwL
+	mcYvwFFXsiXOHTsQL0QsjH06IJ71hkpKJu29tgXGZuN7V7xHbPdwm+aEkT8MkgkSe4gvfqX3GPX
+	eQCaWQ1dpcuCPDXBL0u7P87fOmhGyAQ11A8bG5QcAcGk9/Zjgh62K+QP0iE/fzhU/1vK7aRRYcn
+	+MgKpOr20f3U+34L7VuCPEc1NFQ/7ZzMY+o2o36+pPllv0uyWVU2aXWrNwC+X5585BRrRunxTAw
+	FpZRk0npA6UC4WDYlQBeMdPU2x6PlsJruidtccVxLTFveCU7wLnZAKRjhBZxWQYwdvipd6Vm6b0
+	SySuONDQvZ6J/qIhRB/dRbQToHDtalSx/MmK8sdZDqpVvLIKL
+X-Google-Smtp-Source: AGHT+IH0zqh5am1c9LUhvOIUND3Fr27yx9vrRpjaozAjD1PSKH7Z/Iy6+QDwmQ4jNnG1UUqeW6IVzg==
+X-Received: by 2002:a05:6830:2801:b0:744:f08e:4d30 with SMTP id 46e09a7af769-74500ae61e4mr8071485a34.35.1756158991618;
+        Mon, 25 Aug 2025 14:56:31 -0700 (PDT)
+Received: from smtpclient.apple ([2600:381:488a:4661:cde9:746f:9e0b:3479])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7450e28a027sm1987573a34.18.2025.08.25.14.56.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Aug 2025 14:56:30 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: Andy Lutomirski <luto@amacapital.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC PATCH v1 1/2] fs: Add O_DENY_WRITE
+Message-Id: <F0E70FC7-8DCE-4057-8E91-9FA1AC5BC758@amacapital.net>
+Date: Mon, 25 Aug 2025 14:56:18 -0700
+Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ Jann Horn <jannh@google.com>, Al Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>,
+ Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>,
+ Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Christian Heimes <christian@python.org>,
+ Dmitry Vyukov <dvyukov@google.com>, Elliott Hughes <enh@google.com>,
+ Fan Wu <wufan@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>,
+ Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>,
+ Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+ Luca Boccassi <bluca@debian.org>,
+ Matt Bobrowski <mattbobrowski@google.com>,
+ Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>,
+ Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+ Robert Waite <rowait@microsoft.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Scott Shell <scottsh@microsoft.com>, Steve Dower <steve.dower@python.org>,
+ Steve Grubb <sgrubb@redhat.com>, kernel-hardening@lists.openwall.com,
+ linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org, Jeff Xu <jeffxu@chromium.org>
+To: Jeff Xu <jeffxu@google.com>
+X-Mailer: iPhone Mail (22G100)
 
-Hi
+=EF=BB=BF
+> On Aug 25, 2025, at 11:10=E2=80=AFAM, Jeff Xu <jeffxu@google.com> wrote:
+>=20
+> =EF=BB=BFOn Mon, Aug 25, 2025 at 9:43=E2=80=AFAM Andy Lutomirski <luto@ama=
+capital.net> wrote:
+>>> On Mon, Aug 25, 2025 at 2:31=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@di=
+gikod.net> wrote:
+>>> On Sun, Aug 24, 2025 at 11:04:03AM -0700, Andy Lutomirski wrote:
+>>>> On Sun, Aug 24, 2025 at 4:03=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@d=
+igikod.net> wrote:
+>>>>> On Fri, Aug 22, 2025 at 09:45:32PM +0200, Jann Horn wrote:
+>>>>>> On Fri, Aug 22, 2025 at 7:08=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn <mic=
+@digikod.net> wrote:
+>>>>>>> Add a new O_DENY_WRITE flag usable at open time and on opened file (=
+e.g.
+>>>>>>> passed file descriptors).  This changes the state of the opened file=
+ by
+>>>>>>> making it read-only until it is closed.  The main use case is for sc=
+ript
+>>>>>>> interpreters to get the guarantee that script' content cannot be alt=
+ered
+>>>>>>> while being read and interpreted.  This is useful for generic distro=
+s
+>>>>>>> that may not have a write-xor-execute policy.  See commit a5874fde3c=
+08
+>>>>>>> ("exec: Add a new AT_EXECVE_CHECK flag to execveat(2)")
+>>>>>>> Both execve(2) and the IOCTL to enable fsverity can already set this=
 
-The last version that I do "as solo":
+>>>>>>> property on files with deny_write_access().  This new O_DENY_WRITE m=
+ake
+>>>>>> The kernel actually tried to get rid of this behavior on execve() in
+>>>>>> commit 2a010c41285345da60cece35575b4e0af7e7bf44.; but sadly that had
+>>>>>> to be reverted in commit 3b832035387ff508fdcf0fba66701afc78f79e3d
+>>>>>> because it broke userspace assumptions.
+>>>>> Oh, good to know.
+>>>>>>> it widely available.  This is similar to what other OSs may provide
+>>>>>>> e.g., opening a file with only FILE_SHARE_READ on Windows.
+>>>>>> We used to have the analogous mmap() flag MAP_DENYWRITE, and that was=
 
-https://crates.io/crates/tpm2-protocol/0.10.10
+>>>>>> removed for security reasons; as
+>>>>>> https://man7.org/linux/man-pages/man2/mmap.2.html says:
+>>>>>> |        MAP_DENYWRITE
+>>>>>> |               This flag is ignored.  (Long ago=E2=80=94Linux 2.0 an=
+d earlier=E2=80=94it
+>>>>>> |               signaled that attempts to write to the underlying fil=
+e
+>>>>>> |               should fail with ETXTBSY.  But this was a source of d=
+enial-
+>>>>>> |               of-service attacks.)"
+>>>>>> It seems to me that the same issue applies to your patch - it would
+>>>>>> allow unprivileged processes to essentially lock files such that othe=
+r
+>>>>>> processes can't write to them anymore. This might allow unprivileged
+>>>>>> users to prevent root from updating config files or stuff like that i=
+f
+>>>>>> they're updated in-place.
+>>>>> Yes, I agree, but since it is the case for executed files I though it
+>>>>> was worth starting a discussion on this topic.  This new flag could be=
 
-I lifted up the version number in the main branch so that ABI breaks can
-be done [1]. Consider all versions up 0.10.10 as the PoC era of this
-project. I'm neither to motivated to pick up any stable fixes for 0.10.x.
+>>>>> restricted to executable files, but we should avoid system-wide locks
+>>>>> like this.  I'm not sure how Windows handle these issues though.
+>>>>> Anyway, we should rely on the access control policy to control write a=
+nd
+>>>>> execute access in a consistent way (e.g. write-xor-execute).  Thanks f=
+or
+>>>>> the references and the background!
+>>>> I'm confused.  I understand that there are many contexts in which one
+>>>> would want to prevent execution of unapproved content, which might
+>>>> include preventing a given process from modifying some code and then
+>>>> executing it.
+>>>> I don't understand what these deny-write features have to do with it.
+>>>> These features merely prevent someone from modifying code *that is
+>>>> currently in use*, which is not at all the same thing as preventing
+>>>> modifying code that might get executed -- one can often modify
+>>>> contents *before* executing those contents.
+>>> The order of checks would be:
+>>> 1. open script with O_DENY_WRITE
+>>> 2. check executability with AT_EXECVE_CHECK
+>>> 3. read the content and interpret it
+>> Hmm.  Common LSM configurations should be able to handle this without
+>> deny write, I think.  If you don't want a program to be able to make
+>> their own scripts, then don't allow AT_EXECVE_CHECK to succeed on a
+>> script that the program can write.
+> Yes, Common LSM could handle this, however, due to historic and app
+> backward compability reason, sometimes it is impossible to enforce
+> that kind of policy in practice, therefore as an alternative, a
+> machinism such as AT_EXECVE_CHECK is really useful.
 
-Versions starting from 0.11 (once it is released) 0.11.x, bug fix
-(no feature) branches can be done.
+Can you clarify?  I=E2=80=99m suspicious that we=E2=80=99re taking past each=
+ other.
 
-There's one feature in my test program (which I don't recommend to use
-for any production, it's still heavily under construction) that I'm
-willing to consider for relicensing and further to contribute e.g.,
-to TPM-RS or perhaps as its own crate:
+AT_EXECVE_CHECK solves a problem that there are actions that effectively =E2=
+=80=9Cexecute=E2=80=9D a file that don=E2=80=99t execute literal CPU instruc=
+tions for it. Sometimes open+read has the effect of interpreting the content=
+s of the file as something code-like.
 
-https://github.com/puavo-org/tpm2sh/blob/main/src/pretty_printer.rs
+But, as I see it, deny-write is almost entirely orthogonal. If you open a fi=
+le with the intent of executing it (mmap-execute or interpret =E2=80=94 make=
+s little practical difference here), then the kernel can enforce some policy=
+. If the file is writable by a process that ought not have permission to exe=
+cute code in the context of the opening-for-execute process, then LSMs need d=
+eny-write to be enforced so that they can verify the contents at the time of=
+ opening.
 
-[lot's of unimplemented parts but it does not trip on them but instead
- marks them down to the log]
+But let=E2=80=99s step back a moment: is there any actual sensible security p=
+olicy that does this?  If I want to *enforce* that a process only execute ap=
+proved code, then wouldn=E2=80=99t I do it be only allowing executing files t=
+hat the process can=E2=80=99t write?
 
-Keep in mind that the constraints in the following sections (taken from
-lib.rs) are the existential limits for any possible patch (including
-dev dependencies, do that type of stuff at your own personan sandbox
-thank you).
+The reason that the removal of deny-write wasn=E2=80=99t security =E2=80=94 i=
+t was a functionality issue: a linker accidentally modified an in-use binary=
+. If you have permission to use gcc or lld, etc to create binaries, and you h=
+ave permission to run them, then you pretty much have permission to run what=
+ever code you like.
 
-## Constraints
+So, if there=E2=80=99s a real security use case for deny-write, I=E2=80=99m s=
+till not seeing it.
 
-* `alloc` is disallowed.
-* Dependencies are disallowed.
-* Developer dependencies (aka 'dev-dependencies`) are disallowed.
-* Panics are disallowed.
-
-## Design Goals
-
-* The crate must compile with GNU make and rustc without any external
-  dependencies.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-protocol.git/commit/?id=d265c021c9407a93068c49a691a9534b1eff3099
-
-BR, Jarkko
+>> Keep in mind that trying to lock this down too hard is pointless for
+>> users who are allowed to to ptrace-write to their own processes.  Or
+>> for users who can do JIT, or for users who can run a REPL, etc.
+> The ptrace-write and /proc/pid/mem writing are on my radar, at least
+> for ChomeOS and Android.
+> AT_EXECVE_CHECK is orthogonal to those IMO, I hope eventually all
+> those paths will be hardened.
+>=20
+> Thanks and regards,
+> -Jeff
 
