@@ -1,64 +1,49 @@
-Return-Path: <linux-integrity+bounces-6908-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6909-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27946B34C11
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 22:32:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E0DFB34D2C
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 23:00:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FED31B22C8F
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 20:33:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E5EB203E54
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 21:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C33071F419B;
-	Mon, 25 Aug 2025 20:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPaV73yP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55B8029B20A;
+	Mon, 25 Aug 2025 20:59:58 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D870393DE3;
-	Mon, 25 Aug 2025 20:32:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A142E29AAFA;
+	Mon, 25 Aug 2025 20:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756153955; cv=none; b=oTrBiaD/S+uUkceq7FvW3EYC6CAIsx7kntty8US2bYt5SFmjTK7lJkwSzZaGMXaPRaCCRWbcQw5ujo1iMY7hD1vm+rCyFzXJ8Lmr/lZf6c9ZvMaqTw3Cnee/C8ZHBNNm7XqIe07Hbc2a4GZV/rkqZVPXjXKD+xf248AD//KQB8Y=
+	t=1756155598; cv=none; b=lWrSv7KStktQhsJiXgQ84uWOlVHkoyFZj5y+4HYivF7j84Wr4Sw6j/SE7tuVYbld+W80659rnujL1vsx8/rRQdVjNoggSQFREiERMzuCPyPJz/0n9+UwG6oXKa6HPm3gf1811G63QvBwhVz9dwMPf26+hoeifn8KERhVzvxuQ1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756153955; c=relaxed/simple;
-	bh=Ucxf6ONPWnqwGHzIJMurAJvEDHnfQwUW0d4rP7PrkbM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XxoR0kLYzkUaKXShkg51LmlTQ5vOUDAgLh+ggCxbH7rYxUt64xX44j0dOmq6hq4GXRRZyiL5KvCdoB4UecekmqTjW4W4SE8f4ojqaonc0jKqNBSVF/XTe1enkZesl7ssvsFaNqQNrQ53IdyVdv62vC7k6faWyB4a45YhWdpinG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPaV73yP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CECC4CEED;
-	Mon, 25 Aug 2025 20:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756153955;
-	bh=Ucxf6ONPWnqwGHzIJMurAJvEDHnfQwUW0d4rP7PrkbM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=CPaV73yPqybMX1kBLGC5zIfe9FgKTCfYnlJ2he/y1tEcHv/LnPkByU9PHTS2778hK
-	 2u9QSDSDZXr0BUtNzxXgXEPf7mFGH9J3LB2sKrdgzbLFQWQggoxkf2ZoBQ1AGx4tW/
-	 5PtwmsoZ3fiE3ZCgSAaTukTvZy7xic1CP332tZN54pIhT5T5varuG6pIQvizU8rdaW
-	 rNHdquu/K0tTeymVtwnBYp/43CJyr2V1CbFcFXzGlisxY7KKa4YwjPl8jrkLj8ToRw
-	 n8oSKQlh+4hv4l2Hh2FzD4r9AG7l4uHk5kZHE+8G60UzSiXC0cvRVIuCGKtOIUrhML
-	 mQM9ltQUDsP5Q==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	stable@vger.kernel.or,
-	Chris Fenner <cfenn@google.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	linux-kernel@vger.kernel.org (open list),
-	keyrings@vger.kernel.org (open list:KEYS/KEYRINGS),
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH] tpm: Disable TPM2_TCG_HMAC by default
-Date: Mon, 25 Aug 2025 23:32:23 +0300
-Message-Id: <20250825203223.629515-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1756155598; c=relaxed/simple;
+	bh=8rnIOqfs8LS68mVn1JICAyY+ZlmXShsrkgyAAXOYJ/c=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uOytchcm/W9MMnKZm42cxlinX6cp133TqidJGehmtV7g5jduNlWF6p61RN31bcgadV9KNpQBKrnaejq1CkjH3+pJbVLm5sN37L2yM5p2C43JdWohUg/yKOB9dbZrAmSKCr0g4KUt9wLRCFjRF8heSwssh4kRbCHqd1uhUmFWN0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48B081E32;
+	Mon, 25 Aug 2025 13:59:45 -0700 (PDT)
+Received: from beelzebub.ast.arm.com (unknown [10.118.29.240])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 544F13F63F;
+	Mon, 25 Aug 2025 13:59:53 -0700 (PDT)
+From: Stuart Yoder <stuart.yoder@arm.com>
+To: linux-integrity@vger.kernel.org,
+	jarkko@kernel.org,
+	peterhuewe@gmx.de,
+	jgg@ziepe.ca,
+	sudeep.holla@arm.com
+Cc: Prachotan.Bathi@arm.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm_crb: Add idle support for the Arm FF-A start method
+Date: Mon, 25 Aug 2025 15:59:43 -0500
+Message-Id: <20250825205943.1225599-1-stuart.yoder@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,58 +52,129 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-After reading all the feedback, right now disabling the TPM2_TCG_HMAC
-is the right call.
+According to the CRB over FF-A specification [1], a TPM that implements
+the ABI must comply with the TCG PTP specification. This requires support
+for the Idle and Ready states.
 
-Other views discussed:
+This patch implements CRB control area requests for goIdle and
+cmdReady on FF-A based TPMs.
 
-A. Having a kernel command-line parameter or refining the feature
-   otherwise. This goes to the area of improvements.  E.g., one
-   example is my own idea where the null key specific code would be
-   replaced with a persistent handle parameter (which can be
-   *unambigously* defined as part of attestation process when
-   done correctly).
+The FF-A message used to notify the TPM of CRB updates includes a
+locality parameter, which provides a hint to the TPM about which
+locality modified the CRB.  This patch adds a locality parameter
+to __crb_go_idle() and __crb_cmd_ready() to support this.
 
-B. Removing the code. I don't buy this because that is same as saying
-   that HMAC encryption cannot work at all (if really nitpicking) in
-   any form. Also I disagree on the view that the feature could not
-   be refined to something more reasoable.
+[1] https://developer.arm.com/documentation/den0138/latest/
 
-Also, both A and B are worst options in terms of backporting.
-
-Thuss, this is the best possible choice.
-
-Cc: stable@vger.kernel.or # v6.10+
-Fixes: d2add27cf2b8 ("tpm: Add NULL primary creation")
-Suggested-by: Chris Fenner <cfenn@google.com>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Stuart Yoder <stuart.yoder@arm.com>
 ---
-PS. I did not post this last week because that would have been most
-likely the most counter-productive action to taken. It's better
-sometimes to take a bit of time to think (which can be seen that
-I've given also more reasonable weight to my own eaerlier
-proposals).
+ drivers/char/tpm/tpm_crb.c | 29 ++++++++++++++++++++---------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-I also accept further changes, if there is e.g., inconsistency
-with TCG_TPM_HMAC setting or similar (obviously).
----
- drivers/char/tpm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
-index dddd702b2454..3e4684f6b4af 100644
---- a/drivers/char/tpm/Kconfig
-+++ b/drivers/char/tpm/Kconfig
-@@ -29,7 +29,7 @@ if TCG_TPM
+diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
+index 876edf2705abb..a18bae0a53717 100644
+--- a/drivers/char/tpm/tpm_crb.c
++++ b/drivers/char/tpm/tpm_crb.c
+@@ -133,8 +133,7 @@ static inline bool tpm_crb_has_idle(u32 start_method)
+ {
+ 	return !(start_method == ACPI_TPM2_START_METHOD ||
+ 	       start_method == ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD ||
+-	       start_method == ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC ||
+-	       start_method == ACPI_TPM2_CRB_WITH_ARM_FFA);
++	       start_method == ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC);
+ }
  
- config TCG_TPM2_HMAC
- 	bool "Use HMAC and encrypted transactions on the TPM bus"
--	default X86_64
-+	default n
- 	select CRYPTO_ECDH
- 	select CRYPTO_LIB_AESCFB
- 	select CRYPTO_LIB_SHA256
+ static bool crb_wait_for_reg_32(u32 __iomem *reg, u32 mask, u32 value,
+@@ -191,7 +190,7 @@ static int crb_try_pluton_doorbell(struct crb_priv *priv, bool wait_for_complete
+  *
+  * Return: 0 always
+  */
+-static int __crb_go_idle(struct device *dev, struct crb_priv *priv)
++static int __crb_go_idle(struct device *dev, struct crb_priv *priv, int loc)
+ {
+ 	int rc;
+ 
+@@ -200,6 +199,12 @@ static int __crb_go_idle(struct device *dev, struct crb_priv *priv)
+ 
+ 	iowrite32(CRB_CTRL_REQ_GO_IDLE, &priv->regs_t->ctrl_req);
+ 
++	if (priv->sm == ACPI_TPM2_CRB_WITH_ARM_FFA) {
++		rc = tpm_crb_ffa_start(CRB_FFA_START_TYPE_COMMAND, loc);
++		if (rc)
++			return rc;
++	}
++
+ 	rc = crb_try_pluton_doorbell(priv, true);
+ 	if (rc)
+ 		return rc;
+@@ -220,7 +225,7 @@ static int crb_go_idle(struct tpm_chip *chip)
+ 	struct device *dev = &chip->dev;
+ 	struct crb_priv *priv = dev_get_drvdata(dev);
+ 
+-	return __crb_go_idle(dev, priv);
++	return __crb_go_idle(dev, priv, chip->locality);
+ }
+ 
+ /**
+@@ -238,7 +243,7 @@ static int crb_go_idle(struct tpm_chip *chip)
+  *
+  * Return: 0 on success -ETIME on timeout;
+  */
+-static int __crb_cmd_ready(struct device *dev, struct crb_priv *priv)
++static int __crb_cmd_ready(struct device *dev, struct crb_priv *priv, int loc)
+ {
+ 	int rc;
+ 
+@@ -247,6 +252,12 @@ static int __crb_cmd_ready(struct device *dev, struct crb_priv *priv)
+ 
+ 	iowrite32(CRB_CTRL_REQ_CMD_READY, &priv->regs_t->ctrl_req);
+ 
++	if (priv->sm == ACPI_TPM2_CRB_WITH_ARM_FFA) {
++		rc = tpm_crb_ffa_start(CRB_FFA_START_TYPE_COMMAND, loc);
++		if (rc)
++			return rc;
++	}
++
+ 	rc = crb_try_pluton_doorbell(priv, true);
+ 	if (rc)
+ 		return rc;
+@@ -267,7 +278,7 @@ static int crb_cmd_ready(struct tpm_chip *chip)
+ 	struct device *dev = &chip->dev;
+ 	struct crb_priv *priv = dev_get_drvdata(dev);
+ 
+-	return __crb_cmd_ready(dev, priv);
++	return __crb_cmd_ready(dev, priv, chip->locality);
+ }
+ 
+ static int __crb_request_locality(struct device *dev,
+@@ -444,7 +455,7 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t len)
+ 
+ 	/* Seems to be necessary for every command */
+ 	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
+-		__crb_cmd_ready(&chip->dev, priv);
++		__crb_cmd_ready(&chip->dev, priv, chip->locality);
+ 
+ 	memcpy_toio(priv->cmd, buf, len);
+ 
+@@ -672,7 +683,7 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
+ 	 * PTT HW bug w/a: wake up the device to access
+ 	 * possibly not retained registers.
+ 	 */
+-	ret = __crb_cmd_ready(dev, priv);
++	ret = __crb_cmd_ready(dev, priv, 0);
+ 	if (ret)
+ 		goto out_relinquish_locality;
+ 
+@@ -744,7 +755,7 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
+ 	if (!ret)
+ 		priv->cmd_size = cmd_size;
+ 
+-	__crb_go_idle(dev, priv);
++	__crb_go_idle(dev, priv, 0);
+ 
+ out_relinquish_locality:
+ 
 -- 
-2.39.5
+2.34.1
 
 
