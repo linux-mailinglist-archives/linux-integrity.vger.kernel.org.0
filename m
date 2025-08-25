@@ -1,230 +1,119 @@
-Return-Path: <linux-integrity+bounces-6905-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6906-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 396B8B349D7
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 20:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DBAB5B34AE6
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 21:30:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17ACF189B8FA
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 18:11:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E72161B23CC1
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 Aug 2025 19:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680D630BF63;
-	Mon, 25 Aug 2025 18:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 257152D7BF;
+	Mon, 25 Aug 2025 19:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IZBdsdz7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3Xp4mzO"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30452309DB0
-	for <linux-integrity@vger.kernel.org>; Mon, 25 Aug 2025 18:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60B1A41;
+	Mon, 25 Aug 2025 19:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756145462; cv=none; b=kwkzYt/wDzJNXypOEd4kMOP3yAl2vmwh1uVfKMXqLtCbmjQH3GYDGWWQ9BJAxSUxkQQm+NNB3IM07rnFt3dBrBB0ZhJIyKmw4gdW8QiaIpsabQ463kdxYNtCk7x6NZLC2sFPyDcD4YurpOiA5DEJi7JCnPJxMiGst1XJpQ4ibpg=
+	t=1756150228; cv=none; b=JJuyj0TmV1OgYyXGRvevl480plPdfbab0e+K2h+I5a4O695cAmh0pd6K10y60d/HcnqtjCpeRa0vT9FaP2cu+h9gATH7YinDGGBt1LkhyZAYpGLD10v0XyeyeVrrBx5vSSG57N1YBTOHqK1gKTGCsR0Woaq+PfMMYesfxQ098Ks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756145462; c=relaxed/simple;
-	bh=7sbF6iBnc19BzvNLlUOJSm4vPADYw2l/nGqr1wrjdEg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sw2VV3e+pxGQ1BOKNXS3jjmm0u2iWE8nvIdYNu5xnoywd99JGm/nJG+u0DieEH10c9UzRgxOn5MIWDb1QMm3zdeSOWh9UGZyH0BwhoonTH7fpXWcTf/D8oemWDkAzcBRpi8dcgtnYtLBSHaIFzuswpQmTHJNq5lDZ/Fro6zoLRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IZBdsdz7; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45b60b612c9so6805e9.0
-        for <linux-integrity@vger.kernel.org>; Mon, 25 Aug 2025 11:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1756145458; x=1756750258; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f72AMp+CXzD5eYq7ijxL7Cpgy8ZEES5VfyxS8Suef1c=;
-        b=IZBdsdz75BnDGnYGI1CIPFG+sv+qT7Yl/o2j3DpgbwyEntcXpuyHous/6J0LNYlgvl
-         J2GnInbuLN3UPMBvvbohLrY2nd3+r/KTpDPuFJ1Lm/RUSxDoZgjDIzJBDukV1GRwZMqH
-         wCWMEoSfTYYkbMcoPKvPjAjA82zW7NkGmMR7ui07i1ChXw/VhkPzwQCd5ybnnjEL1lKV
-         ae329UHb2ebnbOwaSCA1wdFiSO0cbemyKGAfFudWk1JlJd4q/p66ROJ3hDMT14g3iDsY
-         gl/b9pFIkSKBvDlh2FRDJ6WWxfyaXED6ePYGG1J7sxgQU9WRu25s/y4uu8V4IrzC6wQL
-         bksg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756145458; x=1756750258;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f72AMp+CXzD5eYq7ijxL7Cpgy8ZEES5VfyxS8Suef1c=;
-        b=aFCnsmNLKfndiDqmQIp0qLedfvAlNGUz4EolXmWM9/BddMhn8ewkE/WCBOnC0tBbk7
-         4TdB39vHy/sGmDTKamgVIWZAm+qUwU0pCnvyOZitZTY81ol9pjEC2mJp3mAUDTG+k9ds
-         GZO5IDAk/e/RtdMMM4oTkLmVkoUoLt/cOli5odoX04tqELeB3WrE0ZH7jxtAkp62Zz0I
-         bAIn1FBUrO9yjWRwWc76of0kH7kPG5W6hf0qaZqHPHCvebFOEKAko7DgUqovkp/ZRl33
-         +iIiNMFimDS817xSEULMmnyJg6INZfPCgVu0cPvWZG8zJBuMetezqvrqbyZstcllI3yQ
-         YR6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVM1/9X+JSv/o4mOdS0xVehRGY1NE2g1QQT01+yaBRMC7FMI8hGTfZgBxDdCzy+rxF+dBUO7KbGUAaKPo9Nu80=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8xfD3lqTuoRCbNo2PqbCuLN2OSxoIaug5+S6KHnZG0hS1TC2q
-	pc/OByfQV6SSCX7tPaPlwZGJEewpnCmLx59e3jPDlfiUaXAgB0D2WV1mwJzbO3ks7fokBs2PQrZ
-	+ebgge23e8PzpR8aLYWq6ZJLX4lMJ2TKp8YhKl/41
-X-Gm-Gg: ASbGncvJY+5bVNXRsZJFQmM+u7tNfn21w7ZcuwIUMJ67I2SLwmAprYJ0+cwSEcVXeNK
-	CjfQVuTrOLojQP/MZce0s803SpI/ERdFsBYBNJnspSn512YjRQLq7yFTznDHevxHC5tjWZFemj9
-	Tn2miL7qIJTeXSAQJM80krzmVrLa98u1pwR+f8HumPLOu++WdcPjiHMSW1hTBP0H8O9zAD3rxvq
-	efgojHWM1wtjvg3z7iWs7Ir97588jCQb8TQ1ZrldbqY
-X-Google-Smtp-Source: AGHT+IEdzkmzQSE86sK/Re7Z3Y+S3h68XMMRvGS7u4Ul3xpIqcNPKL9CDchW0vRIxsbQVwF635c6eJCb0IgTL4iIJ34=
-X-Received: by 2002:a05:600c:a102:b0:459:d7da:3179 with SMTP id
- 5b1f17b1804b1-45b65f4e6ccmr13005e9.5.1756145458325; Mon, 25 Aug 2025 11:10:58
- -0700 (PDT)
+	s=arc-20240116; t=1756150228; c=relaxed/simple;
+	bh=wVt33l1vjCoy4m+csBjzU5NrxJHWMdJ8EMxYyEoGmvY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T0ICvHoHWa9K5pGbg/jrv3YHKYZDnEX9TYgi3QKXtfVSDLsy0Kq5AQtYvJTVMx/kHjuTdU5mEiMEDpvK+e+ZcOtQLZiY1b+kL8EYgrHvN/Psdv2DV00y3z7t1WgCuLLh0v9psrCqA8ITy38fSNmgiBhm18XMjPngU61aagBFLjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3Xp4mzO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B56C4CEED;
+	Mon, 25 Aug 2025 19:30:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756150227;
+	bh=wVt33l1vjCoy4m+csBjzU5NrxJHWMdJ8EMxYyEoGmvY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M3Xp4mzOC28JGhFkxteYmhsEHBxsQL6oRceVTuiXQ/7TxzFcwi6PA/wDF3NEG58pd
+	 v+RwB29C106ACDc6EiPHykYemZkQs7KPDbIQqqr0LpsV54sgCFpt2xY/bGH56Tlcdr
+	 h9MzWHxs6W3CRheh20T7o7R4Er+k6M1jA6uu2k/FMNrgt+1SoQLJXc+3tPCvWdq0+Q
+	 TclEumr6pbt+ZMVwwFASHbnBtWKmTR9sc8A/uETBsgojII8tGupOtcZYLLmXFUi1o1
+	 C9wX4vK1QKHMdfCwMAsuxa7AFtmGsTpUl7pASLHtbT0zFeO0XMXpnPFJ9kq4DwocLy
+	 A1vzZxpw+dzWg==
+Date: Mon, 25 Aug 2025 22:30:23 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Jonathan McDowell <noodles@earth.li>
+Cc: rust-for-linux@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: Using Rust on non-Rust side of kernel
+Message-ID: <aKy5z74FE4paL7za@kernel.org>
+References: <aKmwPFb4cCk_E-ob@kernel.org>
+ <aKxRVlyNXUGBwJ2L@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250822170800.2116980-1-mic@digikod.net> <20250822170800.2116980-2-mic@digikod.net>
- <CAG48ez1XjUdcFztc_pF2qcoLi7xvfpJ224Ypc=FoGi-Px-qyZw@mail.gmail.com>
- <20250824.Ujoh8unahy5a@digikod.net> <CALCETrWwd90qQ3U2nZg9Fhye6CMQ6ZF20oQ4ME6BoyrFd0t88Q@mail.gmail.com>
- <20250825.mahNeel0dohz@digikod.net> <CALCETrX+OpkRSvOZhaWiqOsAPr-hRb+kY5=Hh5LU3H+1xPb3qg@mail.gmail.com>
-In-Reply-To: <CALCETrX+OpkRSvOZhaWiqOsAPr-hRb+kY5=Hh5LU3H+1xPb3qg@mail.gmail.com>
-From: Jeff Xu <jeffxu@google.com>
-Date: Mon, 25 Aug 2025 11:10:20 -0700
-X-Gm-Features: Ac12FXyE5Uc9z6yYoKPiBcnlngqu1ThnovMVOVfP8SQyJlN2POaLvxRW9Wz9AP8
-Message-ID: <CALmYWFvbcmrB6yDdi4_L-2iOaE216O3JTvtfMcwydHWR6ZVpEg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 1/2] fs: Add O_DENY_WRITE
-To: Andy Lutomirski <luto@amacapital.net>
-Cc: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Jann Horn <jannh@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Christian Heimes <christian@python.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Elliott Hughes <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Florian Weimer <fweimer@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
-	Luca Boccassi <bluca@debian.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Robert Waite <rowait@microsoft.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Scott Shell <scottsh@microsoft.com>, 
-	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
-	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	Jeff Xu <jeffxu@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aKxRVlyNXUGBwJ2L@earth.li>
 
-On Mon, Aug 25, 2025 at 9:43=E2=80=AFAM Andy Lutomirski <luto@amacapital.ne=
-t> wrote:
->
-> On Mon, Aug 25, 2025 at 2:31=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic@dig=
-ikod.net> wrote:
-> >
-> > On Sun, Aug 24, 2025 at 11:04:03AM -0700, Andy Lutomirski wrote:
-> > > On Sun, Aug 24, 2025 at 4:03=E2=80=AFAM Micka=C3=ABl Sala=C3=BCn <mic=
-@digikod.net> wrote:
-> > > >
-> > > > On Fri, Aug 22, 2025 at 09:45:32PM +0200, Jann Horn wrote:
-> > > > > On Fri, Aug 22, 2025 at 7:08=E2=80=AFPM Micka=C3=ABl Sala=C3=BCn =
-<mic@digikod.net> wrote:
-> > > > > > Add a new O_DENY_WRITE flag usable at open time and on opened f=
-ile (e.g.
-> > > > > > passed file descriptors).  This changes the state of the opened=
- file by
-> > > > > > making it read-only until it is closed.  The main use case is f=
-or script
-> > > > > > interpreters to get the guarantee that script' content cannot b=
-e altered
-> > > > > > while being read and interpreted.  This is useful for generic d=
-istros
-> > > > > > that may not have a write-xor-execute policy.  See commit a5874=
-fde3c08
-> > > > > > ("exec: Add a new AT_EXECVE_CHECK flag to execveat(2)")
-> > > > > >
-> > > > > > Both execve(2) and the IOCTL to enable fsverity can already set=
- this
-> > > > > > property on files with deny_write_access().  This new O_DENY_WR=
-ITE make
-> > > > >
-> > > > > The kernel actually tried to get rid of this behavior on execve()=
- in
-> > > > > commit 2a010c41285345da60cece35575b4e0af7e7bf44.; but sadly that =
-had
-> > > > > to be reverted in commit 3b832035387ff508fdcf0fba66701afc78f79e3d
-> > > > > because it broke userspace assumptions.
-> > > >
-> > > > Oh, good to know.
-> > > >
-> > > > >
-> > > > > > it widely available.  This is similar to what other OSs may pro=
-vide
-> > > > > > e.g., opening a file with only FILE_SHARE_READ on Windows.
-> > > > >
-> > > > > We used to have the analogous mmap() flag MAP_DENYWRITE, and that=
- was
-> > > > > removed for security reasons; as
-> > > > > https://man7.org/linux/man-pages/man2/mmap.2.html says:
-> > > > >
-> > > > > |        MAP_DENYWRITE
-> > > > > |               This flag is ignored.  (Long ago=E2=80=94Linux 2.=
-0 and earlier=E2=80=94it
-> > > > > |               signaled that attempts to write to the underlying=
- file
-> > > > > |               should fail with ETXTBSY.  But this was a source =
-of denial-
-> > > > > |               of-service attacks.)"
-> > > > >
-> > > > > It seems to me that the same issue applies to your patch - it wou=
-ld
-> > > > > allow unprivileged processes to essentially lock files such that =
-other
-> > > > > processes can't write to them anymore. This might allow unprivile=
-ged
-> > > > > users to prevent root from updating config files or stuff like th=
-at if
-> > > > > they're updated in-place.
-> > > >
-> > > > Yes, I agree, but since it is the case for executed files I though =
-it
-> > > > was worth starting a discussion on this topic.  This new flag could=
- be
-> > > > restricted to executable files, but we should avoid system-wide loc=
-ks
-> > > > like this.  I'm not sure how Windows handle these issues though.
-> > > >
-> > > > Anyway, we should rely on the access control policy to control writ=
-e and
-> > > > execute access in a consistent way (e.g. write-xor-execute).  Thank=
-s for
-> > > > the references and the background!
-> > >
-> > > I'm confused.  I understand that there are many contexts in which one
-> > > would want to prevent execution of unapproved content, which might
-> > > include preventing a given process from modifying some code and then
-> > > executing it.
-> > >
-> > > I don't understand what these deny-write features have to do with it.
-> > > These features merely prevent someone from modifying code *that is
-> > > currently in use*, which is not at all the same thing as preventing
-> > > modifying code that might get executed -- one can often modify
-> > > contents *before* executing those contents.
-> >
-> > The order of checks would be:
-> > 1. open script with O_DENY_WRITE
-> > 2. check executability with AT_EXECVE_CHECK
-> > 3. read the content and interpret it
->
-> Hmm.  Common LSM configurations should be able to handle this without
-> deny write, I think.  If you don't want a program to be able to make
-> their own scripts, then don't allow AT_EXECVE_CHECK to succeed on a
-> script that the program can write.
->
-Yes, Common LSM could handle this, however, due to historic and app
-backward compability reason, sometimes it is impossible to enforce
-that kind of policy in practice, therefore as an alternative, a
-machinism such as AT_EXECVE_CHECK is really useful.
+On Mon, Aug 25, 2025 at 01:04:38PM +0100, Jonathan McDowell wrote:
+> On Sat, Aug 23, 2025 at 03:12:44PM +0300, Jarkko Sakkinen wrote:
+> 
+> > My goal with tpm2_protocol is to have ACPICA alike model of imports as
+> > the crate is driven by TCG spec updates and it is very likely to be
+> > also used by TPM-RS (also via import style process).
+> 
+> I'm not entirely clear on what your plan is for this / the existing TPM
+> drivers in the kernel? I assume it's to eventually remove some of the C code
+> in favour of the Rust implementation, but I'm missing exactly how that's
+> expected to work.
 
-> Keep in mind that trying to lock this down too hard is pointless for
-> users who are allowed to to ptrace-write to their own processes.  Or
-> for users who can do JIT, or for users who can run a REPL, etc.
->
-The ptrace-write and /proc/pid/mem writing are on my radar, at least
-for ChomeOS and Android.
-AT_EXECVE_CHECK is orthogonal to those IMO, I hope eventually all
-those paths will be hardened.
+There's no plan of doing anything at this point. This is more like doing
+early research for the following questions:
 
-Thanks and regards,
--Jeff
+1. If this comes up in form or another, what are the directions of freedom.
+2. What could be in general done in Rust that could potentially extend
+   the capabilities of e.g. /dev/tpmrm0 (which could be entirely
+   different device).
+3. There has not been any discussion from my part of removing and/or
+   repealing and replacing any of the C driver code.
+
+It's a bit odd position IMHO to not prepare for future outcomes. Even
+without kernel context, for the TPM marshalling/unmarshalling there does
+not exist decent implementation as of today in *any language*.
+
+There's been way too many unprepared situations of C-to-Rust
+transformations, and learning lessons from that, I think it was the
+priority to implement the protocol part so that it has enough time to
+mature when the day might come.
+
+> 
+> (Given I've spent a bunch of time this year tracking down various edge case
+> issues in the TPM code that have been causing failures in our fleet I'm
+> understandably wary of a replacement of the core code. *It* might be a
+> perfect spec implementation, but hardware rarely is.)
+
+I think this is somewhat unconstructive comment. How do you implement
+against anything if you don't follow the spec and later on fix the
+incosistencies?
+
+I have not observed high stream of marshalling and unmarshalling
+associated bugs or other issues.
+
+Also if you make obnoxious arguments like that please also underline
+how implementation A is worse at dealing possible inconsistencies
+than implementation B. Otherwise, you're only spreading FUD.
+
+> 
+> J.
+> 
+> -- 
+> /-\                             |    It's deja-vu all over again.
+> |@/  Debian GNU/Linux Developer |
+> \-                              |
+
+BR, Jarkko
 
