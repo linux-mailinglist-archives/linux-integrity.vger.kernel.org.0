@@ -1,101 +1,134 @@
-Return-Path: <linux-integrity+bounces-6922-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6923-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B55FB35887
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 11:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 122A6B35BE6
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 13:29:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 175953602D3
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 09:13:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85077165D13
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 11:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4E683019A2;
-	Tue, 26 Aug 2025 09:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF0A30BF55;
+	Tue, 26 Aug 2025 11:23:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JlZsQp6s"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="ZxBqKiQh"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-bc0f.mail.infomaniak.ch (smtp-bc0f.mail.infomaniak.ch [45.157.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F672264B8;
-	Tue, 26 Aug 2025 09:13:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DF6239573
+	for <linux-integrity@vger.kernel.org>; Tue, 26 Aug 2025 11:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.157.188.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756199621; cv=none; b=FKrtLooxJSId+4+HvE0jnH6RBmtmdaxj9U7J2098Kxr2+IzfzXi7gEPF7Ud3hTnAmPOge+ze5FLleld6ftLEqmUQaWa0h4380QzY7EM44fL0LJhI6ThDytE0BXjldJVcUlOTBh8tE5FvJKhdCGIsBhvrAFffy+GOOLmBQILjW4A=
+	t=1756207431; cv=none; b=PeVRdMnPZQOc0JiQpMhmAkFj4EcjY/IzfFyKnOcS7uJjPeuVqMrnln57VHRyT8wS7WiK1xjSBzNQxTs3d9HAxzw5zQa1WoPciOPlxA2+axxgz20J/V2EQbEhMbS+0AE2axlMGFEhu4fScQzDMZFTPMUS0/q/K+uHBMJbkcVPDdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756199621; c=relaxed/simple;
-	bh=wIiQ7TffapU2rCFO6zjBA1TstT51WxaPWa/EGr2UdQE=;
+	s=arc-20240116; t=1756207431; c=relaxed/simple;
+	bh=a3dONpQbijK8YoaZ/aqqUpqY1ZvBSwtSGl3/rVu/h0o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nqGvLeWU4YbyvfoHKH1Kf0Yf+JmpwclO8JNoYz9gLgc7+zKsT1eIeIu2K7zNzVyKNXJ3ZbPgIO0JQ/OiDAF4Srxkh6gUu5hxsoM5/dHfRGLvqIwSniu7I6kgBFQF1uA0NHyNq/0FWl4/OXL+mqrsP/Us/S1IUVaibui4v9c+vtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JlZsQp6s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F255C4CEF4;
-	Tue, 26 Aug 2025 09:13:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756199620;
-	bh=wIiQ7TffapU2rCFO6zjBA1TstT51WxaPWa/EGr2UdQE=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=TDvqniflIRNOH8q5YTVHr1h6NjtWjf+7nNGY38fpPdXLh7VZbeffu8pvCeXEblNtrXohMx5m8dUMLiBzhnYMkYictCzw/UX+yq4D3KDOaOFV6HMGVbjRqW747aol8BtAeb2z8b4eL+QE7QxVtyanVddpUtMzz804xeCnu93nSk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=ZxBqKiQh; arc=none smtp.client-ip=45.157.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch [10.7.10.107])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4cB4zb5C65zhCD;
+	Tue, 26 Aug 2025 13:23:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1756207419;
+	bh=Rww2xVuKT9hbmIFkkD7HcWVeLL+qhFltg+bgWOSpLGg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JlZsQp6s0QNwctC4r38S74yzlxLtnCYwGT4dYECETFr+a2cL6DaMoMpa6xrQeuiXF
-	 E8ACEVo7EltMlCiYKqWNQtp3w2EM/iGEzrhR2exTfNVTep3jlzvmqdr971lgFILqSI
-	 6Ndr1bH2GrCcgUeAKiS7NKO0rNzmBe3A5mTNi6fUlQaxLpLMzEpYP47ZVlcfMU9X/W
-	 Um5vNrMfaORiMoyjZiJj1gzXc0KQ7A47Ld2Kt0maa/8CLlfhQpXqmp0O7eESSA9ENm
-	 x/MNQQA9ZJhUC2GtUOkO6JJqXSs35X5Yj9DE5Kn1vJhxBfopdYiIZGbTUUfKO3jKQ9
-	 OkCTdV3UDmZRA==
-Date: Tue, 26 Aug 2025 12:13:37 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Jonathan McDowell <noodles@earth.li>
-Cc: rust-for-linux@vger.kernel.org, linux-integrity@vger.kernel.org
-Subject: Re: Using Rust on non-Rust side of kernel
-Message-ID: <aK16wbmeKjq_1RLO@kernel.org>
-References: <aKmwPFb4cCk_E-ob@kernel.org>
- <aKxRVlyNXUGBwJ2L@earth.li>
- <aKy5z74FE4paL7za@kernel.org>
- <aK1xvMTqoq-6JyHm@earth.li>
- <aK12y2NuBmA4SfyM@kernel.org>
+	b=ZxBqKiQhUv+Pvrrn1/2CQKD3XT1nzj3AUfxgSMhhQuZD50UOTb9HuJYeEW+zysahz
+	 +B6JqT/YlnN76HwUPjid1Hasw1kpct8gdFLBml/o9qkdlCXMqGR5dSJkexYtSzgQgf
+	 6aykxrpUeddHu6VCgD5BUhF6SSEa7sfB/s2j2q+w=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4cB4zX5hs0zYsS;
+	Tue, 26 Aug 2025 13:23:36 +0200 (CEST)
+Date: Tue, 26 Aug 2025 13:23:36 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Al Viro <viro@zeniv.linux.org.uk>, Kees Cook <keescook@chromium.org>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>, 
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Elliott Hughes <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Miklos Szeredi <mszeredi@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, 
+	Robert Waite <rowait@microsoft.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Scott Shell <scottsh@microsoft.com>, Steve Dower <steve.dower@python.org>, 
+	Steve Grubb <sgrubb@redhat.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/2] Add O_DENY_WRITE (complement AT_EXECVE_CHECK)
+Message-ID: <20250826.aig5aiShunga@digikod.net>
+References: <20250822170800.2116980-1-mic@digikod.net>
+ <20250826-skorpion-magma-141496988fdc@brauner>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aK12y2NuBmA4SfyM@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250826-skorpion-magma-141496988fdc@brauner>
+X-Infomaniak-Routing: alpha
 
-On Tue, Aug 26, 2025 at 11:56:48AM +0300, Jarkko Sakkinen wrote:
-> On Tue, Aug 26, 2025 at 09:35:08AM +0100, Jonathan McDowell wrote:
-> > d4640c394f23 tpm: Check for completion after timeout
-> > 2f661f71fda1 tpm: tis: Double the timeout B to 4s
-> > 1dbf74e00a5f tpm: End any active auth session before shutdown
-> > de9e33df7762 tpm, tpm_tis: Workaround failed command reception on Infineon devices
-> > 7146dffa875c tpm, tpm_tis: Fix timeout handling when waiting for TPM status
-> > e3aaebcbb7c6 tpm: Clean up TPM space after command failure
+On Tue, Aug 26, 2025 at 11:07:03AM +0200, Christian Brauner wrote:
+> On Fri, Aug 22, 2025 at 07:07:58PM +0200, Mickaël Salaün wrote:
+> > Hi,
+> > 
+> > Script interpreters can check if a file would be allowed to be executed
+> > by the kernel using the new AT_EXECVE_CHECK flag. This approach works
+> > well on systems with write-xor-execute policies, where scripts cannot
+> > be modified by malicious processes. However, this protection may not be
+> > available on more generic distributions.
+> > 
+> > The key difference between `./script.sh` and `sh script.sh` (when using
+> > AT_EXECVE_CHECK) is that execve(2) prevents the script from being opened
+> > for writing while it's being executed. To achieve parity, the kernel
+> > should provide a mechanism for script interpreters to deny write access
+> > during script interpretation. While interpreters can copy script content
+> > into a buffer, a race condition remains possible after AT_EXECVE_CHECK.
+> > 
+> > This patch series introduces a new O_DENY_WRITE flag for use with
+> > open*(2) and fcntl(2). Both interfaces are necessary since script
+> > interpreters may receive either a file path or file descriptor. For
+> > backward compatibility, open(2) with O_DENY_WRITE will not fail on
+> > unsupported systems, while users requiring explicit support guarantees
+> > can use openat2(2).
 > 
-> I think we're in the same line here really :-) And apologies for
-> over-reacting, I definitely went over the top!
-> 
-> I did the marshaller/unmarshaller exactly for Rust TPM driver only in
-> the sense that if I got a patch set on my table doing that, it would be
-> the part which is complex enough that I would actually be in trouble.
-> So consider it like "years ahead preparation".
+> We've said no to abusing the O_* flag space for that AT_EXECVE_* stuff
+> before and you've been told by Linus as well that this is a nogo.
 
-As per having e.g. C driver with some Rust in and all sort of ways to
-integrate Rust code etc. I definitely want to experiment with that type
-of stuff in experimental branches. It's single best way to learn stuff
-to do integrations (factors better than "how to program") at least for
-me. Kernel dev is all about how sandboxes are created and not so
-much how to program kernel (IMHO).
+Oh, please, don't mix up everything.  First, this is an RFC, and as I
+explained, the goal is to start a discussion with something concrete.
+Second, doing a one-time check on a file and providing guarantees for
+the whole lifetime of an opened file requires different approaches,
+hence this O_ *proposal*.
 
 > 
-> I quickly went through your list as a reality check if I have blind
-> spot but for the most part it is "business as usual" type of stuff,
-> some to change done many years ago (at least as old as tpmrm0).
-> 
-> Obvious exception to the rule are bugs related to HMAC encryption
-> to which I think we have now a resolution.
-> 
-> BR, Jarkko
-> 
+> Nothing has changed in that regard and I'm not interested in stuffing
+> the VFS APIs full of special-purpose behavior to work around the fact
+> that this is work that needs to be done in userspace. Change the apps,
+> stop pushing more and more cruft into the VFS that has no business
+> there.
 
-BR, Jarkko
+It would be interesting to know how to patch user space to get the same
+guarantees...  Do you think I would propose a kernel patch otherwise?
+
+> 
+> That's before we get into all the issues that are introduced by this
+> mechanism that magically makes arbitrary files unwritable. It's not just
+> a DoS it's likely to cause breakage in userspace as well. I removed the
+> deny-write from execve because it already breaks various use-cases or
+> leads to spurious failures in e.g., go. We're not spreading this disease
+> as a first-class VFS API.
+
+Jann explained it very well, and the deny-write for execve is still
+there, but let's keep it civil.  I already agreed that this is not a
+good approach, but we could get interesting proposals.
 
