@@ -1,154 +1,157 @@
-Return-Path: <linux-integrity+bounces-6918-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6919-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B0ACB356BF
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 10:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03C4AB3571E
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 10:35:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B902918874B5
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 08:25:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5166A189EDEA
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 Aug 2025 08:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563322877DA;
-	Tue, 26 Aug 2025 08:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C1A2F9C3D;
+	Tue, 26 Aug 2025 08:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="usCqbP7u"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="OK3Ewd5w"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 248892AE8D;
-	Tue, 26 Aug 2025 08:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D83B2857E9;
+	Tue, 26 Aug 2025 08:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756196729; cv=none; b=Peqqe+TKLsl0op5KN0KKYJ5+jrUA19mEg/BciFtDiOvfefOyuXTJGpflokYmlFqx6lGZDVVMsshO30rP6jo1dl6CBgzwySic9uQO2jcgPLCp+ajb6cM3t8RghR3B7OlVnFK20iPSy13smAPcZuuaM33iIN9pQIBoAXK9yP3JKRs=
+	t=1756197313; cv=none; b=aEZbg+14VYW2+IW9iSD5MM3ig9uHYzuJCm68DTpQQUe/tSFQIzUEwGI8u4aQGh3AI8aQg3b9V6boX+R82cT8rgOuSwqURPcJHq8vTBl6cmxBK4xU7/GVp9tYwd9f16DqfzhbLallVUE4UITX+Eird9H6eeyrtlQnoNh4iX3L3v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756196729; c=relaxed/simple;
-	bh=VkeszMZY1ksdwbOs73xgWaFT2kBLSssyVgThE5cmC1k=;
+	s=arc-20240116; t=1756197313; c=relaxed/simple;
+	bh=Z/LB1M/2VX7KqJrgprVj6tKUWP9E0EA908mu2BjbDTQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AsGk6KVALGLQly6syq0a5kf608D4+mjc1bW509WHW2VNNcN1G7iQvmYEmhSpkPu/Ewq1Mr5zUtQE4wOJCb2nxVPx1zokp1e/ygt+Yx1lvl+xKEhzzPb7TPW3nzeeQHYIJBvV7ck1o21j7GnSSyiKrLVHoxrjWKDNeHiYmx0ZW1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=usCqbP7u; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2586BC4CEF1;
-	Tue, 26 Aug 2025 08:25:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756196728;
-	bh=VkeszMZY1ksdwbOs73xgWaFT2kBLSssyVgThE5cmC1k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=usCqbP7uRNQ13YBhnWf1Zp3LRYsBKqu9s5ZGGYDjRlye9lEVBvycZ/a1VLH9/QqAS
-	 05y4bWzLtoV7x+7zQ88isnbgga89Ei82D+NnIk/gGnB7BeADgNPnPxGCRw1jIRSpOo
-	 j96cUSDlXjWNJs/al4euZUYjJccKcrQoy9M4N9Ith4QrHWkE9qkuPv2yq7S7JNU0Fb
-	 j/3bUpJMDW4zlVcHH/qfntY4p6sSgDiW8WAoE0Bfv7/mvx4wCpGxqPJNJckF+DfrdW
-	 aaQRM5QUzqmwP4hc2YpG+q+A5UJpgTgZYAtCDoDMlFZRKSE5GL1Tig5J6VAmC48TM3
-	 UDprsaBEvhw4Q==
-Date: Tue, 26 Aug 2025 11:25:24 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	Andreas.Fuchs@infineon.com, James Prestwood <prestwoj@gmail.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Eric Biggers <ebiggers@kernel.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-crypto@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>,
-	Lennart Poettering <lennart@poettering.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	open list <linux-kernel@vger.kernel.org>,
-	David Howells <dhowells@redhat.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v7 4/5] keys: asymmetric: Add tpm2_key_rsa
-Message-ID: <aK1vdEcuN_xjhjyY@kernel.org>
-References: <20240528210823.28798-1-jarkko@kernel.org>
- <20240528210823.28798-5-jarkko@kernel.org>
- <ZmLnyp9j_QoPgj7W@gondor.apana.org.au>
- <D24EZPFV6DBS.1LZVHIVPITE83@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fdHBTKUpV6TUeghab8dU4SjZhM+EuvZXHhrF0mPqS8ZcXw9Wx0mv/QghLX/IiExCNMLjO6ipjwAOsw7mje4CiwiVyh5MnM/FYjAzmoNJ8xg+2/0EmEocSonnU0T3VBgYyiJBL0Tt05rYfDEK349QVwTos785gIwHvi333SoZ6ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=OK3Ewd5w; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=C/eQL7etAvfhe8pmbZCTySyBXYWaoKqCDA6fW77TpVI=; b=OK3Ewd5w/fEuKZMVjES/EH9cKF
+	GTEXGRhREqUvtw0N5NjD7BRPRgeHipOESB8SkbYZ2EqOj2sRzGTSgMlDG69PryOMQzYugCA6nkOfQ
+	pSL+u1eYfkNcxiimAdHU6cThL5Hr0hDj+BeMztWmE76LbmILFDLkpWsYhDvGnjhrPJXmPb0+7rohO
+	AHppgo8LAESfR0o62xzEXWny6HX9l20ORTEl079aeCK9fQeRn/vvato/GH5CJy2FFBl6Pn3pYGntN
+	6hTQZdneQ3EKSvfq0jFTTvwZxchpqFVzsuKUXZB/scbATrOB82Sh0M5adyR4c7XOSJiIoZnMAIjyU
+	QrPpzORg==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1uqp92-00FYom-0f;
+	Tue, 26 Aug 2025 09:35:08 +0100
+Date: Tue, 26 Aug 2025 09:35:08 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: rust-for-linux@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: Using Rust on non-Rust side of kernel
+Message-ID: <aK1xvMTqoq-6JyHm@earth.li>
+References: <aKmwPFb4cCk_E-ob@kernel.org>
+ <aKxRVlyNXUGBwJ2L@earth.li>
+ <aKy5z74FE4paL7za@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <D24EZPFV6DBS.1LZVHIVPITE83@kernel.org>
+In-Reply-To: <aKy5z74FE4paL7za@kernel.org>
 
-On Thu, Jun 20, 2024 at 03:23:20AM +0300, Jarkko Sakkinen wrote:
-> On Fri Jun 7, 2024 at 1:58 PM EEST, Herbert Xu wrote:
-> > On Wed, May 29, 2024 at 12:08:09AM +0300, Jarkko Sakkinen wrote:
-> > >
-> > > +/*
-> > > + * Sign operation is an encryption using the TPM's private key. With RSA the
-> > > + * only difference between encryption and decryption is where the padding goes.
-> > > + * Since own padding can be used, TPM2_RSA_Decrypt can be repurposed to do
-> > > + * encryption.
-> > > + */
-> > > +static int tpm2_key_rsa_sign(struct tpm_chip *chip, struct tpm2_key *key,
-> > > +			     struct kernel_pkey_params *params,
-> > > +			     const void *in, void *out)
-> > > +{
-> > > +	const off_t o = key->priv_len + 2 + sizeof(*key->desc);
-> > > +	const struct tpm2_rsa_parms *p =
-> > > +		(const struct tpm2_rsa_parms *)&key->data[o];
-> > > +	const u16 mod_size = be16_to_cpu(p->modulus_size);
-> > > +	const struct rsa_asn1_template *asn1;
-> > > +	u32 in_len = params->in_len;
-> > > +	void *asn1_wrapped = NULL;
-> > > +	u8 *padded;
-> > > +	int ret;
-> > > +
-> > > +	if (strcmp(params->encoding, "pkcs1") != 0) {
-> > > +		ret = -ENOPKG;
-> > > +		goto err;
-> > > +	}
-> > > +
-> > > +	if (params->hash_algo) {
-> > > +		asn1 = rsa_lookup_asn1(params->hash_algo);
-> >
-> > Could you please explain why this can't be done through pkcs1pad
-> > instead of going to raw RSA?
-> 
-> Sorry was away couple of weeks from here. I replace this with TPM2_Sign
-> as is done already in the ECDSA module, so I guess that is a "yes".
+(I've seen your later mails, but I think this is the right one for me to 
+respond to around what my concerns are.)
 
-Time travelling back to 2024 ;-)
+On Mon, Aug 25, 2025 at 10:30:23PM +0300, Jarkko Sakkinen wrote:
+>On Mon, Aug 25, 2025 at 01:04:38PM +0100, Jonathan McDowell wrote:
+>> On Sat, Aug 23, 2025 at 03:12:44PM +0300, Jarkko Sakkinen wrote:
+>>
+>> > My goal with tpm2_protocol is to have ACPICA alike model of imports as
+>> > the crate is driven by TCG spec updates and it is very likely to be
+>> > also used by TPM-RS (also via import style process).
+>>
+>> I'm not entirely clear on what your plan is for this / the existing TPM
+>> drivers in the kernel? I assume it's to eventually remove some of the C code
+>> in favour of the Rust implementation, but I'm missing exactly how that's
+>> expected to work.
+>
+>There's no plan of doing anything at this point. This is more like doing
+>early research for the following questions:
+>
+>1. If this comes up in form or another, what are the directions of freedom.
+>2. What could be in general done in Rust that could potentially extend
+>   the capabilities of e.g. /dev/tpmrm0 (which could be entirely
+>   different device).
+>3. There has not been any discussion from my part of removing and/or
+>   repealing and replacing any of the C driver code.
+>
+>It's a bit odd position IMHO to not prepare for future outcomes. Even
+>without kernel context, for the TPM marshalling/unmarshalling there does
+>not exist decent implementation as of today in *any language*.
 
-I can't recall what I was thining here butI'm glad that I did not put
-the patch set further as now I have much more sane angle to this.
+I'm not saying we shouldn't prepare for future outcomes. It sounds like 
+you're focusing on the marshalling/unmarshalling piece with Rust, rather 
+than expecting to replace the entire of drivers/char/tpm/ so that 
+worries me less.
 
-I realized while working on [1] that I'm better of making this to work
-as API on rsapubkey.asn1 and rsaprivkey.asn1 and matching files for
-ECC and do all steps inside kernel from this:
+>> (Given I've spent a bunch of time this year tracking down various edge case
+>> issues in the TPM code that have been causing failures in our fleet I'm
+>> understandably wary of a replacement of the core code. *It* might be a
+>> perfect spec implementation, but hardware rarely is.)
+>
+>I think this is somewhat unconstructive comment. How do you implement
+>against anything if you don't follow the spec and later on fix the
+>incosistencies?
+>
+>I have not observed high stream of marshalling and unmarshalling
+>associated bugs or other issues.
+>
+>Also if you make obnoxious arguments like that please also underline
+>how implementation A is worse at dealing possible inconsistencies
+>than implementation B. Otherwise, you're only spreading FUD.
 
-tpm2_createprimary --hierarchy o -G rsa2048 -c owner.txt
-tpm2_evictcontrol -c owner.txt 0x81000001
-tpm2_getcap handles-persistent
-openssl genrsa -out private.pem 2048
-tpm2_import -C 0x81000001 -G rsa -i private.pem -u key.pub -r key.priv
-tpm2_encodeobject -C 0x81000001 -u key.pub -r key.priv -o key.priv.pem
-openssl asn1parse -inform pem -in key.priv.pem -noout -out key.priv.der
+I think you're confusing my concerns with concerns others have about 
+/dev/tpmrm0. I'm not overly worried about that. I suspect there might be 
+some cleanups that can be done, but we use it as our resource broker and 
+I don't believe it to be the root cause of any of the issues we have 
+seen.
 
-I.e. my test tool does everything else except
+If you're focused on marshalling + unmarshalling then I don't recall 
+seeing issues there. What I'm thinking of more are the workarounds for 
+firmware issues, or the subtle timing bugs that have sat in the kernel 
+for a number of revisions before they've been tracked down and resolved.  
+I'm not intending to be obnoxious; these are not fundamental design 
+issues, just code fixes that have hardened the driver over time. If we 
+were talking about ripping everything out then my concern would be we'd 
+have to do all this battle hardening over again, no matter what our best 
+efforts. i.e. we've already done some work fixing the inconsistencies, 
+let's make sure we don't lose that.
 
-openssl genrsa -out private.pem 2048
+Examples of the sorts of fixes I'm thinking about:
 
-Im now pretty familiar with import procedure and how to prepare data
-for TPM2_Import and is like the "spirit" of it i.e., take external
-key and store it inside TPM2. That as side effect removes all the
-use of tpm2key.asn1 from the patch set and simplifies flows
-greatly.
+d4640c394f23 tpm: Check for completion after timeout
+2f661f71fda1 tpm: tis: Double the timeout B to 4s
+1dbf74e00a5f tpm: End any active auth session before shutdown
+de9e33df7762 tpm, tpm_tis: Workaround failed command reception on Infineon devices
+7146dffa875c tpm, tpm_tis: Fix timeout handling when waiting for TPM status
+e3aaebcbb7c6 tpm: Clean up TPM space after command failure
 
-And my Rust works help to get the preparation procedure exactly
-right and none of those crazy tools and commands will be needed.
+(I've also got another issue I'm currently trying to work through but 
+I'm pretty sure it's a firmware bug and until I nail it down fully with 
+a reproducible test I can't determine if there's a suitable kernel 
+workaround, or it _needs_ a firmware upgrade.)
 
-The matching C code following TCG Architecture spec  I'll first write in
-user space and then port that kernel crypto APIs
+J.
 
-That spans a question tho: should it be its own key type (as it is
-right now or would it be better idea to have parameter/option for
-hardware pre-existing RSA key types, or what would be the best
-direction API wise to approach this?
-
-[1] https://lore.kernel.org/tpm2/aKzaTYCI2GO_UPRB@kernel.org/T/#u
-
-BR, Jarkko
+-- 
+Web [    101 things you can't have too much of : 22 - Friends.     ]
+site: https:// [                                          ]      Made by
+www.earth.li/~noodles/  [                      ]         HuggieTag 0.0.24
 
