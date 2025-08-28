@@ -1,168 +1,140 @@
-Return-Path: <linux-integrity+bounces-6941-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6942-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E358BB38FA2
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Aug 2025 02:14:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EB39B39019
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Aug 2025 02:36:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E82C51B23411
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Aug 2025 00:14:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 617009808D1
+	for <lists+linux-integrity@lfdr.de>; Thu, 28 Aug 2025 00:35:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48AF818E3F;
-	Thu, 28 Aug 2025 00:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7E41CDFD5;
+	Thu, 28 Aug 2025 00:32:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="ko6VF2kA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKGHQ0t8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A218A23CB;
-	Thu, 28 Aug 2025 00:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730A31C4A20
+	for <linux-integrity@vger.kernel.org>; Thu, 28 Aug 2025 00:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756340074; cv=none; b=pMLh8QZeM04j6tK1apKoBvWquaUcLR/bvwR1XfCDhKU6vNz1sNbpSewrV6C5M/NbAETFJnDoQZWHgtxb6aLvWS8os15of97QmO4mQ/sQIKS+Hi147OTww2/yC69o+PezTMjhaKoJR5l+bcXC1gX+wKvP88bmClQj23kemtSQhZ4=
+	t=1756341136; cv=none; b=PHOx1z0RqjRjcvKdG0YXpzMnCQunUFCiJzyiRWwll3DIhv3ZGP53lgE8DXjFFOSWUEkz2d62uo9IDd+UGJEBb+tqQNM59wxadndh1W39y8YEuPscEskB8vVQl0TnipUIaeG+CW/yDDI918QbqeUNU0//I1b49tAg/f2yZp1lU2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756340074; c=relaxed/simple;
-	bh=vR+P7v6+Ct20eU7awFHLXQjrBuYS+LxOz2wJgbna1rE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hy14mTVsFcg9fPAqD0Q4da7GP2ZCQMDLtiu0otgCLIUvUd95b/jRXvfqNaHF9wKi94rNDl4nDdDhkjtGLzX+BPB/we7UbL4x+cLs6HUnQCD5ooDeNmfgl1QTxYdRVVTn+te4ofnm6fDZ67+7VZVyJT7Bucof3JFapXXtQTmlwnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=ko6VF2kA; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4cC22W3nCMz9tSp;
-	Thu, 28 Aug 2025 02:14:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1756340067;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7PK3Ez1Rfnej7jNOPYQs5y3Mm6w6Khoe08rct6ODjuA=;
-	b=ko6VF2kAjcFV7/loAFG3DijKDdEZnWAtqyqZx+AM6VAnZjb1ZghYykty/sdRM4Z84qHq7G
-	Vt+lgdCqKZkwdNjUQkGH5Tt3q5zsG5t9TFRidcCvLdRy93pl5L1y1mPIyvpYl7/XsyvEPb
-	4W1bn1ZNCnyPWikIrT9pwa/G8ySTKhRBr0b7NM90oYn2k3dqdpgtl03kgYZ4Gsl9Q5OjYE
-	RXyIhGD8eglc5O/AnEurlOOObC5p660YfCXGnUfjHpYiAhlJL+eqcidEw+p9UgJKIsiw5m
-	rCTYOh5LQf2S3+nhRH2KFDc577NbG8zpFjrFhqYk3dqXKSejYKBBmEYjhSaBFw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of cyphar@cyphar.com designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=cyphar@cyphar.com
-Date: Thu, 28 Aug 2025 10:14:00 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Kees Cook <keescook@chromium.org>, 
-	Paul Moore <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>, 
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
-	Elliott Hughes <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
-	Florian Weimer <fweimer@redhat.com>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
-	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Miklos Szeredi <mszeredi@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, 
-	Robert Waite <rowait@microsoft.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Scott Shell <scottsh@microsoft.com>, Steve Dower <steve.dower@python.org>, 
-	Steve Grubb <sgrubb@redhat.com>, kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/2] Add O_DENY_WRITE (complement AT_EXECVE_CHECK)
-Message-ID: <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
-References: <20250822170800.2116980-1-mic@digikod.net>
- <20250826-skorpion-magma-141496988fdc@brauner>
- <20250826.aig5aiShunga@digikod.net>
+	s=arc-20240116; t=1756341136; c=relaxed/simple;
+	bh=yFq2/idFtNoKxfqONa3lFVunxo2YTbhdRw8i4j3V+8g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=huf2+95XNZtmcGvnKx5VA0yag2YtNyovi3sHtCVFVYF+NDIlsRppU2GCOcz8wInhuKQaxXeAH2lcNUbz/ccf2xUB1FZNo3ReNIrJ3x0tvOB5rpa46B2n3oiBKLr+DLgRCqT/hSoFswYNPMgFBKGu5FyjzKh6e7dPd+FlulVZ31E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKGHQ0t8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E93AC4CEFB
+	for <linux-integrity@vger.kernel.org>; Thu, 28 Aug 2025 00:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756341136;
+	bh=yFq2/idFtNoKxfqONa3lFVunxo2YTbhdRw8i4j3V+8g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=dKGHQ0t8y8ngpO8oQiaqbJhdoUVSVS8DBm/p+nD/Q3almAHFqvHQY/Wxmqy1ZtaeA
+	 Wu98Hpo4zoMa8P4vs+6AkRRXF61DXlBkyi4Xe3f5QMwtcWZuP/nutx6SS6OyyUDwh5
+	 g+svymb2e8Po6ywHghfIdC1G8llFZLRthIkDACqVx2zXSkQoyRE24kOWiT55NZizhb
+	 Q5qsLKVMmVirkLyxbfzakXCNgtliQZfZaXiibaqzbS/2CMDEBtZ1DJfxA6WiPeLWXK
+	 Me2Av3WCHEUCYV/wqFXzSY2gM0fsAOMizoLlsMWRGWkaMKxmbhgrfHiIGwfjHNtsDo
+	 gteUfyV0DDjVg==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-55f527db6f6so490988e87.2
+        for <linux-integrity@vger.kernel.org>; Wed, 27 Aug 2025 17:32:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXCNGzMUxXS7sQrszK6Fa9k2ilAsJZgIWIxk+LRXzMdhO3hVZ6GhyhAbI5RKzR1Uc1Sali+N30dIhQSaYqN8GA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfIebSUKzX30Zy+8kVv0qLxflfYJaRuWutCfN2jgIJGiLoJt6M
+	DuGzR7/kO+Jgjr+hWDIS5Q0ALXUG/adUO2Bt/Lb+6sJICNw/KD0kAAelPHP50GyKYh7pjV0qzsk
+	UHifo5ZGSUDew79imNWXV2hMyRq4pu7tC+VDjp2ZF
+X-Google-Smtp-Source: AGHT+IFBs4E/ufqmFInmmCfp8Nwce44WjgaXqekpIOhAHuwl87Hc2TiTY2CPCDgnPsJSmqV5fcG8a1TMiCPT2sNMeO0=
+X-Received: by 2002:a05:6512:258d:b0:55f:596f:2ec4 with SMTP id
+ 2adb3069b0e04-55f596f3039mr681952e87.23.1756341133959; Wed, 27 Aug 2025
+ 17:32:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4tazkxltbygkcgo4"
-Content-Disposition: inline
-In-Reply-To: <20250826.aig5aiShunga@digikod.net>
-X-Rspamd-Queue-Id: 4cC22W3nCMz9tSp
-
-
---4tazkxltbygkcgo4
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+References: <20250822170800.2116980-1-mic@digikod.net> <20250826-skorpion-magma-141496988fdc@brauner>
+ <20250826.aig5aiShunga@digikod.net> <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
+In-Reply-To: <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
+From: Andy Lutomirski <luto@kernel.org>
+Date: Wed, 27 Aug 2025 17:32:02 -0700
+X-Gmail-Original-Message-ID: <CALCETrWHKga33bvzUHnd-mRQUeNXTtXSS8Y8+40d5bxv-CqBhw@mail.gmail.com>
+X-Gm-Features: Ac12FXxg-YalsCfcTcpKiyudyQQfe_FOt5x1XpJ9sIiByXo4by4N2XquUDNMVBc
+Message-ID: <CALCETrWHKga33bvzUHnd-mRQUeNXTtXSS8Y8+40d5bxv-CqBhw@mail.gmail.com>
 Subject: Re: [RFC PATCH v1 0/2] Add O_DENY_WRITE (complement AT_EXECVE_CHECK)
-MIME-Version: 1.0
+To: Aleksa Sarai <cyphar@cyphar.com>
+Cc: =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>, 
+	Serge Hallyn <serge@hallyn.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Elliott Hughes <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Jann Horn <jannh@google.com>, Jeff Xu <jeffxu@google.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams <ajordanr@google.com>, 
+	Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Miklos Szeredi <mszeredi@redhat.com>, 
+	Mimi Zohar <zohar@linux.ibm.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Robert Waite <rowait@microsoft.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Scott Shell <scottsh@microsoft.com>, 
+	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
+	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-08-26, Micka=EBl Sala=FCn <mic@digikod.net> wrote:
-> On Tue, Aug 26, 2025 at 11:07:03AM +0200, Christian Brauner wrote:
-> > Nothing has changed in that regard and I'm not interested in stuffing
-> > the VFS APIs full of special-purpose behavior to work around the fact
-> > that this is work that needs to be done in userspace. Change the apps,
-> > stop pushing more and more cruft into the VFS that has no business
-> > there.
->=20
-> It would be interesting to know how to patch user space to get the same
-> guarantees...  Do you think I would propose a kernel patch otherwise?
+On Wed, Aug 27, 2025 at 5:14=E2=80=AFPM Aleksa Sarai <cyphar@cyphar.com> wr=
+ote:
+>
+> On 2025-08-26, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
+> > On Tue, Aug 26, 2025 at 11:07:03AM +0200, Christian Brauner wrote:
+> > > Nothing has changed in that regard and I'm not interested in stuffing
+> > > the VFS APIs full of special-purpose behavior to work around the fact
+> > > that this is work that needs to be done in userspace. Change the apps=
+,
+> > > stop pushing more and more cruft into the VFS that has no business
+> > > there.
+> >
+> > It would be interesting to know how to patch user space to get the same
+> > guarantees...  Do you think I would propose a kernel patch otherwise?
+>
+> You could mmap the script file with MAP_PRIVATE. This is the *actual*
+> protection the kernel uses against overwriting binaries (yes, ETXTBSY is
+> nice but IIRC there are ways to get around it anyway).
 
-You could mmap the script file with MAP_PRIVATE. This is the *actual*
-protection the kernel uses against overwriting binaries (yes, ETXTBSY is
-nice but IIRC there are ways to get around it anyway). Of course, most
-interpreters don't mmap their scripts, but this is a potential solution.
-If the security policy is based on validating the script text in some
-way, this avoids the TOCTOU.
+Wait, really?  MAP_PRIVATE prevents writes to the mapping from
+affecting the file, but I don't think that writes to the file will
+break the MAP_PRIVATE CoW if it's not already broken.
 
-Now, in cases where you have IMA or something and you only permit signed
-binaries to execute, you could argue there is a different race here (an
-attacker creates a malicious script, runs it, and then replaces it with
-a valid script's contents and metadata after the fact to get
-AT_EXECVE_CHECK to permit the execution). However, I'm not sure that
-this is even possible with IMA (can an unprivileged user even set
-security.ima?). But even then, I would expect users that really need
-this would also probably use fs-verity or dm-verity that would block
-this kind of attack since it would render the files read-only anyway.
+IPython says:
 
-This is why a more detailed threat model of what kinds of attacks are
-relevant is useful. I was there for the talk you gave and subsequent
-discussion at last year's LPC, but I felt that your threat model was
-not really fleshed out at all. I am still not sure what capabilities you
-expect the attacker to have nor what is being used to authenticate
-binaries (other than AT_EXECVE_CHECK). Maybe I'm wrong with my above
-assumptions, but I can't know without knowing what threat model you have
-in mind, *in detail*.
+In [1]: import mmap, tempfile
 
-For example, if you are dealing with an attacker that has CAP_SYS_ADMIN,
-there are plenty of ways for an attacker to execute their own code
-without using interpreters (create a new tmpfs with fsopen(2) for
-instance). Executable memfds are even easier and don't require
-privileges on most systems (yes, you can block them with vm.memfd_noexec
-but CAP_SYS_ADMIN can disable that -- and there's always fsopen(2) or
-mount(2)).
+In [2]: f =3D tempfile.TemporaryFile()
 
-(As an aside, it's a shame that AT_EXECVE_CHECK burned one of the
-top-level AT_* bits for a per-syscall flag -- the block comment I added
-in b4fef22c2fb9 ("uapi: explain how per-syscall AT_* flags should be
-allocated") was meant to avoid this happening but it seems you and the
-reviewers missed that...)
+In [3]: f.write(b'initial contents')
+Out[3]: 16
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-https://www.cyphar.com/
+In [4]: f.flush()
 
---4tazkxltbygkcgo4
-Content-Type: application/pgp-signature; name="signature.asc"
+In [5]: map =3D mmap.mmap(f.fileno(), f.tell(), flags=3Dmmap.MAP_PRIVATE,
+prot=3Dmmap.PROT_READ)
 
------BEGIN PGP SIGNATURE-----
+In [6]: map[:]
+Out[6]: b'initial contents'
 
-iJEEABYKADkWIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCaK+fRBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQKJf60rfpRG+uowD/Sqmo+gatXLeikpI5XmZo
-OTzPamUQKF6Qc1cYyy2INK8BAPK2BcHkJfcGbfBSjW2CshX9cc5oZuhvWEtz4TDD
-XzYA
-=FdMM
------END PGP SIGNATURE-----
+In [7]: f.seek(0)
+Out[7]: 0
 
---4tazkxltbygkcgo4--
+In [8]: f.write(b'changed')
+Out[8]: 7
+
+In [9]: f.flush()
+
+In [10]: map[:]
+Out[10]: b'changed contents'
 
