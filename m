@@ -1,147 +1,266 @@
-Return-Path: <linux-integrity+bounces-6948-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6949-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4DB4B3AEB2
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 Aug 2025 01:54:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48271B3C214
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Aug 2025 19:52:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 211361891609
-	for <lists+linux-integrity@lfdr.de>; Thu, 28 Aug 2025 23:55:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04321586117
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 Aug 2025 17:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F45B2D9787;
-	Thu, 28 Aug 2025 23:54:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1177F335BB1;
+	Fri, 29 Aug 2025 17:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E97y42YG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L9MSJNvF"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0512D9786
-	for <linux-integrity@vger.kernel.org>; Thu, 28 Aug 2025 23:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5614D340D9B
+	for <linux-integrity@vger.kernel.org>; Fri, 29 Aug 2025 17:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756425293; cv=none; b=uC9gSPjF6BhLF5H6zz1SyYX2Sn92xMLV3OasQQ9EzRlDLP9Q1+VUYSQw1Zxa3JWxJEUs5TL5G26R8856042womxyfaoNRNXG5d1//Id/O1arPKq5R2TvB72EfBSktnglo4JY/t+RnK0kMcEpjLeNjVjFPEoQ393jbJQ+cg7zVW4=
+	t=1756489961; cv=none; b=B/Pf35xWpaPNOwixRRbT7u/mAO2gizEJ8wB/RQn5f9D+tCsf8FSmpmGXVDvyiypNit1/uXiROFYtiXJJeBy596W9tk622Odv5w0DoYc+n/7lpkWpfcNQFi9rei6oEo+IQR/WAdx0j3mbVjEiWF/H9z4udYyQFpV+3onG9398KEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756425293; c=relaxed/simple;
-	bh=BjJJ4QV8UNld/i//52PoaHJ541gNRNlFMthNNdcE9LM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=giITubhaor/WSTxiKGYsbvdM0Swctn6WEkIZffVUsgOD7htqA57Vwb4RPReljLmIuJtA1mm8KshaH+9fsrwW8aliT9D8TdMhCamQ8ET2Yro0WSHppwQs8Jj8Ll/MRByUuyFWbrQzxbkO5Gyqv/abkfQrnz5Og0/PROwlZIMIGCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E97y42YG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 498FDC4CEF7;
-	Thu, 28 Aug 2025 23:54:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756425292;
-	bh=BjJJ4QV8UNld/i//52PoaHJ541gNRNlFMthNNdcE9LM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=E97y42YGbMa8cIfyKqIpLC7a0NVPQUrlfSYaUmKrfE/1trw/bG9skMi4pwRLcAYnh
-	 zUjAq5jo1Em4/mX/8iHSv/remjr+2QzXpE2Wb0wk3w41dWKp4nDbIyWqsNllyx2Tmg
-	 85FerJu0fdrfbt4o1YbsrwkEWYosfWW9q9zAWE0e3hGwZyVltmUGSeZddxxvdr++o2
-	 TvLJKjbF31qOvjuCgRjYldCAZTY6ti3Yih5Dxb7bU/DY/uhO1+L8jSWvmAoAx+FzrX
-	 QstVgmxWmDzdfMH2hpGvJllGPnTT8nBJ0ZAjSxX/NiNe9u9xftke9DSpn35nJFPeCa
-	 UIKxtsDATdRNA==
-Date: Fri, 29 Aug 2025 02:54:48 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Denis Aleksandrov <daleksan@redhat.com>
-Cc: Paul Menzel <pmenzel@molgen.mpg.de>, peterhuewe@gmx.de, jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org, Jan Stancek <jstancek@redhat.com>
-Subject: Re: [PATCH v2] tpm: prevents local DOS via tpm/tpm0/ppi/*operations
-Message-ID: <aLDsSLVH4hdXTa2J@kernel.org>
-References: <20250827022102.17731-1-daleksan@redhat.com>
- <e576d3a8-2693-4445-8cd0-997afb5e5dc2@molgen.mpg.de>
- <aK7-rTTqg--lM9if@kernel.org>
- <CAG+gbFd-Y=VO0c7zU8a9DtpAEHGDjhpwk_nsiBg5FHA1qVy4yg@mail.gmail.com>
+	s=arc-20240116; t=1756489961; c=relaxed/simple;
+	bh=67BiwGDF2QshU4Cqu4P3f9Cn9P9ApYmC7Xwv0YVdjjk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U3MAZ1BfNbWTezMJCikKaNDCzqKnERU17Q/M8yQDhxfQGVTP49Uyq3ySz6hMmVmIBGkEPHQwv4UD6KhbWN5xT44PFLY7lBsFkZIIZwNUSuFtvPwoUAH1o0tiK3D8Ha8cySRovw66Lsm+ZFgkmjRJbNSWv/He/nGGwDBciXUJ2zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=L9MSJNvF; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756489956;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ey9cpKGoTIW3egBjfZcs4xRk6vKxtTKk6VcxXuz3jEc=;
+	b=L9MSJNvFJKVV4wOgAvxMw9o2YYRoyS97U33sx8BxLyi6C+Q/39EEWxgWUGxE9ebOSJE53p
+	36EbYo4ygWthA0DYJAf+2NFS+hq9qDUJ6RZlRtKFGCia1GacCSLlN19835d6GArBbJkpf4
+	vnV4IObFQC+uvdFAARLSYdphnRhyhag=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-225-ovU2A5F2P-SnFjp_gzjSbA-1; Fri, 29 Aug 2025 13:52:34 -0400
+X-MC-Unique: ovU2A5F2P-SnFjp_gzjSbA-1
+X-Mimecast-MFC-AGG-ID: ovU2A5F2P-SnFjp_gzjSbA_1756489954
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7e8704c5867so787341985a.1
+        for <linux-integrity@vger.kernel.org>; Fri, 29 Aug 2025 10:52:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756489954; x=1757094754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ey9cpKGoTIW3egBjfZcs4xRk6vKxtTKk6VcxXuz3jEc=;
+        b=MUZ160MJvrQp0E4J0Hp9tTSodnJ3rQbQzJdA3ey1tVhI/KxrmmuCel0hFbLCi25k2n
+         PLkqQfBjgUAOiyg9IQF9EA9PIRAfGL82cQCkpgaeB1xpezOorZY6bmI9STDSeZyMAKpO
+         Av9wW5p61Bwz16bVP/yQlVQI+RevpHhtJ8X1tSm9OplLDDY4+TUN9YS3fo+2YPGpoo7A
+         +o25PFTGCF2S2nDx29+AOKE/2FVQ/4/e55N2aIxv9RB+9jP635NoA64Xz+OFHmaWu5kA
+         AI75IxrG/H6s2zp/VaXXgQ9K9JwHLSjZgk83XnfWIACLyDBk/xwpwM6pW0f2aE2pUaAB
+         tJeA==
+X-Forwarded-Encrypted: i=1; AJvYcCXnpJ+DuXXzeeRd0sqxN3DkyyN3vXJBhQdRwJX9NQKXf4FYB6+q23Bgwm/0rTGJnDmhn5u2vlXLnVWuBpMnqnI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY/v5HH/hb6TSj/9aib0IENg/LxaeeBa/H8Z/h8O55bOgzZg+w
+	JDXQtSMCVr9vWx5y5jmQxhLAqCW7Hsft+6IOiT9V0rKsLMI6v85VDItZc+LBG4JXfiA64ebwT0g
+	5DVeVLKrO+kaf0uVNVoQz0IZGvcOyQuR7R4Nf1F45tAwyINCq5znBXsorcvrPXXrYiWyhmw==
+X-Gm-Gg: ASbGncvM+5iGWVfBavR6yPHrnRucPb5Z6bm8k3VNnfjteLTvTPLgbcMk9wWZ1KXSI+g
+	jnT6EaijVoF1G0dFxNqoo36lgTPQusKhoeYEBK0UGjKyBhB25hd+vgQLj3IFurreDGumZHxOjrc
+	G4n/Ca3h2njaW9QgkWECkkz01Sj3XWkrJeqTQjVxLbAS3YojseA/Hxp1xaTJRAphGyl8oQsvQ87
+	8QBVX+1WycEsXatRYjRRueRwOcpWPHE/MnkzIyMYiSjzZamRajotw27Oj91AGJX/7uG9oO3rExk
+	f60fyJXLM1wWsg/hMqkGZxhMZqE4sSY5zqBaYiKsskuF8EtvtFppdko1TpoBBPQtQUYQSa/uOWx
+	PDttewJbu3NTR6J56wV4ZQUj9D3JT6U87BI5MzYwuR+9cCDNJgRcI8apDYRrBhiBm47164w3s5i
+	g=
+X-Received: by 2002:a05:620a:2953:b0:7f7:e6de:3709 with SMTP id af79cd13be357-7f7e6de39c0mr1211905885a.32.1756489954246;
+        Fri, 29 Aug 2025 10:52:34 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH1Ym/WQxhbPtyU3s+3io8JIhGJEAnrd+ViRQ3EDhQvcAEwhubikpbzkxidOztKivWcOMBWqw==
+X-Received: by 2002:a05:620a:2953:b0:7f7:e6de:3709 with SMTP id af79cd13be357-7f7e6de39c0mr1211902085a.32.1756489953713;
+        Fri, 29 Aug 2025 10:52:33 -0700 (PDT)
+Received: from daleksan-thinkpadp1gen3.boston.csb (146-115-41-251.s4857.c3-0.abr-cbr1.sbo-abr.ma.cable.rcncustomer.com. [146.115.41.251])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b30b6715desm20258101cf.24.2025.08.29.10.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Aug 2025 10:52:33 -0700 (PDT)
+From: Denis Aleksandrov <daleksan@redhat.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org,
+	Denis Aleksandrov <daleksan@redhat.com>,
+	Jan Stancek <jstancek@redhat.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: [PATCH v3] tpm: Prevent local DOS via tpm/tpm0/ppi/*operations
+Date: Fri, 29 Aug 2025 13:51:53 -0400
+Message-ID: <20250829175152.9704-2-daleksan@redhat.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG+gbFd-Y=VO0c7zU8a9DtpAEHGDjhpwk_nsiBg5FHA1qVy4yg@mail.gmail.com>
 
-On Thu, Aug 28, 2025 at 11:35:31AM -0400, Denis Aleksandrov wrote:
-> On Wed, Aug 27, 2025 at 8:48 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > On Wed, Aug 27, 2025 at 07:55:23AM +0200, Paul Menzel wrote:
-> > > Dear Denis,
-> > >
-> > >
-> > > Thank you for your patch. In the summary, I’d use imperative mood:
-> >
-> > +1
-> >
-> 
-> I can add this in a v3.
-> 
-> > >
-> > > tpm: Prevent local DOS …
-> > >
-> > > Am 27.08.25 um 04:21 schrieb Denis Aleksandrov:
-> > > > Reads on tpm/tpm0/ppi/*operations can become very long on
-> > > > misconfigured systems. Reading the TPM is a blocking operation,
-> > > > thus a user could effectively trigger a DOS.
-> > > >
-> > > > Resolve this by caching the results and avoiding the blocking
-> > > > operations after the first read.
-> > >
-> > > If you could elaborate, how to test this, and in possible error cases, how
-> > > to debug this – for example, how to disable the cache–, that’d be great.
-> >
-> > +1
-> >
-> 
-> The issue is that this bug is not replicable on most systems, but the way that
-> I've been able to test it is by running the following:
-> $ time cat /sys/devices/pnp0/00:0a/tpm/tpm0/ppi/tcg_operations
-> and
-> $ time cat /sys/devices/pnp0/00:0a/tpm/tpm0/ppi/vs_operations
-> On a system that I know is experiencing the DOS symptom.
-> 
-> For debugging, I've been using an unpatched kernel and running the same
-> commands.
-> 
-> > >
-> > > >
-> > > > Reported-by: Jan Stancek <jstancek@redhat.com>
-> > > > Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
-> 
-> I'll make sure to add the Suggested-by tag in the future, and the v3.
-> Sorry about that.
-> 
-> > > > ---
-> > > >
-> > > > Changes in v2:
-> > > >   - Replaced file permission change with a caching mechanism as
-> > > >     suggested by Jarkko.
-> > > >
-> > > >   drivers/char/tpm/tpm_ppi.c | 88 ++++++++++++++++++++++++++++----------
-> > > >   1 file changed, 65 insertions(+), 23 deletions(-)
-> > > >
-> > > > diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-> > > > index d53fce1c9d6f..e0212893748e 100644
-> > > > --- a/drivers/char/tpm/tpm_ppi.c
-> > > > +++ b/drivers/char/tpm/tpm_ppi.c
-> > > > @@ -33,6 +33,21 @@ static const guid_t tpm_ppi_guid =
-> > > >     GUID_INIT(0x3DDDFAA6, 0x361B, 0x4EB4,
-> > > >               0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53);
-> > > > +static const char * const tpm_ppi_info[] = {
-> > > > +   "Not implemented",
-> > > > +   "BIOS only",
-> > > > +   "Blocked for OS by BIOS",
-> > >
-> > > Is this x86 specific? If not maybe use *system firmware*?
-> > >
-> 
-> This was the original implementation, but I can change the info message to
-> be more general. I can add it to the v3.
+Reads on tpm/tpm0/ppi/*operations can become very long on
+misconfigured systems. Reading the TPM is a blocking operation,
+thus a user could effectively trigger a DOS.
 
-Sure, no need for apologies it was just a remark :-)
+Resolve this by caching the results and avoiding the blocking
+operations after the first read.
 
-Go ahead and send v3. I'll test that version.
+Reported-by: Jan Stancek <jstancek@redhat.com>
+Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
+Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+---
 
-BR, Jarkko
+Changes in v3:
+	- Generalizes ppi info to all architectures.
+	- Adds reporting of "Not implemented" in ppi operations range.
+
+ drivers/char/tpm/tpm_ppi.c | 88 ++++++++++++++++++++++++++++----------
+ 1 file changed, 65 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+index d53fce1c9d6f..a59b6da69bf6 100644
+--- a/drivers/char/tpm/tpm_ppi.c
++++ b/drivers/char/tpm/tpm_ppi.c
+@@ -33,6 +33,21 @@ static const guid_t tpm_ppi_guid =
+ 	GUID_INIT(0x3DDDFAA6, 0x361B, 0x4EB4,
+ 		  0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53);
+ 
++static const char * const tpm_ppi_info[] = {
++	"Not implemented",
++	"BIOS only",
++	"Blocked for OS by system firmware",
++	"User required",
++	"User not required",
++};
++
++/* A spinlock to protect access to the cache from concurrent reads */
++static DEFINE_SPINLOCK(tpm_ppi_lock);
++
++static u32 ppi_operations_cache[PPI_VS_REQ_END + 1];
++
++static bool ppi_cache_populated;
++
+ static bool tpm_ppi_req_has_parameter(u64 req)
+ {
+ 	return req == 23;
+@@ -277,8 +292,7 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
+ 	return status;
+ }
+ 
+-static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+-				   u32 end)
++static ssize_t cache_ppi_operations(acpi_handle dev_handle, char *buf)
+ {
+ 	int i;
+ 	u32 ret;
+@@ -286,34 +300,22 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+ 	union acpi_object *obj, tmp;
+ 	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
+ 
+-	static char *info[] = {
+-		"Not implemented",
+-		"BIOS only",
+-		"Blocked for OS by BIOS",
+-		"User required",
+-		"User not required",
+-	};
+-
+ 	if (!acpi_check_dsm(dev_handle, &tpm_ppi_guid, TPM_PPI_REVISION_ID_1,
+ 			    1 << TPM_PPI_FN_GETOPR))
+ 		return -EPERM;
+ 
+ 	tmp.integer.type = ACPI_TYPE_INTEGER;
+-	for (i = start; i <= end; i++) {
++	for (i = 0; i <= PPI_VS_REQ_END; i++) {
+ 		tmp.integer.value = i;
+ 		obj = tpm_eval_dsm(dev_handle, TPM_PPI_FN_GETOPR,
+ 				   ACPI_TYPE_INTEGER, &argv,
+ 				   TPM_PPI_REVISION_ID_1);
+-		if (!obj) {
++		if (!obj)
+ 			return -ENOMEM;
+-		} else {
+-			ret = obj->integer.value;
+-			ACPI_FREE(obj);
+-		}
+ 
+-		if (ret > 0 && ret < ARRAY_SIZE(info))
+-			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+-					     i, ret, info[ret]);
++		ret = obj->integer.value;
++		ppi_operations_cache[i] = ret;
++		ACPI_FREE(obj);
+ 	}
+ 
+ 	return len;
+@@ -323,20 +325,60 @@ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+ 					   struct device_attribute *attr,
+ 					   char *buf)
+ {
++	int i;
++	ssize_t len = 0;
++	u32 ret;
+ 	struct tpm_chip *chip = to_tpm_chip(dev);
+ 
+-	return show_ppi_operations(chip->acpi_dev_handle, buf, 0,
+-				   PPI_TPM_REQ_MAX);
++	spin_lock(&tpm_ppi_lock);
++	if (!ppi_cache_populated) {
++		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
++
++		if (len < 0)
++			return len;
++
++		ppi_cache_populated = true;
++	}
++
++	for (i = 0; i <= PPI_TPM_REQ_MAX; i++) {
++		ret = ppi_operations_cache[i];
++		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
++			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
++							i, ret, tpm_ppi_info[ret]);
++	}
++	spin_unlock(&tpm_ppi_lock);
++
++	return len;
+ }
+ 
+ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+ 					  struct device_attribute *attr,
+ 					  char *buf)
+ {
++	int i;
++	ssize_t len = 0;
++	u32 ret;
+ 	struct tpm_chip *chip = to_tpm_chip(dev);
+ 
+-	return show_ppi_operations(chip->acpi_dev_handle, buf, PPI_VS_REQ_START,
+-				   PPI_VS_REQ_END);
++	spin_lock(&tpm_ppi_lock);
++	if (!ppi_cache_populated) {
++		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
++
++		if (len < 0)
++			return len;
++
++		ppi_cache_populated = true;
++	}
++
++	for (i = PPI_VS_REQ_START; i <= PPI_VS_REQ_END; i++) {
++		ret = ppi_operations_cache[i];
++		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
++			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
++							i, ret, tpm_ppi_info[ret]);
++	}
++	spin_unlock(&tpm_ppi_lock);
++
++	return len;
+ }
+ 
+ static DEVICE_ATTR(version, S_IRUGO, tpm_show_ppi_version, NULL);
+-- 
+2.48.1
+
 
