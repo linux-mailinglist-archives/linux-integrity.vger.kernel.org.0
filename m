@@ -1,187 +1,200 @@
-Return-Path: <linux-integrity+bounces-6953-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6954-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B414B3DED1
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Sep 2025 11:42:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8876BB3E0FE
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Sep 2025 13:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE27F189AE64
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Sep 2025 09:42:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A68D201A57
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Sep 2025 11:06:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C7F309DC1;
-	Mon,  1 Sep 2025 09:41:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F2603115AC;
+	Mon,  1 Sep 2025 11:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zhHF+ZPQ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286C623E23C;
-	Mon,  1 Sep 2025 09:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EAFD3112DA
+	for <linux-integrity@vger.kernel.org>; Mon,  1 Sep 2025 11:05:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756719673; cv=none; b=clhaBZraJXjorHnOgUbwtz+f6dvnS+EUi8c+2I/1WaBeWmpHo82BsDGKrKssN+2e8bETpnmxZwPrbhe7Q9IN+lR/61GZYawMKSgpHBL9KtMkR/lg3tJaa4LERGA2JtwssEWqh9ow/2o/84tW6BnuLM6+mxA/YefOET9mWBzQe5Y=
+	t=1756724757; cv=none; b=dteXhuUC7v5P46r3NPsJapGJpln9cNcpxuLDOICbI5RhLzPG9D2c8WFDl63Dgj/hugCbIrX+AslwP46YoJK5EnACZ4n7kycQbJXcVYnBHnr+0X2OIcwxx8w5KHgvwYub97tzwgt0+7uRZAoTs4XmhYb96+lsbkSlS5ZIxEWVnO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756719673; c=relaxed/simple;
-	bh=tTYf9LKW6XZAWe8Mq9GSfJKgl+eQpwHG4OYySo6GQLc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=n39j9hn00eH6jAd6oN8WiFXQb8vt/ukkXAuNxAipTKMEPWhnCNjZlHyqTXZwFqqES9rJsqCh2wDf7Vt9djh4/HLUIdE+/6uK3Ikm/Z7D/SDA+lQF2U0bn1XAKkJYY1WIjwd9owpQ13a9y/TY2BicJ7cyEr1+NPOMz72jz9tf84M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4cFk1X1B79z1HBR7;
-	Mon,  1 Sep 2025 17:22:56 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id CBB331402C4;
-	Mon,  1 Sep 2025 17:24:39 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwAXbEFDZrVod9SLAA--.60560S2;
-	Mon, 01 Sep 2025 10:24:38 +0100 (CET)
-Message-ID: <54e27d05bae55749a975bc7cbe109b237b2b1323.camel@huaweicloud.com>
-Subject: Re: [RFC PATCH v1 0/2] Add O_DENY_WRITE (complement AT_EXECVE_CHECK)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Aleksa Sarai <cyphar@cyphar.com>, =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=
-	 <mic@digikod.net>
-Cc: Christian Brauner <brauner@kernel.org>, Al Viro
- <viro@zeniv.linux.org.uk>,  Kees Cook <keescook@chromium.org>, Paul Moore
- <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>,  Andy Lutomirski
- <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Christian Heimes
- <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, Elliott Hughes
- <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, Florian Weimer
- <fweimer@redhat.com>, Jann Horn <jannh@google.com>, Jeff Xu
- <jeffxu@google.com>,  Jonathan Corbet <corbet@lwn.net>, Jordan R Abrahams
- <ajordanr@google.com>, Lakshmi Ramasubramanian
- <nramas@linux.microsoft.com>, Luca Boccassi <bluca@debian.org>, Matt
- Bobrowski <mattbobrowski@google.com>, Miklos Szeredi <mszeredi@redhat.com>,
- Mimi Zohar <zohar@linux.ibm.com>, Nicolas Bouchinet
- <nicolas.bouchinet@oss.cyber.gouv.fr>,  Robert Waite
- <rowait@microsoft.com>, Roberto Sassu <roberto.sassu@huawei.com>, Scott
- Shell <scottsh@microsoft.com>, Steve Dower <steve.dower@python.org>, Steve
- Grubb <sgrubb@redhat.com>, kernel-hardening@lists.openwall.com, 
- linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-security-module@vger.kernel.org
-Date: Mon, 01 Sep 2025 11:24:17 +0200
-In-Reply-To: <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
-References: <20250822170800.2116980-1-mic@digikod.net>
-	 <20250826-skorpion-magma-141496988fdc@brauner>
-	 <20250826.aig5aiShunga@digikod.net>
-	 <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1756724757; c=relaxed/simple;
+	bh=p5+1izTU/BboUNRpObEumq/hltcsExWIGEz2Tq4Mlo4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fgBtyrU97pXRAk635q4uS/GA/gAqiHy/l/rTibeR4jf29/MMQToE14mWdZxaZOBVhr/lS3+n3Rv1yKbYVW8MOzw3grNEY0Ex8CZPTuLyV6O4BsGKyfPGBKZaNT+I8ABbk2ILzUGTFcloE9ISApBXGnDR6Iq8SwK56d75O4+bACE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zhHF+ZPQ; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-61d14448c22so10900a12.1
+        for <linux-integrity@vger.kernel.org>; Mon, 01 Sep 2025 04:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1756724754; x=1757329554; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H2Gn0F3UVjDM2gGMhXQsx0gqpBNXUu+/C4/628F9+6w=;
+        b=zhHF+ZPQQ/cdUNcvWh9wRQxdLj+Q5qvDkcVdB4GsJu8w4TG/Sx7VpadW/u2+VM90kD
+         MWZ7KefcoVJDE66nFlxhSUWnTyKzQ6+8DGPWC0YAb+M7J3SMBjcPUa9fac/4kqFdiRZN
+         bmh8xPNpN356jqTIFE3lvh5rIAIDMSHzPKvvSRz8b1sP/z2gjnf/aYTzUszPpz4eo4Rc
+         Ek7LC+xd7MHhUINzM69dKqVr0ImvVRnaxDNJB100uSTNhQTz98goiqH6BFPo4v+fgMsJ
+         0/sASHjaxJbup7ylconpLxJdRZRsJhpr3kDIQ6pv6z18H/VYgUcwY36BQHszM9smF9JM
+         GKbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756724754; x=1757329554;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H2Gn0F3UVjDM2gGMhXQsx0gqpBNXUu+/C4/628F9+6w=;
+        b=AVyu/tzM/7qvyQqrm0UqgkuKqRryh5r68C+ppMekYMQZ934sLtjiT504ztqopZyS9O
+         Rms5w/BICZofvx7dHEXCR/co0fMWe6HvxmvNLdfu6wCuP5MBrLDL6LTByJHCx9VncIOi
+         KMDSg2LuczkuFEX2H4YU3cWezNpTlL7m57um6Wq2rQVs2HmIqzxx+Ra3OrcRMKkJ1Cjs
+         p1mS8lBPOD/TGcqzgLnICewRyyDLDsgPQX/s9xkzG3hPo0gLHnE9kUObzhWHpKMSMpcr
+         rhlNUlNmf76dGbnoCwX+nM7bYidXNHbA0fbfUl8TFICM0t95/M0p7iRnUza6EGoLMptB
+         hRAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV2RhP/zmz4mPcxiuivNNxiNXIFIFW2AfFsXHKKbzXHZJmRAgcf/W5pxS4y1XV/ZqABzRTHiyKdIwacJjvwAHc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfvtYQAC2un4/LKmJ3jZCHVNGGcbvVFPO6GT5nKKM1AqYmH1aF
+	ZJKzO5fpE5YMiwPtkMm3zJQQfS2M7M3UL3/pyC9UxgH7/RtLuTWJHe2S8BOpUsPJ+ja23e46BzY
+	U1hjPNb/m48ts8E8pF63+W2cXZUvKHi06bqXadDRJ
+X-Gm-Gg: ASbGncs1uMpTAmLXdYm+Fptgr31evD0dhRCP8Z7Xeb9h1bNF9txPqVtX+cbXQgYjUwt
+	BY1hUYJTyUXQbw08Iae3MATO8b5Lql4Ca9Cce0AztdthrlBEW+IVmDDuypGuxpdKL5pqH27eaCA
+	hidrosplkcvZUAM/uUf/x+rQP0Mazfg9YEq4QBc+fRN3wM28gbIQGjtkKUbZZl+xbDeiPw59qe3
+	93GwH/jaKiEwhY3TlDbJvmHEmCezixNTRQVEK99dw==
+X-Google-Smtp-Source: AGHT+IEX9I7U3nv8ZNRMUsZz4F6PIX/KTn5ofQX/L8rVN2zWLtQUH9G0KmEck4019L1pfWH3sn8LvwP06awvWqA6Rb8=
+X-Received: by 2002:a05:6402:14ca:b0:61e:a896:de87 with SMTP id
+ 4fb4d7f45d1cf-61ea896df66mr30742a12.2.1756724753434; Mon, 01 Sep 2025
+ 04:05:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwAXbEFDZrVod9SLAA--.60560S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF15Gr15Jr4xtrW8Zw4fKrg_yoWrCFyfpF
-	WFqwnIkF1DJr1Iyw1xC3WxZ3yFywsxJay3Jr95JrykA3W5uF1Igr1fKr4YvFZrCF4fKw1j
-	vrWIv3s8urWDAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
-	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	EksDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBGi1Q8AC1wAAsc
+References: <20250822170800.2116980-1-mic@digikod.net> <20250826-skorpion-magma-141496988fdc@brauner>
+ <20250826.aig5aiShunga@digikod.net> <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
+ <CALCETrWHKga33bvzUHnd-mRQUeNXTtXSS8Y8+40d5bxv-CqBhw@mail.gmail.com> <aLDDk4x7QBKxLmoi@mail.hallyn.com>
+In-Reply-To: <aLDDk4x7QBKxLmoi@mail.hallyn.com>
+From: Jann Horn <jannh@google.com>
+Date: Mon, 1 Sep 2025 13:05:16 +0200
+X-Gm-Features: Ac12FXz5pCbJNirecqxwiyEggxW7kJ9K_j8hu8U2LuwZM19I7qdULHA6wz1yLJg
+Message-ID: <CAG48ez0p1B9nmG3ZyNRywaSYTtEULSpbxueia912nVpg2Q7WYA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/2] Add O_DENY_WRITE (complement AT_EXECVE_CHECK)
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Aleksa Sarai <cyphar@cyphar.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Christian Heimes <christian@python.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Elliott Hughes <enh@google.com>, Fan Wu <wufan@linux.microsoft.com>, 
+	Florian Weimer <fweimer@redhat.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Jordan R Abrahams <ajordanr@google.com>, Lakshmi Ramasubramanian <nramas@linux.microsoft.com>, 
+	Luca Boccassi <bluca@debian.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Miklos Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Robert Waite <rowait@microsoft.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Scott Shell <scottsh@microsoft.com>, 
+	Steve Dower <steve.dower@python.org>, Steve Grubb <sgrubb@redhat.com>, 
+	kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2025-08-28 at 10:14 +1000, Aleksa Sarai wrote:
-> On 2025-08-26, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
-> > On Tue, Aug 26, 2025 at 11:07:03AM +0200, Christian Brauner wrote:
-> > > Nothing has changed in that regard and I'm not interested in stuffing
-> > > the VFS APIs full of special-purpose behavior to work around the fact
-> > > that this is work that needs to be done in userspace. Change the apps=
-,
-> > > stop pushing more and more cruft into the VFS that has no business
-> > > there.
-> >=20
-> > It would be interesting to know how to patch user space to get the same
-> > guarantees...  Do you think I would propose a kernel patch otherwise?
->=20
-> You could mmap the script file with MAP_PRIVATE. This is the *actual*
-> protection the kernel uses against overwriting binaries (yes, ETXTBSY is
-> nice but IIRC there are ways to get around it anyway). Of course, most
-> interpreters don't mmap their scripts, but this is a potential solution.
-> If the security policy is based on validating the script text in some
-> way, this avoids the TOCTOU.
->=20
-> Now, in cases where you have IMA or something and you only permit signed
-> binaries to execute, you could argue there is a different race here (an
-> attacker creates a malicious script, runs it, and then replaces it with
-> a valid script's contents and metadata after the fact to get
-> AT_EXECVE_CHECK to permit the execution). However, I'm not sure that
+On Thu, Aug 28, 2025 at 11:01=E2=80=AFPM Serge E. Hallyn <serge@hallyn.com>=
+ wrote:
+> On Wed, Aug 27, 2025 at 05:32:02PM -0700, Andy Lutomirski wrote:
+> > On Wed, Aug 27, 2025 at 5:14=E2=80=AFPM Aleksa Sarai <cyphar@cyphar.com=
+> wrote:
+> > >
+> > > On 2025-08-26, Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> wrote:
+> > > > On Tue, Aug 26, 2025 at 11:07:03AM +0200, Christian Brauner wrote:
+> > > > > Nothing has changed in that regard and I'm not interested in stuf=
+fing
+> > > > > the VFS APIs full of special-purpose behavior to work around the =
+fact
+> > > > > that this is work that needs to be done in userspace. Change the =
+apps,
+> > > > > stop pushing more and more cruft into the VFS that has no busines=
+s
+> > > > > there.
+> > > >
+> > > > It would be interesting to know how to patch user space to get the =
+same
+> > > > guarantees...  Do you think I would propose a kernel patch otherwis=
+e?
+> > >
+> > > You could mmap the script file with MAP_PRIVATE. This is the *actual*
+> > > protection the kernel uses against overwriting binaries (yes, ETXTBSY=
+ is
+> > > nice but IIRC there are ways to get around it anyway).
+> >
+> > Wait, really?  MAP_PRIVATE prevents writes to the mapping from
+> > affecting the file, but I don't think that writes to the file will
+> > break the MAP_PRIVATE CoW if it's not already broken.
+> >
+> > IPython says:
+> >
+> > In [1]: import mmap, tempfile
+> >
+> > In [2]: f =3D tempfile.TemporaryFile()
+> >
+> > In [3]: f.write(b'initial contents')
+> > Out[3]: 16
+> >
+> > In [4]: f.flush()
+> >
+> > In [5]: map =3D mmap.mmap(f.fileno(), f.tell(), flags=3Dmmap.MAP_PRIVAT=
+E,
+> > prot=3Dmmap.PROT_READ)
+> >
+> > In [6]: map[:]
+> > Out[6]: b'initial contents'
+> >
+> > In [7]: f.seek(0)
+> > Out[7]: 0
+> >
+> > In [8]: f.write(b'changed')
+> > Out[8]: 7
+> >
+> > In [9]: f.flush()
+> >
+> > In [10]: map[:]
+> > Out[10]: b'changed contents'
+>
+> That was surprising to me, however, if I split the reader
+> and writer into different processes, so
 
-Uhm, let's consider measurement, I'm more familiar with.
+Testing this in python is a terrible idea because it obfuscates the
+actual syscalls from you.
 
-I think the race you wanted to express was that the attacker replaces
-the good script, verified with AT_EXECVE_CHECK, with the bad script
-after the IMA verification but before the interpreter reads it.
+> P1:
+> f =3D open("/tmp/3", "w")
+> f.write('initial contents')
+> f.flush()
+>
+> P2:
+> import mmap
+> f =3D open("/tmp/3", "r")
+> map =3D mmap.mmap(f.fileno(), f.tell(), flags=3Dmmap.MAP_PRIVATE, prot=3D=
+mmap.PROT_READ)
+>
+> Back to P1:
+> f.seek(0)
+> f.write('changed')
+>
+> Back to P2:
+> map[:]
+>
+> Then P2 gives me:
+>
+> b'initial contents'
 
-Fortunately, IMA is able to cope with this situation, since this race
-can happen for any file open, where of course a file can be not read-
-locked.
-
-If the attacker tries to concurrently open the script for write in this
-race window, IMA will report this event (called violation) in the
-measurement list, and during remote attestation it will be clear that
-the interpreter did not read what was measured.
-
-We just need to run the violation check for the BPRM_CHECK hook too
-(then, probably for us the O_DENY_WRITE flag or alternative solution
-would not be needed, for measurement).
-
-Please, let us know when you apply patches like 2a010c412853 ("fs:
-don't block i_writecount during exec"). We had a discussion [1], but
-probably I missed when it was decided to be applied (I saw now it was
-in the same thread, but didn't get that at the time). We would have
-needed to update our code accordingly. In the future, we will try to
-clarify better our expectations from the VFS.
-
-Thanks
-
-Roberto
-
-[1]: https://lore.kernel.org/linux-fsdevel/88d5a92379755413e1ec3c981d9a04e6=
-796da110.camel@huaweicloud.com/#t
-
-> this is even possible with IMA (can an unprivileged user even set
-> security.ima?). But even then, I would expect users that really need
-> this would also probably use fs-verity or dm-verity that would block
-> this kind of attack since it would render the files read-only anyway.
->=20
-> This is why a more detailed threat model of what kinds of attacks are
-> relevant is useful. I was there for the talk you gave and subsequent
-> discussion at last year's LPC, but I felt that your threat model was
-> not really fleshed out at all. I am still not sure what capabilities you
-> expect the attacker to have nor what is being used to authenticate
-> binaries (other than AT_EXECVE_CHECK). Maybe I'm wrong with my above
-> assumptions, but I can't know without knowing what threat model you have
-> in mind, *in detail*.
->=20
-> For example, if you are dealing with an attacker that has CAP_SYS_ADMIN,
-> there are plenty of ways for an attacker to execute their own code
-> without using interpreters (create a new tmpfs with fsopen(2) for
-> instance). Executable memfds are even easier and don't require
-> privileges on most systems (yes, you can block them with vm.memfd_noexec
-> but CAP_SYS_ADMIN can disable that -- and there's always fsopen(2) or
-> mount(2)).
->=20
-> (As an aside, it's a shame that AT_EXECVE_CHECK burned one of the
-> top-level AT_* bits for a per-syscall flag -- the block comment I added
-> in b4fef22c2fb9 ("uapi: explain how per-syscall AT_* flags should be
-> allocated") was meant to avoid this happening but it seems you and the
-> reviewers missed that...)
->=20
-
+Because when you executed `f.write('changed')`, Python internally
+buffered the write. "changed" is never actually written into the file
+in your example. If you add a `f.flush()` in P1 after this, running
+`map[:]` in P2 again will show you the new data.
 
