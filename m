@@ -1,57 +1,57 @@
-Return-Path: <linux-integrity+bounces-6963-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6964-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB756B3FDD8
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 13:34:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66773B400FA
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 14:44:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C64F3BD67F
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 11:34:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C79AD178417
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 12:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5471A285C9C;
-	Tue,  2 Sep 2025 11:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1A429BD92;
+	Tue,  2 Sep 2025 12:42:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IplzEo0/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sZCRd08B"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23751247298;
-	Tue,  2 Sep 2025 11:34:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D860429B8E1;
+	Tue,  2 Sep 2025 12:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756812844; cv=none; b=Z3zZABvQpSEssolSx32CRpVam1DjCmpMT9F2UFmxdkeaCqvlOiFG2bERljXfcYJ6Oq2bISWI3pyHBdYPTixZ+vOf4G1me5UydhT1248kUFqTXzhHznGMlrGR8idGj3NJXR5iJ8zaCS6c/Koiq6PPsdyGfE5h0k4LE/Vp5X3RPGo=
+	t=1756816931; cv=none; b=SJBaaEMKKmnLZDn+X27Hs2crsYUoorlEShfKB30KH/oAHTE8706/2qED6r15Px4U//dpmb8TLJCbon7yoxhvZwrgIjnoJB3yYHNYff9x3UGkN6CysNoKP+jmEzStw8CIwGyzqY5vWg1yyAUqQuxHLGsB1/z7FSUdqfGJ/5UC4PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756812844; c=relaxed/simple;
-	bh=NDEg3JUwIVXYkuZ0znIzSpopXc2IJTtscbXtwUBuMtc=;
+	s=arc-20240116; t=1756816931; c=relaxed/simple;
+	bh=vfVAXgi/xoadFdLNQPKyg6IA8NM2WS3piyY2GDuRiDI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j1xf+Munyjd3QeYjsRux3l5udadpXu83i30mRup/hSeO9qHEhibXcwz7hZuBQVfI9ngTXLkGbfajD1CrCKFK9HrUdINMfpT+V7EQgLlqebiXa1uDMxFQmw5FXnhVw8MnC/xHvEZWWVY3Y3NaupO0hCiBPKAXhQFeF1a4sEqOGCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IplzEo0/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ACADC4CEED;
-	Tue,  2 Sep 2025 11:34:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=T9ZINF7559/J1vFqdossfV6Ig+P5kRgpal7HKzSF6WZYIxvVnF70Q/ohLYDXHX7eurOpAPqagXcRc4p+AkS/hlShbQMRcxFXuR7maAXs3i2TGo4hgdzci/PzauowKwtq75n20dArjI2iOa/M7i1pLZ1+jH3AOOlPY9T11dA+GwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sZCRd08B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6360BC4CEED;
+	Tue,  2 Sep 2025 12:42:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756812843;
-	bh=NDEg3JUwIVXYkuZ0znIzSpopXc2IJTtscbXtwUBuMtc=;
+	s=k20201202; t=1756816930;
+	bh=vfVAXgi/xoadFdLNQPKyg6IA8NM2WS3piyY2GDuRiDI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IplzEo0/LCoFnSOvu7NS4cizRR773dAiCcNJRkdjSJ35knNUKaD8gnVGZrIWKkIep
-	 +1kVN/zygPiulbxI6I8dluFiF5Vqn/la/mJlFQWT5CQI+aLwz37Utwe6ZdW5n7CJHE
-	 9O9K7mjbnHDAXlbAtNsJBRLvlTfAME4zaA6m+5gLXX4eJ7/EV5LWy1QiLe2UBPxx52
-	 seqk81IEEnVOzEErROkL5ZggP8btdaaqQkXFqVWRdGOHTbcaXfYmiTou6i4lwEe0AT
-	 eSZPIO/TbSA2U2Zj1nEOZojX3S8gNQCOI+5KUKawcRriM1PFVH4LQzau5JuVuX53V1
-	 cO8dfO43FFCxg==
-Date: Tue, 2 Sep 2025 12:33:58 +0100
+	b=sZCRd08BOuFqi4xDMDXSY4mSBtD7aWXhCzNa1EiUuStTllrufiB2M7hX8WQyL3d+H
+	 yfNUAeapHP1iiF+Ui+BnCDAingaYfo+kqDrdGYDIpe7zstaEehQSjbI4C6EGgLzlRh
+	 HU5PlaKkR0iAMcUeCPx+HAVik87lGQXUtS7XH/9yRBCqpFjASpBXIOAxFNTbv90ukh
+	 JC+SWE4B1OBcOUf/foBq7kWn3Ij6DZNIBE2Sj5I887z68tnm9I6m9izLKVRWX07j4O
+	 QEgc8d1FxpkcNGaCL8UuDCV6wGjxUileXxvVUWH62Fp5oEUY+eZQ2B6FBL60zEFxrn
+	 Yb7lcQkSNmqDQ==
+Date: Tue, 2 Sep 2025 13:42:05 +0100
 From: Lee Jones <lee@kernel.org>
-To: herbert@gondor.apana.org.au, jarkko@kernel.org,
-	Qunqin Zhao <zhaoqunqin@loongson.cn>
-Cc: linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+To: Qunqin Zhao <zhaoqunqin@loongson.cn>
+Cc: herbert@gondor.apana.org.au, jarkko@kernel.org,
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
 	davem@davemloft.net, linux-crypto@vger.kernel.org,
 	peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v12 0/4] Add Loongson Security Engine chip driver
-Message-ID: <20250902113358.GI2163762@google.com>
+Subject: [GIT PULL] Immutable branch between MFD, Char and Crypto due for the
+ v6.18 merge window
+Message-ID: <20250902124205.GL2163762@google.com>
 References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
- <175681275359.2293173.7663755797512449740.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -61,35 +61,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <175681275359.2293173.7663755797512449740.b4-ty@kernel.org>
+In-Reply-To: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
 
-On Tue, 02 Sep 2025, Lee Jones wrote:
+Enjoy!
 
-> On Sat, 05 Jul 2025 15:20:41 +0800, Qunqin Zhao wrote:
-> > The Loongson Security Engine chip supports RNG, SM2, SM3 and SM4
-> > accelerator engines. Each engine have its own DMA buffer provided
-> > by the controller. The kernel cannot directly send commands to the
-> > engine and must first send them to the controller, which will
-> > forward them to the corresponding engine. Based on these engines,
-> > TPM2 have been implemented in the chip, then let's treat TPM2 itself
-> > as an engine.
-> > 
-> > [...]
-> 
-> Applied, thanks!
-> 
-> [1/4] mfd: Add support for Loongson Security Engine chip controller
->       commit: e551fa3159e3050c26ff010c3b595b45d7eb071a
-> [2/4] crypto: loongson - add Loongson RNG driver support
->       commit: 766b2d724c8df071031412eea902b566a0049c31
-> [3/4] tpm: Add a driver for Loongson TPM device
->       commit: 5c83b07df9c5a6e063328c5b885de79f8e8f0263
-> [4/4] MAINTAINERS: Add entry for Loongson Security Engine drivers
->       commit: 74fddd5fbab879a7d039d9fb49af923927a64811
+The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
 
-Submitted for testing.  I'll send out a PR once successful.
+  Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
 
-Note to self: ib-mfd-char-crypto-6.18
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-char-crypto-v6.18
+
+for you to fetch changes up to 74fddd5fbab879a7d039d9fb49af923927a64811:
+
+  MAINTAINERS: Add entry for Loongson Security Engine drivers (2025-09-02 12:29:57 +0100)
+
+----------------------------------------------------------------
+Immutable branch between MFD, Char and Crypto due for the v6.18 merge window
+
+----------------------------------------------------------------
+Qunqin Zhao (4):
+      mfd: Add support for Loongson Security Engine chip controller
+      crypto: loongson - add Loongson RNG driver support
+      tpm: Add a driver for Loongson TPM device
+      MAINTAINERS: Add entry for Loongson Security Engine drivers
+
+ MAINTAINERS                            |   9 ++
+ drivers/char/tpm/Kconfig               |   9 ++
+ drivers/char/tpm/Makefile              |   1 +
+ drivers/char/tpm/tpm_loongson.c        |  84 +++++++++++
+ drivers/crypto/Kconfig                 |   1 +
+ drivers/crypto/Makefile                |   1 +
+ drivers/crypto/loongson/Kconfig        |   5 +
+ drivers/crypto/loongson/Makefile       |   1 +
+ drivers/crypto/loongson/loongson-rng.c | 209 +++++++++++++++++++++++++++
+ drivers/mfd/Kconfig                    |  11 ++
+ drivers/mfd/Makefile                   |   2 +
+ drivers/mfd/loongson-se.c              | 253 +++++++++++++++++++++++++++++++++
+ include/linux/mfd/loongson-se.h        |  53 +++++++
+ 13 files changed, 639 insertions(+)
+ create mode 100644 drivers/char/tpm/tpm_loongson.c
+ create mode 100644 drivers/crypto/loongson/Kconfig
+ create mode 100644 drivers/crypto/loongson/Makefile
+ create mode 100644 drivers/crypto/loongson/loongson-rng.c
+ create mode 100644 drivers/mfd/loongson-se.c
+ create mode 100644 include/linux/mfd/loongson-se.h
 
 -- 
 Lee Jones [李琼斯]
