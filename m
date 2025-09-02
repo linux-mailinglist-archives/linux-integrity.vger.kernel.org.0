@@ -1,89 +1,89 @@
-Return-Path: <linux-integrity+bounces-6971-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6972-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB7A0B40B2B
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 18:53:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 131B8B40B42
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 18:56:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42643189F9C2
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 16:54:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE79A4E28E1
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 16:55:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BB852E4241;
-	Tue,  2 Sep 2025 16:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACB933CEB7;
+	Tue,  2 Sep 2025 16:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="vlXaI+pB"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="IRO/DUHL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4F52F6594
-	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 16:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0BF2F6594
+	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 16:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756832032; cv=none; b=TOl0PpwdLKRQubjZQm3SCVdxZUmrflv8myc2I8rD12RQjEv98mbFxL1QwIA3xYyZ3VgXX9e94SP0NCkZRprakmAYRjDHzIC5iVaQoZ/YZpLsBh2tHtDq2oEIwr4qDwO+7QELid5ZZxTgJ3wQ9m7wjbVwIxOSgBXBb9Iooi75mY8=
+	t=1756832146; cv=none; b=S4yZM99M8acClGjFpscTDuJJSkg6RCjL9asFo7yvSzTILh8TgQtdkGDPfKismr7Fnkcz9IaGiVgRrC6YAAyJPC9SitK/4zBp6EHRe/xWqJy5eYzBsmPgRp+EvMMwByu1DBt36/0xhvDQzC1TdLdp/Ku2aL5pGPJtaOoxbgK1ncw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756832032; c=relaxed/simple;
-	bh=30XQ6tkc1YhEQ6UZWGp9RGftrfvqpn/DxIVuoenzK38=;
+	s=arc-20240116; t=1756832146; c=relaxed/simple;
+	bh=/xxeE059uo86Lbu9QoxapeearuJKgwvVQglnaDL81RM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cje9a9QGE0VfJjoHpjoWrBmmnd/VsNp7mafQtKlyb+BERPLZbxEE4Mqy/u7b8oWH10jqd0LvS5ue6btRJa6fwIVtq07gBeUsaCWosKcy/nTveZJ4EJkGApMo6WrDM8kUPm2wpWRFIpZHuwEJ+G0pNYTLW5oqQi5Il0CUhzTJbx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=vlXaI+pB; arc=none smtp.client-ip=185.125.188.122
+	 In-Reply-To:Content-Type; b=aOoKVeKG0hmJxlLxxFGHATqUkLjpplK42pHV7hNvKrJGbNUkbOIHBhTDHDHWttyAGEqZqGIj/WJdKPNXStvZBxhp/Vrxx2DcGHkhex3EvseNM5Gti1MiFrj1kQll/cWe2qtBvebTfFZMu960PjXKRoEtRGGQ/6yhz93ShxEaUDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=IRO/DUHL; arc=none smtp.client-ip=185.125.188.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B4DC03F5B7
-	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 16:53:48 +0000 (UTC)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 915923F289
+	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 16:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1756832028;
-	bh=T+7jN7cEM1G09nGFPNHBEb1kKweKEUGK2LzUhIAIkyQ=;
+	s=20210705; t=1756832142;
+	bh=EY90WhhIV0VerTGq9O80b9w7uZTFSHb4YSkwpYsnu8o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=vlXaI+pB5ZzCfvW+VwQyUW4baLko5r7jVqj/AkhnC5z4XYUVPzCk/jBZ1kOJOXy6D
-	 lfTd8cn36KJqNWNpRLQjLLOe8Y3z1xKCOJRZB04oUIqqoieeo/Jr0nMRQOMYWWiMGH
-	 DBRc7mJbeP2GEEOA+u0YzwvhxtvoxGoMYNNqLDagkpAQ1diDs9tKzxx3tCDsitgcpa
-	 gxDNnBEdsgPDzIE0e22KzQiuSUsXAjAfqadX/S18fsezqg6JoMTowL4hBusDxPcJXm
-	 5FqUpdyt5Cs9o8tjnXbiV4K3Yn8c+LyLyonQsLD7XCSzZgmVZ+TeX3yRtZfBZy7+wj
-	 dS/+u2YVbzFBQ==
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-24456ebed7bso1109065ad.0
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Sep 2025 09:53:48 -0700 (PDT)
+	b=IRO/DUHLZnpYQjtsK4cqq2zQXkeyogPI4LYZmpMJdv2wISDhkWSc/f553JnMYDy5g
+	 7/bZh5KxWbcChynysKBmH3+H6D/6WqsNe3DUA1u283RTiJdf1ar2++q+KI65vFUn5S
+	 VEzh9ad15y37zc2k9i6CZ+s+L8EfGBf/XNouXoUJv0Qchs+aKQVWUAmsr4kXui6lCx
+	 VYrroL5OFZVM9r4+W9ScYkpv5mubXxy5YdPzXmB/c3i4x/Eid0HEukjaW4wD+sV5oT
+	 27zgZS+HCISdL15Demx+XU1D0NUbjAjWZthDpWz9C2KSeoeps8lHP+jXTV+5mAvraX
+	 qlcKb+NcE7ZLQ==
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-7724046c346so2843882b3a.1
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Sep 2025 09:55:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756832027; x=1757436827;
+        d=1e100.net; s=20230601; t=1756832141; x=1757436941;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T+7jN7cEM1G09nGFPNHBEb1kKweKEUGK2LzUhIAIkyQ=;
-        b=ukdLUSuuxfhyAE9rtAmrE8ouhYLmFGzjwo8Y5RicXFoznN7g5uPArP4a7K70o4TAr7
-         ijL9cy0Ks7+ucn/8R2l444JWX4d7J592x9zfwtRL5ZDGBINH/SZ32l4ImHO0mKyU2wkF
-         UdAmmRgEqoucESV7CEhmCkkwORFHKTWsKQEWqB0f8ZBeIbN5wglVOxtWbMZPEoPSZCo0
-         7h/EMOvOcrU6I+KuylSAP9LIoz166sM0l2xm0+SotJbpsBQA465EwyZAjLxFftkjXwjk
-         9WzfWJ9XrKug7czk8zdI7KdOmKpQjDxOaYM2vT4L/rxE+1ewTG8TMYgQ2gbCql9+tLIn
-         y9Eg==
-X-Forwarded-Encrypted: i=1; AJvYcCULyDKDu5uyXlG1qcuHZD+6AXe4MIlrgkot8cksQccJt3W3MKFN02MsNevv1hcN429kwAEFAp9Q+ifrZtpb1fc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzq4cfuJaNMgkzzDCU5Jl8tNGhoVQsl1InJSYGJR7pl3lGX4wRi
-	Xrp9oXBpfZSDxmLXVnisnxOsgLN0dVz8GgEauFfohVt5JASR15Xpoc1kU+yhQT8Og7SX/1+LP0K
-	+dPfOL2eKTbD/oh2+An8CWhDYVxDE7VH2FERcmP38J53UlrN2jaG4Ge0/JaTnITgKEZGoQjcIgX
-	XxmsjwfzpQnQ==
-X-Gm-Gg: ASbGncumMbVHgh+XPaS/wxeDSGn84eZkx8Ugj5sQt1i0VbWtEtjLY2c7cBs7cPHUjDx
-	2bFvDuaVUMtqU9nU0zMZ5K1eS6QkY210G60+hso8SXXgWJu2wRBsY0j3w7jyCVseuo95LjE9VdV
-	zrvrO0HRRa3MzGtaC1zDE0L5CRJZB9LLVoStBztA+NmwXFSdGq2OylvaoV8ZYXUYqDW3HVHlN8D
-	kDFdfw54Wc0VeIDXrj9jmC+736yyFEnMrQZUpLmChSJfJcOJptVGJ3VZg65O0khIHsnLXt4Aa72
-	PkW6RExOxD4fW3lzEeZ5p82SWF4uj3OOBPYR/NUwkdU4QrtSOi182g==
-X-Received: by 2002:a17:902:c945:b0:24a:b06e:f814 with SMTP id d9443c01a7336-24ab06efee6mr112020085ad.12.1756832027107;
-        Tue, 02 Sep 2025 09:53:47 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGJRhxCp5UPNj8Y+BWmMbFgfZTYKNYOe1kOAFS3XfBptXI28wng/yTH0b8iccEaONmGWl4Ytg==
-X-Received: by 2002:a17:902:c945:b0:24a:b06e:f814 with SMTP id d9443c01a7336-24ab06efee6mr112019895ad.12.1756832026696;
-        Tue, 02 Sep 2025 09:53:46 -0700 (PDT)
+        bh=EY90WhhIV0VerTGq9O80b9w7uZTFSHb4YSkwpYsnu8o=;
+        b=RssDg0Z0qDTRNv1UjDI41+T5GHhNY4NmB/XxHl6HdAZGU8rf994cK5MnRZDL2mrS8r
+         fp8ra6whMYVaVsb5lsLXKZpqgjQvocZgvW+0gaVYDEsP9sVD7bIa+/83tINpOFW0/0k7
+         +JSYrHJOYE5H5Rdw+GYkGXbzEW3c8j1QrgpyZr0CMMOi06PaCzLln0g9RfIt79jEFDVU
+         UN9O9/0fGOBSQpPoS4YJnJiyPppfPmxidEvXfHpYHoSwl/SPz/+m6OxXkvH1uSwzW6F2
+         DqI9LQXMxLnSr8/arRDEQPqonu6ptIC2P3t6Uvm038/lAn7ra0c2ED1XZSVhmGU0Ufbe
+         er7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWNu9H1jXkUNw7zLy3KdFGByneWITOAz/gY684LOO4cMoChQu5Jb6jbPxcPP2mnFMkrPUNaEc5CRoXWcsK26xc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz69sKfxrPxkkOKiF0umsCP+MsIDvxAFnkigcvZDThRxXDGtb0x
+	1NZX5/9y1G99wIIN9pAWAk0/ZClH9z5JoqE7XhmWZT9kSiDnWgruLGZC7Q3fvMdXYUBx1XOgl1S
+	Ic7jOWgsN4c7ndxLBm3wCWnz1l6M//v4Z0zkrf3kGQXzZAbVVRSebv9vF/caucNVBtCFCshJOGd
+	ABaI6p3Ou+Fg==
+X-Gm-Gg: ASbGncvL3OY5CUFyCP4PDrBKblXBqLh0Kty3PdTB5cPkEcQHZG0o/jXsafJWbhD0TrQ
+	6Hz3m8aWwwfacUg6dZwhuWNOuNFJp+lOJjV6QaODW9Ye1kvWAkmPrr401UvI14SiFPZ5KUJeZ/j
+	hOuLE9bJF2Io9gOSY+bQpCb7i3P3cLNdcBeFkipYHjkZrYdPooGVPleBolIqTkUKatalc6lKRZQ
+	W19V49IVqnU2I/XQXVaWzdhhKydo+Ch1zU4RirRK4SHkdCVx2RpI50lIzxsAwAGSu/EIej60svQ
+	eesLHOeb+Vyya1ftfELdKOcSOGS1IXo/hFK0LnG5uywrMcD8DJU0sA==
+X-Received: by 2002:a05:6a00:80b:b0:772:50c6:47d6 with SMTP id d2e1a72fcca58-77250c660aamr11870469b3a.2.1756832140974;
+        Tue, 02 Sep 2025 09:55:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEX4U9bm5QhGjURu7Y/R0akv7pamUW72N3oR6X4atcRH2LP/ZzjHY6NVilK3eQ35cZTc/RHaw==
+X-Received: by 2002:a05:6a00:80b:b0:772:50c6:47d6 with SMTP id d2e1a72fcca58-77250c660aamr11870427b3a.2.1756832140545;
+        Tue, 02 Sep 2025 09:55:40 -0700 (PDT)
 Received: from [192.168.192.85] ([50.47.129.42])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-249037022d9sm138103805ad.23.2025.09.02.09.53.45
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-7725f9f7b50sm5803411b3a.68.2025.09.02.09.55.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Sep 2025 09:53:46 -0700 (PDT)
-Message-ID: <e1e26c8b-5f8e-42ce-9044-59c57032ee5a@canonical.com>
-Date: Tue, 2 Sep 2025 09:53:45 -0700
+        Tue, 02 Sep 2025 09:55:40 -0700 (PDT)
+Message-ID: <95872870-17fd-48ed-be0e-25dd768e2eb0@canonical.com>
+Date: Tue, 2 Sep 2025 09:55:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -91,8 +91,8 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 05/34] lsm: integrate report_lsm_order() code into
- caller
+Subject: Re: [PATCH v3 06/34] lsm: integrate lsm_early_cred() and
+ lsm_early_task() into caller
 To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
  linux-integrity@vger.kernel.org, selinux@vger.kernel.org
 Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
@@ -105,7 +105,7 @@ Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
  Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
  Xiu Jianfeng <xiujianfeng@huawei.com>
 References: <20250814225159.275901-36-paul@paul-moore.com>
- <20250814225159.275901-41-paul@paul-moore.com>
+ <20250814225159.275901-42-paul@paul-moore.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -151,82 +151,76 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <20250814225159.275901-41-paul@paul-moore.com>
+In-Reply-To: <20250814225159.275901-42-paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 8/14/25 15:50, Paul Moore wrote:
-> With only one caller of report_lsm_order(), insert the function's code
-> directly into the caller and ger rid of report_lsm_order().
+> With only one caller of lsm_early_cred() and lsm_early_task(), insert
+> the functions' code directly into the caller and ger rid of the two
+> functions.
 > 
 > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-
 Reviewed-by: John Johansen <john.johansen@canonical.com>
 
 > ---
->   security/lsm_init.c | 33 ++++++++++++---------------------
->   1 file changed, 12 insertions(+), 21 deletions(-)
+>   security/lsm_init.c | 35 +++++------------------------------
+>   1 file changed, 5 insertions(+), 30 deletions(-)
 > 
 > diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index 18828a65c364..09afa7ad719e 100644
+> index 09afa7ad719e..a8b82329c76a 100644
 > --- a/security/lsm_init.c
 > +++ b/security/lsm_init.c
-> @@ -291,26 +291,6 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+> @@ -291,34 +291,6 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
 >   	kfree(sep);
 >   }
 >   
-> -static void __init report_lsm_order(void)
+> -/**
+> - * lsm_early_cred - during initialization allocate a composite cred blob
+> - * @cred: the cred that needs a blob
+> - *
+> - * Allocate the cred blob for all the modules
+> - */
+> -static void __init lsm_early_cred(struct cred *cred)
 > -{
-> -	struct lsm_info **lsm, *early;
-> -	int first = 0;
+> -	int rc = lsm_cred_alloc(cred, GFP_KERNEL);
 > -
-> -	pr_info("initializing lsm=");
-> -
-> -	/* Report each enabled LSM name, comma separated. */
-> -	lsm_early_for_each_raw(early) {
-> -		if (is_enabled(early))
-> -			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
-> -	}
-> -	lsm_order_for_each(lsm) {
-> -		if (is_enabled(*lsm))
-> -			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
-> -	}
-> -
-> -	pr_cont("\n");
+> -	if (rc)
+> -		panic("%s: Early cred alloc failed.\n", __func__);
 > -}
 > -
->   /**
->    * lsm_early_cred - during initialization allocate a composite cred blob
->    * @cred: the cred that needs a blob
-> @@ -341,7 +321,9 @@ static void __init lsm_early_task(struct task_struct *task)
->   
+> -/**
+> - * lsm_early_task - during initialization allocate a composite task blob
+> - * @task: the task that needs a blob
+> - *
+> - * Allocate the task blob for all the modules
+> - */
+> -static void __init lsm_early_task(struct task_struct *task)
+> -{
+> -	int rc = lsm_task_alloc(task);
+> -
+> -	if (rc)
+> -		panic("%s: Early task alloc failed.\n", __func__);
+> -}
+> -
 >   static void __init ordered_lsm_init(void)
 >   {
-> +	unsigned int first = 0;
->   	struct lsm_info **lsm;
-> +	struct lsm_info *early;
+>   	unsigned int first = 0;
+> @@ -382,8 +354,11 @@ static void __init ordered_lsm_init(void)
+>   						    blob_sizes.lbs_inode, 0,
+>   						    SLAB_PANIC, NULL);
 >   
->   	if (chosen_lsm_order) {
->   		if (chosen_major_lsm) {
-> @@ -357,7 +339,16 @@ static void __init ordered_lsm_init(void)
->   		lsm_prepare(*lsm);
+> -	lsm_early_cred((struct cred *) current->cred);
+> -	lsm_early_task(current);
+> +	if (lsm_cred_alloc((struct cred *)current->cred, GFP_KERNEL))
+> +		panic("%s: early cred alloc failed.\n", __func__);
+> +	if (lsm_task_alloc(current))
+> +		panic("%s: early task alloc failed.\n", __func__);
+> +
+>   	lsm_order_for_each(lsm) {
+>   		initialize_lsm(*lsm);
 >   	}
->   
-> -	report_lsm_order();
-> +	pr_info("initializing lsm=");
-> +	lsm_early_for_each_raw(early) {
-> +		if (is_enabled(early))
-> +			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
-> +	}
-> +	lsm_order_for_each(lsm) {
-> +		if (is_enabled(*lsm))
-> +			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
-> +	}
-> +	pr_cont("\n");
->   
->   	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
->   	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
 
 
