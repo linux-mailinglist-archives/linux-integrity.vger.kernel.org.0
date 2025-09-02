@@ -1,89 +1,89 @@
-Return-Path: <linux-integrity+bounces-6992-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6993-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39721B40D03
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 20:20:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A69A1B40D0A
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 20:21:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA9761B63742
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 18:20:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D6AD5E16AE
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 18:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54C1632F77E;
-	Tue,  2 Sep 2025 18:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655D8342CB8;
+	Tue,  2 Sep 2025 18:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="OWB8gLDc"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="saxJGeZc"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8172A2D6E57
-	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 18:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AA92D6E57
+	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 18:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756837225; cv=none; b=CKfuiwv1+J/mLiaowDJ/5snl/JQK5OG4PHIaHLnQBOJM7BT76HJzSxSnN7FCg2qJnvndYlSQTpxKtqlJ0UwZAOQLJ8/OFMmcZ+TMs5AHPcnaWr3q8nlj9wsqCMTqa8IKzhARMbjAQmPLGjBCpiMbv+Ak5V4MTLzXyYQ9kD7pcqI=
+	t=1756837274; cv=none; b=K5X3RB3K7NU4cVb1kbnHstHik6ikSQLB+izy2YkjoKB1Q2YVG9TC5jlAkUWLZiVV/PBQXDTWGGFwIYeI3Pp4Us7zb/Vp/jGwibFlv3wFeLhTvByKk1esbWDWXpnW+xa+qMK5sJdEUMmJrX3r8GzgvWrUMHp6pAJgNoHeIuh+/QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756837225; c=relaxed/simple;
-	bh=3KBBQEXp1j2SUecge6Vg1ut0WIqcmHxhVYmH8pKx/O0=;
+	s=arc-20240116; t=1756837274; c=relaxed/simple;
+	bh=QG1cKbEmgCIDwQqxonwIsmcHljsheUhGPmX5mtniRGg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N/pnEK5UOMrydIGCsSjFAw/amg32981DSs06nWviaFLlpUiFgc8pqRg7eqBJAwBrNAjjWgZUjrNVQPWLno2qH7Pt2jZfYQqxu5tzu33Lq0ng1kyER/OO9wBXJTu1bHgybvlZFsVaRk7t12ewSDhOeIqpGvNc1/fiUq//6kqduo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=OWB8gLDc; arc=none smtp.client-ip=185.125.188.122
+	 In-Reply-To:Content-Type; b=tMjHRmMXDsPSaxQD0ijtGAh5zt5IG5LHuTvTHEgpnMeo9Tkv4M5CKadjEzO6hwhUMWZR7wbkveJBHWSPoXgCE+UHZ71vUDk55oKaskHkq7lvdvWgDVKleHlWn1jad3sfGDOOWmtnIVgfxPpCI74GKzw47M/b+9tWwXI5Q9y898k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=saxJGeZc; arc=none smtp.client-ip=185.125.188.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 770BA3F078
-	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 18:20:21 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id EDFCD3F4A6
+	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 18:21:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1756837221;
-	bh=S029MEGT5TSIi/OkV9SSMnt5iIRR8VzURXAohDvFhBg=;
+	s=20210705; t=1756837271;
+	bh=15clSUWqNSAR9SebenuOsr+lyBq90zoYZkr1QC/p+vk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=OWB8gLDc8WEfWCe/LgyJRe0+Jo+SUI1SY7zQ+naLVtKOMZ933ErbVSKf4dlsZi1O2
-	 9OFSo+xb/lUWEi3R4nCh0a/Z3phMXaTv82aXIiKT3BgpnqkwuHQ2LgaNS/rU/W/Ap4
-	 UZvlHKIkz9RrVjGvDWdon+Zwo/81CD1XSQpEiG2U7OsSEolKoYQ2g5tZFTAe928FCL
-	 bQKTqcg/8IfNybIfyJ7xZb+/2yKh6Cj2wKzgL11FUECg4w3Oxxq8mnSSOE7dhK5kDm
-	 OuqlMqBSttzofezM8lDQKJZiDu8q2QsM9OOTJilikBIa27wO3b1AeW2asNXpxlKi9j
-	 xnj8HKwgxoObg==
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-24a9de13b7eso35611835ad.0
-        for <linux-integrity@vger.kernel.org>; Tue, 02 Sep 2025 11:20:21 -0700 (PDT)
+	b=saxJGeZcyMLqBfNO9HoFhvmaWZZjdhlfbho/uc1uzSUfFrk693Pwj4YVoHdUwJOSO
+	 2Wib/EEqr19CwJSzK+TPscFs36ZlA9UjtZm+pi0wZlSkRAQlnIO7gYcRXnlPOn9V51
+	 Dn+r4aB6G5xH7KrBZQK7BTtNzYNy/HYxEcaSqgrbueWWtKXIk5h67LdCq95S0di4KN
+	 xQhHc+f/NQte179byuG9j19/7i9ZQ8meEFI9B8HpT4HG8wDfGbF8SReRJ9aQO8b6PL
+	 yzaHxFtU+ljEU3QEuNY/oSe4FFCc4tRbDEJ4BWHQMNIq9oTQRfXBbDiLj3FmCHnMEg
+	 fN18viwTbLp5Q==
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-24a9de13b7eso35620795ad.0
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Sep 2025 11:21:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756837220; x=1757442020;
+        d=1e100.net; s=20230601; t=1756837269; x=1757442069;
         h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S029MEGT5TSIi/OkV9SSMnt5iIRR8VzURXAohDvFhBg=;
-        b=KRGNBsn15Qilp/0da0Scuhyq3efyDzRBdmKt3t7cPe5GH5+lq1HM5d5fPPFLXzOS06
-         V0gCQUYuyaP0eiUVmR/LjrYzy4e6oB6rJ32gTYwHH4It37luGDYohRJtVARqYKLO8W8N
-         ovG7m8xJwsS6IITyBLcggUngE7golhLmi42GhjeCd80JFA4jlWQn/Qvjr7hX99L1diPk
-         K9X1Jhd2KRbYP9txbE1BX+mloAu3oYmBaD7mHMgKMydZ+7n1krJZvcRMuiiauqxyFSEV
-         4zyZiLAMjyeqqiOe1g4zLgLz2wJeFqbc07hZl8VmoubddYBoeu+NT76VaQvPN5bMlw0N
-         wHIA==
-X-Forwarded-Encrypted: i=1; AJvYcCWQe2Q4LT+e+9XerV/EBp0jRRAuv9/YjbRatvF9QxYAAiDBMSSnIpeCHXM3q9CV/QzH3JKkzdFenrex+3RogXg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFf0IlkFeZWOkNOV2gexavRWNkJlTFhMiGNCJclVvoJElS/sXW
-	PQL4iRNxGQOSq92IhsTjdQ9rI+GjqKPnweNkOwGnA48qLLyHQ5iV7SBpVPpjOAWajmiZfiv7KdU
-	E+plyY3ZIaJToSPVMRUmsdx67Y8OYJGERREcdQxUSoyrx6/V0AIUZllu+46hhTzBsu/uo3WFb63
-	r655qHj51wIw==
-X-Gm-Gg: ASbGncswcjYi8KuqLzzGHwQluWdsNuZyiRxdGA0KiUkONWtMmOjgY+Hg5Y0eciVEOxF
-	DKF00V+gLddrlVpwWn7qlMEHqCj8mjawITNwyKcA51SB9AY6eI/qDXnoglCT0/T3JG1w6Gy2RQe
-	J8bVH/hYLZXGWy3Ha0aaGFibyf91zN2QMxUBfof86awMNEd/jYE1pp/O0VqVVE9lb4rIfgR+QPj
-	5U4sOLNnDjGvn4C72YJ0KHIjsPcm0OlyyAjdXPG7Vc/kj4W7TyCjXZEmO9IJDGMJ+mapoah9ORZ
-	Mht9E4Bf9Pz/OeycCfavrgpGh9BxevOVHE8r/zOs9m948XmQOnh+4A==
-X-Received: by 2002:a17:903:41d0:b0:249:27b9:2a06 with SMTP id d9443c01a7336-2494488a758mr174465785ad.2.1756837220017;
-        Tue, 02 Sep 2025 11:20:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH+EckhCuZ4GrS0CI5mr4WL8iciCvCMGF84eY8IDYjRhJGB4SQ097kgD6id6n31fkyvBsZQxg==
-X-Received: by 2002:a17:903:41d0:b0:249:27b9:2a06 with SMTP id d9443c01a7336-2494488a758mr174465435ad.2.1756837219567;
-        Tue, 02 Sep 2025 11:20:19 -0700 (PDT)
+        bh=15clSUWqNSAR9SebenuOsr+lyBq90zoYZkr1QC/p+vk=;
+        b=B/TnXevqZRwrv/+X7Nbe2ma2/GhTTiegGCgHhYib8c82X/hXJdljygjjlk0ja5EExg
+         rVttJwMjnTXKiHGbxn1LJK6nM/JxcqK2IIXtp4B2uDHewN1/GGGk3sRSenjIfafHMkI5
+         J1F1H01h0eNIaEOU+SPKd+M9rgmiK3TPg93n89tzXOOsMcjJOp6nVYgon/W3M//flFee
+         6CJY3a/THJBfhQ6gNPHfVIX2cuErJiusXN0mg5DWfp4uqp1hOYy71FHICGPJ94uhEPOw
+         eD5RxG/ws6hAOmXnAKVXt7GCloArfNrUrwajOh7V98QLMgjTokN+9/gvRnfOERkfXuh1
+         o6yg==
+X-Forwarded-Encrypted: i=1; AJvYcCXXhaV51jAaZzMPis2uxMJ/mWmHU12aLDnWD56z343e325ozhpYlkMA0T4Mh8wW5HdtRuASpweJfNV1QgGqjBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7ey0ov5gMWqh7Lzb34Tr9dZuvTEJkU6L7rBKuzdXbAdmcLByf
+	nRi3+XgSLZOlN2uRwSV6/T19BX8wkU+EvIJRJOxQPfJi/cHQa3dt4ftsF8hS+PBI0jiY04PYjVN
+	nTZsV6PXmRu8lthorY030Fo2IiRrP3MaeycHKiwnHGn/NjtEanC+riTUy2QsjoxGAsfCrs26S0z
+	GsIeZi0lIf0w==
+X-Gm-Gg: ASbGncsdodzZmfNdQdwiMP8DH2k71Xs5Ya4yeo244YMUT58s59UK8/kzbXEVO3hwSeA
+	beluj/Q46syndF/4/00lKbxEXema9SoMxmqMIDyc/W7H5PEJNkHJJb0swjAyqYNzZ+QM+VacnR0
+	hVsMC0C/FJXPRw5otQ3vjMv4taNBGYRp9bCshvYSHteiTkEeajT12m2yeiWl7vbrMzmBLh5d+fI
+	LmloUEYXQcSUEn8ZAT76mvbkOs7YaJ37p96+ofWYuxZ1PjVaAfgjrsCPK0gWSqMRLtFRHLi2Iuf
+	4t5p7KPac9qhmkMXiK0oNz1qxOt9MYnhb4eDKB8KJZYGa7LB8LuYIw==
+X-Received: by 2002:a17:903:ac8:b0:248:9128:6cf9 with SMTP id d9443c01a7336-24944aa2fb1mr153942575ad.28.1756837269492;
+        Tue, 02 Sep 2025 11:21:09 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGdk5a18UBvT5b2zKJCuw6sw/U4u+4WIcxc8xXWrGNz9ORShAKLqwFqBstpzx9V+0C0dGgadA==
+X-Received: by 2002:a17:903:ac8:b0:248:9128:6cf9 with SMTP id d9443c01a7336-24944aa2fb1mr153942215ad.28.1756837269048;
+        Tue, 02 Sep 2025 11:21:09 -0700 (PDT)
 Received: from [192.168.192.85] ([50.47.129.42])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-249065b7413sm136066355ad.132.2025.09.02.11.20.18
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-24906598815sm135582765ad.117.2025.09.02.11.21.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Sep 2025 11:20:18 -0700 (PDT)
-Message-ID: <ed07813e-e000-4e62-8801-8d190517cd5a@canonical.com>
-Date: Tue, 2 Sep 2025 11:20:18 -0700
+        Tue, 02 Sep 2025 11:21:08 -0700 (PDT)
+Message-ID: <6d06f0b4-e5dd-45da-9df7-b60b0499f944@canonical.com>
+Date: Tue, 2 Sep 2025 11:21:07 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -91,8 +91,7 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 33/34] lsm: consolidate all of the LSM framework
- initcalls
+Subject: Re: [PATCH v3 34/34] lsm: add a LSM_STARTED_ALL notification event
 To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
  linux-integrity@vger.kernel.org, selinux@vger.kernel.org
 Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
@@ -105,7 +104,7 @@ Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
  Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
  Xiu Jianfeng <xiujianfeng@huawei.com>
 References: <20250814225159.275901-36-paul@paul-moore.com>
- <20250814225159.275901-69-paul@paul-moore.com>
+ <20250814225159.275901-70-paul@paul-moore.com>
 Content-Language: en-US
 From: John Johansen <john.johansen@canonical.com>
 Autocrypt: addr=john.johansen@canonical.com; keydata=
@@ -151,114 +150,48 @@ Autocrypt: addr=john.johansen@canonical.com; keydata=
  +T7sv9+iY+e0Y+SolyJgTxMYeRnDWE6S77g6gzYYHmcQOWP7ZMX+MtD4SKlf0+Q8li/F9GUL
  p0rw8op9f0p1+YAhyAd+dXWNKf7zIfZ2ME+0qKpbQnr1oizLHuJX/Telo8KMmHter28DPJ03 lT9Q
 Organization: Canonical
-In-Reply-To: <20250814225159.275901-69-paul@paul-moore.com>
+In-Reply-To: <20250814225159.275901-70-paul@paul-moore.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 8/14/25 15:50, Paul Moore wrote:
-> The LSM framework itself registers a small number of initcalls, this
-> patch converts these initcalls into the new initcall mechanism.
+> Add a new LSM notifier event, LSM_STARTED_ALL, which is fired once at
+> boot when all of the LSMs have been started.
 > 
+> Reviewed-by: Kees Cook <kees@kernel.org>
 > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
 > Signed-off-by: Paul Moore <paul@paul-moore.com>
 
 Reviewed-by: John Johansen <john.johansen@canonical.com>
 
 > ---
->   security/inode.c    |  3 +--
->   security/lsm.h      |  4 ++++
->   security/lsm_init.c | 14 ++++++++++++--
->   security/min_addr.c |  5 +++--
->   4 files changed, 20 insertions(+), 6 deletions(-)
+>   include/linux/security.h | 1 +
+>   security/lsm_init.c      | 1 +
+>   2 files changed, 2 insertions(+)
 > 
-> diff --git a/security/inode.c b/security/inode.c
-> index a5e7a073e672..21b1f9b4d396 100644
-> --- a/security/inode.c
-> +++ b/security/inode.c
-> @@ -384,7 +384,7 @@ static const struct file_operations lsm_ops = {
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 8560c50edd2e..c13f0a849024 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -85,6 +85,7 @@ struct timezone;
+>   
+>   enum lsm_event {
+>   	LSM_POLICY_CHANGE,
+> +	LSM_STARTED_ALL,
 >   };
->   #endif
 >   
-> -static int __init securityfs_init(void)
-> +int __init securityfs_init(void)
->   {
->   	int retval;
->   
-> @@ -403,4 +403,3 @@ static int __init securityfs_init(void)
->   #endif
->   	return 0;
->   }
-> -core_initcall(securityfs_init);
-> diff --git a/security/lsm.h b/security/lsm.h
-> index 8dc267977ae0..436219260376 100644
-> --- a/security/lsm.h
-> +++ b/security/lsm.h
-> @@ -35,4 +35,8 @@ extern struct kmem_cache *lsm_inode_cache;
->   int lsm_cred_alloc(struct cred *cred, gfp_t gfp);
->   int lsm_task_alloc(struct task_struct *task);
->   
-> +/* LSM framework initializers */
-> +int securityfs_init(void);
-> +int min_addr_init(void);
-> +
->   #endif /* _LSM_H_ */
+>   struct dm_verity_digest {
 > diff --git a/security/lsm_init.c b/security/lsm_init.c
-> index 697482a22a02..2bd705836df8 100644
+> index 2bd705836df8..af4046c5c581 100644
 > --- a/security/lsm_init.c
 > +++ b/security/lsm_init.c
-> @@ -488,7 +488,12 @@ int __init security_init(void)
->    */
->   static int __init security_initcall_pure(void)
->   {
-> -	return lsm_initcall(pure);
-> +	int rc_adr, rc_lsm;
-> +
-> +	rc_adr = min_addr_init();
-> +	rc_lsm = lsm_initcall(pure);
-> +
-> +	return (rc_adr ? rc_adr : rc_lsm);
+> @@ -556,6 +556,7 @@ static int __init security_initcall_late(void)
+>   
+>   	rc = lsm_initcall(late);
+>   	lsm_pr_dbg("all enabled LSMs fully activated\n");
+> +	call_blocking_lsm_notifier(LSM_STARTED_ALL, NULL);
+>   
+>   	return rc;
 >   }
->   pure_initcall(security_initcall_pure);
->   
-> @@ -506,7 +511,12 @@ early_initcall(security_initcall_early);
->    */
->   static int __init security_initcall_core(void)
->   {
-> -	return lsm_initcall(core);
-> +	int rc_sfs, rc_lsm;
-> +
-> +	rc_sfs = securityfs_init();
-> +	rc_lsm = lsm_initcall(core);
-> +
-> +	return (rc_sfs ? rc_sfs : rc_lsm);
->   }
->   core_initcall(security_initcall_core);
->   
-> diff --git a/security/min_addr.c b/security/min_addr.c
-> index df1bc643d886..40714bdeefbe 100644
-> --- a/security/min_addr.c
-> +++ b/security/min_addr.c
-> @@ -4,6 +4,8 @@
->   #include <linux/security.h>
->   #include <linux/sysctl.h>
->   
-> +#include "lsm.h"
-> +
->   /* amount of vm to protect from userspace access by both DAC and the LSM*/
->   unsigned long mmap_min_addr;
->   /* amount of vm to protect from userspace using CAP_SYS_RAWIO (DAC) */
-> @@ -54,11 +56,10 @@ static const struct ctl_table min_addr_sysctl_table[] = {
->   	},
->   };
->   
-> -static int __init init_mmap_min_addr(void)
-> +int __init min_addr_init(void)
->   {
->   	register_sysctl_init("vm", min_addr_sysctl_table);
->   	update_mmap_min_addr();
->   
->   	return 0;
->   }
-> -pure_initcall(init_mmap_min_addr);
 
 
