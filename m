@@ -1,65 +1,94 @@
-Return-Path: <linux-integrity+bounces-6966-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6967-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5483B401E7
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 15:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69E4AB406A0
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 16:25:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A405B3BDB56
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 13:01:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 257163ADBEE
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 14:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC322DE713;
-	Tue,  2 Sep 2025 12:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC6892E03EB;
+	Tue,  2 Sep 2025 14:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PApwUa/O"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052B52D9784;
-	Tue,  2 Sep 2025 12:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4D92DF6F4
+	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 14:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756817996; cv=none; b=hR/xgvcDIkhjnjcV0HP0H/3maVj4Y4M5uPpCkOxJl2Mi6uHSjGx8SEY5NlowYVGmPTBoW8/EIOs68EOnqi9vNswbZlrJzF1dPsDWgNBkWHKZCXERniSctUf0hcFRoMq8wsg2JAD57b9mthzcM9DViE1KxUYgty2HKB9MYN10Y4U=
+	t=1756823114; cv=none; b=Y1mxiGEagxUIE2xTuSE5wIMCNTTiYdqab17u+vveXm2B5GUSlNOsmxezJy6vwYg0bQKWjbctN1adOKQrKeLiufCAF2BTfud0WNHI3IXXIDZCYP+UoO+iiqeNNWXiYrrBM6SZFrCaHlUsBJ79THz27OF92071jmqrmbMTH96gwn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756817996; c=relaxed/simple;
-	bh=l7NMA9SCuOeZytQ1wMt0IZ0DxTjEV3/p7b8oa+JmsNg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lyqu1Q9WxO9RcfyIuV+VUeROu0ERcY79aKaKicp1NuWkv8OcXfpqF9NOYlMDNbmbVjjjsrOkVKyK1qrZD5PXLrKsY5lM/DtTL/Zd0WNJtim2yKdF58gbuP5iCpNz0pUz/zX+AlKHsw+au7L5bx1Y+z1Kws3eThQ8WyEX0LDf7m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4cGQlF3lMqz1HCj6;
-	Tue,  2 Sep 2025 20:58:01 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 894C6140157;
-	Tue,  2 Sep 2025 20:58:46 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwBHRqW26bZovoWeAA--.18504S2;
-	Tue, 02 Sep 2025 13:57:36 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: paul@paul-moore.com,
-	zohar@linux.ibm.com,
-	roberto.sassu@huawei.com
-Cc: linux-security-module@vger.kernel.org,
+	s=arc-20240116; t=1756823114; c=relaxed/simple;
+	bh=D7HXpEU730OXpS/WZEfuIxfFn2o/NeLsQ0na54tZwHY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RkRcl87DZZsQAJHc85BcIT/98s+XhWG7XoyP8HV2C+SfILkCaVl23fYRbMFEg2WHr2VpPOfaLPP+P8PP2T+iPpldjJsiVIubkdC9CWNl6pNxsZJ11Vz+TfsgNV/xCfStpA6RmwAUg4v6isMIUeHn8naJRTiIp5UoeqxgoKffEh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PApwUa/O; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756823109;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KCwmIuBVumzS/zqE7SJcaJXWGkBsvZeBHhi+FBAFQDU=;
+	b=PApwUa/OPwCLXzNQ9CRXqFNHVvLQxZub/OWWhsdscIQPv5CQhcVBxPDw6h4F5jB6O9wiRh
+	w3JGmBHNqA5E76EYBmRXChrxZ9OvEna5G69jKg3ZlHDezUhwDWjiowqtQi98eJjtkVqmKc
+	BdtX2k9KV6vCktyeLEkgxH8bU1xRnQc=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-314-MNAvf_5eP5GrlpF-q11hQA-1; Tue, 02 Sep 2025 10:25:06 -0400
+X-MC-Unique: MNAvf_5eP5GrlpF-q11hQA-1
+X-Mimecast-MFC-AGG-ID: MNAvf_5eP5GrlpF-q11hQA_1756823106
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4b2f78511e6so33281571cf.1
+        for <linux-integrity@vger.kernel.org>; Tue, 02 Sep 2025 07:25:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756823106; x=1757427906;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KCwmIuBVumzS/zqE7SJcaJXWGkBsvZeBHhi+FBAFQDU=;
+        b=mF64dCsaW9YgNRqnU13NEUESYmFjFdCjrsZpop6CTCSPnLmov0BU6PEYDGEiqgfLye
+         FG+HoNj/Nv8AIiXtjQJsJxbip6Dh1rm2KchwCAAfgYG1pvkWSYNbKlLS9d2+NapDIuoI
+         dW8wMZF1j0nhsFJLJJUGJf8xhil9J4sp5db6NVdYt8Uys/v+0hBybISurWM627VNA8qk
+         lBWaFM8J7nYEiYufZaXep9nWqe73bmxJcvTy5kN4nDu/FF2a3aoktbD4tjvNZ8ay5Bl5
+         IYVznkO7f2+KW0RNhdni2+0oHrmDXB8MIDIKWKNjleYeExkhWy+eAXhG383GByDaaZFg
+         kR3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXnzcPmI/c8vlqJHRCPyQIfmLFv+p/QFQHaNxoaWpXpKx5zpZVQqQL6dQ9OeOmpqzq7ue9vEXDXiDB4zzHnDlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxjw/ApeqA6fYfkxYMFj3V0djkFcLzyex8ErQlDOHZcm3HPECMU
+	u9Jl6bIXIjDB3Yszpl8wNji+UIMY7w5K8G6gyeJY1W8y+/D7zeTONriotsuuBGezShaoEXMVGQk
+	PHvB80Zdo7cgvWTp9EPI/Tqw2Old/D7vzC6zl06sPVRvULzG2h/1tiwXDyw1CQP1p58l5vA==
+X-Gm-Gg: ASbGncs7PPxrBVp2KrFd1BbMkhIRB7fpZ+mLhnaXw5QNLdHCTm9WCo12a0S3QOhqzKr
+	KxZZCMQh92ZbDaQgLBptDmV8EMGSNVx2/9LHtskmepIAUsrb1WmlSH7a00qLjPUT8qHumO/De92
+	Rv8nZ4uWXsxo3QUBTBIRXUwiekWgGvIl0g+3xK4/KcW5pBnegCGd6+GtD6/EaLFDTfuDdaG4zRP
+	pW4k7GQINuAMUJrE7BWtwv4oB7liHMxGQB+sOrj5nZfc+NU06yAnh6BH7u0kVQsfFI1zUymJi5D
+	DKZJXw/fejsl+2YkhXW9pFLalW8tlLOvSgLSCMMxTx124gHOgiKX9fhOSjXnik9KThkAhrhz
+X-Received: by 2002:a05:622a:2a12:b0:4b3:4d20:302 with SMTP id d75a77b69052e-4b34d2015ccmr20121141cf.81.1756823105914;
+        Tue, 02 Sep 2025 07:25:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHGBOvL4H6uwqZjEpalH9gAPguD3oZEVC672bSw1eO4PQCyQQlfXbcUKzK3Evm18/66GGuTWQ==
+X-Received: by 2002:a05:622a:2a12:b0:4b3:4d20:302 with SMTP id d75a77b69052e-4b34d2015ccmr20120641cf.81.1756823105329;
+        Tue, 02 Sep 2025 07:25:05 -0700 (PDT)
+Received: from daleksan-thinkpadp1gen3.boston.csb ([2601:189:8480:3170:a791:5837:3694:7627])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b3461c8414sm12921361cf.17.2025.09.02.07.25.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Sep 2025 07:25:05 -0700 (PDT)
+From: Denis Aleksandrov <daleksan@redhat.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: jgg@ziepe.ca,
 	linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org,
-	john.johansen@canonical.com,
-	wufan@kernel.org,
-	mic@digikod.net,
-	kees@kernel.org,
-	mortonm@chromium.org,
-	casey@schaufler-ca.com,
-	penguin-kernel@i-love.sakura.ne.jp,
-	nicolas.bouchinet@oss.cyber.gouv.fr,
-	xiujianfeng@huawei.com
-Subject: [PATCH] ima,evm: move initcalls to the LSM framework
-Date: Tue,  2 Sep 2025 14:54:57 +0200
-Message-ID: <20250902125457.2689519-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <9f35539de7188c6b853c55b76958a286131f5928.camel@huaweicloud.com>
-References: <9f35539de7188c6b853c55b76958a286131f5928.camel@huaweicloud.com>
+	Denis Aleksandrov <daleksan@redhat.com>,
+	Jan Stancek <jstancek@redhat.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: [PATCH v4] tpm: Prevent local DOS via tpm/tpm0/ppi/*operations
+Date: Tue,  2 Sep 2025 10:24:30 -0400
+Message-ID: <20250902142429.14041-2-daleksan@redhat.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,179 +96,165 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwBHRqW26bZovoWeAA--.18504S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xw1kuFWrGr1DGw1kAF4fKrg_yoW7XF45pa
-	1qgay8Gr18AFWIkF97Aa43CFWfK3yFg34UWws8Cw1vyasxZr1UXr97AryUCr13WrW5tFyr
-	twnIvw43Aw1DtFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-	w2AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUV-txDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBGi2lUAE-wAAsm
 
-From: Paul Moore <paul@paul-moore.com>
+Reads on tpm/tpm0/ppi/*operations can become very long on
+misconfigured systems. Reading the TPM is a blocking operation,
+thus a user could effectively trigger a DOS.
 
-This patch converts IMA and EVM to use the LSM frameworks's initcall
-mechanism. It moved the integrity_fs_init() call to ima_fs_init() and
-evm_init_secfs(), to work around the fact that there is no "integrity" LSM,
-and introduced integrity_fs_fini() to remove the integrity directory, if
-empty. Both integrity_fs_init() and integrity_fs_fini() support the
-scenario of being called by both the IMA and EVM LSMs.
+Resolve this by caching the results and avoiding the blocking
+operations after the first read.
 
-It is worth mentioning that this patch does not touch any of the
-"platform certs" code that lives in the security/integrity/platform_certs
-directory as the IMA/EVM maintainers have assured me that this code is
-unrelated to IMA/EVM, despite the location, and will be moved to a more
-relevant subsystem in the future.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reported-by: Jan Stancek <jstancek@redhat.com>
+Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
+Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
 ---
- security/integrity/evm/evm_main.c  |  3 +--
- security/integrity/evm/evm_secfs.c | 11 +++++++++--
- security/integrity/iint.c          | 14 ++++++++++++--
- security/integrity/ima/ima_fs.c    | 11 +++++++++--
- security/integrity/ima/ima_main.c  |  4 ++--
- security/integrity/integrity.h     |  2 ++
- 6 files changed, 35 insertions(+), 10 deletions(-)
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index db8e324ed4e6..73d500a375cb 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -1179,6 +1179,5 @@ DEFINE_LSM(evm) = {
- 	.init = init_evm_lsm,
- 	.order = LSM_ORDER_LAST,
- 	.blobs = &evm_blob_sizes,
-+	.initcall_late = init_evm,
- };
--
--late_initcall(init_evm);
-diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
-index b0d2aad27850..c26724690cec 100644
---- a/security/integrity/evm/evm_secfs.c
-+++ b/security/integrity/evm/evm_secfs.c
-@@ -302,10 +302,16 @@ int __init evm_init_secfs(void)
- 	int error = 0;
- 	struct dentry *dentry;
+Changes in v4:
+	- Removes empty lines.
+	- Reorders vars to reverse christmas tree.
+
+ drivers/char/tpm/tpm_ppi.c | 85 +++++++++++++++++++++++++++-----------
+ 1 file changed, 62 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+index d53fce1c9d6f..df34b215440d 100644
+--- a/drivers/char/tpm/tpm_ppi.c
++++ b/drivers/char/tpm/tpm_ppi.c
+@@ -33,6 +33,20 @@ static const guid_t tpm_ppi_guid =
+ 	GUID_INIT(0x3DDDFAA6, 0x361B, 0x4EB4,
+ 		  0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53);
  
--	evm_dir = securityfs_create_dir("evm", integrity_dir);
--	if (IS_ERR(evm_dir))
-+	error = integrity_fs_init();
-+	if (error < 0)
- 		return -EFAULT;
- 
-+	evm_dir = securityfs_create_dir("evm", integrity_dir);
-+	if (IS_ERR(evm_dir)) {
-+		error = -EFAULT;
-+		goto out;
-+	}
++static const char * const tpm_ppi_info[] = {
++	"Not implemented",
++	"BIOS only",
++	"Blocked for OS by system firmware",
++	"User required",
++	"User not required",
++};
 +
- 	dentry = securityfs_create_file("evm", 0660,
- 				      evm_dir, NULL, &evm_key_ops);
- 	if (IS_ERR(dentry)) {
-@@ -329,5 +335,6 @@ int __init evm_init_secfs(void)
- out:
- 	securityfs_remove(evm_symlink);
- 	securityfs_remove(evm_dir);
-+	integrity_fs_fini();
- 	return error;
- }
-diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-index 068ac6c2ae1e..8ec1a3436a71 100644
---- a/security/integrity/iint.c
-+++ b/security/integrity/iint.c
-@@ -42,8 +42,11 @@ void __init integrity_load_keys(void)
- 		evm_load_x509();
- }
- 
--static int __init integrity_fs_init(void)
-+int __init integrity_fs_init(void)
++/* A spinlock to protect access to the cache from concurrent reads */
++static DEFINE_SPINLOCK(tpm_ppi_lock);
++
++static u32 ppi_operations_cache[PPI_VS_REQ_END + 1];
++static bool ppi_cache_populated;
++
+ static bool tpm_ppi_req_has_parameter(u64 req)
  {
-+	if (integrity_dir)
-+		return 0;
-+
- 	integrity_dir = securityfs_create_dir("integrity", NULL);
- 	if (IS_ERR(integrity_dir)) {
- 		int ret = PTR_ERR(integrity_dir);
-@@ -58,4 +61,11 @@ static int __init integrity_fs_init(void)
- 	return 0;
+ 	return req == 23;
+@@ -277,8 +291,7 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
+ 	return status;
  }
  
--late_initcall(integrity_fs_init)
-+void __init integrity_fs_fini(void)
-+{
-+	if (!integrity_dir || !simple_empty(integrity_dir))
-+		return;
-+
-+	securityfs_remove(integrity_dir);
-+	integrity_dir = NULL;
-+}
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 87045b09f120..012a58959ff0 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -499,9 +499,15 @@ int __init ima_fs_init(void)
- 	struct dentry *dentry;
- 	int ret;
+-static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+-				   u32 end)
++static ssize_t cache_ppi_operations(acpi_handle dev_handle, char *buf)
+ {
+ 	int i;
+ 	u32 ret;
+@@ -286,34 +299,22 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+ 	union acpi_object *obj, tmp;
+ 	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
  
-+	ret = integrity_fs_init();
-+	if (ret < 0)
-+		return ret;
-+
- 	ima_dir = securityfs_create_dir("ima", integrity_dir);
--	if (IS_ERR(ima_dir))
--		return PTR_ERR(ima_dir);
-+	if (IS_ERR(ima_dir)) {
-+		ret = PTR_ERR(ima_dir);
-+		goto out;
-+	}
- 
- 	ima_symlink = securityfs_create_symlink("ima", NULL, "integrity/ima",
- 						NULL);
-@@ -555,6 +561,7 @@ int __init ima_fs_init(void)
- out:
- 	securityfs_remove(ima_symlink);
- 	securityfs_remove(ima_dir);
-+	integrity_fs_fini();
- 
- 	return ret;
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index eade8e1e3cb1..b703bfc2f470 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -1283,6 +1283,6 @@ DEFINE_LSM(ima) = {
- 	.init = init_ima_lsm,
- 	.order = LSM_ORDER_LAST,
- 	.blobs = &ima_blob_sizes,
-+	/* Start IMA after the TPM is available */
-+	.initcall_late = init_ima,
- };
+-	static char *info[] = {
+-		"Not implemented",
+-		"BIOS only",
+-		"Blocked for OS by BIOS",
+-		"User required",
+-		"User not required",
+-	};
 -
--late_initcall(init_ima);	/* Start IMA after the TPM is available */
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index c2c2da691123..7b388b66cf80 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -114,6 +114,8 @@ struct ima_file_id {
+ 	if (!acpi_check_dsm(dev_handle, &tpm_ppi_guid, TPM_PPI_REVISION_ID_1,
+ 			    1 << TPM_PPI_FN_GETOPR))
+ 		return -EPERM;
  
- int integrity_kernel_read(struct file *file, loff_t offset,
- 			  void *addr, unsigned long count);
-+int __init integrity_fs_init(void);
-+void __init integrity_fs_fini(void);
+ 	tmp.integer.type = ACPI_TYPE_INTEGER;
+-	for (i = start; i <= end; i++) {
++	for (i = 0; i <= PPI_VS_REQ_END; i++) {
+ 		tmp.integer.value = i;
+ 		obj = tpm_eval_dsm(dev_handle, TPM_PPI_FN_GETOPR,
+ 				   ACPI_TYPE_INTEGER, &argv,
+ 				   TPM_PPI_REVISION_ID_1);
+-		if (!obj) {
++		if (!obj)
+ 			return -ENOMEM;
+-		} else {
+-			ret = obj->integer.value;
+-			ACPI_FREE(obj);
+-		}
  
- #define INTEGRITY_KEYRING_EVM		0
- #define INTEGRITY_KEYRING_IMA		1
+-		if (ret > 0 && ret < ARRAY_SIZE(info))
+-			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+-					     i, ret, info[ret]);
++		ret = obj->integer.value;
++		ppi_operations_cache[i] = ret;
++		ACPI_FREE(obj);
+ 	}
+ 
+ 	return len;
+@@ -324,9 +325,28 @@ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+ 					   char *buf)
+ {
+ 	struct tpm_chip *chip = to_tpm_chip(dev);
++	ssize_t len = 0;
++	u32 ret;
++	int i;
++
++	spin_lock(&tpm_ppi_lock);
++	if (!ppi_cache_populated) {
++		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
++		if (len < 0)
++			return len;
+ 
+-	return show_ppi_operations(chip->acpi_dev_handle, buf, 0,
+-				   PPI_TPM_REQ_MAX);
++		ppi_cache_populated = true;
++	}
++
++	for (i = 0; i <= PPI_TPM_REQ_MAX; i++) {
++		ret = ppi_operations_cache[i];
++		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
++			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
++							i, ret, tpm_ppi_info[ret]);
++	}
++	spin_unlock(&tpm_ppi_lock);
++
++	return len;
+ }
+ 
+ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+@@ -334,9 +354,28 @@ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+ 					  char *buf)
+ {
+ 	struct tpm_chip *chip = to_tpm_chip(dev);
++	ssize_t len = 0;
++	u32 ret;
++	int i;
+ 
+-	return show_ppi_operations(chip->acpi_dev_handle, buf, PPI_VS_REQ_START,
+-				   PPI_VS_REQ_END);
++	spin_lock(&tpm_ppi_lock);
++	if (!ppi_cache_populated) {
++		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
++		if (len < 0)
++			return len;
++
++		ppi_cache_populated = true;
++	}
++
++	for (i = PPI_VS_REQ_START; i <= PPI_VS_REQ_END; i++) {
++		ret = ppi_operations_cache[i];
++		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
++			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
++							i, ret, tpm_ppi_info[ret]);
++	}
++	spin_unlock(&tpm_ppi_lock);
++
++	return len;
+ }
+ 
+ static DEVICE_ATTR(version, S_IRUGO, tpm_show_ppi_version, NULL);
 -- 
-2.43.0
+2.48.1
 
 
