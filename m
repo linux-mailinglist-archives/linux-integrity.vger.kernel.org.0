@@ -1,193 +1,210 @@
-Return-Path: <linux-integrity+bounces-6960-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-6961-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5044B3F3B9
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 06:25:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1F8DB3FA00
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 11:16:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 926EA480BDA
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 04:25:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2EAF7ACFB2
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Sep 2025 09:14:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E6F2E03EC;
-	Tue,  2 Sep 2025 04:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YFM/4JbZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 007872737E5;
+	Tue,  2 Sep 2025 09:16:13 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E0225EFBB
-	for <linux-integrity@vger.kernel.org>; Tue,  2 Sep 2025 04:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297DE1FC7C5;
+	Tue,  2 Sep 2025 09:16:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756787125; cv=none; b=qNEnPqRxR5YE/dWvqHqbPKAZSjN1ryzlKBqhfs8SlLEieIEq02JheCiCjYzjD1oUiKPLrYKb99iLsCLcTbSsqyD4ADwUyGpm7ZJTywWU9y8POKMFyVK/s9ZJe0f/YUFAP1CLbHx3aqon9kNGXdtcLEUoWaGsLgHEpTL89Xu9u1A=
+	t=1756804572; cv=none; b=aLrLUFc/GzmbmCSqVhMGRhh2HDwVQdF3q5zsnLz94FCzMzX90yDy63GqSCWbPwgdNTSFFPdndFmSBDpsafIqC4VGH5xPHKFV7UQZaW4G9iQJj6yw6E5RzWyEkouOjxnFMxsG2WbSQKo1pE+43zN6+bgbKy1gnvHD5JDVOWKLDqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756787125; c=relaxed/simple;
-	bh=KGVqkd0oWHkbJ+ZQ3pjCuoMltYbH2zy2sVQQCrEM91U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bR6YuyoTTgM450liTcftvJGOSUtbm7ZhOTNjKQejyt4igqN7vsIjfjQrhPQlmzgky6CgcKu3tUs4PhNDXIY16GvzCCOXVRqcXlZHVghT3g/p3QMMjqzW3XdcouNas/Dgl6uJ8Se8zveUmvKmgllAy3kTKLn8+HDOAkGR3j6cLVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YFM/4JbZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756787121;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yceXk2CDlZjXkspmIbhQrCudqcmdaHsA3xCQZcIxoPY=;
-	b=YFM/4JbZXLGb8uZsNcQK0sjGid36RSc6J2zAWSP9PtRaDa/V1Wb/bsMZmUiHPmDVbnnvIB
-	IvrQVecYPFFtQAHM6O67Osyu5jqdR3gQykXbmsmnxRWPiHDyYVec4OeDdZmQpHUmouVUck
-	F8i7Z3RMU0HoJI6Of7a9mIOGSf3SsoM=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-MuddI9_zPXOwDulgP98Fpw-1; Tue, 02 Sep 2025 00:25:20 -0400
-X-MC-Unique: MuddI9_zPXOwDulgP98Fpw-1
-X-Mimecast-MFC-AGG-ID: MuddI9_zPXOwDulgP98Fpw_1756787119
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-24458345f5dso55724235ad.3
-        for <linux-integrity@vger.kernel.org>; Mon, 01 Sep 2025 21:25:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756787119; x=1757391919;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yceXk2CDlZjXkspmIbhQrCudqcmdaHsA3xCQZcIxoPY=;
-        b=EJziAngl6UC10bwd/Yjp+baT7qLjD0o7JRGcPKXmktJLkFiNksXQ9wHCIZi5eNa7Np
-         +m5EFoS3CZE82+2E32RBPSOlPDNXWZdeQ53P223cE8IDfWl5ev5vas/TmlKvQu7z15kM
-         c90QhV/kbJquR10fYINJ/vknyofUyTMHaw7RpKylMfNB4rFlQrt+aEnO35HO+A6cQR1O
-         3YLJbnUzdpBGbWZxA1b1HcrQ/BgRT10ZlRWf0IHJz4AN5Q04umPgPqWqgJ01MmRKUMnK
-         QS3sIllR3O80OFChur0FeoUeZUo086RK0sWZBZ50L9QUCSd6gbVTZp7yb1ffAyyV4OG2
-         pRJg==
-X-Gm-Message-State: AOJu0YxQyvavP04q+NB0abl0KCk3JXaADUDUgTGf6c2VUHBhTdzFJ1na
-	rfR9K239Baby8QL02Qp76VknnTdvqUokhLptkJFLXpvzfEF4t9wsNvtjJcuLoYaqqf1xSwnDTHz
-	Zixi0PloCSKX72q/k6H0TeTPHrLk0V80Uk/US9mSy8TYtmXYq+vPAWdyZ4g8PK537PpfMCOOpMc
-	3uAJNKIARErYSGoZEd6ymX2Ja8KJXSlU1BYo8tx3wwRax0QQmh4TI4lw==
-X-Gm-Gg: ASbGncti3XXDOcJiAWjfNucPMVo/cseSKcQzthmdAfGY9gIK3eEOiOjvSmZ4gTyjKIO
-	P22tpN9QbI4RH3ObN3djWp4lEKxX2oYlkRjgA/V8Tvn7wm9oGrox2Ru9jjjjtLM8TJypW2n2W9p
-	4xBH8Px38sOI9HSkfChaZ+KlFt08YnxfoB3xZUkGltyf77jPM4PnC+CryWNE1S5kpV/AE3AO/K2
-	I6deP4vLrA6UVVpZtYnnt6ItnxYjeDVXOyX5A0MN58b8FensbBaj/7sUvqvO3wWEikHvZVakrBu
-	X5iEEhiAdtCzPxDxqHqWCtBzAMYu1GU=
-X-Received: by 2002:a17:903:ac8:b0:248:9b68:f522 with SMTP id d9443c01a7336-24944ac8802mr119741195ad.43.1756787119236;
-        Mon, 01 Sep 2025 21:25:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE6qHS5CaJlgiiZHBDHXTwlaeAvO21OpILjrDjJxhf0jrDdLhZ4exXvJAzU8wyGG8a51R9XhA==
-X-Received: by 2002:a17:903:ac8:b0:248:9b68:f522 with SMTP id d9443c01a7336-24944ac8802mr119740845ad.43.1756787118749;
-        Mon, 01 Sep 2025 21:25:18 -0700 (PDT)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-249037285b9sm120009035ad.44.2025.09.01.21.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Sep 2025 21:25:18 -0700 (PDT)
-From: Coiby Xu <coxu@redhat.com>
-To: linux-integrity@vger.kernel.org
-Cc: Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ima: don't clear IMA_DIGSIG flag when setting non-IMA xattr
-Date: Tue,  2 Sep 2025 12:25:14 +0800
-Message-ID: <20250902042515.759750-1-coxu@redhat.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1756804572; c=relaxed/simple;
+	bh=sGl3z+vxSNXHFFIUDM2nYAHCt1lpvpooruMiKQbcKSk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rGvSSakUGav1DA/oSaJHg7V8pNQP6weIe0FOitwC9hriUEcsT5Eu2x89D6ApEzMnA7iK1GnDzw+Qj/TWMGH1ST9UK/WU6P+nNXuv3gvpZNLCKZBmc2AKjRLroTT46pkYo7gzrUyJA4mHqjmCi9MPB6LZEC093Ciwiw5vexQDC4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4cGKNQ1Tg6zpVLQ;
+	Tue,  2 Sep 2025 16:56:22 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 00F39140132;
+	Tue,  2 Sep 2025 16:58:10 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwD39qWLsbZoKumbAA--.17803S2;
+	Tue, 02 Sep 2025 09:58:08 +0100 (CET)
+Message-ID: <696c93137a5232a3f07ddf937897d96cac89d36e.camel@huaweicloud.com>
+Subject: Re: [RFC PATCH v1 0/2] Add O_DENY_WRITE (complement AT_EXECVE_CHECK)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Andy Lutomirski <luto@kernel.org>
+Cc: Aleksa Sarai <cyphar@cyphar.com>, =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=
+ <mic@digikod.net>, Christian Brauner <brauner@kernel.org>, Al Viro
+ <viro@zeniv.linux.org.uk>, Kees Cook <keescook@chromium.org>, Paul Moore
+ <paul@paul-moore.com>, Serge Hallyn <serge@hallyn.com>, Arnd Bergmann
+ <arnd@arndb.de>, Christian Heimes <christian@python.org>, Dmitry Vyukov
+ <dvyukov@google.com>, Elliott Hughes <enh@google.com>, Fan Wu
+ <wufan@linux.microsoft.com>, Florian Weimer <fweimer@redhat.com>, Jann Horn
+ <jannh@google.com>, Jeff Xu <jeffxu@google.com>, Jonathan Corbet
+ <corbet@lwn.net>,  Jordan R Abrahams <ajordanr@google.com>, Lakshmi
+ Ramasubramanian <nramas@linux.microsoft.com>, Luca Boccassi
+ <bluca@debian.org>, Matt Bobrowski <mattbobrowski@google.com>, Miklos
+ Szeredi <mszeredi@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, Nicolas
+ Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Robert Waite
+ <rowait@microsoft.com>,  Roberto Sassu <roberto.sassu@huawei.com>, Scott
+ Shell <scottsh@microsoft.com>, Steve Dower <steve.dower@python.org>, Steve
+ Grubb <sgrubb@redhat.com>,  kernel-hardening@lists.openwall.com,
+ linux-api@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
+ linux-integrity@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+Date: Tue, 02 Sep 2025 10:57:45 +0200
+In-Reply-To: <3d89a03f31cacb53a2ed8017899f2dab10476b62.camel@huaweicloud.com>
+References: <20250822170800.2116980-1-mic@digikod.net>
+	 <20250826-skorpion-magma-141496988fdc@brauner>
+	 <20250826.aig5aiShunga@digikod.net>
+	 <2025-08-27-obscene-great-toy-diary-X1gVRV@cyphar.com>
+	 <54e27d05bae55749a975bc7cbe109b237b2b1323.camel@huaweicloud.com>
+	 <CALCETrUtJmWxKYSi6QQAGpQR_ETNfoBidCu_VEq8Lx9iJAOyEw@mail.gmail.com>
+	 <3d89a03f31cacb53a2ed8017899f2dab10476b62.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwD39qWLsbZoKumbAA--.17803S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr1fuw1UZryrAr4UJrWxXrb_yoW7JryfpF
+	WrW3Z7KF1DJ3WxAw1Ik3W7XF4Fka4rJw45Jrn8t34kCF98Zr10qryftFWYqF97Zr9Ykw4Y
+	vw4I93s5Gw4DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26rWY6r4U
+	JwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	EksDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBGi2lWkA9gAEsF
 
-Currently when both IMA and EVM are in fix mode, the IMA signature will
-be reset to IMA hash if a program first stores IMA signature in
-security.ima and then sets security.selinux for a file. For example, on
-Fedora, after booting the kernel with "ima_appraise=fix evm=fix
-ima_policy=appraise_tcb" and installing rpm-plugin-ima, reinstalling a
-package will not make good reference IMA signature generated. Instead
-IMA hash is generated,
-    # getfattr -m - -d -e hex /usr/bin/bash
-    # file: usr/bin/bash
-    security.ima=0x0404...
+On Mon, 2025-09-01 at 19:01 +0200, Roberto Sassu wrote:
+> On Mon, 2025-09-01 at 09:25 -0700, Andy Lutomirski wrote:
+> > Can you clarify this a bit for those of us who are not well-versed in
+> > exactly what "measurement" does?
 
-This happens because when setting selinux.selinux, the IMA_DIGSIG flag
-that had been set early was cleared. As a result, IMA hash is generated
-when the file is closed.
+Ah, sorry, I missed that.
 
-Here's a minimal C reproducer,
+Measurement refers to the process of collecting the file digest and
+storing it in the measurement list, as opposed to appraisal which
+instead compares the collected file digest with a reference value
+(assumed to be good), and denies access in case of a mismatch.
 
-    #include <stdio.h>
-    #include <sys/xattr.h>
-    #include <fcntl.h>
-    #include <unistd.h>
-    #include <string.h>
-    #include <stdlib.h>
+Integrity violations are detected and reported only for measurement.
 
-    int main() {
-        const char* file_path = "/usr/sbin/test_binary";
-        const char* hex_string = "030204d33204490066306402304";
-        int length = strlen(hex_string);
-        char* ima_attr_value;
-        int fd;
+Roberto
 
-        fd = open(file_path, O_WRONLY|O_CREAT|O_EXCL, 0644);
-        if (fd == -1) {
-            perror("Error opening file");
-            return 1;
-        }
-
-        ima_attr_value = (char*)malloc(length / 2 );
-        for (int i = 0, j = 0; i < length; i += 2, j++) {
-            sscanf(hex_string + i, "%2hhx", &ima_attr_value[j]);
-        }
-
-        if (fsetxattr(fd, "security.ima", ima_attr_value, length/2, 0) == -1) {
-            perror("Error setting extended attribute");
-            close(fd);
-            return 1;
-        }
-
-        const char* selinux_value= "system_u:object_r:bin_t:s0";
-        if (fsetxattr(fd, "security.selinux", selinux_value, strlen(selinux_value), 0) == -1) {
-            perror("Error setting extended attribute");
-            close(fd);
-            return 1;
-        }
-
-        close(fd);
-
-        return 0;
-    }
-
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- security/integrity/ima/ima_appraise.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index f435eff4667f..fc82161f8b30 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -708,7 +708,7 @@ static void ima_reset_appraise_flags(struct inode *inode, int digsig)
- 	set_bit(IMA_CHANGE_XATTR, &iint->atomic_flags);
- 	if (digsig)
- 		set_bit(IMA_DIGSIG, &iint->atomic_flags);
--	else
-+	else if (digsig != -1)
- 		clear_bit(IMA_DIGSIG, &iint->atomic_flags);
- }
- 
-@@ -794,6 +794,8 @@ static int ima_inode_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 		digsig = (xvalue->type == EVM_IMA_XATTR_DIGSIG);
- 	} else if (!strcmp(xattr_name, XATTR_NAME_EVM) && xattr_value_len > 0) {
- 		digsig = (xvalue->type == EVM_XATTR_PORTABLE_DIGSIG);
-+	} else if (result != 1) {
-+		digsig = -1;
- 	}
- 	if (result == 1 || evm_revalidate_status(xattr_name)) {
- 		ima_reset_appraise_flags(d_backing_inode(dentry), digsig);
--- 
-2.51.0
+> > On Mon, Sep 1, 2025 at 2:42=E2=80=AFAM Roberto Sassu
+> > <roberto.sassu@huaweicloud.com> wrote:
+> > > > Now, in cases where you have IMA or something and you only permit s=
+igned
+> > > > binaries to execute, you could argue there is a different race here=
+ (an
+> > > > attacker creates a malicious script, runs it, and then replaces it =
+with
+> > > > a valid script's contents and metadata after the fact to get
+> > > > AT_EXECVE_CHECK to permit the execution). However, I'm not sure tha=
+t
+> > >=20
+> > > Uhm, let's consider measurement, I'm more familiar with.
+> > >=20
+> > > I think the race you wanted to express was that the attacker replaces
+> > > the good script, verified with AT_EXECVE_CHECK, with the bad script
+> > > after the IMA verification but before the interpreter reads it.
+> > >=20
+> > > Fortunately, IMA is able to cope with this situation, since this race
+> > > can happen for any file open, where of course a file can be not read-
+> > > locked.
+> >=20
+> > I assume you mean that this has nothing specifically to do with
+> > scripts, as IMA tries to protect ordinary (non-"execute" file access)
+> > as well.  Am I right?
+>=20
+> Yes, correct, violations are checked for all open() and mmap()
+> involving regular files. It would not be special to do it for scripts.
+>=20
+> > > If the attacker tries to concurrently open the script for write in th=
+is
+> > > race window, IMA will report this event (called violation) in the
+> > > measurement list, and during remote attestation it will be clear that
+> > > the interpreter did not read what was measured.
+> > >=20
+> > > We just need to run the violation check for the BPRM_CHECK hook too
+> > > (then, probably for us the O_DENY_WRITE flag or alternative solution
+> > > would not be needed, for measurement).
+> >=20
+> > This seems consistent with my interpretation above, but ...
+>=20
+> The comment here [1] seems to be clear on why the violation check it is
+> not done for execution (BPRM_CHECK hook). Since the OS read-locks the
+> files during execution, this implicitly guarantees that there will not
+> be concurrent writes, and thus no IMA violations.
+>=20
+> However, recently, we took advantage of AT_EXECVE_CHECK to also
+> evaluate the integrity of scripts (when not executed via ./). Since we
+> are using the same hook for both executed files (read-locked) and
+> scripts (I guess non-read-locked), then we need to do a violation check
+> for BPRM_CHECK too, although it will be redundant for the first
+> category.
+>=20
+> > > Please, let us know when you apply patches like 2a010c412853 ("fs:
+> > > don't block i_writecount during exec"). We had a discussion [1], but
+> > > probably I missed when it was decided to be applied (I saw now it was
+> > > in the same thread, but didn't get that at the time). We would have
+> > > needed to update our code accordingly. In the future, we will try to
+> > > clarify better our expectations from the VFS.
+> >=20
+> > ... I didn't follow this.
+> >=20
+> > Suppose there's some valid contents of /bin/sleep.  I execute
+> > /bin/sleep 1m.  While it's running, I modify /bin/sleep (by opening it
+> > for write, not by replacing it), and the kernel in question doesn't do
+> > ETXTBSY.  Then the sleep process reads (and executes) the modified
+> > contents.  Wouldn't a subsequent attestation fail?  Why is ETXTBSY
+> > needed?
+>=20
+> Ok, this is actually a good opportunity to explain what it will be
+> missing. If you do the operations in the order you proposed, actually a
+> violation will be emitted, because the violating operation is an open()
+> and the check is done for this system call.
+>=20
+> However, if you do the opposite, first open for write and then
+> execution, IMA will not be aware of that since it trusts the OS to not
+> make it happen and will not check for violations.
+>=20
+> So yes, in your case the remote attestation will fail (actually it is
+> up to the remote verifier to decide...). But in the opposite case, the
+> writer could wait for IMA to measure the genuine content and then
+> modify the content conveniently. The remote attestation will succeed.
+>=20
+> Adding the violation check on BPRM_CHECK should be sufficient to avoid
+> such situation, but I would try to think if there are other
+> implications for IMA of not read-locking the files on execution.
+>=20
+> Roberto
+>=20
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/security/integrity/ima/ima_main.c?h=3Dv6.17-rc4#n565
+>=20
 
 
