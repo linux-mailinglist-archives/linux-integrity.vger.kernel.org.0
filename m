@@ -1,123 +1,162 @@
-Return-Path: <linux-integrity+bounces-7032-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7033-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39B58B48F08
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Sep 2025 15:14:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B800B49219
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Sep 2025 16:53:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7317E3AFFAF
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Sep 2025 13:12:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B793717B22D
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Sep 2025 14:53:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3D430ACE5;
-	Mon,  8 Sep 2025 13:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6709930AD09;
+	Mon,  8 Sep 2025 14:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="H0sZgex0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A9E30ACFF;
-	Mon,  8 Sep 2025 13:12:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C115AF4F1;
+	Mon,  8 Sep 2025 14:53:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757337161; cv=none; b=sg9PGKsCucCuoxrhwuoge7nZlboSXPf2uGkitgRZ6l7l1mCmtukI0Z9iUqgwGaOgjVYLsYK1jyzFiXOM2eIZjcu2/dVKXQJ9FU4vUt3P+pJtgf0hiIukKrJDFMKgD5nniC3L2FydXLtfujg36WqByM22qn/4lmQo49gsducR2uc=
+	t=1757343220; cv=none; b=VZVZ3Gp2l2kwccgpU4+K0rAWVoqhEymnMD0KwgBvbR51IbvxAi0MX/xMi+y7fv28qGouFc6C6m3t1MTMbpS2nDdc8lTPMSabIyExCWVMbRSCW1Y8epT0PHW1TCg1Ure3W6Xk5JpZP1zQqgTH2Cih2xbS/wIKm+P+KRkNb0qNxkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757337161; c=relaxed/simple;
-	bh=BppaAQ4jD6WEzrdgKqVOPdodNLx/+Zk2oqkAZPgmM2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=b0dL7jdH5RXgZKx/7uKNmQmwuG2tJZm8LJwSFVSTNMF1WHvW87tK+w35wr579sn6o6q+QWZTEbirbOBoIPvmRuzkEsDfgn5mQATIaONOrxA2nWV1cJy7AfVrykzR+XQo11177Sk4wkjSjC8D5UumC8NNtgREXLtW3HbL8nxrvI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=I-love.SAKURA.ne.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
-Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 588D5kOL069269;
-	Mon, 8 Sep 2025 22:05:46 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from [192.168.1.10] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-	(authenticated bits=0)
-	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 588D5kwe069266
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 8 Sep 2025 22:05:46 +0900 (JST)
-	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <91e6cbd4-9811-4890-84e6-4d58c22a02b0@I-love.SAKURA.ne.jp>
-Date: Mon, 8 Sep 2025 22:05:43 +0900
+	s=arc-20240116; t=1757343220; c=relaxed/simple;
+	bh=4ejeLhZ6tG5k/CAQk8S8fF5V4jQskUGzKNkhFGcv3xo=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=UZI8y4u6tcwBXe+L7KP6/TsTRv7bXJu58laZdNQkxT8fjfnsEvfld26rGgU5ea/+hImHnUYAPimWpcGJwTRUyp6bGWR0UcZyqgtQSx79dtGYGPFCcjOlMdJzod1dfaSaxsAj0Lhll7X/mk+zKab3qj/SOhmTpuzMmp9078xaO8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=H0sZgex0; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 588BXErN009608;
+	Mon, 8 Sep 2025 14:53:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Jvlbpr
+	Waq3FVs5LaKh8dQji8AHiVaMt9q3PcZwfUrLk=; b=H0sZgex0NzlHbcsy8InDsX
+	dTEdcs+9/NhS56zKI3C+aUN9xADydlxM6T+6Qb8BMg+Fm0jsfygFTxzbLfe5q1AB
+	cxZy9Cvtp5Wm5nASHxsHiFxyu9/Js/E/3NdVz3CbEvhG0M6lpUGMB3DlJd/Y7GhR
+	nEUrQnlehlUlV8y3G2OQ4JAEYMxLk87g2ghODxN9nhdo12FWooRbiEARqTk2CHLl
+	EFd8LFvDtkqIYqVfDjXJ5HqzTCAhP1ihqERYwLCQSRBHjdnh84MB1fLL2IakYgxS
+	RgVF0erfNv+1GSOkpipo907J4cRadrb6k0ao0ON1a6rvxZVJerq1Be2JyHAfMQJQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 490cff26cf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Sep 2025 14:53:07 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 588EmH3v007957;
+	Mon, 8 Sep 2025 14:53:07 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 490cff26c8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Sep 2025 14:53:06 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 588CgNhV007895;
+	Mon, 8 Sep 2025 14:53:05 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 49109pem43-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Sep 2025 14:53:05 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 588Er5tb15925792
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 8 Sep 2025 14:53:05 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0157F5805A;
+	Mon,  8 Sep 2025 14:53:05 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4E6ED58051;
+	Mon,  8 Sep 2025 14:53:04 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.92.24])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  8 Sep 2025 14:53:04 +0000 (GMT)
+Message-ID: <13d7fcfecb06423294ae0553c9a561f4cc8faf67.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: don't clear IMA_DIGSIG flag when setting non-IMA
+ xattr
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>
+Cc: linux-integrity@vger.kernel.org, Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore	
+ <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn"	
+ <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM"	
+ <linux-security-module@vger.kernel.org>,
+        open list	
+ <linux-kernel@vger.kernel.org>
+In-Reply-To: <53wb5tzech2k4k25xy2heq7ohmp2elw2a7l4x3nfk6fajfydur@5thsinydau5x>
+References: <20250902042515.759750-1-coxu@redhat.com>
+	 <d252b04934908e7e65a3299bfeffc282c7b0b12f.camel@linux.ibm.com>
+	 <53wb5tzech2k4k25xy2heq7ohmp2elw2a7l4x3nfk6fajfydur@5thsinydau5x>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 08 Sep 2025 10:53:03 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 11/34] lsm: get rid of the lsm_names list and do some
- cleanup
-From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-To: Paul Moore <paul@paul-moore.com>,
-        John Johansen <john.johansen@canonical.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
-        selinux@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
-        =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-        =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
-        Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-References: <20250814225159.275901-36-paul@paul-moore.com>
- <20250814225159.275901-47-paul@paul-moore.com>
- <06a68323-b297-4be7-92eb-c2091207b9f0@canonical.com>
- <dd03266930a7b219c590c54bb2c210366f8d89a1.camel@huaweicloud.com>
- <e92064a4-06c5-4913-917c-f9aca02378f3@canonical.com>
- <CAHC9VhQPmF-RCSUjZo-pe1+sWyw5ZGdnD7P0CWb7yXQQoo+92g@mail.gmail.com>
- <CAHC9VhRjQrjvsn65A-TGKKGrVFjZdnPBu+1vp=7w86SOjoyiUw@mail.gmail.com>
- <6e4bb79d-ba8f-47fa-ad12-0bb79d4442e0@I-love.SAKURA.ne.jp>
-Content-Language: en-US
-In-Reply-To: <6e4bb79d-ba8f-47fa-ad12-0bb79d4442e0@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Anti-Virus-Server: fsav101.rs.sakura.ne.jp
-X-Virus-Status: clean
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: nCth1x5t4Ggujz5ZK94I6HudKIYhfAv8
+X-Proofpoint-GUID: S2B6xdoBFwUWmzAOdF2f1yTmkOYzfUm6
+X-Authority-Analysis: v=2.4 cv=EYDIQOmC c=1 sm=1 tr=0 ts=68beedd3 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=iol2u-jmQgTjznvq4PsA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAyMCBTYWx0ZWRfX0USws6mBdETW
+ DPf4UiNAqPLj+yGOXQeXrfQqkviTrOlDazWiSygyB7CoXOoRH0dX3J5+R905oMa4KAserwdnkQx
+ fb+8Jiowb+US7SHk6BgfMGxqAVsMAlyRRBx+/diy1fONCNgz82PbXtflja0/6pAlAjqMQcAUiuo
+ m0YI5KtFmLDgQtil0NCvOkUxTCbau4nDrmceq+wIbQwhMR9juNN8rBhn1LTPHW52WiyStLkSKXf
+ UihzgRezxRCPMY47OgMHQTOmoUboypHZKv4pJevKbjbNAmUPOkrfzWS1nVBaNdAR+m/o78Ih//K
+ /k4wigAhyZ5gK7MbuBQUN71mBtFzLzm0y3xCl0nlhAutOD3FjQxYfdj2WDkgdAABgGUifQh1dMX
+ MjbcuscL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-08_05,2025-09-08_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 suspectscore=0 spamscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 clxscore=1015 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060020
 
-On 2025/09/07 16:35, Tetsuo Handa wrote:
-> On 2025/09/05 2:52, Paul Moore wrote:
->> +               if (!str) {
->> +                       str = str_tmp;
->> +                       len = len_tmp - 1;
-> 
-> This needs to be
-> 
-> 			len = len_tmp - 1;
-> 			mb();
-> 			str = str_tmp;
-> 
-> , or concurrent access might reach simple_read_from_buffer()
-> with str != 0 and len == 0. (If you don't want mb(), you can use
-> 
-> -	if (unlikely(!str)) {
-> +	if (unlikely(!str || !len)) {
-> 
-> instead).
+Hi Coiby,
 
-Well, memory barrier is more complicated; it will be
+On Mon, 2025-09-08 at 19:12 +0800, Coiby Xu wrote:
+> >=20
+> > Even without an IMA appraise policy, the security xattrs are written ou=
+t to the
+> > filesystem, but the IMA_DIGSIG flag is not cached.
+>=20
+> It seems I miss some context for the above sentence. If no IMA policy is
+> configured, no ima_iint_cache will be created. If you mean non-appraisal
+> policy, will not caching IMA_DIGSIG flag cause any problem?
 
-	len = len_tmp - 1;
-	wmb();
-	str = str_tmp;
+Sorry.  What I was trying to say is that your test program illustrates the
+problem both with or without any of the boot command line options as you
+suggested - "ima_appraise=3Dfix evm=3Dfix ima_policy=3Dappraise_tcb".  Writ=
+ing some
+other security xattr is a generic problem, whether the file is in policy or=
+ not,
+whether IMA or EVM are in fix mode or not.  The rpm-plugin-ima should insta=
+ll
+the IMA signature regardless.
 
-and
+SELinux doesn't usually re-write the security.selinux xattr, so the problem=
+ is
+hard to reproduce after installing the rpm-plugin-ima with "dnf reinstall
+<package>".
 
-	}
-	rmb();
-	return simple_read_from_buffer(buf, count, ppos, str, len);
+thanks,
 
-pair.
-
-Just splitting the whole { } block that follows "if (unlikely(!str))"
-out as an initcall function is much simpler; no need to use spinlock
-(because the userspace threads has not started yet), no need to worry
-about kmalloc() failure (because the allocation failure will panic()
-because the userspace threads has not started yet), and the memory size
-saved by use of __init function will be larger than the memory size
-wasted by /sys/kernel/security/lsm being never accessed...
-
+Mimi
 
