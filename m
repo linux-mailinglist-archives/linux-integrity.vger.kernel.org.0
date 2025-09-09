@@ -1,141 +1,214 @@
-Return-Path: <linux-integrity+bounces-7040-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7041-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 155D8B4A426
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Sep 2025 09:48:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1E2AB5017D
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Sep 2025 17:36:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01C8F1882168
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Sep 2025 07:48:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D5504E2D31
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Sep 2025 15:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A598B22172D;
-	Tue,  9 Sep 2025 07:48:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B702331A56D;
+	Tue,  9 Sep 2025 15:31:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YPsi05+d"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16CD71D5CE8;
-	Tue,  9 Sep 2025 07:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16ED125D209;
+	Tue,  9 Sep 2025 15:31:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757404092; cv=none; b=amfjUoGyjxIyXvo47152pwr7DSZJAvCbLC1XAD9zYR0YG3hu+29nZoinzeqywJpzvQQZpbYRIs8mXABAW1/Os/zFdZWPIkcV09/WOxd5Y7LmvmfrdArOXy6i52VWP+wpordp8vKasO/lQhVtyokqYACjeHBylTvPQWcLFQyprpE=
+	t=1757431906; cv=none; b=pdABBwkYeTsnYQq0El1Xie3AoCDFDRTQFTZgeoghyDbqMk9ptHTfYBvOjSpFZZvVqQAfaDuyBdodJDpzIc3EgFoZiLJpGmMtiSHmxEGghJmKbjn7QOLo/NDKsmOfm3bVijYeg0Ri+Yf78LARweeSjcPCJrTUqjSH4BmqyneJYYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757404092; c=relaxed/simple;
-	bh=c5iAKbXkqPtpHNGYxMaTOQYt1Gf9eA8cH13MWswLUdM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GoWqCrfdnjzW5vJvwYDuCiUVQg88qkLA6by6XZpm1beZ8+IXMt27Nso5xgw9zlcmjagIKeV1H7P7KPvTYXXjgVuNYIHUGxJurcyAqWeXRTlJIlqYRFBFVwZr5AAswg9PKRQbvddKFxMIDXSwmc6oKnGKfNAJtxX00sl3lw8XB/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4cLbVH1wg2zsjt1;
-	Tue,  9 Sep 2025 15:46:15 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 38F341402FA;
-	Tue,  9 Sep 2025 15:48:01 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBXrUKn279olzIGAQ--.52053S2;
-	Tue, 09 Sep 2025 08:48:00 +0100 (CET)
-Message-ID: <db0b620e1eac353190927c45a2adbc13f35722b9.camel@huaweicloud.com>
-Subject: Re: [PATCH] ima,evm: move initcalls to the LSM framework
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>, roberto.sassu@huawei.com
-Cc: Mimi Zohar <zohar@linux.ibm.com>, linux-security-module@vger.kernel.org,
-  linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
- john.johansen@canonical.com, wufan@kernel.org, mic@digikod.net,
- kees@kernel.org,  mortonm@chromium.org, casey@schaufler-ca.com,
- penguin-kernel@i-love.sakura.ne.jp,  nicolas.bouchinet@oss.cyber.gouv.fr,
- xiujianfeng@huawei.com
-Date: Tue, 09 Sep 2025 09:47:47 +0200
-In-Reply-To: <CAHC9VhRWt54V3nvRDpN_=gb5Fc68KznwDd7xhNmyGJw5+TQ5Dw@mail.gmail.com>
-References: <9f35539de7188c6b853c55b76958a286131f5928.camel@huaweicloud.com>
-	 <20250902125457.2689519-1-roberto.sassu@huaweicloud.com>
-	 <82f22f97486622408bec772a9b025e301c8fa2f4.camel@linux.ibm.com>
-	 <CAHC9VhTGAcMTXHReinybpLzer7seCN+NUTHcFte+aU2oRNtNNg@mail.gmail.com>
-	 <0cccd05c0005d3b9e85ab92e35363cc69ea6a3f2.camel@linux.ibm.com>
-	 <CAHC9VhRWt54V3nvRDpN_=gb5Fc68KznwDd7xhNmyGJw5+TQ5Dw@mail.gmail.com>
+	s=arc-20240116; t=1757431906; c=relaxed/simple;
+	bh=9u4csa/Fww/W7t8uP7zd9sB1+c5iLLbS/3N7rDstuh4=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=aNe9UmqN8wCqkvaDcwJ2KWtiBN4JDOrC/W7rYYFNF6cPozkDGFQIG/3SbFETVD58JgEQCoRe+jRBSrlO0DNx/bKb2VgY1Lhqnc1vPtVHK+c8KiCqUm9QDQmpacTlm4e7FpOuEr3GShQjUbON65v6kt6TPX+LtZey8Tp2HqDa5rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YPsi05+d; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 589Bd18F018250;
+	Tue, 9 Sep 2025 15:31:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=90Byf5
+	XT5MVaruoMf5NIbSiGdAOV7cZPs2ms46N+2LA=; b=YPsi05+dFuGfVRukLZbm9E
+	wQLhH9DhwNhgJ8Dz4+FB5hINwSYpknUXM6cISW9HqXUYj28ieN+bVRsK497f3umO
+	9iGJKsdmDBgX+7w4T9hGjXRY2vMZC6Qh1YzbMVTHp5Nsqw5dd47bxuuTaJ2G/Vfg
+	EfMO4hqMs4Tc1KWUlfkTExjkqAI+7IZH18ygMuM8VXjFP0pVS3Ufs954epJOhl95
+	/Tad37qIrQtUupup7wGUC6PfgWLhFXcPLt5zCPAb29X60gOvc/jr3dCyMa2bionw
+	Sag8W7oC2H4pjGMf+p4cCHYwiCoLmfq3NVsOUvUekYDwefPjQF5GHGBx9dezjkrw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 490cff8rj8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Sep 2025 15:31:24 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 589FVG7f019321;
+	Tue, 9 Sep 2025 15:31:23 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 490cff8rhw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Sep 2025 15:31:23 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 589E5aTX010613;
+	Tue, 9 Sep 2025 15:31:22 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4910smurvx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 09 Sep 2025 15:31:22 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 589FVLdm29950706
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 9 Sep 2025 15:31:22 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CB3FC58063;
+	Tue,  9 Sep 2025 15:31:21 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3145D58057;
+	Tue,  9 Sep 2025 15:31:21 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.147.133])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  9 Sep 2025 15:31:21 +0000 (GMT)
+Message-ID: <5aeecf1aa6eff8ae0ea0a9e95d5df79aee338b32.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: setting security.ima to fix security.evm for a
+ file with IMA signature
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
+Cc: Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin	
+ <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul
+ Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E.
+ Hallyn"	 <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM"	
+ <linux-security-module@vger.kernel.org>,
+        open list	
+ <linux-kernel@vger.kernel.org>
+In-Reply-To: <20250909041954.1626914-1-coxu@redhat.com>
+References: <20250909041954.1626914-1-coxu@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+Date: Tue, 09 Sep 2025 11:31:20 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwBXrUKn279olzIGAQ--.52053S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zr43Xw18uF1fXrW5Zw13Jwb_yoW8CFW5pF
-	W7tayUKr4qvr4aywn2v3W5Ar4Yk3s3XFy5Xrn8t34UA3sI9rnrXr1xCFy5CFyDGr4fJ343
-	ZF18Z343A3WDAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAGBGi-z8EAnQAAsH
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: LIpIJ4Th07-G7SHRm1oHskGpVS30Mlud
+X-Proofpoint-GUID: Vjm5K-ly7Hr2I-wroiZSdDn6d9Ge4Wwu
+X-Authority-Analysis: v=2.4 cv=EYDIQOmC c=1 sm=1 tr=0 ts=68c0484c cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=vUXcQdf43LBxS_wO:21 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=20KFwNOVAAAA:8
+ a=_UlRNL-Y48Z5G6zc6kMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA2MDAyMCBTYWx0ZWRfX+04/QzGKh42V
+ 7R3TZfQ5zixYo4gMQfKXaKQZHxt5tr3UCtAOLCxTYfFEvrb+o6EgJST+U0E19vYjwWpTeu04TDR
+ IlM7W3x5WTYsPGS3I5SJK9j1AKdPKADvttGJYv7C44r1T4R9tGfD+24/sb//PrIr/FLgxXe6T8p
+ 3Kn/hdo0dsYf3BfVF3T6tVGgCFNegFGcr4ZYJHhchs5eRlnX8DF+38SYw7x9FpRh9NA4bDvly8N
+ KgZAO8HiO870zMRO2cl8a98/9ANGG/3ErAd+o9WmO5SdDNOUsbA6lrFt0S+MRCwQtbqyBv5bmtE
+ oYVUsQSFBfXEoxvmT9wc9c1LBJ2WbJzcjjI5cCii8wQxrTuu0JJypxzxLq5rU3JTYmAVsOW8R8v
+ +zitNgjl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-09_02,2025-09-08_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 suspectscore=0 spamscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 clxscore=1015 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509060020
 
-On Mon, 2025-09-08 at 17:04 -0400, Paul Moore wrote:
-> On Sun, Sep 7, 2025 at 10:46=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> =
-wrote:
-> > On Sun, 2025-09-07 at 21:08 -0400, Paul Moore wrote:
-> > > On Sun, Sep 7, 2025 at 5:18=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.co=
-m> wrote:
-> > > > On Tue, 2025-09-02 at 14:54 +0200, Roberto Sassu wrote:
-> > > > > From: Paul Moore <paul@paul-moore.com>
-> > > >=20
-> > > > Remove above ...
-> > > >=20
-> > > > >=20
-> > > > > This patch converts IMA and EVM to use the LSM frameworks's initc=
-all
-> > > > > mechanism. It moved the integrity_fs_init() call to ima_fs_init()=
- and
-> > > > > evm_init_secfs(), to work around the fact that there is no "integ=
-rity" LSM,
-> > > > > and introduced integrity_fs_fini() to remove the integrity direct=
-ory, if
-> > > > > empty. Both integrity_fs_init() and integrity_fs_fini() support t=
-he
-> > > > > scenario of being called by both the IMA and EVM LSMs.
-> > > > >=20
-> > > > > It is worth mentioning that this patch does not touch any of the
-> > > > > "platform certs" code that lives in the security/integrity/platfo=
-rm_certs
-> > > > > directory as the IMA/EVM maintainers have assured me that this co=
-de is
-> > > > > unrelated to IMA/EVM, despite the location, and will be moved to =
-a more
-> > > >=20
-> > > > This wording "unrelated to IMA/EVM" was taken from Paul's patch des=
-cription, but
-> > > > needs to be tweaked.  Please refer to my comment on Paul's patch.
-> > >=20
-> > > Minim, Roberto, would both of you be okay if I changed the second
-> > > paragraph to read as follows:
-> > >=20
-> > > "This patch does not touch any of the platform certificate code that
-> > > lives under the security/integrity/platform_certs directory as the
-> > > IMA/EVM developers would prefer to address that in a future patchset.=
-"
-> >=20
-> > That's fine.
+On Tue, 2025-09-09 at 12:19 +0800, Coiby Xu wrote:
+> When both IMA and EVM fix modes are enabled, accessing a file with IMA
+> signature won't cause security.evm to be fixed. But this doesn't happen
+> to a file with correct IMA hash already set because accessing it will
+> cause setting security.ima again which triggers fixing security.evm
+> thanks to security_inode_post_setxattr->evm_update_evmxattr.
 >=20
-> Roberto, is it okay if I update your patch with the text above and use
-> it to replace my IMA/EVM patch in the LSM init patchset?  I'll retain
-> your From/Sign-off of course.
+> Let's use the same mechanism to fix security.evm for a file with IMA
+> signature.
+>=20
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
 
-Yes, absolutely!
+Agreed, re-writing the file signature stored as security.ima would force
+security.evm to be updated.
 
-Roberto
+Unfortunately, I'm missing something. ima_appraise_measurement() first veri=
+fies
+the existing security.evm xattr, before verifying the security.ima xattr.  =
+If
+the EVM HMAC fails to verify, it immediately exits ima_appraise_measurement=
+().=20
+security.ima in this case is never verified.
+
+This patch seems to address the case where the existing security.evm is val=
+id,
+but the file signature stored in security.ima is invalid.  (To get to the n=
+ew
+code, the "status" flag is not INTEGRITY_PASS.)  Re-writing the same invali=
+d
+file signature would solve an invalid security.evm, but not an invalid IMA =
+file
+signature.  What am I missing?
+
+thanks,
+
+Mimi
+
+> ---
+>  security/integrity/ima/ima_appraise.c | 27 +++++++++++++++++++++------
+>  1 file changed, 21 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/i=
+ma/ima_appraise.c
+> index f435eff4667f..18c3907c5e44 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -595,12 +595,27 @@ int ima_appraise_measurement(enum ima_hooks func, s=
+truct ima_iint_cache *iint,
+>  		integrity_audit_msg(audit_msgno, inode, filename,
+>  				    op, cause, rc, 0);
+>  	} else if (status !=3D INTEGRITY_PASS) {
+> -		/* Fix mode, but don't replace file signatures. */
+> -		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig &&
+> -		    (!xattr_value ||
+> -		     xattr_value->type !=3D EVM_IMA_XATTR_DIGSIG)) {
+> -			if (!ima_fix_xattr(dentry, iint))
+> -				status =3D INTEGRITY_PASS;
+> +		/*
+> +		 * Fix mode, but don't replace file signatures.
+> +		 *
+> +		 * When EVM fix mode is also enabled, security.evm will be
+> +		 * fixed automatically when security.ima is set because of
+> +		 * security_inode_post_setxattr->evm_update_evmxattr.
+> +		 */
+> +		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig) {
+> +			if (!xattr_value ||
+> +			    xattr_value->type !=3D EVM_IMA_XATTR_DIGSIG) {
+> +				if (ima_fix_xattr(dentry, iint))
+> +					status =3D INTEGRITY_PASS;
+> +			} else if (xattr_value->type =3D=3D EVM_IMA_XATTR_DIGSIG &&
+> +				   evm_revalidate_status(XATTR_NAME_IMA)) {
+> +				if (!__vfs_setxattr_noperm(&nop_mnt_idmap,
+> +							   dentry,
+> +							   XATTR_NAME_IMA,
+> +							   xattr_value,
+> +							   xattr_len, 0))
+> +					status =3D INTEGRITY_PASS;
+> +			}
+>  		}
+> =20
+>  		/*
+>=20
+> base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
 
 
