@@ -1,147 +1,160 @@
-Return-Path: <linux-integrity+bounces-7038-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7039-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC13AB49D47
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Sep 2025 01:06:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73EC0B4A095
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Sep 2025 06:20:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 098AA188361A
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Sep 2025 23:06:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C8313A7972
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Sep 2025 04:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D8E23B61E;
-	Mon,  8 Sep 2025 23:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC022E1747;
+	Tue,  9 Sep 2025 04:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="FuCn4CUU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="itXIm1sE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473A821FF39
-	for <linux-integrity@vger.kernel.org>; Mon,  8 Sep 2025 23:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E80281375
+	for <linux-integrity@vger.kernel.org>; Tue,  9 Sep 2025 04:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757372770; cv=none; b=NZRUXKR5/KLna9N7Qqb48PYdRb+tApZQVQlA5eO0p2Ei0NVkO6ozVP9IQfXg09IUOIzUq21txCbl26W89MMr68IiHY0CCbZGEzrPxeBCsksHkNXlLGKAnDtwJqfmuv4mvfKsXVMKMnzaBQP3W/wGRItzo0CDxaz5b4OKAlaDU8g=
+	t=1757391605; cv=none; b=AHTG902WJs+KghzTE1S6YySutbA6S9dScdGpkIK+Md9GymikLMSSsmEWU4y3xc/dV1csQT3+xdZvc/e3XyRmh2IaTPVNIMAuMHFtJBtbe8i0fp4OzJ8SOANHb9bvY0PLS0C4mVuyX9d3a8DR0VwF5E662Q2UrTr20eR1B7+/dSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757372770; c=relaxed/simple;
-	bh=Y5RZSb94nAB2oyU1qoO8afAl+wCOgH+J1m+ytAgunGs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=geUjgnVwF7sEnjucHZrcJIi65+NCAWpN8hTTD0S9r1MgrcK3fhYaygnpcTT05Egg1QIsnXZwvnPbCH/43nZa+cSC/HQEyzyUDLdQHkgtwXDuR3uRUEGeX3Xrg7wKXj5nwzhgcpQ+H/I9iWW78j6HoCSBVowj5t9N2wXtIi3t0qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=FuCn4CUU; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-32b8919e7c7so5858067a91.2
-        for <linux-integrity@vger.kernel.org>; Mon, 08 Sep 2025 16:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1757372768; x=1757977568; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Erv6ujYQyM5esz/88jb3LaQCpJ9LwDgjjS4NuHxBBhU=;
-        b=FuCn4CUUjgnNvtegpU/nHCxIG72/RqpukgPzgn/NB7mzyhx8waHFDDfVtFZ84r0haq
-         A5CltYE17oZ6zKlQ1KkO7Rh1IcvqXZaZ84CPwy3RHww4qXC2AhxZOnzqVjQSJUwUu/i7
-         Sgrp5zVpM2ekQyNsnpxNcfPoJ8x8PTufkYZ0diGzB38hw0qmxafGRm00yjbZBoiImyrg
-         VawHe2RPR4E8xX5LD1cAgcT+Be7Fkgxpi5zuy9afzLCB98yv5jgM46zVjl1ysuuqgood
-         zH5oHWUNiP/27MAJB3teMsatItiUqzQi4/z3wMEyPSZ6y8ljkRDGGf61maLLITB8cPzL
-         q3/g==
+	s=arc-20240116; t=1757391605; c=relaxed/simple;
+	bh=kcJMNEpEeX4hcspzTai+arozdN7w9isGuN5jMeekjZA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GIZvPSusHQUpdTLSanaSchtKVgwjBq4z8cTOhYRnrPUmlGdcto9qDOkqHa+poW3o1aKbyD1cppgnYSlXy1oyWOFmzdJgaknsEORxBxfPIYX6wCIsExV8x0oYL1Lla1o5T2ITUqj+8+1FLlBF/SNddSDA8eFSUcfS04xYsHEecDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=itXIm1sE; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757391601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=54MsxNCmmlAlcM5f+BHWGLYP6L+NuEk1hd/wbu7HmzE=;
+	b=itXIm1sE7Wsw/T2sTwg/lSrMp/cna6MZ6tO99hGCLeKLgDiZa0h8ViBIHN9OTqPYhaY+XN
+	7YH1Cpms3ATfLvMvR891g/PfovoJNaYois9xQwHk8WcHebT8tDaSaW7b2wJxYQTVKSpG4L
+	UKV268n7sCZLGvMczUD5jliuPL8EPGU=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-277-jE7ZPdMEMPi3XWLBMnr7ig-1; Tue, 09 Sep 2025 00:19:59 -0400
+X-MC-Unique: jE7ZPdMEMPi3XWLBMnr7ig-1
+X-Mimecast-MFC-AGG-ID: jE7ZPdMEMPi3XWLBMnr7ig_1757391599
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b47174b3427so4177752a12.2
+        for <linux-integrity@vger.kernel.org>; Mon, 08 Sep 2025 21:19:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757372768; x=1757977568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Erv6ujYQyM5esz/88jb3LaQCpJ9LwDgjjS4NuHxBBhU=;
-        b=YWuV5iZKkzeu7+VUCaIhX/dD/g/36HGIh0ohImaE9jfc8O0npEQteGLwP6jynv9Esu
-         FioutxZZtVkWIMgKzjnPuhNnLQm/2zxK6xjZgxZMMWZFEFh7LLktWQHJXhjRcI6wVTHu
-         FlP55X2mVAXKU5iZrPhJCaKOcw96Zt3nRgANYvuVeGC97UPf9OKcl3zX/Rcp7t8+2cvd
-         TNqZzMGmnLur16jnZ647/iSA/O7zctsZCvC5MQRD+EF3V163RIkQWy5tG/fmcEic3tXb
-         XorSWgcXyrmojfT4sOtEoOU05RRacsuaAuKRMfUuzyXJ595j/I7i35suNZawUHVwNkVX
-         0C2g==
-X-Forwarded-Encrypted: i=1; AJvYcCW3g4IjoGViIJBDI1D2YiJQ0qCeYidbgkjD1Ca/WX8xjVMP1BRLhrrPipt4b1yo63TNycZYZd3Gdqdxz73uges=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfSxb+T1E+MBYcAxG/768Q7/ml9LBuR3ec8BXIn4fM68ZCkpzK
-	VaX2ez1FzSu2KsAfhAP0rcGnbHA6T9/qCvaaCMcvXxii0yBb3N40NiBSLj9oqxr8W0WZ89ne6TT
-	CnJa61Pal9GyV8nNU+TpTV9Dvb+oQYKZOFqqaee75
-X-Gm-Gg: ASbGncsH1jwCxIHIiT4j3go3yXDVdvs89ygQqh6v0zBYLwOw9Q76zF9pVdEQicxMNHB
-	zpO+BIY+C9ftRFHKFTaR1FXBnfhfu0c6iYI8WWibqaTCzwAS6zyFY2U394vbEQ+lW+uhCcaVswB
-	3wFnhJQ9myjj+keuOnPikkgzvUGN21CLdl7q0VGUwi7rVsCFqOisNW/UMg5MfqBBe2oTMz//jOP
-	tHgxcg=
-X-Google-Smtp-Source: AGHT+IFB+FxnX4rjcAYZGM7fEt911DkcKdbHyBbmx41VKn8nMmV/AAJIF3WqaGwCTnbvarfbhMxVBFEgH0t3USpFar8=
-X-Received: by 2002:a17:90b:1d0b:b0:32b:df0e:9284 with SMTP id
- 98e67ed59e1d1-32d43f45856mr12879413a91.10.1757372768528; Mon, 08 Sep 2025
- 16:06:08 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757391598; x=1757996398;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=54MsxNCmmlAlcM5f+BHWGLYP6L+NuEk1hd/wbu7HmzE=;
+        b=A8lMuVoU6A2bjGRvNQFDZcG124QPfqw/lrASOhujkYd/eb5f0gyTYtM4jEtoRkjozW
+         lVcXf2J9TBmtjUmKGcJ6dTmEdOPtHNw+QMdEgkOMxJQ/Dg3AFQX2df4wdcYIguZHUA26
+         N1LMrSi/4twAmS7AFE8EqtQzpduTtOSnG98bHeFu9jcluf5CYNI7BJ7L6y2OY1gwkoM8
+         3IRo6LSPZUZHSTi50AVGcAxmph9Li/OgZUC9ISDf2kjP+9KVK24RSHGhL8KW5LqWez+0
+         RB9PlLrAgWpcDyBIGX+SGl/IsvtM7sAsRnPgdR7YUb40Xwu7Gb/Ce0L0EDVGuzfePf8E
+         dWjg==
+X-Gm-Message-State: AOJu0YzpQFaPjuRx+juFz5BE6IyWaeL5O79WwBsUqOAsPe8PmcEP+SCl
+	7/R3TyF1sboazU8muaJWd2694goFysx4RPXzKZayAjyZqJmRTYbl0dqY4/HOir1S3TIV9G/fmcg
+	MjeBFNTSIIQKOUQORLSHh3TLQFWmcvQhJIzHv77iYALFYgaPlV0nqgzuAfVKf/FJxjUnne5oF1a
+	9RO8vHq7G4pRTkc7nyZMY8cO4twsTXH0TCCh6As7qjETJtMlauFustzg==
+X-Gm-Gg: ASbGncvSoo1v+1DQ7LGUTzUPBElMn8vJDUMWH4SMyp+s1c1+oJ/5fep75zHxTS5g5GL
+	ECsNR+mIt7Q6MuDMBKCceSGQQj3zqeq3ZaMl4T5qvMohv4HWlp+zKlHwt1TRyonQUnQlHXIv8zj
+	6NwMCzUBqO2mkcbPIrqf1s5YHbNNjiUTzuLFEtLhGyv8aSz6VqngRQuvujBgpDw79AifO60APlt
+	+PJdTXACP9IINMZjWCRXGpWyNHX9/xPyAo90IPnUG1JsncCcnOeIVu6djsXvUf5a0A8xiRM5RHf
+	SSUK/hvi6y+ihM8dq0kdSFlcYnZhnP8=
+X-Received: by 2002:a17:903:b0e:b0:258:fa62:ab17 with SMTP id d9443c01a7336-258fa62ac03mr15850515ad.29.1757391598484;
+        Mon, 08 Sep 2025 21:19:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEv36p9UxA54Z3porfTlTxG7LAGzqKIDTmwybjkcWmGH9oQOVl5p8+shON8WpdrhlHXD9O2lQ==
+X-Received: by 2002:a17:903:b0e:b0:258:fa62:ab17 with SMTP id d9443c01a7336-258fa62ac03mr15850235ad.29.1757391597940;
+        Mon, 08 Sep 2025 21:19:57 -0700 (PDT)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24c9952bccasm157077385ad.105.2025.09.08.21.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Sep 2025 21:19:57 -0700 (PDT)
+From: Coiby Xu <coxu@redhat.com>
+To: linux-integrity@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] ima: setting security.ima to fix security.evm for a file with IMA signature
+Date: Tue,  9 Sep 2025 12:19:53 +0800
+Message-ID: <20250909041954.1626914-1-coxu@redhat.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250814225159.275901-36-paul@paul-moore.com> <20250814225159.275901-47-paul@paul-moore.com>
- <06a68323-b297-4be7-92eb-c2091207b9f0@canonical.com> <dd03266930a7b219c590c54bb2c210366f8d89a1.camel@huaweicloud.com>
- <e92064a4-06c5-4913-917c-f9aca02378f3@canonical.com> <CAHC9VhQPmF-RCSUjZo-pe1+sWyw5ZGdnD7P0CWb7yXQQoo+92g@mail.gmail.com>
- <CAHC9VhRjQrjvsn65A-TGKKGrVFjZdnPBu+1vp=7w86SOjoyiUw@mail.gmail.com>
- <6e4bb79d-ba8f-47fa-ad12-0bb79d4442e0@I-love.SAKURA.ne.jp> <91e6cbd4-9811-4890-84e6-4d58c22a02b0@I-love.SAKURA.ne.jp>
-In-Reply-To: <91e6cbd4-9811-4890-84e6-4d58c22a02b0@I-love.SAKURA.ne.jp>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 8 Sep 2025 19:05:56 -0400
-X-Gm-Features: Ac12FXxJDTl9FmflOjd4KGcqf27UBcWa5-_QkD1wxw_L_dqqk3VN6ThLKrEYEI4
-Message-ID: <CAHC9VhRvdxdmyp1+hDpiOZTLdJjuK1u5Rvk5dTsbN=oDAyPkNA@mail.gmail.com>
-Subject: Re: [PATCH v3 11/34] lsm: get rid of the lsm_names list and do some cleanup
-To: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: John Johansen <john.johansen@canonical.com>, 
-	Roberto Sassu <roberto.sassu@huaweicloud.com>, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Fan Wu <wufan@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 8, 2025 at 9:07=E2=80=AFAM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
-> On 2025/09/07 16:35, Tetsuo Handa wrote:
-> > On 2025/09/05 2:52, Paul Moore wrote:
-> >> +               if (!str) {
-> >> +                       str =3D str_tmp;
-> >> +                       len =3D len_tmp - 1;
-> >
-> > This needs to be
-> >
-> >                       len =3D len_tmp - 1;
-> >                       mb();
-> >                       str =3D str_tmp;
-> >
-> > , or concurrent access might reach simple_read_from_buffer()
-> > with str !=3D 0 and len =3D=3D 0. (If you don't want mb(), you can use
-> >
-> > -     if (unlikely(!str)) {
-> > +     if (unlikely(!str || !len)) {
+When both IMA and EVM fix modes are enabled, accessing a file with IMA
+signature won't cause security.evm to be fixed. But this doesn't happen
+to a file with correct IMA hash already set because accessing it will
+cause setting security.ima again which triggers fixing security.evm
+thanks to security_inode_post_setxattr->evm_update_evmxattr.
 
-Good catch, thanks.  I'm going to go with the approach above as it is
-rather straightforward.
+Let's use the same mechanism to fix security.evm for a file with IMA
+signature.
 
-> Well, memory barrier is more complicated; it will be
->
->         len =3D len_tmp - 1;
->         wmb();
->         str =3D str_tmp;
->
-> and
->
->         }
->         rmb();
->         return simple_read_from_buffer(buf, count, ppos, str, len);
->
-> pair.
->
-> Just splitting the whole { } block that follows "if (unlikely(!str))"
-> out as an initcall function is much simpler ...
+Signed-off-by: Coiby Xu <coxu@redhat.com>
+---
+ security/integrity/ima/ima_appraise.c | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-I would very much prefer to get the string generation out of the boot,
-and generate it on demand.
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index f435eff4667f..18c3907c5e44 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -595,12 +595,27 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 		integrity_audit_msg(audit_msgno, inode, filename,
+ 				    op, cause, rc, 0);
+ 	} else if (status != INTEGRITY_PASS) {
+-		/* Fix mode, but don't replace file signatures. */
+-		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig &&
+-		    (!xattr_value ||
+-		     xattr_value->type != EVM_IMA_XATTR_DIGSIG)) {
+-			if (!ima_fix_xattr(dentry, iint))
+-				status = INTEGRITY_PASS;
++		/*
++		 * Fix mode, but don't replace file signatures.
++		 *
++		 * When EVM fix mode is also enabled, security.evm will be
++		 * fixed automatically when security.ima is set because of
++		 * security_inode_post_setxattr->evm_update_evmxattr.
++		 */
++		if ((ima_appraise & IMA_APPRAISE_FIX) && !try_modsig) {
++			if (!xattr_value ||
++			    xattr_value->type != EVM_IMA_XATTR_DIGSIG) {
++				if (ima_fix_xattr(dentry, iint))
++					status = INTEGRITY_PASS;
++			} else if (xattr_value->type == EVM_IMA_XATTR_DIGSIG &&
++				   evm_revalidate_status(XATTR_NAME_IMA)) {
++				if (!__vfs_setxattr_noperm(&nop_mnt_idmap,
++							   dentry,
++							   XATTR_NAME_IMA,
++							   xattr_value,
++							   xattr_len, 0))
++					status = INTEGRITY_PASS;
++			}
+ 		}
+ 
+ 		/*
 
---=20
-paul-moore.com
+base-commit: b320789d6883cc00ac78ce83bccbfe7ed58afcf0
+-- 
+2.51.0
+
 
