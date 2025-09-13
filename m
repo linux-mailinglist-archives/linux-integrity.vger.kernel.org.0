@@ -1,59 +1,61 @@
-Return-Path: <linux-integrity+bounces-7065-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7066-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDAC0B55867
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Sep 2025 23:33:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9EACB55E2C
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Sep 2025 05:56:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CFA71C85546
-	for <lists+linux-integrity@lfdr.de>; Fri, 12 Sep 2025 21:33:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E6C2178F2F
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Sep 2025 03:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4757426B973;
-	Fri, 12 Sep 2025 21:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F601DED53;
+	Sat, 13 Sep 2025 03:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlg3Ik6Y"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="QPtKmzZM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 176352BAF4;
-	Fri, 12 Sep 2025 21:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEF326290;
+	Sat, 13 Sep 2025 03:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757712782; cv=none; b=CIbrIWDu3EGDx7Trijs1+znL4ZXnA1fnx5bIHkR+dlrmXKwvW2ULJ8blCeN9kWJkEUNpnt5QCe/vahvUDl6gqMaRpz//FzTn5Qr1Zalqhjrx9IrmazCl83LAmtmc01v/aMGVUWymeJ+bEV+FkZW44SanDGwQ+7w8p/+Or6h1ITY=
+	t=1757735806; cv=none; b=rHPB5JgrSe4nd62Zm1GaeyT5t8bGh7gEAqtKA7N9xBgZk/h+6vyPfHvTSgKUJ/1CwtyQ3yGWvQQB5Cu03nkQPj35YcZeAGGXeLuJS7qVwseQUlMadmIiWxDh1r8Ya0zhK1RYM9vf0hSX1X5FsSZvlUPdfOFd/gxa9n2kxmNjeHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757712782; c=relaxed/simple;
-	bh=Fa1ZYSxyvToVhEv9NrlVYdvmGvyVBS7zdoogcGQu6K8=;
+	s=arc-20240116; t=1757735806; c=relaxed/simple;
+	bh=mYvWyyZaBbGor0A60kVcHbc38K2M2ajjYNslJyZmHEQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NcNc/mZfYh8UhTkjA9oZqPLO07ln+i+SbRid1CunaIT8T7v49vHf8sebuGVEmB7TLWCT9VhU4Gfumcq2y7RTp3eqiqL61tArmsKjxK2YK+MxZfKBYQzGodRXyIRXmB9qEe9qJhh5NByxFPOC8mp57lv+NgdDZYGcgDG37514mdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlg3Ik6Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 688B3C4CEF1;
-	Fri, 12 Sep 2025 21:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757712781;
-	bh=Fa1ZYSxyvToVhEv9NrlVYdvmGvyVBS7zdoogcGQu6K8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qlg3Ik6YJQLRToqhk65gPTvTWAqKzPKLpqlPYg11Yq2+28+n5ZzxnRVnZ7BKTTfVs
-	 a6wjOGdVttmVndkHti7ibC9ut03i6qZ1BU72QM8NS+oyrKLmYlgq4YsEjuxyAysWVZ
-	 B22Raaf0/Nilxq0hdrzLMZSOeC4YbjnKPvgilKGUudzvZxsSE5a/VF2SEe0cVexRJT
-	 J5kVvL4qKRh50sFWtZsd6waWZNNixwntAzMBW9+2lSJ6dmuB5e3nxZM9Dwg21juXhn
-	 xBkS42tFwUjK4djCIiGKwlV81GON04CGAXgBHU1Yo6WGQntuL7D8FhBcgdDKpN27nn
-	 EAg1n1tYtDieg==
-Date: Fri, 12 Sep 2025 14:32:56 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, herbert@gondor.apana.org.au,
-	jarkko@kernel.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, davem@davemloft.net,
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org
-Subject: Re: [GIT PULL] Immutable branch between MFD, Char and Crypto due for
- the v6.18 merge window
-Message-ID: <20250912213256.GA3062565@ax162>
-References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
- <20250902124205.GL2163762@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tb+us7TIM2sRH3ojHZw2qZgRGcHFcesL5hMOlRPqk2OhTCIZIApr8qfr6wIPUgi60axqm4lQ7vBYSdvRUHOHdlfghjpOXKI4P3feKQXZmkk3gk9y8GJTevPYOOw9sDnLGtJyZItkjqyBdSlUHOZq2y4uqFcksNHxtNM1qu08fjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=QPtKmzZM; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=WLmYVqGmFrzsHw7vn69TnalxcG7p2lkJTyh4HjR608k=; b=QPtKmzZMTomvBoL+huYUQ7vFRO
+	V7x9T1qiHnWamZseWJAqZ1SznQnB+WATCOGcMpDNZIkpyX51EK/LPrHrBk/x/tuHnpehEB7J9aj25
+	Cc7v+m/aDBnT0t7UQFQcWrDh+5OFKSFk5tq2W3yXhfHmbrT88yQtD1xHUxwnvX5cxUrZD7tkqPafF
+	LagX0eZyF7+Ti27hN4qjpPclZiiFyzCe9BoHp7wJKxayShGoow8ja7GqP1uaRGouLdYxil7sE0xuY
+	HsJ1xXQjR2B6uXraxNtqdqgrrZ9yogZf22h+dJafcYYyPz9J9nKOCSlGreRLACdjVLErmyC7Mz5fE
+	lr0g1NIA==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uxH7m-0053bQ-2q;
+	Sat, 13 Sep 2025 11:56:28 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 13 Sep 2025 11:56:27 +0800
+Date: Sat, 13 Sep 2025 11:56:27 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Jonathan McDowell <noodles@earth.li>
+Cc: Olivia Mackall <olivia@selenic.com>, linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] hwrng: core - Allow runtime disabling of the HW RNG
+Message-ID: <aMTra7C-CayEcaCY@gondor.apana.org.au>
+References: <aLWltVMmuYQn8Pwa@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -62,61 +64,79 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250902124205.GL2163762@google.com>
+In-Reply-To: <aLWltVMmuYQn8Pwa@earth.li>
 
-Hi Lee,
+On Mon, Sep 01, 2025 at 02:55:01PM +0100, Jonathan McDowell wrote:
+> From: Jonathan McDowell <noodles@meta.com>
+> 
+> The HW RNG core allows for manual selection of which RNG device to use,
+> but does not allow for no device to be enabled. It may be desirable to
+> do this on systems with only a single suitable hardware RNG, where we
+> need exclusive access to other functionality on this device. In
+> particular when performing TPM firmware upgrades this lets us ensure the
+> kernel does not try to access the device.
+> 
+> Before:
+> 
+> root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+> /sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0
+> /sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
+> /sys/devices/virtual/misc/hw_random/rng_quality:1024
+> /sys/devices/virtual/misc/hw_random/rng_selected:0
+> 
+> After:
+> 
+> root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+> /sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
+> /sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
+> /sys/devices/virtual/misc/hw_random/rng_quality:1024
+> /sys/devices/virtual/misc/hw_random/rng_selected:0
+> 
+> root@debian-qemu-efi:~# echo none > /sys/devices/virtual/misc/hw_random/rng_current
+> root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+> /sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
+> /sys/devices/virtual/misc/hw_random/rng_current:none
+> grep: /sys/devices/virtual/misc/hw_random/rng_quality: No such device
+> /sys/devices/virtual/misc/hw_random/rng_selected:1
+> 
+> (Observe using bpftrace no calls to TPM being made)
+> 
+> root@debian-qemu-efi:~# echo "" > /sys/devices/virtual/misc/hw_random/rng_current
+> root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+> /sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
+> /sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
+> /sys/devices/virtual/misc/hw_random/rng_quality:1024
+> /sys/devices/virtual/misc/hw_random/rng_selected:0
+> 
+> (Observe using bpftrace that calls to the TPM resume)
+> 
+> Signed-off-by: Jonathan McDowell <noodles@meta.com>
+> ---
+>  drivers/char/hw_random/core.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
+> index 018316f54621..11c8077b792b 100644
+> --- a/drivers/char/hw_random/core.c
+> +++ b/drivers/char/hw_random/core.c
+> @@ -341,6 +341,10 @@ static ssize_t rng_current_store(struct device *dev,
+>  
+>  	if (sysfs_streq(buf, "")) {
+>  		err = enable_best_rng();
+> +	} else if (sysfs_streq(buf, "none")) {
+> +		if (current_rng)
+> +			cur_rng_set_by_user = 1;
+> +		drop_current_rng();
 
-On Tue, Sep 02, 2025 at 01:42:05PM +0100, Lee Jones wrote:
-> Enjoy!
-> 
-> The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-> 
->   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-char-crypto-v6.18
-> 
-> for you to fetch changes up to 74fddd5fbab879a7d039d9fb49af923927a64811:
-> 
->   MAINTAINERS: Add entry for Loongson Security Engine drivers (2025-09-02 12:29:57 +0100)
-> 
-> ----------------------------------------------------------------
-> Immutable branch between MFD, Char and Crypto due for the v6.18 merge window
-> 
-> ----------------------------------------------------------------
-> Qunqin Zhao (4):
-...
->       tpm: Add a driver for Loongson TPM device
+Is this setting supposed to be sticky?
 
-This one needs a fix up due to commit 07d8004d6fb9 ("tpm: add bufsiz
-parameter in the .send callback") in 6.17-rc1, as I am seeing the
-following error in next-20250912.
-
-  drivers/char/tpm/tpm_loongson.c:48:17: error: initialization of 'int (*)(struct tpm_chip *, u8 *, size_t,  size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int,  long unsigned int)'} from incompatible pointer type 'int (*)(struct tpm_chip *, u8 *, size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int)'} [-Wincompatible-pointer-types]
-     48 |         .send = tpm_loongson_send,
-        |                 ^~~~~~~~~~~~~~~~~
-  drivers/char/tpm/tpm_loongson.c:48:17: note: (near initialization for 'tpm_loongson_ops.send')
-  drivers/char/tpm/tpm_loongson.c:31:12: note: 'tpm_loongson_send' declared here
-     31 | static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
-        |            ^~~~~~~~~~~~~~~~~
-
-Can you squash it or do you want a separate patch?
+Because as it stands, if another HWRNG is registered after setting
+it to none, it would still become the default RNG which seems to be
+surprising.
 
 Cheers,
-Nathan
-
-diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loongson.c
-index a4ec23639911..9e50250763d1 100644
---- a/drivers/char/tpm/tpm_loongson.c
-+++ b/drivers/char/tpm/tpm_loongson.c
-@@ -28,7 +28,7 @@ static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t count)
- 	return cmd_ret->data_len;
- }
- 
--static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
-+static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t count)
- {
- 	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
- 	struct tpm_loongson_cmd *cmd = tpm_engine->command;
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
