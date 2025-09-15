@@ -1,135 +1,133 @@
-Return-Path: <linux-integrity+bounces-7081-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7082-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF29B57A0E
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 14:11:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 985A8B57FA0
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 16:55:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B3CD1A21BBF
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 12:12:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12C407B2307
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 14:51:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0069A306489;
-	Mon, 15 Sep 2025 12:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8668C33CEB1;
+	Mon, 15 Sep 2025 14:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hmxpPNSW";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="BEi3LbcT";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="hmxpPNSW";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="BEi3LbcT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFU/u96O"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E15F30649A
-	for <linux-integrity@vger.kernel.org>; Mon, 15 Sep 2025 12:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD89338F4A;
+	Mon, 15 Sep 2025 14:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757938281; cv=none; b=Amegexc1AydXvoFHHsqqlj+mV34dUuESlBBndHBj/yUn+O2js/neXSLVNBBe8RczOVZ/JjeWSuWVaWoNNTMbefcEYNSmZSJqBm/f0rtWs2QJTgnxLQOo6GC4Oiox0rwF0PVFkWKoAQbxyJbGZOJb53uhZZnetQ8myURYcZ1DIzc=
+	t=1757947807; cv=none; b=rOuo5CUy39/89JMu656h1H5Hn4iZiDoyw2MuoJQPjwZzlikfL8rWXyzenqSG/ycUZlKQ5rog8Z1otuO2ohEZjr9ECyjqTCOjBxkSN5D9p/DuvoP2a2n6R9kTuqCLJXkd3VuPk0eMqPuqlgrvPWZ48Z2ghINDwkXF2wwUWaVOILI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757938281; c=relaxed/simple;
-	bh=iQ5IhtZgLm+rkc5eoGm9hIH3ZDzmZomFvTPndZ9kpjY=;
+	s=arc-20240116; t=1757947807; c=relaxed/simple;
+	bh=c9GFrC7DaPOd4zrDemUY+nLS3IzPHHt3WJOypqyVfMI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NEzWOhLBevpWmfzq4x1TAOF/xJd/v4tfsZTbBHi3CYn9g5ocqQ7GOKNoUbNJbfkkFi+uv6sWcUakRtk3lVuFKUq2MrslKesMn2unrgQfZlrjEJSKPsHBzL4wH/R/i8vsU9AxpD+GPiu7S0/QnO/pn9lWIdsX9UrLXNNH/LCwVM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hmxpPNSW; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=BEi3LbcT; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=hmxpPNSW; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=BEi3LbcT; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id C438E1F8C3;
-	Mon, 15 Sep 2025 12:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757938278; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
-	b=hmxpPNSWXjFF1DnaMfFj7+DlM0YR/P+WlnCiH/AxdZ1GVJSjerp6IjD/Qtmt0BXrTj4+pC
-	vM4NNlSRpZuDvOtR5wOJbB6Cm6LTE+CoLmBxNaDIAZQgUBz83L1afT/5cNN9hBHrE5BnKC
-	p+8nI8Wm9Abe3fjt5ymtfQw0xB3OEu0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757938278;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
-	b=BEi3LbcTVi2SoGRRq/V+s2scC0X9YCA2Ao5RhziYUzXgIT5PCllg+OQ3aqOoLtylq0Yc0i
-	zC5HJ7TAkWz33CDg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757938278; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
-	b=hmxpPNSWXjFF1DnaMfFj7+DlM0YR/P+WlnCiH/AxdZ1GVJSjerp6IjD/Qtmt0BXrTj4+pC
-	vM4NNlSRpZuDvOtR5wOJbB6Cm6LTE+CoLmBxNaDIAZQgUBz83L1afT/5cNN9hBHrE5BnKC
-	p+8nI8Wm9Abe3fjt5ymtfQw0xB3OEu0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757938278;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+qEjuQevZqyO6CweEJ3yMgcImI5q9b4HueNFxukrWBY=;
-	b=BEi3LbcTVi2SoGRRq/V+s2scC0X9YCA2Ao5RhziYUzXgIT5PCllg+OQ3aqOoLtylq0Yc0i
-	zC5HJ7TAkWz33CDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B184B1368D;
-	Mon, 15 Sep 2025 12:11:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id aLNwKWYCyGg4NAAAD6G6ig
-	(envelope-from <chrubis@suse.cz>); Mon, 15 Sep 2025 12:11:18 +0000
-Date: Mon, 15 Sep 2025 14:12:00 +0200
-From: Cyril Hrubis <chrubis@suse.cz>
-To: Petr Vorel <pvorel@suse.cz>
-Cc: ltp@lists.linux.it, Mimi Zohar <zohar@linux.ibm.com>,
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-	Coiby Xu <coxu@redhat.com>
-Subject: Re: [PATCH 2/2] ima_{conditionals,policy}: Handle policy required to
- be signed
-Message-ID: <aMgCkNQlZ147Mm7w@yuki.lan>
-References: <20250912073210.47637-1-pvorel@suse.cz>
- <20250912073210.47637-3-pvorel@suse.cz>
+	 Content-Type:Content-Disposition:In-Reply-To; b=sti++5qyujBfTgik9gE6Gck6CBVUn2ZW3jvLZOrdFfBesNL00JMzQb2hB5enqkVbb0q5nEbhIEXeHvwAhXrPnQVcM31SYWD8cxnOjKzR1lTBhwRuGlIFzGtAGb7M16+Nr75yFucuUqP5iPlaTM00Jg65BOiXn88g1EcYyMUX/YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFU/u96O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8814AC4CEF1;
+	Mon, 15 Sep 2025 14:50:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757947806;
+	bh=c9GFrC7DaPOd4zrDemUY+nLS3IzPHHt3WJOypqyVfMI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dFU/u96OfiQNU+zC4+WOpdrT/7zOpeRxpBSo7ReLRk0tVUbFs73Y+rBC5uyJMOJww
+	 mp4NZqjSmMikJPdBt36Xu7WBcPnNDu0T79qN0Z4v7tyYqmzU3e4G9bAF1Dp5RQAlM9
+	 HrK6bUJK8W9qELTpm0nFcfdryoJnS04v4UW8121jSjE0PZnNcd6y5KQjmr6r6HiIdX
+	 xUSpc5NrHH4Nf7170MsSKBfoqKrGvH5PP13AT5wppGKvaZdZJllrjJgU7dJNVgc/G3
+	 foawS8AnNNMULG9R6KTKU/SAxMDYH4VR87noWU1mIv9iCNTwToqPSVaKbtcLIYqLLJ
+	 i6O8hJqfM0XqQ==
+Date: Mon, 15 Sep 2025 17:50:03 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, tpm2@lists.linux.dev
+Subject: Re: tpm2key.asn1 parent identification
+Message-ID: <aMgnm1OkDj9XnStc@kernel.org>
+References: <aMboFXNNX7WZaOaS@kernel.org>
+ <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250912073210.47637-3-pvorel@suse.cz>
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,yuki.lan:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Spam-Score: -4.30
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
 
-Hi!
-Reviewed-by: Cyril Hrubis <chrubis@suse.cz>
+On Sun, Sep 14, 2025 at 11:24:24PM -0400, James Bottomley wrote:
+> On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
+> > Hi,
+> > 
+> > In practice, while implementing tpm2sh and its self-contained TPM
+> > emulator called "MockTPM", I've noticed that 'tpm2key.asn1.' has a
+> > major bottleneck, but luckily it is easy to squash.
+> > 
+> > Parent handle should never be persisted, as it defies the existential
+> > reason of having a file format in the first place.
+> 
+> Actually, if you read the spec:it describes how to handle non-
+> persistent parents by defining the exact form of the P256 parent you
+> derive from the permanent handle in section 3.1.8:
+> 
+> https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+> 
+> This is the way all the implementations (well except the kernel, but
+> that's fixable) do it.
 
--- 
-Cyril Hrubis
-chrubis@suse.cz
+Even if you fix it to persistent handle, the problem does not go
+magically go away. Read public attributes are ubiquitos and
+cryptographically correct way to do the binding.
+
+> 
+> > To address this issue I just added couple of optional fields to
+> > TPMKey:
+> > 
+> >   parentName   [6] EXPLICIT OCTET STRING OPTIONAL,
+> >   parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
+> 
+> So that's a bit redundant, since if you know the key, you know its
+> name.
+
+What I know is irrelevant here :-)
+
+> 
+> > By persisting this information TPM2_GetCapability + TPM2_ReadPublic
+> > can be used to acquire an appropriate handle.
+> 
+> It can, how?  If the parent is a primary, you can't insert it from a
+> public key, you have to derive it and if it's non-primary, you need its
+> parent to do the insertion.
+
+Transient handle is like file handle and persistent handle is like inode
+number. Neither unambigiuously (and this is dead obvious) does not 
+identify any possible key.
+
+Further by binding key correctly, the requirement of being persistent
+key goes away, which is a limiting factor.
+
+> 
+> > I'd highly recommend to add this quirk to anything that processes
+> > this ASN.1 format.
+> 
+> Well, patches to the standard are accepted:
+> 
+> https://groups.io/g/openssl-tpm2-engine/topics
+> 
+> But first verify you don't simply need to use the non-persistent
+> format.
+> 
+> Regards,
+> 
+> James
+> 
+> 
+> 
+
+BR, Jarkko
 
