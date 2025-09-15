@@ -1,133 +1,158 @@
-Return-Path: <linux-integrity+bounces-7082-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7083-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 985A8B57FA0
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 16:55:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 430E9B5816E
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 18:02:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12C407B2307
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 14:51:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02B573B8FEB
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 16:02:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8668C33CEB1;
-	Mon, 15 Sep 2025 14:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4DE21770A;
+	Mon, 15 Sep 2025 16:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFU/u96O"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="VjUeatuy"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD89338F4A;
-	Mon, 15 Sep 2025 14:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07460EAD7;
+	Mon, 15 Sep 2025 16:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757947807; cv=none; b=rOuo5CUy39/89JMu656h1H5Hn4iZiDoyw2MuoJQPjwZzlikfL8rWXyzenqSG/ycUZlKQ5rog8Z1otuO2ohEZjr9ECyjqTCOjBxkSN5D9p/DuvoP2a2n6R9kTuqCLJXkd3VuPk0eMqPuqlgrvPWZ48Z2ghINDwkXF2wwUWaVOILI=
+	t=1757952149; cv=none; b=I5IGTlu0qwJ9HeEHpO/N0wQDN7pe2r3g8sJyv6P37ZGTFF4wLVos/ChKHOBtij1+QUuBGvwk3uHcPvS/IPJUwf5ZXNDLHAr7HkOD0EZ9YWcPOcsPAwjK9XkivSQBiw7cFzMrqz60d6/WZ6r3+5nF200brUTZT2j4tyLH17CIma8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757947807; c=relaxed/simple;
-	bh=c9GFrC7DaPOd4zrDemUY+nLS3IzPHHt3WJOypqyVfMI=;
+	s=arc-20240116; t=1757952149; c=relaxed/simple;
+	bh=ZavVOFy7p+aHN0BEwnntQn4rJME9Ova625rXkE4ZN0I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sti++5qyujBfTgik9gE6Gck6CBVUn2ZW3jvLZOrdFfBesNL00JMzQb2hB5enqkVbb0q5nEbhIEXeHvwAhXrPnQVcM31SYWD8cxnOjKzR1lTBhwRuGlIFzGtAGb7M16+Nr75yFucuUqP5iPlaTM00Jg65BOiXn88g1EcYyMUX/YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFU/u96O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8814AC4CEF1;
-	Mon, 15 Sep 2025 14:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757947806;
-	bh=c9GFrC7DaPOd4zrDemUY+nLS3IzPHHt3WJOypqyVfMI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dFU/u96OfiQNU+zC4+WOpdrT/7zOpeRxpBSo7ReLRk0tVUbFs73Y+rBC5uyJMOJww
-	 mp4NZqjSmMikJPdBt36Xu7WBcPnNDu0T79qN0Z4v7tyYqmzU3e4G9bAF1Dp5RQAlM9
-	 HrK6bUJK8W9qELTpm0nFcfdryoJnS04v4UW8121jSjE0PZnNcd6y5KQjmr6r6HiIdX
-	 xUSpc5NrHH4Nf7170MsSKBfoqKrGvH5PP13AT5wppGKvaZdZJllrjJgU7dJNVgc/G3
-	 foawS8AnNNMULG9R6KTKU/SAxMDYH4VR87noWU1mIv9iCNTwToqPSVaKbtcLIYqLLJ
-	 i6O8hJqfM0XqQ==
-Date: Mon, 15 Sep 2025 17:50:03 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: linux-integrity@vger.kernel.org, tpm2@lists.linux.dev
-Subject: Re: tpm2key.asn1 parent identification
-Message-ID: <aMgnm1OkDj9XnStc@kernel.org>
-References: <aMboFXNNX7WZaOaS@kernel.org>
- <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xae6Bws0xS18qPMPf40d58QVdGrknpi5ovmlMg9BY5E5x6vW+9zleLrUzLbyGF2cxPGPjJfiedA+10usSWblj0eRW9PXtt0G5k9Vk/8B4DiRkVxRGRx5KyG1bKoL5k8siqtVBsInwoazO+aWfnQWbznmtXouaEY0lzTuZ2yGynI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=VjUeatuy; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=D7IggKGhPyJUcmIjxEeQlKJOLgaxFMcl0GgywU9PiEM=; b=VjUeatuyBytE5yZDdsZ66OeJtZ
+	bQ7I0FmfIYBuxaqKWSCqEtCwSoYRB06jOaued2BkwLAHjU+AzMx9cHHQC/1pR17hq6iDC/xay7Muc
+	0qdjjK4uNSUGqNCHNtYMAgCHCBcPl7asCXl0MvFiGieojYF/7q83lqCTimfjl/nq7YFdhpFkKM7nq
+	TlzlP/MqK1eK8IJAUycdXi74T6ktB8JM6Tprnq4pDFr4VfRIn89c+Md/OY7a9qMkkoWVyX//j8yHp
+	aEyuH4Nf0fO/1hrtcTKHgAS//lvldpEjgAmgCLK91jgGMJgcEViGQ43XYclkaGB+3ogbvaVQ1KVur
+	cTRjzomQ==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1uyBeh-0045wj-2f;
+	Mon, 15 Sep 2025 17:02:15 +0100
+Date: Mon, 15 Sep 2025 17:02:15 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org
+Subject: [PATCH v2] hwrng: core - Allow runtime disabling of the HW RNG
+Message-ID: <aMg4h_WeJb9bHeNb@earth.li>
+References: <aLWltVMmuYQn8Pwa@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
+In-Reply-To: <aLWltVMmuYQn8Pwa@earth.li>
 
-On Sun, Sep 14, 2025 at 11:24:24PM -0400, James Bottomley wrote:
-> On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
-> > Hi,
-> > 
-> > In practice, while implementing tpm2sh and its self-contained TPM
-> > emulator called "MockTPM", I've noticed that 'tpm2key.asn1.' has a
-> > major bottleneck, but luckily it is easy to squash.
-> > 
-> > Parent handle should never be persisted, as it defies the existential
-> > reason of having a file format in the first place.
-> 
-> Actually, if you read the spec:it describes how to handle non-
-> persistent parents by defining the exact form of the P256 parent you
-> derive from the permanent handle in section 3.1.8:
-> 
-> https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
-> 
-> This is the way all the implementations (well except the kernel, but
-> that's fixable) do it.
+From: Jonathan McDowell <noodles@meta.com>
 
-Even if you fix it to persistent handle, the problem does not go
-magically go away. Read public attributes are ubiquitos and
-cryptographically correct way to do the binding.
+The HW RNG core allows for manual selection of which RNG device to use,
+but does not allow for no device to be enabled. It may be desirable to
+do this on systems with only a single suitable hardware RNG, where we
+need exclusive access to other functionality on this device. In
+particular when performing TPM firmware upgrades this lets us ensure the
+kernel does not try to access the device.
 
-> 
-> > To address this issue I just added couple of optional fields to
-> > TPMKey:
-> > 
-> >   parentName   [6] EXPLICIT OCTET STRING OPTIONAL,
-> >   parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
-> 
-> So that's a bit redundant, since if you know the key, you know its
-> name.
+Before:
 
-What I know is irrelevant here :-)
+root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0
+/sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
+/sys/devices/virtual/misc/hw_random/rng_quality:1024
+/sys/devices/virtual/misc/hw_random/rng_selected:0
 
-> 
-> > By persisting this information TPM2_GetCapability + TPM2_ReadPublic
-> > can be used to acquire an appropriate handle.
-> 
-> It can, how?  If the parent is a primary, you can't insert it from a
-> public key, you have to derive it and if it's non-primary, you need its
-> parent to do the insertion.
+After:
 
-Transient handle is like file handle and persistent handle is like inode
-number. Neither unambigiuously (and this is dead obvious) does not 
-identify any possible key.
+root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
+/sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
+/sys/devices/virtual/misc/hw_random/rng_quality:1024
+/sys/devices/virtual/misc/hw_random/rng_selected:0
 
-Further by binding key correctly, the requirement of being persistent
-key goes away, which is a limiting factor.
+root@debian-qemu-efi:~# echo none > /sys/devices/virtual/misc/hw_random/rng_current
+root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
+/sys/devices/virtual/misc/hw_random/rng_current:none
+grep: /sys/devices/virtual/misc/hw_random/rng_quality: No such device
+/sys/devices/virtual/misc/hw_random/rng_selected:1
 
-> 
-> > I'd highly recommend to add this quirk to anything that processes
-> > this ASN.1 format.
-> 
-> Well, patches to the standard are accepted:
-> 
-> https://groups.io/g/openssl-tpm2-engine/topics
-> 
-> But first verify you don't simply need to use the non-persistent
-> format.
-> 
-> Regards,
-> 
-> James
-> 
-> 
-> 
+(Observe using bpftrace no calls to TPM being made)
 
-BR, Jarkko
+root@debian-qemu-efi:~# echo "" > /sys/devices/virtual/misc/hw_random/rng_current
+root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
+/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
+/sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
+/sys/devices/virtual/misc/hw_random/rng_quality:1024
+/sys/devices/virtual/misc/hw_random/rng_selected:0
+
+(Observe using bpftrace that calls to the TPM resume)
+
+Signed-off-by: Jonathan McDowell <noodles@meta.com>
+---
+v2: If the user manually forces the HWRNG to none do not override this
+     when a new driver is loaded. Pointed out by Herbert Xu.
+
+  drivers/char/hw_random/core.c | 10 +++++++---
+  1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
+index 018316f54621..1682a9f1b28c 100644
+--- a/drivers/char/hw_random/core.c
++++ b/drivers/char/hw_random/core.c
+@@ -341,6 +341,10 @@ static ssize_t rng_current_store(struct device *dev,
+  
+  	if (sysfs_streq(buf, "")) {
+  		err = enable_best_rng();
++	} else if (sysfs_streq(buf, "none")) {
++		if (current_rng)
++			cur_rng_set_by_user = 1;
++		drop_current_rng();
+  	} else {
+  		list_for_each_entry(rng, &rng_list, list) {
+  			if (sysfs_streq(rng->name, buf)) {
+@@ -392,7 +396,7 @@ static ssize_t rng_available_show(struct device *dev,
+  		strlcat(buf, rng->name, PAGE_SIZE);
+  		strlcat(buf, " ", PAGE_SIZE);
+  	}
+-	strlcat(buf, "\n", PAGE_SIZE);
++	strlcat(buf, "none\n", PAGE_SIZE);
+  	mutex_unlock(&rng_mutex);
+  
+  	return strlen(buf);
+@@ -544,8 +548,8 @@ int hwrng_register(struct hwrng *rng)
+  	/* Adjust quality field to always have a proper value */
+  	rng->quality = min_t(u16, min_t(u16, default_quality, 1024), rng->quality ?: 1024);
+  
+-	if (!current_rng ||
+-	    (!cur_rng_set_by_user && rng->quality > current_rng->quality)) {
++	if (!cur_rng_set_by_user &&
++	    (!current_rng || rng->quality > current_rng->quality)) {
+  		/*
+  		 * Set new rng as current as the new rng source
+  		 * provides better entropy quality and was not
+-- 
+2.51.0
+
 
