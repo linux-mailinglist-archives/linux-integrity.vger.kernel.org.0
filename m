@@ -1,158 +1,96 @@
-Return-Path: <linux-integrity+bounces-7083-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7084-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 430E9B5816E
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 18:02:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 100A3B58253
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 18:40:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02B573B8FEB
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 16:02:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CF6B7A73C9
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 16:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4DE21770A;
-	Mon, 15 Sep 2025 16:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03D4264A9E;
+	Mon, 15 Sep 2025 16:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="VjUeatuy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dBjRTLOP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07460EAD7;
-	Mon, 15 Sep 2025 16:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC0B3B1AB;
+	Mon, 15 Sep 2025 16:39:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757952149; cv=none; b=I5IGTlu0qwJ9HeEHpO/N0wQDN7pe2r3g8sJyv6P37ZGTFF4wLVos/ChKHOBtij1+QUuBGvwk3uHcPvS/IPJUwf5ZXNDLHAr7HkOD0EZ9YWcPOcsPAwjK9XkivSQBiw7cFzMrqz60d6/WZ6r3+5nF200brUTZT2j4tyLH17CIma8=
+	t=1757954392; cv=none; b=tPWXNwlwapmxF8b/C4YpjvHKMR++21b1MI0C0NGBdMcMnx61jW1V4bw+gk4/hllKygNcUYdXQ3AWzaXhY42pQeihITdUZVhQqqiZgd2fJKZakm0mqlogz1afbnJgje2lJyswweYSgXU2UCo+4yrotEgoVg3JYWiuwkpulrnCiAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757952149; c=relaxed/simple;
-	bh=ZavVOFy7p+aHN0BEwnntQn4rJME9Ova625rXkE4ZN0I=;
+	s=arc-20240116; t=1757954392; c=relaxed/simple;
+	bh=Z8A8GPAQF9g0Cbu9CE2MdE4wD+Nl3g96ByVA34gWwfM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xae6Bws0xS18qPMPf40d58QVdGrknpi5ovmlMg9BY5E5x6vW+9zleLrUzLbyGF2cxPGPjJfiedA+10usSWblj0eRW9PXtt0G5k9Vk/8B4DiRkVxRGRx5KyG1bKoL5k8siqtVBsInwoazO+aWfnQWbznmtXouaEY0lzTuZ2yGynI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=VjUeatuy; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=D7IggKGhPyJUcmIjxEeQlKJOLgaxFMcl0GgywU9PiEM=; b=VjUeatuyBytE5yZDdsZ66OeJtZ
-	bQ7I0FmfIYBuxaqKWSCqEtCwSoYRB06jOaued2BkwLAHjU+AzMx9cHHQC/1pR17hq6iDC/xay7Muc
-	0qdjjK4uNSUGqNCHNtYMAgCHCBcPl7asCXl0MvFiGieojYF/7q83lqCTimfjl/nq7YFdhpFkKM7nq
-	TlzlP/MqK1eK8IJAUycdXi74T6ktB8JM6Tprnq4pDFr4VfRIn89c+Md/OY7a9qMkkoWVyX//j8yHp
-	aEyuH4Nf0fO/1hrtcTKHgAS//lvldpEjgAmgCLK91jgGMJgcEViGQ43XYclkaGB+3ogbvaVQ1KVur
-	cTRjzomQ==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1uyBeh-0045wj-2f;
-	Mon, 15 Sep 2025 17:02:15 +0100
-Date: Mon, 15 Sep 2025 17:02:15 +0100
-From: Jonathan McDowell <noodles@earth.li>
-To: Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH v2] hwrng: core - Allow runtime disabling of the HW RNG
-Message-ID: <aMg4h_WeJb9bHeNb@earth.li>
-References: <aLWltVMmuYQn8Pwa@earth.li>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CsR9Bgc2L1NIn6mfuptImxjh9s3ZyzLIQQ3wPUT7as9OtCiFNQ/peVU1R6EMK9+oZaqRqdIuLY5JsszZi+kjO2EuD0E3JKSEyUWp6LNKyS2v5w9ntNeSwhEs14ST93+cfX27TwkyXbCB9V6OPXu0xOi7IDvzwWWbJDA7Cc4hGQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dBjRTLOP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B2A5C4CEF1;
+	Mon, 15 Sep 2025 16:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757954392;
+	bh=Z8A8GPAQF9g0Cbu9CE2MdE4wD+Nl3g96ByVA34gWwfM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dBjRTLOPBqCRVOsgSHyqRuHBUvho/NCwMW/RT7Nj4S+cu0W0vdIP73oOZOJOgqNNb
+	 M/v5WKl0LUkIrYSznexL1Wmpw+ODkb1bIAeZpEp3kPHolgaZF/63JCvTXSREG0asSf
+	 RHsohUTIxDTo+WmKbakSFr9J6m8Gkd9x27ATLJtEgqvClYD9q49RoTJn5eVL5Azgp/
+	 lZfx1RMeGVPThhqNOKKRpdN/MT0FjWJSd5Z9BBgFbx6sajCeMhIDJx48d8ajw5ILqJ
+	 LLZTqMGl5p5dWbxHqFl81pKdfh3VMN/iPvzVK0TFxETNyuNWBK9tu1k+WmRL5XM/dm
+	 1tZQcKqh+6BRQ==
+Date: Mon, 15 Sep 2025 11:39:49 -0500
+From: Eric Biggers <ebiggers@kernel.org>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+	David Howells <dhowells@redhat.com>,
+	linux-integrity@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KEYS: encrypted: Use SHA-256 library instead of
+ crypto_shash
+Message-ID: <20250915163949.GF1993@quark>
+References: <20250731184747.12335-1-ebiggers@kernel.org>
+ <aJIKH3-fRizRV8fi@kernel.org>
+ <e8fff5a1607ce2d98c5999d522202e1104f0a12d.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aLWltVMmuYQn8Pwa@earth.li>
+In-Reply-To: <e8fff5a1607ce2d98c5999d522202e1104f0a12d.camel@linux.ibm.com>
 
-From: Jonathan McDowell <noodles@meta.com>
+On Sun, Sep 07, 2025 at 07:57:12AM -0400, Mimi Zohar wrote:
+> On Tue, 2025-08-05 at 16:41 +0300, Jarkko Sakkinen wrote:
+> > On Thu, Jul 31, 2025 at 11:47:47AM -0700, Eric Biggers wrote:
+> > > Instead of the "sha256" crypto_shash, just use sha256().  Similarly,
+> > > instead of the "hmac(sha256)" crypto_shash, just use
+> > > hmac_sha256_usingrawkey().  This is simpler and faster.
+> > > 
+> > > Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+> > 
+> > Yeah, fully agree.
+> > 
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > 
+> > David, will you pick this?
+> > 
+> 
+> Do you want this patch being upstreamed with "[PATCH 0/2] Convert lib/digsig.c
+> to SHA-1 library" patch set?
+> 
+> thanks,
+> 
+> Mimi
 
-The HW RNG core allows for manual selection of which RNG device to use,
-but does not allow for no device to be enabled. It may be desirable to
-do this on systems with only a single suitable hardware RNG, where we
-need exclusive access to other functionality on this device. In
-particular when performing TPM firmware upgrades this lets us ensure the
-kernel does not try to access the device.
+If someone could apply this for v6.18, that would be great.  It's
+independent of my other patches.  It looks like Mimi has been taking
+changes to this file most recently.  If David or Jarkko wants to take it
+instead, that's fine too.  As long as someone does it.
 
-Before:
-
-root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
-/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0
-/sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
-/sys/devices/virtual/misc/hw_random/rng_quality:1024
-/sys/devices/virtual/misc/hw_random/rng_selected:0
-
-After:
-
-root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
-/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
-/sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
-/sys/devices/virtual/misc/hw_random/rng_quality:1024
-/sys/devices/virtual/misc/hw_random/rng_selected:0
-
-root@debian-qemu-efi:~# echo none > /sys/devices/virtual/misc/hw_random/rng_current
-root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
-/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
-/sys/devices/virtual/misc/hw_random/rng_current:none
-grep: /sys/devices/virtual/misc/hw_random/rng_quality: No such device
-/sys/devices/virtual/misc/hw_random/rng_selected:1
-
-(Observe using bpftrace no calls to TPM being made)
-
-root@debian-qemu-efi:~# echo "" > /sys/devices/virtual/misc/hw_random/rng_current
-root@debian-qemu-efi:~# grep "" /sys/devices/virtual/misc/hw_random/rng_*
-/sys/devices/virtual/misc/hw_random/rng_available:tpm-rng-0 none
-/sys/devices/virtual/misc/hw_random/rng_current:tpm-rng-0
-/sys/devices/virtual/misc/hw_random/rng_quality:1024
-/sys/devices/virtual/misc/hw_random/rng_selected:0
-
-(Observe using bpftrace that calls to the TPM resume)
-
-Signed-off-by: Jonathan McDowell <noodles@meta.com>
----
-v2: If the user manually forces the HWRNG to none do not override this
-     when a new driver is loaded. Pointed out by Herbert Xu.
-
-  drivers/char/hw_random/core.c | 10 +++++++---
-  1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/char/hw_random/core.c b/drivers/char/hw_random/core.c
-index 018316f54621..1682a9f1b28c 100644
---- a/drivers/char/hw_random/core.c
-+++ b/drivers/char/hw_random/core.c
-@@ -341,6 +341,10 @@ static ssize_t rng_current_store(struct device *dev,
-  
-  	if (sysfs_streq(buf, "")) {
-  		err = enable_best_rng();
-+	} else if (sysfs_streq(buf, "none")) {
-+		if (current_rng)
-+			cur_rng_set_by_user = 1;
-+		drop_current_rng();
-  	} else {
-  		list_for_each_entry(rng, &rng_list, list) {
-  			if (sysfs_streq(rng->name, buf)) {
-@@ -392,7 +396,7 @@ static ssize_t rng_available_show(struct device *dev,
-  		strlcat(buf, rng->name, PAGE_SIZE);
-  		strlcat(buf, " ", PAGE_SIZE);
-  	}
--	strlcat(buf, "\n", PAGE_SIZE);
-+	strlcat(buf, "none\n", PAGE_SIZE);
-  	mutex_unlock(&rng_mutex);
-  
-  	return strlen(buf);
-@@ -544,8 +548,8 @@ int hwrng_register(struct hwrng *rng)
-  	/* Adjust quality field to always have a proper value */
-  	rng->quality = min_t(u16, min_t(u16, default_quality, 1024), rng->quality ?: 1024);
-  
--	if (!current_rng ||
--	    (!cur_rng_set_by_user && rng->quality > current_rng->quality)) {
-+	if (!cur_rng_set_by_user &&
-+	    (!current_rng || rng->quality > current_rng->quality)) {
-  		/*
-  		 * Set new rng as current as the new rng source
-  		 * provides better entropy quality and was not
--- 
-2.51.0
-
+- Eric
 
