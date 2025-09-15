@@ -1,116 +1,233 @@
-Return-Path: <linux-integrity+bounces-7087-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7088-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A74B58479
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 20:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 78E86B584C8
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 20:39:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27DC6161BB6
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 18:21:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 326F12E0227
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 18:39:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4CA92DF3CF;
-	Mon, 15 Sep 2025 18:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6FC526AD9;
+	Mon, 15 Sep 2025 18:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="GfuVNvcX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tmSbr4m+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0842D12E0;
-	Mon, 15 Sep 2025 18:21:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.245.243.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B37E573
+	for <linux-integrity@vger.kernel.org>; Mon, 15 Sep 2025 18:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757960472; cv=none; b=brCWwrq1Pv9gZqAxiTjob1IjzJR0px8p3d0nWvk7Eg9mvCeigA69i8rYbWJ4Tem7cxYtGy8/tszR49TeClLuiJQDPOGOsyuhd257PbdWL6HpO4Ohx+MH435AiBzrdKBpjj5wwpbEcfYVS/btD0AtYccOXIG+Gc5u6AWg1DozcNs=
+	t=1757961589; cv=none; b=bZcDjRh4kYbwaMHC+IsMct4t9coCI2pCaYMMgIXni+p6QHVwPDOo6YhuOY62Rcl6BfZpMrAow+B+43o4+nsvXj1Aq5KZca1kNErOjy4wX0i4Z9rbRFDFvPhG22meYUB6OocBgV+YWoOzU8bQA4s+Rl3oY/Qs47PZxbYYUlvaKy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757960472; c=relaxed/simple;
-	bh=PEoO1C0Hv5+CbTVQ1qWI2SP+EpjMKGXQ2cmIg+TUaJ0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FMA8zdXH5FHfZZjxIJYp42uJURhlSqDW8cH2trA7D4kximNj+6AxWvD1PHjthGH8tJCa+AQryAXY++Sl/SvSYByrSmhkTb+NqEfYW28ZvqOX/nklIJVIu3ZmwH+RmvAjQPA1Ezu+gMZfOnTwDLCl4llX5vbYpYEl3LX6z686ndo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=GfuVNvcX; arc=none smtp.client-ip=44.245.243.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1757960471; x=1789496471;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7O3IYagJoiX+gt77T0OesTy7GT31k4QznuVmMo0p8hw=;
-  b=GfuVNvcXxuXRk+hkUsUIXY7bSxKJ4nvny/oRiHMICBs6R0g0u8CnIhO+
-   cshbsqzxYuUBOzFkytK4yENSkWjms/eneOCU85R72buJsFb0Ey4Il8L5N
-   lVJmRvUL+pF4SVfslN7DvB08UNxEQuf1TXwNHMfv9nO1NMGZYWR5flgUp
-   qYEWbfkdPGGS62Cs5XaQBRNFwNBkD1yAJ3YhyoG9tWkZNR7AYJxNpBVXu
-   OSJX013S8nbP+uTDLNULPKyOelnPsp9ecGhmVxmUnErXN52bfOUvlpQ+W
-   iJY29pUaTCxAdncT6OUBmbY9OuCpjGNDBb7LYbsV3eV+UG0sd50m/Gowx
-   A==;
-X-CSE-ConnectionGUID: zjNEpi3ARzS8x1cSF+zIUw==
-X-CSE-MsgGUID: KTG2D8NPQk2JTh8nBAwJCg==
-X-IronPort-AV: E=Sophos;i="6.18,266,1751241600"; 
-   d="scan'208";a="3035264"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2025 18:21:10 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [10.0.21.151:6558]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.34.38:2525] with esmtp (Farcaster)
- id f94009dd-42bf-40c8-a998-032c66133717; Mon, 15 Sep 2025 18:21:10 +0000 (UTC)
-X-Farcaster-Flow-ID: f94009dd-42bf-40c8-a998-032c66133717
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
- Mon, 15 Sep 2025 18:21:10 +0000
-Received: from dev-dsk-gunnarku-2c-36117f29.us-west-2.amazon.com
- (172.23.139.22) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Mon, 15 Sep 2025
- 18:21:10 +0000
-From: Gunnar Kudrjavets <gunnarku@amazon.com>
-To: <peterhuewe@gmx.de>, <jarkko@kernel.org>
-CC: <jgg@ziepe.ca>, <stefanb@linux.vnet.ibm.com>,
-	<christophe.ricard@gmail.com>, <linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Justinien Bouron <jbouron@amazon.com>
-Subject: [PATCH] tpm_tis: Fix incorrect arguments in tpm_tis_probe_irq_single
-Date: Mon, 15 Sep 2025 18:20:44 +0000
-Message-ID: <20250915182105.6664-1-gunnarku@amazon.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1757961589; c=relaxed/simple;
+	bh=C5Jicf/u6TVam8feL78Qw97QCVX+zUBFWk4IYrM/tCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a0+xRhFz2jXPXveE3It795LFzcoo2/gFa17cbcg48YD7vCBBDQ8l+tqJ7mTTUcOY7aHFxyHeFjuNbq8t51x/PUabWP+rPmJhy3HSOqfUw3DFAKyxVpL+J+ANZcbHSvnF+No+AXcJ/mn2x4FqYkuDAwdtRppcIB6owvLJzhRlYl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tmSbr4m+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F87CC4CEF1;
+	Mon, 15 Sep 2025 18:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757961589;
+	bh=C5Jicf/u6TVam8feL78Qw97QCVX+zUBFWk4IYrM/tCo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tmSbr4m+0WwzvFIyOy3AdXz2iHlI8jhTpoZLGUcDV7SlHj7r777p1LqRLsPTNtX2s
+	 XyasTdaFlwaxHDKjKI8gBVQiofwDB4embc3XrKOsV3qfv3YHuYKExHJO/+oBCPdCx3
+	 yh5eqtn6xJbWWnKjAbsunKOYVDqfUJTVMi/QEB2uYK9yWy29jXMV+v8Rfc+ukYicEX
+	 36gq14pDpTMRfINCFu0zjf0OleOy4ye2/SC5dqkXgqU4pqX8nui9jd81O690m4Iq7J
+	 qP4b0zjek5SupFAhj8xvywPSBwzMnTuRtM4Rw8o7T3W76LnQzS3wK+MNvVPWAj61pt
+	 1B62lL0nq37Qg==
+Date: Mon, 15 Sep 2025 21:39:44 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Denis Aleksandrov <daleksan@redhat.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	Jan Stancek <jstancek@redhat.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Re: [PATCH v4] tpm: Prevent local DOS via tpm/tpm0/ppi/*operations
+Message-ID: <aMhdcOZxpqgckC78@kernel.org>
+References: <20250902142429.14041-2-daleksan@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D040UWB001.ant.amazon.com (10.13.138.82) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250902142429.14041-2-daleksan@redhat.com>
 
-The tpm_tis_write8() call specifies arguments in wrong order. Should be
-(data, addr, value) not (data, value, addr). The initial correct order
-was changed during the major refactoring when the code was split.
+On Tue, Sep 02, 2025 at 10:24:30AM -0400, Denis Aleksandrov wrote:
+> Reads on tpm/tpm0/ppi/*operations can become very long on
+> misconfigured systems. Reading the TPM is a blocking operation,
+> thus a user could effectively trigger a DOS.
+> 
+> Resolve this by caching the results and avoiding the blocking
+> operations after the first read.
+> 
+> Reported-by: Jan Stancek <jstancek@redhat.com>
+> Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
+> Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> ---
+> 
+> Changes in v4:
+> 	- Removes empty lines.
+> 	- Reorders vars to reverse christmas tree.
+> 
+>  drivers/char/tpm/tpm_ppi.c | 85 +++++++++++++++++++++++++++-----------
+>  1 file changed, 62 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> index d53fce1c9d6f..df34b215440d 100644
+> --- a/drivers/char/tpm/tpm_ppi.c
+> +++ b/drivers/char/tpm/tpm_ppi.c
+> @@ -33,6 +33,20 @@ static const guid_t tpm_ppi_guid =
+>  	GUID_INIT(0x3DDDFAA6, 0x361B, 0x4EB4,
+>  		  0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53);
+>  
+> +static const char * const tpm_ppi_info[] = {
+> +	"Not implemented",
+> +	"BIOS only",
+> +	"Blocked for OS by system firmware",
+> +	"User required",
+> +	"User not required",
+> +};
+> +
+> +/* A spinlock to protect access to the cache from concurrent reads */
+> +static DEFINE_SPINLOCK(tpm_ppi_lock);
+> +
+> +static u32 ppi_operations_cache[PPI_VS_REQ_END + 1];
+> +static bool ppi_cache_populated;
+> +
+>  static bool tpm_ppi_req_has_parameter(u64 req)
+>  {
+>  	return req == 23;
+> @@ -277,8 +291,7 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
+>  	return status;
+>  }
+>  
+> -static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+> -				   u32 end)
+> +static ssize_t cache_ppi_operations(acpi_handle dev_handle, char *buf)
+>  {
+>  	int i;
+>  	u32 ret;
+> @@ -286,34 +299,22 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+>  	union acpi_object *obj, tmp;
+>  	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
+>  
+> -	static char *info[] = {
+> -		"Not implemented",
+> -		"BIOS only",
+> -		"Blocked for OS by BIOS",
+> -		"User required",
+> -		"User not required",
+> -	};
+> -
+>  	if (!acpi_check_dsm(dev_handle, &tpm_ppi_guid, TPM_PPI_REVISION_ID_1,
+>  			    1 << TPM_PPI_FN_GETOPR))
+>  		return -EPERM;
+>  
+>  	tmp.integer.type = ACPI_TYPE_INTEGER;
+> -	for (i = start; i <= end; i++) {
+> +	for (i = 0; i <= PPI_VS_REQ_END; i++) {
+>  		tmp.integer.value = i;
+>  		obj = tpm_eval_dsm(dev_handle, TPM_PPI_FN_GETOPR,
+>  				   ACPI_TYPE_INTEGER, &argv,
+>  				   TPM_PPI_REVISION_ID_1);
+> -		if (!obj) {
+> +		if (!obj)
+>  			return -ENOMEM;
+> -		} else {
+> -			ret = obj->integer.value;
+> -			ACPI_FREE(obj);
+> -		}
+>  
+> -		if (ret > 0 && ret < ARRAY_SIZE(info))
+> -			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> -					     i, ret, info[ret]);
+> +		ret = obj->integer.value;
+> +		ppi_operations_cache[i] = ret;
+> +		ACPI_FREE(obj);
+>  	}
+>  
+>  	return len;
+> @@ -324,9 +325,28 @@ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+>  					   char *buf)
+>  {
+>  	struct tpm_chip *chip = to_tpm_chip(dev);
+> +	ssize_t len = 0;
+> +	u32 ret;
+> +	int i;
+> +
+> +	spin_lock(&tpm_ppi_lock);
+> +	if (!ppi_cache_populated) {
+> +		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
+> +		if (len < 0)
+> +			return len;
+>  
+> -	return show_ppi_operations(chip->acpi_dev_handle, buf, 0,
+> -				   PPI_TPM_REQ_MAX);
+> +		ppi_cache_populated = true;
+> +	}
+> +
+> +	for (i = 0; i <= PPI_TPM_REQ_MAX; i++) {
+> +		ret = ppi_operations_cache[i];
+> +		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
+> +			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> +							i, ret, tpm_ppi_info[ret]);
+> +	}
+> +	spin_unlock(&tpm_ppi_lock);
+> +
+> +	return len;
+>  }
+>  
+>  static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+> @@ -334,9 +354,28 @@ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+>  					  char *buf)
+>  {
+>  	struct tpm_chip *chip = to_tpm_chip(dev);
+> +	ssize_t len = 0;
+> +	u32 ret;
+> +	int i;
+>  
+> -	return show_ppi_operations(chip->acpi_dev_handle, buf, PPI_VS_REQ_START,
+> -				   PPI_VS_REQ_END);
+> +	spin_lock(&tpm_ppi_lock);
+> +	if (!ppi_cache_populated) {
+> +		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
+> +		if (len < 0)
+> +			return len;
+> +
+> +		ppi_cache_populated = true;
+> +	}
+> +
+> +	for (i = PPI_VS_REQ_START; i <= PPI_VS_REQ_END; i++) {
+> +		ret = ppi_operations_cache[i];
+> +		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
+> +			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> +							i, ret, tpm_ppi_info[ret]);
+> +	}
+> +	spin_unlock(&tpm_ppi_lock);
+> +
+> +	return len;
+>  }
+>  
+>  static DEVICE_ATTR(version, S_IRUGO, tpm_show_ppi_version, NULL);
+> -- 
+> 2.48.1
+> 
 
-Fixes: 41a5e1cf1fe1 ("tpm/tpm_tis: Split tpm_tis driver into a core and TCG TIS compliant phy")
-Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
-Reviewed-by: Justinien Bouron <jbouron@amazon.com>
----
- drivers/char/tpm/tpm_tis_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I don't know how I messed up the patch in my Git but now it is good
+(I think):
 
-diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-index 4b12c4b9da8b..8954a8660ffc 100644
---- a/drivers/char/tpm/tpm_tis_core.c
-+++ b/drivers/char/tpm/tpm_tis_core.c
-@@ -978,8 +978,8 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
- 	 * will call disable_irq which undoes all of the above.
- 	 */
- 	if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
--		tpm_tis_write8(priv, original_int_vec,
--			       TPM_INT_VECTOR(priv->locality));
-+		tpm_tis_write8(priv, TPM_INT_VECTOR(priv->locality),
-+			       original_int_vec);
- 		rc = -1;
- 	}
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?h=next
 
+Please check before I move forward with the PR.
 
-base-commit: f83ec76bf285bea5727f478a68b894f5543ca76e
---
-2.47.3
-
+BR, Jarkko
 
