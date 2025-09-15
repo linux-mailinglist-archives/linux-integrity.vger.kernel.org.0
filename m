@@ -1,126 +1,178 @@
-Return-Path: <linux-integrity+bounces-7073-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7074-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E37EB56ED0
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 05:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBBD0B56F39
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 06:10:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 875251897951
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 03:24:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15E781894823
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Sep 2025 04:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FF75221FAE;
-	Mon, 15 Sep 2025 03:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8880726F445;
+	Mon, 15 Sep 2025 04:10:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="dIH58Mnu"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="faZbQpMT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A22518E3F
-	for <linux-integrity@vger.kernel.org>; Mon, 15 Sep 2025 03:24:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E5D22422E
+	for <linux-integrity@vger.kernel.org>; Mon, 15 Sep 2025 04:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757906667; cv=none; b=czKs3Q7fcy+Bi7XBnFMGybTOvkjv8yV4gFXhaM32vlK66Hop6tOeE8t8ocMviQloylSK5e/N5foOv5PfbiGYf3fvXrWkrUMc18/Ypm/5F654EX/5vovP5JHBaGqtYAc+DrDiVa2y4757xOpGAj580GqHzIZ+2izNc+OJus1eAVY=
+	t=1757909420; cv=none; b=evEoYOmiRYaH4JbthAu0bIZSGWiBj99WatZrdg53yZ0VTjRfNPlgMe15z/00uocOjwQV0ULFYks8mUN7nFc6yv/vQfVbtsLzbvPxjVbLuUByIJvvdoSy/sZzvl4J2gNiII4Tj959sivbjCUncRcHlg1B1aSd3NNI3BYefTkH/ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757906667; c=relaxed/simple;
-	bh=uSWqttK/Er2JoYRBpB55cI3wct/MWbBtdjOIgEM6uwY=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Q8rVkez0JwA6NCCnNkAk299NJk0Y1GKG7rWpxuJCQ3U1vRpuc6Q7+4cfJpupmChMnTLWNTtVwBrulAutldNn+pc48RmDmn1irSq2N92brwj20QX0LhmGV20OIXGdCiJDS38HdFqNSUKwDJk3Pu71EeqOMG7VhfMFciRksY+QfyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=dIH58Mnu; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1757906664;
-	bh=uSWqttK/Er2JoYRBpB55cI3wct/MWbBtdjOIgEM6uwY=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=dIH58MnujvrImpEFIuW+vGLHZVIxEHF78z7mxEJkIaT9q1EoBRP06g8fQW1hJWOSk
-	 1/01qzTxRvnGkgUWP/Ix8biX9XennjJx/kMrIbQRVY/ydTdHx9QHDId05UguW5toWb
-	 ih9sGKVK06orqsp6x2ZEAnZzwA++NkoZH8gTtJIo=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id BACFF1C021A;
-	Sun, 14 Sep 2025 23:24:24 -0400 (EDT)
-Message-ID: <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
-Subject: Re: tpm2key.asn1 parent identification
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org, 
-	tpm2@lists.linux.dev
-Date: Sun, 14 Sep 2025 23:24:24 -0400
-In-Reply-To: <aMboFXNNX7WZaOaS@kernel.org>
-References: <aMboFXNNX7WZaOaS@kernel.org>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1757909420; c=relaxed/simple;
+	bh=h8k5kgiQo04J4cYIvgiwArMCbShond7hXSIPbojyJj0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rQMHDGRP+fSG23AdDeRrb+jDbEdbXUD+7GC+rs4WlU8pSON2jUS/lQteG6ETflRLGy0LLUMKJLaqebQCK5MoU86EHlcc1uOgIQnLwBT5ygmSQsev9OZgVoaXcskeiFTaHS+9+nbcJIR62ZAnGlJA6g+b2Rxu0rtKHz+EhYNWcCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=faZbQpMT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757909417;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sGoOHPT/CWj+fQ5zG/JFWu43Z6MNUxq6JbcjP4KWET0=;
+	b=faZbQpMTylw8DgQFZq7aNnQrZC2Qrg2XNPe+IBxHuzw5clCknOTtL7La/A2mstGGb0WnLQ
+	rur7qDiKV3L6YbpJPSJpspymiporg6dYjn37/Jmt5zeA4JsdtLaUv2ZLMBpYjy9bBcNmtw
+	qHbuTs2W8b+/VBV+d1bYDyt6g61Jyus=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-632-ltkMnhtSP6qMqBIG7ANQYw-1; Mon, 15 Sep 2025 00:10:15 -0400
+X-MC-Unique: ltkMnhtSP6qMqBIG7ANQYw-1
+X-Mimecast-MFC-AGG-ID: ltkMnhtSP6qMqBIG7ANQYw_1757909414
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-244582bc5e4so44667245ad.2
+        for <linux-integrity@vger.kernel.org>; Sun, 14 Sep 2025 21:10:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757909414; x=1758514214;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sGoOHPT/CWj+fQ5zG/JFWu43Z6MNUxq6JbcjP4KWET0=;
+        b=Ne2DAH73iEmD5uiun2Jd+YF7IzbsiEKkTzIEESKwtvF7rTKMR7Lj4Hq0STjueacwy6
+         XVIq4la3NVcwz2IQbCaGKcR8S1ZucgNvMKdUqQEmYIi82mHC9hznz3/qamX5IRoFcDKW
+         KtRgzIn3AlxapHtHZgcyG9fE9N4hTYjQQFJ+sxR8u2AtDOGnvz4irRo3k3d1dKt2rVCY
+         7vcwxcBdTx7mngEVaKS+1YJHDiYPPIK9Z6sPIeJdZEzgR+z7dchxd4l2Oe05vcNuxolZ
+         CJmZOb73BFOTNaos8o0dFPEKSbD0uTAisql3ht5AejfmsBtVo9OB2irX5VWv95ccIMjp
+         /mfw==
+X-Gm-Message-State: AOJu0Yyb9CQ2PFmS4o1wcT7XCe3PyxhE0Kbn3fB/syjvRxpdPtSkKh6T
+	lObT3f3+tdhjJwgkQxlC6NlBx1KO+w9kgNxciGr+WMAKfZuyxgXwxV501HKczGMofFckey+TxzX
+	lddI9Qs/KbAiwFIfxlgf4VixVw/7wLdsS737usuSPGMAGp8rUrvvqOYlIHJUZyIl1R5YG0Q==
+X-Gm-Gg: ASbGncvjQbN2XPCBVKwUXJKKd0dWsia+C8TdHeB46XPFDKkarcLhVi3czTSbylI0V21
+	vqUBJeKETLs+8CBtpqcKjH5zVxGwm+W5mEiSjIHLtgJ8uxIVzC9+4reeLF8ZYS3sML7jkFd3Gm1
+	s2DHbGWz+w2SFUHYmX1FU47FmBCSwArENTcg3zy2t29PQ+5qwmoCHvgrEHX3m09XXDrVXIrfIDB
+	euRQ9FNR618x7c5yESnodL9vH5uJ05CiYCLdWTXtRyl5Cxwcng+lbo06QSaZ4l0E6pDZTJYMYPi
+	sGPj+EXBqxGGY9Mmw1hJ9L9cWG5kfvQ=
+X-Received: by 2002:a17:903:2f50:b0:24e:e5c9:ed02 with SMTP id d9443c01a7336-25d2733433amr153723595ad.54.1757909414424;
+        Sun, 14 Sep 2025 21:10:14 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHyK81nXtCTp8GRKJSmbRDpD+Db9frZqrd9pWO6WKwuNgkdIsfhXl6/0fESeThCnYRYxzwvWg==
+X-Received: by 2002:a17:903:2f50:b0:24e:e5c9:ed02 with SMTP id d9443c01a7336-25d2733433amr153723255ad.54.1757909413939;
+        Sun, 14 Sep 2025 21:10:13 -0700 (PDT)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2610eb7c962sm56275785ad.12.2025.09.14.21.10.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Sep 2025 21:10:13 -0700 (PDT)
+Date: Mon, 15 Sep 2025 12:06:14 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ima: don't clear IMA_DIGSIG flag when setting non-IMA
+ xattr
+Message-ID: <gw7xopwfzrp5qatwqa4n4i3miztbvbdolfaa2jxslb5pktc7fs@56r7n6feu55m>
+References: <20250902042515.759750-1-coxu@redhat.com>
+ <d252b04934908e7e65a3299bfeffc282c7b0b12f.camel@linux.ibm.com>
+ <53wb5tzech2k4k25xy2heq7ohmp2elw2a7l4x3nfk6fajfydur@5thsinydau5x>
+ <13d7fcfecb06423294ae0553c9a561f4cc8faf67.camel@linux.ibm.com>
+ <9fb8781bfb9c9ae9dd0a1413e23cae20dcd7356a.camel@linux.ibm.com>
+ <wwcnoevou44eoe3ner4oegtdsdg46tlvwidu3ynobs7huac7ae@ljivg5ksohxv>
+ <6f2b7320b691669068dda110c29c25f8aae2f244.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <6f2b7320b691669068dda110c29c25f8aae2f244.camel@linux.ibm.com>
 
-On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
-> Hi,
->=20
-> In practice, while implementing tpm2sh and its self-contained TPM
-> emulator called "MockTPM", I've noticed that 'tpm2key.asn1.' has a
-> major bottleneck, but luckily it is easy to squash.
->=20
-> Parent handle should never be persisted, as it defies the existential
-> reason of having a file format in the first place.
+On Wed, Sep 10, 2025 at 08:21:33AM -0400, Mimi Zohar wrote:
+>On Wed, 2025-09-10 at 09:36 +0800, Coiby Xu wrote:
+>> On Mon, Sep 08, 2025 at 04:58:05PM -0400, Mimi Zohar wrote:
+>> > On Mon, 2025-09-08 at 10:53 -0400, Mimi Zohar wrote:
+>> > > Hi Coiby,
+>> > >
+>> > > On Mon, 2025-09-08 at 19:12 +0800, Coiby Xu wrote:
+>> > > > >
+>> > > > > Even without an IMA appraise policy, the security xattrs are written out to the
+>> > > > > filesystem, but the IMA_DIGSIG flag is not cached.
+>> > > >
+>> > > > It seems I miss some context for the above sentence. If no IMA policy is
+>> > > > configured, no ima_iint_cache will be created. If you mean non-appraisal
+>> > > > policy, will not caching IMA_DIGSIG flag cause any problem?
+>> > >
+>> > > Sorry.  What I was trying to say is that your test program illustrates the
+>> > > problem both with or without any of the boot command line options as you
+>> > > suggested - "ima_appraise=fix evm=fix ima_policy=appraise_tcb".  Writing some
+>> > > other security xattr is a generic problem, whether the file is in policy or not,
+>> > > whether IMA or EVM are in fix mode or not.  The rpm-plugin-ima should install
+>> > > the IMA signature regardless.
+>> >
+>> > My mistake.  An appraise policy indeed needs to be defined for the file
+>> > signature to be replaced with a file hash.
+>>
+>> Thanks for the clarification! rpm-plugin-ima does try to install IMA
+>> signature as shown from the following strace output,
+>
+>Agreed. I was referring to the SELinux label, which would be installed for new
+>files, but not necessarily re-installed on existing files.  The test program
+>simplified testing.  Thank you.
 
-Actually, if you read the spec:it describes how to handle non-
-persistent parents by defining the exact form of the P256 parent you
-derive from the permanent handle in section 3.1.8:
+My pleasure! Note reinstalling a package using dnf/rpm is equivalent to
+installing a new package in terms of this issue. Because according to
+the strace output and rpm's source code, when reinstalling a package,
+the following steps happens, taking lnstat as an example,
 
-https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+1. A temporary file "lnstat;68aee3f4" is created
+2. Read the content from RPM and write it to lnstat;68aee3f4
+3. Set file permission
+4. Set security.ima by rpm-plugin-ima
+5. Set security.selinux by rpm-plugin-selinux
+6. Rename "lnstat;68aee3f4" to lnstat
 
-This is the way all the implementations (well except the kernel, but
-that's fixable) do it.
+And here's the strace output,
 
-> To address this issue I just added couple of optional fields to
-> TPMKey:
->=20
-> =C2=A0 parentName=C2=A0=C2=A0 [6] EXPLICIT OCTET STRING OPTIONAL,
-> =C2=A0 parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
+     # strace rpm --reinstall ip*.rpm
+     openat(11, "lnstat;68aee3f4", O_WRONLY|O_CREAT|O_EXCL, 0200) = 12
+     dup(12)                                 = 13
+     write(13, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\0'\0\0\0\0\0\0"..., 19256) = 19256
+     close(13)                               = 0
+     getuid()                                = 0
+     fchown(12, 0, 0)                        = 0
+     fchmod(12, 0755)                        = 0
+     getuid()                                = 0
+     utimensat(12, NULL, [{tv_sec=1734480000, tv_nsec=0} /* 2024-12-17T19:00:00-0500 */, {tv_sec=1734480000, tv_nsec=0} /* 2024-12-17T19:00:00-0500 */], 0) = 0
+     fsetxattr(12, "security.ima", "\3\2\4\3232\4I\0f0d\0020O\231\341q\323Q\322\235\341\7\323\224\205\2104\24\241\331#"..., 111, 0) = 0
+     fsetxattr(12, "security.selinux", "system_u:object_r:bin_t:s0", 27, 0) = 0
+     close(12)                               = 0
+     ...
+     renameat(11, "lnstat;68aee3f4", 11, "lnstat") = 0
 
-So that's a bit redundant, since if you know the key, you know its
-name.
+>
+>Mimi
+>
 
-> By persisting this information TPM2_GetCapability + TPM2_ReadPublic
-> can be used to acquire an appropriate handle.
-
-It can, how?  If the parent is a primary, you can't insert it from a
-public key, you have to derive it and if it's non-primary, you need its
-parent to do the insertion.
-
-> I'd highly recommend to add this quirk to anything that processes
-> this ASN.1 format.
-
-Well, patches to the standard are accepted:
-
-https://groups.io/g/openssl-tpm2-engine/topics
-
-But first verify you don't simply need to use the non-persistent
-format.
-
-Regards,
-
-James
-
-
+-- 
+Best regards,
+Coiby
 
 
