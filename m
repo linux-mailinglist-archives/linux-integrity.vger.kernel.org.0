@@ -1,127 +1,255 @@
-Return-Path: <linux-integrity+bounces-7104-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7105-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10514B5A13D
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 21:17:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 685F4B7D288
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 14:20:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97A812A837F
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 19:17:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19AC452615E
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 22:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD2162D9488;
-	Tue, 16 Sep 2025 19:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4C429B8DD;
+	Tue, 16 Sep 2025 22:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="irVToYby"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="W3sKM3f3"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E9727702A;
-	Tue, 16 Sep 2025 19:17:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4BEA29A9E9
+	for <linux-integrity@vger.kernel.org>; Tue, 16 Sep 2025 22:13:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758050224; cv=none; b=iZ2IgqB37l0h7HLwChU9k4+LlRWDg28yQ+ixzWY70IBuA4lFUDY28mxBMA8Ia28Gf4gKjzbFW6eTeOmcB3zpggjR2ROi0L9xTcbDNk1zUSydc+lXhOYFFX9ceezT8v4KO5NnXJUebtbTbTZtZsbe2OoVvPA3xvN0jGXpajS0svU=
+	t=1758060816; cv=none; b=QSz3fHUllzCMRmc2O8IOsI3RY/XxfHLKVTvQdWAZiEHGt8NFMTWYpUVr4PtZTMl2H3y5b21e8o0rLjU0N6v7KN1JBnMBrZy6nbi6nGCt61NxSPgy3mmuRg/whedgH/3leMreywnwKsiRfWkdVFVGuFLSCp7tsKtMXL/EKQ4rKvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758050224; c=relaxed/simple;
-	bh=MCfy3UUe9SGDvblB2otWUElDBg2kG3cObuhgRkiSZaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KnMepHA7BiNFGMwRdjVstAlfQvqVykVErT/KETEFNi+NniikhiIFPLlPv6DvU4oCvB0YGNVcB5NHec23JtFtUzbHzGhbkvgndMyX5A+JMU4Wb9+lmcWdyh7olcJRfvPxsEV1i5rCarM/9sULu4fCrm3Hn3Ibv8h1r0Hrxah3NP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=irVToYby; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BAC0C4CEEB;
-	Tue, 16 Sep 2025 19:17:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758050224;
-	bh=MCfy3UUe9SGDvblB2otWUElDBg2kG3cObuhgRkiSZaE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=irVToYbyKA9zV+Jv/UyZYdBPHUu5trW7OpgacTJmnzFxEPjY5GODB5+/dB47WdJOM
-	 wUsXChj1HRtPu/aBNMTmTiwdDlN7Jn1NA2M2AT8HkeY0lpaTiKQDLqUh8OyKJYa08k
-	 82uz577D9jimv+LWW+4RSr36XmfkfxjhzCiSMQKHHH//N2uC0Bv9/CByfUl1IAf6xv
-	 kUdTXtitRRqkHDf4ujw4pYee2s9k+FlV1KiB8MlmOFydY/2h46w4RJokFo+uALCWUA
-	 F4vjsWGxkKaTNUzPqBdPft3WdQCp+6EYP8kdsFckQgIvU9/A990/O+vm/kv5wnnSiZ
-	 hTSP7K7d/TS7g==
-Date: Tue, 16 Sep 2025 12:16:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, herbert@gondor.apana.org.au,
-	jarkko@kernel.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, davem@davemloft.net,
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org, sgarzare@redhat.com
-Subject: Re: [GIT PULL] Immutable branch between MFD, Char and Crypto due for
- the v6.18 merge window
-Message-ID: <20250916191658.GA1249009@ax162>
-References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
- <20250902124205.GL2163762@google.com>
- <20250912213256.GA3062565@ax162>
- <20250916075835.GB1637058@google.com>
+	s=arc-20240116; t=1758060816; c=relaxed/simple;
+	bh=KEKoazf+RdgvXOwdy/j1s3l2Jx3MEp0aLYvpEDzfO68=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sqFTPw9TG9Ac/Qrh0KGdOfWeOWDgGyFobD1OAJYTOV3mWSh0O133zUaEQuZLtlI+tmApDNk2HdzG6RKOv/GRDUNZB5TCk35R5DeWMD5YT0k7Z9HubucxBYKdRZGOu8Eo82yb5TCoUf0YFRtrhwfPO/ccHnpNg1NFcy6EZjLknTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=W3sKM3f3; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4b109c6b9fcso46572841cf.3
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Sep 2025 15:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1758060814; x=1758665614; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ou8HM7+FvpfjRvFRWjxB1s6gl/EzXkcqrmhBZWUvpNk=;
+        b=W3sKM3f3I2292bnBS3/OIz8GwkscYTVDCUuz/4c4tgj2ZXG+EdDUWCsNUliQ69EYAe
+         QEMvtcxYy+ycjhTYZmRlryKBsM9lJW6BWKAxSZz3w2mFZFAVeU1l1UxHCfl2RbXiQbEF
+         6kRTHm3/3/clbcYFaJalOr9+aE7KY6QJEaaO3NzOEtJCtntRxrkaMVEK6X7beaiD2E+O
+         sIW/EeGmrNzIgigc90DU+Xx19qWJH5IJFjnrMc3tjPcZaadViygUqW0cjOe56ncCf86q
+         ZXs4LAnRlBQgY4v/xlTSKnVQiKgrlG+AmNTn5ZPSQBG1m4lr6Lkheondnz8j7OnIwYgX
+         b7VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758060814; x=1758665614;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ou8HM7+FvpfjRvFRWjxB1s6gl/EzXkcqrmhBZWUvpNk=;
+        b=Oj8ufMNb/dh3oRVTt/V7knxjuhnjPnKW8K0+jEoKw4yGq2Rv8Ko7LYEq5saiVFMGDK
+         kt9yojDkBeFAUhjeITPx1OrxoGMlaZLu+qEWY1yeMm4eHTXyctvun1iLeCgA/gSg1Y8+
+         SwekkHX+850jeFWD4oVxZwxXLFjWs1lPKFcvynzeh/0sW7wvMIe3qmZjwKP2WTXvq/Wj
+         8aE7zty9UrrHtbwVSSkc5ZqLpp0Wsq9PGNZHQKN7mGsWR2iyWhmBtw8Zac5r9HSSzEx9
+         MZSPJDNnmPVvCHpRMRBWFWf/Ezay3Agjle3Rz8bR4EMT1cPjdQTsHzuR37C/1DGo5Ozs
+         RwNw==
+X-Forwarded-Encrypted: i=1; AJvYcCUTupW2W/L0SVuwAahYfPZnaMhBHzOTkNyiBfAd2X5112gXap9mjaJT8AMGwcCEZc+nMRduyNs5VBXmYsw+w+Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf9bKKQ3WsligHjVhduhBqMsIPoYmH+eYHAO4IxteCcj5dtkMS
+	uFja4vqSctoxgGVgi0XltZoNMrKO1B8pP2x+Q8yt+0wfxRzoBNy11SIpS3sjPbRZuw==
+X-Gm-Gg: ASbGnctFMHHNeUenrGlPB42IUGN3zPN499nwZfHjEGiAfiYjX66m/2yGqeu7Nnr2GBT
+	qt52+cAployGod9N6tPXFPaSc85dnie85JbdtNL3gI/tKroG9h8WuuWUyaVxR+HN04ec60o5sSc
+	YpPHUpFhGGZF9zcTniWoy/nK2bhqgKigPoM9gfyVRX67mGnyZAs6ILTwjnCrguxuIGJw7drkGg9
+	KRkJspJPUOvf4sGPrUYta0Rx0wx+5q/LvDhj76tu7Zw4u0q941WkCLWX73XU23quU28TIj86wOH
+	41eHIxbNYUO7rxeFRoT0vPe5dSHP4bkD6JilGs7QDjVULZb5sqLf1YzHjDTP9h+hu/iTHtutRqu
+	/4uMHsjwxzp+NyJxUgbx1rn0U6pKlokuOiRrBfNiCc5AAyAtP+Iqprz21XG62sk9/uXnn
+X-Google-Smtp-Source: AGHT+IGSeycXTJmU+LVCeOj0BwbvoSahcrD2iBEepqk9pDoC1WBPQ8AwrQa54YUYw62HRI2HbFD92g==
+X-Received: by 2002:ac8:7f04:0:b0:4b7:a434:adab with SMTP id d75a77b69052e-4ba671e6531mr1001801cf.28.1758060813626;
+        Tue, 16 Sep 2025 15:13:33 -0700 (PDT)
+Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-820cec300a4sm1000810985a.57.2025.09.16.15.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Sep 2025 15:13:32 -0700 (PDT)
+From: Paul Moore <paul@paul-moore.com>
+To: linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Fan Wu <wufan@kernel.org>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Kees Cook <kees@kernel.org>,
+	Micah Morton <mortonm@chromium.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>
+Subject: [PATCH v4 0/34] Rework the LSM initialization
+Date: Tue, 16 Sep 2025 18:03:27 -0400
+Message-ID: <20250916220355.252592-36-paul@paul-moore.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250916075835.GB1637058@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 16, 2025 at 08:58:35AM +0100, Lee Jones wrote:
-> On Fri, 12 Sep 2025, Nathan Chancellor wrote:
-> > > The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
-> > > 
-> > >   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
-...
-> > > Qunqin Zhao (4):
-> > ...
-> > >       tpm: Add a driver for Loongson TPM device
-> > 
-> > This one needs a fix up due to commit 07d8004d6fb9 ("tpm: add bufsiz
-> > parameter in the .send callback") in 6.17-rc1, as I am seeing the
-> > following error in next-20250912.
-> > 
-> >   drivers/char/tpm/tpm_loongson.c:48:17: error: initialization of 'int (*)(struct tpm_chip *, u8 *, size_t,  size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int,  long unsigned int)'} from incompatible pointer type 'int (*)(struct tpm_chip *, u8 *, size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int)'} [-Wincompatible-pointer-types]
-> >      48 |         .send = tpm_loongson_send,
-> >         |                 ^~~~~~~~~~~~~~~~~
-> >   drivers/char/tpm/tpm_loongson.c:48:17: note: (near initialization for 'tpm_loongson_ops.send')
-> >   drivers/char/tpm/tpm_loongson.c:31:12: note: 'tpm_loongson_send' declared here
-> >      31 | static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
-> >         |            ^~~~~~~~~~~~~~~~~
-> > 
-> > Can you squash it or do you want a separate patch?
-> > 
-> > Cheers,
-> > Nathan
-> > 
-> > diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loongson.c
-> > index a4ec23639911..9e50250763d1 100644
-> > --- a/drivers/char/tpm/tpm_loongson.c
-> > +++ b/drivers/char/tpm/tpm_loongson.c
-> > @@ -28,7 +28,7 @@ static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-> >  	return cmd_ret->data_len;
-> >  }
-> >  
-> > -static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
-> > +static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t count)
-> >  {
-> >  	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
-> >  	struct tpm_loongson_cmd *cmd = tpm_engine->command;
-> 
-> This will break my local branch.
-> 
-> Any chance of an immutable pull-request for:
-> 
->   07d8004d6fb9 ("tpm: add bufsiz parameter in the .send callback")
+This is the fourth revision of the LSM initialization rework patchset.
+The number of changes between this revision and the last are limited to
+a rework of the lsm_read() function and the replacement of my IMA/EVM
+patch with one from Roberto; relatively minor things given the scope of
+the patchset.
 
-I might be missing something but this commit is in Linux 6.17-rc1, which
-this tree is based on according to both 'git log' and the lead in to
-your pull request at the top, so your local branch is already broken.
-That error message was taken from the tip of your tree and the fix was
-tested against it as well.
+I've run the v4 patchset through some basic testing today and everything
+looks okay to me; I'll continue to play with it, but I wanted to get this
+out onto the list sooner rather than later.  Assuming Mimi is okay with
+Roberto's patch, and no other issues are found, I would expect this to go
+into the LSM tree after the upcoming merge window closes.
 
-"tpm: Add a driver for Loongson TPM device" was sent back in early July,
-so it was never updated for this conflict.
+For those of you having problems pulling this patchset into your own
+local trees for review/testing, this patchset can be found in the
+working-lsm_init_rework branch of the main LSM tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/log/?h=working-lsm_init_rework
 
-Cheers,
-Nathan
+The RFC/v3 patchset:
+https://lore.kernel.org/linux-security-module/20250814225159.275901-36-paul@paul-moore.com/
+
+The RFC/v2 patchset:
+https://lore.kernel.org/linux-security-module/20250721232142.77224-36-paul@paul-moore.com/
+
+The RFC/v1 patchset is below, the cover letter provides some background
+and motivation for this series which still applies:
+https://lore.kernel.org/linux-security-module/20250409185019.238841-31-paul@paul-moore.com/
+
+CHANGELOG
+v4:
+- reworked the lsm_read() function (John, Roberto, Tetsuo)
+- replaced the IMA/EVM patch with one from Roberto
+RFC/v3:
+- rebased to lsm/dev branch
+- fixed IMA/EVM initcall comment (Roberto)
+- fixed CONFIG_IMA and CONFIG_EVM problems (Nicolas, Roberto)
+- fixed CONFIG_SECURITY_SMACK_NETFILTER problems (Roberto)
+- fixed the IMA/EVM header file include macro protections
+- fixed an off-by-one string length issue in lsm_read() (Casey)
+RFC/v2:
+- rename lsm_prep_single() to lsm_prepare()
+- drop the lsm_prop counting patch
+- drop the platform_certs changes from the IMA/EVM patch (Mimi)
+- split/reorder anough patches in the patchset that I lost track
+- added missing function comment blocks in the SELinux patches
+- split patch 04/29 into smaller patches (Kees)
+- fix an LSM list output problem in an intermediate patch (Kees)
+- preserve the "lsm_active_cnt" variable name (Casey)
+- cache the lsm_read() string (Kees)
+- squashed, split, and reordered the enabled/ordering patches
+- reworked the Smack patch (Casey)
+- conditionalized the SELinux IB init code (Stephen)
+- fixed missing Smack "__init" annotation (Fan)
+- fixed a potential unused variable warning in IMA/EVM (John)
+- fixed the placeholder commit descriptions (various)
+RFC/v1:
+- initial version
+
+--
+Paul Moore (33):
+      lsm: split the notifier code out into lsm_notifier.c
+      lsm: split the init code out into lsm_init.c
+      lsm: consolidate lsm_allowed() and prepare_lsm() into
+           lsm_prepare()
+      lsm: introduce looping macros for the initialization code
+      lsm: integrate report_lsm_order() code into caller
+      lsm: integrate lsm_early_cred() and lsm_early_task() into caller
+      lsm: rename ordered_lsm_init() to lsm_init_ordered()
+      lsm: replace the name field with a pointer to the lsm_id struct
+      lsm: rename the lsm order variables for consistency
+      lsm: rework lsm_active_cnt and lsm_idlist[]
+      lsm: get rid of the lsm_names list and do some cleanup
+      lsm: rework the LSM enable/disable setter/getter functions
+      lsm: rename exists_ordered_lsm() to lsm_order_exists()
+      lsm: rename/rework append_ordered_lsm() into lsm_order_append()
+      lsm: rename/rework ordered_lsm_parse() to lsm_order_parse()
+      lsm: cleanup the LSM blob size code
+      lsm: cleanup initialize_lsm() and rename to lsm_init_single()
+      lsm: fold lsm_init_ordered() into security_init()
+      lsm: add/tweak function header comment blocks in lsm_init.c
+      lsm: cleanup the debug and console output in lsm_init.c
+      lsm: output available LSMs when debugging
+      lsm: group lsm_order_parse() with the other lsm_order_*()
+           functions
+      lsm: introduce an initcall mechanism into the LSM framework
+      loadpin: move initcalls to the LSM framework
+      ipe: move initcalls to the LSM framework
+      smack: move initcalls to the LSM framework
+      tomoyo: move initcalls to the LSM framework
+      safesetid: move initcalls to the LSM framework
+      apparmor: move initcalls to the LSM framework
+      lockdown: move initcalls to the LSM framework
+      selinux: move initcalls to the LSM framework
+      lsm: consolidate all of the LSM framework initcalls
+      lsm: add a LSM_STARTED_ALL notification event
+
+Roberto Sassu (1):
+      ima,evm: move initcalls to the LSM framework
+
+ include/linux/lsm_hooks.h              |   73 +-
+ include/linux/security.h               |    3 
+ security/Makefile                      |    2 
+ security/apparmor/apparmorfs.c         |    4 
+ security/apparmor/crypto.c             |    3 
+ security/apparmor/include/apparmorfs.h |    2 
+ security/apparmor/include/crypto.h     |    1 
+ security/apparmor/lsm.c                |   11 
+ security/bpf/hooks.c                   |    2 
+ security/commoncap.c                   |    2 
+ security/inode.c                       |   46 +
+ security/integrity/evm/evm_main.c      |    5 
+ security/integrity/evm/evm_secfs.c     |   11 
+ security/integrity/iint.c              |   14 
+ security/integrity/ima/ima_fs.c        |   11 
+ security/integrity/ima/ima_main.c      |    6 
+ security/integrity/integrity.h         |    2 
+ security/ipe/fs.c                      |    4 
+ security/ipe/ipe.c                     |    3 
+ security/ipe/ipe.h                     |    2 
+ security/landlock/setup.c              |    2 
+ security/loadpin/loadpin.c             |   15 
+ security/lockdown/lockdown.c           |    5 
+ security/lsm.h                         |   42 +
+ security/lsm_init.c                    |  563 ++++++++++++++++++++++
+ security/lsm_notifier.c                |   31 +
+ security/lsm_syscalls.c                |    2 
+ security/min_addr.c                    |    5 
+ security/safesetid/lsm.c               |    3 
+ security/safesetid/lsm.h               |    2 
+ security/safesetid/securityfs.c        |    3 
+ security/security.c                    |  623 +------------------------
+ security/selinux/Makefile              |    2 
+ security/selinux/hooks.c               |   11 
+ security/selinux/ibpkey.c              |    5 
+ security/selinux/include/audit.h       |    9 
+ security/selinux/include/initcalls.h   |   19 
+ security/selinux/initcalls.c           |   52 ++
+ security/selinux/netif.c               |    5 
+ security/selinux/netlink.c             |    5 
+ security/selinux/netnode.c             |    5 
+ security/selinux/netport.c             |    5 
+ security/selinux/selinuxfs.c           |    5 
+ security/selinux/ss/services.c         |   26 -
+ security/smack/smack.h                 |   14 
+ security/smack/smack_lsm.c             |   11 
+ security/smack/smack_netfilter.c       |    4 
+ security/smack/smackfs.c               |    4 
+ security/tomoyo/common.h               |    2 
+ security/tomoyo/securityfs_if.c        |    4 
+ security/tomoyo/tomoyo.c               |    3 
+ security/yama/yama_lsm.c               |    2 
+ 52 files changed, 984 insertions(+), 712 deletions(-)
+
 
