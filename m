@@ -1,105 +1,61 @@
-Return-Path: <linux-integrity+bounces-7103-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7104-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 580B6B59DE6
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 18:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 10514B5A13D
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 21:17:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 889721621C7
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 16:41:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97A812A837F
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 19:17:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E878127A124;
-	Tue, 16 Sep 2025 16:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD2162D9488;
+	Tue, 16 Sep 2025 19:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CxWwmcYS";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="30cVzvZ4";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="sDpQEn4k";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="o8MlFga7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="irVToYby"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12F231E89A
-	for <linux-integrity@vger.kernel.org>; Tue, 16 Sep 2025 16:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E9727702A;
+	Tue, 16 Sep 2025 19:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758040869; cv=none; b=crPFurRV+89IUnbOnOJPypn85Fgil4GiZHaMh4hrN0tQnEzRz3MOd93I5hNq3p2bfWgNddW9vOPFv2WXLCAtGPsYUxNsZm+180i5s0b/96Nr87j/Ngik60qnyqXcnTso+SJSArq5OWvE+Bh8Ch9k2RYfeh8su0tpAWMlaq96IQ4=
+	t=1758050224; cv=none; b=iZ2IgqB37l0h7HLwChU9k4+LlRWDg28yQ+ixzWY70IBuA4lFUDY28mxBMA8Ia28Gf4gKjzbFW6eTeOmcB3zpggjR2ROi0L9xTcbDNk1zUSydc+lXhOYFFX9ceezT8v4KO5NnXJUebtbTbTZtZsbe2OoVvPA3xvN0jGXpajS0svU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758040869; c=relaxed/simple;
-	bh=ygHRKU4+NyJNpxxxSeziFUbD7M5KcN1tEmTyd/ZM9MI=;
+	s=arc-20240116; t=1758050224; c=relaxed/simple;
+	bh=MCfy3UUe9SGDvblB2otWUElDBg2kG3cObuhgRkiSZaE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bFJBkz+knOgQH/UgQocIhLPQtdKrDRRyyKWQthUpE+NYhxBKWQjik+jGA8lPFEOiiXGISzVekGb3nqiBx37RpjG7ih76ndU4+ow5fjdK1eP5ew6EYPzlpq19H6gVyej+9UQIWf5q5Jx80ObS/hyrTtXSGWseKpiD/8TpTJRtuWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CxWwmcYS; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=30cVzvZ4; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=sDpQEn4k; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=o8MlFga7; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C7402227A8;
-	Tue, 16 Sep 2025 16:41:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1758040866;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60UJXs00+JFtBJRSqpPgQp+TkYv/DrUkYHiS5ruLArA=;
-	b=CxWwmcYS7wlahKqWtAyC9iOMvNJUPSh3MbRUHtaoUaIjgeLvJL2uBugKlPNbaghkSg47AZ
-	9KF2bHvKfDzHrZBQ4JGb7p3XTlhIE78YDg43Zat7bLOLrX8TIqqPL6QN5OL1VaHm/SsJmn
-	wfmiKn68hd11h85QDG6wXXh+cd3pU1k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1758040866;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60UJXs00+JFtBJRSqpPgQp+TkYv/DrUkYHiS5ruLArA=;
-	b=30cVzvZ4VHDffz+r8fP5OLTryRTOhw82RaYp2j5U3v84RtEfAjtpPedmnqxd1T6nttNy25
-	lV5rccHc6rYiDkCw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=sDpQEn4k;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=o8MlFga7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1758040865;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60UJXs00+JFtBJRSqpPgQp+TkYv/DrUkYHiS5ruLArA=;
-	b=sDpQEn4kvhvn4mgSO/dqWXZEY4il0SMEJuyYXwigha+uDLlTl4ZqiOySmF8hP0SapcOHIF
-	vfuoJpSPicXZ4qbKVL6MJlB8cO7kGmER9iyMVT7QSL4mCfTGRQMyc4NzItFC5/iVcS8wLw
-	Qcm4iIBI/+03TgGmqn3SKqUNuD7sktE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1758040865;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60UJXs00+JFtBJRSqpPgQp+TkYv/DrUkYHiS5ruLArA=;
-	b=o8MlFga7R7VpBFvW4tzLykyYcQnCtaE4yIZCS8d8OqLwWEwNBBlgowA+92WsTq+vV0fIy2
-	t3wc5yj+XUq5w5Aw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C634813A63;
-	Tue, 16 Sep 2025 16:41:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id KOvTLiCTyWhqVQAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Tue, 16 Sep 2025 16:41:04 +0000
-Date: Tue, 16 Sep 2025 18:41:02 +0200
-From: Petr Vorel <pvorel@suse.cz>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org, Cyril Hrubis <chrubis@suse.cz>,
-	Coiby Xu <coxu@redhat.com>, Li Wang <liwang@redhat.com>
-Subject: Re: [PATCH 2/2] ima_{conditionals,policy}: Handle policy required to
- be signed
-Message-ID: <20250916164102.GA284778@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20250912073210.47637-1-pvorel@suse.cz>
- <20250912073210.47637-3-pvorel@suse.cz>
- <b8723148a39083cab0b43f9c7fa5ce18d696f99d.camel@linux.ibm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KnMepHA7BiNFGMwRdjVstAlfQvqVykVErT/KETEFNi+NniikhiIFPLlPv6DvU4oCvB0YGNVcB5NHec23JtFtUzbHzGhbkvgndMyX5A+JMU4Wb9+lmcWdyh7olcJRfvPxsEV1i5rCarM/9sULu4fCrm3Hn3Ibv8h1r0Hrxah3NP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=irVToYby; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BAC0C4CEEB;
+	Tue, 16 Sep 2025 19:17:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758050224;
+	bh=MCfy3UUe9SGDvblB2otWUElDBg2kG3cObuhgRkiSZaE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=irVToYbyKA9zV+Jv/UyZYdBPHUu5trW7OpgacTJmnzFxEPjY5GODB5+/dB47WdJOM
+	 wUsXChj1HRtPu/aBNMTmTiwdDlN7Jn1NA2M2AT8HkeY0lpaTiKQDLqUh8OyKJYa08k
+	 82uz577D9jimv+LWW+4RSr36XmfkfxjhzCiSMQKHHH//N2uC0Bv9/CByfUl1IAf6xv
+	 kUdTXtitRRqkHDf4ujw4pYee2s9k+FlV1KiB8MlmOFydY/2h46w4RJokFo+uALCWUA
+	 F4vjsWGxkKaTNUzPqBdPft3WdQCp+6EYP8kdsFckQgIvU9/A990/O+vm/kv5wnnSiZ
+	 hTSP7K7d/TS7g==
+Date: Tue, 16 Sep 2025 12:16:58 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Lee Jones <lee@kernel.org>
+Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, herbert@gondor.apana.org.au,
+	jarkko@kernel.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, davem@davemloft.net,
+	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org, sgarzare@redhat.com
+Subject: Re: [GIT PULL] Immutable branch between MFD, Char and Crypto due for
+ the v6.18 merge window
+Message-ID: <20250916191658.GA1249009@ax162>
+References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
+ <20250902124205.GL2163762@google.com>
+ <20250912213256.GA3062565@ax162>
+ <20250916075835.GB1637058@google.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -108,92 +64,64 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b8723148a39083cab0b43f9c7fa5ce18d696f99d.camel@linux.ibm.com>
-X-Spamd-Result: default: False [-3.71 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:replyto,suse.cz:dkim,suse.cz:email,suse.de:url];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Rspamd-Queue-Id: C7402227A8
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -3.71
+In-Reply-To: <20250916075835.GB1637058@google.com>
 
-Hi Mimi,
+On Tue, Sep 16, 2025 at 08:58:35AM +0100, Lee Jones wrote:
+> On Fri, 12 Sep 2025, Nathan Chancellor wrote:
+> > > The following changes since commit 8f5ae30d69d7543eee0d70083daf4de8fe15d585:
+> > > 
+> > >   Linux 6.17-rc1 (2025-08-10 19:41:16 +0300)
+...
+> > > Qunqin Zhao (4):
+> > ...
+> > >       tpm: Add a driver for Loongson TPM device
+> > 
+> > This one needs a fix up due to commit 07d8004d6fb9 ("tpm: add bufsiz
+> > parameter in the .send callback") in 6.17-rc1, as I am seeing the
+> > following error in next-20250912.
+> > 
+> >   drivers/char/tpm/tpm_loongson.c:48:17: error: initialization of 'int (*)(struct tpm_chip *, u8 *, size_t,  size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int,  long unsigned int)'} from incompatible pointer type 'int (*)(struct tpm_chip *, u8 *, size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int)'} [-Wincompatible-pointer-types]
+> >      48 |         .send = tpm_loongson_send,
+> >         |                 ^~~~~~~~~~~~~~~~~
+> >   drivers/char/tpm/tpm_loongson.c:48:17: note: (near initialization for 'tpm_loongson_ops.send')
+> >   drivers/char/tpm/tpm_loongson.c:31:12: note: 'tpm_loongson_send' declared here
+> >      31 | static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
+> >         |            ^~~~~~~~~~~~~~~~~
+> > 
+> > Can you squash it or do you want a separate patch?
+> > 
+> > Cheers,
+> > Nathan
+> > 
+> > diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loongson.c
+> > index a4ec23639911..9e50250763d1 100644
+> > --- a/drivers/char/tpm/tpm_loongson.c
+> > +++ b/drivers/char/tpm/tpm_loongson.c
+> > @@ -28,7 +28,7 @@ static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+> >  	return cmd_ret->data_len;
+> >  }
+> >  
+> > -static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
+> > +static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t count)
+> >  {
+> >  	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
+> >  	struct tpm_loongson_cmd *cmd = tpm_engine->command;
+> 
+> This will break my local branch.
+> 
+> Any chance of an immutable pull-request for:
+> 
+>   07d8004d6fb9 ("tpm: add bufsiz parameter in the .send callback")
 
-[ Cc Li, although I have no idea if Fedora even runs LTP IMA tests ]
+I might be missing something but this commit is in Linux 6.17-rc1, which
+this tree is based on according to both 'git log' and the lead in to
+your pull request at the top, so your local branch is already broken.
+That error message was taken from the tip of your tree and the fix was
+tested against it as well.
 
-> On Fri, 2025-09-12 at 09:32 +0200, Petr Vorel wrote:
-> > Since kernel 6.6 policy needs to be signed on enabled UEFI secure boot.
-> > Skip testing in that case.
+"tpm: Add a driver for Loongson TPM device" was sent back in early July,
+so it was never updated for this conflict.
 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=56dc986a6b20b
-
-> > This fixes errors:
-
-> >     ima_policy 2 TINFO: verify that policy file is not opened concurrently and able to loaded multiple times
-> >     ima_policy 2 TFAIL: problem loading or extending policy (may require policy to be signed)
-> >     https://openqa.suse.de/tests/18723792#step/ima_conditionals/6
-
-> >     ima_conditionals 1 TINFO: verify measuring user files when requested via uid
-> >     echo: write error: Permission denied
-> >     ima_conditionals 1 TBROK: echo measure uid=65534 > /sys/kernel/security/ima/policy failed
-
-> > Ideally there would be test which check that unsigned policy cannot be
-> > written.
-
-> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
-
-> Thanks, Petr.
-
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-
-Thanks for your review, merged!
-
-> At some point, consider adding support for signing policy rules, if the
-> private/public keypair is provided.
-
-I'm not against it, but I'm not sure if I find time for this (as usual patches
-are welcome). If I understand the docs [1] [2] it depends on
-CONFIG_SYSTEM_TRUSTED_KEYS, right?
-
-Fedora builds with CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem", but ship config
-with CONFIG_SYSTEM_TRUSTED_KEYS="" ("We are resetting this value to facilitate
-local builds" - makes perfectly sense), other distros (at least openSUSE
-Tumbleweed and Debian) build with CONFIG_SYSTEM_TRUSTED_KEYS="".
-
-I doubt that Fedora private key will be exposed for testing. Therefore this
-feature is IMHO useful for mainline testing, but not for distro testing, right?
-But again, I'm not against merging the patch (if anybody is willing to implement
-it).
-
-Kind regards,
-Petr
-
-[1] https://ima-doc.readthedocs.io/en/latest/ima-utilities.html#build-kernel-with-ima-ca-key-on-keyring
-[2] https://ima-doc.readthedocs.io/en/latest/ima-utilities.html#ima-ca-key-and-certificate
-
-> Mimi
+Cheers,
+Nathan
 
