@@ -1,147 +1,125 @@
-Return-Path: <linux-integrity+bounces-7139-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7140-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B176FB7D5CD
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 14:26:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCA57B7EE6E
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 15:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C82BD3A29F6
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 22:15:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 005311C0747A
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Sep 2025 22:40:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A8A305E10;
-	Tue, 16 Sep 2025 22:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C56822BDC02;
+	Tue, 16 Sep 2025 22:39:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="LVzHf5MV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BkAA8D/1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBE932B497
-	for <linux-integrity@vger.kernel.org>; Tue, 16 Sep 2025 22:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00D129C339
+	for <linux-integrity@vger.kernel.org>; Tue, 16 Sep 2025 22:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758060884; cv=none; b=k/KSoeFD7hRq0X3w0aApN7bgRXi3kshlrvahaGPcx/t2pZmrStamTFcf6ci6LtT2ilzzgZvBTGB1ztJYp8X7tNclKCmnFC4FpPqRIjJoQQ5N36LZNPWMkqF3jUN3mJUdolAZqyTCvX7BXzzTz/HJ+b1LmC0yE8Fx/ikSrYjwIUw=
+	t=1758062381; cv=none; b=g77j+pqzZAXPTK4iTaTaNStn3XHhowNGzdsx7RmihwiyUK64bG0fIHeAs20oTKmXtArEOTZqeCGjp37H3lrmBl7BLOgmH5kUq85dIRaJn3uCSDZXkYFDIaWsk2o1mbcc6RLUkc0oj3o9vEQGBi2ueKI/Gcykw8hAGGKpB0M2wUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758060884; c=relaxed/simple;
-	bh=aCC82L2q0ysTfaRazG/CWqQeq8HFWa6+t3PPs9R+FMg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NG1UtBW4eUIAypGBd6RGM6FfD3/bMQNP30385K5XAeuatXGfoewCYGfTaBkmxEq1joUZubFj1m9K7D1aDeJlO71RSG/Ydh3GPTOcv+rfxsvbMmB+g0arRaO67DCpz63EOukN00XDrPuW2Q3VWZHZddtUwYbPyNavYHrIJ43NxRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=LVzHf5MV; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-77967339d30so37286426d6.0
-        for <linux-integrity@vger.kernel.org>; Tue, 16 Sep 2025 15:14:42 -0700 (PDT)
+	s=arc-20240116; t=1758062381; c=relaxed/simple;
+	bh=k0SOfZoXTL+6XpT7LDFJn/Tq3Mu6JeeevxzxgIaMsmg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=T4ht0uWQCYEadwGVafYuoR5yzb1MIMFP5ohVBikJrQH94z6oxh6eIy+bI4cB+S0Ub2WMo/GEUgfBMPFbfqurlOngiJlUltJkmCqef3VvxUIlsNRMimW0JLAUbjN83koHn2+XkFc4TxGsOO7GZUGt6QKwivi7WPQ8Ft+coPGsyis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BkAA8D/1; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-80e2c52703bso532883385a.1
+        for <linux-integrity@vger.kernel.org>; Tue, 16 Sep 2025 15:39:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1758060882; x=1758665682; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=01szfj2Cz8qfgT6cyE8Os4+shA0fv2T2/bVUGDyEzf8=;
-        b=LVzHf5MVNE643XNPSSlSg2haxWFxB/Oq9OD+GrC7bYouRY9dbJBeGZ2CxMng4dWQVP
-         Ez4R/dtHWFd2dgxVhfc86I4snrnlZLN5Lx3xDMPda4bIrXqwAJgxGS4X8y/0Gny38KD0
-         yfFz9n5CZkJRjLJKoqCf8Q6dfS6GPc5oB40C7CSpN5jVv3Mn5Hij0uUJPUb4UXnWN2H5
-         uNpHQj9dpyY98eR9JJmT/QxmVCIT42U+QVAKJwVxu34qxyEXWOrfDuXhIp8mbo8TqM3h
-         MXJCwo/0fEMvHtEQoms2mNHkiDpgTb6HjglgWQEDLKTk59gNU7mQw2hRqgVKulJDQnQG
-         t8jQ==
+        d=linuxfoundation.org; s=google; t=1758062379; x=1758667179; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ywdaVb62eCR3TvAc/4+sZpZzoYKTPBN8q6oGAifJQEA=;
+        b=BkAA8D/1/6NCcFJlQD8q6QQQHj1raguXwPyrIhw4GIJc0ZO1z+tfSWboWr2QU0rGLE
+         NxgxmMth1RzQF9hnJP5SxRc8XH1VcPypk9OTPa81T3CU/HdKfAytIe1/xgFT9XgqQx2U
+         DStqeNofIvkJqE/Y5KjU5n3gz683riqFw3Q4U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758060882; x=1758665682;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=01szfj2Cz8qfgT6cyE8Os4+shA0fv2T2/bVUGDyEzf8=;
-        b=FxypGVjs84NjFj3DX3Yr0RRiDRbD81Or9lBgklPy7XQbr6h7yIkMcGwYJ8GtPjJrd8
-         +SyxaJzdNhvXdP9KFX2ob/bZebPNN+KQwJy2SmlGGTqZfYhrL7elEl5+mt4WZMAd367B
-         wIrR2/lhBwsbxPE1VO27t2EEsTpVJgb3c8dsi8PjNYH1J0pcFiVVPiunIxEldpKi5mzP
-         eC+AyEwb2pHkuPjpvJ5S5BSxnxBB0LV0i/urPAVcPpCVQkOfF+sgQmBNTld33+0NnrhL
-         cLhd8WAjQJz8ZljGjx9KZF6fBn/CxJAYwRE7YEJRi4DpALqSvvvVKjqG1eiBko0MCq4W
-         7Ftw==
-X-Forwarded-Encrypted: i=1; AJvYcCVP1sRNmE5CKnhvYxlwDVvRZ4XesKEvcTo7vmGFidbwDS+nQFRLLWPvH+7dIbRyUMQWgK5j5G3JrxuHUBxlfzA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/Jr9JWvPRK0pMm1kWQl/24OVcvkUi5hRrf6Sme2xME+LhsNVZ
-	UhJg3vKULAUTcAlwJopmn320GneGoMF6jubw3KTj36F3WbCVBTjSqQxOrgaLh6zWVg==
-X-Gm-Gg: ASbGnctBHbmLQTHPSHysCnx8MdcNuD58ur61sxJramj9dOAGoC51B/Xjqv+q8YKUrhz
-	hLK2fpYgBhQ+UpvQ+a6nr6rBPQiUX6H95rDvM6FwdYSdEnFpfJwrDorPZg6UsXLEueHVYf3ThIW
-	J9a64udi9JPMCEVKxyNpd/z1eSupORU2riS6VrB1t34Oyau1+2VBj+yD8YAP4SsBESgzfmjoxOA
-	cHSluJblZHr85FKNva6NK7zarbzgs5cgzG3cODDvGpg7221ZzkR78Bc0gEVZtDtrAWYVy2hD78T
-	hpcLklKSmKNoW6wAtZEFlXoFnd+r+kFgImJmAOQCDBsrhuCr4TOskGxRyf/JPrUwrDG8MK+Tcfg
-	151HifG7d4JP9I6rHsJln9sibUq1YXTE45MT5xp8Emnv/8v8nuZdPzdZ+DVeG+KrsKDzX
-X-Google-Smtp-Source: AGHT+IF1dqpDXLNbt8CmRok87Jh+UImED7Clfzg7Ej4N3+L8YwCkf8OUBsmT+MP+k7B+bCivdtcyOA==
-X-Received: by 2002:ad4:5e89:0:b0:77c:eb84:8de0 with SMTP id 6a1803df08f44-77ceb848f79mr134501036d6.26.1758060881918;
-        Tue, 16 Sep 2025 15:14:41 -0700 (PDT)
-Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-763b3f49139sm101521606d6.9.2025.09.16.15.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Sep 2025 15:14:40 -0700 (PDT)
-From: Paul Moore <paul@paul-moore.com>
-To: linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	selinux@vger.kernel.org
-Cc: John Johansen <john.johansen@canonical.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Fan Wu <wufan@kernel.org>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
-	Kees Cook <kees@kernel.org>,
-	Micah Morton <mortonm@chromium.org>,
-	Casey Schaufler <casey@schaufler-ca.com>,
-	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: [PATCH v4 34/34] lsm: add a LSM_STARTED_ALL notification event
-Date: Tue, 16 Sep 2025 18:04:01 -0400
-Message-ID: <20250916220355.252592-70-paul@paul-moore.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250916220355.252592-36-paul@paul-moore.com>
-References: <20250916220355.252592-36-paul@paul-moore.com>
+        d=1e100.net; s=20230601; t=1758062379; x=1758667179;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywdaVb62eCR3TvAc/4+sZpZzoYKTPBN8q6oGAifJQEA=;
+        b=aH3lsyFcT0K7iiDH0FWcZEL1U+TsOUq/vd1FuGdfJAOZ5PlsgluFfpT9hRsoO+phFn
+         7LJu0I8T2wdk1WHMMS03bMRed25o5b3eFm7dkZMvjRXdoWTm3Dowq52JEmOEfk+QRQdF
+         qEMM3SIHkGinHef5OSg/sjmlbqtWfv+X2Tczk291LZ/TbdU0AhUx3JiRlAUMkY+8XScL
+         UCzrKkfjG6NVupbh1rVpZ+HA1ffwC2UrFi1f4Qxe6kdLf8tqJ/JdsM+zq2X5bJPhDMQ1
+         og48aIQmlVfByrKF96TfgjovszDIXAylmSqNW0fdFMXUFwrcAeFxvisWhWyo8go+bCOw
+         ZaAQ==
+X-Gm-Message-State: AOJu0YzLJ37mVYxI4w0Fn2C08ofUgbT4zAMHJBLDeqV9nydz2YQqnzbm
+	XK+P3CDCvx3M35sifD0UFmvFQzrVdU5qtwq5o96JZ20Vwf6h23y0pXLqwNjDonmuN2I=
+X-Gm-Gg: ASbGncvtSl/RxjT4ssix0NmWBMfSvUNhPOJ7ga167gmei58oAbWjjfsp59jugHmIqro
+	7ZJw5euZcnj48m/ppiSgPiZsp4saNEM+G0JT1cZW/d8Gnc2x7OrD97t7XlY8D61nQnvGRq1SZh2
+	VPfcLFtBZZQLztSQVUKJeEHcbak2Jy17ZcbidNzUqR+hhn/M+h71pgzwqqr6teJF5ouVp6AxoMX
+	vSv10ZbCR6XdOJ15QXfIeREPHoxUFq8KinSgbU6hr6kSsxMdQXfdEUXE180jelpOz2dZszfkVLV
+	tsvn9hkpkXfQWhoSDAxVHGsGNgGGXPUgqkVk0J9zPWy1pfHtRsReTJfJwPpRmtaaGuI5cCFjeG8
+	sqxU3iDaXwlJp0cPOtxqblk/25o/lrlGSQPueg/MA74hJYQvRZ05e4uHS4FO+m5KZQAaFY2FMuc
+	Qp9JLfSE09GuyFZGfwO9qxbPtG3YbrRkJN6YHh/00dv50=
+X-Google-Smtp-Source: AGHT+IESNgABLBfvwr4hM4tLIKI9UIhpBPnDVjoN9Ta2vfOV0RzKOw0gmHxxKYKx1UMzPUGBzABwLQ==
+X-Received: by 2002:a05:620a:450e:b0:811:1212:1b6e with SMTP id af79cd13be357-8311390c126mr173485a.50.1758062378651;
+        Tue, 16 Sep 2025 15:39:38 -0700 (PDT)
+Received: from [192.168.226.35] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4b639cb2562sm87328371cf.13.2025.09.16.15.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Sep 2025 15:39:38 -0700 (PDT)
+Message-ID: <f18854b2-f9c8-44a3-a09d-3b2ddbcb971a@linuxfoundation.org>
+Date: Tue, 16 Sep 2025 16:39:37 -0600
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1130; i=paul@paul-moore.com; h=from:subject; bh=aCC82L2q0ysTfaRazG/CWqQeq8HFWa6+t3PPs9R+FMg=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBoyd846bpw0/+yoZxyQYOyFvIbV8lN+aCviDkZP XEGukbIvcmJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaMnfOAAKCRDqIPLalzeJ c/j4EACQv3IyAp1a6CGB5WxKeCmgzNhL+HZiDLDBIaW/iAbkiZpvYBFCsvOWOuZbe7VTC02tQG/ RNj0eRQ50N6xdM8yRdp1kUHQjGys1aOGlFN2PwLEDoCZb5Y4ZFCxm3ctvJnwTCw8CfzdlCJLcXC sR+lUfGdHuYQuG3H6Ddf2Asq5bnOjTP53DzGPbJHkCciHrJCZkZAv5IbBpy1PQXLXm83EBz6cep CSNc3O/sOWEqk+grtxeS6nTcdLjFM7has+QIuP9jNshkoGffl37Ltw6pvLoW0ku0iSpsT22MW/l 4d4Mf0ghXp61Ayd8Ay+bNoVGERvh+0n78PhWN5tjZLPNqKaIlSylR3/UX6xGnkiKUJDseCl/3v6 I289CwjJhRWbR7K7gCqGItzETYHvsQXQkZXoObI1QDv+MmedJGiDNtrBaWG+fjIVEKjDFZQVi8n Or38t1N/cBoSV8sogiABL29Eq5kcgVgRPd9LCngb4pti7H8bSR2wQOoVWXlPj37LVSuIpeuczd/ 8CZBedW7Roi9c7nG7Z3oelDSrSMimGR4QQF9OnpxwIa7stfupQrW0748FQPjZH+4HpCKLerN+8e Dj6E96LTEvDq+Jv04p8z3F/gos5IYhZE4aJ4k1WWrkf/BwFNwxM5LiYq5Pk0k/WG0EYeXJrIBhs +e3X68c3GRynkYw==
-X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: kselftest and cargo
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-kselftest@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-integrity@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <aMlqouOSU8XN7V5H@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <aMlqouOSU8XN7V5H@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add a new LSM notifier event, LSM_STARTED_ALL, which is fired once at
-boot when all of the LSMs have been started.
+On 9/16/25 07:48, Jarkko Sakkinen wrote:
+> Hi,
+> 
+> The pre-existing kselftest for TPM2 is derived works of my earlier Python
+> based rudimentary TPM2 stack called 'tpm2-scripts'.
+> 
+> In order to get more coverage and more mainintainable and extensible test
+> suite I'd like to eventually rewrite the tests with bash and tpm2sh, which
+> is a TPM2 cli written with Rust and based on my new TPM2 stack [1] [2].
+> 
+> Given linux-rust work, would it be acceptable to require cargo to install
+> a runner for kselftest? I'm finishing off now 0.11 version of the tool,
+> which will take some time (versions before that are honestly quite bad,
+> don't try them) but after that this would be something I'd like to
+> put together.
 
-Reviewed-by: Kees Cook <kees@kernel.org>
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-Reviewed-by: John Johansen <john.johhansen@canonical.com>
-Signed-off-by: Paul Moore <paul@paul-moore.com>
----
- include/linux/security.h | 1 +
- security/lsm_init.c      | 1 +
- 2 files changed, 2 insertions(+)
+Probably fine - how does this impact kselftest default run?
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 8560c50edd2e..c13f0a849024 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -85,6 +85,7 @@ struct timezone;
- 
- enum lsm_event {
- 	LSM_POLICY_CHANGE,
-+	LSM_STARTED_ALL,
- };
- 
- struct dm_verity_digest {
-diff --git a/security/lsm_init.c b/security/lsm_init.c
-index 2bd705836df8..af4046c5c581 100644
---- a/security/lsm_init.c
-+++ b/security/lsm_init.c
-@@ -556,6 +556,7 @@ static int __init security_initcall_late(void)
- 
- 	rc = lsm_initcall(late);
- 	lsm_pr_dbg("all enabled LSMs fully activated\n");
-+	call_blocking_lsm_notifier(LSM_STARTED_ALL, NULL);
- 
- 	return rc;
- }
--- 
-2.51.0
+> 
+> NOTE: while tpm2-protocol itself is Apache/MIT, tpm2sh is GPL3 licensed
+> command-line program (for what it is worth).
+> 
+> [1] https://github.com/puavo-org/tpm2sh
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-protocol.git/about/
+> 
+> BR, Jarkko
+> 
+> 
 
+thanks,
+-- Shuah
 
