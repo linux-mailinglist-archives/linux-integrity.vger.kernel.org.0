@@ -1,123 +1,88 @@
-Return-Path: <linux-integrity+bounces-7144-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7145-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8368B811FE
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 19:09:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19B98B81231
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 19:12:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 806041C074CA
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 17:09:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BD1D7AA2B6
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 17:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64C2C2FC86C;
-	Wed, 17 Sep 2025 17:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FAA2FCBF4;
+	Wed, 17 Sep 2025 17:12:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KkffK2HW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YfNw0Eex"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B53D2EAD0C;
-	Wed, 17 Sep 2025 17:09:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADB72F99A6;
+	Wed, 17 Sep 2025 17:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758128947; cv=none; b=mkBxUiCVkQIpi6+ssFW9gTl1ja5a3dt6EjhrhrilBDW/JU+OXwagkhV6t6JlBnfwzv9MnFgFwGyoSmbTcPLpJDXa/YxkbB/RKmaJEl7+DMTD4J1AzF62Wp2KZ8uPiZyDDF/n6xoZ2jowBVbMBq6dKU5D5VxXWiv6E7eHLEWndyc=
+	t=1758129159; cv=none; b=lYUDOxbFXnxeioBIuIFvO6+44QzWbBX6K2cG4Hxn8nLmZwiy3RMmZ7adM3VpK/MgcspI8u4DdMG+ZlWwMXcfRA2F9VGGttdje0Ot4uAbaca9wIOXdoD0WLQO1L8r/EXK1cAJ4+PJOUExiebc1rKVlPM3rCGrND8gCBcvtbHGWjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758128947; c=relaxed/simple;
-	bh=ybViU5NWrDT7kCmPZeLitJ9YsoFcBxxvuApRKbRjteQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GKaq/aTrPDdxjavNm/1I3Y8UAeuCrUhHNwdG5S4dTTZf2Gk+64HWuwzJwB3140SMKZJFxFaJv6An4HP43ddEbKnhKG6fY3kW4uLWbKDBOSwjAfH+4enmxay31DRqp4jZFoaI9Z9f2ppnvSLcxKQXXBQgH5/P9cHbLfbu2kBbNDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KkffK2HW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2365C4CEE7;
-	Wed, 17 Sep 2025 17:09:04 +0000 (UTC)
+	s=arc-20240116; t=1758129159; c=relaxed/simple;
+	bh=cjwB8xCDt/x0cjPMrecLsB4GTBSMS9dIXIQbUTwpVzc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R5c4kDZ6ha12TuX8K0pklfpRwgoJTP0b1yrRxdD22gldKYQT2hIWtOEb+vcI3kFdYFFrVwH7vxzd/8YGas81jAjNKLkI5caSvN/mWU+mh/uQ9j5SB5MVEOIXfCN+5f7Ic/Q1nmBUUON9lTYI+aN70PL0TwcoLZJwfeVmEuVpnsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YfNw0Eex; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5461AC4CEE7;
+	Wed, 17 Sep 2025 17:12:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758128946;
-	bh=ybViU5NWrDT7kCmPZeLitJ9YsoFcBxxvuApRKbRjteQ=;
-	h=From:Date:Subject:To:Cc:From;
-	b=KkffK2HWbImAZlcNRfsE9/xZz/knncuVFhScSZ5A8e82arwAO5GxhLwO0xGIkndkq
-	 lmgl5H3aI5LQtW8dmkUUvGNeTxGQfyMTqEBSAwmXkZdp7EZUqqOY1qpq8vULU9ofQ2
-	 BpHQA/tpnK/sQ8LfO8dmYsjAdfDvg1NHSrU6KtPYRrjgjgzqtdAiRXeHR6E49E7QaF
-	 UGCmvEp+CPtMgx6BWUPhXpzknU4wr8fgnuddrdH9A8831dNBnmYSOupLL90HqN44p/
-	 LBngFEdFOsnDltn/VSdczzJMhyqNvdhKEI4YSPukfeyUO/8K0u5DZX27vtel7ea5sb
-	 Vx4ehsEh3uy6Q==
+	s=k20201202; t=1758129157;
+	bh=cjwB8xCDt/x0cjPMrecLsB4GTBSMS9dIXIQbUTwpVzc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YfNw0EexKdDPmklIXZEzvlC/X7BhePBqzIxVGYlllmZyjulcFzli7HJNEj5zbBWo4
+	 q9mnMO45HDDh3k+cQ/mVD8Q+uv5pRc0bR6kddgHHfg6hc66+rkUZEj9KBLx8d8z98m
+	 ASh+Yv4uli8l970RoiQwpye2/6AXJbVtYDlsZHz7nd1wNLR7774NEmq9I8Jy7g36ru
+	 51byqfp5DvLlsMWni7AneCPRHzdwigRzxCk71sxdqPZ6Nvf21pa1ba2ly3906sIQa1
+	 SUVr+ZalK39KP7X4sChhjE9kWinj/f1CtzsE1TEWhXEQc4mjOVBvjmV2TtFMWyQhUY
+	 GOwd1ZIfiXVoA==
+Date: Wed, 17 Sep 2025 10:12:32 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 17 Sep 2025 10:09:00 -0700
-Subject: [PATCH] tpm: loongson: Add bufsiz parameter to tpm_loongson_send()
+To: Lee Jones <lee@kernel.org>
+Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, herbert@gondor.apana.org.au,
+	jarkko@kernel.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, davem@davemloft.net,
+	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org, sgarzare@redhat.com
+Subject: Re: [GIT PULL] Immutable branch between MFD, Char and Crypto due for
+ the v6.18 merge window
+Message-ID: <20250917171232.GA1457869@ax162>
+References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
+ <20250902124205.GL2163762@google.com>
+ <20250912213256.GA3062565@ax162>
+ <20250916075835.GB1637058@google.com>
+ <20250916191658.GA1249009@ax162>
+ <20250917093823.GG3893363@google.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250917-tpm-loongson-add-bufsiz-v1-1-972a75c0aab2@kernel.org>
-X-B4-Tracking: v=1; b=H4sIACvrymgC/x3MTQqDMBBA4avIrDuQ+ItepXQRk4kOtIlkqoji3
- Q0uv8V7JwglJoGhOCHRxsIxZOhXAXY2YSJklw2lKhvV6w7/yw+/MYZJYkDjHI6rFz6Q6sq3Sun
- WWgO5XhJ53p/z+3NdN1F08OhpAAAA
-X-Change-ID: 20250917-tpm-loongson-add-bufsiz-e43f60016cca
-To: Lee Jones <lee@kernel.org>, Qunqin Zhao <zhaoqunqin@loongson.cn>, 
- Yinggang Gu <guyinggang@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
- Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2367; i=nathan@kernel.org;
- h=from:subject:message-id; bh=ybViU5NWrDT7kCmPZeLitJ9YsoFcBxxvuApRKbRjteQ=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBmnXhvUfNeWWbHLxv+G/Kc9zvUb38T+enOsKOqM1J12z
- QzBu20/O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEdnMwMlzsMQ786frGkuXq
- T362bxOur/Z3ED656E+nms9blc0/GqsZfjF9+RywqZlxCqPjg4JtO672BUT8aVs0K2311OfXDe8
- YPeMFAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250917093823.GG3893363@google.com>
 
-Commit 5c83b07df9c5 ("tpm: Add a driver for Loongson TPM device") has a
-semantic conflict with commit 07d8004d6fb9 ("tpm: add bufsiz parameter
-in the .send callback"), as the former change was developed against a
-tree without the latter change. This results in a build error:
+On Wed, Sep 17, 2025 at 10:38:23AM +0100, Lee Jones wrote:
+> Ah, gotcha.  I thought you were saying that 07d8004d6fb9 ("tpm: add
+> bufsiz parameter in the .send callback") was applied somewhere else.  In
+> which case, I need to figure out why my build testing didn't catch it.
 
-  drivers/char/tpm/tpm_loongson.c:48:17: error: initialization of 'int (*)(struct tpm_chip *, u8 *, size_t,  size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int,  long unsigned int)'} from incompatible pointer type 'int (*)(struct tpm_chip *, u8 *, size_t)' {aka 'int (*)(struct tpm_chip *, unsigned char *, long unsigned int)'} [-Wincompatible-pointer-types]
-     48 |         .send = tpm_loongson_send,
-        |                 ^~~~~~~~~~~~~~~~~
-  drivers/char/tpm/tpm_loongson.c:48:17: note: (near initialization for 'tpm_loongson_ops.send')
-  drivers/char/tpm/tpm_loongson.c:31:12: note: 'tpm_loongson_send' declared here
-     31 | static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
-        |            ^~~~~~~~~~~~~~~~~
+Maybe because this driver ultimately depends on CONFIG_LOONGARCH (i.e.,
+no COMPILE_TEST)? I would argue most people don't do LoongArch builds.
 
-Add the expected bufsiz parameter to tpm_loongson_send() to resolve the
-error.
+> I'd be happy with a formal patch from you or I can create the patch and
+> add your {Reported,Suggested}-by.  How would you like to proceed?
 
-Fixes: 5c83b07df9c5 ("tpm: Add a driver for Loongson TPM device")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-This is in Lee's ib-mfd-char-crypto-6.18 [1] so he will need to take it
-but I have CC'd the TPM folks as an FYI.
+I sent a formal patch to make life a little easier for you :)
 
-[1]: https://lore.kernel.org/20250902124205.GL2163762@google.com/
----
- drivers/char/tpm/tpm_loongson.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://lore.kernel.org/20250917-tpm-loongson-add-bufsiz-v1-1-972a75c0aab2@kernel.org/
 
-diff --git a/drivers/char/tpm/tpm_loongson.c b/drivers/char/tpm/tpm_loongson.c
-index a4ec23639911..9e50250763d1 100644
---- a/drivers/char/tpm/tpm_loongson.c
-+++ b/drivers/char/tpm/tpm_loongson.c
-@@ -28,7 +28,7 @@ static int tpm_loongson_recv(struct tpm_chip *chip, u8 *buf, size_t count)
- 	return cmd_ret->data_len;
- }
- 
--static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t count)
-+static int tpm_loongson_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t count)
- {
- 	struct loongson_se_engine *tpm_engine = dev_get_drvdata(&chip->dev);
- 	struct tpm_loongson_cmd *cmd = tpm_engine->command;
-
----
-base-commit: 74fddd5fbab879a7d039d9fb49af923927a64811
-change-id: 20250917-tpm-loongson-add-bufsiz-e43f60016cca
-
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
-
+Cheers,
+Nathan
 
