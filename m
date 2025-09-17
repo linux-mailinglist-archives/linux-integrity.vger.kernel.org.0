@@ -1,88 +1,108 @@
-Return-Path: <linux-integrity+bounces-7145-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7146-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B98B81231
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 19:12:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCA9BB821FB
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 00:13:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BD1D7AA2B6
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 17:11:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FA41324CDF
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Sep 2025 22:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59FAA2FCBF4;
-	Wed, 17 Sep 2025 17:12:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YfNw0Eex"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F702DCBF7;
+	Wed, 17 Sep 2025 22:13:26 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADB72F99A6;
-	Wed, 17 Sep 2025 17:12:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3598830BBA2;
+	Wed, 17 Sep 2025 22:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758129159; cv=none; b=lYUDOxbFXnxeioBIuIFvO6+44QzWbBX6K2cG4Hxn8nLmZwiy3RMmZ7adM3VpK/MgcspI8u4DdMG+ZlWwMXcfRA2F9VGGttdje0Ot4uAbaca9wIOXdoD0WLQO1L8r/EXK1cAJ4+PJOUExiebc1rKVlPM3rCGrND8gCBcvtbHGWjY=
+	t=1758147206; cv=none; b=nUNxRgOdrukHygfjeRRoXtxGZ6Xlq0EIwoAPj8H8NE9/pM90ajTDBD2ICw++GjSzEunJSQkBUt3IaAgz13o6PoU2/tclVJ1gXEqVKJDSz6dK+nq6LkAYLASnfi0sNLD2q0XxH4QP40I8srQShbVUCpM4RRH1NvNU3D0u8lqkA2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758129159; c=relaxed/simple;
-	bh=cjwB8xCDt/x0cjPMrecLsB4GTBSMS9dIXIQbUTwpVzc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R5c4kDZ6ha12TuX8K0pklfpRwgoJTP0b1yrRxdD22gldKYQT2hIWtOEb+vcI3kFdYFFrVwH7vxzd/8YGas81jAjNKLkI5caSvN/mWU+mh/uQ9j5SB5MVEOIXfCN+5f7Ic/Q1nmBUUON9lTYI+aN70PL0TwcoLZJwfeVmEuVpnsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YfNw0Eex; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5461AC4CEE7;
-	Wed, 17 Sep 2025 17:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758129157;
-	bh=cjwB8xCDt/x0cjPMrecLsB4GTBSMS9dIXIQbUTwpVzc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YfNw0EexKdDPmklIXZEzvlC/X7BhePBqzIxVGYlllmZyjulcFzli7HJNEj5zbBWo4
-	 q9mnMO45HDDh3k+cQ/mVD8Q+uv5pRc0bR6kddgHHfg6hc66+rkUZEj9KBLx8d8z98m
-	 ASh+Yv4uli8l970RoiQwpye2/6AXJbVtYDlsZHz7nd1wNLR7774NEmq9I8Jy7g36ru
-	 51byqfp5DvLlsMWni7AneCPRHzdwigRzxCk71sxdqPZ6Nvf21pa1ba2ly3906sIQa1
-	 SUVr+ZalK39KP7X4sChhjE9kWinj/f1CtzsE1TEWhXEQc4mjOVBvjmV2TtFMWyQhUY
-	 GOwd1ZIfiXVoA==
-Date: Wed, 17 Sep 2025 10:12:32 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Lee Jones <lee@kernel.org>
-Cc: Qunqin Zhao <zhaoqunqin@loongson.cn>, herbert@gondor.apana.org.au,
-	jarkko@kernel.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, davem@davemloft.net,
-	linux-crypto@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org, sgarzare@redhat.com
-Subject: Re: [GIT PULL] Immutable branch between MFD, Char and Crypto due for
- the v6.18 merge window
-Message-ID: <20250917171232.GA1457869@ax162>
-References: <20250705072045.1067-1-zhaoqunqin@loongson.cn>
- <20250902124205.GL2163762@google.com>
- <20250912213256.GA3062565@ax162>
- <20250916075835.GB1637058@google.com>
- <20250916191658.GA1249009@ax162>
- <20250917093823.GG3893363@google.com>
+	s=arc-20240116; t=1758147206; c=relaxed/simple;
+	bh=GrdDBAfmSXiAltqk82o1oRjarAsneKhZi0ywhKVk+a0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cDicY2tU6X8nWZ+21E03kB+K89IzspjqGlrujCD0rw2zQZoRgdMaKWR9dtZBLaKM9DbvpnG7Q18/F1b5AkyDO/BsNBtkls8mo48LvdTirn/w8rAnAIhFBsCNZyOUpEC3+9IVo6YjPph7GX60NoTilGMnN86MaPCwlOT+Otb1Ivs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.5] (ip5f5af79c.dynamic.kabel-deutschland.de [95.90.247.156])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id C798861E647BB;
+	Thu, 18 Sep 2025 00:13:05 +0200 (CEST)
+Message-ID: <53b303e1-4e75-4fb1-a700-ba4011c02e26@molgen.mpg.de>
+Date: Thu, 18 Sep 2025 00:13:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917093823.GG3893363@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tpm_tis: Fix undefined behavior in
+ tpm_tis_spi_transfer_half()
+To: Gunnar Kudrjavets <gunnarku@amazon.com>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+ kyarlagadda@nvidia.com, linux-integrity@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Justinien Bouron <jbouron@amazon.com>
+References: <20250917153022.18567-1-gunnarku@amazon.com>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20250917153022.18567-1-gunnarku@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 17, 2025 at 10:38:23AM +0100, Lee Jones wrote:
-> Ah, gotcha.  I thought you were saying that 07d8004d6fb9 ("tpm: add
-> bufsiz parameter in the .send callback") was applied somewhere else.  In
-> which case, I need to figure out why my build testing didn't catch it.
+Dear Gunnar,
 
-Maybe because this driver ultimately depends on CONFIG_LOONGARCH (i.e.,
-no COMPILE_TEST)? I would argue most people don't do LoongArch builds.
 
-> I'd be happy with a formal patch from you or I can create the patch and
-> add your {Reported,Suggested}-by.  How would you like to proceed?
+Thank you very much for your patch.
 
-I sent a formal patch to make life a little easier for you :)
+Am 17.09.25 um 17:29 schrieb Gunnar Kudrjavets:
+> When len is 0, the while loop in tpm_tis_spi_transfer_half() never
+> executes, leaving ret uninitialized. This will lead to undefined
+> behavior when the function returns.
+> 
+> The issue was introduced when tpm_tis_spi_transfer() was refactored
+> to call tpm_tis_spi_transfer_half() or tpm_tis_spi_transfer_full().
+> While ret is properly initialized in tpm_tis_spi_transfer_full(), it
+> was missed in tpm_tis_spi_transfer_half().
+> 
+> Initialize ret to 0 at the beginning of the function to ensure
+> defined behavior in all code paths.
+> 
+> Found by GCC 14.2.0 static analyzer with -fanalyzer.
+> 
+> Fixes: a86a42ac2bd6 ("tpm_tis_spi: Add hardware wait polling")
+> Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
+> Reviewed-by: Justinien Bouron <jbouron@amazon.com>
+> ---
+>   drivers/char/tpm/tpm_tis_spi_main.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
+> index 61b42c83ced8..1b6d79662ca1 100644
+> --- a/drivers/char/tpm/tpm_tis_spi_main.c
+> +++ b/drivers/char/tpm/tpm_tis_spi_main.c
+> @@ -85,7 +85,7 @@ static int tpm_tis_spi_transfer_half(struct tpm_tis_data *data,	u32 addr,
+>   	struct spi_transfer spi_xfer[3];
+>   	struct spi_message m;
+>   	u8 transfer_len;
+> -	int ret;
+> +	int ret = 0;
+> 
+>   	while (len) {
+>   		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
 
-https://lore.kernel.org/20250917-tpm-loongson-add-bufsiz-v1-1-972a75c0aab2@kernel.org/
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-Cheers,
-Nathan
+
+Kind regards,
+
+Paul
 
