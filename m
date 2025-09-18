@@ -1,210 +1,182 @@
-Return-Path: <linux-integrity+bounces-7160-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7161-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EB80B85BD0
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:46:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27E3AB85C45
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:50:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D6731C24933
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:41:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2F4C5612FF
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:48:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FB592F616A;
-	Thu, 18 Sep 2025 15:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B41B23B616;
+	Thu, 18 Sep 2025 15:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="ZAtRkFSP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FD2QmrKN"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 747F02264CB
-	for <linux-integrity@vger.kernel.org>; Thu, 18 Sep 2025 15:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E7F22D7B5;
+	Thu, 18 Sep 2025 15:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758209953; cv=none; b=riLjRWb6NVoKLLdY3kohIBMyy2hh2rRUnRT3gxze8uU/AFW+3OgeOpjfytTa24H65zhos9J1Negw5bi3clZdA8kiYRyu78MUkBR/VWiQhJUbNLm4mRQkBOaKnXrjKH4vyMjXPmdiF65i7C4Y3dxNU2s+ZJ6oDRQ3dTMfhXd/Hwk=
+	t=1758210492; cv=none; b=el1p3ia2iPZafxeS/i3lWu6L+5+lW9xvTp71+WAZuah/vSkP6Sfc11MIsJv+4/13UFKq/Qkt2LLOCvqYnmeQGF5FXeEZC5lEs/8x7spBG1MjhsU9C9ZOALEZvUvhul9pcA6HBIFLq3UvzKCUlmpvTJ30jiVUQaSRrt4aefiz9R0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758209953; c=relaxed/simple;
-	bh=l+CHzfhzTph9TC1j6Luy+Ow00xFATk2QnuE2sNI8HvI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TUhTf3/+dB5w+IKQTtwwxpHNB/nO/HPElWMUzUPpUjC61i6hsyy4pRV8TK/EHIs1xyrIzMo3LBZxPjL63bV1GECRCc/k8W9sApWDvgsg5SATrjZ38umN7Q4iVcYsI7QSp8wcpyNGZ/9EurHlzlj8RzKsXr03iEo9J0qlPcWquv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=ZAtRkFSP; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-77b2e3169dcso1506533b3a.2
-        for <linux-integrity@vger.kernel.org>; Thu, 18 Sep 2025 08:39:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1758209950; x=1758814750; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0r97KKGYMsHeXRrgZiOGNJu+AOhAt5WoepEoce/7wW0=;
-        b=ZAtRkFSPf5ojJtW5ChBGUbvS+ay7iIPvOJudujNeN5AvH3CWRJlB/z7qFqCvog+NKI
-         hzY7GO8FBHC+YHd5byMPQA82ZFA05HZCZaKJZ2eNWv8yTBXxJ6QIqgLvoft56+yWgGwN
-         QSGtNF3QjWl72RnbslNjbsC+z+17hibmiXjlc3izTf2eJ92Q3mX2iIfPdrxXnZGSR4lc
-         XxbpE8SaEkYOqsCSD8qKSHrZID/P+1bF9o8mN+LHnQjzPjjGUBGWsgX9rpx28Il5fzem
-         i7f61mCGFRktj9xSM9JPo8G0iSm5q0vY1tMX8ME3r+WZCu/KOBU8yqfPIZ0hO9SLj/7H
-         QC/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758209950; x=1758814750;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0r97KKGYMsHeXRrgZiOGNJu+AOhAt5WoepEoce/7wW0=;
-        b=eGOgIbK3ZXAh9LWEYHM6OJF1ScmhbG+iP6IaJImDCV/k42M3zbtua04YIuBmYX9eo1
-         oBF9jX/Ib765JKBM7+4WPm99yNxyAsxq4SYpe27DyKuXN670/MdIGpNpt+IWd0UI/LSa
-         fiEOit8+Ep/lHcwpAdtnf7Rn/xunNlwPuuph8fgsv/JtBl8uvUEMaQuvM5CDcBkPy16E
-         igf8FI3aYTatGt/zVLB4a4WD2BLmSgVwrre+tn9Y1YfKddTqyyJOFHU/NcaXq7EA0Fr7
-         q5aZQa1UfSlw65Tfq3QqyglCwSGnWuQy5hFPdZgHOk6S5cNniVzUB/fAUmHhkxfnHzaL
-         78oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWXwp1jgcksRrLoztpN3iWYx/tuUpL2matMJrS82tvyyke5c0WHlmqb1pzHQSl9NlXfjL4EaZLOWXp4T6NPVJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbkyQSV0AeT2+fIyqDwwa9Ne4U1v/qJOU7j8oDeX8KJ1J3c/GV
-	UWtJ0sRtN6mv+729iK8uO9mQpBsZ/e4/xGszr8JHOLHc+7QqNnk2qA0ENO5rNSRnqy6Ljg8O16H
-	E+dwk7uU93nZsDUoCV5WOWBs9X7hjRP6ugMBo3m4N
-X-Gm-Gg: ASbGncsN0hJaGmEVWgWzDTxAB2epCzJ2xuQtBOSarwIcvd8TLj4S3m8Q4H+D/7SGxsU
-	vj3Xjfa+qTPaJLN7+IKvonh2ZQQHHV4g1IlyNjYgOqwNebwtUesQymKuQgEDR/JpD2DdnHan0UA
-	Tc2ILRE7ygU8SAQRS88ORKQwkdB2l9/xod+osdd/07UIxRY1WaunKMjSAOpK7YjIdiAh+UoJkN2
-	mBJ1uGf96CSZ6O773k5EAsA+g==
-X-Google-Smtp-Source: AGHT+IElmkij4wYopIn8UrpgdMTCj5k6zUQlBbkUIO8IyLnCWwFl7MhD5rIB7cKOXRm/+Dj0xrbvWGIatYmEZd7kYmg=
-X-Received: by 2002:a05:6a20:a10f:b0:263:81aa:d613 with SMTP id
- adf61e73a8af0-2925d4b2bcbmr37354637.22.1758209949741; Thu, 18 Sep 2025
- 08:39:09 -0700 (PDT)
+	s=arc-20240116; t=1758210492; c=relaxed/simple;
+	bh=JT3ECR8y3wiOUot8uXmFiGz+zMI4wQ4XDLAlJPjll14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hBm3jxjtPXFZHQnAbUWf2Ka4NxIRwMhdWH9SADT9aC7TriEh+yrE6NphbxhkdF192+bUUyU3oOjzioffinlmG4R4kpVWTGuT7EE1tuDiDmIBA79RKOv5EusZ0CmxU6QxixyFI4OTaCCSr0DN9/OW10PkGxL+4aUT1cbfiP8UxEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FD2QmrKN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0E7C4CEE7;
+	Thu, 18 Sep 2025 15:48:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758210491;
+	bh=JT3ECR8y3wiOUot8uXmFiGz+zMI4wQ4XDLAlJPjll14=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FD2QmrKN5yIySe/pKeqRq5r0fM3eWM4bAjiS7qF7FI364PckEHdaXGhrGKj1NAP7k
+	 4c+gaP+IrI6ZOftmqLrVDpfuOYiMWqS7FJtp+XvH2Fr4/DueVeqDUfUGvhnoLdEhdL
+	 yuEPi9ILPfzrDbz1k70K2BfUTS4aQ6JAKCa+d6YpaJV5RLIt4QZ6XGDth32k+UsK93
+	 4DdBg0OM40oosv024r/vGxLaaoaP1kPYn6gkOdko4+yS1uGHcNce7z6fIyfmhVXCxM
+	 wTzDqtzxYqQjrXaQv4SZU2ol7qaY4n3t8ztToOGs9PRocbDu8vnHelKSfLJRToe1sF
+	 3sVsMKedRnZKA==
+Date: Thu, 18 Sep 2025 18:48:06 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, tpm2@lists.linux.dev
+Subject: Re: tpm2key.asn1 parent identification
+Message-ID: <aMwptnyYedvdqdHc@kernel.org>
+References: <aMboFXNNX7WZaOaS@kernel.org>
+ <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
+ <aMgnm1OkDj9XnStc@kernel.org>
+ <aMhWHy1LQVqpyW5E@kernel.org>
+ <8c2817f5bbf8202b50d93b6044d6595ea4b29b9a.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250916220355.252592-36-paul@paul-moore.com> <20250916220355.252592-51-paul@paul-moore.com>
- <8b560b9522c1c42e26a108e2f9b2977901d73649.camel@linux.ibm.com>
-In-Reply-To: <8b560b9522c1c42e26a108e2f9b2977901d73649.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 18 Sep 2025 11:38:58 -0400
-X-Gm-Features: AS18NWAHpIkWgt5Zhht6NQrhgyLZn1uDjxVxDej5yO7gbsbueflErH6ttnEljyU
-Message-ID: <CAHC9VhSxookZfVQhDMdrikmFrk0VoUhEwMx0FR5DS3JfK_MY9Q@mail.gmail.com>
-Subject: Re: [PATCH v4 15/34] lsm: rename/rework ordered_lsm_parse() to lsm_order_parse()
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8c2817f5bbf8202b50d93b6044d6595ea4b29b9a.camel@HansenPartnership.com>
 
-On Thu, Sep 18, 2025 at 7:30=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Tue, 2025-09-16 at 18:03 -0400, Paul Moore wrote:
-> > Rename ordered_lsm_parse() to lsm_order_parse() for the sake of
-> > consistency with the other LSM initialization routines, and also
-> > do some minor rework of the function.  Aside from some minor style
-> > decisions, the majority of the rework involved shuffling the order
-> > of the LSM_FLAG_LEGACY and LSM_ORDER_FIRST code so that the
-> > LSM_FLAG_LEGACY checks are handled first; it is important to note
-> > that this doesn't affect the order in which the LSMs are registered.
-> >
-> > Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> > Reviewed-by: John Johansen <john.johhansen@canonical.com>
-> > Signed-off-by: Paul Moore <paul@paul-moore.com>
-> > ---
-> >  security/lsm_init.c | 82 ++++++++++++++++++++-------------------------
-> >  1 file changed, 37 insertions(+), 45 deletions(-)
-> >
-> > diff --git a/security/lsm_init.c b/security/lsm_init.c
-> > index a314484d7c2f..7b2491120fc8 100644
-> > --- a/security/lsm_init.c
-> > +++ b/security/lsm_init.c
-> > @@ -228,83 +228,75 @@ static void __init initialize_lsm(struct lsm_info=
- *lsm)
-> >       }
-> >  }
-> >
-> > -/* Populate ordered LSMs list from comma-separated LSM name list. */
-> > -static void __init ordered_lsm_parse(const char *order, const char *or=
-igin)
-> > +/**
-> > + * lsm_order_parse - Parse the comma delimited LSM list
-> > + * @list: LSM list
-> > + * @src: source of the list
-> > + */
-> > +static void __init lsm_order_parse(const char *list, const char *src)
-> >  {
-> >       struct lsm_info *lsm;
-> >       char *sep, *name, *next;
-> >
-> > -     /* LSM_ORDER_FIRST is always first. */
-> > -     lsm_for_each_raw(lsm) {
-> > -             if (lsm->order =3D=3D LSM_ORDER_FIRST)
-> > -                     lsm_order_append(lsm, "  first");
-> > -     }
-> > -
-> > -     /* Process "security=3D", if given. */
-> > +     /* Handle any Legacy LSM exclusions if one was specified. */
-> >       if (lsm_order_legacy) {
-> > -             struct lsm_info *major;
-> > -
-> >               /*
-> > -              * To match the original "security=3D" behavior, this
-> > -              * explicitly does NOT fallback to another Legacy Major
-> > -              * if the selected one was separately disabled: disable
-> > -              * all non-matching Legacy Major LSMs.
-> > +              * To match the original "security=3D" behavior, this exp=
-licitly
-> > +              * does NOT fallback to another Legacy Major if the selec=
-ted
-> > +              * one was separately disabled: disable all non-matching
-> > +              * Legacy Major LSMs.
-> >                */
-> > -             lsm_for_each_raw(major) {
-> > -                     if ((major->flags & LSM_FLAG_LEGACY_MAJOR) &&
-> > -                         strcmp(major->id->name, lsm_order_legacy) !=
-=3D 0) {
-> > -                             lsm_enabled_set(major, false);
-> > +             lsm_for_each_raw(lsm) {
-> > +                     if ((lsm->flags & LSM_FLAG_LEGACY_MAJOR) &&
-> > +                          strcmp(lsm->id->name, lsm_order_legacy)) {
-> > +                             lsm_enabled_set(lsm, false);
-> >                               init_debug("security=3D%s disabled: %s (o=
-nly one legacy major LSM)\n",
-> > -                                        lsm_order_legacy, major->id->n=
-ame);
-> > +                                        lsm_order_legacy, lsm->id->nam=
-e);
-> >                       }
-> >               }
-> >       }
-> >
-> > -     sep =3D kstrdup(order, GFP_KERNEL);
-> > +     /* LSM_ORDER_FIRST */
-> > +     lsm_for_each_raw(lsm) {
-> > +             if (lsm->order =3D=3D LSM_ORDER_FIRST)
-> > +                     lsm_order_append(lsm, "first");
-> > +     }
-> > +
-> > +     /* Normal or "mutable" LSMs */
->
-> Paul, there's a reason for another set of eyes reviewing patches and yes,=
- even,
-> comments.
+On Tue, Sep 16, 2025 at 10:33:43PM -0400, James Bottomley wrote:
+> On Mon, 2025-09-15 at 21:08 +0300, Jarkko Sakkinen wrote:
+> > On Mon, Sep 15, 2025 at 05:50:07PM +0300, Jarkko Sakkinen wrote:
+> > > On Sun, Sep 14, 2025 at 11:24:24PM -0400, James Bottomley wrote:
+> > > > On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > In practice, while implementing tpm2sh and its self-contained
+> > > > > TPM emulator called "MockTPM", I've noticed that
+> > > > > 'tpm2key.asn1.' has a major bottleneck, but luckily it is easy
+> > > > > to squash.
+> > > > > 
+> > > > > Parent handle should never be persisted, as it defies the
+> > > > > existential reason of having a file format in the first place.
+> > > > 
+> > > > Actually, if you read the spec:it describes how to handle non-
+> > > > persistent parents by defining the exact form of the P256 parent
+> > > > you derive from the permanent handle in section 3.1.8:
+> > > > 
+> > > > https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+> > > > 
+> > > > This is the way all the implementations (well except the kernel,
+> > > > but that's fixable) do it.
+> > > 
+> > > Even if you fix it to persistent handle, the problem does not go
+> > > magically go away. Read public attributes are ubiquitos and
+> > > cryptographically correct way to do the binding.
+> > > 
+> > > > 
+> > > > > To address this issue I just added couple of optional fields to
+> > > > > TPMKey:
+> > > > > 
+> > > > >   parentName   [6] EXPLICIT OCTET STRING OPTIONAL,
+> > > > >   parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
+> > > > 
+> > > > So that's a bit redundant, since if you know the key, you know
+> > > > its name.
+> > > 
+> > > What I know is irrelevant here :-)
+> > > 
+> > > > 
+> > > > > By persisting this information TPM2_GetCapability +
+> > > > > TPM2_ReadPublic can be used to acquire an appropriate handle.
+> > > > 
+> > > > It can, how?  If the parent is a primary, you can't insert it
+> > > > from a public key, you have to derive it and if it's non-primary,
+> > > > you need its parent to do the insertion.
+> > > 
+> > > Transient handle is like file handle and persistent handle is like
+> > > inode number. Neither unambigiuously (and this is dead obvious)
+> > > does not identify any possible key.
+> > > 
+> > > Further by binding key correctly, the requirement of being
+> > > persistent key goes away, which is a limiting factor.
+> > > 
+> > > > 
+> > > > > I'd highly recommend to add this quirk to anything that
+> > > > > processes this ASN.1 format.
+> > > > 
+> > > > Well, patches to the standard are accepted:
+> > > > 
+> > > > https://groups.io/g/openssl-tpm2-engine/topics
+> > 
+> > Further there is two options:
+> > 
+> > 1. Either remove TPM2 key ASN.1 support from kernel entirely.
+> > 2. Fix the 0day bug.
+> 
+> Can you please explain in technical terms what you see as a zero day
+> bug in the current implementation?
 
-Mimi, if you've read my emails over the years, or discussed this topic
-with me in person or off-list, you'll know that I almost always* hold
-my patches to the same standard as any other contributor; even in
-cases where I know there is likely to be no review beyond my own.
+It's essentially ambiguity problem in my opinion that locks in the
+creator TPM if you know the expected parent. 0day might be overstatement
+yes, but it is essentially the immutable reference in this scheme.
+If you want to scope it, it's essentially a great way to add some defence
+in depth to the scheme.
 
-[*] There have been exceptions in the past due to build breakages and
-other "critical" fixes that need to be merged ASAP, but even then the
-patches are posted and subject to review and additional
-patching/fixing afterwards.
+> 
+> > It is unacceptable to make strong binding to a random open source
+> > project. I zero care what OpenSSL TPM2 engine does with the file
+> > format.
+> 
+> I don't really get what you mean here, but the tone, which is also in
+> several of your replies is unmistakably hostile.  My usual playbook for
+> defusing this is to respond only to technical content.  However,
+> several people have cited to me this hostility as the reason they're
+> unwilling to engage further with the linux-integrity@ or keyrings@
+> lists and have moved on to pursue other interests. Since losing
+> talented contributors because of things like this is a tragedy and
+> because it's partly my fault for letting this continue, I'm now asking
+> you to please make the effort to tone down the hostile rhetoric. 
+> That's not to say you can't do technical criticism, you absolutely can,
+> just do it without hectoring and implying sinister motivations.
 
->  What are "mutable" LSMs?!
+This goes a bit off-topic but I don't recognize this as I'm usually
+helpful in my own code reviews at least, and acknowledging my own
+misconceptions.
 
-As the "or" would indicate, they are "normal" LSMs where the ordering
-is mutable, as opposed to the "first" or "last" LSMs.
+> 
+> I think most of us have noticed that there seem to be various
+> circumstances in your life that are producing significant stress but at
+> the same time, that's not a reason to take it out on the mailing lists.
+> There are resources available to help with maintainer stress and
+> burnout and I'd certainly be happy to connect you or help out here in
+> another way if you'd like.
 
---=20
-paul-moore.com
+Sure I get that but as said there's been mostly positive tone in
+the patch reviews.
+
+> 
+> Regards,
+> 
+> James
+> 
+
+BRm Jarkko
 
