@@ -1,134 +1,147 @@
-Return-Path: <linux-integrity+bounces-7158-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7159-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC8CB85966
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:28:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ECA2B859F6
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:33:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EB047B1C8C
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:26:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22DC3482D31
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A379A30C629;
-	Thu, 18 Sep 2025 15:27:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F3B30CB31;
+	Thu, 18 Sep 2025 15:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="HE1jRdqh"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Wd+K3adH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0208530BF5C
-	for <linux-integrity@vger.kernel.org>; Thu, 18 Sep 2025 15:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1EF22D7B5;
+	Thu, 18 Sep 2025 15:29:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758209274; cv=none; b=Xuqv8AfUAf7OrMiWGZAVoDT+moXINlGiQRdNym5ycykcdl6AT8/XpWh2aL49KRGY8gW6vWDsqo5L5MfDGx/2pOG65wnp/g9DCKmt7sodFkN6SkqLsRw9mJbFYF605o9Pisk7cfPbKWrDyyru8t4HnFnA79mEwAmD8ZdYbDCroKg=
+	t=1758209363; cv=none; b=pyBAjELP2XAqvMMgeZJEsccy5X2yrYsBBf7gRt9S2BYdhgkhkJ9LnJD4N1ClXAUPCCoFe4bJh9Ya7zNppoj3swgeDxsnwHefu7nGV6x8gSQSbYdEE+u36GAC0w60M3XtsR2RSTHFeRHixZWm9sad7oWjofOmd6NH34iqhV3Fvr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758209274; c=relaxed/simple;
-	bh=HXvQiKWsrrHBdZACQbTWrX32g69RA1tMFfDPMY+ssIw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eGYUmVsdK3bxgZshYqK7PynaIHxzrsmkw++5u6e0K8kUJmD6G0qq8ZUocNdinJDfkesfzADE2Ww1GBxlj9uGY+oqkS/T/aUs4FmC2ncoBLDVcNEeQL/ChPMFWyuDT8Ak3J/nkI9tgu2vvtPgN2BnTk4AfS6d6j8OPpM/xb/WUjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=HE1jRdqh; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2698384978dso8356355ad.0
-        for <linux-integrity@vger.kernel.org>; Thu, 18 Sep 2025 08:27:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1758209272; x=1758814072; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9usXAm7mnQ2i6AJbPrd0D0V8P+IxkfPi+oCGWh2MEZs=;
-        b=HE1jRdqhb/bVK2e1hfRNhAHq97SKOklDUV8FCsdx9jxdfinSmXuadzc+aFqX0s7QwE
-         6guJAaakj2iWeEI07uuDivcPXSDQJnUMp9nlsojMvkghFB9LTZ4arQLnjnrm2QmZxnwq
-         tOPYiBC2qIX8hjQ5QSGSrnxTLGG4rcg7AohKKqQkAL6934GoDzXqsimOs6p9HqIqY9N2
-         +ZDCb/0K98MpVlcUKWwdMfGYeY5F+0EgGJ/sYgndmpWydHI4j0Gf4QjnhEnY9LFrq9y3
-         aNjDafxyknsAnKv5tgK4EGO4+IblCtOJgeaOapBw8fIPP8bvR4CbTiOV0nQGu41yZTBd
-         Td4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758209272; x=1758814072;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9usXAm7mnQ2i6AJbPrd0D0V8P+IxkfPi+oCGWh2MEZs=;
-        b=w2GjHxnltPrWS3MuaSX/gBS+aQnJ2VG1DpBL4AiFhjhrNaoRei3BFzTIO3QUU48cW3
-         zloRUgEoSNdKvWgJ96F3iIGnJ0lwr1b7aqGVWpPg7G751WYBNvSRYVh+9VRIQPjqq/kU
-         oPwbZfvfxHvSpzuCkabrdF9x8YNRzF8z8egOt8mMmQCPwUr0PkwxNjEHdSWQVGAjhuri
-         lth2bJskBLEPTVhswL0VZ9sRfRjbiZ3BfnHYzR8OGkcm90AV8J4K2YXHdWFFS3+gRpkQ
-         2qPBgz4rEd3toZQ0nVyVjoO0/ZROon+gyS8/P3pQ2EkcIUc5e65+dG90NWj1DCw3AAY6
-         ctKg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+TXMCFcfBvauusfIB7dyJmOSKNErbShzfi222guIOsW8yS2HcGV2gejwhTclpXtI5RInJLQt2FLhVKbD8wOs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfrfwPKYnOkhmRBjpB8RWn6TjHsdNI8RFn4KNsKtJ7mSSCsG+N
-	jx5JyhSgDgN20pzB6QfoZStdJF7pBquSiH+9fanO/xkqNt4c0cJ8YkT2giJ0ffxethRK4RBSfc4
-	vqAeomMbK0zDeLA/1s+73X2jh83oQyKW90NnuFdW5
-X-Gm-Gg: ASbGncsd6344vLtZCrNkBWPDlTaxpIRTWuNBm+yu2UrGn5Cbe35qhbZdbQjv7nSgC3v
-	JAix/xKdrQevyrW7BLRMX8SqGadpNpHzwmRDbwa4UHEgKe1rzYokkP9DYMwaQHfapXAihH8Asn0
-	A7IgHIAIJfXlw/DV3nsgMmbRvAe2GbnSchNsa3GtBccw7DPVwuxopbHIdc97EHppZFJRCG50g+H
-	pr2NQ9cEZKTnmq6qSE8G99iSg==
-X-Google-Smtp-Source: AGHT+IG7BDPCip6fQa6ARXPNfQrjCV+vC+xcORBNq41mtqWS9WAdTM6NdCI+4xWkS1H6z+w3/aesgQolKoF2syk/PGE=
-X-Received: by 2002:a17:902:d544:b0:249:3efa:3c99 with SMTP id
- d9443c01a7336-26813f1e97cmr69129925ad.61.1758209272366; Thu, 18 Sep 2025
- 08:27:52 -0700 (PDT)
+	s=arc-20240116; t=1758209363; c=relaxed/simple;
+	bh=WjQOdUIhxKxIlOUmvfEs/EbBcW4JuCY0+St3brDKOhk=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=f4SQbOCCHi1X7nzTa7UzO+ZbrGWQhFtFqURSMRDpZIotTd++X0q9vqGSt9CbohbyvnX9IgXIjw4l5RER+g9STgJJ89E0hdTwfv0svfxjISBxpAH1j0MRN2cXmRbN4oQj/vHfmzfeTy4Xg5eTnTbEwygroLKAoINxV01b5a/vTeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Wd+K3adH; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58IEnEPV028332;
+	Thu, 18 Sep 2025 15:28:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=WjQOdU
+	IhxKxIlOUmvfEs/EbBcW4JuCY0+St3brDKOhk=; b=Wd+K3adH1cwwFflJHNwQd8
+	eVE96BJleTNzOp/xLf/rY6O7kqNWGaWzSt4f+zeLGJD9+AyPxfDowAHLFaWuvLh9
+	kvZQi10YXWlA6IBul/L3QrZQw5qmApjOiHcRlO0a1W5xIxIrUOKTql4Dp48lPCo9
+	S40JAXeA9NB2SWOw9KmazCfKU0zwKtqTLnhMUtb36nyu3Z3byacMESuSmgWBgr8C
+	EM8hI4R8mOCDYJ2k43wpgogEWbWXdGBTVpQvakVsW4nv0TXNRBtEonJ2otmzTEIK
+	rNtAi4LU7R5yo/KtdShqKRqSzlah//H+l+Yrf0Q3esbLAHET6dSSIRZM2FZynK8g
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4pb7vt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Sep 2025 15:28:15 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58IFSEMm010019;
+	Thu, 18 Sep 2025 15:28:14 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4pb7vp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Sep 2025 15:28:14 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58IFNVQJ009363;
+	Thu, 18 Sep 2025 15:28:13 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 495nn3py9f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Sep 2025 15:28:13 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58IFSDp05178056
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 18 Sep 2025 15:28:13 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F313058059;
+	Thu, 18 Sep 2025 15:28:12 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5EB6A5804B;
+	Thu, 18 Sep 2025 15:28:11 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.89.238])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 18 Sep 2025 15:28:11 +0000 (GMT)
+Message-ID: <2e83f9b4c7f6dcc570c18f5c9f5fb655bcf10d62.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 17/34] lsm: cleanup initialize_lsm() and rename to
+ lsm_init_single()
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+        Roberto Sassu	
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=	 <mic@digikod.net>,
+        =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+        Kees Cook
+ <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+        Casey Schaufler	
+ <casey@schaufler-ca.com>,
+        Tetsuo Handa
+ <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Nicolas Bouchinet
+ <nicolas.bouchinet@oss.cyber.gouv.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <20250916220355.252592-53-paul@paul-moore.com>
+References: <20250916220355.252592-36-paul@paul-moore.com>
+	 <20250916220355.252592-53-paul@paul-moore.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 18 Sep 2025 11:28:10 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250916220355.252592-36-paul@paul-moore.com> <20250916220355.252592-60-paul@paul-moore.com>
- <598e9ed199ba23e7e11c5ea29132bd2e3202305f.camel@linux.ibm.com>
-In-Reply-To: <598e9ed199ba23e7e11c5ea29132bd2e3202305f.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 18 Sep 2025 11:27:39 -0400
-X-Gm-Features: AS18NWBPsneqht7dFrXISa1pEsxcBNxr7SK4dsIkWlo-NPzoZeCCloIzwU8sIuw
-Message-ID: <CAHC9VhT53+2qvJT8Cpw5aYsbyT057Q2y0LZwDziRiucuzbUbyQ@mail.gmail.com>
-Subject: Re: [PATCH v4 24/34] loadpin: move initcalls to the LSM framework
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	selinux@vger.kernel.org, John Johansen <john.johansen@canonical.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwNCBTYWx0ZWRfXz9ykgdIzk9rD
+ muVC64o2bm5ZcoPevag+XPlpVJRpEu0o6ctnkJKqnG+M/OYlkod+cyOH4kOaJXWe9KYhPKILkeE
+ oWauz5bxjCfJ2eWQCie/L/8CJXZ1Npt8dgfNEcjdbpgfsZGb89hTpOp+XDTV/zmoWhdfT6xXI+P
+ 8kENwN91cwonIdmAi+YxiupfkzXHmO+hcafd0zH/FZfYL6JsZQTzMeMXtIeErLLw5UENj36aHnq
+ 13LaHkTpVV2ZIKLEuh2ASh5LcJhadr2r2AuVj/ESRbm+Xhv0Z6c5wFFNMHlBDuzCbGmw4y6TmQe
+ qR6p8qlPOn+A5P5VN8oVYdJ6BOAuihBvINL3hT47DF+TpSQppRotP1Gfozpn38Z7Yc5A52glurF
+ Jfl1dBzK
+X-Proofpoint-ORIG-GUID: -V4x2mUJKfsUoo-xa97-JO075Qk639V8
+X-Proofpoint-GUID: gWC5zTDRIiI7_LhO0gFFnQcMBLnhqtK5
+X-Authority-Analysis: v=2.4 cv=cNzgskeN c=1 sm=1 tr=0 ts=68cc250f cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=DfNHnWVPAAAA:8
+ a=vpqfxihKAAAA:8 a=xVhDTqbCAAAA:8 a=VnNF1IyMAAAA:8 a=viIWlect0QnoYGXmhEcA:9
+ a=QEXdDO2ut3YA:10 a=rjTVMONInIDnV1a_A2c_:22 a=AULIiLoY-XQsE5F6gcqX:22
+ a=GrmWmAYt4dzCMttCBZOh:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-18_01,2025-09-18_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 spamscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160204
 
-On Thu, Sep 18, 2025 at 7:16=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Tue, 2025-09-16 at 18:03 -0400, Paul Moore wrote:
-> > Acked-by: Kees Cook <kees@kernel.org>
-> > Reviewed-by: John Johansen <john.johhansen@canonical.com>
-> > Signed-off-by: Paul Moore <paul@paul-moore.com>
->
-> For the first couple of iterations, the patch descriptions needed to be a=
-dded or
-> improved upon.
+On Tue, 2025-09-16 at 18:03 -0400, Paul Moore wrote:
+> Rename initialize_lsm() to be more consistent with the rest of the LSM
+> initialization changes and rework the function itself to better fit
+> with the "exit on fail" coding pattern.
+>=20
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> Reviewed-by: John Johansen <john.johansen@canonical.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-As was discussed in the first cover letter, and in the related
-reviews, the first iteration was simply a FYI primarily for the sake
-of Casey who was working on a patchset which has some overlap.
-
-> Some of the patch descriptions are still missing (e.g. 25, 27,
-> etc).  Is this intentional because you feel it is redundant ...
-
-Yes.  Take this particular patch as an example, the conversion to
-using the new initcall mechanism for Loadpin is perhaps one of the
-more trivial patches one might see in the kernel, the subject line of
-"loadpin: move initcalls to the LSM framework" is sufficient to
-document the patch as far as I'm concerned.
-
-> FYI, teaching newbies how to break up a patch set is not easy.  This patc=
-h set
-> is nicely broken up and would be a good example.  However, leaving out th=
-e patch
-> description would be teaching the wrong thing.
-
-Documentation is a good and important part of the work we do, but
-redundant and/or excessive documentation simply for the sake of
-satisfying a checkbox is not a good thing IMO.
-
---=20
-paul-moore.com
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
