@@ -1,146 +1,202 @@
-Return-Path: <linux-integrity+bounces-7174-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7175-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABA69B8631C
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 19:23:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 459DFB863CA
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 19:35:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 806EC188E4E6
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:24:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 727EA1CC3BC5
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:36:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0463265CAB;
-	Thu, 18 Sep 2025 17:23:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3C8313280;
+	Thu, 18 Sep 2025 17:35:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="r22YuGnp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7+8hIEb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D649A264A72;
-	Thu, 18 Sep 2025 17:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E82D34BA5D;
+	Thu, 18 Sep 2025 17:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758216234; cv=none; b=dBm/H6ayQJCK4lYr1ehTvYMqq6ac4NQOkksXd4s6BpslpF9zy64LTfPW4C7RAw/5C5Ai07Z2Wq+Ie3PTZCzYwupJAOCEXX6z4RBChFCcrdEo5ZtmkDnaHljatnkdQ4u7VXpaO+u531qsY4GSI9gv9a9mKu2IR/Z+6A+V9i6sNIo=
+	t=1758216942; cv=none; b=Bhz6XOknNroik9LOUaKFwEMN37wCSS1//8+1IaYiIelnJLuKPeBA/A7eXp2Vp4sB18Ym99UuVpqQYaSic8VsaKULduq5Qa1ZrDxWyVQGM7GUfJnTt31wWInvW4c4AqjEKQdpnj2HGLL29oRjjM2zrUQgdipFvCLpKr9ljU81vHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758216234; c=relaxed/simple;
-	bh=Nf7dNiF43W8KUqsLZiqy4+fTyKDxTCAcaKg7fwxMtLk=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=mm1T980Sx9u/MPmGRtByLfcxW5CRMfjtXB5ugIjUDM7NRoN3iNFaQNuMIfzdzTSw17wxeqSxRxM/p7+bIVkxoPVrtBS/lsC2JpJXtdIo2oXHDg+Ghi3P6CUb+PU5kGvtIguIqgz1lNGDHNxl2ZWH+Zg3E6Q0Bw+hdBbySdnZvBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=r22YuGnp; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58IDtNIO023783;
-	Thu, 18 Sep 2025 17:22:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Nf7dNi
-	F43W8KUqsLZiqy4+fTyKDxTCAcaKg7fwxMtLk=; b=r22YuGnpwsVxBch/UYigQq
-	jitCKzaq27AmcCA7Fe4wwjyoGE54wP75e4e6tJlPVciZo2b20rtjbVvwINE7j9kc
-	xUH5orZEJ1++6flxudx8HKKLA3H5TPARORi2joXqfG8T1DNw0gae/oi4B8GM+6LZ
-	Y3aZ7clm+SZTlFpZNSqgZJ8vbgpC/SMLf0nzOjOYDHhaWCvip7bF5ceTta7/ctCa
-	kE5naQIrkmtJ456U/WPDdFNc5V9Nr9TDSUY4vlJTscG6YC7N5dxmpNLB+aHAKXC/
-	A8v4DIImqOcysV/M+oC6JeX3yl/Pzak2sW8zuSE3qflOsZ+B3RvVrv4imO8tCqqg
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4quae4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 17:22:50 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58IHMngr008366;
-	Thu, 18 Sep 2025 17:22:49 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4quae2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 17:22:49 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58IGGEtT005981;
-	Thu, 18 Sep 2025 17:22:48 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 495jxug458-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 17:22:48 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58IHMm1823397114
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 18 Sep 2025 17:22:48 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1348B58063;
-	Thu, 18 Sep 2025 17:22:48 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 420BF58061;
-	Thu, 18 Sep 2025 17:22:47 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 18 Sep 2025 17:22:47 +0000 (GMT)
-Message-ID: <2bde04515347e50b00026754764c76c2998dff28.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 22/34] lsm: group lsm_order_parse() with the other
- lsm_order_*() functions
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Cc: John Johansen <john.johansen@canonical.com>,
-        Roberto Sassu	
- <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=	 <mic@digikod.net>,
-        =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-        Kees Cook
- <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
-        Casey Schaufler	
- <casey@schaufler-ca.com>,
-        Tetsuo Handa
- <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Nicolas Bouchinet
- <nicolas.bouchinet@oss.cyber.gouv.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-In-Reply-To: <20250916220355.252592-58-paul@paul-moore.com>
-References: <20250916220355.252592-36-paul@paul-moore.com>
-	 <20250916220355.252592-58-paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 18 Sep 2025 13:22:46 -0400
+	s=arc-20240116; t=1758216942; c=relaxed/simple;
+	bh=HOJXBILIUCbsXHZF6FbXexgk4hrGKdW14uCb3GuIQ/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PZEzu3PiLE1ag3CDmG0QuGjwrE4Fv72CWBTAKJ8RZle5j/akIymv3an0LdOhyfkCTzbH/fQVjv0/wvKkcZZUeOXngEtPhRgdFjF4jos6xzZeQoUjqEk+ojfJM2+Q+ntvXlTxMud6E/sGRd3+zzqr+75dlO4c1X9zFMWUGSmvvvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7+8hIEb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38279C4CEE7;
+	Thu, 18 Sep 2025 17:35:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758216941;
+	bh=HOJXBILIUCbsXHZF6FbXexgk4hrGKdW14uCb3GuIQ/8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X7+8hIEbZyCeIOreXgzZu56CZt2TaM0uUd3PMYIoEK5rLZckaqGyyhUBhaxA0Bycp
+	 6FdMeTokca37TZqf/umMj1K+pBNrkecDcaO6od7KYZr06OsQMZAPknPiu9hU9tWM1H
+	 JFKYvcJTtOXZVyJ9coHW/Z5UtyonV5yfs0so5ok5fnIC/F5OjrfCjBvAcyuJfrG6XH
+	 3caAEn1MzagYREEMzSswJMfWa0Uki03g2aRwVH8KDfOZ3l2NU8l1YMb6dDlifodMRT
+	 YCfmUCoQtU0hWPhHCvzPBNR33ZYlcrVSj4BHn0BkyANJ0aZG04+YE/CpknAr2AqSYR
+	 n1QSAVNmtY4fg==
+Date: Thu, 18 Sep 2025 20:35:38 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, tpm2@lists.linux.dev
+Subject: Re: tpm2key.asn1 parent identification
+Message-ID: <aMxC6hU-UhCP2m6v@kernel.org>
+References: <aMboFXNNX7WZaOaS@kernel.org>
+ <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
+ <aMgnm1OkDj9XnStc@kernel.org>
+ <aMhWHy1LQVqpyW5E@kernel.org>
+ <8c2817f5bbf8202b50d93b6044d6595ea4b29b9a.camel@HansenPartnership.com>
+ <aMwptnyYedvdqdHc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: wV7C2xoEkaZPhBE-EJEqo9sSYIg7_JbB
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwNCBTYWx0ZWRfXyPBNQQ4XfbiW
- QUlcjJoWkH/A/viOq0SiEpxpKLC4c7C30Ji7OkO8LpvQW4OViJ9WCgqqFmiCMGbKD21cP1xsa7r
- 2tw1a09URdv/jBkT7Ryia0ICXF4wLQKuB1k7aMQVCBPfcWf9evo2PUPGw1iYvrUoDz+7KZInzFf
- eVqgOINd0aAx2Z2IxcY/X8jx+dGKTqJNiffXxy2TXXM6dbBAlOc/cyuj1euFeVxzXzX/l0rrKwD
- zy0gkO8G3Wc0PvJwjGVt8viG3yTuEH0kLT4Pg6eg/3ruLAB+jGfO+mIAtFL1zZfzBiFCk8LYrLy
- v1Wy277PdmqRHsIQTlKiXLscpckx+jIyMks1Shiia0ZIJoMvCh1kN0Rib2soiT+J5evuaXF/VrV
- 6m1Q8wtQ
-X-Authority-Analysis: v=2.4 cv=R8oDGcRX c=1 sm=1 tr=0 ts=68cc3fea cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=vpqfxihKAAAA:8 a=DfNHnWVPAAAA:8
- a=xVhDTqbCAAAA:8 a=VnNF1IyMAAAA:8 a=jeTWaIcxhKW1VuSt1_MA:9 a=QEXdDO2ut3YA:10
- a=AULIiLoY-XQsE5F6gcqX:22 a=rjTVMONInIDnV1a_A2c_:22 a=GrmWmAYt4dzCMttCBZOh:22
-X-Proofpoint-GUID: ZUkc37i-X5viiXUHlPSVrfxjELcQbhnw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-18_02,2025-09-18_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 suspectscore=0 malwarescore=0 bulkscore=0 spamscore=0
- adultscore=0 impostorscore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160204
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aMwptnyYedvdqdHc@kernel.org>
 
-On Tue, 2025-09-16 at 18:03 -0400, Paul Moore wrote:
-> Move the lsm_order_parse() function near the other lsm_order_*()
-> functions to improve readability.
->=20
-> No code changes.
->=20
-> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> Reviewed-by: John Johansen <john.johhansen@canonical.com>
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
+On Thu, Sep 18, 2025 at 06:48:06PM +0300, Jarkko Sakkinen wrote:
+> On Tue, Sep 16, 2025 at 10:33:43PM -0400, James Bottomley wrote:
+> > On Mon, 2025-09-15 at 21:08 +0300, Jarkko Sakkinen wrote:
+> > > On Mon, Sep 15, 2025 at 05:50:07PM +0300, Jarkko Sakkinen wrote:
+> > > > On Sun, Sep 14, 2025 at 11:24:24PM -0400, James Bottomley wrote:
+> > > > > On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
+> > > > > > Hi,
+> > > > > > 
+> > > > > > In practice, while implementing tpm2sh and its self-contained
+> > > > > > TPM emulator called "MockTPM", I've noticed that
+> > > > > > 'tpm2key.asn1.' has a major bottleneck, but luckily it is easy
+> > > > > > to squash.
+> > > > > > 
+> > > > > > Parent handle should never be persisted, as it defies the
+> > > > > > existential reason of having a file format in the first place.
+> > > > > 
+> > > > > Actually, if you read the spec:it describes how to handle non-
+> > > > > persistent parents by defining the exact form of the P256 parent
+> > > > > you derive from the permanent handle in section 3.1.8:
+> > > > > 
+> > > > > https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+> > > > > 
+> > > > > This is the way all the implementations (well except the kernel,
+> > > > > but that's fixable) do it.
+> > > > 
+> > > > Even if you fix it to persistent handle, the problem does not go
+> > > > magically go away. Read public attributes are ubiquitos and
+> > > > cryptographically correct way to do the binding.
+> > > > 
+> > > > > 
+> > > > > > To address this issue I just added couple of optional fields to
+> > > > > > TPMKey:
+> > > > > > 
+> > > > > >   parentName   [6] EXPLICIT OCTET STRING OPTIONAL,
+> > > > > >   parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
+> > > > > 
+> > > > > So that's a bit redundant, since if you know the key, you know
+> > > > > its name.
+> > > > 
+> > > > What I know is irrelevant here :-)
+> > > > 
+> > > > > 
+> > > > > > By persisting this information TPM2_GetCapability +
+> > > > > > TPM2_ReadPublic can be used to acquire an appropriate handle.
+> > > > > 
+> > > > > It can, how?  If the parent is a primary, you can't insert it
+> > > > > from a public key, you have to derive it and if it's non-primary,
+> > > > > you need its parent to do the insertion.
+> > > > 
+> > > > Transient handle is like file handle and persistent handle is like
+> > > > inode number. Neither unambigiuously (and this is dead obvious)
+> > > > does not identify any possible key.
+> > > > 
+> > > > Further by binding key correctly, the requirement of being
+> > > > persistent key goes away, which is a limiting factor.
+> > > > 
+> > > > > 
+> > > > > > I'd highly recommend to add this quirk to anything that
+> > > > > > processes this ASN.1 format.
+> > > > > 
+> > > > > Well, patches to the standard are accepted:
+> > > > > 
+> > > > > https://groups.io/g/openssl-tpm2-engine/topics
+> > > 
+> > > Further there is two options:
+> > > 
+> > > 1. Either remove TPM2 key ASN.1 support from kernel entirely.
+> > > 2. Fix the 0day bug.
+> > 
+> > Can you please explain in technical terms what you see as a zero day
+> > bug in the current implementation?
+> 
+> It's essentially ambiguity problem in my opinion that locks in the
+> creator TPM if you know the expected parent. 0day might be overstatement
+> yes, but it is essentially the immutable reference in this scheme.
+> If you want to scope it, it's essentially a great way to add some defence
+> in depth to the scheme.
+> 
+> > 
+> > > It is unacceptable to make strong binding to a random open source
+> > > project. I zero care what OpenSSL TPM2 engine does with the file
+> > > format.
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+The way I see it, a "random project" would apply to any project that a
+format is locked in, and it is quite obvious that fixing handle as the
+anchor is exactly fit for exactly for this project, and within those
+exact limits it is probably a sustainable choice.
+
+Being able to fix key into cryptographic  identity is somewhat sane
+addition because not only does it lock-in the creator but it also allows
+to use offline stored keys with the same scheme i.e., non-endorsement
+hierarchy derived keys created with TPM2_Create or TPM2_Import.
+
+In the context of OpenSSL TPM2 engine, perhaps the current scheme is
+fine but in the context of supporting a "ecosystem" as a kernel feature
+it's not in its current form robust enough.
+
+And how else I can describe it other than I don't care about the
+project, if the file format enforces me align with it?
+
+> > 
+> > I don't really get what you mean here, but the tone, which is also in
+> > several of your replies is unmistakably hostile.  My usual playbook for
+> > defusing this is to respond only to technical content.  However,
+> > several people have cited to me this hostility as the reason they're
+> > unwilling to engage further with the linux-integrity@ or keyrings@
+> > lists and have moved on to pursue other interests. Since losing
+> > talented contributors because of things like this is a tragedy and
+> > because it's partly my fault for letting this continue, I'm now asking
+> > you to please make the effort to tone down the hostile rhetoric. 
+> > That's not to say you can't do technical criticism, you absolutely can,
+> > just do it without hectoring and implying sinister motivations.
+> 
+> This goes a bit off-topic but I don't recognize this as I'm usually
+> helpful in my own code reviews at least, and acknowledging my own
+> misconceptions.
+> 
+> > 
+> > I think most of us have noticed that there seem to be various
+> > circumstances in your life that are producing significant stress but at
+> > the same time, that's not a reason to take it out on the mailing lists.
+> > There are resources available to help with maintainer stress and
+> > burnout and I'd certainly be happy to connect you or help out here in
+> > another way if you'd like.
+> 
+> Sure I get that but as said there's been mostly positive tone in
+> the patch reviews.
+> 
+> > 
+> > Regards,
+> > 
+> > James
+> > 
+
+BR, Jarkko
 
