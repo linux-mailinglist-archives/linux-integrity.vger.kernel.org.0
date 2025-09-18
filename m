@@ -1,182 +1,183 @@
-Return-Path: <linux-integrity+bounces-7161-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7162-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E3AB85C45
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:50:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4727AB85D0E
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:57:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2F4C5612FF
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:48:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9F5C3B69ED
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B41B23B616;
-	Thu, 18 Sep 2025 15:48:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E566313D45;
+	Thu, 18 Sep 2025 15:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FD2QmrKN"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DqJ4xidW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E7F22D7B5;
-	Thu, 18 Sep 2025 15:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F21B31158F;
+	Thu, 18 Sep 2025 15:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758210492; cv=none; b=el1p3ia2iPZafxeS/i3lWu6L+5+lW9xvTp71+WAZuah/vSkP6Sfc11MIsJv+4/13UFKq/Qkt2LLOCvqYnmeQGF5FXeEZC5lEs/8x7spBG1MjhsU9C9ZOALEZvUvhul9pcA6HBIFLq3UvzKCUlmpvTJ30jiVUQaSRrt4aefiz9R0=
+	t=1758210677; cv=none; b=DCfTuUJ17wxy2AeIRrvb9Iada/tbpSagx/I7svCe9eYzJlUFQcv7KCAdZ/QkmoNiYru16pCf3SudGY1D02gx8sL6Ayk//WzCDmp8ixi3QQI9sSY+GzwajcgWfE2kJtzAlCt3AKJyaVdNfk26YNuZyzzmCGw6VwrSbt3lHdDgCGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758210492; c=relaxed/simple;
-	bh=JT3ECR8y3wiOUot8uXmFiGz+zMI4wQ4XDLAlJPjll14=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hBm3jxjtPXFZHQnAbUWf2Ka4NxIRwMhdWH9SADT9aC7TriEh+yrE6NphbxhkdF192+bUUyU3oOjzioffinlmG4R4kpVWTGuT7EE1tuDiDmIBA79RKOv5EusZ0CmxU6QxixyFI4OTaCCSr0DN9/OW10PkGxL+4aUT1cbfiP8UxEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FD2QmrKN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE0E7C4CEE7;
-	Thu, 18 Sep 2025 15:48:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758210491;
-	bh=JT3ECR8y3wiOUot8uXmFiGz+zMI4wQ4XDLAlJPjll14=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FD2QmrKN5yIySe/pKeqRq5r0fM3eWM4bAjiS7qF7FI364PckEHdaXGhrGKj1NAP7k
-	 4c+gaP+IrI6ZOftmqLrVDpfuOYiMWqS7FJtp+XvH2Fr4/DueVeqDUfUGvhnoLdEhdL
-	 yuEPi9ILPfzrDbz1k70K2BfUTS4aQ6JAKCa+d6YpaJV5RLIt4QZ6XGDth32k+UsK93
-	 4DdBg0OM40oosv024r/vGxLaaoaP1kPYn6gkOdko4+yS1uGHcNce7z6fIyfmhVXCxM
-	 wTzDqtzxYqQjrXaQv4SZU2ol7qaY4n3t8ztToOGs9PRocbDu8vnHelKSfLJRToe1sF
-	 3sVsMKedRnZKA==
-Date: Thu, 18 Sep 2025 18:48:06 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc: linux-integrity@vger.kernel.org, tpm2@lists.linux.dev
-Subject: Re: tpm2key.asn1 parent identification
-Message-ID: <aMwptnyYedvdqdHc@kernel.org>
-References: <aMboFXNNX7WZaOaS@kernel.org>
- <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
- <aMgnm1OkDj9XnStc@kernel.org>
- <aMhWHy1LQVqpyW5E@kernel.org>
- <8c2817f5bbf8202b50d93b6044d6595ea4b29b9a.camel@HansenPartnership.com>
+	s=arc-20240116; t=1758210677; c=relaxed/simple;
+	bh=XLoC4IDn6XB4T4stDaEg7atqyx17HXOSv6kMWVrjEEc=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=FkcHvkJlCEs5dAKF6huIId2QIWe/yWyXBgX914bDAFmDgKqIAtmD5CKfKwfXqcVqbWDbaHTDYM1Q50iLrk2NSezk2uEFM8jqrlJW4G4v0xXeNXjjAaJknbUAy4fmTvt8V4LkDXwjf5+a9JWZU9N8ufzss8vh31X5sF/7qAR1jNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DqJ4xidW; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58I8L6Uw011358;
+	Thu, 18 Sep 2025 15:50:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=PChGhv
+	dlII29F1X4own0ZbEZ9B3RdFiEEvM/kvev0L4=; b=DqJ4xidW8BdujQXw8XwKAg
+	TeJGZbdc8cattWF/hDssZKjSVxvH9fPY/DCCQ4PXmwCcIjk3FHXhBlnSdDzwXvJw
+	LR4bMTMwiQnfz45nFUFNv5oYrOPGuqMtOfmWzAezkzW88Lhr4yfYRnGiZzo3pC3c
+	RTmrCdYd/v2DIYBa1aSemOTm7yoJV+jFjBWDszdQKXaeVEh6BknnLyoiuGG7KE5j
+	vZhtFHbn/rY+VVARsRmR75q+eCmn6oCNmYR3qIDQU2e9WM4KrIoeDKvraP5gDh0z
+	sBruDyUstEP7VRX+muXm8YsJGA4DeuLSt96fBm6v+9b9ABfM+TycV9eIX05MylRA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4njttu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Sep 2025 15:50:08 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58IFo8XC002773;
+	Thu, 18 Sep 2025 15:50:08 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4njttp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Sep 2025 15:50:08 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58IF8Af0009486;
+	Thu, 18 Sep 2025 15:50:07 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 495nn3q3ww-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Sep 2025 15:50:07 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58IFo6Hs32113282
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 18 Sep 2025 15:50:06 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AC13F5805E;
+	Thu, 18 Sep 2025 15:50:06 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9B7DE5805D;
+	Thu, 18 Sep 2025 15:50:05 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.89.238])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 18 Sep 2025 15:50:05 +0000 (GMT)
+Message-ID: <4db3bb94c42f11240a880a439c7a678599d7053f.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 20/34] lsm: cleanup the debug and console output in
+ lsm_init.c
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+        Roberto Sassu	
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=	 <mic@digikod.net>,
+        =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+        Kees Cook
+ <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+        Casey Schaufler	
+ <casey@schaufler-ca.com>,
+        Tetsuo Handa
+ <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Nicolas Bouchinet
+ <nicolas.bouchinet@oss.cyber.gouv.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <20250916220355.252592-56-paul@paul-moore.com>
+References: <20250916220355.252592-36-paul@paul-moore.com>
+	 <20250916220355.252592-56-paul@paul-moore.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 18 Sep 2025 11:50:05 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8c2817f5bbf8202b50d93b6044d6595ea4b29b9a.camel@HansenPartnership.com>
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=MN5gmNZl c=1 sm=1 tr=0 ts=68cc2a30 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=vpqfxihKAAAA:8 a=DfNHnWVPAAAA:8
+ a=xVhDTqbCAAAA:8 a=rzX1WqAAvrR1uQPcxNMA:9 a=QEXdDO2ut3YA:10
+ a=AULIiLoY-XQsE5F6gcqX:22 a=rjTVMONInIDnV1a_A2c_:22 a=GrmWmAYt4dzCMttCBZOh:22
+X-Proofpoint-GUID: 6yzVrc6RCklkC6LcnuLiLsEyMYnVnO8T
+X-Proofpoint-ORIG-GUID: NwrpxkIowtORex3aANCNMuoijrBXtuMo
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwNCBTYWx0ZWRfX+tSVHHOaa1kj
+ OZjZYVduOu81zF6PCpm1PVq/TApZWrsvZHYk7VfyWtFXVEfe1GB25xi+QzQu3GhBVjdyD2HaE74
+ c3ztiP0Qh6t3rA9hsXoC7BawBV/2hIUTjMibB9/L9OZ9DPHp8QulgzrVCCqbgTX/tH7kslOKFHZ
+ OtJd/DKwuCcMpr1c8hjazBiVS5nBkXczhqSNFg7lBLrBcj+oM7RmBycoU5yCljC47A48e6jKs9D
+ 6R7Ma4IgLwzYholvi1AQHJ1cDpkqseTc5xeJBK+DmLjtBjRMAYvntKxCOAt38MlOYnceTQOKvVO
+ Kk/g3KdVFf+ivDlLHSJ1eQMoXnAWugdDsyvUCrrALVdokLAE5HAofdN1hMtLqeMTK9L0qU3PTuM
+ kW8+bvyC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-18_01,2025-09-18_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
+ malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160204
 
-On Tue, Sep 16, 2025 at 10:33:43PM -0400, James Bottomley wrote:
-> On Mon, 2025-09-15 at 21:08 +0300, Jarkko Sakkinen wrote:
-> > On Mon, Sep 15, 2025 at 05:50:07PM +0300, Jarkko Sakkinen wrote:
-> > > On Sun, Sep 14, 2025 at 11:24:24PM -0400, James Bottomley wrote:
-> > > > On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > In practice, while implementing tpm2sh and its self-contained
-> > > > > TPM emulator called "MockTPM", I've noticed that
-> > > > > 'tpm2key.asn1.' has a major bottleneck, but luckily it is easy
-> > > > > to squash.
-> > > > > 
-> > > > > Parent handle should never be persisted, as it defies the
-> > > > > existential reason of having a file format in the first place.
-> > > > 
-> > > > Actually, if you read the spec:it describes how to handle non-
-> > > > persistent parents by defining the exact form of the P256 parent
-> > > > you derive from the permanent handle in section 3.1.8:
-> > > > 
-> > > > https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
-> > > > 
-> > > > This is the way all the implementations (well except the kernel,
-> > > > but that's fixable) do it.
-> > > 
-> > > Even if you fix it to persistent handle, the problem does not go
-> > > magically go away. Read public attributes are ubiquitos and
-> > > cryptographically correct way to do the binding.
-> > > 
-> > > > 
-> > > > > To address this issue I just added couple of optional fields to
-> > > > > TPMKey:
-> > > > > 
-> > > > >   parentName   [6] EXPLICIT OCTET STRING OPTIONAL,
-> > > > >   parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
-> > > > 
-> > > > So that's a bit redundant, since if you know the key, you know
-> > > > its name.
-> > > 
-> > > What I know is irrelevant here :-)
-> > > 
-> > > > 
-> > > > > By persisting this information TPM2_GetCapability +
-> > > > > TPM2_ReadPublic can be used to acquire an appropriate handle.
-> > > > 
-> > > > It can, how?  If the parent is a primary, you can't insert it
-> > > > from a public key, you have to derive it and if it's non-primary,
-> > > > you need its parent to do the insertion.
-> > > 
-> > > Transient handle is like file handle and persistent handle is like
-> > > inode number. Neither unambigiuously (and this is dead obvious)
-> > > does not identify any possible key.
-> > > 
-> > > Further by binding key correctly, the requirement of being
-> > > persistent key goes away, which is a limiting factor.
-> > > 
-> > > > 
-> > > > > I'd highly recommend to add this quirk to anything that
-> > > > > processes this ASN.1 format.
-> > > > 
-> > > > Well, patches to the standard are accepted:
-> > > > 
-> > > > https://groups.io/g/openssl-tpm2-engine/topics
-> > 
-> > Further there is two options:
-> > 
-> > 1. Either remove TPM2 key ASN.1 support from kernel entirely.
-> > 2. Fix the 0day bug.
-> 
-> Can you please explain in technical terms what you see as a zero day
-> bug in the current implementation?
+On Tue, 2025-09-16 at 18:03 -0400, Paul Moore wrote:
+> Move away from an init specific init_debug() macro to a more general
+> lsm_pr()/lsm_pr_cont()/lsm_pr_dbg() set of macros that are available
+> both before and after init.  In the process we do a number of minor
+> changes to improve the LSM initialization output and cleanup the code
+> somewhat.
+>=20
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Reviewed-by: John Johansen <john.johhansen@canonical.com>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
+> ---
+>  security/lsm.h      |  11 ++++
+>  security/lsm_init.c | 123 +++++++++++++++++++-------------------------
+>  security/security.c |   2 +
+>  3 files changed, 66 insertions(+), 70 deletions(-)
+>=20
+> diff --git a/security/lsm.h b/security/lsm.h
+> index dbe755c45e57..8dc267977ae0 100644
+> --- a/security/lsm.h
+> +++ b/security/lsm.h
+> @@ -6,9 +6,20 @@
+>  #ifndef _LSM_H_
+>  #define _LSM_H_
+> =20
+> +#include <linux/printk.h>
+>  #include <linux/lsm_hooks.h>
+>  #include <linux/lsm_count.h>
+> =20
+> +/* LSM debugging */
+> +extern bool lsm_debug;
+> +#define lsm_pr(...)		pr_info(__VA_ARGS__)
+> +#define lsm_pr_cont(...)	pr_cont(__VA_ARGS__)
+> +#define lsm_pr_dbg(...)
+>=20
+> 				\
+> +	do {								\
+> +		if (lsm_debug)						\
+> +			pr_info(__VA_ARGS__);				\
+> +	} while (0)
 
-It's essentially ambiguity problem in my opinion that locks in the
-creator TPM if you know the expected parent. 0day might be overstatement
-yes, but it is essentially the immutable reference in this scheme.
-If you want to scope it, it's essentially a great way to add some defence
-in depth to the scheme.
 
-> 
-> > It is unacceptable to make strong binding to a random open source
-> > project. I zero care what OpenSSL TPM2 engine does with the file
-> > format.
-> 
-> I don't really get what you mean here, but the tone, which is also in
-> several of your replies is unmistakably hostile.  My usual playbook for
-> defusing this is to respond only to technical content.  However,
-> several people have cited to me this hostility as the reason they're
-> unwilling to engage further with the linux-integrity@ or keyrings@
-> lists and have moved on to pursue other interests. Since losing
-> talented contributors because of things like this is a tragedy and
-> because it's partly my fault for letting this continue, I'm now asking
-> you to please make the effort to tone down the hostile rhetoric. 
-> That's not to say you can't do technical criticism, you absolutely can,
-> just do it without hectoring and implying sinister motivations.
+The existing pr_info and pr_cont themselves are #defines.  Is there a reaso=
+n for
+these new "#define"?  If there is a valid reason for having these new defin=
+es,
+why aren't they simply prefixed with "lsm"?
 
-This goes a bit off-topic but I don't recognize this as I'm usually
-helpful in my own code reviews at least, and acknowledging my own
-misconceptions.
-
-> 
-> I think most of us have noticed that there seem to be various
-> circumstances in your life that are producing significant stress but at
-> the same time, that's not a reason to take it out on the mailing lists.
-> There are resources available to help with maintainer stress and
-> burnout and I'd certainly be happy to connect you or help out here in
-> another way if you'd like.
-
-Sure I get that but as said there's been mostly positive tone in
-the patch reviews.
-
-> 
-> Regards,
-> 
-> James
-> 
-
-BRm Jarkko
+Mimi
 
