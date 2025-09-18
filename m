@@ -1,148 +1,112 @@
-Return-Path: <linux-integrity+bounces-7157-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7156-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9ADAB85873
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:20:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DB6FB857FD
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 17:16:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D00B87E1931
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:15:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20F2B464837
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Sep 2025 15:15:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789E630F52D;
-	Thu, 18 Sep 2025 15:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 265B52C1596;
+	Thu, 18 Sep 2025 15:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KkybRtPf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="trja0lui"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA5E30F529;
-	Thu, 18 Sep 2025 15:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF472264CB;
+	Thu, 18 Sep 2025 15:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758208527; cv=none; b=fuAvh17J6YU30JBj1pkK+Rn8Hw6O68Z+uh/xcuiivIxYoBByiwHdx97yPPnTOy60PWnsdw3NiBmwEsuDzIziZmHysIK4jgR0eI61XhxX4Cooxx/wPcL23NANcxms6mkuT2OpWJxXiOu6q9a9Dsf8XELa7o5kGx8rC9vir05S834=
+	t=1758208507; cv=none; b=DH79wHslMvBHrH4KIBkqSa5BdkgCWveAuFsFG4HWdOYC+MsSAk8S7Hzb8NMs7936QjI7ZjSnw4SfD+0xwrngKxUI+Kq0UIDAnvp/m1pCUWR5BJaGURxgHrMkOH8f5q/mW3sBcsZVXFIF1/89SloQOw2rjRfoBBXxXH580/ZmbIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758208527; c=relaxed/simple;
-	bh=7m8Hq61tVZWiz57e9668ITrXwgA2tmBkjlX1GsRuLng=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=Hq35fcfcQONwsVYn96taDaMbou9X5jZdvI7EuqcS6sxqZTxDSnqANG8zPvgZL80DOet+yvp7WaTyI8k/B+Ft45SxjUFJqhOFc8CpjB9tvzi5ksiK5RKpt5Jrk0EYKob1ZQxGytseCgc3dW4gtt2RMNlM7h1C3rF5MfwqovumwJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KkybRtPf; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58I8L6QN011358;
-	Thu, 18 Sep 2025 15:14:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=7m8Hq6
-	1tVZWiz57e9668ITrXwgA2tmBkjlX1GsRuLng=; b=KkybRtPf2eujPFN+QaAQjw
-	+URfkT7SMS+e/kIj6QFcICIYGTLJZY0C7jjXgsQ3hIw8ZP9900j1xhqGitCXakFN
-	w1GBaouI7+p90ocokC/kfgZ3lw2SOqiUNigerp6NtmrmCSW1ngPOQgunGWjjtueg
-	uboIg3C6mo9RMISG0WAmq2CS1Uqhuj4Pd2D2pXYKr3vALuG1qV6xQ3OeTZyJeDtO
-	bDuylOlGEM32AHY0rbR1oTXm68zMw8TdtVipej1OYUJN9mbn5vE/86yxBQ9fxfTt
-	QSXV3UQi80ltug1/ZPa1OPwyMCYdp+gLfL06vM/AlwYpwvb2YIsbYhPXt4YyGwug
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4njnan-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 15:14:16 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58IFEFYE025678;
-	Thu, 18 Sep 2025 15:14:15 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4njnaj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 15:14:15 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58IDeb7x022316;
-	Thu, 18 Sep 2025 15:14:14 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 495kxpy98c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Sep 2025 15:14:14 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58IFEEJZ28443344
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 18 Sep 2025 15:14:14 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 89E845805F;
-	Thu, 18 Sep 2025 15:14:14 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EEEBC5805D;
-	Thu, 18 Sep 2025 15:14:12 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.89.238])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 18 Sep 2025 15:14:12 +0000 (GMT)
-Message-ID: <78e72c9779fdc42425755101de3270308255935c.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 16/34] lsm: cleanup the LSM blob size code
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
-Cc: John Johansen <john.johansen@canonical.com>,
-        Roberto Sassu	
- <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
-        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=	 <mic@digikod.net>,
-        =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-        Kees Cook
- <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
-        Casey Schaufler	
- <casey@schaufler-ca.com>,
-        Tetsuo Handa
- <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Nicolas Bouchinet
- <nicolas.bouchinet@oss.cyber.gouv.fr>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>
-In-Reply-To: <20250916220355.252592-52-paul@paul-moore.com>
-References: <20250916220355.252592-36-paul@paul-moore.com>
-	 <20250916220355.252592-52-paul@paul-moore.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 18 Sep 2025 11:14:12 -0400
+	s=arc-20240116; t=1758208507; c=relaxed/simple;
+	bh=9cbSk6+mZ/JrPOLQ24x/4/EE/51AgOhzhqGiKBm5vf0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sIQBbrMz0H1gIHNq1d9/kEuWKLo//6g1UkqX8B66nH7hfrDgk6AVMXWMTKEft7wWFb/9qy9C389F/XlVJ8rD89OUNFsC808Mi6zRy37eyTZyqaVKXP4nhFr5sYVIWd64CQ3rwlXikk1iaUs1OPUJV8Nc08Ktd/4NczOpBzvHTlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=trja0lui; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78381C4CEE7;
+	Thu, 18 Sep 2025 15:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758208506;
+	bh=9cbSk6+mZ/JrPOLQ24x/4/EE/51AgOhzhqGiKBm5vf0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=trja0luiZFB9ihF1GlN40zg9VSi0MgAYsxgoSIytd5SNUo3LldZJa4NQr+cW6cD2K
+	 18DtQsxD6IhMEIVfeChbR8/sgkELiVIgL1G+clAcmh5eKnnJ3wO11xK/+wjkFQSFGp
+	 ZiA+pHuAg3wpAAwUgxifcaICq08APfJc6NbNUFdRnKbyaDRGbJQPc1iAnEyP9gC6oK
+	 HpLqC15tQej3bnzyl1JZ0OM9f4PRXEXE0iTZzs2zjaPkti9uZAHbYLKX50Doa4nb29
+	 xQnD28cTyVvmz5XuVP/gV/2JPCZiyDJIFhFHjTOub8MdTcw2ZMa4XR64ZuCSl4X2/N
+	 7Flsj1J/DQWpg==
+Date: Thu, 18 Sep 2025 18:15:03 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+	linux-integrity@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: kselftest and cargo
+Message-ID: <aMwh95tMxB7sMEzy@kernel.org>
+References: <aMlqouOSU8XN7V5H@kernel.org>
+ <f18854b2-f9c8-44a3-a09d-3b2ddbcb971a@linuxfoundation.org>
+ <aMwf89qekCuAdD1L@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=MN5gmNZl c=1 sm=1 tr=0 ts=68cc21c8 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=DfNHnWVPAAAA:8
- a=vpqfxihKAAAA:8 a=xVhDTqbCAAAA:8 a=VnNF1IyMAAAA:8 a=TJvjXSSun--OMuyg4_MA:9
- a=QEXdDO2ut3YA:10 a=rjTVMONInIDnV1a_A2c_:22 a=AULIiLoY-XQsE5F6gcqX:22
- a=GrmWmAYt4dzCMttCBZOh:22
-X-Proofpoint-GUID: GbhyfS0D7amGsKO1mRlqQOVWYVAAcDB1
-X-Proofpoint-ORIG-GUID: i3uhtyHTbV0MkFHx1hY65_2tMW8JTMis
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwNCBTYWx0ZWRfX5b40MypvQPsQ
- R/VulwDTt69/xvFkcqMUAlrut1dr1iOVuemTU2QWd1t+OKlAj+oQIEY5Zc0yWoAGjKkHCItw6zh
- pwFzFwD1vfLnbhQj/WyXXEdVfT9YWTKr+opxOZDxgcFRhp5SsPPWDCkP33rCK/eGl3URbQQLojP
- uHfQnalEIw04c1h3b1wFryHrVHCk6wjqIXNXPFwlaXBfRWru6Daq3pvofKbl9oEA90KfdGf7n7h
- Kly7Yfjgd3iicKEdaqUc1wv3EPQ/MGxkc01Ftv2jfJ1cAGtzSivVq3ZV2sDf7nZv/piszIVXC5B
- V1vUCx8cDL1shZ68Z1O9E/DMWXMrnDk2iYoO4aPD5vAvpZaBlL8W3mwgfZdgYJt4IGC759m7mgh
- ++vVrOoz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-18_01,2025-09-18_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 priorityscore=1501 bulkscore=0 impostorscore=0
- malwarescore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160204
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aMwf89qekCuAdD1L@kernel.org>
 
-On Tue, 2025-09-16 at 18:03 -0400, Paul Moore wrote:
-> Convert the lsm_blob_size fields to unsigned integers as there is no
-> current need for them to be negative, change "lsm_set_blob_size()" to
-> "lsm_blob_size_update()" to better reflect reality, and perform some
-> other minor cleanups to the associated code.
->=20
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> Reviewed-by: John Johansen <john.johansen@canonical.com>
-> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
+On Thu, Sep 18, 2025 at 06:06:31PM +0300, Jarkko Sakkinen wrote:
+> On Tue, Sep 16, 2025 at 04:39:37PM -0600, Shuah Khan wrote:
+> > On 9/16/25 07:48, Jarkko Sakkinen wrote:
+> > > Hi,
+> > > 
+> > > The pre-existing kselftest for TPM2 is derived works of my earlier Python
+> > > based rudimentary TPM2 stack called 'tpm2-scripts'.
+> > > 
+> > > In order to get more coverage and more mainintainable and extensible test
+> > > suite I'd like to eventually rewrite the tests with bash and tpm2sh, which
+> > > is a TPM2 cli written with Rust and based on my new TPM2 stack [1] [2].
+> > > 
+> > > Given linux-rust work, would it be acceptable to require cargo to install
+> > > a runner for kselftest? I'm finishing off now 0.11 version of the tool,
+> > > which will take some time (versions before that are honestly quite bad,
+> > > don't try them) but after that this would be something I'd like to
+> > > put together.
+> > 
+> > Probably fine - how does this impact kselftest default run?
+> 
+> OK so this was early query: I might introduce such test as part
+> of series that hasa waited for long time for an update [1]. I can
+> use tpm2sh more easily to reproduce equivalent crypto as kernel
+> does and make a test that can compare the results in a meaningful
+> manner. I also plan to relocate tpm2sh as part of git.kernel.org
+> custody from Github, as its main dependency tpm2-protocol crate 
+> already is [2].
 
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Some motivation context, I left out on doing the aforementioned
+patch set because I did not see importing TPM2 keys useful enough
+application but recently I've been dealing with remote attestation
+and that levels up the feature something quite useful.
 
+I.e. so called attestation identity keys are persisted to the NVRAM of a
+TPM chip and it would great if kernel could at boot time reserve
+selected (in the command-line) NV indexes and wrap them up into keyring
+keys. Since in UKI model command-line is signed that effectively locks
+them in into controlled use only through keyring as kernel can
+guard that via the device.
+
+I could put tons more detail into this but point to open up this
+complexity is that getting all cryptography right is easiest done
+by reproducing it in a test in user space and comparing the 
+results, and Rust and the crate I did give sort of powerful
+way to describe all this. And also because of the complexity
+it needs to be anchroed with some kind of sufficient test.
+
+BR, Jarkko
 
