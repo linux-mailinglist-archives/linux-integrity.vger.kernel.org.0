@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-7193-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7194-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D37EAB8934E
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 13:11:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D606B89419
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 13:25:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0036B1CC0005
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 11:12:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FF1A5611FA
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 11:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19BE230BF68;
-	Fri, 19 Sep 2025 11:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB9430CB54;
+	Fri, 19 Sep 2025 11:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qGJDRRKu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FIKbjFBs"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1ADF1B87C0;
-	Fri, 19 Sep 2025 11:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F56930C119;
+	Fri, 19 Sep 2025 11:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758280308; cv=none; b=Dvg5U97gKFNru/Ie41AHQaHdXU3ycu7RfEM64b1ypV5AsR9PAVXdI9bSO5uUgntpGvLOdh2BjhvynLkeBtw9qfRIG5G6zEW9rzXR6dPeM6Rm7lV7I5gIog3O4MYPluEVITU6nEcbtOaPSV3w6UJmy4CmF/PzMq/1E5xai3TXSv4=
+	t=1758281106; cv=none; b=pyiBn0OM6++UVMiYR384LPXm4xmIcxcifELs/qigLTnWWOd46vyW+9i1XZuL4H5pvoXT/K8BycJ9C5cc1DrTCqbYNefPZrtvA2evksG1u+rZ9g1pdGGqRSRvZHj5U9IxWsxu2tlruiFCasugy65gPqCtqDV8ZL2SWZRJLdnG0DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758280308; c=relaxed/simple;
-	bh=OMGTwYmbLj+dKIIwM+I/bLHQDf45I+5LbYabNmjn0Bg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k6i6vSWzWmDpChVTNgjPc7Y+0mLJyywmUKsFILZpwRDWtfAsETkBkfwnLkkJryE7Ljbh6qfpS3p/nOkqfS1Ciay1QyrDWiJkGWrFpT80oI1aAKlCRzuowargBVVo7nhqU/n93zGqnNjhpPfQHjGr2+tvrwJvYyAmULee1H8Y6AU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qGJDRRKu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9C0C4CEF0;
-	Fri, 19 Sep 2025 11:11:46 +0000 (UTC)
+	s=arc-20240116; t=1758281106; c=relaxed/simple;
+	bh=m0PXGFdmlx7oarIZHh48Hcs0Iq9Z4TUyOofrmHVpUTo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Zh9RIx0nEldVCIEEqX4OOXnwxJnxj5kB/10PqU9pdNLP9GU6cnBe/PTeO9dDHlF2TCI0mTrZaRbcJbP7eN6YjLjOA78jVS7FyQsapV9MgtkT4zmTh/EcA8NjoBEh21HHrw0FoqrogIFnH8/gAJuE948Rs3yM0zIfF/yZ2QoYGng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FIKbjFBs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D72D3C4CEF0;
+	Fri, 19 Sep 2025 11:25:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758280307;
-	bh=OMGTwYmbLj+dKIIwM+I/bLHQDf45I+5LbYabNmjn0Bg=;
+	s=k20201202; t=1758281105;
+	bh=m0PXGFdmlx7oarIZHh48Hcs0Iq9Z4TUyOofrmHVpUTo=;
 	h=From:To:Cc:Subject:Date:From;
-	b=qGJDRRKuVevC21Y+nPHkCogAelVk6/CLEfhdDCk+XV8tZo1nWtO42jGMgPOsVxtVe
-	 vLIRhTwFbqzAF+dL34Zl/R7wIN61qIgsZje47Y+Gcqdby4R0S1lL646l5DFVyxRPrS
-	 kwxXuli30OItvveUiOeGBDJCOClpC5LZyNAqli7bTlzSnS5cvaMkB88x15dgX5Hqtb
-	 QMehQoJsYqjo3bNZQVfi4lEXdm43CXtKroVaUyYv05RsscFdfkgfn3cR0qxDqqYglG
-	 KCrmJ/5ydZSf23z6A3ssONdTnXiVRREkrJ+xyf2sPSFEO7iwdOC305HO3OwtnVVo7u
-	 pkZWxDEfpwRaQ==
+	b=FIKbjFBs7UDyPeOS7PvcQjRHQYrk7FUTUHPtOwUzB3miLPsBI+2fXV/YiqRIv4A8d
+	 4wkjQO7SxDw9KXZfLFr7gZaEnDfhwhRLszMRiPP1N9zziLYJ6fZbDz0z+MolJhT0ot
+	 HHFXoFnnT1RSe5iwj464F3ttMQLo94hIihN4pvKp+A700fEpzvdqd9U8xOEAROzjj5
+	 rDaWjLuCGmApoAVezu7Mz4bi4I1Rfs2a7RmUCeBVYkLMWwD5ommWT78qb7JdrYQL1C
+	 qCfoP4PqHo86kcK8K0DAsFPrr/gZF2Ku+cIojlskF3qqixjPVO0HXrE9qxt3KDqr0t
+	 9m+I+N1aA9peA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Stefan Berger <stefanb@linux.ibm.com>,
@@ -56,9 +56,9 @@ Cc: Stefan Berger <stefanb@linux.ibm.com>,
 	linux-kernel@vger.kernel.org (open list),
 	keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
 	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v6] tpm: Make TPM buffer allocations more robust
-Date: Fri, 19 Sep 2025 14:11:37 +0300
-Message-Id: <20250919111139.2472612-1-jarkko@kernel.org>
+Subject: [PATCH v7] tpm: Make TPM buffer allocations more robust
+Date: Fri, 19 Sep 2025 14:24:47 +0300
+Message-Id: <20250919112448.2543343-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -93,6 +93,9 @@ managed allocation:
 Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 ---
+v7:
+- Additional function comments and invariant was unfortunately left to
+  my staging area so here's the addition (does not affect functionality).
 v6:
 - Removed two empty lines as requested by Stefan:
   https://lore.kernel.org/linux-integrity/be1c5bef-7c97-4173-b417-986dc90d779c@linux.ibm.com/
@@ -122,7 +125,7 @@ v2:
 - Rewrote the commit message.
 - Implemented CLASS_TPM_BUF() helper macro.
 ---
- drivers/char/tpm/tpm-buf.c                |  57 +----
+ drivers/char/tpm/tpm-buf.c                |  68 ++----
  drivers/char/tpm/tpm-sysfs.c              |  19 +-
  drivers/char/tpm/tpm1-cmd.c               | 143 ++++++------
  drivers/char/tpm/tpm2-cmd.c               | 270 ++++++++++------------
@@ -132,13 +135,13 @@ v2:
  include/linux/tpm.h                       |  17 +-
  security/keys/trusted-keys/trusted_tpm1.c |  40 ++--
  security/keys/trusted-keys/trusted_tpm2.c | 153 ++++++------
- 10 files changed, 379 insertions(+), 509 deletions(-)
+ 10 files changed, 390 insertions(+), 509 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-index dc882fc9fa9e..1fe9bc99305c 100644
+index dc882fc9fa9e..19774bc5786f 100644
 --- a/drivers/char/tpm/tpm-buf.c
 +++ b/drivers/char/tpm/tpm-buf.c
-@@ -7,32 +7,14 @@
+@@ -7,83 +7,57 @@
  #include <linux/module.h>
  #include <linux/tpm.h>
  
@@ -167,13 +170,19 @@ index dc882fc9fa9e..1fe9bc99305c 100644
 + * @buf_size:	Size of the buffer.
   * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
   * @ordinal:	A command ordinal
++ *
++ * 1. Expects that on the first run the passed buffer is zeroed by the caller.
++ * 2. Old buffer can be reused. On the second and subsequent resets @buf_size is
++ *    verified to be equal to the previous value.
   */
 -void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
 +void tpm_buf_reset(struct tpm_buf *buf, u16 buf_size, u16 tag, u32 ordinal)
  {
  	struct tpm_header *head = (struct tpm_header *)buf->data;
  
-@@ -41,49 +23,30 @@ void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
++	WARN_ON(buf->capacity != 0 && buf_size != (buf->capacity + sizeof(*buf)));
+ 	WARN_ON(tag != TPM_TAG_RQU_COMMAND && tag != TPM2_ST_NO_SESSIONS &&
+ 		tag != TPM2_ST_SESSIONS && tag != 0);
  
  	buf->flags = 0;
  	buf->length = sizeof(*head);
@@ -207,10 +216,16 @@ index dc882fc9fa9e..1fe9bc99305c 100644
   * tpm_buf_reset_sized() - Initialize a sized buffer
   * @buf:	A &tpm_buf
 + * @buf_size:	Size of the buffer.
++ *
++ * 1. Expects that on the first run the passed buffer is zeroed by the caller.
++ * 2. Old buffer can be reused. On the second and subsequent resets @buf_size is
++ *    verified to be equal to the previous value.
   */
 -void tpm_buf_reset_sized(struct tpm_buf *buf)
 +void tpm_buf_reset_sized(struct tpm_buf *buf, u16 buf_size)
  {
++	WARN_ON(buf->capacity != 0 && buf_size != (buf->capacity + sizeof(*buf)));
++
  	buf->flags = TPM_BUF_TPM2B;
  	buf->length = 2;
 +	buf->capacity = buf_size - sizeof(*buf);
@@ -229,7 +244,7 @@ index dc882fc9fa9e..1fe9bc99305c 100644
  /**
   * tpm_buf_length() - Return the number of bytes consumed by the data
   * @buf:	A &tpm_buf
-@@ -108,7 +71,7 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
+@@ -108,7 +82,7 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
  	if (buf->flags & TPM_BUF_OVERFLOW)
  		return;
  
@@ -238,7 +253,7 @@ index dc882fc9fa9e..1fe9bc99305c 100644
  		WARN(1, "tpm_buf: write overflow\n");
  		buf->flags |= TPM_BUF_OVERFLOW;
  		return;
-@@ -242,5 +205,3 @@ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
+@@ -242,5 +216,3 @@ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
  	return be32_to_cpu(value);
  }
  EXPORT_SYMBOL_GPL(tpm_buf_read_u32);
