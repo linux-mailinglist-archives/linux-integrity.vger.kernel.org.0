@@ -1,2021 +1,515 @@
-Return-Path: <linux-integrity+bounces-7198-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7199-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71EF3B8A4F7
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 17:34:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8028DB8B07A
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 21:03:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8F6BB61D53
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 15:31:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A8181CC4EAD
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Sep 2025 19:04:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71FAF3176E0;
-	Fri, 19 Sep 2025 15:32:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8639C26159E;
+	Fri, 19 Sep 2025 19:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BElvmABP"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QnL39S8k"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3134172628;
-	Fri, 19 Sep 2025 15:32:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD82217F3D;
+	Fri, 19 Sep 2025 19:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758295968; cv=none; b=fb0gdmEOwqawO3kTPO/0aAWjI2WGunK5hlgf4Mzm+ifEVE5MOC0sAw2s0lo8Zx8n6E3BdGNkekzRoLwVq60e2e2gFlf1bCBA0ndeV7ygruPjOQMrJt3i/SJafcn4itgPC7DyeduhrC7faCh1oYst3VuBV7rwIWIV2ht74hbHzHU=
+	t=1758308617; cv=none; b=f0TE2bA+MvoHF9CtxIGe1N7e4/EwLYIX6tnEm4uf4AEPi8wTVyDDU6a+iQS1hlyFcHGWaL3dUuxImTX6HMR4zABC13T7pTDr0JxqyMqkh1GbJnQkPIrJo4GWDe0s8NxunPpBZtsR+An4dKw1VFVyuyvbfGJ4U+pO3V5Lox9PFUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758295968; c=relaxed/simple;
-	bh=MqIceZlFovOOds2ea7Tsp2zQx+xYXEZbnimb3rYroys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q6PZlA5GodbI7QEnjfUnQfUFVUOE94gmpHv2gT1t6TJ/BiJ5m5wBJ6vIvOqPgRllbuGSlKYa6rPJqPNXl9Tx33PV8dKHDTuWzi9FT2mxdgREH1r0Ejlk18ZH2WzOrYULdVW8waCnQXVuWL6fXF1kjX8koTIZilWkm7u53OxWC2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BElvmABP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A61DC4CEF0;
-	Fri, 19 Sep 2025 15:32:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758295968;
-	bh=MqIceZlFovOOds2ea7Tsp2zQx+xYXEZbnimb3rYroys=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BElvmABP2c6FOtrVMEWpUbDZbhurwncZJNuuumX4Ev01IhAB7CcJk0CTMdP/Kz4xM
-	 LZW/MqVgE26kIu3ZeBqefAf4OfyKFSTuTj5yeo9wVutLrhkqtNz58RJKyVZhwUqd2U
-	 AyrDvis3AEaIxGE0ZdRk3y4U1riqoL8CT1a/bUl8TJLQM+jxwiPJHiWkNOBDxTRiMU
-	 pg3Og+2uZRCYfdnOkudY2hzxQCU0MR01YDhZo6M/quac9IfFWn1tU3jxY2dUme/jGT
-	 MOgjoGCJHRyUx4+CEQ8nIchVKJw7JBIDdizrDHY/tMX1Ipvr5nKu0K/d/xexI2dKUj
-	 aQOJ51sG7zmFg==
-Date: Fri, 19 Sep 2025 18:32:43 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: linux-integrity@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>,
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v7] tpm: Make TPM buffer allocations more robust
-Message-ID: <aM13m-CYijlu6Pf6@kernel.org>
-References: <20250919112448.2543343-1-jarkko@kernel.org>
- <hwsx2t2tkbos3g7k2syemxbvc6sfrsbviwm64ubcdl6ms7ljvo@toetomkhheht>
+	s=arc-20240116; t=1758308617; c=relaxed/simple;
+	bh=wQ25qQiNKf1eeQdWxdQGjmPWXYAwoGPhgrPbG4DsH1Q=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=PQKuXKREZdl8zNNahpPzWvPx7eL57k+Y8FjjZniS2LItB8hq6qxZRsT+Zl7zyYwCyfiSuQhAf8Ik4sfkyCo6RhHZie9aRK7TNq3cCekVE14zDj4tUQIbudykyCZustqaURgkAVTWyDtQJnPM7wnQqPbUcxTFHFM91dqy/XVu3Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QnL39S8k; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58JE9ZLO027388;
+	Fri, 19 Sep 2025 19:02:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=OuYHkH
+	SlHkzySYvdH6VPYSH8EVm0xzCe94FkGf7/rfQ=; b=QnL39S8k5YUMlHL2xGAx9x
+	hb9K7f5/uXtn73dhvrgbuzg0YyA/CfEDDqiS/9MV3ryj5Tyu9dO2iwVA6Qcmimke
+	7mRJGKFJMTGIMhOixfy5biERp5SsVIhTs1lQ2UPLK8th9B5rSVUzFXkvX8yVy/+S
+	+0f6AZ1Ubh74IRAyBC+vDRvRKb3K/fPgUGW9qgh9JK3FgCkwKWwF8gj8jHYyNFep
+	G68XxQ1XIYF0UNUNy8WOiqOY/g0nG8neP42eCq7p/z8YgglsZfI1ev3PKL7Y9noj
+	7M3xPW2VRtXLgKL1nZPT7oxWAGSkYILtFsYUgHal8yy8xTRR6XRZN5eFP/e4T9Bw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4pjs34-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 19 Sep 2025 19:02:29 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58JJ1xfO000958;
+	Fri, 19 Sep 2025 19:02:28 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4pjs31-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 19 Sep 2025 19:02:28 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58JGIamn018668;
+	Fri, 19 Sep 2025 19:02:27 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4997a29jth-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 19 Sep 2025 19:02:27 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58JJ2RhB17760960
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 19 Sep 2025 19:02:27 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F41905805F;
+	Fri, 19 Sep 2025 19:02:26 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7CBE558054;
+	Fri, 19 Sep 2025 19:02:25 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.19.242])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 19 Sep 2025 19:02:25 +0000 (GMT)
+Message-ID: <3f5809b2250efd65e02dea44437175e2a95f5f2d.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 08/34] lsm: replace the name field with a pointer to
+ the lsm_id struct
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Cc: John Johansen <john.johansen@canonical.com>,
+        Roberto Sassu	
+ <roberto.sassu@huawei.com>, Fan Wu <wufan@kernel.org>,
+        =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?=	 <mic@digikod.net>,
+        =?ISO-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+        Kees Cook
+ <kees@kernel.org>, Micah Morton <mortonm@chromium.org>,
+        Casey Schaufler	
+ <casey@schaufler-ca.com>,
+        Tetsuo Handa
+ <penguin-kernel@I-love.SAKURA.ne.jp>,
+        Nicolas Bouchinet
+ <nicolas.bouchinet@oss.cyber.gouv.fr>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>
+In-Reply-To: <20250916220355.252592-44-paul@paul-moore.com>
+References: <20250916220355.252592-36-paul@paul-moore.com>
+	 <20250916220355.252592-44-paul@paul-moore.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 19 Sep 2025 15:02:25 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <hwsx2t2tkbos3g7k2syemxbvc6sfrsbviwm64ubcdl6ms7ljvo@toetomkhheht>
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwNCBTYWx0ZWRfX0V0zNN6Hk/1x
+ RcmCWra4klMShT4/By7JA/iqbV00h3H8bTSUiX+Zuih3/E6T2cJlq13W+492kZYacjA05eh8OG/
+ UDnALZS1k+F6XQJ1bmSpKAyENUxce/AWyNkzS3p/5dvtKrUjsRPN4FRGtFVasJMRdduZD//aF81
+ ShhxCgrjV07zpM2TSbLLPMzAtkVQhJ9qlYG11fg3enlHzvwHEgrfMD72cxptpBC0Tev34x0EmOd
+ C34XctMV/2PFcuRdNlxc+ibP5Ts7me4XeTt35boTg8clyVpUGweCDoQi7LW5ZWPH7mbIPR0PrmC
+ eE0iY+W4IHPSl4RqWQ3sYB//qZZBjjptPbYUlyV5B06WU4SLBoToGbqdkr26ZFISQcxbQUufOEv
+ 5Xtx9nrr
+X-Proofpoint-ORIG-GUID: OnOAtGHZvkHYMch8aT1au9Q06r3cWa4g
+X-Proofpoint-GUID: IiP6NCaRdvzNAdrdKEQakVZGg2sQaS8I
+X-Authority-Analysis: v=2.4 cv=cNzgskeN c=1 sm=1 tr=0 ts=68cda8c5 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=3MP0g_lkJP05MlL4:21 a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8
+ a=DfNHnWVPAAAA:8 a=vpqfxihKAAAA:8 a=xVhDTqbCAAAA:8 a=VnNF1IyMAAAA:8
+ a=kkBOLNhXHHjkpg_EOLUA:9 a=QEXdDO2ut3YA:10 a=rjTVMONInIDnV1a_A2c_:22
+ a=AULIiLoY-XQsE5F6gcqX:22 a=GrmWmAYt4dzCMttCBZOh:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-19_02,2025-09-19_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 spamscore=0 bulkscore=0 malwarescore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2509160204
 
-On Fri, Sep 19, 2025 at 03:35:43PM +0200, Stefano Garzarella wrote:
-> On Fri, Sep 19, 2025 at 02:24:47PM +0300, Jarkko Sakkinen wrote:
-> > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> > 
-> > Drop 'tpm_buf_init', 'tpm_buf_init_sized' and 'tpm_buf_free'. Refine
-> > 'struct tpm_buf' to hold capacity in order to enable stack allocation and
-> > sizes other than page size.
-> > 
-> > The updated 'struct tpm_buf' can be allocated either from stack or heap.
-> > 
-> > The contract is the following:
-> > 
-> > 1. 'tpm_buf_reset' and 'tpm_buf_reset_size' expect that on the first run
-> >   the passed buffer is zeroed by the caller (e.g. via memset or kzalloc).
-> > 2. The same buffer can be reused. On the second and subsequent resets the
-> >   aforementioned functions verify that 'buf_size' has the same value, and
-> >   emits warning if not.
-> > 
-> > As a consequence 'struct tpm_buf' instance can be easily wrapped into
-> > managed allocation:
-> > 
-> > 	struct tpm_buf *buf __free(kfree) buf = kzalloc(PAGE_SIZE,
-> > 							GFP_KERNEL);
-> > 
-> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> > ---
-> > v7:
-> > - Additional function comments and invariant was unfortunately left to
-> >  my staging area so here's the addition (does not affect functionality).
-> > v6:
-> > - Removed two empty lines as requested by Stefan:
-> >  https://lore.kernel.org/linux-integrity/be1c5bef-7c97-4173-b417-986dc90d779c@linux.ibm.com/
-> > - Add 'capacity' field as this makes easy to stretch tpm_buf into stack
-> >  allocation.
-> > v5:
-> > - I tested this version also with TPM 1.2 by booting up and checking
-> >  that sysfs attributes work.
-> > - Fixed the length check against capacity (James) with TPM_BUF_CAPACITY.
-> > - Fixed declaration style: do it at the site (Jason).
-> > - Improved commit message (Stefan).
-> > - Removed "out" label from tpm2_pcr_read() (Stefan).
-> > - Removed spurious "return rc;" from tpm2_get_pcr_allocation() (Stefan).
-> > v4:
-> > - Wrote a more a descriptive short summary and improved description.
-> > - Fixed the error in documentation: there is 4090 bytes of space left
-> >  for the payload - not 4088 bytes.
-> > - Turned tpm_buf_alloc() into inline function.
-> > v3:
-> > - Removed the cleanup class and moved on using __free(kfree) instead.
-> > - Removed `buf_size` (James).
-> > - I'm open for the idea of splitting still (Jason) but I'll hold
-> >  at least this revision just to check that my core idea here
-> >  is correct.
-> > v2:
-> > - Implement also memory allocation using the cleanup class.
-> > - Rewrote the commit message.
-> > - Implemented CLASS_TPM_BUF() helper macro.
-> > ---
-> > drivers/char/tpm/tpm-buf.c                |  68 ++----
-> > drivers/char/tpm/tpm-sysfs.c              |  19 +-
-> > drivers/char/tpm/tpm1-cmd.c               | 143 ++++++------
-> > drivers/char/tpm/tpm2-cmd.c               | 270 ++++++++++------------
-> > drivers/char/tpm/tpm2-sessions.c          | 118 +++++-----
-> > drivers/char/tpm/tpm2-space.c             |  42 ++--
-> > drivers/char/tpm/tpm_vtpm_proxy.c         |  29 +--
-> > include/linux/tpm.h                       |  17 +-
-> > security/keys/trusted-keys/trusted_tpm1.c |  40 ++--
-> > security/keys/trusted-keys/trusted_tpm2.c | 153 ++++++------
-> > 10 files changed, 390 insertions(+), 509 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-> > index dc882fc9fa9e..19774bc5786f 100644
-> > --- a/drivers/char/tpm/tpm-buf.c
-> > +++ b/drivers/char/tpm/tpm-buf.c
-> > @@ -7,83 +7,57 @@
-> > #include <linux/module.h>
-> > #include <linux/tpm.h>
-> > 
-> > -/**
-> > - * tpm_buf_init() - Allocate and initialize a TPM command
-> > - * @buf:	A &tpm_buf
-> > - * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
-> > - * @ordinal:	A command ordinal
-> > - *
-> > - * Return: 0 or -ENOMEM
-> > - */
-> > -int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
-> > -{
-> > -	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
-> > -	if (!buf->data)
-> > -		return -ENOMEM;
-> > -
-> > -	tpm_buf_reset(buf, tag, ordinal);
-> > -	return 0;
-> > -}
-> > -EXPORT_SYMBOL_GPL(tpm_buf_init);
-> > -
-> > /**
-> >  * tpm_buf_reset() - Initialize a TPM command
-> >  * @buf:	A &tpm_buf
-> > + * @buf_size:	Size of the buffer.
-> >  * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
-> >  * @ordinal:	A command ordinal
-> > + *
-> > + * 1. Expects that on the first run the passed buffer is zeroed by the caller.
-> > + * 2. Old buffer can be reused. On the second and subsequent resets @buf_size is
-> > + *    verified to be equal to the previous value.
-> >  */
-> > -void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
-> > +void tpm_buf_reset(struct tpm_buf *buf, u16 buf_size, u16 tag, u32 ordinal)
-> > {
-> > 	struct tpm_header *head = (struct tpm_header *)buf->data;
-> > 
-> > +	WARN_ON(buf->capacity != 0 && buf_size != (buf->capacity + sizeof(*buf)));
-> > 	WARN_ON(tag != TPM_TAG_RQU_COMMAND && tag != TPM2_ST_NO_SESSIONS &&
-> > 		tag != TPM2_ST_SESSIONS && tag != 0);
-> > 
-> > 	buf->flags = 0;
-> > 	buf->length = sizeof(*head);
-> > +	buf->capacity = buf_size - sizeof(*buf);
-> > +	buf->handles = 0;
-> > 	head->tag = cpu_to_be16(tag);
-> > 	head->length = cpu_to_be32(sizeof(*head));
-> > 	head->ordinal = cpu_to_be32(ordinal);
-> > -	buf->handles = 0;
-> > }
-> > EXPORT_SYMBOL_GPL(tpm_buf_reset);
-> > 
-> > -/**
-> > - * tpm_buf_init_sized() - Allocate and initialize a sized (TPM2B) buffer
-> > - * @buf:	A @tpm_buf
-> > - *
-> > - * Return: 0 or -ENOMEM
-> > - */
-> > -int tpm_buf_init_sized(struct tpm_buf *buf)
-> > -{
-> > -	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
-> > -	if (!buf->data)
-> > -		return -ENOMEM;
-> > -
-> > -	tpm_buf_reset_sized(buf);
-> > -	return 0;
-> > -}
-> > -EXPORT_SYMBOL_GPL(tpm_buf_init_sized);
-> > -
-> > /**
-> >  * tpm_buf_reset_sized() - Initialize a sized buffer
-> >  * @buf:	A &tpm_buf
-> > + * @buf_size:	Size of the buffer.
-> > + *
-> > + * 1. Expects that on the first run the passed buffer is zeroed by the caller.
-> > + * 2. Old buffer can be reused. On the second and subsequent resets @buf_size is
-> > + *    verified to be equal to the previous value.
-> >  */
-> > -void tpm_buf_reset_sized(struct tpm_buf *buf)
-> > +void tpm_buf_reset_sized(struct tpm_buf *buf, u16 buf_size)
-> > {
-> > +	WARN_ON(buf->capacity != 0 && buf_size != (buf->capacity + sizeof(*buf)));
-> > +
-> > 	buf->flags = TPM_BUF_TPM2B;
-> > 	buf->length = 2;
-> > +	buf->capacity = buf_size - sizeof(*buf);
-> > +	buf->handles = 0;
-> > 	buf->data[0] = 0;
-> > 	buf->data[1] = 0;
-> > }
-> > EXPORT_SYMBOL_GPL(tpm_buf_reset_sized);
-> > 
-> > -void tpm_buf_destroy(struct tpm_buf *buf)
-> > -{
-> > -	free_page((unsigned long)buf->data);
-> > -}
-> > -EXPORT_SYMBOL_GPL(tpm_buf_destroy);
-> > -
-> > /**
-> >  * tpm_buf_length() - Return the number of bytes consumed by the data
-> >  * @buf:	A &tpm_buf
->  *
->  * Return: The number of bytes consumed by the buffer
->  */
-> u32 tpm_buf_length(struct tpm_buf *buf)
-> {
-> 	return buf->length;
-> }
-> EXPORT_SYMBOL_GPL(tpm_buf_length);
-> 
-> Should we update the return type (u16) on this function?
+On Tue, 2025-09-16 at 18:03 -0400, Paul Moore wrote:
+> Reduce the duplication between the lsm_id struct and the DEFINE_LSM()
+> definition by linking the lsm_id struct directly into the individual
+> LSM's DEFINE_LSM() instance.
+>=20
+> Linking the lsm_id into the LSM definition also allows us to simplify
+> the security_add_hooks() function by removing the code which populates
+> the lsm_idlist[] array and moving it into the normal LSM startup code
+> where the LSM list is parsed and the individual LSMs are enabled,
+> making for a cleaner implementation with less overhead at boot.
+>=20
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> Reviewed-by: John Johansen <john.johansen@canonical.com>
+> Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+> Signed-off-by: Paul Moore <paul@paul-moore.com>
 
-Yes we should. Thanks for catching this.
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
-> 
-> > @@ -108,7 +82,7 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
-> > 	if (buf->flags & TPM_BUF_OVERFLOW)
-> > 		return;
-> > 
-> > -	if ((buf->length + new_length) > PAGE_SIZE) {
-> > +	if ((buf->length + new_length) > buf->capacity) {
-> 
-> IIUC all of these are u16, so there could be an overflow when we do
-> `buf->length + new_length` ?
-> 
-> Should we cast to u32 or just change the expression in something like
-> `new_length > (buf->capacity - buf->length)`
+> ---
+>  include/linux/lsm_hooks.h         |  2 +-
+>  security/apparmor/lsm.c           |  2 +-
+>  security/bpf/hooks.c              |  2 +-
+>  security/commoncap.c              |  2 +-
+>  security/integrity/evm/evm_main.c |  2 +-
+>  security/integrity/ima/ima_main.c |  2 +-
+>  security/ipe/ipe.c                |  2 +-
+>  security/landlock/setup.c         |  2 +-
+>  security/loadpin/loadpin.c        |  2 +-
+>  security/lockdown/lockdown.c      |  2 +-
+>  security/lsm_init.c               | 45 +++++++++++++------------------
+>  security/safesetid/lsm.c          |  2 +-
+>  security/selinux/hooks.c          |  2 +-
+>  security/smack/smack_lsm.c        |  2 +-
+>  security/tomoyo/tomoyo.c          |  2 +-
+>  security/yama/yama_lsm.c          |  2 +-
+>  16 files changed, 33 insertions(+), 42 deletions(-)
+>=20
+> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> index 0112926ed923..7343dd60b1d5 100644
+> --- a/include/linux/lsm_hooks.h
+> +++ b/include/linux/lsm_hooks.h
+> @@ -152,7 +152,7 @@ enum lsm_order {
+>  };
+> =20
+>  struct lsm_info {
+> -	const char *name;	/* Required. */
+> +	const struct lsm_id *id;
+>  	enum lsm_order order;	/* Optional: default is LSM_ORDER_MUTABLE */
+>  	unsigned long flags;	/* Optional: flags describing LSM */
+>  	int *enabled;		/* Optional: controlled by CONFIG_LSM */
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index 8e1cc229b41b..45b3a304d525 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -2552,7 +2552,7 @@ static int __init apparmor_init(void)
+>  }
+> =20
+>  DEFINE_LSM(apparmor) =3D {
+> -	.name =3D "apparmor",
+> +	.id =3D &apparmor_lsmid,
+>  	.flags =3D LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
+>  	.enabled =3D &apparmor_enabled,
+>  	.blobs =3D &apparmor_blob_sizes,
+> diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+> index db759025abe1..40efde233f3a 100644
+> --- a/security/bpf/hooks.c
+> +++ b/security/bpf/hooks.c
+> @@ -33,7 +33,7 @@ struct lsm_blob_sizes bpf_lsm_blob_sizes __ro_after_ini=
+t =3D {
+>  };
+> =20
+>  DEFINE_LSM(bpf) =3D {
+> -	.name =3D "bpf",
+> +	.id =3D &bpf_lsmid,
+>  	.init =3D bpf_lsm_init,
+>  	.blobs =3D &bpf_lsm_blob_sizes
+>  };
+> diff --git a/security/commoncap.c b/security/commoncap.c
+> index 6bd4adeb4795..b50479bd0286 100644
+> --- a/security/commoncap.c
+> +++ b/security/commoncap.c
+> @@ -1505,7 +1505,7 @@ static int __init capability_init(void)
+>  }
+> =20
+>  DEFINE_LSM(capability) =3D {
+> -	.name =3D "capability",
+> +	.id =3D &capability_lsmid,
+>  	.order =3D LSM_ORDER_FIRST,
+>  	.init =3D capability_init,
+>  };
+> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
+vm_main.c
+> index 0add782e73ba..db8e324ed4e6 100644
+> --- a/security/integrity/evm/evm_main.c
+> +++ b/security/integrity/evm/evm_main.c
+> @@ -1175,7 +1175,7 @@ struct lsm_blob_sizes evm_blob_sizes __ro_after_ini=
+t =3D {
+>  };
+> =20
+>  DEFINE_LSM(evm) =3D {
+> -	.name =3D "evm",
+> +	.id =3D &evm_lsmid,
+>  	.init =3D init_evm_lsm,
+>  	.order =3D LSM_ORDER_LAST,
+>  	.blobs =3D &evm_blob_sizes,
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
+ma_main.c
+> index cdd225f65a62..eade8e1e3cb1 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -1279,7 +1279,7 @@ struct lsm_blob_sizes ima_blob_sizes __ro_after_ini=
+t =3D {
+>  };
+> =20
+>  DEFINE_LSM(ima) =3D {
+> -	.name =3D "ima",
+> +	.id =3D &ima_lsmid,
+>  	.init =3D init_ima_lsm,
+>  	.order =3D LSM_ORDER_LAST,
+>  	.blobs =3D &ima_blob_sizes,
+> diff --git a/security/ipe/ipe.c b/security/ipe/ipe.c
+> index 4317134cb0da..2426441181dc 100644
+> --- a/security/ipe/ipe.c
+> +++ b/security/ipe/ipe.c
+> @@ -92,7 +92,7 @@ static int __init ipe_init(void)
+>  }
+> =20
+>  DEFINE_LSM(ipe) =3D {
+> -	.name =3D "ipe",
+> +	.id =3D &ipe_lsmid,
+>  	.init =3D ipe_init,
+>  	.blobs =3D &ipe_blobs,
+>  };
+> diff --git a/security/landlock/setup.c b/security/landlock/setup.c
+> index bd53c7a56ab9..47dac1736f10 100644
+> --- a/security/landlock/setup.c
+> +++ b/security/landlock/setup.c
+> @@ -75,7 +75,7 @@ static int __init landlock_init(void)
+>  }
+> =20
+>  DEFINE_LSM(LANDLOCK_NAME) =3D {
+> -	.name =3D LANDLOCK_NAME,
+> +	.id =3D &landlock_lsmid,
+>  	.init =3D landlock_init,
+>  	.blobs =3D &landlock_blob_sizes,
+>  };
+> diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+> index 68252452b66c..b9ddf05c5c16 100644
+> --- a/security/loadpin/loadpin.c
+> +++ b/security/loadpin/loadpin.c
+> @@ -271,7 +271,7 @@ static int __init loadpin_init(void)
+>  }
+> =20
+>  DEFINE_LSM(loadpin) =3D {
+> -	.name =3D "loadpin",
+> +	.id =3D &loadpin_lsmid,
+>  	.init =3D loadpin_init,
+>  };
+> =20
+> diff --git a/security/lockdown/lockdown.c b/security/lockdown/lockdown.c
+> index cf83afa1d879..4813f168ff93 100644
+> --- a/security/lockdown/lockdown.c
+> +++ b/security/lockdown/lockdown.c
+> @@ -168,6 +168,6 @@ DEFINE_EARLY_LSM(lockdown) =3D {
+>  #else
+>  DEFINE_LSM(lockdown) =3D {
+>  #endif
+> -	.name =3D "lockdown",
+> +	.id =3D &lockdown_lsmid,
+>  	.init =3D lockdown_lsm_init,
+>  };
+> diff --git a/security/lsm_init.c b/security/lsm_init.c
+> index 4a108b03c23d..628f54790360 100644
+> --- a/security/lsm_init.c
+> +++ b/security/lsm_init.c
+> @@ -127,9 +127,10 @@ static void __init append_ordered_lsm(struct lsm_inf=
+o *lsm, const char *from)
+>  	/* Enable this LSM, if it is not already set. */
+>  	if (!lsm->enabled)
+>  		lsm->enabled =3D &lsm_enabled_true;
+> -	ordered_lsms[last_lsm++] =3D lsm;
+> +	ordered_lsms[last_lsm] =3D lsm;
+> +	lsm_idlist[last_lsm++] =3D lsm->id;
+> =20
+> -	init_debug("%s ordered: %s (%s)\n", from, lsm->name,
+> +	init_debug("%s ordered: %s (%s)\n", from, lsm->id->name,
+>  		   is_enabled(lsm) ? "enabled" : "disabled");
+>  }
+> =20
+> @@ -157,7 +158,7 @@ static void __init lsm_prepare(struct lsm_info *lsm)
+>  		set_enabled(lsm, false);
+>  		return;
+>  	} else if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && exclusive) {
+> -		init_debug("exclusive disabled: %s\n", lsm->name);
+> +		init_debug("exclusive disabled: %s\n", lsm->id->name);
+>  		set_enabled(lsm, false);
+>  		return;
+>  	}
+> @@ -165,7 +166,7 @@ static void __init lsm_prepare(struct lsm_info *lsm)
+>  	/* Mark the LSM as enabled. */
+>  	set_enabled(lsm, true);
+>  	if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && !exclusive) {
+> -		init_debug("exclusive chosen:   %s\n", lsm->name);
+> +		init_debug("exclusive chosen:   %s\n", lsm->id->name);
+>  		exclusive =3D lsm;
+>  	}
+> =20
+> @@ -200,9 +201,9 @@ static void __init initialize_lsm(struct lsm_info *ls=
+m)
+>  	if (is_enabled(lsm)) {
+>  		int ret;
+> =20
+> -		init_debug("initializing %s\n", lsm->name);
+> +		init_debug("initializing %s\n", lsm->id->name);
+>  		ret =3D lsm->init();
+> -		WARN(ret, "%s failed to initialize: %d\n", lsm->name, ret);
+> +		WARN(ret, "%s failed to initialize: %d\n", lsm->id->name, ret);
+>  	}
+>  }
+> =20
+> @@ -236,10 +237,10 @@ static void __init ordered_lsm_parse(const char *or=
+der, const char *origin)
+>  		 */
+>  		lsm_for_each_raw(major) {
+>  			if ((major->flags & LSM_FLAG_LEGACY_MAJOR) &&
+> -			    strcmp(major->name, chosen_major_lsm) !=3D 0) {
+> +			    strcmp(major->id->name, chosen_major_lsm) !=3D 0) {
+>  				set_enabled(major, false);
+>  				init_debug("security=3D%s disabled: %s (only one legacy major LSM)\n=
+",
+> -					   chosen_major_lsm, major->name);
+> +					   chosen_major_lsm, major->id->name);
+>  			}
+>  		}
+>  	}
+> @@ -251,7 +252,7 @@ static void __init ordered_lsm_parse(const char *orde=
+r, const char *origin)
+>  		bool found =3D false;
+> =20
+>  		lsm_for_each_raw(lsm) {
+> -			if (strcmp(lsm->name, name) =3D=3D 0) {
+> +			if (strcmp(lsm->id->name, name) =3D=3D 0) {
+>  				if (lsm->order =3D=3D LSM_ORDER_MUTABLE)
+>  					append_ordered_lsm(lsm, origin);
+>  				found =3D true;
+> @@ -268,7 +269,7 @@ static void __init ordered_lsm_parse(const char *orde=
+r, const char *origin)
+>  		lsm_for_each_raw(lsm) {
+>  			if (exists_ordered_lsm(lsm))
+>  				continue;
+> -			if (strcmp(lsm->name, chosen_major_lsm) =3D=3D 0)
+> +			if (strcmp(lsm->id->name, chosen_major_lsm) =3D=3D 0)
+>  				append_ordered_lsm(lsm, "security=3D");
+>  		}
+>  	}
+> @@ -285,7 +286,7 @@ static void __init ordered_lsm_parse(const char *orde=
+r, const char *origin)
+>  			continue;
+>  		set_enabled(lsm, false);
+>  		init_debug("%s skipped: %s (not in requested order)\n",
+> -			   origin, lsm->name);
+> +			   origin, lsm->id->name);
+>  	}
+> =20
+>  	kfree(sep);
+> @@ -317,11 +318,13 @@ static void __init lsm_init_ordered(void)
+>  	pr_info("initializing lsm=3D");
+>  	lsm_early_for_each_raw(early) {
+>  		if (is_enabled(early))
+> -			pr_cont("%s%s", first++ =3D=3D 0 ? "" : ",", early->name);
+> +			pr_cont("%s%s",
+> +				first++ =3D=3D 0 ? "" : ",", early->id->name);
+>  	}
+>  	lsm_order_for_each(lsm) {
+>  		if (is_enabled(*lsm))
+> -			pr_cont("%s%s", first++ =3D=3D 0 ? "" : ",", (*lsm)->name);
+> +			pr_cont("%s%s",
+> +				first++ =3D=3D 0 ? "" : ",", (*lsm)->id->name);
+>  	}
+>  	pr_cont("\n");
+> =20
+> @@ -432,18 +435,6 @@ void __init security_add_hooks(struct security_hook_=
+list *hooks, int count,
+>  {
+>  	int i;
+> =20
+> -	/*
+> -	 * A security module may call security_add_hooks() more
+> -	 * than once during initialization, and LSM initialization
+> -	 * is serialized. Landlock is one such case.
+> -	 * Look at the previous entry, if there is one, for duplication.
+> -	 */
+> -	if (lsm_active_cnt =3D=3D 0 || lsm_idlist[lsm_active_cnt - 1] !=3D lsmi=
+d) {
+> -		if (lsm_active_cnt >=3D MAX_LSM_COUNT)
+> -			panic("%s Too many LSMs registered.\n", __func__);
+> -		lsm_idlist[lsm_active_cnt++] =3D lsmid;
+> -	}
+> -
+>  	for (i =3D 0; i < count; i++) {
+>  		hooks[i].lsmid =3D lsmid;
+>  		lsm_static_call_init(&hooks[i]);
+> @@ -491,10 +482,10 @@ int __init security_init(void)
+>  	 * available
+>  	 */
+>  	lsm_early_for_each_raw(lsm) {
+> -		init_debug("  early started: %s (%s)\n", lsm->name,
+> +		init_debug("  early started: %s (%s)\n", lsm->id->name,
+>  			   is_enabled(lsm) ? "enabled" : "disabled");
+>  		if (lsm->enabled)
+> -			lsm_append(lsm->name, &lsm_names);
+> +			lsm_append(lsm->id->name, &lsm_names);
+>  	}
+> =20
+>  	/* Load LSMs in specified order. */
+> diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
+> index 1ba564f097f5..9a7c68d4e642 100644
+> --- a/security/safesetid/lsm.c
+> +++ b/security/safesetid/lsm.c
+> @@ -287,6 +287,6 @@ static int __init safesetid_security_init(void)
+>  }
+> =20
+>  DEFINE_LSM(safesetid_security_init) =3D {
+> +	.id =3D &safesetid_lsmid,
+>  	.init =3D safesetid_security_init,
+> -	.name =3D "safesetid",
+>  };
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 4da5e792b42e..d94b1ff316ba 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -7630,7 +7630,7 @@ void selinux_complete_init(void)
+>  /* SELinux requires early initialization in order to label
+>     all processes and objects when they are created. */
+>  DEFINE_LSM(selinux) =3D {
+> -	.name =3D "selinux",
+> +	.id =3D &selinux_lsmid,
+>  	.flags =3D LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
+>  	.enabled =3D &selinux_enabled_boot,
+>  	.blobs =3D &selinux_blob_sizes,
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index fc340a6f0dde..e09490c75f59 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -5275,7 +5275,7 @@ static __init int smack_init(void)
+>   * all processes and objects when they are created.
+>   */
+>  DEFINE_LSM(smack) =3D {
+> -	.name =3D "smack",
+> +	.id =3D &smack_lsmid,
+>  	.flags =3D LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
+>  	.blobs =3D &smack_blob_sizes,
+>  	.init =3D smack_init,
+> diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
+> index d6ebcd9db80a..ed0f7b052a85 100644
+> --- a/security/tomoyo/tomoyo.c
+> +++ b/security/tomoyo/tomoyo.c
+> @@ -612,7 +612,7 @@ static int __init tomoyo_init(void)
+>  }
+> =20
+>  DEFINE_LSM(tomoyo) =3D {
+> -	.name =3D "tomoyo",
+> +	.id =3D &tomoyo_lsmid,
+>  	.enabled =3D &tomoyo_enabled,
+>  	.flags =3D LSM_FLAG_LEGACY_MAJOR,
+>  	.blobs =3D &tomoyo_blob_sizes,
+> diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+> index 3d064dd4e03f..38b21ee0c560 100644
+> --- a/security/yama/yama_lsm.c
+> +++ b/security/yama/yama_lsm.c
+> @@ -476,6 +476,6 @@ static int __init yama_init(void)
+>  }
+> =20
+>  DEFINE_LSM(yama) =3D {
+> -	.name =3D "yama",
+> +	.id =3D &yama_lsmid,
+>  	.init =3D yama_init,
+>  };
 
-Thanks, these really appropriate comments.
-
-I think best measure here would have hard constant cap of PAGE_SIZE
-for buf_size. That's how the specs limit anyhow. I'll extend the
-invariant.
-
-
-> 
-> Thanks,
-> Stefano
-> 
-> > 		WARN(1, "tpm_buf: write overflow\n");
-> > 		buf->flags |= TPM_BUF_OVERFLOW;
-> > 		return;
-> > @@ -242,5 +216,3 @@ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
-> > 	return be32_to_cpu(value);
-> > }
-> > EXPORT_SYMBOL_GPL(tpm_buf_read_u32);
-> > -
-> > -
-> > diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-> > index 94231f052ea7..68328ca6367d 100644
-> > --- a/drivers/char/tpm/tpm-sysfs.c
-> > +++ b/drivers/char/tpm/tpm-sysfs.c
-> > @@ -32,28 +32,29 @@ struct tpm_readpubek_out {
-> > static ssize_t pubek_show(struct device *dev, struct device_attribute *attr,
-> > 			  char *buf)
-> > {
-> > -	struct tpm_buf tpm_buf;
-> > 	struct tpm_readpubek_out *out;
-> > 	int i;
-> > 	char *str = buf;
-> > 	struct tpm_chip *chip = to_tpm_chip(dev);
-> > 	char anti_replay[20];
-> > 
-> > +	struct tpm_buf *tpm_buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!tpm_buf)
-> > +		return -ENOMEM;
-> > +
-> > 	memset(&anti_replay, 0, sizeof(anti_replay));
-> > 
-> > 	if (tpm_try_get_ops(chip))
-> > 		return 0;
-> > 
-> > -	if (tpm_buf_init(&tpm_buf, TPM_TAG_RQU_COMMAND, TPM_ORD_READPUBEK))
-> > -		goto out_ops;
-> > -
-> > -	tpm_buf_append(&tpm_buf, anti_replay, sizeof(anti_replay));
-> > +	tpm_buf_reset(tpm_buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_READPUBEK);
-> > +	tpm_buf_append(tpm_buf, anti_replay, sizeof(anti_replay));
-> > 
-> > -	if (tpm_transmit_cmd(chip, &tpm_buf, READ_PUBEK_RESULT_MIN_BODY_SIZE,
-> > +	if (tpm_transmit_cmd(chip, tpm_buf, READ_PUBEK_RESULT_MIN_BODY_SIZE,
-> > 			     "attempting to read the PUBEK"))
-> > -		goto out_buf;
-> > +		goto out_ops;
-> > 
-> > -	out = (struct tpm_readpubek_out *)&tpm_buf.data[10];
-> > +	out = (struct tpm_readpubek_out *)&tpm_buf->data[10];
-> > 	str +=
-> > 	    sprintf(str,
-> > 		    "Algorithm: %4ph\n"
-> > @@ -71,8 +72,6 @@ static ssize_t pubek_show(struct device *dev, struct device_attribute *attr,
-> > 	for (i = 0; i < 256; i += 16)
-> > 		str += sprintf(str, "%16ph\n", &out->modulus[i]);
-> > 
-> > -out_buf:
-> > -	tpm_buf_destroy(&tpm_buf);
-> > out_ops:
-> > 	tpm_put_ops(chip);
-> > 	return str - buf;
-> > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> > index cf64c7385105..e7dc01c68a92 100644
-> > --- a/drivers/char/tpm/tpm1-cmd.c
-> > +++ b/drivers/char/tpm/tpm1-cmd.c
-> > @@ -323,19 +323,18 @@ unsigned long tpm1_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
-> >  */
-> > static int tpm1_startup(struct tpm_chip *chip)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	dev_info(&chip->dev, "starting up the TPM manually\n");
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_STARTUP);
-> > -	if (rc < 0)
-> > -		return rc;
-> > +	dev_info(&chip->dev, "starting up the TPM manually\n");
-> > 
-> > -	tpm_buf_append_u16(&buf, TPM_ST_CLEAR);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_STARTUP);
-> > +	tpm_buf_append_u16(buf, TPM_ST_CLEAR);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to start the TPM");
-> > -	tpm_buf_destroy(&buf);
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, "attempting to start the TPM");
-> > 	return rc;
-> > }
-> > 
-> > @@ -463,18 +462,17 @@ int tpm1_get_timeouts(struct tpm_chip *chip)
-> > int tpm1_pcr_extend(struct tpm_chip *chip, u32 pcr_idx, const u8 *hash,
-> > 		    const char *log_msg)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCR_EXTEND);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -	tpm_buf_append_u32(&buf, pcr_idx);
-> > -	tpm_buf_append(&buf, hash, TPM_DIGEST_SIZE);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_PCR_EXTEND);
-> > +	tpm_buf_append_u32(buf, pcr_idx);
-> > +	tpm_buf_append(buf, hash, TPM_DIGEST_SIZE);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, TPM_DIGEST_SIZE, log_msg);
-> > -	tpm_buf_destroy(&buf);
-> > +	rc = tpm_transmit_cmd(chip, buf, TPM_DIGEST_SIZE, log_msg);
-> > 	return rc;
-> > }
-> > 
-> > @@ -482,31 +480,31 @@ int tpm1_pcr_extend(struct tpm_chip *chip, u32 pcr_idx, const u8 *hash,
-> > ssize_t tpm1_getcap(struct tpm_chip *chip, u32 subcap_id, cap_t *cap,
-> > 		    const char *desc, size_t min_cap_length)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_CAP);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_CAP);
-> > 
-> > 	if (subcap_id == TPM_CAP_VERSION_1_1 ||
-> > 	    subcap_id == TPM_CAP_VERSION_1_2) {
-> > -		tpm_buf_append_u32(&buf, subcap_id);
-> > -		tpm_buf_append_u32(&buf, 0);
-> > +		tpm_buf_append_u32(buf, subcap_id);
-> > +		tpm_buf_append_u32(buf, 0);
-> > 	} else {
-> > 		if (subcap_id == TPM_CAP_FLAG_PERM ||
-> > 		    subcap_id == TPM_CAP_FLAG_VOL)
-> > -			tpm_buf_append_u32(&buf, TPM_CAP_FLAG);
-> > +			tpm_buf_append_u32(buf, TPM_CAP_FLAG);
-> > 		else
-> > -			tpm_buf_append_u32(&buf, TPM_CAP_PROP);
-> > +			tpm_buf_append_u32(buf, TPM_CAP_PROP);
-> > 
-> > -		tpm_buf_append_u32(&buf, 4);
-> > -		tpm_buf_append_u32(&buf, subcap_id);
-> > +		tpm_buf_append_u32(buf, 4);
-> > +		tpm_buf_append_u32(buf, subcap_id);
-> > 	}
-> > -	rc = tpm_transmit_cmd(chip, &buf, min_cap_length, desc);
-> > +	rc = tpm_transmit_cmd(chip, buf, min_cap_length, desc);
-> > 	if (!rc)
-> > -		*cap = *(cap_t *)&buf.data[TPM_HEADER_SIZE + 4];
-> > -	tpm_buf_destroy(&buf);
-> > +		*cap = *(cap_t *)&buf->data[TPM_HEADER_SIZE + 4];
-> > 	return rc;
-> > }
-> > EXPORT_SYMBOL_GPL(tpm1_getcap);
-> > @@ -531,81 +529,72 @@ int tpm1_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
-> > {
-> > 	struct tpm1_get_random_out *out;
-> > 	u32 num_bytes =  min_t(u32, max, TPM_MAX_RNG_DATA);
-> > -	struct tpm_buf buf;
-> > 	u32 total = 0;
-> > 	int retries = 5;
-> > 	u32 recd;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_RANDOM);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_RANDOM);
-> > 
-> > 	do {
-> > -		tpm_buf_append_u32(&buf, num_bytes);
-> > +		tpm_buf_append_u32(buf, num_bytes);
-> > 
-> > -		rc = tpm_transmit_cmd(chip, &buf, sizeof(out->rng_data_len),
-> > +		rc = tpm_transmit_cmd(chip, buf, sizeof(out->rng_data_len),
-> > 				      "attempting get random");
-> > 		if (rc) {
-> > 			if (rc > 0)
-> > 				rc = -EIO;
-> > -			goto out;
-> > +			return rc;
-> > 		}
-> > 
-> > -		out = (struct tpm1_get_random_out *)&buf.data[TPM_HEADER_SIZE];
-> > +		out = (struct tpm1_get_random_out *)&buf->data[TPM_HEADER_SIZE];
-> > 
-> > 		recd = be32_to_cpu(out->rng_data_len);
-> > -		if (recd > num_bytes) {
-> > -			rc = -EFAULT;
-> > -			goto out;
-> > -		}
-> > +		if (recd > num_bytes)
-> > +			return -EFAULT;
-> > +
-> > +		if (buf->length < TPM_HEADER_SIZE +
-> > +				  sizeof(out->rng_data_len) + recd)
-> > +			return -EFAULT;
-> > 
-> > -		if (tpm_buf_length(&buf) < TPM_HEADER_SIZE +
-> > -					   sizeof(out->rng_data_len) + recd) {
-> > -			rc = -EFAULT;
-> > -			goto out;
-> > -		}
-> > 		memcpy(dest, out->rng_data, recd);
-> > 
-> > 		dest += recd;
-> > 		total += recd;
-> > 		num_bytes -= recd;
-> > 
-> > -		tpm_buf_reset(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_RANDOM);
-> > +		tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_RANDOM);
-> > 	} while (retries-- && total < max);
-> > 
-> > 	rc = total ? (int)total : -EIO;
-> > -out:
-> > -	tpm_buf_destroy(&buf);
-> > 	return rc;
-> > }
-> > 
-> > #define TPM_ORD_PCRREAD 21
-> > int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCRREAD);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -	tpm_buf_append_u32(&buf, pcr_idx);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_PCRREAD);
-> > +	tpm_buf_append_u32(buf, pcr_idx);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, TPM_DIGEST_SIZE,
-> > +	rc = tpm_transmit_cmd(chip, buf, TPM_DIGEST_SIZE,
-> > 			      "attempting to read a pcr value");
-> > 	if (rc)
-> > -		goto out;
-> > -
-> > -	if (tpm_buf_length(&buf) < TPM_DIGEST_SIZE) {
-> > -		rc = -EFAULT;
-> > -		goto out;
-> > -	}
-> > +		return rc;
-> > 
-> > -	memcpy(res_buf, &buf.data[TPM_HEADER_SIZE], TPM_DIGEST_SIZE);
-> > +	if (buf->length < TPM_DIGEST_SIZE)
-> > +		return -EFAULT;
-> > 
-> > -out:
-> > -	tpm_buf_destroy(&buf);
-> > +	memcpy(res_buf, &buf->data[TPM_HEADER_SIZE], TPM_DIGEST_SIZE);
-> > 	return rc;
-> > }
-> > 
-> > @@ -619,15 +608,14 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
-> >  */
-> > static int tpm1_continue_selftest(struct tpm_chip *chip)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_CONTINUE_SELFTEST);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, "continue selftest");
-> > -	tpm_buf_destroy(&buf);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_CONTINUE_SELFTEST);
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, "continue selftest");
-> > 	return rc;
-> > }
-> > 
-> > @@ -742,22 +730,23 @@ int tpm1_auto_startup(struct tpm_chip *chip)
-> > int tpm1_pm_suspend(struct tpm_chip *chip, u32 tpm_suspend_pcr)
-> > {
-> > 	u8 dummy_hash[TPM_DIGEST_SIZE] = { 0 };
-> > -	struct tpm_buf buf;
-> > 	unsigned int try;
-> > 	int rc;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > 	/* for buggy tpm, flush pcrs with extend to selected dummy */
-> > 	if (tpm_suspend_pcr)
-> > 		rc = tpm1_pcr_extend(chip, tpm_suspend_pcr, dummy_hash,
-> > 				     "extending dummy pcr before suspend");
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_SAVESTATE);
-> > -	if (rc)
-> > -		return rc;
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_SAVESTATE);
-> > +
-> > 	/* now do the actual savestate */
-> > 	for (try = 0; try < TPM_RETRY; try++) {
-> > -		rc = tpm_transmit_cmd(chip, &buf, 0, NULL);
-> > +		rc = tpm_transmit_cmd(chip, buf, 0, NULL);
-> > 		/*
-> > 		 * If the TPM indicates that it is too busy to respond to
-> > 		 * this command then retry before giving up.  It can take
-> > @@ -772,7 +761,7 @@ int tpm1_pm_suspend(struct tpm_chip *chip, u32 tpm_suspend_pcr)
-> > 			break;
-> > 		tpm_msleep(TPM_TIMEOUT_RETRY);
-> > 
-> > -		tpm_buf_reset(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_SAVESTATE);
-> > +		tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_SAVESTATE);
-> > 	}
-> > 
-> > 	if (rc)
-> > @@ -782,8 +771,6 @@ int tpm1_pm_suspend(struct tpm_chip *chip, u32 tpm_suspend_pcr)
-> > 		dev_warn(&chip->dev, "TPM savestate took %dms\n",
-> > 			 try * TPM_TIMEOUT_RETRY);
-> > 
-> > -	tpm_buf_destroy(&buf);
-> > -
-> > 	return rc;
-> > }
-> > 
-> > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> > index 524d802ede26..56d8bc496cd6 100644
-> > --- a/drivers/char/tpm/tpm2-cmd.c
-> > +++ b/drivers/char/tpm/tpm2-cmd.c
-> > @@ -167,12 +167,15 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
-> > {
-> > 	int i;
-> > 	int rc;
-> > -	struct tpm_buf buf;
-> > 	struct tpm2_pcr_read_out *out;
-> > 	u8 pcr_select[TPM2_PCR_SELECT_MIN] = {0};
-> > 	u16 digest_size;
-> > 	u16 expected_digest_size = 0;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	if (pcr_idx >= TPM2_PLATFORM_PCR)
-> > 		return -EINVAL;
-> > 
-> > @@ -187,36 +190,30 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
-> > 		expected_digest_size = chip->allocated_banks[i].digest_size;
-> > 	}
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
-> > -	if (rc)
-> > -		return rc;
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
-> > 
-> > 	pcr_select[pcr_idx >> 3] = 1 << (pcr_idx & 0x7);
-> > 
-> > -	tpm_buf_append_u32(&buf, 1);
-> > -	tpm_buf_append_u16(&buf, digest->alg_id);
-> > -	tpm_buf_append_u8(&buf, TPM2_PCR_SELECT_MIN);
-> > -	tpm_buf_append(&buf, (const unsigned char *)pcr_select,
-> > +	tpm_buf_append_u32(buf, 1);
-> > +	tpm_buf_append_u16(buf, digest->alg_id);
-> > +	tpm_buf_append_u8(buf, TPM2_PCR_SELECT_MIN);
-> > +	tpm_buf_append(buf, (const unsigned char *)pcr_select,
-> > 		       sizeof(pcr_select));
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to read a pcr value");
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, "attempting to read a pcr value");
-> > 	if (rc)
-> > -		goto out;
-> > +		return rc;
-> > 
-> > -	out = (struct tpm2_pcr_read_out *)&buf.data[TPM_HEADER_SIZE];
-> > +	out = (struct tpm2_pcr_read_out *)&buf->data[TPM_HEADER_SIZE];
-> > 	digest_size = be16_to_cpu(out->digest_size);
-> > 	if (digest_size > sizeof(digest->digest) ||
-> > -	    (!digest_size_ptr && digest_size != expected_digest_size)) {
-> > -		rc = -EINVAL;
-> > -		goto out;
-> > -	}
-> > +	    (!digest_size_ptr && digest_size != expected_digest_size))
-> > +		return rc;
-> > 
-> > 	if (digest_size_ptr)
-> > 		*digest_size_ptr = digest_size;
-> > 
-> > 	memcpy(digest->digest, out->digest, digest_size);
-> > -out:
-> > -	tpm_buf_destroy(&buf);
-> > 	return rc;
-> > }
-> > 
-> > @@ -232,46 +229,42 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
-> > int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
-> > 		    struct tpm_digest *digests)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 	int i;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	if (!disable_pcr_integrity) {
-> > 		rc = tpm2_start_auth_session(chip);
-> > 		if (rc)
-> > 			return rc;
-> > 	}
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
-> > -	if (rc) {
-> > -		if (!disable_pcr_integrity)
-> > -			tpm2_end_auth_session(chip);
-> > -		return rc;
-> > -	}
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
-> > 
-> > 	if (!disable_pcr_integrity) {
-> > -		tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
-> > -		tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
-> > +		tpm_buf_append_name(chip, buf, pcr_idx, NULL);
-> > +		tpm_buf_append_hmac_session(chip, buf, 0, NULL, 0);
-> > 	} else {
-> > -		tpm_buf_append_handle(chip, &buf, pcr_idx);
-> > -		tpm_buf_append_auth(chip, &buf, 0, NULL, 0);
-> > +		tpm_buf_append_handle(chip, buf, pcr_idx);
-> > +		tpm_buf_append_auth(chip, buf, 0, NULL, 0);
-> > 	}
-> > 
-> > -	tpm_buf_append_u32(&buf, chip->nr_allocated_banks);
-> > +	tpm_buf_append_u32(buf, chip->nr_allocated_banks);
-> > 
-> > 	for (i = 0; i < chip->nr_allocated_banks; i++) {
-> > -		tpm_buf_append_u16(&buf, digests[i].alg_id);
-> > -		tpm_buf_append(&buf, (const unsigned char *)&digests[i].digest,
-> > +		tpm_buf_append_u16(buf, digests[i].alg_id);
-> > +		tpm_buf_append(buf, (const unsigned char *)&digests[i].digest,
-> > 			       chip->allocated_banks[i].digest_size);
-> > 	}
-> > 
-> > 	if (!disable_pcr_integrity)
-> > -		tpm_buf_fill_hmac_session(chip, &buf);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting extend a PCR value");
-> > +		tpm_buf_fill_hmac_session(chip, buf);
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, "attempting extend a PCR value");
-> > 	if (!disable_pcr_integrity)
-> > -		rc = tpm_buf_check_hmac_response(chip, &buf, rc);
-> > -
-> > -	tpm_buf_destroy(&buf);
-> > +		rc = tpm_buf_check_hmac_response(chip, buf, rc);
-> > 
-> > 	return rc;
-> > }
-> > @@ -296,7 +289,6 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
-> > {
-> > 	struct tpm2_get_random_out *out;
-> > 	struct tpm_header *head;
-> > -	struct tpm_buf buf;
-> > 	u32 recd;
-> > 	u32 num_bytes = max;
-> > 	int err;
-> > @@ -308,43 +300,41 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
-> > 	if (!num_bytes || max > TPM_MAX_RNG_DATA)
-> > 		return -EINVAL;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	err = tpm2_start_auth_session(chip);
-> > 	if (err)
-> > 		return err;
-> > 
-> > -	err = tpm_buf_init(&buf, 0, 0);
-> > -	if (err) {
-> > -		tpm2_end_auth_session(chip);
-> > -		return err;
-> > -	}
-> > -
-> > 	do {
-> > -		tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_GET_RANDOM);
-> > -		tpm_buf_append_hmac_session_opt(chip, &buf, TPM2_SA_ENCRYPT
-> > +		tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_SESSIONS, TPM2_CC_GET_RANDOM);
-> > +		tpm_buf_append_hmac_session_opt(chip, buf, TPM2_SA_ENCRYPT
-> > 						| TPM2_SA_CONTINUE_SESSION,
-> > 						NULL, 0);
-> > -		tpm_buf_append_u16(&buf, num_bytes);
-> > -		tpm_buf_fill_hmac_session(chip, &buf);
-> > -		err = tpm_transmit_cmd(chip, &buf,
-> > +		tpm_buf_append_u16(buf, num_bytes);
-> > +		tpm_buf_fill_hmac_session(chip, buf);
-> > +		err = tpm_transmit_cmd(chip, buf,
-> > 				       offsetof(struct tpm2_get_random_out,
-> > 						buffer),
-> > 				       "attempting get random");
-> > -		err = tpm_buf_check_hmac_response(chip, &buf, err);
-> > +		err = tpm_buf_check_hmac_response(chip, buf, err);
-> > 		if (err) {
-> > 			if (err > 0)
-> > 				err = -EIO;
-> > 			goto out;
-> > 		}
-> > 
-> > -		head = (struct tpm_header *)buf.data;
-> > +		head = (struct tpm_header *)buf->data;
-> > 		offset = TPM_HEADER_SIZE;
-> > 		/* Skip the parameter size field: */
-> > 		if (be16_to_cpu(head->tag) == TPM2_ST_SESSIONS)
-> > 			offset += 4;
-> > 
-> > -		out = (struct tpm2_get_random_out *)&buf.data[offset];
-> > +		out = (struct tpm2_get_random_out *)&buf->data[offset];
-> > 		recd = min_t(u32, be16_to_cpu(out->size), num_bytes);
-> > -		if (tpm_buf_length(&buf) <
-> > +		if (tpm_buf_length(buf) <
-> > 		    TPM_HEADER_SIZE +
-> > 		    offsetof(struct tpm2_get_random_out, buffer) +
-> > 		    recd) {
-> > @@ -358,11 +348,9 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
-> > 		num_bytes -= recd;
-> > 	} while (retries-- && total < max);
-> > 
-> > -	tpm_buf_destroy(&buf);
-> > -
-> > 	return total ? total : -EIO;
-> > +
-> > out:
-> > -	tpm_buf_destroy(&buf);
-> > 	tpm2_end_auth_session(chip);
-> > 	return err;
-> > }
-> > @@ -374,20 +362,17 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
-> >  */
-> > void tpm2_flush_context(struct tpm_chip *chip, u32 handle)
-> > {
-> > -	struct tpm_buf buf;
-> > -	int rc;
-> > -
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_FLUSH_CONTEXT);
-> > -	if (rc) {
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf) {
-> > 		dev_warn(&chip->dev, "0x%08x was not flushed, out of memory\n",
-> > 			 handle);
-> > 		return;
-> > 	}
-> > 
-> > -	tpm_buf_append_u32(&buf, handle);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_FLUSH_CONTEXT);
-> > +	tpm_buf_append_u32(buf, handle);
-> > 
-> > -	tpm_transmit_cmd(chip, &buf, 0, "flushing context");
-> > -	tpm_buf_destroy(&buf);
-> > +	tpm_transmit_cmd(chip, buf, 0, "flushing context");
-> > }
-> > EXPORT_SYMBOL_GPL(tpm2_flush_context);
-> > 
-> > @@ -414,19 +399,20 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,  u32 *value,
-> > 			const char *desc)
-> > {
-> > 	struct tpm2_get_cap_out *out;
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > -	if (rc)
-> > -		return rc;
-> > -	tpm_buf_append_u32(&buf, TPM2_CAP_TPM_PROPERTIES);
-> > -	tpm_buf_append_u32(&buf, property_id);
-> > -	tpm_buf_append_u32(&buf, 1);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, NULL);
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > +	tpm_buf_append_u32(buf, TPM2_CAP_TPM_PROPERTIES);
-> > +	tpm_buf_append_u32(buf, property_id);
-> > +	tpm_buf_append_u32(buf, 1);
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, NULL);
-> > 	if (!rc) {
-> > 		out = (struct tpm2_get_cap_out *)
-> > -			&buf.data[TPM_HEADER_SIZE];
-> > +			&buf->data[TPM_HEADER_SIZE];
-> > 		/*
-> > 		 * To prevent failing boot up of some systems, Infineon TPM2.0
-> > 		 * returns SUCCESS on TPM2_Startup in field upgrade mode. Also
-> > @@ -438,7 +424,6 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,  u32 *value,
-> > 		else
-> > 			rc = -ENODATA;
-> > 	}
-> > -	tpm_buf_destroy(&buf);
-> > 	return rc;
-> > }
-> > EXPORT_SYMBOL_GPL(tpm2_get_tpm_pt);
-> > @@ -455,15 +440,13 @@ EXPORT_SYMBOL_GPL(tpm2_get_tpm_pt);
-> >  */
-> > void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type)
-> > {
-> > -	struct tpm_buf buf;
-> > -	int rc;
-> > -
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SHUTDOWN);
-> > -	if (rc)
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > 		return;
-> > -	tpm_buf_append_u16(&buf, shutdown_type);
-> > -	tpm_transmit_cmd(chip, &buf, 0, "stopping the TPM");
-> > -	tpm_buf_destroy(&buf);
-> > +
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_SHUTDOWN);
-> > +	tpm_buf_append_u16(buf, shutdown_type);
-> > +	tpm_transmit_cmd(chip, buf, 0, "stopping the TPM");
-> > }
-> > 
-> > /**
-> > @@ -481,19 +464,18 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type)
-> >  */
-> > static int tpm2_do_selftest(struct tpm_chip *chip)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int full;
-> > 	int rc;
-> > 
-> > -	for (full = 0; full < 2; full++) {
-> > -		rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SELF_TEST);
-> > -		if (rc)
-> > -			return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -		tpm_buf_append_u8(&buf, full);
-> > -		rc = tpm_transmit_cmd(chip, &buf, 0,
-> > +	for (full = 0; full < 2; full++) {
-> > +		tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_SELF_TEST);
-> > +		tpm_buf_append_u8(buf, full);
-> > +		rc = tpm_transmit_cmd(chip, buf, 0,
-> > 				      "attempting the self test");
-> > -		tpm_buf_destroy(&buf);
-> > 
-> > 		if (rc == TPM2_RC_TESTING)
-> > 			rc = TPM2_RC_SUCCESS;
-> > @@ -519,23 +501,23 @@ static int tpm2_do_selftest(struct tpm_chip *chip)
-> > int tpm2_probe(struct tpm_chip *chip)
-> > {
-> > 	struct tpm_header *out;
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > -	if (rc)
-> > -		return rc;
-> > -	tpm_buf_append_u32(&buf, TPM2_CAP_TPM_PROPERTIES);
-> > -	tpm_buf_append_u32(&buf, TPM_PT_TOTAL_COMMANDS);
-> > -	tpm_buf_append_u32(&buf, 1);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, NULL);
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > +	tpm_buf_append_u32(buf, TPM2_CAP_TPM_PROPERTIES);
-> > +	tpm_buf_append_u32(buf, TPM_PT_TOTAL_COMMANDS);
-> > +	tpm_buf_append_u32(buf, 1);
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, NULL);
-> > 	/* We ignore TPM return codes on purpose. */
-> > 	if (rc >=  0) {
-> > -		out = (struct tpm_header *)buf.data;
-> > +		out = (struct tpm_header *)buf->data;
-> > 		if (be16_to_cpu(out->tag) == TPM2_ST_NO_SESSIONS)
-> > 			chip->flags |= TPM_CHIP_FLAG_TPM2;
-> > 	}
-> > -	tpm_buf_destroy(&buf);
-> > 	return 0;
-> > }
-> > EXPORT_SYMBOL_GPL(tpm2_probe);
-> > @@ -575,7 +557,6 @@ struct tpm2_pcr_selection {
-> > ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
-> > {
-> > 	struct tpm2_pcr_selection pcr_selection;
-> > -	struct tpm_buf buf;
-> > 	void *marker;
-> > 	void *end;
-> > 	void *pcr_select_offset;
-> > @@ -587,41 +568,38 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
-> > 	int rc;
-> > 	int i = 0;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -	tpm_buf_append_u32(&buf, TPM2_CAP_PCRS);
-> > -	tpm_buf_append_u32(&buf, 0);
-> > -	tpm_buf_append_u32(&buf, 1);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > +	tpm_buf_append_u32(buf, TPM2_CAP_PCRS);
-> > +	tpm_buf_append_u32(buf, 0);
-> > +	tpm_buf_append_u32(buf, 1);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, 9, "get tpm pcr allocation");
-> > +	rc = tpm_transmit_cmd(chip, buf, 9, "get tpm pcr allocation");
-> > 	if (rc)
-> > -		goto out;
-> > +		return rc;
-> > 
-> > 	nr_possible_banks = be32_to_cpup(
-> > -		(__be32 *)&buf.data[TPM_HEADER_SIZE + 5]);
-> > +		(__be32 *)&buf->data[TPM_HEADER_SIZE + 5]);
-> > 
-> > 	chip->allocated_banks = kcalloc(nr_possible_banks,
-> > 					sizeof(*chip->allocated_banks),
-> > 					GFP_KERNEL);
-> > -	if (!chip->allocated_banks) {
-> > -		rc = -ENOMEM;
-> > -		goto out;
-> > -	}
-> > +	if (!chip->allocated_banks)
-> > +		return -ENOMEM;
-> > 
-> > -	marker = &buf.data[TPM_HEADER_SIZE + 9];
-> > +	marker = &buf->data[TPM_HEADER_SIZE + 9];
-> > 
-> > -	rsp_len = be32_to_cpup((__be32 *)&buf.data[2]);
-> > -	end = &buf.data[rsp_len];
-> > +	rsp_len = be32_to_cpup((__be32 *)&buf->data[2]);
-> > +	end = &buf->data[rsp_len];
-> > 
-> > 	for (i = 0; i < nr_possible_banks; i++) {
-> > 		pcr_select_offset = marker +
-> > 			offsetof(struct tpm2_pcr_selection, size_of_select);
-> > -		if (pcr_select_offset >= end) {
-> > -			rc = -EFAULT;
-> > -			break;
-> > -		}
-> > +		if (pcr_select_offset >= end)
-> > +			return -EFAULT;
-> > 
-> > 		memcpy(&pcr_selection, marker, sizeof(pcr_selection));
-> > 		hash_alg = be16_to_cpu(pcr_selection.hash_alg);
-> > @@ -633,7 +611,7 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
-> > 
-> > 			rc = tpm2_init_bank_info(chip, nr_alloc_banks);
-> > 			if (rc < 0)
-> > -				break;
-> > +				return rc;
-> > 
-> > 			nr_alloc_banks++;
-> > 		}
-> > @@ -645,21 +623,21 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
-> > 	}
-> > 
-> > 	chip->nr_allocated_banks = nr_alloc_banks;
-> > -out:
-> > -	tpm_buf_destroy(&buf);
-> > -
-> > -	return rc;
-> > +	return 0;
-> > }
-> > 
-> > int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
-> > {
-> > -	struct tpm_buf buf;
-> > 	u32 nr_commands;
-> > 	__be32 *attrs;
-> > 	u32 cc;
-> > 	int i;
-> > 	int rc;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	rc = tpm2_get_tpm_pt(chip, TPM_PT_TOTAL_COMMANDS, &nr_commands, NULL);
-> > 	if (rc)
-> > 		goto out;
-> > @@ -676,30 +654,24 @@ int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
-> > 		goto out;
-> > 	}
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > -	if (rc)
-> > -		goto out;
-> > -
-> > -	tpm_buf_append_u32(&buf, TPM2_CAP_COMMANDS);
-> > -	tpm_buf_append_u32(&buf, TPM2_CC_FIRST);
-> > -	tpm_buf_append_u32(&buf, nr_commands);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
-> > +	tpm_buf_append_u32(buf, TPM2_CAP_COMMANDS);
-> > +	tpm_buf_append_u32(buf, TPM2_CC_FIRST);
-> > +	tpm_buf_append_u32(buf, nr_commands);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, 9 + 4 * nr_commands, NULL);
-> > -	if (rc) {
-> > -		tpm_buf_destroy(&buf);
-> > +	rc = tpm_transmit_cmd(chip, buf, 9 + 4 * nr_commands, NULL);
-> > +	if (rc)
-> > 		goto out;
-> > -	}
-> > 
-> > 	if (nr_commands !=
-> > -	    be32_to_cpup((__be32 *)&buf.data[TPM_HEADER_SIZE + 5])) {
-> > +	    be32_to_cpup((__be32 *)&buf->data[TPM_HEADER_SIZE + 5])) {
-> > 		rc = -EFAULT;
-> > -		tpm_buf_destroy(&buf);
-> > 		goto out;
-> > 	}
-> > 
-> > 	chip->nr_commands = nr_commands;
-> > 
-> > -	attrs = (__be32 *)&buf.data[TPM_HEADER_SIZE + 9];
-> > +	attrs = (__be32 *)&buf->data[TPM_HEADER_SIZE + 9];
-> > 	for (i = 0; i < nr_commands; i++, attrs++) {
-> > 		chip->cc_attrs_tbl[i] = be32_to_cpup(attrs);
-> > 		cc = chip->cc_attrs_tbl[i] & 0xFFFF;
-> > @@ -711,8 +683,6 @@ int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
-> > 		}
-> > 	}
-> > 
-> > -	tpm_buf_destroy(&buf);
-> > -
-> > out:
-> > 	if (rc > 0)
-> > 		rc = -ENODEV;
-> > @@ -733,20 +703,16 @@ EXPORT_SYMBOL_GPL(tpm2_get_cc_attrs_tbl);
-> > 
-> > static int tpm2_startup(struct tpm_chip *chip)
-> > {
-> > -	struct tpm_buf buf;
-> > -	int rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > 	dev_info(&chip->dev, "starting up the TPM manually\n");
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_STARTUP);
-> > -	if (rc < 0)
-> > -		return rc;
-> > -
-> > -	tpm_buf_append_u16(&buf, TPM2_SU_CLEAR);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to start the TPM");
-> > -	tpm_buf_destroy(&buf);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_STARTUP);
-> > +	tpm_buf_append_u16(buf, TPM2_SU_CLEAR);
-> > 
-> > -	return rc;
-> > +	return tpm_transmit_cmd(chip, buf, 0, "attempting to start the TPM");
-> > }
-> > 
-> > /**
-> > diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-> > index 6d03c224e6b2..b2c0c2143adc 100644
-> > --- a/drivers/char/tpm/tpm2-sessions.c
-> > +++ b/drivers/char/tpm/tpm2-sessions.c
-> > @@ -182,19 +182,17 @@ static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
-> > 
-> > static int tpm2_read_public(struct tpm_chip *chip, u32 handle, char *name)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -	tpm_buf_append_u32(&buf, handle);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, "read public");
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
-> > +	tpm_buf_append_u32(buf, handle);
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, "read public");
-> > 	if (rc == TPM2_RC_SUCCESS)
-> > -		rc = tpm2_parse_read_public(name, &buf);
-> > -
-> > -	tpm_buf_destroy(&buf);
-> > +		rc = tpm2_parse_read_public(name, buf);
-> > 
-> > 	return rc;
-> > }
-> > @@ -925,7 +923,6 @@ static int tpm2_load_null(struct tpm_chip *chip, u32 *null_key)
-> > int tpm2_start_auth_session(struct tpm_chip *chip)
-> > {
-> > 	struct tpm2_auth *auth;
-> > -	struct tpm_buf buf;
-> > 	u32 null_key;
-> > 	int rc;
-> > 
-> > @@ -934,6 +931,10 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
-> > 		return 0;
-> > 	}
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	auth = kzalloc(sizeof(*auth), GFP_KERNEL);
-> > 	if (!auth)
-> > 		return -ENOMEM;
-> > @@ -944,41 +945,36 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
-> > 
-> > 	auth->session = TPM_HEADER_SIZE;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_START_AUTH_SESS);
-> > -	if (rc)
-> > -		goto out;
-> > -
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_START_AUTH_SESS);
-> > 	/* salt key handle */
-> > -	tpm_buf_append_u32(&buf, null_key);
-> > +	tpm_buf_append_u32(buf, null_key);
-> > 	/* bind key handle */
-> > -	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-> > +	tpm_buf_append_u32(buf, TPM2_RH_NULL);
-> > 	/* nonce caller */
-> > 	get_random_bytes(auth->our_nonce, sizeof(auth->our_nonce));
-> > -	tpm_buf_append_u16(&buf, sizeof(auth->our_nonce));
-> > -	tpm_buf_append(&buf, auth->our_nonce, sizeof(auth->our_nonce));
-> > +	tpm_buf_append_u16(buf, sizeof(auth->our_nonce));
-> > +	tpm_buf_append(buf, auth->our_nonce, sizeof(auth->our_nonce));
-> > 
-> > 	/* append encrypted salt and squirrel away unencrypted in auth */
-> > -	tpm_buf_append_salt(&buf, chip, auth);
-> > +	tpm_buf_append_salt(buf, chip, auth);
-> > 	/* session type (HMAC, audit or policy) */
-> > -	tpm_buf_append_u8(&buf, TPM2_SE_HMAC);
-> > +	tpm_buf_append_u8(buf, TPM2_SE_HMAC);
-> > 
-> > 	/* symmetric encryption parameters */
-> > 	/* symmetric algorithm */
-> > -	tpm_buf_append_u16(&buf, TPM_ALG_AES);
-> > +	tpm_buf_append_u16(buf, TPM_ALG_AES);
-> > 	/* bits for symmetric algorithm */
-> > -	tpm_buf_append_u16(&buf, AES_KEY_BITS);
-> > +	tpm_buf_append_u16(buf, AES_KEY_BITS);
-> > 	/* symmetric algorithm mode (must be CFB) */
-> > -	tpm_buf_append_u16(&buf, TPM_ALG_CFB);
-> > +	tpm_buf_append_u16(buf, TPM_ALG_CFB);
-> > 	/* hash algorithm for session */
-> > -	tpm_buf_append_u16(&buf, TPM_ALG_SHA256);
-> > +	tpm_buf_append_u16(buf, TPM_ALG_SHA256);
-> > 
-> > -	rc = tpm_ret_to_err(tpm_transmit_cmd(chip, &buf, 0, "StartAuthSession"));
-> > +	rc = tpm_ret_to_err(tpm_transmit_cmd(chip, buf, 0, "StartAuthSession"));
-> > 	tpm2_flush_context(chip, null_key);
-> > 
-> > 	if (rc == TPM2_RC_SUCCESS)
-> > -		rc = tpm2_parse_start_auth_session(auth, &buf);
-> > -
-> > -	tpm_buf_destroy(&buf);
-> > +		rc = tpm2_parse_start_auth_session(auth, buf);
-> > 
-> > 	if (rc == TPM2_RC_SUCCESS) {
-> > 		chip->auth = auth;
-> > @@ -1200,18 +1196,17 @@ static int tpm2_create_primary(struct tpm_chip *chip, u32 hierarchy,
-> > 			       u32 *handle, u8 *name)
-> > {
-> > 	int rc;
-> > -	struct tpm_buf buf;
-> > -	struct tpm_buf template;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE_PRIMARY);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > 
-> > -	rc = tpm_buf_init_sized(&template);
-> > -	if (rc) {
-> > -		tpm_buf_destroy(&buf);
-> > -		return rc;
-> > -	}
-> > +	struct tpm_buf *template __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!template)
-> > +		return -ENOMEM;
-> > +
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_SESSIONS, TPM2_CC_CREATE_PRIMARY);
-> > +	tpm_buf_reset_sized(template, PAGE_SIZE);
-> > 
-> > 	/*
-> > 	 * create the template.  Note: in order for userspace to
-> > @@ -1223,75 +1218,72 @@ static int tpm2_create_primary(struct tpm_chip *chip, u32 hierarchy,
-> > 	 */
-> > 
-> > 	/* key type */
-> > -	tpm_buf_append_u16(&template, TPM_ALG_ECC);
-> > +	tpm_buf_append_u16(template, TPM_ALG_ECC);
-> > 
-> > 	/* name algorithm */
-> > -	tpm_buf_append_u16(&template, TPM_ALG_SHA256);
-> > +	tpm_buf_append_u16(template, TPM_ALG_SHA256);
-> > 
-> > 	/* object properties */
-> > -	tpm_buf_append_u32(&template, TPM2_OA_NULL_KEY);
-> > +	tpm_buf_append_u32(template, TPM2_OA_NULL_KEY);
-> > 
-> > 	/* sauth policy (empty) */
-> > -	tpm_buf_append_u16(&template, 0);
-> > +	tpm_buf_append_u16(template, 0);
-> > 
-> > 	/* BEGIN parameters: key specific; for ECC*/
-> > 
-> > 	/* symmetric algorithm */
-> > -	tpm_buf_append_u16(&template, TPM_ALG_AES);
-> > +	tpm_buf_append_u16(template, TPM_ALG_AES);
-> > 
-> > 	/* bits for symmetric algorithm */
-> > -	tpm_buf_append_u16(&template, AES_KEY_BITS);
-> > +	tpm_buf_append_u16(template, AES_KEY_BITS);
-> > 
-> > 	/* algorithm mode (must be CFB) */
-> > -	tpm_buf_append_u16(&template, TPM_ALG_CFB);
-> > +	tpm_buf_append_u16(template, TPM_ALG_CFB);
-> > 
-> > 	/* scheme (NULL means any scheme) */
-> > -	tpm_buf_append_u16(&template, TPM_ALG_NULL);
-> > +	tpm_buf_append_u16(template, TPM_ALG_NULL);
-> > 
-> > 	/* ECC Curve ID */
-> > -	tpm_buf_append_u16(&template, TPM2_ECC_NIST_P256);
-> > +	tpm_buf_append_u16(template, TPM2_ECC_NIST_P256);
-> > 
-> > 	/* KDF Scheme */
-> > -	tpm_buf_append_u16(&template, TPM_ALG_NULL);
-> > +	tpm_buf_append_u16(template, TPM_ALG_NULL);
-> > 
-> > 	/* unique: key specific; for ECC it is two zero size points */
-> > -	tpm_buf_append_u16(&template, 0);
-> > -	tpm_buf_append_u16(&template, 0);
-> > +	tpm_buf_append_u16(template, 0);
-> > +	tpm_buf_append_u16(template, 0);
-> > 
-> > 	/* END parameters */
-> > 
-> > 	/* primary handle */
-> > -	tpm_buf_append_u32(&buf, hierarchy);
-> > -	tpm_buf_append_empty_auth(&buf, TPM2_RS_PW);
-> > +	tpm_buf_append_u32(buf, hierarchy);
-> > +	tpm_buf_append_empty_auth(buf, TPM2_RS_PW);
-> > 
-> > 	/* sensitive create size is 4 for two empty buffers */
-> > -	tpm_buf_append_u16(&buf, 4);
-> > +	tpm_buf_append_u16(buf, 4);
-> > 
-> > 	/* sensitive create auth data (empty) */
-> > -	tpm_buf_append_u16(&buf, 0);
-> > +	tpm_buf_append_u16(buf, 0);
-> > 
-> > 	/* sensitive create sensitive data (empty) */
-> > -	tpm_buf_append_u16(&buf, 0);
-> > +	tpm_buf_append_u16(buf, 0);
-> > 
-> > 	/* the public template */
-> > -	tpm_buf_append(&buf, template.data, template.length);
-> > -	tpm_buf_destroy(&template);
-> > +	tpm_buf_append(buf, template->data, template->length);
-> > 
-> > 	/* outside info (empty) */
-> > -	tpm_buf_append_u16(&buf, 0);
-> > +	tpm_buf_append_u16(buf, 0);
-> > 
-> > 	/* creation PCR (none) */
-> > -	tpm_buf_append_u32(&buf, 0);
-> > +	tpm_buf_append_u32(buf, 0);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0,
-> > +	rc = tpm_transmit_cmd(chip, buf, 0,
-> > 			      "attempting to create NULL primary");
-> > 
-> > 	if (rc == TPM2_RC_SUCCESS)
-> > -		rc = tpm2_parse_create_primary(chip, &buf, handle, hierarchy,
-> > +		rc = tpm2_parse_create_primary(chip, buf, handle, hierarchy,
-> > 					       name);
-> > 
-> > -	tpm_buf_destroy(&buf);
-> > -
-> > 	return rc;
-> > }
-> > 
-> > diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-> > index 60354cd53b5c..c7409c4c78d0 100644
-> > --- a/drivers/char/tpm/tpm2-space.c
-> > +++ b/drivers/char/tpm/tpm2-space.c
-> > @@ -71,24 +71,24 @@ void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
-> > int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
-> > 		      unsigned int *offset, u32 *handle)
-> > {
-> > -	struct tpm_buf tbuf;
-> > 	struct tpm2_context *ctx;
-> > 	unsigned int body_size;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&tbuf, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_LOAD);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *tbuf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!tbuf)
-> > +		return -ENOMEM;
-> > +
-> > +	tpm_buf_reset(tbuf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_LOAD);
-> > 
-> > 	ctx = (struct tpm2_context *)&buf[*offset];
-> > 	body_size = sizeof(*ctx) + be16_to_cpu(ctx->blob_size);
-> > -	tpm_buf_append(&tbuf, &buf[*offset], body_size);
-> > +	tpm_buf_append(tbuf, &buf[*offset], body_size);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &tbuf, 4, NULL);
-> > +	rc = tpm_transmit_cmd(chip, tbuf, 4, NULL);
-> > 	if (rc < 0) {
-> > 		dev_warn(&chip->dev, "%s: failed with a system error %d\n",
-> > 			 __func__, rc);
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -EFAULT;
-> > 	} else if (tpm2_rc_value(rc) == TPM2_RC_HANDLE ||
-> > 		   rc == TPM2_RC_REFERENCE_H0) {
-> > @@ -103,64 +103,54 @@ int tpm2_load_context(struct tpm_chip *chip, u8 *buf,
-> > 		 * flushed outside the space
-> > 		 */
-> > 		*handle = 0;
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -ENOENT;
-> > 	} else if (tpm2_rc_value(rc) == TPM2_RC_INTEGRITY) {
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -EINVAL;
-> > 	} else if (rc > 0) {
-> > 		dev_warn(&chip->dev, "%s: failed with a TPM error 0x%04X\n",
-> > 			 __func__, rc);
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -EFAULT;
-> > 	}
-> > 
-> > -	*handle = be32_to_cpup((__be32 *)&tbuf.data[TPM_HEADER_SIZE]);
-> > +	*handle = be32_to_cpup((__be32 *)&tbuf->data[TPM_HEADER_SIZE]);
-> > 	*offset += body_size;
-> > -
-> > -	tpm_buf_destroy(&tbuf);
-> > 	return 0;
-> > }
-> > 
-> > int tpm2_save_context(struct tpm_chip *chip, u32 handle, u8 *buf,
-> > 		      unsigned int buf_size, unsigned int *offset)
-> > {
-> > -	struct tpm_buf tbuf;
-> > 	unsigned int body_size;
-> > 	int rc;
-> > 
-> > -	rc = tpm_buf_init(&tbuf, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_SAVE);
-> > -	if (rc)
-> > -		return rc;
-> > +	struct tpm_buf *tbuf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!tbuf)
-> > +		return -ENOMEM;
-> > 
-> > -	tpm_buf_append_u32(&tbuf, handle);
-> > +	tpm_buf_reset(tbuf, PAGE_SIZE, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_SAVE);
-> > +	tpm_buf_append_u32(tbuf, handle);
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &tbuf, 0, NULL);
-> > +	rc = tpm_transmit_cmd(chip, tbuf, 0, NULL);
-> > 	if (rc < 0) {
-> > 		dev_warn(&chip->dev, "%s: failed with a system error %d\n",
-> > 			 __func__, rc);
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -EFAULT;
-> > 	} else if (tpm2_rc_value(rc) == TPM2_RC_REFERENCE_H0) {
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -ENOENT;
-> > 	} else if (rc) {
-> > 		dev_warn(&chip->dev, "%s: failed with a TPM error 0x%04X\n",
-> > 			 __func__, rc);
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -EFAULT;
-> > 	}
-> > 
-> > -	body_size = tpm_buf_length(&tbuf) - TPM_HEADER_SIZE;
-> > +	body_size = tpm_buf_length(tbuf) - TPM_HEADER_SIZE;
-> > 	if ((*offset + body_size) > buf_size) {
-> > 		dev_warn(&chip->dev, "%s: out of backing storage\n", __func__);
-> > -		tpm_buf_destroy(&tbuf);
-> > 		return -ENOMEM;
-> > 	}
-> > 
-> > -	memcpy(&buf[*offset], &tbuf.data[TPM_HEADER_SIZE], body_size);
-> > +	memcpy(&buf[*offset], &tbuf->data[TPM_HEADER_SIZE], body_size);
-> > 	*offset += body_size;
-> > -	tpm_buf_destroy(&tbuf);
-> > 	return 0;
-> > }
-> > 
-> > diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-> > index 0818bb517805..7ebe55825215 100644
-> > --- a/drivers/char/tpm/tpm_vtpm_proxy.c
-> > +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
-> > @@ -395,40 +395,35 @@ static bool vtpm_proxy_tpm_req_canceled(struct tpm_chip  *chip, u8 status)
-> > 
-> > static int vtpm_proxy_request_locality(struct tpm_chip *chip, int locality)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 	const struct tpm_header *header;
-> > 	struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > -		rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS,
-> > -				  TPM2_CC_SET_LOCALITY);
-> > +		tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_SESSIONS, TPM2_CC_SET_LOCALITY);
-> > 	else
-> > -		rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND,
-> > -				  TPM_ORD_SET_LOCALITY);
-> > -	if (rc)
-> > -		return rc;
-> > -	tpm_buf_append_u8(&buf, locality);
-> > +		tpm_buf_reset(buf, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_SET_LOCALITY);
-> > +
-> > +	tpm_buf_append_u8(buf, locality);
-> > 
-> > 	proxy_dev->state |= STATE_DRIVER_COMMAND;
-> > 
-> > -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to set locality");
-> > +	rc = tpm_transmit_cmd(chip, buf, 0, "attempting to set locality");
-> > 
-> > 	proxy_dev->state &= ~STATE_DRIVER_COMMAND;
-> > 
-> > -	if (rc < 0) {
-> > -		locality = rc;
-> > -		goto out;
-> > -	}
-> > +	if (rc < 0)
-> > +		return rc;
-> > 
-> > -	header = (const struct tpm_header *)buf.data;
-> > +	header = (const struct tpm_header *)buf->data;
-> > 	rc = be32_to_cpu(header->return_code);
-> > 	if (rc)
-> > 		locality = -1;
-> > 
-> > -out:
-> > -	tpm_buf_destroy(&buf);
-> > -
-> > 	return locality;
-> > }
-> > 
-> > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > index b0e9eb5ef022..1d8b016dd6bc 100644
-> > --- a/include/linux/tpm.h
-> > +++ b/include/linux/tpm.h
-> > @@ -375,13 +375,15 @@ enum tpm_buf_flags {
-> > };
-> > 
-> > /*
-> > - * A string buffer type for constructing TPM commands.
-> > + * A buffer for constructing and parsing TPM commands, responses and sized
-> > + * (TPM2B) buffers.
-> >  */
-> > struct tpm_buf {
-> > -	u32 flags;
-> > -	u32 length;
-> > -	u8 *data;
-> > +	u8 flags;
-> > 	u8 handles;
-> > +	u16 length;
-> > +	u16 capacity;
-> > +	u8 data[];
-> > };
-> > 
-> > enum tpm2_object_attributes {
-> > @@ -412,11 +414,8 @@ struct tpm2_hash {
-> > 	unsigned int tpm_id;
-> > };
-> > 
-> > -int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
-> > -void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
-> > -int tpm_buf_init_sized(struct tpm_buf *buf);
-> > -void tpm_buf_reset_sized(struct tpm_buf *buf);
-> > -void tpm_buf_destroy(struct tpm_buf *buf);
-> > +void tpm_buf_reset(struct tpm_buf *buf, u16 buf_size, u16 tag, u32 ordinal);
-> > +void tpm_buf_reset_sized(struct tpm_buf *buf, u16 buf_size);
-> > u32 tpm_buf_length(struct tpm_buf *buf);
-> > void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length);
-> > void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
-> > diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-> > index 636acb66a4f6..3b710daff084 100644
-> > --- a/security/keys/trusted-keys/trusted_tpm1.c
-> > +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> > @@ -312,21 +312,23 @@ static int TSS_checkhmac2(unsigned char *buffer,
-> >  */
-> > static int trusted_tpm_send(unsigned char *cmd, size_t buflen)
-> > {
-> > -	struct tpm_buf buf;
-> > 	int rc;
-> > 
-> > 	if (!chip)
-> > 		return -ENODEV;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	rc = tpm_try_get_ops(chip);
-> > 	if (rc)
-> > 		return rc;
-> > 
-> > -	buf.flags = 0;
-> > -	buf.length = buflen;
-> > -	buf.data = cmd;
-> > +	tpm_buf_append(buf, cmd, buflen);
-> > +
-> > 	dump_tpm_buf(cmd);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 4, "sending data");
-> > +	rc = tpm_transmit_cmd(chip, buf, 4, "sending data");
-> > 	dump_tpm_buf(cmd);
-> > 
-> > 	if (rc > 0)
-> > @@ -368,7 +370,7 @@ static int osap(struct tpm_buf *tb, struct osapsess *s,
-> > 	if (ret != TPM_NONCE_SIZE)
-> > 		return -EIO;
-> > 
-> > -	tpm_buf_reset(tb, TPM_TAG_RQU_COMMAND, TPM_ORD_OSAP);
-> > +	tpm_buf_reset(tb, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_OSAP);
-> > 	tpm_buf_append_u16(tb, type);
-> > 	tpm_buf_append_u32(tb, handle);
-> > 	tpm_buf_append(tb, ononce, TPM_NONCE_SIZE);
-> > @@ -396,7 +398,7 @@ static int oiap(struct tpm_buf *tb, uint32_t *handle, unsigned char *nonce)
-> > 	if (!chip)
-> > 		return -ENODEV;
-> > 
-> > -	tpm_buf_reset(tb, TPM_TAG_RQU_COMMAND, TPM_ORD_OIAP);
-> > +	tpm_buf_reset(tb, PAGE_SIZE, TPM_TAG_RQU_COMMAND, TPM_ORD_OIAP);
-> > 	ret = trusted_tpm_send(tb->data, tb->length);
-> > 	if (ret < 0)
-> > 		return ret;
-> > @@ -494,7 +496,7 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
-> > 		goto out;
-> > 
-> > 	/* build and send the TPM request packet */
-> > -	tpm_buf_reset(tb, TPM_TAG_RQU_AUTH1_COMMAND, TPM_ORD_SEAL);
-> > +	tpm_buf_reset(tb, PAGE_SIZE, TPM_TAG_RQU_AUTH1_COMMAND, TPM_ORD_SEAL);
-> > 	tpm_buf_append_u32(tb, keyhandle);
-> > 	tpm_buf_append(tb, td->encauth, SHA1_DIGEST_SIZE);
-> > 	tpm_buf_append_u32(tb, pcrinfosize);
-> > @@ -585,7 +587,7 @@ static int tpm_unseal(struct tpm_buf *tb,
-> > 		return ret;
-> > 
-> > 	/* build and send TPM request packet */
-> > -	tpm_buf_reset(tb, TPM_TAG_RQU_AUTH2_COMMAND, TPM_ORD_UNSEAL);
-> > +	tpm_buf_reset(tb, PAGE_SIZE, TPM_TAG_RQU_AUTH2_COMMAND, TPM_ORD_UNSEAL);
-> > 	tpm_buf_append_u32(tb, keyhandle);
-> > 	tpm_buf_append(tb, blob, bloblen);
-> > 	tpm_buf_append_u32(tb, authhandle1);
-> > @@ -624,23 +626,21 @@ static int tpm_unseal(struct tpm_buf *tb,
-> > static int key_seal(struct trusted_key_payload *p,
-> > 		    struct trusted_key_options *o)
-> > {
-> > -	struct tpm_buf tb;
-> > 	int ret;
-> > 
-> > -	ret = tpm_buf_init(&tb, 0, 0);
-> > -	if (ret)
-> > -		return ret;
-> > +	struct tpm_buf *tb __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!tb)
-> > +		return -ENOMEM;
-> > 
-> > 	/* include migratable flag at end of sealed key */
-> > 	p->key[p->key_len] = p->migratable;
-> > 
-> > -	ret = tpm_seal(&tb, o->keytype, o->keyhandle, o->keyauth,
-> > +	ret = tpm_seal(tb, o->keytype, o->keyhandle, o->keyauth,
-> > 		       p->key, p->key_len + 1, p->blob, &p->blob_len,
-> > 		       o->blobauth, o->pcrinfo, o->pcrinfo_len);
-> > 	if (ret < 0)
-> > 		pr_info("srkseal failed (%d)\n", ret);
-> > 
-> > -	tpm_buf_destroy(&tb);
-> > 	return ret;
-> > }
-> > 
-> > @@ -650,14 +650,13 @@ static int key_seal(struct trusted_key_payload *p,
-> > static int key_unseal(struct trusted_key_payload *p,
-> > 		      struct trusted_key_options *o)
-> > {
-> > -	struct tpm_buf tb;
-> > 	int ret;
-> > 
-> > -	ret = tpm_buf_init(&tb, 0, 0);
-> > -	if (ret)
-> > -		return ret;
-> > +	struct tpm_buf *tb __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!tb)
-> > +		return -ENOMEM;
-> > 
-> > -	ret = tpm_unseal(&tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
-> > +	ret = tpm_unseal(tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
-> > 			 o->blobauth, p->key, &p->key_len);
-> > 	if (ret < 0)
-> > 		pr_info("srkunseal failed (%d)\n", ret);
-> > @@ -665,7 +664,6 @@ static int key_unseal(struct trusted_key_payload *p,
-> > 		/* pull migratable flag out of sealed key */
-> > 		p->migratable = p->key[--p->key_len];
-> > 
-> > -	tpm_buf_destroy(&tb);
-> > 	return ret;
-> > }
-> > 
-> > diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> > index 024be262702f..472344c788ec 100644
-> > --- a/security/keys/trusted-keys/trusted_tpm2.c
-> > +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> > @@ -242,13 +242,20 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
-> > 		      struct trusted_key_options *options)
-> > {
-> > 	off_t offset = TPM_HEADER_SIZE;
-> > -	struct tpm_buf buf, sized;
-> > 	int blob_len = 0;
-> > 	u32 hash;
-> > 	u32 flags;
-> > 	int i;
-> > 	int rc;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > +	struct tpm_buf *sized __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!sized)
-> > +		return -ENOMEM;
-> > +
-> > 	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
-> > 		if (options->hash == tpm2_hash_map[i].crypto_id) {
-> > 			hash = tpm2_hash_map[i].tpm_id;
-> > @@ -270,89 +277,76 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
-> > 	if (rc)
-> > 		goto out_put;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
-> > -	if (rc) {
-> > -		tpm2_end_auth_session(chip);
-> > -		goto out_put;
-> > -	}
-> > -
-> > -	rc = tpm_buf_init_sized(&sized);
-> > -	if (rc) {
-> > -		tpm_buf_destroy(&buf);
-> > -		tpm2_end_auth_session(chip);
-> > -		goto out_put;
-> > -	}
-> > -
-> > -	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
-> > -	tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_DECRYPT,
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
-> > +	tpm_buf_reset_sized(sized, PAGE_SIZE);
-> > +	tpm_buf_append_name(chip, buf, options->keyhandle, NULL);
-> > +	tpm_buf_append_hmac_session(chip, buf, TPM2_SA_DECRYPT,
-> > 				    options->keyauth, TPM_DIGEST_SIZE);
-> > 
-> > 	/* sensitive */
-> > -	tpm_buf_append_u16(&sized, options->blobauth_len);
-> > +	tpm_buf_append_u16(sized, options->blobauth_len);
-> > 
-> > 	if (options->blobauth_len)
-> > -		tpm_buf_append(&sized, options->blobauth, options->blobauth_len);
-> > +		tpm_buf_append(sized, options->blobauth, options->blobauth_len);
-> > 
-> > -	tpm_buf_append_u16(&sized, payload->key_len);
-> > -	tpm_buf_append(&sized, payload->key, payload->key_len);
-> > -	tpm_buf_append(&buf, sized.data, sized.length);
-> > +	tpm_buf_append_u16(sized, payload->key_len);
-> > +	tpm_buf_append(sized, payload->key, payload->key_len);
-> > +	tpm_buf_append(buf, sized->data, sized->length);
-> > 
-> > 	/* public */
-> > -	tpm_buf_reset_sized(&sized);
-> > -	tpm_buf_append_u16(&sized, TPM_ALG_KEYEDHASH);
-> > -	tpm_buf_append_u16(&sized, hash);
-> > +	tpm_buf_reset_sized(sized, PAGE_SIZE);
-> > +	tpm_buf_append_u16(sized, TPM_ALG_KEYEDHASH);
-> > +	tpm_buf_append_u16(sized, hash);
-> > 
-> > 	/* key properties */
-> > 	flags = 0;
-> > 	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
-> > 	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT);
-> > -	tpm_buf_append_u32(&sized, flags);
-> > +	tpm_buf_append_u32(sized, flags);
-> > 
-> > 	/* policy */
-> > -	tpm_buf_append_u16(&sized, options->policydigest_len);
-> > +	tpm_buf_append_u16(sized, options->policydigest_len);
-> > 	if (options->policydigest_len)
-> > -		tpm_buf_append(&sized, options->policydigest, options->policydigest_len);
-> > +		tpm_buf_append(sized, options->policydigest, options->policydigest_len);
-> > 
-> > 	/* public parameters */
-> > -	tpm_buf_append_u16(&sized, TPM_ALG_NULL);
-> > -	tpm_buf_append_u16(&sized, 0);
-> > +	tpm_buf_append_u16(sized, TPM_ALG_NULL);
-> > +	tpm_buf_append_u16(sized, 0);
-> > 
-> > -	tpm_buf_append(&buf, sized.data, sized.length);
-> > +	tpm_buf_append(buf, sized->data, sized->length);
-> > 
-> > 	/* outside info */
-> > -	tpm_buf_append_u16(&buf, 0);
-> > +	tpm_buf_append_u16(buf, 0);
-> > 
-> > 	/* creation PCR */
-> > -	tpm_buf_append_u32(&buf, 0);
-> > +	tpm_buf_append_u32(buf, 0);
-> > 
-> > -	if (buf.flags & TPM_BUF_OVERFLOW) {
-> > +	if (buf->flags & TPM_BUF_OVERFLOW) {
-> > 		rc = -E2BIG;
-> > 		tpm2_end_auth_session(chip);
-> > 		goto out;
-> > 	}
-> > 
-> > -	tpm_buf_fill_hmac_session(chip, &buf);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 4, "sealing data");
-> > -	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
-> > +	tpm_buf_fill_hmac_session(chip, buf);
-> > +	rc = tpm_transmit_cmd(chip, buf, 4, "sealing data");
-> > +	rc = tpm_buf_check_hmac_response(chip, buf, rc);
-> > 	if (rc)
-> > 		goto out;
-> > 
-> > -	blob_len = tpm_buf_read_u32(&buf, &offset);
-> > -	if (blob_len > MAX_BLOB_SIZE || buf.flags & TPM_BUF_BOUNDARY_ERROR) {
-> > +	blob_len = tpm_buf_read_u32(buf, &offset);
-> > +	if (blob_len > MAX_BLOB_SIZE || buf->flags & TPM_BUF_BOUNDARY_ERROR) {
-> > 		rc = -E2BIG;
-> > 		goto out;
-> > 	}
-> > -	if (buf.length - offset < blob_len) {
-> > +	if (buf->length - offset < blob_len) {
-> > 		rc = -EFAULT;
-> > 		goto out;
-> > 	}
-> > 
-> > -	blob_len = tpm2_key_encode(payload, options, &buf.data[offset], blob_len);
-> > +	blob_len = tpm2_key_encode(payload, options, &buf->data[offset],
-> > +				   blob_len);
-> > 
-> > out:
-> > -	tpm_buf_destroy(&sized);
-> > -	tpm_buf_destroy(&buf);
-> > -
-> > 	if (rc > 0) {
-> > 		if (tpm2_rc_value(rc) == TPM2_RC_HASH)
-> > 			rc = -EINVAL;
-> > @@ -387,7 +381,6 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
-> > 			 struct trusted_key_options *options,
-> > 			 u32 *blob_handle)
-> > {
-> > -	struct tpm_buf buf;
-> > 	unsigned int private_len;
-> > 	unsigned int public_len;
-> > 	unsigned int blob_len;
-> > @@ -395,6 +388,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
-> > 	int rc;
-> > 	u32 attrs;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	rc = tpm2_key_decode(payload, options, &blob);
-> > 	if (rc) {
-> > 		/* old form */
-> > @@ -438,35 +435,29 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
-> > 	if (rc)
-> > 		return rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_LOAD);
-> > -	if (rc) {
-> > -		tpm2_end_auth_session(chip);
-> > -		return rc;
-> > -	}
-> > -
-> > -	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
-> > -	tpm_buf_append_hmac_session(chip, &buf, 0, options->keyauth,
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_SESSIONS, TPM2_CC_LOAD);
-> > +	tpm_buf_append_name(chip, buf, options->keyhandle, NULL);
-> > +	tpm_buf_append_hmac_session(chip, buf, 0, options->keyauth,
-> > 				    TPM_DIGEST_SIZE);
-> > 
-> > -	tpm_buf_append(&buf, blob, blob_len);
-> > +	tpm_buf_append(buf, blob, blob_len);
-> > 
-> > -	if (buf.flags & TPM_BUF_OVERFLOW) {
-> > +	if (buf->flags & TPM_BUF_OVERFLOW) {
-> > 		rc = -E2BIG;
-> > 		tpm2_end_auth_session(chip);
-> > 		goto out;
-> > 	}
-> > 
-> > -	tpm_buf_fill_hmac_session(chip, &buf);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 4, "loading blob");
-> > -	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
-> > +	tpm_buf_fill_hmac_session(chip, buf);
-> > +	rc = tpm_transmit_cmd(chip, buf, 4, "loading blob");
-> > +	rc = tpm_buf_check_hmac_response(chip, buf, rc);
-> > 	if (!rc)
-> > 		*blob_handle = be32_to_cpup(
-> > -			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
-> > +			(__be32 *)&buf->data[TPM_HEADER_SIZE]);
-> > 
-> > out:
-> > 	if (blob != payload->blob)
-> > 		kfree(blob);
-> > -	tpm_buf_destroy(&buf);
-> > 
-> > 	if (rc > 0)
-> > 		rc = -EPERM;
-> > @@ -491,25 +482,23 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
-> > 			   struct trusted_key_options *options,
-> > 			   u32 blob_handle)
-> > {
-> > -	struct tpm_buf buf;
-> > 	u16 data_len;
-> > 	u8 *data;
-> > 	int rc;
-> > 
-> > +	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > +	if (!buf)
-> > +		return -ENOMEM;
-> > +
-> > 	rc = tpm2_start_auth_session(chip);
-> > 	if (rc)
-> > 		return rc;
-> > 
-> > -	rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS, TPM2_CC_UNSEAL);
-> > -	if (rc) {
-> > -		tpm2_end_auth_session(chip);
-> > -		return rc;
-> > -	}
-> > -
-> > -	tpm_buf_append_name(chip, &buf, blob_handle, NULL);
-> > +	tpm_buf_reset(buf, PAGE_SIZE, TPM2_ST_SESSIONS, TPM2_CC_UNSEAL);
-> > +	tpm_buf_append_name(chip, buf, blob_handle, NULL);
-> > 
-> > 	if (!options->policyhandle) {
-> > -		tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT,
-> > +		tpm_buf_append_hmac_session(chip, buf, TPM2_SA_ENCRYPT,
-> > 					    options->blobauth,
-> > 					    options->blobauth_len);
-> > 	} else {
-> > @@ -524,32 +513,28 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
-> > 		 * could repeat our actions with the exfiltrated
-> > 		 * password.
-> > 		 */
-> > -		tpm2_buf_append_auth(&buf, options->policyhandle,
-> > +		tpm2_buf_append_auth(buf, options->policyhandle,
-> > 				     NULL /* nonce */, 0, 0,
-> > 				     options->blobauth, options->blobauth_len);
-> > -		tpm_buf_append_hmac_session_opt(chip, &buf, TPM2_SA_ENCRYPT,
-> > +		tpm_buf_append_hmac_session_opt(chip, buf, TPM2_SA_ENCRYPT,
-> > 						NULL, 0);
-> > 	}
-> > 
-> > -	tpm_buf_fill_hmac_session(chip, &buf);
-> > -	rc = tpm_transmit_cmd(chip, &buf, 6, "unsealing");
-> > -	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
-> > +	tpm_buf_fill_hmac_session(chip, buf);
-> > +	rc = tpm_transmit_cmd(chip, buf, 6, "unsealing");
-> > +	rc = tpm_buf_check_hmac_response(chip, buf, rc);
-> > 	if (rc > 0)
-> > 		rc = -EPERM;
-> > 
-> > 	if (!rc) {
-> > 		data_len = be16_to_cpup(
-> > -			(__be16 *) &buf.data[TPM_HEADER_SIZE + 4]);
-> > -		if (data_len < MIN_KEY_SIZE ||  data_len > MAX_KEY_SIZE) {
-> > -			rc = -EFAULT;
-> > -			goto out;
-> > -		}
-> > +			(__be16 *)&buf->data[TPM_HEADER_SIZE + 4]);
-> > +		if (data_len < MIN_KEY_SIZE ||  data_len > MAX_KEY_SIZE)
-> > +			return -EFAULT;
-> > 
-> > -		if (tpm_buf_length(&buf) < TPM_HEADER_SIZE + 6 + data_len) {
-> > -			rc = -EFAULT;
-> > -			goto out;
-> > -		}
-> > -		data = &buf.data[TPM_HEADER_SIZE + 6];
-> > +		if (tpm_buf_length(buf) < TPM_HEADER_SIZE + 6 + data_len)
-> > +			return -EFAULT;
-> > +		data = &buf->data[TPM_HEADER_SIZE + 6];
-> > 
-> > 		if (payload->old_format) {
-> > 			/* migratable flag is at the end of the key */
-> > @@ -566,8 +551,6 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
-> > 		}
-> > 	}
-> > 
-> > -out:
-> > -	tpm_buf_destroy(&buf);
-> > 	return rc;
-> > }
-> > 
-> > -- 
-> > 2.39.5
-> > 
-> > 
-
-BR, Jarkko
-> 
 
