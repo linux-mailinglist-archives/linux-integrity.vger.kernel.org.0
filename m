@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-7205-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7206-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B2CAB8CCE7
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Sep 2025 18:27:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20AF9B8D158
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Sep 2025 22:59:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 508FD4E14F6
-	for <lists+linux-integrity@lfdr.de>; Sat, 20 Sep 2025 16:27:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAD75179950
+	for <lists+linux-integrity@lfdr.de>; Sat, 20 Sep 2025 20:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA442EA75C;
-	Sat, 20 Sep 2025 16:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F582D660A;
+	Sat, 20 Sep 2025 20:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pHuDlCtz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eZVO/WwX"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71041DFF7;
-	Sat, 20 Sep 2025 16:27:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D142273D6F;
+	Sat, 20 Sep 2025 20:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758385627; cv=none; b=R20duPuEcpaATTGaLLmVij6On91o0XZ2mSfFC+0X3eF+IleTBwkGX8weFQYNpYGix5B8EIvVKq8WzQy8bWpfH6JtdUOH7BSiBUintxZO9UpHkOzcFWSQQ0xe/G/8cOcZBuGlvVJNgTvlX+LUt5lIALm8QbxKVH9C7k36Tghqlf8=
+	t=1758401974; cv=none; b=Ax/0wtQSDyoX2jKmcfvY4VBcuAbassgqTHv/vv4tKqcYbRNqL223jJ8mtrq8MTA8ClGwHUNWhlR1b7aH/fpbV03x3WVxfGEw5ecpLdvq0I2zzxNSQ8RTAGAkvLwNOnbCVc2DnD80BmfGoqXbIsqNoab2sk9fOKjGOzWSao/02gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758385627; c=relaxed/simple;
-	bh=Q2vSld9/pvrcdOh7tFMBZizca3kS4egwsyZShzMzpzc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Xb/2qw00YOE0OxaRdJ19xLimCwto7z7Fpu2rXqRfkQXoS21TvSaPK9Hias/WcLiAqULmwbKZpdKtkFz//GvHuRJhZMBvQy4KxSzA339nHptqmqkdNhjM0uJZPUTnLDKORgDfkJVlxtDmPVywp1tSr6eYAEKG5FneiynzVHSuiNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pHuDlCtz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 966B8C4CEEB;
-	Sat, 20 Sep 2025 16:27:05 +0000 (UTC)
+	s=arc-20240116; t=1758401974; c=relaxed/simple;
+	bh=v0Y8zYhO7x9Y07TgJtU3IyBA1RtgIhmIUTqOMI7fST4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gP5rc2GFJ29v4rdQ28usj2bNipLqxjryRyH/IHHYLDua5aRkZ9VPdVKA5K2/ovfjvrIi8vvDPyJtRHeqD6Zh4BFUabux0qyK5e2R1ryIBKD9y18S0Jl+faWjH6SCCRnEJQ+802zAJdrl0MqdGaT3zlr26fnHdhK6EwsSZiMCM4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eZVO/WwX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E5BC4CEEB;
+	Sat, 20 Sep 2025 20:59:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758385626;
-	bh=Q2vSld9/pvrcdOh7tFMBZizca3kS4egwsyZShzMzpzc=;
+	s=k20201202; t=1758401974;
+	bh=v0Y8zYhO7x9Y07TgJtU3IyBA1RtgIhmIUTqOMI7fST4=;
 	h=From:To:Cc:Subject:Date:From;
-	b=pHuDlCtzo/PlPjuLjZkeECPGibXPUTBWgShWcNOgPWx8+NVlw9bHlwMHjwMXrP4R7
-	 y5TfC0rJYx3rtWKJqUAqseUyqof/VKtUE9seJZBj8rgZVZZcaJ6j42sZBBivbk4c4B
-	 kvtjobhAQ+4uWxaQCwq+AEy4cxHEqQ8S6x/J3h21+MP1UvxY/xlBKoTdJqkMhEc86T
-	 /nALzU0ox8nEOKzhcwQPgpvU9zBa5tzBK7sJkmNpLb74+z9F7rXDNaqDzkTfzsp2ux
-	 lNQRY5/kZsEkQbkj1TMQCve/aNWNjRtI8cdyc4lHfVxfHhqT0c1R4z0l3j9IXqktxQ
-	 4QiFh33TvVDmg==
+	b=eZVO/WwXUb6xyfYG0Xorz30zAZaMMO5gSRy1uV4ReNVo+MiVuz3hV7I7mGcz7/iO4
+	 UTTaUctjeuhjPCTapBz80GawBhFDgVTBC4U6oOz5G16dwn7Sop85hEGcpy2Udhyb5+
+	 Z/2m7WZDdPq8ctv/imsA3hLgF3cROqN74ED2J7/oEW5sdy2ahQ9jt794qMy6F4qlxY
+	 2HEhn+CmiFGxsxJ7INAATXtJZSIkeo8b/2CghTuxXeoXNPKmoD3uR/0Db44qnbg0Ik
+	 WDkvTM8MSaZeXGhsS//kxT0tlI1w6sWSglvXamOMKOViY+k8j+fcF2qkD014+RYX++
+	 0UF+7OITWbaBg==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Stefano Garzarella <sgarzare@redhat.com>,
@@ -57,9 +57,9 @@ Cc: Stefano Garzarella <sgarzare@redhat.com>,
 	linux-kernel@vger.kernel.org (open list),
 	keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
 	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v8] tpm: Make TPM buffer allocations more robust
-Date: Sat, 20 Sep 2025 19:26:57 +0300
-Message-Id: <20250920162659.3807817-1-jarkko@kernel.org>
+Subject: [PATCH v9] tpm: Make TPM buffer allocations more robust
+Date: Sat, 20 Sep 2025 23:59:27 +0300
+Message-Id: <20250920205929.29465-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -71,21 +71,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-Create clean primitives to work with TPM buffers, where 'tpm_buf_init*'
-initialize the memory and 'tpm_buf_reset*' (re)set a buffer for a
-particular use and purpose.
+Create more ergonomic primitives to work with TPM buffers, where
+'tpm_buf_init*' initialize the memory and 'tpm_buf_reset*' (re)set a buffer
+for a particular use and purpose. The new primitives are ubiquitos when
+it comes to heap and stack usage.
 
-Finally, decouple allocation from these functions. This in effect enables
-managed allocations:
+Given that the kzalloc is decoupled, a managed allocation can be done
+trivially:
 
-	struct tpm_buf *buf __free(kfree) buf = kzalloc(PAGE_SIZE,
+	struct tpm_buf *buf __free(kfree) buf = kzalloc(TPM_BUF_MAX_SIZE,
 							GFP_KERNEL);
 
-This in effect zeros out the odds having any memory leaks with TPM buffers.
+This effectively zeros out the odds having any memory leaks with TPM
+buffers. The new structures can be later used to widen the use of stack
+over heap in the subsystem in the critical code paths..
 
 Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 ---
+v9:
+- Rename pre-existing TPM_BUFSIZE as TPM_BUF_MAX_SIZE and redeclare
+  it in include/linux/tpm.h, and use this constant instead of
+  PAGE_SIZE in tpm_buf_init*. Define TPM_BUF_MIN_SIZE to be a
+  sane placeholder value for stack allocations.
+- Fix and restructure invariant for the sake of clarity.
+- memset buffers to zero in tpm_buf_init* in order to guarantee a legit
+  initial state. This does not cause any regressions but once tpm_buf
+  is allocaed from stack at some site, this will zero out chance of
+  corrupted state.
 v8:
 - Decouple memory init i.e. bring tpm_init* back but with new fresh
   form.
@@ -125,23 +138,28 @@ v2:
 - Rewrote the commit message.
 - Implemented CLASS_TPM_BUF() helper macro.
 ---
- drivers/char/tpm/tpm-buf.c                | 128 ++++++----
+ drivers/char/tpm/tpm-buf.c                | 137 +++++++----
+ drivers/char/tpm/tpm-dev-common.c         |   4 +-
+ drivers/char/tpm/tpm-dev.h                |   2 +-
+ drivers/char/tpm/tpm-interface.c          |   4 +-
  drivers/char/tpm/tpm-sysfs.c              |  20 +-
+ drivers/char/tpm/tpm.h                    |   3 +-
  drivers/char/tpm/tpm1-cmd.c               | 149 ++++++------
  drivers/char/tpm/tpm2-cmd.c               | 282 ++++++++++------------
  drivers/char/tpm/tpm2-sessions.c          | 121 +++++-----
  drivers/char/tpm/tpm2-space.c             |  44 ++--
- drivers/char/tpm/tpm_vtpm_proxy.c         |  30 +--
- include/linux/tpm.h                       |  25 +-
+ drivers/char/tpm/tpm_tis_i2c.c            |   4 +-
+ drivers/char/tpm/tpm_vtpm_proxy.c         |  32 ++-
+ include/linux/tpm.h                       |  28 ++-
  security/keys/trusted-keys/trusted_tpm1.c |  34 ++-
  security/keys/trusted-keys/trusted_tpm2.c | 156 ++++++------
- 10 files changed, 472 insertions(+), 517 deletions(-)
+ 15 files changed, 493 insertions(+), 527 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-index dc882fc9fa9e..5480583663f1 100644
+index dc882fc9fa9e..82dce0350a41 100644
 --- a/drivers/char/tpm/tpm-buf.c
 +++ b/drivers/char/tpm/tpm-buf.c
-@@ -7,82 +7,98 @@
+@@ -7,82 +7,107 @@
  #include <linux/module.h>
  #include <linux/tpm.h>
  
@@ -162,10 +180,17 @@ index dc882fc9fa9e..5480583663f1 100644
 -
 -	tpm_buf_reset(buf, tag, ordinal);
 -	return 0;
-+	if (buf->capacity != 0 && buf->capacity != PAGE_SIZE &&
-+	    buf_size != (buf->capacity + sizeof(*buf))) {
-+		WARN(1, "%s: invalid buffer size: %u\n", __func__, buf_size);
-+		buf->flags |= TPM_BUF_ERROR;
++	if (!buf->capacity) {
++		if (buf_size > TPM_BUF_MAX_SIZE) {
++			WARN(1, "%s: size overflow: %u\n", __func__, buf_size);
++			buf->flags |= TPM_BUF_ERROR;
++		}
++	} else {
++		if (buf_size != buf->capacity + sizeof(*buf)) {
++			WARN(1, "%s: size mismatch: %u != %u\n", __func__, buf_size,
++			     buf->capacity + sizeof(*buf));
++			buf->flags |= TPM_BUF_ERROR;
++		}
 +	}
  }
 -EXPORT_SYMBOL_GPL(tpm_buf_init);
@@ -229,6 +254,7 @@ index dc882fc9fa9e..5480583663f1 100644
 -	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
 -	if (!buf->data)
 -		return -ENOMEM;
++	memset(buf, 0, buf_size);
 +	__tpm_buf_reset(buf, buf_size, TPM_TAG_RQU_COMMAND, 0);
 +}
 +EXPORT_SYMBOL_GPL(tpm_buf_init);
@@ -242,6 +268,7 @@ index dc882fc9fa9e..5480583663f1 100644
 + */
 +void tpm_buf_init_sized(struct tpm_buf *buf, u16 buf_size)
 +{
++	memset(buf, 0, buf_size);
 +	__tpm_buf_reset_sized(buf, buf_size);
  }
  EXPORT_SYMBOL_GPL(tpm_buf_init_sized);
@@ -284,7 +311,7 @@ index dc882fc9fa9e..5480583663f1 100644
  
  /**
   * tpm_buf_length() - Return the number of bytes consumed by the data
-@@ -92,6 +108,9 @@ EXPORT_SYMBOL_GPL(tpm_buf_destroy);
+@@ -92,6 +117,9 @@ EXPORT_SYMBOL_GPL(tpm_buf_destroy);
   */
  u32 tpm_buf_length(struct tpm_buf *buf)
  {
@@ -294,7 +321,7 @@ index dc882fc9fa9e..5480583663f1 100644
  	return buf->length;
  }
  EXPORT_SYMBOL_GPL(tpm_buf_length);
-@@ -104,13 +123,14 @@ EXPORT_SYMBOL_GPL(tpm_buf_length);
+@@ -104,13 +132,14 @@ EXPORT_SYMBOL_GPL(tpm_buf_length);
   */
  void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
  {
@@ -313,7 +340,7 @@ index dc882fc9fa9e..5480583663f1 100644
  		return;
  	}
  
-@@ -157,8 +177,12 @@ EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
+@@ -157,8 +186,12 @@ EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
   */
  void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u32 handle)
  {
@@ -327,7 +354,7 @@ index dc882fc9fa9e..5480583663f1 100644
  		return;
  	}
  
-@@ -178,13 +202,13 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
+@@ -178,13 +211,13 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
  	off_t next_offset;
  
  	/* Return silently if overflow has already happened. */
@@ -343,14 +370,64 @@ index dc882fc9fa9e..5480583663f1 100644
  		return;
  	}
  
-@@ -242,5 +266,3 @@ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
+@@ -242,5 +275,3 @@ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
  	return be32_to_cpu(value);
  }
  EXPORT_SYMBOL_GPL(tpm_buf_read_u32);
 -
 -
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index f2a5e09257dd..4f5893555fb7 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -147,7 +147,7 @@ ssize_t tpm_common_read(struct file *file, char __user *buf,
+ 
+ 		rc = copy_to_user(buf, priv->data_buffer + *off, ret_size);
+ 		if (rc) {
+-			memset(priv->data_buffer, 0, TPM_BUFSIZE);
++			memset(priv->data_buffer, 0, TPM_BUF_MAX_SIZE);
+ 			priv->response_length = 0;
+ 			ret_size = -EFAULT;
+ 		} else {
+@@ -173,7 +173,7 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+ 	struct file_priv *priv = file->private_data;
+ 	int ret = 0;
+ 
+-	if (size > TPM_BUFSIZE)
++	if (size > TPM_BUF_MAX_SIZE)
+ 		return -E2BIG;
+ 
+ 	mutex_lock(&priv->buffer_mutex);
+diff --git a/drivers/char/tpm/tpm-dev.h b/drivers/char/tpm/tpm-dev.h
+index f3742bcc73e3..700e3d9d8b64 100644
+--- a/drivers/char/tpm/tpm-dev.h
++++ b/drivers/char/tpm/tpm-dev.h
+@@ -18,7 +18,7 @@ struct file_priv {
+ 	bool response_read;
+ 	bool command_enqueued;
+ 
+-	u8 data_buffer[TPM_BUFSIZE];
++	u8 data_buffer[TPM_BUF_MAX_SIZE];
+ };
+ 
+ void tpm_common_open(struct file *file, struct tpm_chip *chip,
+diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
+index c9f173001d0e..b0d5098fb92b 100644
+--- a/drivers/char/tpm/tpm-interface.c
++++ b/drivers/char/tpm/tpm-interface.c
+@@ -100,8 +100,8 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
+ 	if (bufsiz < TPM_HEADER_SIZE)
+ 		return -EINVAL;
+ 
+-	if (bufsiz > TPM_BUFSIZE)
+-		bufsiz = TPM_BUFSIZE;
++	if (bufsiz > TPM_BUF_MAX_SIZE)
++		bufsiz = TPM_BUF_MAX_SIZE;
+ 
+ 	count = be32_to_cpu(header->length);
+ 	ordinal = be32_to_cpu(header->ordinal);
 diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-index 94231f052ea7..28780a72d1bf 100644
+index 94231f052ea7..4213a8285ed0 100644
 --- a/drivers/char/tpm/tpm-sysfs.c
 +++ b/drivers/char/tpm/tpm-sysfs.c
 @@ -32,28 +32,30 @@ struct tpm_readpubek_out {
@@ -377,7 +454,7 @@ index 94231f052ea7..28780a72d1bf 100644
 -		goto out_ops;
 -
 -	tpm_buf_append(&tpm_buf, anti_replay, sizeof(anti_replay));
-+	tpm_buf_init(tpm_buf, PAGE_SIZE);
++	tpm_buf_init(tpm_buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(tpm_buf, TPM_TAG_RQU_COMMAND, TPM_ORD_READPUBEK);
 +	tpm_buf_append(tpm_buf, anti_replay, sizeof(anti_replay));
  
@@ -401,8 +478,29 @@ index 94231f052ea7..28780a72d1bf 100644
  out_ops:
  	tpm_put_ops(chip);
  	return str - buf;
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 2726bd38e5ac..1a4abe54db15 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -32,7 +32,6 @@
+ #endif
+ 
+ #define TPM_MINOR		224	/* officially assigned */
+-#define TPM_BUFSIZE		4096
+ #define TPM_NUM_DEVICES		65536
+ #define TPM_RETRY		50
+ 
+@@ -224,7 +223,7 @@ enum tpm2_pt_props {
+ 	TPM2_PT_AUDIT_COUNTER_1 = TPM2_PT_VAR + 20,
+ };
+ 
+-/* 128 bytes is an arbitrary cap. This could be as large as TPM_BUFSIZE - 18
++/* 128 bytes is an arbitrary cap. This could be as large as TPM_BUF_MAX_SIZE - 18
+  * bytes, but 128 is still a relatively large number of random bytes and
+  * anything much bigger causes users of struct tpm_cmd_t to start getting
+  * compiler warnings about stack frame size. */
 diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-index cf64c7385105..7d53f39d5574 100644
+index cf64c7385105..ca3e7f9a105d 100644
 --- a/drivers/char/tpm/tpm1-cmd.c
 +++ b/drivers/char/tpm/tpm1-cmd.c
 @@ -323,19 +323,19 @@ unsigned long tpm1_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
@@ -423,7 +521,7 @@ index cf64c7385105..7d53f39d5574 100644
 +	dev_info(&chip->dev, "starting up the TPM manually\n");
  
 -	tpm_buf_append_u16(&buf, TPM_ST_CLEAR);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_STARTUP);
 +	tpm_buf_append_u16(buf, TPM_ST_CLEAR);
  
@@ -449,7 +547,7 @@ index cf64c7385105..7d53f39d5574 100644
  
 -	tpm_buf_append_u32(&buf, pcr_idx);
 -	tpm_buf_append(&buf, hash, TPM_DIGEST_SIZE);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCR_EXTEND);
 +	tpm_buf_append_u32(buf, pcr_idx);
 +	tpm_buf_append(buf, hash, TPM_DIGEST_SIZE);
@@ -474,7 +572,7 @@ index cf64c7385105..7d53f39d5574 100644
 +	if (!buf)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_CAP);
  
  	if (subcap_id == TPM_CAP_VERSION_1_1 ||
@@ -523,7 +621,7 @@ index cf64c7385105..7d53f39d5574 100644
 +	if (!buf)
 +		return -ENOMEM;
  
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
  	do {
 -		tpm_buf_append_u32(&buf, num_bytes);
 +		tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_GET_RANDOM);
@@ -588,7 +686,7 @@ index cf64c7385105..7d53f39d5574 100644
 +		return -ENOMEM;
  
 -	tpm_buf_append_u32(&buf, pcr_idx);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCRREAD);
 +	tpm_buf_append_u32(buf, pcr_idx);
  
@@ -630,7 +728,7 @@ index cf64c7385105..7d53f39d5574 100644
  
 -	rc = tpm_transmit_cmd(chip, &buf, 0, "continue selftest");
 -	tpm_buf_destroy(&buf);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_CONTINUE_SELFTEST);
 +	rc = tpm_transmit_cmd(chip, buf, 0, "continue selftest");
  	return rc;
@@ -656,7 +754,7 @@ index cf64c7385105..7d53f39d5574 100644
 -	rc = tpm_buf_init(&buf, TPM_TAG_RQU_COMMAND, TPM_ORD_SAVESTATE);
 -	if (rc)
 -		return rc;
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_SAVESTATE);
 +
  	/* now do the actual savestate */
@@ -685,10 +783,10 @@ index cf64c7385105..7d53f39d5574 100644
  }
  
 diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index 524d802ede26..1d4db15f3991 100644
+index 7d77f6fbc152..245c7c952e82 100644
 --- a/drivers/char/tpm/tpm2-cmd.c
 +++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -167,12 +167,15 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+@@ -104,12 +104,15 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
  {
  	int i;
  	int rc;
@@ -705,14 +803,14 @@ index 524d802ede26..1d4db15f3991 100644
  	if (pcr_idx >= TPM2_PLATFORM_PCR)
  		return -EINVAL;
  
-@@ -187,36 +190,31 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+@@ -124,36 +127,31 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
  		expected_digest_size = chip->allocated_banks[i].digest_size;
  	}
  
 -	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
 -	if (rc)
 -		return rc;
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_PCR_READ);
  
  	pcr_select[pcr_idx >> 3] = 1 << (pcr_idx & 0x7);
@@ -753,7 +851,7 @@ index 524d802ede26..1d4db15f3991 100644
  	return rc;
  }
  
-@@ -232,46 +230,43 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
+@@ -169,46 +167,43 @@ int tpm2_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
  int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
  		    struct tpm_digest *digests)
  {
@@ -777,7 +875,7 @@ index 524d802ede26..1d4db15f3991 100644
 -			tpm2_end_auth_session(chip);
 -		return rc;
 -	}
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
  
  	if (!disable_pcr_integrity) {
@@ -816,7 +914,7 @@ index 524d802ede26..1d4db15f3991 100644
  
  	return rc;
  }
-@@ -296,7 +291,6 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+@@ -233,7 +228,6 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
  {
  	struct tpm2_get_random_out *out;
  	struct tpm_header *head;
@@ -824,7 +922,7 @@ index 524d802ede26..1d4db15f3991 100644
  	u32 recd;
  	u32 num_bytes = max;
  	int err;
-@@ -308,43 +302,42 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+@@ -245,43 +239,42 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
  	if (!num_bytes || max > TPM_MAX_RNG_DATA)
  		return -EINVAL;
  
@@ -842,7 +940,7 @@ index 524d802ede26..1d4db15f3991 100644
 -		return err;
 -	}
 -
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
  	do {
 -		tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_GET_RANDOM);
 -		tpm_buf_append_hmac_session_opt(chip, &buf, TPM2_SA_ENCRYPT
@@ -882,7 +980,7 @@ index 524d802ede26..1d4db15f3991 100644
  		    TPM_HEADER_SIZE +
  		    offsetof(struct tpm2_get_random_out, buffer) +
  		    recd) {
-@@ -358,11 +351,9 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+@@ -295,11 +288,9 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
  		num_bytes -= recd;
  	} while (retries-- && total < max);
  
@@ -895,7 +993,7 @@ index 524d802ede26..1d4db15f3991 100644
  	tpm2_end_auth_session(chip);
  	return err;
  }
-@@ -374,20 +365,18 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+@@ -311,20 +302,18 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
   */
  void tpm2_flush_context(struct tpm_chip *chip, u32 handle)
  {
@@ -912,7 +1010,7 @@ index 524d802ede26..1d4db15f3991 100644
  	}
  
 -	tpm_buf_append_u32(&buf, handle);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_FLUSH_CONTEXT);
 +	tpm_buf_append_u32(buf, handle);
  
@@ -922,7 +1020,7 @@ index 524d802ede26..1d4db15f3991 100644
  }
  EXPORT_SYMBOL_GPL(tpm2_flush_context);
  
-@@ -414,19 +403,21 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,  u32 *value,
+@@ -351,19 +340,21 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,  u32 *value,
  			const char *desc)
  {
  	struct tpm2_get_cap_out *out;
@@ -940,7 +1038,7 @@ index 524d802ede26..1d4db15f3991 100644
 +	if (!buf)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
 +	tpm_buf_append_u32(buf, TPM2_CAP_TPM_PROPERTIES);
 +	tpm_buf_append_u32(buf, property_id);
@@ -953,7 +1051,7 @@ index 524d802ede26..1d4db15f3991 100644
  		/*
  		 * To prevent failing boot up of some systems, Infineon TPM2.0
  		 * returns SUCCESS on TPM2_Startup in field upgrade mode. Also
-@@ -438,7 +429,6 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,  u32 *value,
+@@ -375,7 +366,6 @@ ssize_t tpm2_get_tpm_pt(struct tpm_chip *chip, u32 property_id,  u32 *value,
  		else
  			rc = -ENODATA;
  	}
@@ -961,7 +1059,7 @@ index 524d802ede26..1d4db15f3991 100644
  	return rc;
  }
  EXPORT_SYMBOL_GPL(tpm2_get_tpm_pt);
-@@ -455,15 +445,14 @@ EXPORT_SYMBOL_GPL(tpm2_get_tpm_pt);
+@@ -392,15 +382,14 @@ EXPORT_SYMBOL_GPL(tpm2_get_tpm_pt);
   */
  void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type)
  {
@@ -977,14 +1075,14 @@ index 524d802ede26..1d4db15f3991 100644
 -	tpm_transmit_cmd(chip, &buf, 0, "stopping the TPM");
 -	tpm_buf_destroy(&buf);
 +
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SHUTDOWN);
 +	tpm_buf_append_u16(buf, shutdown_type);
 +	tpm_transmit_cmd(chip, buf, 0, "stopping the TPM");
  }
  
  /**
-@@ -481,19 +470,20 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type)
+@@ -418,19 +407,20 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type)
   */
  static int tpm2_do_selftest(struct tpm_chip *chip)
  {
@@ -1002,7 +1100,7 @@ index 524d802ede26..1d4db15f3991 100644
  
 -		tpm_buf_append_u8(&buf, full);
 -		rc = tpm_transmit_cmd(chip, &buf, 0,
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SELF_TEST);
 +	for (full = 0; full < 2; full++) {
 +		tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SELF_TEST);
@@ -1013,7 +1111,7 @@ index 524d802ede26..1d4db15f3991 100644
  
  		if (rc == TPM2_RC_TESTING)
  			rc = TPM2_RC_SUCCESS;
-@@ -519,23 +509,24 @@ static int tpm2_do_selftest(struct tpm_chip *chip)
+@@ -456,23 +446,24 @@ static int tpm2_do_selftest(struct tpm_chip *chip)
  int tpm2_probe(struct tpm_chip *chip)
  {
  	struct tpm_header *out;
@@ -1031,7 +1129,7 @@ index 524d802ede26..1d4db15f3991 100644
 +	if (!buf)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
 +	tpm_buf_append_u32(buf, TPM2_CAP_TPM_PROPERTIES);
 +	tpm_buf_append_u32(buf, TPM_PT_TOTAL_COMMANDS);
@@ -1048,7 +1146,7 @@ index 524d802ede26..1d4db15f3991 100644
  	return 0;
  }
  EXPORT_SYMBOL_GPL(tpm2_probe);
-@@ -575,7 +566,6 @@ struct tpm2_pcr_selection {
+@@ -512,7 +503,6 @@ struct tpm2_pcr_selection {
  ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
  {
  	struct tpm2_pcr_selection pcr_selection;
@@ -1056,7 +1154,7 @@ index 524d802ede26..1d4db15f3991 100644
  	void *marker;
  	void *end;
  	void *pcr_select_offset;
-@@ -587,41 +577,39 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
+@@ -524,41 +514,39 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
  	int rc;
  	int i = 0;
  
@@ -1070,7 +1168,7 @@ index 524d802ede26..1d4db15f3991 100644
 -	tpm_buf_append_u32(&buf, TPM2_CAP_PCRS);
 -	tpm_buf_append_u32(&buf, 0);
 -	tpm_buf_append_u32(&buf, 1);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
 +	tpm_buf_append_u32(buf, TPM2_CAP_PCRS);
 +	tpm_buf_append_u32(buf, 0);
@@ -1116,7 +1214,7 @@ index 524d802ede26..1d4db15f3991 100644
  
  		memcpy(&pcr_selection, marker, sizeof(pcr_selection));
  		hash_alg = be16_to_cpu(pcr_selection.hash_alg);
-@@ -633,7 +621,7 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
+@@ -570,7 +558,7 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
  
  			rc = tpm2_init_bank_info(chip, nr_alloc_banks);
  			if (rc < 0)
@@ -1125,7 +1223,7 @@ index 524d802ede26..1d4db15f3991 100644
  
  			nr_alloc_banks++;
  		}
-@@ -645,21 +633,21 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
+@@ -582,21 +570,21 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
  	}
  
  	chip->nr_allocated_banks = nr_alloc_banks;
@@ -1152,7 +1250,7 @@ index 524d802ede26..1d4db15f3991 100644
  	rc = tpm2_get_tpm_pt(chip, TPM_PT_TOTAL_COMMANDS, &nr_commands, NULL);
  	if (rc)
  		goto out;
-@@ -676,30 +664,25 @@ int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
+@@ -613,30 +601,25 @@ int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
  		goto out;
  	}
  
@@ -1163,7 +1261,7 @@ index 524d802ede26..1d4db15f3991 100644
 -	tpm_buf_append_u32(&buf, TPM2_CAP_COMMANDS);
 -	tpm_buf_append_u32(&buf, TPM2_CC_FIRST);
 -	tpm_buf_append_u32(&buf, nr_commands);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
 +	tpm_buf_append_u32(buf, TPM2_CAP_COMMANDS);
 +	tpm_buf_append_u32(buf, TPM2_CC_FIRST);
@@ -1192,7 +1290,7 @@ index 524d802ede26..1d4db15f3991 100644
  	for (i = 0; i < nr_commands; i++, attrs++) {
  		chip->cc_attrs_tbl[i] = be32_to_cpup(attrs);
  		cc = chip->cc_attrs_tbl[i] & 0xFFFF;
-@@ -711,8 +694,6 @@ int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
+@@ -648,8 +631,6 @@ int tpm2_get_cc_attrs_tbl(struct tpm_chip *chip)
  		}
  	}
  
@@ -1201,7 +1299,7 @@ index 524d802ede26..1d4db15f3991 100644
  out:
  	if (rc > 0)
  		rc = -ENODEV;
-@@ -733,20 +714,17 @@ EXPORT_SYMBOL_GPL(tpm2_get_cc_attrs_tbl);
+@@ -670,20 +651,17 @@ EXPORT_SYMBOL_GPL(tpm2_get_cc_attrs_tbl);
  
  static int tpm2_startup(struct tpm_chip *chip)
  {
@@ -1220,7 +1318,7 @@ index 524d802ede26..1d4db15f3991 100644
 -	tpm_buf_append_u16(&buf, TPM2_SU_CLEAR);
 -	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting to start the TPM");
 -	tpm_buf_destroy(&buf);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_STARTUP);
 +	tpm_buf_append_u16(buf, TPM2_SU_CLEAR);
  
@@ -1230,7 +1328,7 @@ index 524d802ede26..1d4db15f3991 100644
  
  /**
 diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 6d03c224e6b2..d37e3f10b2b7 100644
+index 6d03c224e6b2..fd0f56e0018b 100644
 --- a/drivers/char/tpm/tpm2-sessions.c
 +++ b/drivers/char/tpm/tpm2-sessions.c
 @@ -182,19 +182,18 @@ static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
@@ -1249,7 +1347,7 @@ index 6d03c224e6b2..d37e3f10b2b7 100644
  
 -	tpm_buf_append_u32(&buf, handle);
 -	rc = tpm_transmit_cmd(chip, &buf, 0, "read public");
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
 +	tpm_buf_append_u32(buf, handle);
 +	rc = tpm_transmit_cmd(chip, buf, 0, "read public");
@@ -1288,7 +1386,7 @@ index 6d03c224e6b2..d37e3f10b2b7 100644
 -	if (rc)
 -		goto out;
 -
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_START_AUTH_SESS);
  	/* salt key handle */
 -	tpm_buf_append_u32(&buf, null_key);
@@ -1359,9 +1457,9 @@ index 6d03c224e6b2..d37e3f10b2b7 100644
 +	if (!template)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE_PRIMARY);
-+	tpm_buf_init_sized(template, PAGE_SIZE);
++	tpm_buf_init_sized(template, TPM_BUF_MAX_SIZE);
  
  	/*
  	 * create the template.  Note: in order for userspace to
@@ -1464,7 +1562,7 @@ index 6d03c224e6b2..d37e3f10b2b7 100644
  }
  
 diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-index 60354cd53b5c..f086f2ac1117 100644
+index 60354cd53b5c..c52040fcd724 100644
 --- a/drivers/char/tpm/tpm2-space.c
 +++ b/drivers/char/tpm/tpm2-space.c
 @@ -71,24 +71,25 @@ void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
@@ -1483,7 +1581,7 @@ index 60354cd53b5c..f086f2ac1117 100644
 +	if (!tbuf)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(tbuf, PAGE_SIZE);
++	tpm_buf_init(tbuf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(tbuf, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_LOAD);
  
  	ctx = (struct tpm2_context *)&buf[*offset];
@@ -1539,7 +1637,7 @@ index 60354cd53b5c..f086f2ac1117 100644
 +		return -ENOMEM;
  
 -	tpm_buf_append_u32(&tbuf, handle);
-+	tpm_buf_init(tbuf, PAGE_SIZE);
++	tpm_buf_init(tbuf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(tbuf, TPM2_ST_NO_SESSIONS, TPM2_CC_CONTEXT_SAVE);
 +	tpm_buf_append_u32(tbuf, handle);
  
@@ -1575,10 +1673,41 @@ index 60354cd53b5c..f086f2ac1117 100644
  	return 0;
  }
  
+diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+index 6cd07dd34507..5832713b1a2c 100644
+--- a/drivers/char/tpm/tpm_tis_i2c.c
++++ b/drivers/char/tpm/tpm_tis_i2c.c
+@@ -232,7 +232,7 @@ static int tpm_tis_i2c_write_bytes(struct tpm_tis_data *data, u32 addr, u16 len,
+ 	int ret;
+ 	u16 wrote = 0;
+ 
+-	if (len > TPM_BUFSIZE - 1)
++	if (len > TPM_BUF_MAX_SIZE - 1)
+ 		return -EIO;
+ 
+ 	phy->io_buf[0] = reg;
+@@ -339,7 +339,7 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev)
+ 	if (!phy)
+ 		return -ENOMEM;
+ 
+-	phy->io_buf = devm_kzalloc(&dev->dev, TPM_BUFSIZE, GFP_KERNEL);
++	phy->io_buf = devm_kzalloc(&dev->dev, TPM_BUF_MAX_SIZE, GFP_KERNEL);
+ 	if (!phy->io_buf)
+ 		return -ENOMEM;
+ 
 diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
-index 0818bb517805..e383bfd82785 100644
+index 0818bb517805..e5de14379eb2 100644
 --- a/drivers/char/tpm/tpm_vtpm_proxy.c
 +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -42,7 +42,7 @@ struct proxy_dev {
+ 
+ 	size_t req_len;              /* length of queued TPM request */
+ 	size_t resp_len;             /* length of queued TPM response */
+-	u8 buffer[TPM_BUFSIZE];      /* request/response buffer */
++	u8 buffer[TPM_BUF_MAX_SIZE];      /* request/response buffer */
+ 
+ 	struct work_struct work;     /* task that retrieves TPM timeouts */
+ };
 @@ -395,40 +395,36 @@ static bool vtpm_proxy_tpm_req_canceled(struct tpm_chip  *chip, u8 status)
  
  static int vtpm_proxy_request_locality(struct tpm_chip *chip, int locality)
@@ -1592,7 +1721,7 @@ index 0818bb517805..e383bfd82785 100644
 +	if (!buf)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
  	if (chip->flags & TPM_CHIP_FLAG_TPM2)
 -		rc = tpm_buf_init(&buf, TPM2_ST_SESSIONS,
 -				  TPM2_CC_SET_LOCALITY);
@@ -1634,10 +1763,10 @@ index 0818bb517805..e383bfd82785 100644
  }
  
 diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index b0e9eb5ef022..91f4159a79c7 100644
+index dc0338a783f3..a0ce1b565769 100644
 --- a/include/linux/tpm.h
 +++ b/include/linux/tpm.h
-@@ -366,22 +366,22 @@ struct tpm_header {
+@@ -367,22 +367,25 @@ struct tpm_header {
  } __packed;
  
  enum tpm_buf_flags {
@@ -1653,6 +1782,9 @@ index b0e9eb5ef022..91f4159a79c7 100644
 +	TPM_BUF_ERROR	= BIT(2),
  };
  
++#define TPM_BUF_MIN_SIZE	256	/* size for stack allocations */
++#define TPM_BUF_MAX_SIZE	4096	/* size for heap allocations */
++
  /*
 - * A string buffer type for constructing TPM commands.
 + * A buffer for constructing and parsing TPM commands, responses and sized
@@ -1670,7 +1802,7 @@ index b0e9eb5ef022..91f4159a79c7 100644
  };
  
  enum tpm2_object_attributes {
-@@ -412,11 +412,10 @@ struct tpm2_hash {
+@@ -413,11 +416,10 @@ struct tpm2_hash {
  	unsigned int tpm_id;
  };
  
@@ -1685,7 +1817,7 @@ index b0e9eb5ef022..91f4159a79c7 100644
  void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length);
  void tpm_buf_append_u8(struct tpm_buf *buf, const u8 value);
 diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index 636acb66a4f6..9343a16e5ba0 100644
+index 636acb66a4f6..fec7b6de7887 100644
 --- a/security/keys/trusted-keys/trusted_tpm1.c
 +++ b/security/keys/trusted-keys/trusted_tpm1.c
 @@ -310,9 +310,8 @@ static int TSS_checkhmac2(unsigned char *buffer,
@@ -1731,7 +1863,7 @@ index 636acb66a4f6..9343a16e5ba0 100644
 +	if (!tb)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(tb, PAGE_SIZE);
++	tpm_buf_init(tb, TPM_BUF_MAX_SIZE);
  
  	/* include migratable flag at end of sealed key */
  	p->key[p->key_len] = p->migratable;
@@ -1761,7 +1893,7 @@ index 636acb66a4f6..9343a16e5ba0 100644
 +	if (!tb)
 +		return -ENOMEM;
 +
-+	tpm_buf_init(tb, PAGE_SIZE);
++	tpm_buf_init(tb, TPM_BUF_MAX_SIZE);
  
 -	ret = tpm_unseal(&tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
 +	ret = tpm_unseal(tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
@@ -1777,7 +1909,7 @@ index 636acb66a4f6..9343a16e5ba0 100644
  }
  
 diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 024be262702f..143add8614b9 100644
+index 024be262702f..7b43535f1a65 100644
 --- a/security/keys/trusted-keys/trusted_tpm2.c
 +++ b/security/keys/trusted-keys/trusted_tpm2.c
 @@ -242,13 +242,20 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
@@ -1821,8 +1953,8 @@ index 024be262702f..143add8614b9 100644
 -
 -	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
 -	tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_DECRYPT,
-+	tpm_buf_init(buf, PAGE_SIZE);
-+	tpm_buf_init_sized(sized, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
++	tpm_buf_init_sized(sized, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_CREATE);
 +	tpm_buf_append_name(chip, buf, options->keyhandle, NULL);
 +	tpm_buf_append_hmac_session(chip, buf, TPM2_SA_DECRYPT,
@@ -1847,7 +1979,7 @@ index 024be262702f..143add8614b9 100644
 -	tpm_buf_reset_sized(&sized);
 -	tpm_buf_append_u16(&sized, TPM_ALG_KEYEDHASH);
 -	tpm_buf_append_u16(&sized, hash);
-+	tpm_buf_init_sized(sized, PAGE_SIZE);
++	tpm_buf_init_sized(sized, TPM_BUF_MAX_SIZE);
 +	tpm_buf_append_u16(sized, TPM_ALG_KEYEDHASH);
 +	tpm_buf_append_u16(sized, hash);
  
@@ -1953,7 +2085,7 @@ index 024be262702f..143add8614b9 100644
 -
 -	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
 -	tpm_buf_append_hmac_session(chip, &buf, 0, options->keyauth,
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_LOAD);
 +	tpm_buf_append_name(chip, buf, options->keyhandle, NULL);
 +	tpm_buf_append_hmac_session(chip, buf, 0, options->keyauth,
@@ -2011,7 +2143,7 @@ index 024be262702f..143add8614b9 100644
 -	}
 -
 -	tpm_buf_append_name(chip, &buf, blob_handle, NULL);
-+	tpm_buf_init(buf, PAGE_SIZE);
++	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_UNSEAL);
 +	tpm_buf_append_name(chip, buf, blob_handle, NULL);
  
