@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-7210-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7211-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101D4B8D36D
-	for <lists+linux-integrity@lfdr.de>; Sun, 21 Sep 2025 04:08:53 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36669B8D379
+	for <lists+linux-integrity@lfdr.de>; Sun, 21 Sep 2025 04:09:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DFAE18A09F3
-	for <lists+linux-integrity@lfdr.de>; Sun, 21 Sep 2025 02:09:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 299744E066E
+	for <lists+linux-integrity@lfdr.de>; Sun, 21 Sep 2025 02:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D4C1B4F0A;
-	Sun, 21 Sep 2025 02:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D08B1D88D0;
+	Sun, 21 Sep 2025 02:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uTHEtPwf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bxNr7LHd"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95AC019CC02;
-	Sun, 21 Sep 2025 02:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503CC19F12D;
+	Sun, 21 Sep 2025 02:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758420506; cv=none; b=p8FuSUaWbWJfOrlVJC0CDSqgq4SFtRNOlzqBPfFNo8/EFjE2n4OjpnfXRsnfv8xvNOgTHF7MSApi/I3CskggEofmSp8y/IMpXfaE3qh1KYNvY61S9nd0OpRPHMxwEaKodTSGeZfGCYQ93QyjExXAKxgJe+n+U39lT1vQobIemN8=
+	t=1758420510; cv=none; b=a9+ZE70U3LOYBNpzBvTa/qLq6RDNDL1t9cLemVjM+CnM9fAd2LHQFe8qEpVPavBPSHA9qiLq3CvNuCAPYHeXhMhJUuj4lwPIu2kBaVcs4gMVX6AL1tGJ7RUlbjYfNyrKtU8siHRUzi8cv7btVTPyqYjAP7wDpj2OrrJqDVZSO2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758420506; c=relaxed/simple;
-	bh=X/bOsUEmbxefF48diYUiSoDG9kbS4cdIv6S/u6MFIew=;
+	s=arc-20240116; t=1758420510; c=relaxed/simple;
+	bh=4M8/GFhV3sFOzAP8bNuOQU4N9+FY30m8pjHxRtU9C9Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=D8uUjN7ORj2Kk7hJGtUD8s/1X8P52WfhkvjlE/13XuRISvzugaKBO4ZeD/XBhozHJliSQCEIfBQskSPS/bgzTu+WK+XiR/j1k0EeFdUB0asLXeBLM1g1UNK3Nme7X+u5ERHZH4dUCZw6tmCPI84Po5MHtJ+kO3pKtYnyOruCutA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uTHEtPwf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E34C4CEEB;
-	Sun, 21 Sep 2025 02:08:25 +0000 (UTC)
+	 MIME-Version; b=fyRJdbp2mK/Ly+513MMksFiIeK0fo+t2u2Ebri5CdUDhcJ4mQixGqiPso9snbQlQ4qXGsnXVRFliSYHvnEccKV9fUJ+p9DfSo93X/vgKb565L2S5dDsUXK2H6pd6nMQgZG/CLHdZ0IGmt4l4tJ6aH19y4vi9qg3is7rgj+b7Nm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bxNr7LHd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A71A1C4CEF1;
+	Sun, 21 Sep 2025 02:08:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758420505;
-	bh=X/bOsUEmbxefF48diYUiSoDG9kbS4cdIv6S/u6MFIew=;
+	s=k20201202; t=1758420510;
+	bh=4M8/GFhV3sFOzAP8bNuOQU4N9+FY30m8pjHxRtU9C9Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uTHEtPwf4nLG14DV2pZltZuoSXs2CGNH4Iu7UAeYViYOsPdvgxJZ+Fyozd3oj6zED
-	 X5LJlGtEYUlCZdNDErVj0WoB5bfuWeIDH51e7eP9SEYDa/BpaUMriULtS4ySToEGr/
-	 NaIe31aUi1evNK4EMmPKJqFLkAgnccXbFXQsgsMCmKPWNTxeqPvWHmDxWXbncXk1mT
-	 pLmUtxcu5mAgQjSjtbrg40Js32cZwEdDXChwOFKyR6RaTGfGWeRDLZJs/kURhePtPm
-	 LVpzWDFtd8Gye8adj5nJrXJZCSI7mDmp7KYFRf/fBQrP5M4l3C4WPp+h1kiKIKidkv
-	 /zq5WvLVEKXcw==
+	b=bxNr7LHdeOwqPfE4X36y8+4ACSu05p095WDmar8fCw1Wh66SbZ9RGEaddfQJqw3+t
+	 Q6FCFpLf2gK+416Ym3njaz0gZAp2TQ+OBkGcix4tgaOUaTBDj+QXTYmc81//3e85p/
+	 g4ICJdVdUXSsTs2orMu6VS1QfukHjr55O7pasCjF18Zng6VwAA7G+t06EIviLAaBSP
+	 9NM6GsVHfR8tLGNk8ySaG1DDwZUGiczfUNbWRrcvW55iRmNEU8f1COttdkuDRwPlxX
+	 ZuZh77JJ4zpRVTO0A7axKVvX+jB4UTgqT2D7Yo5GXQ7sM1Y1Q+44k9LVGQrsb/5du2
+	 0RXFGKLCL8QKQ==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Stefano Garzarella <sgarzare@redhat.com>,
@@ -55,9 +55,9 @@ Cc: Stefano Garzarella <sgarzare@redhat.com>,
 	linux-kernel@vger.kernel.org (open list),
 	keyrings@vger.kernel.org (open list:KEYS/KEYRINGS),
 	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v10 3/4] tpm, tpm2-cmd: Use stack for trivial cases
-Date: Sun, 21 Sep 2025 05:08:03 +0300
-Message-Id: <20250921020804.1088824-4-jarkko@kernel.org>
+Subject: [PATCH v10 4/4] tpm_vpm_proxy: Use stack for TPM_CC_SET_LOCALITY
+Date: Sun, 21 Sep 2025 05:08:04 +0300
+Message-Id: <20250921020804.1088824-5-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250921020804.1088824-1-jarkko@kernel.org>
 References: <20250921020804.1088824-1-jarkko@kernel.org>
@@ -71,93 +71,42 @@ Content-Transfer-Encoding: 8bit
 
 From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-Use stack allocation for trivial "low-hanging fruit" sites, which are often
-also critical code paths associated with probing and power management.
+Use stack allocation for TPM_CC_SET_LOCALITY, as it has known fixed size.
 
 Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 ---
- drivers/char/tpm/tpm2-cmd.c | 57 ++++++++++++++-----------------------
- 1 file changed, 22 insertions(+), 35 deletions(-)
+ drivers/char/tpm/tpm1-cmd.c       |  2 +-
+ drivers/char/tpm/tpm_vtpm_proxy.c | 12 +++++-------
+ 2 files changed, 6 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index 245c7c952e82..3c55f60ae4c2 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -382,14 +382,13 @@ EXPORT_SYMBOL_GPL(tpm2_get_tpm_pt);
-  */
- void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type)
- {
--	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
--	if (!buf)
--		return;
-+	u8 buf_data[TPM_BUF_MIN_SIZE];
-+	struct tpm_buf *buf = (struct tpm_buf *)buf_data;
- 
--	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
-+	tpm_buf_init(buf, TPM_BUF_MIN_SIZE);
- 	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SHUTDOWN);
- 	tpm_buf_append_u16(buf, shutdown_type);
--	tpm_transmit_cmd(chip, buf, 0, "stopping the TPM");
-+	tpm_transmit_cmd(chip, buf, 0, "TPM2_Shutdown");
- }
- 
- /**
-@@ -407,58 +406,49 @@ void tpm2_shutdown(struct tpm_chip *chip, u16 shutdown_type)
-  */
- static int tpm2_do_selftest(struct tpm_chip *chip)
- {
-+	u8 buf_data[TPM_BUF_MIN_SIZE];
-+	struct tpm_buf *buf = (struct tpm_buf *)buf_data;
- 	int full;
+diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+index 11c16ad9b2a7..433908cfb4a9 100644
+--- a/drivers/char/tpm/tpm1-cmd.c
++++ b/drivers/char/tpm/tpm1-cmd.c
+@@ -328,7 +328,7 @@ static int tpm1_startup(struct tpm_chip *chip)
  	int rc;
  
--	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
--	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
--	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SELF_TEST);
+ 	dev_info(&chip->dev, "TPM_Startup\n");
+-	tpm_buf_init(buf, TPM_BUF_INT_SIZE);
 +	tpm_buf_init(buf, TPM_BUF_MIN_SIZE);
- 	for (full = 0; full < 2; full++) {
- 		tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_SELF_TEST);
- 		tpm_buf_append_u8(buf, full);
--		rc = tpm_transmit_cmd(chip, buf, 0,
--				      "attempting the self test");
--
-+		rc = tpm_transmit_cmd(chip, buf, 0, "TPM2_SelfTest");
- 		if (rc == TPM2_RC_TESTING)
- 			rc = TPM2_RC_SUCCESS;
- 		if (rc == TPM2_RC_INITIALIZE || rc == TPM2_RC_SUCCESS)
- 			return rc;
- 	}
--
- 	return rc;
- }
+ 	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_STARTUP);
+ 	tpm_buf_append_u16(buf, TPM_ST_CLEAR);
+ 	rc = tpm_transmit_cmd(chip, buf, 0, "TPM_Startup");
+diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
+index e5de14379eb2..0f1b1b67ed4e 100644
+--- a/drivers/char/tpm/tpm_vtpm_proxy.c
++++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+@@ -395,15 +395,13 @@ static bool vtpm_proxy_tpm_req_canceled(struct tpm_chip  *chip, u8 status)
  
- /**
-- * tpm2_probe() - probe for the TPM 2.0 protocol
-+ * tpm2_probe() - Probe for the TPM 2.0 protocol
-  * @chip:	a &tpm_chip instance
-  *
-- * Send an idempotent TPM 2.0 command and see whether there is TPM2 chip in the
-- * other end based on the response tag. The flag TPM_CHIP_FLAG_TPM2 is set by
-- * this function if this is the case.
-+ * Sends an idempotent TPM 2.0 command, and based on the response tag deduces
-+ * whether a functional TPM2 chip is on the other side. When the result is
-+ * positive, TPM_CHIP_FLAG_TPM2 is append to the chip's flags.
-  *
-  * Return:
-- *   0 on success,
-- *   -errno otherwise
-+ * * 0 on success,
-+ * * -errno otherwise
-  */
- int tpm2_probe(struct tpm_chip *chip)
+ static int vtpm_proxy_request_locality(struct tpm_chip *chip, int locality)
  {
+-	int rc;
+-	const struct tpm_header *header;
+ 	struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
 +	u8 buf_data[TPM_BUF_MIN_SIZE];
 +	struct tpm_buf *buf = (struct tpm_buf *)buf_data;
- 	struct tpm_header *out;
- 	int rc;
++	const struct tpm_header *header;
++	int rc;
  
 -	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
 -	if (!buf)
@@ -165,38 +114,9 @@ index 245c7c952e82..3c55f60ae4c2 100644
 -
 -	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
 +	tpm_buf_init(buf, TPM_BUF_MIN_SIZE);
- 	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_GET_CAPABILITY);
- 	tpm_buf_append_u32(buf, TPM2_CAP_TPM_PROPERTIES);
- 	tpm_buf_append_u32(buf, TPM_PT_TOTAL_COMMANDS);
- 	tpm_buf_append_u32(buf, 1);
- 	rc = tpm_transmit_cmd(chip, buf, 0, NULL);
--	/* We ignore TPM return codes on purpose. */
- 	if (rc >=  0) {
- 		out = (struct tpm_header *)buf->data;
- 		if (be16_to_cpu(out->tag) == TPM2_ST_NO_SESSIONS)
-@@ -651,17 +641,14 @@ EXPORT_SYMBOL_GPL(tpm2_get_cc_attrs_tbl);
- 
- static int tpm2_startup(struct tpm_chip *chip)
- {
--	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
--	dev_info(&chip->dev, "starting up the TPM manually\n");
-+	u8 buf_data[TPM_BUF_MIN_SIZE];
-+	struct tpm_buf *buf = (struct tpm_buf *)buf_data;
- 
--	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
-+	dev_info(&chip->dev, "TPM2_Startup\n");
-+	tpm_buf_init(buf, TPM_BUF_MIN_SIZE);
- 	tpm_buf_reset(buf, TPM2_ST_NO_SESSIONS, TPM2_CC_STARTUP);
- 	tpm_buf_append_u16(buf, TPM2_SU_CLEAR);
--
--	return tpm_transmit_cmd(chip, buf, 0, "attempting to start the TPM");
-+	return tpm_transmit_cmd(chip, buf, 0, "TPM2_Startup");
- }
- 
- /**
+ 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
+ 		tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_SET_LOCALITY);
+ 	else
 -- 
 2.39.5
 
