@@ -1,62 +1,57 @@
-Return-Path: <linux-integrity+bounces-7230-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7231-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0834CB9360D
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 23:31:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F62BB9365E
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 23:42:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D80B719C102E
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 21:32:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18F70177037
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 21:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2610D2F7ABE;
-	Mon, 22 Sep 2025 21:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B33742FD1B2;
+	Mon, 22 Sep 2025 21:42:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="MY6VWvFh"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="gJjoXE/T"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C80288C9D
-	for <linux-integrity@vger.kernel.org>; Mon, 22 Sep 2025 21:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B502F2617
+	for <linux-integrity@vger.kernel.org>; Mon, 22 Sep 2025 21:42:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758576688; cv=none; b=HLoX8eqV9iYP28SEPEB/F5C31nnUtXB5zjXx4yP7SmH/jflo4WyRt365N/H8FJ9eGH44DNYPe752VBz2W9LKq1t5WcaoygoQRaNNh55SVEgnqKmdrTCKdQXWNhEFqoZiDrmpRE3s/qKzYZ71mBELwzWrs8IWXe1RfJzCmE+WMF8=
+	t=1758577349; cv=none; b=DPW63b7mpfJOluW7HHLgWBQBUk1xr2ZcJYdY7TonEJ4ozTgRHsR7+aezaIu1nseE9+cLra7YW6fSef5zCe3fKkfmrShEYfdgTn/Qo5UPprV1gm3dZKcMab9C1ORMqMrwAvc3occqBeEWu3+PsEu6tr8FHHg/D7jdOYELg7YgZto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758576688; c=relaxed/simple;
-	bh=8nKfHr/ph7F8GfFB1GkesOp9hG016FLtOApy4Z65/iM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=b/oByFdzL75X818WlYKINGvFWzlisA89EdQ3AVtopaJ8Kh8VGOwsZEi7HrfpCoeq+jWXY7zIMATLhmiq0iUqhf2wQuU2/jKDe25fCwfThYyv3+rrn0sTwvVXgFCdYP72HTn6uy1i4Kd+a9Cy4jn+QS2+K2Xvv1Y+nPx9qi91aQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=MY6VWvFh; arc=none smtp.client-ip=198.37.111.173
+	s=arc-20240116; t=1758577349; c=relaxed/simple;
+	bh=ZQ4LDA5oLACMH5AGu5JBCShVKvArCCIor28me+Mal7w=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=L24R2AIplTTn6BOLZCL53FJ8OVc8nlHoi16FUjOIKOKMqSnvyfjU38Q7ElS5mm02PK8vMo7g8omg/i9Yuf/ONIftDhiqCziNrXtNKMeZ5XsBnpz+YWBkU2VMalbmlVV0EJJqXk6DhmdVEPRg/EUGAUNNP5jVJI8MRYH8fWZ8eGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=gJjoXE/T; arc=none smtp.client-ip=198.37.111.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1758576685;
-	bh=8nKfHr/ph7F8GfFB1GkesOp9hG016FLtOApy4Z65/iM=;
+	d=hansenpartnership.com; s=20151216; t=1758577347;
+	bh=ZQ4LDA5oLACMH5AGu5JBCShVKvArCCIor28me+Mal7w=;
 	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=MY6VWvFhN0A4eb/e5WDvgvYoiOaasm/FwprogTLxvIWLJeVMOxib+cRUPh9FzFFKb
-	 t3b2OgvtSOrPNWV6p0yAFj41HK4Vzmpg7RwwJHb/QZQgXXv9x5TrrsGwegV+ViSf5Z
-	 QHFNVpSKHKCEQBbLodJ0fWbiWbvpETajWaarNwuw=
+	b=gJjoXE/TGiq3Cg17lchbbLUNWlFYk/8+zJId/J8N2DJHZ07Sonh+Dh/smRAE79JWR
+	 OL2hEh0K1ZFG9kelfJNvYjnv3oKxtJpFOAZ/aOEdfXWtCSopxXXvw9xAmo3J6VUBbV
+	 CxyLmYdjrQcHOoRIbYQAutGJmtR4fD52yZYBNy/o=
 Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id DB5EA1C02E9;
-	Mon, 22 Sep 2025 17:31:24 -0400 (EDT)
-Message-ID: <76504837de4d85c385d32f36b8340af0ccad2a09.camel@HansenPartnership.com>
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id E05681C0101;
+	Mon, 22 Sep 2025 17:42:26 -0400 (EDT)
+Message-ID: <c07b932bef1c5930f3f1245723e65c1c5f21d0d8.camel@HansenPartnership.com>
 Subject: Re: tpm2key.asn1 parent identification
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, tpm2@lists.linux.dev
-Date: Mon, 22 Sep 2025 17:31:24 -0400
-In-Reply-To: <aNEPLsJlV6LjnAty@kernel.org>
-References: <aMboFXNNX7WZaOaS@kernel.org>
-	 <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
-	 <aMgnm1OkDj9XnStc@kernel.org> <aMhWHy1LQVqpyW5E@kernel.org>
-	 <8c2817f5bbf8202b50d93b6044d6595ea4b29b9a.camel@HansenPartnership.com>
-	 <aMwptnyYedvdqdHc@kernel.org> <aMxC6hU-UhCP2m6v@kernel.org>
-	 <aNEPLsJlV6LjnAty@kernel.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org, 
+	tpm2@lists.linux.dev
+Date: Mon, 22 Sep 2025 17:42:26 -0400
+In-Reply-To: <aMbsBX2uq6zOixSA@kernel.org>
+References: <aMboFXNNX7WZaOaS@kernel.org> <aMbsBX2uq6zOixSA@kernel.org>
 Autocrypt: addr=James.Bottomley@HansenPartnership.com;
  prefer-encrypt=mutual;
  keydata=mQENBE58FlABCADPM714lRLxGmba4JFjkocqpj1/6/Cx+IXezcS22azZetzCXDpm2MfNElecY3qkFjfnoffQiw5rrOO0/oRSATOh8+2fmJ6el7naRbDuh+i8lVESfdlkoqX57H5R8h/UTIp6gn1mpNlxjQv6QSZbl551zQ1nmkSVRbA5TbEp4br5GZeJ58esmYDCBwxuFTsSsdzbOBNthLcudWpJZHURfMc0ew24By1nldL9F37AktNcCipKpC2U0NtGlJjYPNSVXrCd1izxKmO7te7BLP+7B4DNj1VRnaf8X9+VIApCi/l4Kdx+ZR3aLTqSuNsIMmXUJ3T8JRl+ag7kby/KBp+0OpotABEBAAG0N0phbWVzIEJvdHRvbWxleSA8SmFtZXMuQm90dG9tbGV5QEhhbnNlblBhcnRuZXJzaGlwLmNvbT6JAVgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAhkBFiEE1WBuc8i0YnG+rZrfgUrkfCFIVNYFAmBLmY0FCRs1hL0ACgkQgUrkfCFIVNaEiQgAg18F4G7PGWQ68xqnIrccke7Reh5thjUz6kQIii6Dh64BDW6/UvXn20UxK2uSs/0TBLO81k1mV4c6rNE+H8b7IEjieGR9frBsp/+Q01JpToJfzzMUY7ZTDV1IXQZ+AY9L7vRzyimnJHx0Ba4JTlAyHB+Ly5i4Ab2+uZcnNfBXquWrG3oPWz+qPK88LJLya5Jxse1m1QT6R/isDuPivBzntLOooxPk+Cwf5sFAAJND+idTAzWzslexr9j7rtQ1UW6FjO4CvK9yVNz7dgG6FvEZl6J/HOr1rivtGgpCZTBzKNF8jg034n49zGfKkkzWLuXbPUOp3/oGfsKv8pnEu1c2GbQpSmFtZXMgQm90dG9tbGV5IDxqZWpiQGxpbnV4LnZuZXQuaWJtLmNvbT6JAVYEEwEIAEACGwMHCwkIBwMCAQYVC
@@ -77,142 +72,52 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2025-09-22 at 11:56 +0300, Jarkko Sakkinen wrote:
-> On Thu, Sep 18, 2025 at 08:35:38PM +0300, Jarkko Sakkinen wrote:
-> > On Thu, Sep 18, 2025 at 06:48:06PM +0300, Jarkko Sakkinen wrote:
-> > > On Tue, Sep 16, 2025 at 10:33:43PM -0400, James Bottomley wrote:
-> > > > On Mon, 2025-09-15 at 21:08 +0300, Jarkko Sakkinen wrote:
-> > > > > On Mon, Sep 15, 2025 at 05:50:07PM +0300, Jarkko Sakkinen
-> > > > > wrote:
-> > > > > > On Sun, Sep 14, 2025 at 11:24:24PM -0400, James Bottomley
-> > > > > > wrote:
-> > > > > > > On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
-> > > > > > > > Hi,
-> > > > > > > >=20
-> > > > > > > > In practice, while implementing tpm2sh and its self-
-> > > > > > > > contained TPM emulator called "MockTPM", I've noticed
-> > > > > > > > that 'tpm2key.asn1.' has a major bottleneck, but
-> > > > > > > > luckily it is easy to squash.
-> > > > > > > >=20
-> > > > > > > > Parent handle should never be persisted, as it defies
-> > > > > > > > the existential reason of having a file format in the
-> > > > > > > > first place.
-> > > > > > >=20
-> > > > > > > Actually, if you read the spec:it describes how to handle
-> > > > > > > non-persistent parents by defining the exact form of the
-> > > > > > > P256 parent you derive from the permanent handle in
-> > > > > > > section 3.1.8:
-> > > > > > >=20
-> > > > > > > https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.h=
-tml
-> > > > > > >=20
-> > > > > > > This is the way all the implementations (well except the
-> > > > > > > kernel, but that's fixable) do it.
-> > > > > >=20
-> > > > > > Even if you fix it to persistent handle, the problem does
-> > > > > > not go magically go away. Read public attributes are
-> > > > > > ubiquitos and cryptographically correct way to do the
-> > > > > > binding.
-> > > > > >=20
-> > > > > > >=20
-> > > > > > > > To address this issue I just added couple of optional
-> > > > > > > > fields to
-> > > > > > > > TPMKey:
-> > > > > > > >=20
-> > > > > > > > =C2=A0 parentName=C2=A0=C2=A0 [6] EXPLICIT OCTET STRING OPT=
-IONAL,
-> > > > > > > > =C2=A0 parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
-> > > > > > >=20
-> > > > > > > So that's a bit redundant, since if you know the key, you
-> > > > > > > know
-> > > > > > > its name.
-> > > > > >=20
-> > > > > > What I know is irrelevant here :-)
-> > > > > >=20
-> > > > > > >=20
-> > > > > > > > By persisting this information TPM2_GetCapability +
-> > > > > > > > TPM2_ReadPublic can be used to acquire an appropriate
-> > > > > > > > handle.
-> > > > > > >=20
-> > > > > > > It can, how?=C2=A0 If the parent is a primary, you can't
-> > > > > > > insert it from a public key, you have to derive it and if
-> > > > > > > it's non-primary, you need its parent to do the
-> > > > > > > insertion.
-> > > > > >=20
-> > > > > > Transient handle is like file handle and persistent handle
-> > > > > > is like inode number. Neither unambigiuously (and this is
-> > > > > > dead obvious) does not identify any possible key.
-> > > > > >=20
-> > > > > > Further by binding key correctly, the requirement of being
-> > > > > > persistent key goes away, which is a limiting factor.
-> > > > > >=20
-> > > > > > >=20
-> > > > > > > > I'd highly recommend to add this quirk to anything that
-> > > > > > > > processes this ASN.1 format.
-> > > > > > >=20
-> > > > > > > Well, patches to the standard are accepted:
-> > > > > > >=20
-> > > > > > > https://groups.io/g/openssl-tpm2-engine/topics
-> > > > >=20
-> > > > > Further there is two options:
-> > > > >=20
-> > > > > 1. Either remove TPM2 key ASN.1 support from kernel entirely.
-> > > > > 2. Fix the 0day bug.
-> > > >=20
-> > > > Can you please explain in technical terms what you see as a
-> > > > zero day bug in the current implementation?
-> > >=20
-> > > It's essentially ambiguity problem in my opinion that locks in
-> > > the creator TPM if you know the expected parent. 0day might be
-> > > overstatement yes, but it is essentially the immutable reference
-> > > in this scheme. If you want to scope it, it's essentially a great
-> > > way to add some defence in depth to the scheme.
-> > >=20
-> > > >=20
-> > > > > It is unacceptable to make strong binding to a random open
-> > > > > source project. I zero care what OpenSSL TPM2 engine does
-> > > > > with the file format.
+On Sun, 2025-09-14 at 19:23 +0300, Jarkko Sakkinen wrote:
+> On Sun, Sep 14, 2025 at 07:08:37PM +0300, Jarkko Sakkinen wrote:
+> > Hi,
 > >=20
-> > The way I see it, a "random project" would apply to any project
-> > that a format is locked in, and it is quite obvious that fixing
-> > handle as the anchor is exactly fit for exactly for this project,
-> > and within those exact limits it is probably a sustainable choice.
+> > In practice, while implementing tpm2sh and its self-contained TPM
+> > emulator called "MockTPM", I've noticed that 'tpm2key.asn1.' has a
+> > major bottleneck, but luckily it is easy to squash.
 > >=20
-> > Being able to fix key into cryptographic=C2=A0 identity is somewhat san=
-e
-> > addition because not only does it lock-in the creator but it also
-> > allows to use offline stored keys with the same scheme i.e.,
-> > non-endorsement hierarchy derived keys created with TPM2_Create or
-> > TPM2_Import.
+> > Parent handle should never be persisted, as it defies the
+> > existential reason of having a file format in the first place.
 > >=20
-> > In the context of OpenSSL TPM2 engine, perhaps the current scheme
-> > is fine but in the context of supporting a "ecosystem" as a kernel
-> > feature it's not in its current form robust enough.
+> > To address this issue I just added couple of optional fields to
+> > TPMKey:
 > >=20
-> > And how else I can describe it other than I don't care about the
-> > project, if the file format enforces me align with it?
+> > =C2=A0 parentName=C2=A0=C2=A0 [6] EXPLICIT OCTET STRING OPTIONAL,
+> > =C2=A0 parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
+> >=20
+> > By persisting this information TPM2_GetCapability + TPM2_ReadPublic
+> > can be used to acquire an appropriate handle.
+> >=20
+> > I'd highly recommend to add this quirk to anything that processes
+> > this ASN.1 format.
 >=20
-> The ASN.1 definition limits types of keys while there's no any good
-> reasons to disregard transient keys.=20
+>=20
+> Here's a proof of concept:
+>=20
+> https://github.com/puavo-org/tpm2sh/commit/18ec3c2169b23523d8866c58fa7b8a=
+89a79bd3d4
 
-As I explained in the bit you quote above, the spec covers volatile
-parents.
+Saving the output of read_public and comparing against the saved value
+provides no proof of binding.  This is actually what the systemd TPM
+keys handlers do and, as I demonstrated in FOSDEM, an interposer attack
+that's early enough to come at key sealing still manages to exfiltrate
+the secret without being revealed.
 
-> It also enforces handle numbers, which is not very robust approach.
+https://archive.fosdem.org/2025/schedule/event/fosdem-2025-4827-recent-tpm-=
+security-enhancements-to-the-linux-kernel/
 
-I think if you read the spec, you'll find it only requires handle
-numbers for persistent keys ... specific handle numbers being a feature
-of those keys required by TPM spec.
-
-> I've neither seen any cryptographic object in my life, which uses
-> ambiguous data as part of the identity no matter how hypothetical
-> the possible threat scenarios are. It's a bad security practice
-> plain and simple.
-
-This contains no actionable technical content.  However, it is possible
-the spec doesn't cover your use case, it's just you haven't actually
-outlined what your use case is, so no-one who knows the spec can
-actually confirm or deny this.
+One possible benefit of saving the public part of the TPM key parent is
+to give subsequent sessions a known key to encrypt a salt to which an
+interposer can't hack.  However, this only works, as demonstrated
+above, if you certify the parent *before* you save it.  However, if
+you're doing certification, it's just as easy to derive a primary and
+certify that before salting the session ... again, as demonstrated,
+this is done by saving the name of the EK signing key somewhere in an
+encrypted filesystem the attacker wouldn't find it easy to alter.
 
 Regards,
 
