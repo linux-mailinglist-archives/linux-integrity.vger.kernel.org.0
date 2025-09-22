@@ -1,162 +1,181 @@
-Return-Path: <linux-integrity+bounces-7218-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7219-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DBB3B8FA3C
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 10:47:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30627B8FA90
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 10:56:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8ADE3BDF62
-	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 08:47:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CFF5189D85F
+	for <lists+linux-integrity@lfdr.de>; Mon, 22 Sep 2025 08:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74743280A58;
-	Mon, 22 Sep 2025 08:46:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875B6248F69;
+	Mon, 22 Sep 2025 08:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="erg93yRl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpOprXkw"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B5B27EFE1
-	for <linux-integrity@vger.kernel.org>; Mon, 22 Sep 2025 08:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0FE1CAA92;
+	Mon, 22 Sep 2025 08:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758530811; cv=none; b=cfQlu46kWtGvgqnqiRdQMIQZBlHJN/GzRb3ye2ZSwhDk9yrecY5riQC73xDpDZoabPa6ZjiEWZ2YtXZ15uQCA1PjSQxVWdkpdGJOp8Cor0SF7fNm73LPl8vkWWKivwAiSpI0s4d45zwqBkYJDLjJwoB8hlmAKJPV84KlhPTRue4=
+	t=1758531378; cv=none; b=rIf5JHM81+EcqsNZcPHPv9FTjFcCM8U/Z9XtGihez8HgtyxTw+J1Jedrtwc78ADw1ECzT4qrsI7zIO061O39YkJMSQSN4tsrlzant4fhSCuC7/2C6xNgJqLG0fRZEgLs7fAARiHxlhRrTOxZJS8xPpjBNl3T/1j7N5cjF14Lveg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758530811; c=relaxed/simple;
-	bh=rux0nTQ+9Ps75XEuL7CDS6cf7zTXqlLDg+FoU++9teE=;
+	s=arc-20240116; t=1758531378; c=relaxed/simple;
+	bh=Ct8ZBWrET9bGw1pRRcUhL+ph5RhnyhRo4829imYMQd4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fJ94OF4PTwj8/tAUnx0fi3Iz1sfgcRIzsicTtQUSLmmCUAJUoLYWU6ONGk9Rq88VbdsT5z9qcX4PYOZT7Qbu0JunYLeKF95JqBpXh3GkPsLDdV29xcA49VTTGSk3WR4FFJQfUnR/hkZmmsRTNkPvtVVUA/2SdwKY8eDiOP4RWy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=erg93yRl; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758530807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l8GHbp8D2RtGBXa6TMzqbqe1udm4TgsD2fx15EVhrsY=;
-	b=erg93yRlVbtuZw+s77oia3XtXtTtdbZk/zPQBrYu4qMoXcz5e/m8dVCxONm8uiQXgacDaO
-	u8sYiEZ7GdPIXUwleHwlIF5ANpLJWsKyWbiuCXTSAnPW3PNsdNpGISmzHJzjriEwaSQ0nj
-	20CX0h6F8ipqCPf3/B3Ib4wLX/dUpYw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-676-7j7fWzOUOSeVZAG8oldmIA-1; Mon, 22 Sep 2025 04:46:45 -0400
-X-MC-Unique: 7j7fWzOUOSeVZAG8oldmIA-1
-X-Mimecast-MFC-AGG-ID: 7j7fWzOUOSeVZAG8oldmIA_1758530805
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3f384f10762so717333f8f.3
-        for <linux-integrity@vger.kernel.org>; Mon, 22 Sep 2025 01:46:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758530804; x=1759135604;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l8GHbp8D2RtGBXa6TMzqbqe1udm4TgsD2fx15EVhrsY=;
-        b=dCOk2EdEdTpAK3yWB+SGncHjs+cth436NYphTdlKmDvJq6KrUFRsWcT9605BKxhr9+
-         NamgUwCvBQ6nf84cBfduvStxT3s2inN00KYUyB/K3XFubAdwA4akr0c9iZ2XvA8GoJ83
-         IBXoi9LrnIJ1a8QlSzkY+rTlpWEvGPHzBP9nGVTk/ldvZ/WpaDeT6KMEDwoiIojo4SbS
-         7g1f9nlVnxdZpsxaQwaqWFYhLa6iUJMGEZDGzLhMzy4jEmhtozwLWgSwsoGTDXdoRMH9
-         Q6nW55pwrb5zb0kJa+DxxliJg0ToEmh6awsiEhB9SXvv11LQAArz+5g8j555M3G3fkRl
-         lcPw==
-X-Gm-Message-State: AOJu0Yy4zFVYSqSE/qD/ZdI4leHjhR2zjxUzO425wxBRU/9HUYje7VgP
-	hR/i7ZEEu5+obBMNEKAHnsDvXq4ZdxocUYWBImHaHXHL7+whsJNtoz9fymrf0v/fKQgLTtcNgUV
-	lEIK5b41gtITx70Im1FYzv+Yes0IQJYxh8/4VY2NoQZdMTLpVQvUs+MGMLVg/av+AnBqS5g==
-X-Gm-Gg: ASbGncux9E+Tk/I/b2vz2Je1xkl+uzNBXvvhCSL6vtWQINoOCyz7k3bg7d1Zw7Ny2Dn
-	+7rIzeFpYGoBy4Syhqivkhxz4QqWzFViKZh8gKG1Y++OI/se/OimGVCpVSgzUhS+WcxhDVYTVZK
-	oa8moaTKnAL9KH6Agy8DCWYiyNU8hq8H9Sslf+F+TR4KfeF71nxQhUmj85x0UF84vtWSESZ/CqR
-	2lpEFBjGv+uu8jbCnija90S/ZUwhzKM6bJ31Bc10SB7obyd0blKrrPsk9NoCKXyGrIVw3RefiYa
-	yfPXJkzrvRrWDr+d2xRIapj5OPOGpSwtAf5jAuP34g==
-X-Received: by 2002:a5d:63cb:0:b0:3f7:ce62:ce17 with SMTP id ffacd0b85a97d-3f7ce62d110mr3512226f8f.38.1758530804592;
-        Mon, 22 Sep 2025 01:46:44 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGFIdF26ri8nPLU1h2hF0oUN4DiGv6MueO1DVBaFqmOzwLifco/ttVWeCoGXOHOK8CouN8qOA==
-X-Received: by 2002:a5d:63cb:0:b0:3f7:ce62:ce17 with SMTP id ffacd0b85a97d-3f7ce62d110mr3512199f8f.38.1758530804128;
-        Mon, 22 Sep 2025 01:46:44 -0700 (PDT)
-Received: from sgarzare-redhat ([5.77.126.50])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3f829e01a15sm7668492f8f.57.2025.09.22.01.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Sep 2025 01:46:43 -0700 (PDT)
-Date: Mon, 22 Sep 2025 10:46:36 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, 
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	open list <linux-kernel@vger.kernel.org>, "open list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v10 4/4] tpm_vpm_proxy: Use stack for TPM_CC_SET_LOCALITY
-Message-ID: <swkdunznhlk5atrdfsiud57uzcvkmknnarzfh6esq3xzy74tmk@2qqsv6tvdtlw>
-References: <20250921020804.1088824-1-jarkko@kernel.org>
- <20250921020804.1088824-5-jarkko@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E2466SuPe5R+9755im5YhOk2yR8UliD3vLBBJCgVziVhc1hUMn7BWJvLMRfk4fcSZg1JtAz0rj5Bv8r70kuTzPV+e01xxK5JJlvRm7QCDGSW97dmubsWpI1R3qanzoZrrPnaF46xw6YgCKQT1jgNx7ak9vRvzwU398y24x5emjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpOprXkw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855D0C4CEF0;
+	Mon, 22 Sep 2025 08:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758531377;
+	bh=Ct8ZBWrET9bGw1pRRcUhL+ph5RhnyhRo4829imYMQd4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hpOprXkwmYuMKpbHPxEgj4eWDwEe7E1Ekfowu1wvKB36bRsmrGE7d9stAneGK1tt1
+	 FvFOdj9BS9ou8qtIEiZNGMcxRB65MTsTwbiGoaj0NgGBS0aqS4sGcfZmTZdNxOV3Jy
+	 TC8ziNKA0UM+RiW/w57Zpyz34cKDKCBy4a3/3pMlC2BWrWZwMt1nXEbj3pZIm7WFTZ
+	 M/usxB4cK7xOhHRvJiG0wdef/Xp7MJkixjDNQe35QFioqDwMfChlqP7W0UMfScDSwZ
+	 a2osUDwt7LBpB40BvmsGorbMNNhcD4/NJIFLYx10/6Gz0X/OEJTz2F5arqy+wqixii
+	 BBBZUF6QmPSzg==
+Date: Mon, 22 Sep 2025 11:56:14 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, tpm2@lists.linux.dev
+Subject: Re: tpm2key.asn1 parent identification
+Message-ID: <aNEPLsJlV6LjnAty@kernel.org>
+References: <aMboFXNNX7WZaOaS@kernel.org>
+ <6e1f2713288b48a1cc0311d01e281a98d8e7f45d.camel@HansenPartnership.com>
+ <aMgnm1OkDj9XnStc@kernel.org>
+ <aMhWHy1LQVqpyW5E@kernel.org>
+ <8c2817f5bbf8202b50d93b6044d6595ea4b29b9a.camel@HansenPartnership.com>
+ <aMwptnyYedvdqdHc@kernel.org>
+ <aMxC6hU-UhCP2m6v@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250921020804.1088824-5-jarkko@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aMxC6hU-UhCP2m6v@kernel.org>
 
-On Sun, Sep 21, 2025 at 05:08:04AM +0300, Jarkko Sakkinen wrote:
->From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
->
->Use stack allocation for TPM_CC_SET_LOCALITY, as it has known fixed size.
->
->Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
->---
-> drivers/char/tpm/tpm1-cmd.c       |  2 +-
-> drivers/char/tpm/tpm_vtpm_proxy.c | 12 +++++-------
-> 2 files changed, 6 insertions(+), 8 deletions(-)
->
->diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
->index 11c16ad9b2a7..433908cfb4a9 100644
->--- a/drivers/char/tpm/tpm1-cmd.c
->+++ b/drivers/char/tpm/tpm1-cmd.c
->@@ -328,7 +328,7 @@ static int tpm1_startup(struct tpm_chip *chip)
-> 	int rc;
->
-> 	dev_info(&chip->dev, "TPM_Startup\n");
->-	tpm_buf_init(buf, TPM_BUF_INT_SIZE);
->+	tpm_buf_init(buf, TPM_BUF_MIN_SIZE);
+On Thu, Sep 18, 2025 at 08:35:38PM +0300, Jarkko Sakkinen wrote:
+> On Thu, Sep 18, 2025 at 06:48:06PM +0300, Jarkko Sakkinen wrote:
+> > On Tue, Sep 16, 2025 at 10:33:43PM -0400, James Bottomley wrote:
+> > > On Mon, 2025-09-15 at 21:08 +0300, Jarkko Sakkinen wrote:
+> > > > On Mon, Sep 15, 2025 at 05:50:07PM +0300, Jarkko Sakkinen wrote:
+> > > > > On Sun, Sep 14, 2025 at 11:24:24PM -0400, James Bottomley wrote:
+> > > > > > On Sun, 2025-09-14 at 19:08 +0300, Jarkko Sakkinen wrote:
+> > > > > > > Hi,
+> > > > > > > 
+> > > > > > > In practice, while implementing tpm2sh and its self-contained
+> > > > > > > TPM emulator called "MockTPM", I've noticed that
+> > > > > > > 'tpm2key.asn1.' has a major bottleneck, but luckily it is easy
+> > > > > > > to squash.
+> > > > > > > 
+> > > > > > > Parent handle should never be persisted, as it defies the
+> > > > > > > existential reason of having a file format in the first place.
+> > > > > > 
+> > > > > > Actually, if you read the spec:it describes how to handle non-
+> > > > > > persistent parents by defining the exact form of the P256 parent
+> > > > > > you derive from the permanent handle in section 3.1.8:
+> > > > > > 
+> > > > > > https://www.hansenpartnership.com/draft-bottomley-tpm2-keys.html
+> > > > > > 
+> > > > > > This is the way all the implementations (well except the kernel,
+> > > > > > but that's fixable) do it.
+> > > > > 
+> > > > > Even if you fix it to persistent handle, the problem does not go
+> > > > > magically go away. Read public attributes are ubiquitos and
+> > > > > cryptographically correct way to do the binding.
+> > > > > 
+> > > > > > 
+> > > > > > > To address this issue I just added couple of optional fields to
+> > > > > > > TPMKey:
+> > > > > > > 
+> > > > > > >   parentName   [6] EXPLICIT OCTET STRING OPTIONAL,
+> > > > > > >   parentPubkey [7] EXPLICIT OCTET STRING OPTIONAL
+> > > > > > 
+> > > > > > So that's a bit redundant, since if you know the key, you know
+> > > > > > its name.
+> > > > > 
+> > > > > What I know is irrelevant here :-)
+> > > > > 
+> > > > > > 
+> > > > > > > By persisting this information TPM2_GetCapability +
+> > > > > > > TPM2_ReadPublic can be used to acquire an appropriate handle.
+> > > > > > 
+> > > > > > It can, how?  If the parent is a primary, you can't insert it
+> > > > > > from a public key, you have to derive it and if it's non-primary,
+> > > > > > you need its parent to do the insertion.
+> > > > > 
+> > > > > Transient handle is like file handle and persistent handle is like
+> > > > > inode number. Neither unambigiuously (and this is dead obvious)
+> > > > > does not identify any possible key.
+> > > > > 
+> > > > > Further by binding key correctly, the requirement of being
+> > > > > persistent key goes away, which is a limiting factor.
+> > > > > 
+> > > > > > 
+> > > > > > > I'd highly recommend to add this quirk to anything that
+> > > > > > > processes this ASN.1 format.
+> > > > > > 
+> > > > > > Well, patches to the standard are accepted:
+> > > > > > 
+> > > > > > https://groups.io/g/openssl-tpm2-engine/topics
+> > > > 
+> > > > Further there is two options:
+> > > > 
+> > > > 1. Either remove TPM2 key ASN.1 support from kernel entirely.
+> > > > 2. Fix the 0day bug.
+> > > 
+> > > Can you please explain in technical terms what you see as a zero day
+> > > bug in the current implementation?
+> > 
+> > It's essentially ambiguity problem in my opinion that locks in the
+> > creator TPM if you know the expected parent. 0day might be overstatement
+> > yes, but it is essentially the immutable reference in this scheme.
+> > If you want to scope it, it's essentially a great way to add some defence
+> > in depth to the scheme.
+> > 
+> > > 
+> > > > It is unacceptable to make strong binding to a random open source
+> > > > project. I zero care what OpenSSL TPM2 engine does with the file
+> > > > format.
+> 
+> The way I see it, a "random project" would apply to any project that a
+> format is locked in, and it is quite obvious that fixing handle as the
+> anchor is exactly fit for exactly for this project, and within those
+> exact limits it is probably a sustainable choice.
+> 
+> Being able to fix key into cryptographic  identity is somewhat sane
+> addition because not only does it lock-in the creator but it also allows
+> to use offline stored keys with the same scheme i.e., non-endorsement
+> hierarchy derived keys created with TPM2_Create or TPM2_Import.
+> 
+> In the context of OpenSSL TPM2 engine, perhaps the current scheme is
+> fine but in the context of supporting a "ecosystem" as a kernel feature
+> it's not in its current form robust enough.
+> 
+> And how else I can describe it other than I don't care about the
+> project, if the file format enforces me align with it?
 
-This change should be squashed in patch 2, right?
+The ASN.1 definition limits types of keys while there's no any good
+reasons to disregard transient keys. 
 
-Thanks,
-Stefano
+It also enforces handle numbers, which is not very robust approach.
 
-> 	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_STARTUP);
-> 	tpm_buf_append_u16(buf, TPM_ST_CLEAR);
-> 	rc = tpm_transmit_cmd(chip, buf, 0, "TPM_Startup");
->diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtpm_proxy.c
->index e5de14379eb2..0f1b1b67ed4e 100644
->--- a/drivers/char/tpm/tpm_vtpm_proxy.c
->+++ b/drivers/char/tpm/tpm_vtpm_proxy.c
->@@ -395,15 +395,13 @@ static bool vtpm_proxy_tpm_req_canceled(struct tpm_chip  *chip, u8 status)
->
-> static int vtpm_proxy_request_locality(struct tpm_chip *chip, int locality)
-> {
->-	int rc;
->-	const struct tpm_header *header;
-> 	struct proxy_dev *proxy_dev = dev_get_drvdata(&chip->dev);
->+	u8 buf_data[TPM_BUF_MIN_SIZE];
->+	struct tpm_buf *buf = (struct tpm_buf *)buf_data;
->+	const struct tpm_header *header;
->+	int rc;
->
->-	struct tpm_buf *buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
->-	if (!buf)
->-		return -ENOMEM;
->-
->-	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
->+	tpm_buf_init(buf, TPM_BUF_MIN_SIZE);
-> 	if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> 		tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_SET_LOCALITY);
-> 	else
->-- 
->2.39.5
->
+I've neither seen any cryptographic object in my life, which uses
+ambiguous data as part of the identity no matter how hypothetical
+the possible threat scenarios are. It's a bad security practice
+plain and simple.
+
+BR, Jarkko
 
 
