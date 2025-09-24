@@ -1,526 +1,479 @@
-Return-Path: <linux-integrity+bounces-7269-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7270-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEE70B995F4
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 12:10:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC88DB9AF89
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 19:04:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FC283B44AE
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 10:10:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE53A1BC001F
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 17:04:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE65B2DCBF2;
-	Wed, 24 Sep 2025 10:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564BE19CCF5;
+	Wed, 24 Sep 2025 17:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cFo909Ys"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpyY4ffj"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A1A2DBF4B
-	for <linux-integrity@vger.kernel.org>; Wed, 24 Sep 2025 10:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317DA182B4
+	for <linux-integrity@vger.kernel.org>; Wed, 24 Sep 2025 17:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758708649; cv=none; b=fM8TsqRYezt39/88gDW00FAQza4jPOK0FiScz2Xt5M/rQtS1nFF+Hdc2f/IGx0AbEv11gvh9QIDzHd0VjonfHtaysFz/DnnmI7ryu1aTQouulh3OvX7GxnlVjpeEq0BK6qvpuVEYZ/8yk9yAkR1Xunlvo9ApI9th7hrbDprNyPY=
+	t=1758733474; cv=none; b=jS5LZJZNbpfFwFyjeOzi6Uu3JvmanEX9GSLCH9U45mq9+orIOQeDclHn/OF8FcjI6HP87QlbePUsOPmYzUOnejXTM5RJS1sCmdMYKsLIG3Z7TclOfXu66kkOUGhq3gVnfTgFmttW05AtBJWxTV55ScYXBuntIvNhXOCA9n3CEwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758708649; c=relaxed/simple;
-	bh=42IUolJFpOG0WNz3wvlFk8/ibhHcFj8As1kDj1zMlCo=;
+	s=arc-20240116; t=1758733474; c=relaxed/simple;
+	bh=65QabU4lrmZ1tqFxsLsMxDxypYz/6V5GoY9JUYn5igg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r5iKJHB47HFKzxXQMSvnI4e0mfj/+we0MnD21S0tFWxF5TUmekjzTd6zvC18orgVDw72L9kc/OYqZ0UUb3SnRe3Cym9X4/0+dlll4Tuz0mb9CSISZg2L3XB+CmmiQIW5pxFJAs+UKmrhPHix9Z5gHxGLsIgeRGDVDjO6/ARYDok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cFo909Ys; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1758708642;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7Q+QYypEhkn5NpRnHRZOiRVDYTC1qSrgPH91Ihh0LNY=;
-	b=cFo909YsZhziReN8KVI33rLZGpYc0WZa4w3zs6Lg/4V3C/ZL562dlMu9MrI5hfIgv0r8j4
-	z4Uozg+baKnJltaKvBm9p6oK5ImZqbaXiKg2vkcY5qxlalJgIN/m6/L0X5UWTssQxxkPIT
-	nH9GPLjkgPbe9lhuAefa89Z2GYYyjdI=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-582-gAMDxI6pN0ayD6I4YeOgcA-1; Wed, 24 Sep 2025 06:10:41 -0400
-X-MC-Unique: gAMDxI6pN0ayD6I4YeOgcA-1
-X-Mimecast-MFC-AGG-ID: gAMDxI6pN0ayD6I4YeOgcA_1758708640
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-46e19f00bc2so24971855e9.3
-        for <linux-integrity@vger.kernel.org>; Wed, 24 Sep 2025 03:10:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758708640; x=1759313440;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7Q+QYypEhkn5NpRnHRZOiRVDYTC1qSrgPH91Ihh0LNY=;
-        b=qMVLrDTCjTymnFmycIa/tQln1N2Hh3AAzCjWPubrkizAVoRyEzQ3OV2+c+kBN9O50S
-         N6u+I229QvwG93viBfDVIoiIYQb5l8+32flp6ieDxi1J2+J/zyyi644MhJqZhiwoK29w
-         4QvBc2bWWkqdyLff8bZu7fw4JkIgl8Byf7hfKkupdlIzvXK8feSe+3gCHOftQ9hPJC4M
-         6rCV1uRZPLavVMbdCiop3y0JEmGdnSuXl321p24orJJ5OtBIS6MLSwN9JKoLZWBQMdFs
-         bZxchrWqKqTR5+uWDZxhYvamjtrARm0nQN78CB5NmJ6VdxKECCB8aY38XTdkOyy9TMNi
-         CxKw==
-X-Gm-Message-State: AOJu0YwzdWSCa+d2c2PDDTYEfx0NEWl7Xtt0lblnhUhT75FYvAsw0iC9
-	YUth7GEQE6Q55wg5hGEIwQgG58X0JgUmP4zUJhqFIwXZ/9A0nYbIFpj7G8SSKSUtWP8RfGtyjWB
-	KUijTA9vv5h5poFOUlu1WTcWto6hO2xKkQrgR5stXQ56dIge9IhHdxZtJIyOhiJYyWVa85w==
-X-Gm-Gg: ASbGncsl1KIyf0Ebq1tGbNQL74R/gh3LfvCmnzPGOHuKy9VqxM47lvlINvOmfiMfRlv
-	xFHnmLQs1OYpVtF+cG/MTRbJcmaOyJFbjZWXKCQOvyqM0iBh77CZaL0d2i4YvJlWUZ/hWw70csH
-	MFh3jQgrAm0dnO4gq02py5ZuZq59UGcuDGcEH6UkR/yD6cYtuyZJcgKYLYbzMEIyelYO8JHMKh8
-	fQNrJlVyenBKiQRsDdoicPqcm/oFQIVul+NW0Uqdby7BqJK8ROleNxAHvIAhFQRKz2/GScBCPCN
-	/eXHW0UsuFOKASIHL34l6/0lffhwMazEtdTcetxa/Oc=
-X-Received: by 2002:a05:600c:35d5:b0:46c:7397:fb03 with SMTP id 5b1f17b1804b1-46e1d9737c0mr78992235e9.8.1758708639830;
-        Wed, 24 Sep 2025 03:10:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGBoGLBODwpwV1IuVt4mT0hSaCZaMf+ZWrE3+qmF8Vhbs7GIUd8ImjhLhyZlIYjDTP2/wIWzw==
-X-Received: by 2002:a05:600c:35d5:b0:46c:7397:fb03 with SMTP id 5b1f17b1804b1-46e1d9737c0mr78991655e9.8.1758708639235;
-        Wed, 24 Sep 2025 03:10:39 -0700 (PDT)
-Received: from sgarzare-redhat ([5.77.110.171])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46e2aadf5c9sm25677785e9.19.2025.09.24.03.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Sep 2025 03:10:38 -0700 (PDT)
-Date: Wed, 24 Sep 2025 12:10:31 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, 
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>, Stefan Berger <stefanb@linux.ibm.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	open list <linux-kernel@vger.kernel.org>, "open list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v10 1/4] tpm: Make TPM buffer allocations more robust
-Message-ID: <vtfrdnkts3hqwvretrqrx445cef5wjourgdmay6rzrrwmfc3hu@nbs5cf2oz3b3>
-References: <20250921020804.1088824-1-jarkko@kernel.org>
- <20250921020804.1088824-2-jarkko@kernel.org>
- <gg6tsuyhnopcwed3zr7p7ikjq3vqi4ijxwfxjqwscx5hjk7lk2@w7e32ofhufov>
- <aNKu_Mm0tupokMmZ@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=KmdHBQdgezXL4AnzaXL8Zgi9HQwalL5nF564jolbEeFatVCUtQ007ZqhAopohLamACqo7NxtsVyH13kUyy9+YF7UqdH0r4PmXxxabV98A0jJzH+oHCHqYWQWYzl94DfM7YFWVkXArs8JTCOtT6O1vEAJI0beRUeqUOxeeABDMdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpyY4ffj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BD34C4CEE7;
+	Wed, 24 Sep 2025 17:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758733473;
+	bh=65QabU4lrmZ1tqFxsLsMxDxypYz/6V5GoY9JUYn5igg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YpyY4ffjXBP/9YNBsOUtLUfB6YMhFPED5Und06I+LX0Odvrn2xS3jSQg48FMLXBKT
+	 8SggNSIlQ95EfRDuhvDdUWotK1U55UK9zsjePqPsSYe8z8DpiABrXeQSiOgDoU6/g5
+	 g8+GV/6knUKvSWSeIuItpfpB6XwC8XiQHOKWx7KytbM9KRQ46IT/SE9dw0T0EddnTA
+	 DBwHa/FMKfHtLPnYdB2iNIqN0jCJKnKlf1mg0ifDCSnu2j+Jr5mAAQ/TmjHa5tuNcp
+	 7/YkekLL3u7Nz5Uvo7nijKwa3yczbNy56SvLMhqJpFQiv0gqrNW28Tx74mcWQEFefn
+	 cyNVjIFB/ALpQ==
+Date: Wed, 24 Sep 2025 20:04:29 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Denis Aleksandrov <daleksan@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, peterhuewe@gmx.de, jgg@ziepe.ca,
+	linux-integrity@vger.kernel.org, Jan Stancek <jstancek@redhat.com>,
+	Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: Re: [PATCH v5] tpm: Prevent local DOS via tpm/tpm0/ppi/*operations
+Message-ID: <aNQknT3Uo7oRfgXl@kernel.org>
+References: <20250915210829.6661-1-daleksan@redhat.com>
+ <20250923200748.GA3355497@ax162>
+ <aNNB7w3x2ZoekCML@kernel.org>
+ <aNNmFCl0OsfeImK3@kernel.org>
+ <aNNnZ8iW7gYPkhhu@kernel.org>
+ <CAG+gbFcAJ7ppMbcyHsRFj=ZMteNV7GoUh5qkb+7iG2n4D5ONGg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aNKu_Mm0tupokMmZ@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG+gbFcAJ7ppMbcyHsRFj=ZMteNV7GoUh5qkb+7iG2n4D5ONGg@mail.gmail.com>
 
-On Tue, Sep 23, 2025 at 05:30:20PM +0300, Jarkko Sakkinen wrote:
->On Mon, Sep 22, 2025 at 10:44:34AM +0200, Stefano Garzarella wrote:
->> On Sun, Sep 21, 2025 at 05:08:01AM +0300, Jarkko Sakkinen wrote:
->> > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
->> >
->> > Create more ergonomic primitives to work with TPM buffers, where
->> > 'tpm_buf_init*' initialize the memory and 'tpm_buf_reset*' (re)set a buffer
->> > for a particular use and purpose. The new primitives are ubiquitos when
->> > it comes to heap and stack usage.
->> >
->> > Given that the kzalloc is decoupled, a managed allocation can be done
->> > trivially:
->> >
->> > 	struct tpm_buf *buf __free(kfree) buf = kzalloc(TPM_BUF_MAX_SIZE,
->> > 							GFP_KERNEL);
->> >
->> > This effectively zeros out the odds having any memory leaks with TPM
->> > buffers. The new structures can be later used to widen the use of stack
->> > over heap in the subsystem in the critical code paths..
->> >
->> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
->> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
->> > ---
->> > v10:
->> > - No changes.
->> > v9:
->> > - Rename pre-existing TPM_BUFSIZE as TPM_BUF_MAX_SIZE and redeclare
->> >  it in include/linux/tpm.h, and use this constant instead of
->> >  PAGE_SIZE in tpm_buf_init*. Define TPM_BUF_MIN_SIZE to be a
->> >  sane placeholder value for stack allocations.
->> > - Fix and restructure invariant for the sake of clarity.
->> > - memset buffers to zero in tpm_buf_init* in order to guarantee a legit
->> >  initial state. This does not cause any regressions but once tpm_buf
->> >  is allocaed from stack at some site, this will zero out chance of
->> >  corrupted state.
->> > v8:
->> > - Decouple memory init i.e. bring tpm_init* back but with new fresh
->> >  form.
->> > - Cap buf_size to page size and also make checks in tpm_buf_append
->> >  safe:
->> >  https://lore.kernel.org/linux-integrity/hwsx2t2tkbos3g7k2syemxbvc6sfrsbviwm64ubcdl6ms7ljvo@toetomkhheht/
->> > - Fix trusted_tpm_send() and simplify the flow.
->> > v7:
->> > - Additional function comments and invariant was unfortunately left to
->> >  my staging area so here's the addition (does not affect functionality).
->> > v6:
->> > - Removed two empty lines as requested by Stefan:
->> >  https://lore.kernel.org/linux-integrity/be1c5bef-7c97-4173-b417-986dc90d779c@linux.ibm.com/
->> > - Add 'capacity' field as this makes easy to stretch tpm_buf into stack
->> >  allocation.
->> > v5:
->> > - I tested this version also with TPM 1.2 by booting up and checking
->> >  that sysfs attributes work.
->> > - Fixed the length check against capacity (James) with TPM_BUF_CAPACITY.
->> > - Fixed declaration style: do it at the site (Jason).
->> > - Improved commit message (Stefan).
->> > - Removed "out" label from tpm2_pcr_read() (Stefan).
->> > - Removed spurious "return rc;" from tpm2_get_pcr_allocation() (Stefan).
->> > v4:
->> > - Wrote a more a descriptive short summary and improved description.
->> > - Fixed the error in documentation: there is 4090 bytes of space left
->> >  for the payload - not 4088 bytes.
->> > - Turned tpm_buf_alloc() into inline function.
->> > v3:
->> > - Removed the cleanup class and moved on using __free(kfree) instead.
->> > - Removed `buf_size` (James).
->> > - I'm open for the idea of splitting still (Jason) but I'll hold
->> >  at least this revision just to check that my core idea here
->> >  is correct.
->> > v2:
->> > - Implement also memory allocation using the cleanup class.
->> > - Rewrote the commit message.
->> > - Implemented CLASS_TPM_BUF() helper macro.
->> > ---
->> > drivers/char/tpm/tpm-buf.c                | 137 +++++++----
->> > drivers/char/tpm/tpm-dev-common.c         |   4 +-
->> > drivers/char/tpm/tpm-dev.h                |   2 +-
->> > drivers/char/tpm/tpm-interface.c          |   4 +-
->> > drivers/char/tpm/tpm-sysfs.c              |  20 +-
->> > drivers/char/tpm/tpm.h                    |   3 +-
->> > drivers/char/tpm/tpm1-cmd.c               | 149 ++++++------
->> > drivers/char/tpm/tpm2-cmd.c               | 282 ++++++++++------------
->> > drivers/char/tpm/tpm2-sessions.c          | 121 +++++-----
->> > drivers/char/tpm/tpm2-space.c             |  44 ++--
->> > drivers/char/tpm/tpm_tis_i2c.c            |   4 +-
->> > drivers/char/tpm/tpm_vtpm_proxy.c         |  32 ++-
->> > include/linux/tpm.h                       |  28 ++-
->> > security/keys/trusted-keys/trusted_tpm1.c |  34 ++-
->> > security/keys/trusted-keys/trusted_tpm2.c | 156 ++++++------
->> > 15 files changed, 493 insertions(+), 527 deletions(-)
->> >
->> > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
->> > index dc882fc9fa9e..82dce0350a41 100644
->> > --- a/drivers/char/tpm/tpm-buf.c
->> > +++ b/drivers/char/tpm/tpm-buf.c
->> > @@ -7,82 +7,107 @@
->> > #include <linux/module.h>
->> > #include <linux/tpm.h>
->> >
->> > -/**
->> > - * tpm_buf_init() - Allocate and initialize a TPM command
->> > - * @buf:	A &tpm_buf
->> > - * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
->> > - * @ordinal:	A command ordinal
->> > - *
->> > - * Return: 0 or -ENOMEM
->> > - */
->> > -int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
->> > +static void __tpm_buf_size_invariant(struct tpm_buf *buf, u16 buf_size)
->> > {
->> > -	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
->> > -	if (!buf->data)
->> > -		return -ENOMEM;
->> > -
->> > -	tpm_buf_reset(buf, tag, ordinal);
->> > -	return 0;
->> > +	if (!buf->capacity) {
->> > +		if (buf_size > TPM_BUF_MAX_SIZE) {
->> > +			WARN(1, "%s: size overflow: %u\n", __func__, buf_size);
->>
->> IIUC here we will always print something like:
->>     "__tpm_buf_size_invariant: size overflow: XXX"
->>
->> So, should we just remove `__func__` or maybe use a macro to print the name
->> of the caller?
->
->It also prints a stack trace.
+On Wed, Sep 24, 2025 at 03:34:33AM -0400, Denis Aleksandrov wrote:
+> On Tue, Sep 23, 2025 at 11:37 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Wed, Sep 24, 2025 at 06:31:37AM +0300, Jarkko Sakkinen wrote:
+> > > On Wed, Sep 24, 2025 at 03:57:23AM +0300, Jarkko Sakkinen wrote:
+> > > > On Tue, Sep 23, 2025 at 01:07:48PM -0700, Nathan Chancellor wrote:
+> > > > > Hi Denis,
+> > > > >
+> > > > > On Mon, Sep 15, 2025 at 05:08:29PM -0400, Denis Aleksandrov wrote:
+> > > > > > Reads on tpm/tpm0/ppi/*operations can become very long on
+> > > > > > misconfigured systems. Reading the TPM is a blocking operation,
+> > > > > > thus a user could effectively trigger a DOS.
+> > > > > >
+> > > > > > Resolve this by caching the results and avoiding the blocking
+> > > > > > operations after the first read.
+> > > > > >
+> > > > > > Reported-by: Jan Stancek <jstancek@redhat.com>
+> > > > > > Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
+> > > > > > Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> > > > > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > > > ---
+> > > > > >
+> > > > > > Changes in v5:
+> > > > > >         - Unlocks the tpm_ppi_lock if cache_ppi_operations() returns and
+> > > > > >           error.
+> > > > > >
+> > > > > >  drivers/char/tpm/tpm_ppi.c | 89 ++++++++++++++++++++++++++++----------
+> > > > > >  1 file changed, 66 insertions(+), 23 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> > > > > > index d53fce1c9d6f..47655407fea5 100644
+> > > > > > --- a/drivers/char/tpm/tpm_ppi.c
+> > > > > > +++ b/drivers/char/tpm/tpm_ppi.c
+> > > > > > @@ -33,6 +33,20 @@ static const guid_t tpm_ppi_guid =
+> > > > > >         GUID_INIT(0x3DDDFAA6, 0x361B, 0x4EB4,
+> > > > > >                   0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53);
+> > > > > >
+> > > > > > +static const char * const tpm_ppi_info[] = {
+> > > > > > +       "Not implemented",
+> > > > > > +       "BIOS only",
+> > > > > > +       "Blocked for OS by system firmware",
+> > > > > > +       "User required",
+> > > > > > +       "User not required",
+> > > > > > +};
+> > > > > > +
+> > > > > > +/* A spinlock to protect access to the cache from concurrent reads */
+> > > > > > +static DEFINE_SPINLOCK(tpm_ppi_lock);
+> > > > > > +
+> > > > > > +static u32 ppi_operations_cache[PPI_VS_REQ_END + 1];
+> > > > > > +static bool ppi_cache_populated;
+> > > > > > +
+> > > > > >  static bool tpm_ppi_req_has_parameter(u64 req)
+> > > > > >  {
+> > > > > >         return req == 23;
+> > > > > > @@ -277,8 +291,7 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
+> > > > > >         return status;
+> > > > > >  }
+> > > > > >
+> > > > > > -static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+> > > > > > -                                  u32 end)
+> > > > > > +static ssize_t cache_ppi_operations(acpi_handle dev_handle, char *buf)
+> > > > > >  {
+> > > > > >         int i;
+> > > > > >         u32 ret;
+> > > > > > @@ -286,34 +299,22 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
+> > > > > >         union acpi_object *obj, tmp;
+> > > > > >         union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
+> > > > > >
+> > > > > > -       static char *info[] = {
+> > > > > > -               "Not implemented",
+> > > > > > -               "BIOS only",
+> > > > > > -               "Blocked for OS by BIOS",
+> > > > > > -               "User required",
+> > > > > > -               "User not required",
+> > > > > > -       };
+> > > > > > -
+> > > > > >         if (!acpi_check_dsm(dev_handle, &tpm_ppi_guid, TPM_PPI_REVISION_ID_1,
+> > > > > >                             1 << TPM_PPI_FN_GETOPR))
+> > > > > >                 return -EPERM;
+> > > > > >
+> > > > > >         tmp.integer.type = ACPI_TYPE_INTEGER;
+> > > > > > -       for (i = start; i <= end; i++) {
+> > > > > > +       for (i = 0; i <= PPI_VS_REQ_END; i++) {
+> > > > > >                 tmp.integer.value = i;
+> > > > > >                 obj = tpm_eval_dsm(dev_handle, TPM_PPI_FN_GETOPR,
+> > > > > >                                    ACPI_TYPE_INTEGER, &argv,
+> > > > > >                                    TPM_PPI_REVISION_ID_1);
+> > > > > > -               if (!obj) {
+> > > > > > +               if (!obj)
+> > > > > >                         return -ENOMEM;
+> > > > > > -               } else {
+> > > > > > -                       ret = obj->integer.value;
+> > > > > > -                       ACPI_FREE(obj);
+> > > > > > -               }
+> > > > > >
+> > > > > > -               if (ret > 0 && ret < ARRAY_SIZE(info))
+> > > > > > -                       len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> > > > > > -                                            i, ret, info[ret]);
+> > > > > > +               ret = obj->integer.value;
+> > > > > > +               ppi_operations_cache[i] = ret;
+> > > > > > +               ACPI_FREE(obj);
+> > > > > >         }
+> > > > > >
+> > > > > >         return len;
+> > > > > > @@ -324,9 +325,30 @@ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+> > > > > >                                            char *buf)
+> > > > > >  {
+> > > > > >         struct tpm_chip *chip = to_tpm_chip(dev);
+> > > > > > +       ssize_t len = 0;
+> > > > > > +       u32 ret;
+> > > > > > +       int i;
+> > > > > > +
+> > > > > > +       spin_lock(&tpm_ppi_lock);
+> > > > > > +       if (!ppi_cache_populated) {
+> > > > > > +               len = cache_ppi_operations(chip->acpi_dev_handle, buf);
+> > > > > > +               if (len < 0) {
+> > > > > > +                       spin_unlock(&tpm_ppi_lock);
+> > > > > > +                       return len;
+> > > > > > +               }
+> > > > > >
+> > > > > > -       return show_ppi_operations(chip->acpi_dev_handle, buf, 0,
+> > > > > > -                                  PPI_TPM_REQ_MAX);
+> > > > > > +               ppi_cache_populated = true;
+> > > > > > +       }
+> > > > > > +
+> > > > > > +       for (i = 0; i <= PPI_TPM_REQ_MAX; i++) {
+> > > > > > +               ret = ppi_operations_cache[i];
+> > > > > > +               if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
+> > > > > > +                       len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> > > > > > +                                                       i, ret, tpm_ppi_info[ret]);
+> > > > > > +       }
+> > > > > > +       spin_unlock(&tpm_ppi_lock);
+> > > > > > +
+> > > > > > +       return len;
+> > > > > >  }
+> > > > > >
+> > > > > >  static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+> > > > > > @@ -334,9 +356,30 @@ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+> > > > > >                                           char *buf)
+> > > > > >  {
+> > > > > >         struct tpm_chip *chip = to_tpm_chip(dev);
+> > > > > > +       ssize_t len = 0;
+> > > > > > +       u32 ret;
+> > > > > > +       int i;
+> > > > > >
+> > > > > > -       return show_ppi_operations(chip->acpi_dev_handle, buf, PPI_VS_REQ_START,
+> > > > > > -                                  PPI_VS_REQ_END);
+> > > > > > +       spin_lock(&tpm_ppi_lock);
+> > > > > > +       if (!ppi_cache_populated) {
+> > > > > > +               len = cache_ppi_operations(chip->acpi_dev_handle, buf);
+> > > > > > +               if (len < 0) {
+> > > > > > +                       spin_unlock(&tpm_ppi_lock);
+> > > > > > +                       return len;
+> > > > > > +               }
+> > > > > > +
+> > > > > > +               ppi_cache_populated = true;
+> > > > > > +       }
+> > > > > > +
+> > > > > > +       for (i = PPI_VS_REQ_START; i <= PPI_VS_REQ_END; i++) {
+> > > > > > +               ret = ppi_operations_cache[i];
+> > > > > > +               if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
+> > > > > > +                       len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> > > > > > +                                                       i, ret, tpm_ppi_info[ret]);
+> > > > > > +       }
+> > > > > > +       spin_unlock(&tpm_ppi_lock);
+> > > > > > +
+> > > > > > +       return len;
+> > > > > >  }
+> > > > > >
+> > > > > >  static DEVICE_ATTR(version, S_IRUGO, tpm_show_ppi_version, NULL);
+> > > > > > --
+> > > > > > 2.48.1
+> > > > > >
+> > > > >
+> > > > > I am seeing a "scheduling while atomic" splat in -next when running
+> > > > > LTP's read_all testcase against /proc and /sys that I bisected to this
+> > > > > change (bisect log at the end of the message). It is still reproducible
+> > > > > with the most recent sha in Jarkko's tree, c4a211c65878 ("tpm: Prevent
+> > > > > local DOS via tpm/tpm0/ppi/*operations"), where there is no difference
+> > > > > in the code as far as I can tell.
+> > > > >
+> > > > >   $ curl -LSs https://github.com/nathanchance/env/raw/014a117384fb9121cf5c81ab30aa4de935246c17/bin/x86_64/read_all | install -m755 /dev/stdin read_all
+> > > > >
+> > > > >   $ sudo sh -c "$PWD/read_all -d /proc && $PWD/read_all -d /sys && dmesg"
+> > > > >   ...
+> > > > >   [  103.605352] BUG: scheduling while atomic: read_all/2907/0x00000002
+> > > > >   [  103.605357] Modules linked in: ...
+> > > > >   [  103.605401]  ...
+> > > > >   [  103.605454] CPU: 0 UID: 0 PID: 2907 Comm: read_all Not tainted 6.17.0-rc6-debug-00276-gc4a211c65878 #1 PREEMPT(full)  ccfbb8e489d66d107205aa22f3b6242dd3605b88
+> > > > >   [  103.605457] Hardware name: AZW MINI S/MINI S, BIOS ADLNV106 05/12/2024
+> > > > >   [  103.605459] Call Trace:
+> > > > >   [  103.605461]  <TASK>
+> > > > >   [  103.605465]  dump_stack_lvl+0x5d/0x80
+> > > > >   [  103.605471]  __schedule_bug.cold+0x42/0x4e
+> > > > >   [  103.605473]  __schedule+0x1083/0x1330
+> > > > >   [  103.605478]  ? acpi_ex_field_datum_io+0xe8/0x4f0
+> > > > >   [  103.605482]  ? acpi_os_release_object+0xe/0x20
+> > > > >   [  103.605486]  schedule+0x27/0xd0
+> > > > >   [  103.605487]  schedule_timeout+0xbd/0x100
+> > > > >   [  103.605491]  __down_common+0x137/0x2d0
+> > > > >   [  103.605493]  down_timeout+0x67/0x70
+> > > > >   [  103.605495]  acpi_os_wait_semaphore+0x68/0x180
+> > > > >   [  103.605498]  acpi_ut_acquire_mutex+0x97/0x250
+> > > > >   [  103.605500]  acpi_ns_delete_namespace_subtree+0x48/0x110
+> > > > >   [  103.605503]  acpi_ds_terminate_control_method+0x1c8/0x200
+> > > > >   [  103.605505]  acpi_ps_parse_aml+0x1ae/0x5d0
+> > > > >   [  103.605508]  acpi_ps_execute_method+0x171/0x3e0
+> > > > >   [  103.605511]  acpi_ns_evaluate+0x196/0x5c0
+> > > > >   [  103.605513]  acpi_evaluate_object+0x1ce/0x450
+> > > > >   [  103.605515]  acpi_evaluate_dsm+0xcb/0x150
+> > > > >   [  103.605519]  cache_ppi_operations.isra.0+0xc2/0x110
+> > > > >   [  103.605522]  tpm_show_ppi_tcg_operations+0x99/0xb0
+> > > > >   [  103.605523]  dev_attr_show+0x1c/0x50
+> > > > >   [  103.605526]  sysfs_kf_seq_show+0xc9/0x120
+> > > > >   [  103.605530]  seq_read_iter+0x125/0x480
+> > > > >   [  103.605532]  ? rw_verify_area+0x56/0x180
+> > > > >   [  103.605534]  vfs_read+0x265/0x390
+> > > > >   [  103.605538]  ksys_read+0x73/0xf0
+> > > > >   [  103.605540]  do_syscall_64+0x81/0x970
+> > > > >   [  103.605542]  ? ksys_read+0x73/0xf0
+> > > > >   [  103.605545]  ? refill_obj_stock+0x12e/0x240
+> > > > >   [  103.605547]  ? xas_load+0xd/0xd0
+> > > > >   [  103.605549]  ? xa_load+0x76/0xb0
+> > > > >   [  103.605552]  ? refill_obj_stock+0x12e/0x240
+> > > > >   [  103.605553]  ? __memcg_slab_free_hook+0xf4/0x140
+> > > > >   [  103.605555]  ? kmem_cache_free+0x490/0x4d0
+> > > > >   [  103.605557]  ? __x64_sys_close+0x3d/0x80
+> > > > >   [  103.605560]  ? __x64_sys_close+0x3d/0x80
+> > > > >   [  103.605562]  ? do_syscall_64+0x81/0x970
+> > > > >   [  103.605563]  ? do_syscall_64+0x81/0x970
+> > > > >   [  103.605564]  ? do_syscall_64+0x81/0x970
+> > > > >   [  103.605565]  ? do_syscall_64+0x81/0x970
+> > > > >   [  103.605566]  ? __irq_exit_rcu+0x4c/0xf0
+> > > > >   [  103.605569]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > > > >   [  103.605571] RIP: 0033:0x4243b8
+> > > > >   [  103.605597] Code: 0f 05 48 83 f8 da 75 08 4c 89 c0 48 89 d6 0f 05 c3 48 89 f8 4d 89 c2 48 89 f7 4d 89 c8 48 89 d6 4c 8b 4c 24 08 48 89 ca 0f 05 <c3> e9 e1 ff ff ff 48 8d 3d 9b 52 02 00 e9 8a 06 00 00 48 8d 3d 8f
+> > > > >   [  103.605598] RSP: 002b:00007ffccef321b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> > > > >   [  103.605601] RAX: ffffffffffffffda RBX: 00007ffccef32690 RCX: 00000000004243b8
+> > > > >   [  103.605602] RDX: 00000000000003ff RSI: 00007ffccef32690 RDI: 0000000000000003
+> > > > >   [  103.605603] RBP: 00000000310cdd71 R08: 0000000000000000 R09: 0000000000000000
+> > > > >   [  103.605603] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb294164000
+> > > > >   [  103.605604] R13: 000000000042b00c R14: 00007ffccef32290 R15: 0000000000000003
+> > > > >   [  103.605606]  </TASK>
+> > > > >   [  103.652735] BUG: scheduling while atomic: read_all/2907/0x00000000
+> > > > >   [  103.652739] Modules linked in: ...
+> > > > >   [  103.652775]  ...
+> > > > >   [  103.652825] CPU: 0 UID: 0 PID: 2907 Comm: read_all Tainted: G        W           6.17.0-rc6-debug-00276-gc4a211c65878 #1 PREEMPT(full)  ccfbb8e489d66d107205aa22f3b6242dd3605b88
+> > > > >   [  103.652828] Tainted: [W]=WARN
+> > > > >   [  103.652829] Hardware name: AZW MINI S/MINI S, BIOS ADLNV106 05/12/2024
+> > > > >   [  103.652830] Call Trace:
+> > > > >   [  103.652830]  <TASK>
+> > > > >   [  103.652831]  dump_stack_lvl+0x5d/0x80
+> > > > >   [  103.652835]  __schedule_bug.cold+0x42/0x4e
+> > > > >   [  103.652837]  __schedule+0x1083/0x1330
+> > > > >   [  103.652840]  ? get_nohz_timer_target+0x2f/0x150
+> > > > >   [  103.652843]  ? timerqueue_add+0x73/0xd0
+> > > > >   [  103.652845]  schedule+0x27/0xd0
+> > > > >   [  103.652847]  schedule_hrtimeout_range_clock+0xd8/0x120
+> > > > >   [  103.652850]  ? __pfx_hrtimer_wakeup+0x10/0x10
+> > > > >   [  103.652853]  usleep_range_state+0x6c/0xa0
+> > > > >   [  103.652855]  crb_wait_for_reg_32.constprop.0+0x40/0x80
+> > > > >   [  103.652858]  crb_request_locality+0x3d/0x50
+> > > > >   [  103.652860]  tpm_chip_start+0x6c/0xe0
+> > > > >   [  103.652862]  tpm_try_get_ops+0x89/0xb0
+> > > > >   [  103.652863]  tpm_find_get_ops+0x1b/0x70
+> > > > >   [  103.652865]  tpm_pcr_read+0x1b/0x70
+> > > > >   [  103.652866]  pcr_value_show+0xcc/0x140
+> > > > >   [  103.652869]  dev_attr_show+0x1c/0x50
+> > > > >   [  103.652871]  sysfs_kf_seq_show+0xc9/0x120
+> > > > >   [  103.652873]  seq_read_iter+0x125/0x480
+> > > > >   [  103.652875]  ? rw_verify_area+0x56/0x180
+> > > > >   [  103.652877]  vfs_read+0x265/0x390
+> > > > >   [  103.652880]  ksys_read+0x73/0xf0
+> > > > >   [  103.652882]  do_syscall_64+0x81/0x970
+> > > > >   [  103.652883]  ? do_syscall_64+0x81/0x970
+> > > > >   [  103.652884]  ? __irq_exit_rcu+0x4c/0xf0
+> > > > >   [  103.652887]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > > > >   [  103.652889] RIP: 0033:0x4243b8
+> > > > >   [  103.652903] Code: 0f 05 48 83 f8 da 75 08 4c 89 c0 48 89 d6 0f 05 c3 48 89 f8 4d 89 c2 48 89 f7 4d 89 c8 48 89 d6 4c 8b 4c 24 08 48 89 ca 0f 05 <c3> e9 e1 ff ff ff 48 8d 3d 9b 52 02 00 e9 8a 06 00 00 48 8d 3d 8f
+> > > > >   [  103.652905] RSP: 002b:00007ffccef321b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> > > > >   [  103.652906] RAX: ffffffffffffffda RBX: 00007ffccef32690 RCX: 00000000004243b8
+> > > > >   [  103.652907] RDX: 00000000000003ff RSI: 00007ffccef32690 RDI: 0000000000000003
+> > > > >   [  103.652908] RBP: 00000000310cdd71 R08: 0000000000000000 R09: 0000000000000000
+> > > > >   [  103.652909] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb294164000
+> > > > >   [  103.652910] R13: 000000000042b00c R14: 00007ffccef32290 R15: 0000000000000003
+> > > > >   [  103.652912]  </TASK>
+> > > > >
+> > > > > If there is any other information I can provide or patches I can test, I
+> > > > > am more than happy to do so.
+> 
+> Hi Nathan, thank you so much for the catch!
+> 
+> > > >
+> > > > Thanks a lot! And I have not rushed with my 6.18 pull request.
+> > > >
+> > > > It took me less than 30 seconds to locate the bug: it's spin
+> > > > lock and sleeing operations.
+> > > >
+> > > > E.g., acpi_evaluate_dsm_typed can lead to kzalloc() and stuff
+> > > > like that. I don't know how I could I have possibly missed this
+> > > > detail and this is embarrasing but luckily this should be easy
+> > > > to fix with major hurdle :-)
+> > > >
+> > > > What I suggest is that I'll simply repeal and replace the lock
+> > > > type (i.e. tweak the patch), as it does not feel worth of trouble
+> > > > to do a review round. Then we should be seeing better results.
+> > > >
+> > > > Thanks again for spotting this. Yeah, and definitely not blaming
+> > > > original author for this. It's all on me tbh. The patch itself
+> > > > was great and I should have been able to address this...
+> > >
+> > >
+> > > So I guess the fix is exactly this:
+> > >
+> > > ~/work/kernel.org/jarkko/linux-tpmdd master* ⇡⇣
+> > > ❯ sed -i 's/DEFINE_SPINLOCK/DEFINE_MUTEX/g' drivers/char/tpm/tpm_ppi.c
+> > >
+> > > ~/work/kernel.org/jarkko/linux-tpmdd master* ⇡⇣
+> > > ❯ sed -i 's/spin_/mutex_/g' drivers/char/tpm/tpm_ppi.c
+> > >
+> > > ~/work/kernel.org/jarkko/linux-tpmdd master* ⇡⇣
+> > > ❯ git -P diff
+> > > diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
+> > > index 47655407fea5..c9793a3d986d 100644
+> > > --- a/drivers/char/tpm/tpm_ppi.c
+> > > +++ b/drivers/char/tpm/tpm_ppi.c
+> > > @@ -42,7 +42,7 @@ static const char * const tpm_ppi_info[] = {
+> > >  };
+> > >
+> > >  /* A spinlock to protect access to the cache from concurrent reads */
+> 
+> Hi Jarkko, this comment should be updated if it's not too late.
 
-Oh, I see, thanks!
+Shouldn't be a problem as long as the fix is good.
 
->
->>
->> > +			buf->flags |= TPM_BUF_ERROR;
->> > +		}
->> > +	} else {
->> > +		if (buf_size != buf->capacity + sizeof(*buf)) {
->> > +			WARN(1, "%s: size mismatch: %u != %u\n", __func__, buf_size,
->> > +			     buf->capacity + sizeof(*buf));
->> > +			buf->flags |= TPM_BUF_ERROR;
->> > +		}
->> > +	}
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_init);
->> >
->> > -/**
->> > - * tpm_buf_reset() - Initialize a TPM command
->> > - * @buf:	A &tpm_buf
->> > - * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
->> > - * @ordinal:	A command ordinal
->> > - */
->> > -void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
->> > +static void __tpm_buf_reset(struct tpm_buf *buf, u16 buf_size, u16 tag, u32 ordinal)
->> > {
->> > 	struct tpm_header *head = (struct tpm_header *)buf->data;
->> >
->> > +	__tpm_buf_size_invariant(buf, buf_size);
->> > +
->> > +	if (buf->flags & TPM_BUF_ERROR)
->> > +		return;
->> > +
->> > 	WARN_ON(tag != TPM_TAG_RQU_COMMAND && tag != TPM2_ST_NO_SESSIONS &&
->> > 		tag != TPM2_ST_SESSIONS && tag != 0);
->> >
->> > 	buf->flags = 0;
->> > 	buf->length = sizeof(*head);
->> > +	buf->capacity = buf_size - sizeof(*buf);
->> > +	buf->handles = 0;
->> > 	head->tag = cpu_to_be16(tag);
->> > 	head->length = cpu_to_be32(sizeof(*head));
->> > 	head->ordinal = cpu_to_be32(ordinal);
->> > +}
->> > +
->> > +static void __tpm_buf_reset_sized(struct tpm_buf *buf, u16 buf_size)
->> > +{
->> > +	__tpm_buf_size_invariant(buf, buf_size);
->> > +
->> > +	if (buf->flags & TPM_BUF_ERROR)
->> > +		return;
->> > +
->> > +	buf->flags = TPM_BUF_TPM2B;
->> > +	buf->length = 2;
->> > +	buf->capacity = buf_size - sizeof(*buf);
->> > 	buf->handles = 0;
->> > +	buf->data[0] = 0;
->> > +	buf->data[1] = 0;
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_reset);
->> >
->> > /**
->> > - * tpm_buf_init_sized() - Allocate and initialize a sized (TPM2B) buffer
->> > - * @buf:	A @tpm_buf
->> > - *
->> > - * Return: 0 or -ENOMEM
->> > + * tpm_buf_init() - Initialize a TPM command
->> > + * @buf:	A &tpm_buf
->> > + * @buf_size:	Size of the buffer.
->> >  */
->> > -int tpm_buf_init_sized(struct tpm_buf *buf)
->> > +void tpm_buf_init(struct tpm_buf *buf, u16 buf_size)
->> > {
->> > -	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
->> > -	if (!buf->data)
->> > -		return -ENOMEM;
->> > +	memset(buf, 0, buf_size);
->> > +	__tpm_buf_reset(buf, buf_size, TPM_TAG_RQU_COMMAND, 0);
->> > +}
->> > +EXPORT_SYMBOL_GPL(tpm_buf_init);
->> >
->> > -	tpm_buf_reset_sized(buf);
->> > -	return 0;
->> > +/**
->> > + * tpm_buf_init_sized() - Initialize a sized buffer
->> > + * @buf:	A &tpm_buf
->> > + * @buf_size:	Size of the buffer.
->> > + */
->> > +void tpm_buf_init_sized(struct tpm_buf *buf, u16 buf_size)
->> > +{
->> > +	memset(buf, 0, buf_size);
->> > +	__tpm_buf_reset_sized(buf, buf_size);
->> > }
->> > EXPORT_SYMBOL_GPL(tpm_buf_init_sized);
->> >
->> > /**
->> > - * tpm_buf_reset_sized() - Initialize a sized buffer
->> > + * tpm_buf_reset() - Re-initialize a TPM command
->> >  * @buf:	A &tpm_buf
->> > + * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
->> > + * @ordinal:	A command ordinal
->> >  */
->> > -void tpm_buf_reset_sized(struct tpm_buf *buf)
->> > +void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
->> > {
->> > -	buf->flags = TPM_BUF_TPM2B;
->> > -	buf->length = 2;
->> > -	buf->data[0] = 0;
->> > -	buf->data[1] = 0;
->> > +	u16 buf_size = buf->capacity + sizeof(*buf);
->> > +
->> > +	__tpm_buf_reset(buf, buf_size, tag, ordinal);
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_reset_sized);
->> > +EXPORT_SYMBOL_GPL(tpm_buf_reset);
->> >
->> > -void tpm_buf_destroy(struct tpm_buf *buf)
->> > +/**
->> > + * tpm_buf_reset_sized() - Re-initialize a sized buffer
->> > + * @buf:	A &tpm_buf
->> > + */
->> > +void tpm_buf_reset_sized(struct tpm_buf *buf)
->> > {
->> > -	free_page((unsigned long)buf->data);
->> > +	u16 buf_size = buf->capacity + sizeof(*buf);
->> > +
->> > +	__tpm_buf_reset_sized(buf, buf_size);
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_destroy);
->> > +EXPORT_SYMBOL_GPL(tpm_buf_reset_sized);
->> >
->> > /**
->> >  * tpm_buf_length() - Return the number of bytes consumed by the data
->> > @@ -92,6 +117,9 @@ EXPORT_SYMBOL_GPL(tpm_buf_destroy);
->> >  */
->> > u32 tpm_buf_length(struct tpm_buf *buf)
->> > {
->> > +	if (buf->flags & TPM_BUF_ERROR)
->> > +		return 0;
->> > +
->> > 	return buf->length;
->> > }
->> > EXPORT_SYMBOL_GPL(tpm_buf_length);
->> > @@ -104,13 +132,14 @@ EXPORT_SYMBOL_GPL(tpm_buf_length);
->> >  */
->> > void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
->> > {
->> > -	/* Return silently if overflow has already happened. */
->> > -	if (buf->flags & TPM_BUF_OVERFLOW)
->> > +	u32 total_length = (u32)buf->length + (u32)new_length;
->> > +
->> > +	if (buf->flags & TPM_BUF_ERROR)
->> > 		return;
->> >
->> > -	if ((buf->length + new_length) > PAGE_SIZE) {
->> > +	if (total_length > (u32)buf->capacity) {
->> > 		WARN(1, "tpm_buf: write overflow\n");
->> > -		buf->flags |= TPM_BUF_OVERFLOW;
->> > +		buf->flags |= TPM_BUF_ERROR;
->> > 		return;
->> > 	}
->> >
->> > @@ -157,8 +186,12 @@ EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
->> >  */
->> > void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u32 handle)
->> > {
->> > +	if (buf->flags & TPM_BUF_ERROR)
->> > +		return;
->> > +
->> > 	if (buf->flags & TPM_BUF_TPM2B) {
->> > -		dev_err(&chip->dev, "Invalid buffer type (TPM2B)\n");
->> > +		dev_err(&chip->dev, "%s: invalid for buffer type: TPM2B\n", __func__);
->> > +		buf->flags |= TPM_BUF_ERROR;
->> > 		return;
->> > 	}
->> >
->> > @@ -178,13 +211,13 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
->> > 	off_t next_offset;
->> >
->> > 	/* Return silently if overflow has already happened. */
->> > -	if (buf->flags & TPM_BUF_BOUNDARY_ERROR)
->> > +	if (buf->flags & TPM_BUF_ERROR)
->> > 		return;
->> >
->> > 	next_offset = *offset + count;
->> > 	if (next_offset > buf->length) {
->> > 		WARN(1, "tpm_buf: read out of boundary\n");
->> > -		buf->flags |= TPM_BUF_BOUNDARY_ERROR;
->> > +		buf->flags |= TPM_BUF_ERROR;
->> > 		return;
->> > 	}
->> >
->> > @@ -242,5 +275,3 @@ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset)
->> > 	return be32_to_cpu(value);
->> > }
->> > EXPORT_SYMBOL_GPL(tpm_buf_read_u32);
->> > -
->> > -
->> > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
->> > index f2a5e09257dd..4f5893555fb7 100644
->> > --- a/drivers/char/tpm/tpm-dev-common.c
->> > +++ b/drivers/char/tpm/tpm-dev-common.c
->> > @@ -147,7 +147,7 @@ ssize_t tpm_common_read(struct file *file, char __user *buf,
->> >
->> > 		rc = copy_to_user(buf, priv->data_buffer + *off, 		ret_size);
->> > 		if (rc) {
->> > -			memset(priv->data_buffer, 0, TPM_BUFSIZE);
->> > +			memset(priv->data_buffer, 0, TPM_BUF_MAX_SIZE);
->> > 			priv->response_length = 0;
->> > 			ret_size = -EFAULT;
->> > 		} else {
->> > @@ -173,7 +173,7 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
->> > 	struct file_priv *priv = file->private_data;
->> > 	int ret = 0;
->> >
->> > -	if (size > TPM_BUFSIZE)
->> > +	if (size > TPM_BUF_MAX_SIZE)
->> > 		return -E2BIG;
->> >
->> > 	mutex_lock(&priv->buffer_mutex);
->> > diff --git a/drivers/char/tpm/tpm-dev.h b/drivers/char/tpm/tpm-dev.h
->> > index f3742bcc73e3..700e3d9d8b64 100644
->> > --- a/drivers/char/tpm/tpm-dev.h
->> > +++ b/drivers/char/tpm/tpm-dev.h
->> > @@ -18,7 +18,7 @@ struct file_priv {
->> > 	bool response_read;
->> > 	bool command_enqueued;
->> >
->> > -	u8 data_buffer[TPM_BUFSIZE];
->> > +	u8 data_buffer[TPM_BUF_MAX_SIZE];
->> > };
->> >
->> > void tpm_common_open(struct file *file, struct tpm_chip *chip,
->> > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
->> > index c9f173001d0e..b0d5098fb92b 100644
->> > --- a/drivers/char/tpm/tpm-interface.c
->> > +++ b/drivers/char/tpm/tpm-interface.c
->> > @@ -100,8 +100,8 @@ static ssize_t tpm_try_transmit(struct tpm_chip *chip, void *buf, size_t bufsiz)
->> > 	if (bufsiz < TPM_HEADER_SIZE)
->> > 		return -EINVAL;
->> >
->> > -	if (bufsiz > TPM_BUFSIZE)
->> > -		bufsiz = TPM_BUFSIZE;
->> > +	if (bufsiz > TPM_BUF_MAX_SIZE)
->> > +		bufsiz = TPM_BUF_MAX_SIZE;
->> >
->> > 	count = be32_to_cpu(header->length);
->> > 	ordinal = be32_to_cpu(header->ordinal);
->> > diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
->> > index 94231f052ea7..4213a8285ed0 100644
->> > --- a/drivers/char/tpm/tpm-sysfs.c
->> > +++ b/drivers/char/tpm/tpm-sysfs.c
->> > @@ -32,28 +32,30 @@ struct tpm_readpubek_out {
->> > static ssize_t pubek_show(struct device *dev, struct device_attribute *attr,
->> > 			  char *buf)
->> > {
->> > -	struct tpm_buf tpm_buf;
->> > 	struct tpm_readpubek_out *out;
->> > 	int i;
->> > 	char *str = buf;
->> > 	struct tpm_chip *chip = to_tpm_chip(dev);
->> > 	char anti_replay[20];
->> >
->> > +	struct tpm_buf *tpm_buf __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
->>
->> We're using PAGE_SIZE instead of TPM_BUF_MAX_SIZE to reduce the pressure on
->> the allocator, right?
->>
->> I was wondering if we could create an inline function or a macro that calls
->> kzalloc() and tpm_buf_init().
->> Just because we do it often, it's not a strong opinion, just something that
->> came to mind while doing the review.
->> I mean something like this (untested):
->>
->> struct tpm_buf *tpm_buf_alloc_max(void) {
->> 	struct tpm_buf *buf = kzalloc(PAGE_SIZE, GFP_KERNEL);
->> 	if (!buf)
->> 		return NULL;
->>
->> 	tpm_buf_init(buf, TPM_BUF_MAX_SIZE);
->> 	return buf;
->> }
->
->With or without this, about same about of boiler plate is introduced to
->the call site. It's easier to understand the code later on when kzalloc
->alloc is clearly at site. Finally I think for most uses the driver could
->favor stack over heap (but that requires prepare the tpm_buf like this).
+> 
+> > > -static DEFINE_SPINLOCK(tpm_ppi_lock);
+> > > +static DEFINE_MUTEX(tpm_ppi_lock);
+> > >
+> > >  static u32 ppi_operations_cache[PPI_VS_REQ_END + 1];
+> > >  static bool ppi_cache_populated;
+> > > @@ -329,11 +329,11 @@ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+> > >         u32 ret;
+> > >         int i;
+> > >
+> > > -       spin_lock(&tpm_ppi_lock);
+> > > +       mutex_lock(&tpm_ppi_lock);
+> > >         if (!ppi_cache_populated) {
+> > >                 len = cache_ppi_operations(chip->acpi_dev_handle, buf);
+> > >                 if (len < 0) {
+> > > -                       spin_unlock(&tpm_ppi_lock);
+> > > +                       mutex_unlock(&tpm_ppi_lock);
+> > >                         return len;
+> > >                 }
+> > >
+> > > @@ -346,7 +346,7 @@ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
+> > >                         len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> > >                                                         i, ret, tpm_ppi_info[ret]);
+> > >         }
+> > > -       spin_unlock(&tpm_ppi_lock);
+> > > +       mutex_unlock(&tpm_ppi_lock);
+> > >
+> > >         return len;
+> > >  }
+> > > @@ -360,11 +360,11 @@ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+> > >         u32 ret;
+> > >         int i;
+> > >
+> > > -       spin_lock(&tpm_ppi_lock);
+> > > +       mutex_lock(&tpm_ppi_lock);
+> > >         if (!ppi_cache_populated) {
+> > >                 len = cache_ppi_operations(chip->acpi_dev_handle, buf);
+> > >                 if (len < 0) {
+> > > -                       spin_unlock(&tpm_ppi_lock);
+> > > +                       mutex_unlock(&tpm_ppi_lock);
+> > >                         return len;
+> > >                 }
+> > >
+> > > @@ -377,7 +377,7 @@ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
+> > >                         len += sysfs_emit_at(buf, len, "%d %d: %s\n",
+> > >                                                         i, ret, tpm_ppi_info[ret]);
+> > >         }
+> > > -       spin_unlock(&tpm_ppi_lock);
+> > > +       mutex_unlock(&tpm_ppi_lock);
+> > >
+> > >         return len;
+> > >  }
+> > >
+> > > I'll just push it to next as it does not make things worse and
+> > > right at the moment I don't have time to do conclusive testing
+> > > (and it is high certainty the correct fix).
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?h=next&id=7e93fe26caa9c010d438b267616793026db363b7
+> 
+> Many thanks for the quick fix! I also should have seen this ahead of time.
 
-Yep, I see.
+Yeah, np, I mean even if this had landed it would have been quickly
+fixed up. Not really catastrophe, this type of things happen...
 
-Stefano
+> 
+> >
+> > BR, Jarkko
+> >
+> 
+> Best,
+> Denis
+> 
 
+BR, Jarkko
 
