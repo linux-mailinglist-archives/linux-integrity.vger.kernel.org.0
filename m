@@ -1,57 +1,56 @@
-Return-Path: <linux-integrity+bounces-7254-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7255-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31592B97F4E
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 02:57:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C516B97FB7
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 03:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA1BD2A4681
-	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 00:57:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBE174C3CEE
+	for <lists+linux-integrity@lfdr.de>; Wed, 24 Sep 2025 01:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466EE1E520D;
-	Wed, 24 Sep 2025 00:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233F21F3B85;
+	Wed, 24 Sep 2025 01:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWyBJnsi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZ/zqcZk"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7A01DF75B
-	for <linux-integrity@vger.kernel.org>; Wed, 24 Sep 2025 00:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA8CC2E0;
+	Wed, 24 Sep 2025 01:15:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758675444; cv=none; b=B0CuRhuPYQooeyH82YiHLJ0b2d5N5VEefOKq/Q4vrydHD5XV911V2Nd7ytVpDPIsCYSF1TkmnNu01lKMGRVw/ajH3se6onLlZjgdSCrLWYgfIRceiI0at4Y9gZMlFDr0h96oYrdm0hf1aI9x6nPuzeCzMvBAgdhX+e7VgO5Gzkg=
+	t=1758676501; cv=none; b=LLAWBdUXr7FNwhq6qSSv9n7Uutg2vj1WXlD71RL0JSEHRJYWzTkR2RjjzqIjtx0EZ4nHQzyyX1C5OCwDWqAedGeOmSA74ZsxGgwBLrOWU0blPDQ3Ai63f19hD3gnpmPLhaKnIXySZU5Mc5eoGeZM3ydFBI4qHxpl+LI94sBcHwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758675444; c=relaxed/simple;
-	bh=+CNxc4kDllD+91aO2azXRAr5+TCGPgHa5ILGrI9riiE=;
+	s=arc-20240116; t=1758676501; c=relaxed/simple;
+	bh=JiyOmmu/L6xN4AZgB4LR7xvyam9W9RhGmQa4QapilEE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e3McL1rC6T76+pFfcAt8iAFH7L46vtBi2xrKX8g+RiyTLlppDYxuubGgpU5EiHxY5T5w7T8p0bN8xoRFV1QBbgX4iD+lSxTK2Cgf7h0b5zWpwCKS3BmlqQwkqKqKVyu1wMSzirTybO0ep11r1NTnVc8EC5/VvX7RLF6t+mxbmPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWyBJnsi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D74CC113D0;
-	Wed, 24 Sep 2025 00:57:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y1RiLZVUfU69IV7C+RbGTpf4cI/HadfzDJ4/4Xeix5TYMGYx9fepe4ZNCBROU3nzAmuITM03hCRDNJrWJkQQCVE82WnxEMvyWwwUfhVrAxS1Db78VRkgcFiRqBT/JXyXamU0zU0PyjVFqbIJ+fqMihVlwYL9gKGdKgQCei/y2m8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FZ/zqcZk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E66BC4CEF5;
+	Wed, 24 Sep 2025 01:14:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758675443;
-	bh=+CNxc4kDllD+91aO2azXRAr5+TCGPgHa5ILGrI9riiE=;
+	s=k20201202; t=1758676500;
+	bh=JiyOmmu/L6xN4AZgB4LR7xvyam9W9RhGmQa4QapilEE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YWyBJnsialJ6QNjRAwez8ds0Rvuk+snY/2PI1BCH6r1c2qfo4i3FJ5ppWLFsiD/Df
-	 a6JVc+e9lSGPtQwjsLzI5BPBsh4zQiEPd7L23NeckvcDD30uKqosootm6SNyvNNGz6
-	 mjeA+sCjMCUvRx7ILVDTpazIBvaFdBbtWA8dPZwjw1X6Q5077kjfqZ12ZtZBLarYJw
-	 1YTuw/GCQJlfmPLOlrPng0Mat0uacINVI+CJJ2R8K1yQ0hZWc5VurkXtpGexRJlXGt
-	 oHko5JWvdIyjRy5cABr3OuySMRjNgcXUh/BDxmHUNjAu1+JgOK1j+E04RDJJ9ZABI9
-	 eKJZOW7ZIkb9Q==
-Date: Wed, 24 Sep 2025 03:57:19 +0300
+	b=FZ/zqcZkm0D/xt1+chS6mxJJOiE8I38yy/DlTyqjG4JvHHBlpZLo/F39MX7D04vZF
+	 F/gib6LLCrzF5W7evXTtXUsEYdkUkmwpYDvnrO5q3nP2Nm7lHCMEgiVPKY9ZgDjHcb
+	 4Pbvsg0tJL2DSjUc8L/47lqXUWVnoQqFljSUdCsB+qKtMINKs03hSgm+acglGZgqi3
+	 YYyauwd+qCCRdtZYEkrHLhBEEQPBFSMPNkDXLfNqkpdj9BsK+BicIom1gI3IzHFK+4
+	 Vp7yqgmhsBh+MOaYABntnmzmyvdtSOmNoHZSu+MMNET+nuOSk7jvdcbdV21+xTwZSq
+	 Aj03abyr+HC+A==
+Date: Wed, 24 Sep 2025 04:14:56 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Denis Aleksandrov <daleksan@redhat.com>, peterhuewe@gmx.de,
-	jgg@ziepe.ca, linux-integrity@vger.kernel.org,
-	Jan Stancek <jstancek@redhat.com>,
-	Paul Menzel <pmenzel@molgen.mpg.de>
-Subject: Re: [PATCH v5] tpm: Prevent local DOS via tpm/tpm0/ppi/*operations
-Message-ID: <aNNB7w3x2ZoekCML@kernel.org>
-References: <20250915210829.6661-1-daleksan@redhat.com>
- <20250923200748.GA3355497@ax162>
+To: Jonathan McDowell <noodles@earth.li>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] tpm: Ensure exclusive userspace access when using
+ /dev/tpm<n>
+Message-ID: <aNNGECfE2izNx2LM@kernel.org>
+References: <cover.1758646791.git.noodles@meta.com>
+ <5497b6bbaaed64fbd245aff0190904c9beba714b.1758646791.git.noodles@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -60,315 +59,162 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250923200748.GA3355497@ax162>
+In-Reply-To: <5497b6bbaaed64fbd245aff0190904c9beba714b.1758646791.git.noodles@meta.com>
 
-On Tue, Sep 23, 2025 at 01:07:48PM -0700, Nathan Chancellor wrote:
-> Hi Denis,
+On Tue, Sep 23, 2025 at 06:10:00PM +0100, Jonathan McDowell wrote:
+> From: Jonathan McDowell <noodles@meta.com>
 > 
-> On Mon, Sep 15, 2025 at 05:08:29PM -0400, Denis Aleksandrov wrote:
-> > Reads on tpm/tpm0/ppi/*operations can become very long on
-> > misconfigured systems. Reading the TPM is a blocking operation,
-> > thus a user could effectively trigger a DOS.
-> > 
-> > Resolve this by caching the results and avoiding the blocking
-> > operations after the first read.
-> > 
-> > Reported-by: Jan Stancek <jstancek@redhat.com>
-> > Signed-off-by: Denis Aleksandrov <daleksan@redhat.com>
-> > Suggested-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> > 
-> > Changes in v5:
-> > 	- Unlocks the tpm_ppi_lock if cache_ppi_operations() returns and
-> > 	  error.
-> > 
-> >  drivers/char/tpm/tpm_ppi.c | 89 ++++++++++++++++++++++++++++----------
-> >  1 file changed, 66 insertions(+), 23 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_ppi.c b/drivers/char/tpm/tpm_ppi.c
-> > index d53fce1c9d6f..47655407fea5 100644
-> > --- a/drivers/char/tpm/tpm_ppi.c
-> > +++ b/drivers/char/tpm/tpm_ppi.c
-> > @@ -33,6 +33,20 @@ static const guid_t tpm_ppi_guid =
-> >  	GUID_INIT(0x3DDDFAA6, 0x361B, 0x4EB4,
-> >  		  0xA4, 0x24, 0x8D, 0x10, 0x08, 0x9D, 0x16, 0x53);
-> >  
-> > +static const char * const tpm_ppi_info[] = {
-> > +	"Not implemented",
-> > +	"BIOS only",
-> > +	"Blocked for OS by system firmware",
-> > +	"User required",
-> > +	"User not required",
-> > +};
-> > +
-> > +/* A spinlock to protect access to the cache from concurrent reads */
-> > +static DEFINE_SPINLOCK(tpm_ppi_lock);
-> > +
-> > +static u32 ppi_operations_cache[PPI_VS_REQ_END + 1];
-> > +static bool ppi_cache_populated;
-> > +
-> >  static bool tpm_ppi_req_has_parameter(u64 req)
-> >  {
-> >  	return req == 23;
-> > @@ -277,8 +291,7 @@ static ssize_t tpm_show_ppi_response(struct device *dev,
-> >  	return status;
-> >  }
-> >  
-> > -static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
-> > -				   u32 end)
-> > +static ssize_t cache_ppi_operations(acpi_handle dev_handle, char *buf)
-> >  {
-> >  	int i;
-> >  	u32 ret;
-> > @@ -286,34 +299,22 @@ static ssize_t show_ppi_operations(acpi_handle dev_handle, char *buf, u32 start,
-> >  	union acpi_object *obj, tmp;
-> >  	union acpi_object argv = ACPI_INIT_DSM_ARGV4(1, &tmp);
-> >  
-> > -	static char *info[] = {
-> > -		"Not implemented",
-> > -		"BIOS only",
-> > -		"Blocked for OS by BIOS",
-> > -		"User required",
-> > -		"User not required",
-> > -	};
-> > -
-> >  	if (!acpi_check_dsm(dev_handle, &tpm_ppi_guid, TPM_PPI_REVISION_ID_1,
-> >  			    1 << TPM_PPI_FN_GETOPR))
-> >  		return -EPERM;
-> >  
-> >  	tmp.integer.type = ACPI_TYPE_INTEGER;
-> > -	for (i = start; i <= end; i++) {
-> > +	for (i = 0; i <= PPI_VS_REQ_END; i++) {
-> >  		tmp.integer.value = i;
-> >  		obj = tpm_eval_dsm(dev_handle, TPM_PPI_FN_GETOPR,
-> >  				   ACPI_TYPE_INTEGER, &argv,
-> >  				   TPM_PPI_REVISION_ID_1);
-> > -		if (!obj) {
-> > +		if (!obj)
-> >  			return -ENOMEM;
-> > -		} else {
-> > -			ret = obj->integer.value;
-> > -			ACPI_FREE(obj);
-> > -		}
-> >  
-> > -		if (ret > 0 && ret < ARRAY_SIZE(info))
-> > -			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
-> > -					     i, ret, info[ret]);
-> > +		ret = obj->integer.value;
-> > +		ppi_operations_cache[i] = ret;
-> > +		ACPI_FREE(obj);
-> >  	}
-> >  
-> >  	return len;
-> > @@ -324,9 +325,30 @@ static ssize_t tpm_show_ppi_tcg_operations(struct device *dev,
-> >  					   char *buf)
-> >  {
-> >  	struct tpm_chip *chip = to_tpm_chip(dev);
-> > +	ssize_t len = 0;
-> > +	u32 ret;
-> > +	int i;
-> > +
-> > +	spin_lock(&tpm_ppi_lock);
-> > +	if (!ppi_cache_populated) {
-> > +		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
-> > +		if (len < 0) {
-> > +			spin_unlock(&tpm_ppi_lock);
-> > +			return len;
-> > +		}
-> >  
-> > -	return show_ppi_operations(chip->acpi_dev_handle, buf, 0,
-> > -				   PPI_TPM_REQ_MAX);
-> > +		ppi_cache_populated = true;
-> > +	}
-> > +
-> > +	for (i = 0; i <= PPI_TPM_REQ_MAX; i++) {
-> > +		ret = ppi_operations_cache[i];
-> > +		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
-> > +			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
-> > +							i, ret, tpm_ppi_info[ret]);
-> > +	}
-> > +	spin_unlock(&tpm_ppi_lock);
-> > +
-> > +	return len;
-> >  }
-> >  
-> >  static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
-> > @@ -334,9 +356,30 @@ static ssize_t tpm_show_ppi_vs_operations(struct device *dev,
-> >  					  char *buf)
-> >  {
-> >  	struct tpm_chip *chip = to_tpm_chip(dev);
-> > +	ssize_t len = 0;
-> > +	u32 ret;
-> > +	int i;
-> >  
-> > -	return show_ppi_operations(chip->acpi_dev_handle, buf, PPI_VS_REQ_START,
-> > -				   PPI_VS_REQ_END);
-> > +	spin_lock(&tpm_ppi_lock);
-> > +	if (!ppi_cache_populated) {
-> > +		len = cache_ppi_operations(chip->acpi_dev_handle, buf);
-> > +		if (len < 0) {
-> > +			spin_unlock(&tpm_ppi_lock);
-> > +			return len;
-> > +		}
-> > +
-> > +		ppi_cache_populated = true;
-> > +	}
-> > +
-> > +	for (i = PPI_VS_REQ_START; i <= PPI_VS_REQ_END; i++) {
-> > +		ret = ppi_operations_cache[i];
-> > +		if (ret >= 0 && ret < ARRAY_SIZE(tpm_ppi_info))
-> > +			len += sysfs_emit_at(buf, len, "%d %d: %s\n",
-> > +							i, ret, tpm_ppi_info[ret]);
-> > +	}
-> > +	spin_unlock(&tpm_ppi_lock);
-> > +
-> > +	return len;
-> >  }
-> >  
-> >  static DEVICE_ATTR(version, S_IRUGO, tpm_show_ppi_version, NULL);
-> > -- 
-> > 2.48.1
-> > 
+> There is an is_open lock on /dev/tpm<n> that dates back to at least
+> 2013, but it only prevents multiple accesses via *this* interface. It is
+> perfectly possible for userspace to use /dev/tpmrm<n>, or the kernel to
+> use the internal interfaces, to access the TPM. For tooling expecting
+> exclusive access, such as firmware updates, this can cause issues.
 > 
-> I am seeing a "scheduling while atomic" splat in -next when running
-> LTP's read_all testcase against /proc and /sys that I bisected to this
-> change (bisect log at the end of the message). It is still reproducible
-> with the most recent sha in Jarkko's tree, c4a211c65878 ("tpm: Prevent
-> local DOS via tpm/tpm0/ppi/*operations"), where there is no difference
-> in the code as far as I can tell.
+> Close the userspace loophole by changing the simple bit lock to a full
+> read/write mutex. Direct /dev/tpm<n> access needs an exclusive write
+> lock, the resource broker continues to allow concurrent access *except*
+> when /dev/tpm<n> is open.
 > 
->   $ curl -LSs https://github.com/nathanchance/env/raw/014a117384fb9121cf5c81ab30aa4de935246c17/bin/x86_64/read_all | install -m755 /dev/stdin read_all
+> Signed-off-by: Jonathan McDowell <noodles@meta.com>
+
+I'm mostly thinking should be tag it as bug fix and backport or not.
+
+> ---
+> v2: Change error path label to err instead of out. Rework commit
+>     message.
 > 
->   $ sudo sh -c "$PWD/read_all -d /proc && $PWD/read_all -d /sys && dmesg"
->   ...
->   [  103.605352] BUG: scheduling while atomic: read_all/2907/0x00000002
->   [  103.605357] Modules linked in: ...
->   [  103.605401]  ...
->   [  103.605454] CPU: 0 UID: 0 PID: 2907 Comm: read_all Not tainted 6.17.0-rc6-debug-00276-gc4a211c65878 #1 PREEMPT(full)  ccfbb8e489d66d107205aa22f3b6242dd3605b88
->   [  103.605457] Hardware name: AZW MINI S/MINI S, BIOS ADLNV106 05/12/2024
->   [  103.605459] Call Trace:
->   [  103.605461]  <TASK>
->   [  103.605465]  dump_stack_lvl+0x5d/0x80
->   [  103.605471]  __schedule_bug.cold+0x42/0x4e
->   [  103.605473]  __schedule+0x1083/0x1330
->   [  103.605478]  ? acpi_ex_field_datum_io+0xe8/0x4f0
->   [  103.605482]  ? acpi_os_release_object+0xe/0x20
->   [  103.605486]  schedule+0x27/0xd0
->   [  103.605487]  schedule_timeout+0xbd/0x100
->   [  103.605491]  __down_common+0x137/0x2d0
->   [  103.605493]  down_timeout+0x67/0x70
->   [  103.605495]  acpi_os_wait_semaphore+0x68/0x180
->   [  103.605498]  acpi_ut_acquire_mutex+0x97/0x250
->   [  103.605500]  acpi_ns_delete_namespace_subtree+0x48/0x110
->   [  103.605503]  acpi_ds_terminate_control_method+0x1c8/0x200
->   [  103.605505]  acpi_ps_parse_aml+0x1ae/0x5d0
->   [  103.605508]  acpi_ps_execute_method+0x171/0x3e0
->   [  103.605511]  acpi_ns_evaluate+0x196/0x5c0
->   [  103.605513]  acpi_evaluate_object+0x1ce/0x450
->   [  103.605515]  acpi_evaluate_dsm+0xcb/0x150
->   [  103.605519]  cache_ppi_operations.isra.0+0xc2/0x110
->   [  103.605522]  tpm_show_ppi_tcg_operations+0x99/0xb0
->   [  103.605523]  dev_attr_show+0x1c/0x50
->   [  103.605526]  sysfs_kf_seq_show+0xc9/0x120
->   [  103.605530]  seq_read_iter+0x125/0x480
->   [  103.605532]  ? rw_verify_area+0x56/0x180
->   [  103.605534]  vfs_read+0x265/0x390
->   [  103.605538]  ksys_read+0x73/0xf0
->   [  103.605540]  do_syscall_64+0x81/0x970
->   [  103.605542]  ? ksys_read+0x73/0xf0
->   [  103.605545]  ? refill_obj_stock+0x12e/0x240
->   [  103.605547]  ? xas_load+0xd/0xd0
->   [  103.605549]  ? xa_load+0x76/0xb0
->   [  103.605552]  ? refill_obj_stock+0x12e/0x240
->   [  103.605553]  ? __memcg_slab_free_hook+0xf4/0x140
->   [  103.605555]  ? kmem_cache_free+0x490/0x4d0
->   [  103.605557]  ? __x64_sys_close+0x3d/0x80
->   [  103.605560]  ? __x64_sys_close+0x3d/0x80
->   [  103.605562]  ? do_syscall_64+0x81/0x970
->   [  103.605563]  ? do_syscall_64+0x81/0x970
->   [  103.605564]  ? do_syscall_64+0x81/0x970
->   [  103.605565]  ? do_syscall_64+0x81/0x970
->   [  103.605566]  ? __irq_exit_rcu+0x4c/0xf0
->   [  103.605569]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
->   [  103.605571] RIP: 0033:0x4243b8
->   [  103.605597] Code: 0f 05 48 83 f8 da 75 08 4c 89 c0 48 89 d6 0f 05 c3 48 89 f8 4d 89 c2 48 89 f7 4d 89 c8 48 89 d6 4c 8b 4c 24 08 48 89 ca 0f 05 <c3> e9 e1 ff ff ff 48 8d 3d 9b 52 02 00 e9 8a 06 00 00 48 8d 3d 8f
->   [  103.605598] RSP: 002b:00007ffccef321b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
->   [  103.605601] RAX: ffffffffffffffda RBX: 00007ffccef32690 RCX: 00000000004243b8
->   [  103.605602] RDX: 00000000000003ff RSI: 00007ffccef32690 RDI: 0000000000000003
->   [  103.605603] RBP: 00000000310cdd71 R08: 0000000000000000 R09: 0000000000000000
->   [  103.605603] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb294164000
->   [  103.605604] R13: 000000000042b00c R14: 00007ffccef32290 R15: 0000000000000003
->   [  103.605606]  </TASK>
->   [  103.652735] BUG: scheduling while atomic: read_all/2907/0x00000000
->   [  103.652739] Modules linked in: ...
->   [  103.652775]  ...
->   [  103.652825] CPU: 0 UID: 0 PID: 2907 Comm: read_all Tainted: G        W           6.17.0-rc6-debug-00276-gc4a211c65878 #1 PREEMPT(full)  ccfbb8e489d66d107205aa22f3b6242dd3605b88
->   [  103.652828] Tainted: [W]=WARN
->   [  103.652829] Hardware name: AZW MINI S/MINI S, BIOS ADLNV106 05/12/2024
->   [  103.652830] Call Trace:
->   [  103.652830]  <TASK>
->   [  103.652831]  dump_stack_lvl+0x5d/0x80
->   [  103.652835]  __schedule_bug.cold+0x42/0x4e
->   [  103.652837]  __schedule+0x1083/0x1330
->   [  103.652840]  ? get_nohz_timer_target+0x2f/0x150
->   [  103.652843]  ? timerqueue_add+0x73/0xd0
->   [  103.652845]  schedule+0x27/0xd0
->   [  103.652847]  schedule_hrtimeout_range_clock+0xd8/0x120
->   [  103.652850]  ? __pfx_hrtimer_wakeup+0x10/0x10
->   [  103.652853]  usleep_range_state+0x6c/0xa0
->   [  103.652855]  crb_wait_for_reg_32.constprop.0+0x40/0x80
->   [  103.652858]  crb_request_locality+0x3d/0x50
->   [  103.652860]  tpm_chip_start+0x6c/0xe0
->   [  103.652862]  tpm_try_get_ops+0x89/0xb0
->   [  103.652863]  tpm_find_get_ops+0x1b/0x70
->   [  103.652865]  tpm_pcr_read+0x1b/0x70
->   [  103.652866]  pcr_value_show+0xcc/0x140
->   [  103.652869]  dev_attr_show+0x1c/0x50
->   [  103.652871]  sysfs_kf_seq_show+0xc9/0x120
->   [  103.652873]  seq_read_iter+0x125/0x480
->   [  103.652875]  ? rw_verify_area+0x56/0x180
->   [  103.652877]  vfs_read+0x265/0x390
->   [  103.652880]  ksys_read+0x73/0xf0
->   [  103.652882]  do_syscall_64+0x81/0x970
->   [  103.652883]  ? do_syscall_64+0x81/0x970
->   [  103.652884]  ? __irq_exit_rcu+0x4c/0xf0
->   [  103.652887]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
->   [  103.652889] RIP: 0033:0x4243b8
->   [  103.652903] Code: 0f 05 48 83 f8 da 75 08 4c 89 c0 48 89 d6 0f 05 c3 48 89 f8 4d 89 c2 48 89 f7 4d 89 c8 48 89 d6 4c 8b 4c 24 08 48 89 ca 0f 05 <c3> e9 e1 ff ff ff 48 8d 3d 9b 52 02 00 e9 8a 06 00 00 48 8d 3d 8f
->   [  103.652905] RSP: 002b:00007ffccef321b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
->   [  103.652906] RAX: ffffffffffffffda RBX: 00007ffccef32690 RCX: 00000000004243b8
->   [  103.652907] RDX: 00000000000003ff RSI: 00007ffccef32690 RDI: 0000000000000003
->   [  103.652908] RBP: 00000000310cdd71 R08: 0000000000000000 R09: 0000000000000000
->   [  103.652909] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb294164000
->   [  103.652910] R13: 000000000042b00c R14: 00007ffccef32290 R15: 0000000000000003
->   [  103.652912]  </TASK>
+>  drivers/char/tpm/tpm-chip.c  |  1 +
+>  drivers/char/tpm/tpm-dev.c   | 14 ++++++++------
+>  drivers/char/tpm/tpmrm-dev.c | 20 ++++++++++++++++++--
+>  include/linux/tpm.h          |  3 ++-
+>  4 files changed, 29 insertions(+), 9 deletions(-)
 > 
-> If there is any other information I can provide or patches I can test, I
-> am more than happy to do so.
-
-Thanks a lot! And I have not rushed with my 6.18 pull request.
-
-It took me less than 30 seconds to locate the bug: it's spin
-lock and sleeing operations.
-
-E.g., acpi_evaluate_dsm_typed can lead to kzalloc() and stuff
-like that. I don't know how I could I have possibly missed this
-detail and this is embarrasing but luckily this should be easy
-to fix with major hurdle :-)
-
-What I suggest is that I'll simply repeal and replace the lock
-type (i.e. tweak the patch), as it does not feel worth of trouble
-to do a review round. Then we should be seeing better results.
-
-Thanks again for spotting this. Yeah, and definitely not blaming
-original author for this. It's all on me tbh. The patch itself
-was great and I should have been able to address this...
-
+> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+> index e25daf2396d3..8c8e9054762a 100644
+> --- a/drivers/char/tpm/tpm-chip.c
+> +++ b/drivers/char/tpm/tpm-chip.c
+> @@ -338,6 +338,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
+>  
+>  	mutex_init(&chip->tpm_mutex);
+>  	init_rwsem(&chip->ops_sem);
+> +	init_rwsem(&chip->open_lock);
+>  
+>  	chip->ops = ops;
+>  
+> diff --git a/drivers/char/tpm/tpm-dev.c b/drivers/char/tpm/tpm-dev.c
+> index 97c94b5e9340..80c4b3f3ad18 100644
+> --- a/drivers/char/tpm/tpm-dev.c
+> +++ b/drivers/char/tpm/tpm-dev.c
+> @@ -22,10 +22,12 @@ static int tpm_open(struct inode *inode, struct file *file)
+>  
+>  	chip = container_of(inode->i_cdev, struct tpm_chip, cdev);
+>  
+> -	/* It's assured that the chip will be opened just once,
+> -	 * by the check of is_open variable, which is protected
+> -	 * by driver_lock. */
+> -	if (test_and_set_bit(0, &chip->is_open)) {
+> +	/*
+> +	 * Only one client is allowed to have /dev/tpm0 open at a time, so we
+> +	 * treat it as a write lock. The shared /dev/tpmrm0 is treated as a
+> +	 * read lock.
+> +	 */
+> +	if (!down_write_trylock(&chip->open_lock)) {
+>  		dev_dbg(&chip->dev, "Another process owns this TPM\n");
+>  		return -EBUSY;
+>  	}
+> @@ -39,7 +41,7 @@ static int tpm_open(struct inode *inode, struct file *file)
+>  	return 0;
+>  
+>   out:
+> -	clear_bit(0, &chip->is_open);
+> +	up_write(&chip->open_lock);
+>  	return -ENOMEM;
+>  }
+>  
+> @@ -51,7 +53,7 @@ static int tpm_release(struct inode *inode, struct file *file)
+>  	struct file_priv *priv = file->private_data;
+>  
+>  	tpm_common_release(file, priv);
+> -	clear_bit(0, &priv->chip->is_open);
+> +	up_write(&priv->chip->open_lock);
+>  	kfree(priv);
+>  
+>  	return 0;
+> diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
+> index c25df7ea064e..13322dd9ac9e 100644
+> --- a/drivers/char/tpm/tpmrm-dev.c
+> +++ b/drivers/char/tpm/tpmrm-dev.c
+> @@ -17,19 +17,34 @@ static int tpmrm_open(struct inode *inode, struct file *file)
+>  	int rc;
+>  
+>  	chip = container_of(inode->i_cdev, struct tpm_chip, cdevs);
+> +
+> +	/*
+> +	 * Only one client is allowed to have /dev/tpm0 open at a time, so we
+> +	 * treat it as a write lock. The shared /dev/tpmrm0 is treated as a
+> +	 * read lock.
+> +	 */
+> +	if (!down_read_trylock(&chip->open_lock)) {
+> +		dev_dbg(&chip->dev, "Another process owns this TPM\n");
+> +		return -EBUSY;
+> +	}
+> +
+>  	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+>  	if (priv == NULL)
+> -		return -ENOMEM;
+> +		goto err;
+>  
+>  	rc = tpm2_init_space(&priv->space, TPM2_SPACE_BUFFER_SIZE);
+>  	if (rc) {
+>  		kfree(priv);
+> -		return -ENOMEM;
+> +		goto err;
+>  	}
+>  
+>  	tpm_common_open(file, chip, &priv->priv, &priv->space);
+>  
+>  	return 0;
+> +
+> +err:
+> +	up_read(&chip->open_lock);
+> +	return -ENOMEM;
+>  }
+>  
+>  static int tpmrm_release(struct inode *inode, struct file *file)
+> @@ -40,6 +55,7 @@ static int tpmrm_release(struct inode *inode, struct file *file)
+>  	tpm_common_release(file, fpriv);
+>  	tpm2_del_space(fpriv->chip, &priv->space);
+>  	kfree(priv);
+> +	up_read(&fpriv->chip->open_lock);
+>  
+>  	return 0;
+>  }
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index b0e9eb5ef022..548362d20b32 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -22,6 +22,7 @@
+>  #include <linux/cdev.h>
+>  #include <linux/fs.h>
+>  #include <linux/highmem.h>
+> +#include <linux/rwsem.h>
+>  #include <crypto/hash_info.h>
+>  #include <crypto/aes.h>
+>  
+> @@ -168,7 +169,7 @@ struct tpm_chip {
+>  	unsigned int flags;
+>  
+>  	int dev_num;		/* /dev/tpm# */
+> -	unsigned long is_open;	/* only one allowed */
+> +	struct rw_semaphore open_lock;
+>  
+>  	char hwrng_name[64];
+>  	struct hwrng hwrng;
+> -- 
+> 2.51.0
 > 
-> Cheers,
-> Nathan
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
 
