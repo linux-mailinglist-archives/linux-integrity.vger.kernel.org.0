@@ -1,265 +1,204 @@
-Return-Path: <linux-integrity+bounces-7280-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7281-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FA48BA1FDD
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Sep 2025 01:45:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9388BA66A5
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Sep 2025 05:04:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 384D7741F63
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Sep 2025 23:45:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 758F717D651
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Sep 2025 03:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B19012EFD8E;
-	Thu, 25 Sep 2025 23:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC97119CC0A;
+	Sun, 28 Sep 2025 03:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wsUcBhCT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aPZbDQpD"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CFF2727FD
-	for <linux-integrity@vger.kernel.org>; Thu, 25 Sep 2025 23:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092FB54F81
+	for <linux-integrity@vger.kernel.org>; Sun, 28 Sep 2025 03:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758843926; cv=none; b=Zu+u2HyRSHYRgVUYTC+8xEuk18txXHLlFHWeCqHeQgk9LQ+MuJJqnJMwbr0LLfd3ErRBH1mqv5c5ZvNSfLSk51jgsPuZCexzf7AmKrllLQ/lQdu6tUyL+d/1DmHahay5MF0FEi6xZFzSclTi9ngTIx9dqXXhT3cTLuVUA3O73Js=
+	t=1759028648; cv=none; b=UrE9roN7BI8bMDOjbSPJqnWxCCuFNi5/H2azjPKNsO4UCclZxPJqPwzp3AlzcgJbqbOdoBsv2N1ibjJwZlsrSHblGhVnEPjHemK2ggf9iLEKp655maTIBhYX3QYPKn547kOQJJ6dg/NUwJdnu1bw+ickyi17zyTV5CBRjeR02HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758843926; c=relaxed/simple;
-	bh=zc5PDYPZ7GdBtFvuYFvu8FWqBQP+b/s/g+l/C+lBL/A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fMBkul4IiTrZauqVGW/jqA6p+f4jhpLGhSSiUyR8mF4QWzgtWOPqrz0ZYMpP4J9fKEbqthiHs9yDQzqLtzb2G5jCCsQMkw2Oby+aorklwA6+09P9lHee7Fajw1ruYK+N9yL3suTAIwNVPwtanEeqfZZ7ca749O/lrwTnChEnOdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wsUcBhCT; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-46e32c0e273so15415e9.1
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Sep 2025 16:45:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758843923; x=1759448723; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ol0A50kwMXAn/GaWuyEx9F/yDfrD7aKDcgThOlWqa7k=;
-        b=wsUcBhCT1oZnj1txTqtlOvc7p5CO0IqzefuZ3SyKFGLb2Eqt2VNb2dG9MkwTdnCX53
-         tR0O+cujtfrqUMOWU8jdrMIFNJEkwhQwbqzp7T+tv4xolIG63GrS7xWPwgiyMgVttNbj
-         IdifOcPEFLYeF2wNyJujtz91pbITuiA7EfeS/vFg4xxv5Ut6NHY3cmRRdGwJZlPVC11v
-         dqe6PQBPzp7xPPQYYXAFTo/UGGpuTiaVIn2U26xbfIDUE+VhtnJnPA/UCq/nhaum3N9e
-         za60WYQtM4ScgeNffqShIskHnVMdPuGqB0X3muKOPAhvCttX1DG4BCxyYDmAqahH+iz8
-         HUYQ==
+	s=arc-20240116; t=1759028648; c=relaxed/simple;
+	bh=VBcvsRhMgO/muYeWFgejs0y+LouNQ+vYo1QbX/Y+XRk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hqcDo1LgqMN4xptvKD1cCYj/fUkKOFUzAuuD9/fdCSZtpynlfsiXMZvfAzEcWBGzfE5UYSobUlDT/71miqMb9Oy/E7Auy4WJoErm/qoShkE4Wen3iOzJeMCDRfV7UjMe09j4sumHBkLgHR2dJHS2Rc1QwNMrTvt7aiRPUuXTXFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aPZbDQpD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759028645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qEw52ze8SdcNH5GneUi5j01Dzu2Pu+0KVOCFzVwvrUY=;
+	b=aPZbDQpDuvGV3cRuM4W5lURdNVxNcz0h6czpLBYeD4vL40WMCijfg9dQD3ICZvcsSR+EVR
+	a9XVnI3TiVvJ9RFiZT5ynnHAYR3bgbYMuuGVULswKXqNxt74hiH+icPB+LTKLdugjicgqz
+	TAzDTshX5oGfOokwAUc53VWZ/fAhK5c=
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
+ [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-642-Hu4OrPTFNTqMf1fmGiJkBA-1; Sat, 27 Sep 2025 23:04:04 -0400
+X-MC-Unique: Hu4OrPTFNTqMf1fmGiJkBA-1
+X-Mimecast-MFC-AGG-ID: Hu4OrPTFNTqMf1fmGiJkBA_1759028643
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-781253de15aso2241956b3a.2
+        for <linux-integrity@vger.kernel.org>; Sat, 27 Sep 2025 20:04:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758843923; x=1759448723;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ol0A50kwMXAn/GaWuyEx9F/yDfrD7aKDcgThOlWqa7k=;
-        b=N7m6b2S2TopUDRFNVqWgtBGDZ8RUi8ozi/DntwlUl7YQ/AbpmpkgOyap/1E+7yyiFA
-         q+MillFieDqSAXzTz78djYz+2Se7nw1S2DOYV/ItPCxpyPv/ROZoLMfNe0Y5JSGmgq11
-         AlBAoS3wx+FE+WeODReZc9zRGMkznCjjOJagWBmL/0QhI+5GWpAlR6+1PF6FuVJbbIAc
-         MsD5eThaIU7gNLqlcF2CgsoVvVXCaLydBl339OjJI3xBM5l0l4o4YWgrgnR1EE6A8Hnj
-         c8AQu4H4Ox490Ooc5MMbHQ0ikhJDE1KxWVd6xKme+KgBdzj+EvhlNfvdmAAVzhw5EwUh
-         dg8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXEOWN2IHpCoIbXwjfynRVNg/TT+g0KRf6NiORrG6aUnTDL0/w5XDlcrQYoqICg9qxcA9EwKLIecAlQ+0TFtyM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5zuXqRdY0nqxgWCsr+VUhBmtdw9Sh1HLFpExtKlYTYPZLLcq4
-	WGu3BpKzO1udCZuTgmYyEzdZYhw0jqVoTKsOaLsuQQoc6HF6fvj9tRrOZwqW1+FHL+88HGWKxhF
-	9rdzBiooj
-X-Gm-Gg: ASbGncs3UY7bUiVYlzPdC6upaXS4YhptVpPljjc2Y5ReNHpgM83P+YymDYtlxFMD3O0
-	30whAoyo7O9t9TlCHsrv4hL+bZW5PakhLezDZ7h+Obb3hKuboG5UoPfKJ3bsbMnIAJKl0vsLAxE
-	p0O1ECn2bpjzHlB4CzlCpBXr9w4DzIPqyp17ut692AiZwXlu4UcLdgf4McG8/0B2CkAhTeJAc2C
-	qH4SluxwXKANoqD+ONC8vrvtWLsegWDPOiudfg8GbUvakzkgodjFSQ1gtNdDIAqH60P/ogkduex
-	5weC8y+Klg0/qsEr7vSnlAr+sefeX2c8pexrLcmwOAiGA3ijVkjkRO3gXY6WGUT61vry72OhOFp
-	d87hlzVoFWcujktbOkiIRVdbkisI4
-X-Google-Smtp-Source: AGHT+IEeVIekGoQsa4rT2uNuLKasNfOTdtHTfwRcmmtPgJYSMssBKLy/KQ1C+vnJw/xi7QWtaEQg/w==
-X-Received: by 2002:a05:600c:6219:b0:45f:2940:d194 with SMTP id 5b1f17b1804b1-46e3af7cb37mr783415e9.2.1758843922890;
-        Thu, 25 Sep 2025 16:45:22 -0700 (PDT)
-Received: from localhost ([2a00:79e0:9d:4:802b:ac1b:7bf0:4c9a])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-46e33be359dsm49540085e9.13.2025.09.25.16.45.22
+        d=1e100.net; s=20230601; t=1759028643; x=1759633443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qEw52ze8SdcNH5GneUi5j01Dzu2Pu+0KVOCFzVwvrUY=;
+        b=QQ8D+lzYEXo+ibWFaEhfjIOcJbGS8LkEK+M5pw0v3Z20NCZRXyeqISDXBmVfs50EZi
+         q96EPxIp255spK+tEQzopih4v9l5j8ibEE7+ZkvutNiLddZXgsQTsNdPiDkq5B8ClSHZ
+         eK5XiS4xElEO+mSgYZgMx2hcAXpENZ05LMVg8DWKDlLw/Eu/Twn10CP3uwNjdkM1iYNT
+         sqdx/1HucfvP/8FUkwqIg81RqzkRTQPeelnJ3OfMCfF6iwamseFu4akc9OYrdh+B4qlF
+         V9ZOBL99MDfVIDeB8/wAuEc8n3yBHzu+qhaGdnuwkdKSXWKq/2H1fstNFDGrwtnyMMxU
+         BiRA==
+X-Gm-Message-State: AOJu0YxDAe21OnAIHiucHd5c28/HosYlrSERkk3IIQT/jZC63QHJ7gj+
+	kbnlzRDS0ygM6Gqd1Kqr1iqJ06JW/mtU8zQnVirnZRSAX9vMTVFvxx8ppSh/AEQa6GAh6mvf8jj
+	IeMWyV/K8UlG3GBP8A3IWs8SvkqJdU3ekyNUuMEpceEKuYTuIN5SoYVugB1NgkhxHR3wHBi2YRK
+	yA3ANRC5xRcGA1rkxSFn7VRrQgW399cXf62sBEfpdbQFQ9GUH/Nrk=
+X-Gm-Gg: ASbGncubuWcYsdD4KySpY+BX936JSNg9NnI3eySQfe2aqcpSxijh2VADjxfkooHsjy/
+	t28mp4xYpP7YOQCMbjVrGnPNxtbA+JXmdzwTXpDV8LVsg/F5OvSJywJlgVhM93f4x1kZyPpxHsx
+	4Whvf2VrNg1GZ9Cr8rJpntG59vThFAoIlJWbcRDXeBHZ8m0xxvO+VbXxDYSA5sHwLx1AsBBTCRy
+	rmvpJ7eCcTbbXb1qf+RYS2ulUaWxRPvX52JyvRCb1V02hLv8PadFhtY3ekTeMUUCQBXa3mQRXov
+	MqMHWXOv7SlCs5Q/18RIgn6ReRMu3hk=
+X-Received: by 2002:a05:6a00:8d6:b0:771:e4c6:10cc with SMTP id d2e1a72fcca58-780fcdd2cb1mr13863869b3a.6.1759028642833;
+        Sat, 27 Sep 2025 20:04:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGrlGFESxb4zyWUKxHw78NUwK96T66HWHGPWOIZ8CPuMROnTHK9D2/BRaau3akM7vrrkSoTGQ==
+X-Received: by 2002:a05:6a00:8d6:b0:771:e4c6:10cc with SMTP id d2e1a72fcca58-780fcdd2cb1mr13863837b3a.6.1759028642348;
+        Sat, 27 Sep 2025 20:04:02 -0700 (PDT)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-78102c1203fsm7854159b3a.92.2025.09.27.20.04.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Sep 2025 16:45:22 -0700 (PDT)
-From: Jann Horn <jannh@google.com>
-Date: Fri, 26 Sep 2025 01:45:07 +0200
-Subject: [PATCH 2/2] ima: add fs_subtype condition for distinguishing FUSE
- instances
+        Sat, 27 Sep 2025 20:04:02 -0700 (PDT)
+From: Coiby Xu <coxu@redhat.com>
+To: linux-integrity@vger.kernel.org
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Karel Srot <ksrot@redhat.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] ima: Fall back to default kernel module signature verification
+Date: Sun, 28 Sep 2025 11:03:58 +0800
+Message-ID: <20250928030358.3873311-1-coxu@redhat.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250926-ima-audit-v1-2-64d75fdc8fdc@google.com>
-References: <20250926-ima-audit-v1-0-64d75fdc8fdc@google.com>
-In-Reply-To: <20250926-ima-audit-v1-0-64d75fdc8fdc@google.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>
-Cc: Frank Dinoff <fdinoff@google.com>, linux-kernel@vger.kernel.org, 
- linux-integrity@vger.kernel.org, Jann Horn <jannh@google.com>
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1758843915; l=5956;
- i=jannh@google.com; s=20240730; h=from:subject:message-id;
- bh=zc5PDYPZ7GdBtFvuYFvu8FWqBQP+b/s/g+l/C+lBL/A=;
- b=I1cM55SBW7Rg1+33aO8Wo7b0pVoP0LwvprwmWHcQ9HccOEFM5xfURqglA10HBLMb4yAyj+/XM
- 9/0Y5HO09OqCsOcWqz/AfcZloR9j8Iy1QjGxY7Wo9qM6pC/rT5mIg4K
-X-Developer-Key: i=jannh@google.com; a=ed25519;
- pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
+Content-Transfer-Encoding: 8bit
 
-Linux systems often use FUSE for several different purposes, where the
-contents of some FUSE instances can be of more interest for auditing
-than others.
+Currently, for any IMA policy that requires appraisal for kernel modules
+e.g. ima_policy=secure_boot, PowerPC architecture specific policy,
+booting will fail because IMA will reject a kernel module which will
+be decompressed in the kernel space and then have its signature
+verified.
 
-Allow distinguishing between them based on the filesystem subtype
-(s_subtype) using the new condition "fs_subtype".
+This happens because when in-kernel module decompression
+(CONFIG_MODULE_DECOMPRESS) is enabled, kmod will use finit_module
+syscall instead of init_module to load a module. And IMA mandates IMA
+xattr verification for finit_module unless appraise_type=imasig|modsig
+is specified in the rule.  However currently initramfs doesn't support
+xattr. And IMA rule "func=MODULE_CHECK appraise_type=imasig|modsig"
+doesn't work either because IMA will treat to-be-decompressed kernel
+module as not having module signature as it can't decompress kernel
+module to check if signature exists.
 
-The subtype string is supplied by userspace FUSE daemons
-when a FUSE connection is initialized, so policy authors who want to
-filter based on subtype need to ensure that FUSE mount operations are
-sufficiently audited or restricted.
+So fall back to default kernel module signature verification when we have
+no way to verify IMA xattr.
 
-Signed-off-by: Jann Horn <jannh@google.com>
+Reported-by: Karel Srot <ksrot@redhat.com>
+Signed-off-by: Coiby Xu <coxu@redhat.com>
 ---
- Documentation/ABI/testing/ima_policy |  1 +
- security/integrity/ima/ima_policy.c  | 43 ++++++++++++++++++++++++++++++++----
- 2 files changed, 40 insertions(+), 4 deletions(-)
+Another approach will be to make IMA decompress the kernel module to
+check the signature. This requires refactoring kernel module code to
+make the in-kernel module decompressing feature modular and seemingly
+more efforts are needed. A second disadvantage is it feels
+counter-intuitive to verify the same kernel module signature twice. And
+we still need to make ima_policy=secure_boot allow verifying appended
+module signature.
 
-diff --git a/Documentation/ABI/testing/ima_policy b/Documentation/ABI/testing/ima_policy
-index 5d548dd2c6e7..d4b3696a9efb 100644
---- a/Documentation/ABI/testing/ima_policy
-+++ b/Documentation/ABI/testing/ima_policy
-@@ -23,6 +23,7 @@ Description:
- 			  audit | dont_audit | hash | dont_hash
- 		  condition:= base | lsm  [option]
- 			base:	[[func=] [mask=] [fsmagic=] [fsuuid=] [fsname=]
-+				[fs_subtype=]
- 				[uid=] [euid=] [gid=] [egid=]
- 				[fowner=] [fgroup=]]
- 			lsm:	[[subj_user=] [subj_role=] [subj_type=]
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index c5bad3a0c43a..164d62832f8e 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -38,6 +38,7 @@
- #define IMA_GID		0x2000
- #define IMA_EGID	0x4000
- #define IMA_FGROUP	0x8000
-+#define IMA_FS_SUBTYPE	0x10000
+Anyways, I'm open to suggestions and can try the latter approach if
+there are some benefits I'm not aware of or a better approach.
+
+ security/integrity/ima/ima_appraise.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index f435eff4667f..fcc75dd1486f 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -502,9 +502,10 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 	enum integrity_status status = INTEGRITY_UNKNOWN;
+ 	int rc = xattr_len;
+ 	bool try_modsig = iint->flags & IMA_MODSIG_ALLOWED && modsig;
++	bool enforce_module_sig = iint->flags & IMA_DIGSIG_REQUIRED && func == MODULE_CHECK;
  
- #define UNKNOWN		0
- #define MEASURE		0x0001	/* same as IMA_MEASURE */
-@@ -120,6 +121,7 @@ struct ima_rule_entry {
- 		int type;	/* audit type */
- 	} lsm[MAX_LSM_RULES];
- 	char *fsname;
-+	char *fs_subtype;
- 	struct ima_rule_opt_list *keyrings; /* Measure keys added to these keyrings */
- 	struct ima_rule_opt_list *label; /* Measure data grouped under this label */
- 	struct ima_template_desc *template;
-@@ -398,6 +400,7 @@ static void ima_free_rule(struct ima_rule_entry *entry)
- 	 * the defined_templates list and cannot be freed here
- 	 */
- 	kfree(entry->fsname);
-+	kfree(entry->fs_subtype);
- 	ima_free_rule_opt_list(entry->keyrings);
- 	ima_lsm_free_rule(entry);
- 	kfree(entry);
-@@ -602,6 +605,12 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 	if ((rule->flags & IMA_FSNAME)
- 	    && strcmp(rule->fsname, inode->i_sb->s_type->name))
- 		return false;
-+	if (rule->flags & IMA_FS_SUBTYPE) {
-+		if (!inode->i_sb->s_subtype)
-+			return false;
-+		if (strcmp(rule->fs_subtype, inode->i_sb->s_subtype))
-+			return false;
-+	}
- 	if ((rule->flags & IMA_FSUUID) &&
- 	    !uuid_equal(&rule->fsuuid, &inode->i_sb->s_uuid))
- 		return false;
-@@ -1068,7 +1077,7 @@ enum policy_opt {
- 	Opt_audit, Opt_dont_audit, Opt_hash, Opt_dont_hash,
- 	Opt_obj_user, Opt_obj_role, Opt_obj_type,
- 	Opt_subj_user, Opt_subj_role, Opt_subj_type,
--	Opt_func, Opt_mask, Opt_fsmagic, Opt_fsname, Opt_fsuuid,
-+	Opt_func, Opt_mask, Opt_fsmagic, Opt_fsname, Opt_fs_subtype, Opt_fsuuid,
- 	Opt_uid_eq, Opt_euid_eq, Opt_gid_eq, Opt_egid_eq,
- 	Opt_fowner_eq, Opt_fgroup_eq,
- 	Opt_uid_gt, Opt_euid_gt, Opt_gid_gt, Opt_egid_gt,
-@@ -1100,6 +1109,7 @@ static const match_table_t policy_tokens = {
- 	{Opt_mask, "mask=%s"},
- 	{Opt_fsmagic, "fsmagic=%s"},
- 	{Opt_fsname, "fsname=%s"},
-+	{Opt_fs_subtype, "fs_subtype=%s"},
- 	{Opt_fsuuid, "fsuuid=%s"},
- 	{Opt_uid_eq, "uid=%s"},
- 	{Opt_euid_eq, "euid=%s"},
-@@ -1284,7 +1294,8 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
- 		if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
- 				     IMA_UID | IMA_FOWNER | IMA_FSUUID |
- 				     IMA_INMASK | IMA_EUID | IMA_PCR |
--				     IMA_FSNAME | IMA_GID | IMA_EGID |
-+				     IMA_FSNAME | IMA_FS_SUBTYPE |
-+				     IMA_GID | IMA_EGID |
- 				     IMA_FGROUP | IMA_DIGSIG_REQUIRED |
- 				     IMA_PERMIT_DIRECTIO | IMA_VALIDATE_ALGOS |
- 				     IMA_CHECK_BLACKLIST | IMA_VERITY_REQUIRED))
-@@ -1297,7 +1308,8 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
- 		if (entry->flags & ~(IMA_FUNC | IMA_MASK | IMA_FSMAGIC |
- 				     IMA_UID | IMA_FOWNER | IMA_FSUUID |
- 				     IMA_INMASK | IMA_EUID | IMA_PCR |
--				     IMA_FSNAME | IMA_GID | IMA_EGID |
-+				     IMA_FSNAME | IMA_FS_SUBTYPE |
-+				     IMA_GID | IMA_EGID |
- 				     IMA_FGROUP | IMA_DIGSIG_REQUIRED |
- 				     IMA_PERMIT_DIRECTIO | IMA_MODSIG_ALLOWED |
- 				     IMA_CHECK_BLACKLIST | IMA_VALIDATE_ALGOS))
-@@ -1310,7 +1322,8 @@ static bool ima_validate_rule(struct ima_rule_entry *entry)
+-	/* If not appraising a modsig, we need an xattr. */
+-	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig)
++	/* If not appraising a modsig or using default module verification, we need an xattr. */
++	if (!(inode->i_opflags & IOP_XATTR) && !try_modsig && !enforce_module_sig)
+ 		return INTEGRITY_UNKNOWN;
  
- 		if (entry->flags & ~(IMA_FUNC | IMA_FSMAGIC | IMA_UID |
- 				     IMA_FOWNER | IMA_FSUUID | IMA_EUID |
--				     IMA_PCR | IMA_FSNAME | IMA_GID | IMA_EGID |
-+				     IMA_PCR | IMA_FSNAME | IMA_FS_SUBTYPE |
-+				     IMA_GID | IMA_EGID |
- 				     IMA_FGROUP))
- 			return false;
+ 	/*
+@@ -517,8 +518,8 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 	if (is_bprm_creds_for_exec(func, file))
+ 		audit_msgno = AUDIT_INTEGRITY_USERSPACE;
  
-@@ -1597,6 +1610,22 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
- 			result = 0;
- 			entry->flags |= IMA_FSNAME;
+-	/* If reading the xattr failed and there's no modsig, error out. */
+-	if (rc <= 0 && !try_modsig) {
++	/* If reading the xattr failed and there's no modsig or module verification, error out. */
++	if (rc <= 0 && !try_modsig && !enforce_module_sig) {
+ 		if (rc && rc != -ENODATA)
+ 			goto out;
+ 
+@@ -549,8 +550,8 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 	case INTEGRITY_UNKNOWN:
+ 		break;
+ 	case INTEGRITY_NOXATTRS:	/* No EVM protected xattrs. */
+-		/* It's fine not to have xattrs when using a modsig. */
+-		if (try_modsig)
++		/* Fine to not have xattrs when using a modsig or default module verification. */
++		if (try_modsig || enforce_module_sig)
  			break;
-+		case Opt_fs_subtype:
-+			ima_log_string(ab, "fs_subtype", args[0].from);
-+
-+			if (entry->fs_subtype) {
-+				result = -EINVAL;
-+				break;
-+			}
-+
-+			entry->fs_subtype = kstrdup(args[0].from, GFP_KERNEL);
-+			if (!entry->fs_subtype) {
-+				result = -ENOMEM;
-+				break;
-+			}
-+			result = 0;
-+			entry->flags |= IMA_FS_SUBTYPE;
-+			break;
- 		case Opt_keyrings:
- 			ima_log_string(ab, "keyrings", args[0].from);
+ 		fallthrough;
+ 	case INTEGRITY_NOLABEL:		/* No security.evm xattr. */
+@@ -580,6 +581,18 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
+ 	     rc == -ENOKEY))
+ 		rc = modsig_verify(func, modsig, &status, &cause);
  
-@@ -2145,6 +2174,12 @@ int ima_policy_show(struct seq_file *m, void *v)
- 		seq_puts(m, " ");
- 	}
- 
-+	if (entry->flags & IMA_FS_SUBTYPE) {
-+		snprintf(tbuf, sizeof(tbuf), "%s", entry->fs_subtype);
-+		seq_printf(m, pt(Opt_fs_subtype), tbuf);
-+		seq_puts(m, " ");
++	/* Fall back to default kernel module signature verification */
++	if (rc && enforce_module_sig) {
++		rc = 0;
++		set_module_sig_enforced();
++		/* CONFIG_MODULE_SIG may be disabled */
++		if (is_module_sig_enforced()) {
++			rc = 0;
++			status = INTEGRITY_PASS;
++			pr_debug("Fall back to default kernel module verification for %s\n", filename);
++		}
 +	}
 +
- 	if (entry->flags & IMA_KEYRINGS) {
- 		seq_puts(m, "keyrings=");
- 		ima_show_rule_opt_list(m, entry->keyrings);
+ out:
+ 	/*
+ 	 * File signatures on some filesystems can not be properly verified.
 
+base-commit: cec1e6e5d1ab33403b809f79cd20d6aff124ccfe
 -- 
-2.51.0.536.g15c5d4f767-goog
+2.51.0
 
 
