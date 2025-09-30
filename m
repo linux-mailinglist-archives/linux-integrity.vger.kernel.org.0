@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-7337-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7338-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E466FBAEB13
-	for <lists+linux-integrity@lfdr.de>; Wed, 01 Oct 2025 00:18:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 838DFBAEB25
+	for <lists+linux-integrity@lfdr.de>; Wed, 01 Oct 2025 00:19:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95D7D1927DE3
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 22:19:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6328A4A7E84
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 22:18:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3972D2394;
-	Tue, 30 Sep 2025 22:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31BA32D249E;
+	Tue, 30 Sep 2025 22:17:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KHe8wrOq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vDR1G4Gf"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1FF2C3274;
-	Tue, 30 Sep 2025 22:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 005792C2375;
+	Tue, 30 Sep 2025 22:17:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759270666; cv=none; b=Hs1QE7EVBWNMw56xtvCenHFn/hf7NzvQbCBmQxrpPBWE+JRUiLHyxSQVQWvmdYQXUVoolFPfz1QwaWokpF0G+SY0wGRukvRabMFPkvSr2/RU3NN0pl6vq/JojPPxahJU485EfCsb3u8BEH5o5QhyaBg/FHZ0A+1pXGTHxvxd3aE=
+	t=1759270671; cv=none; b=nCO1Jo149+z+8y2LZIGWOAabu6VUQBZFmNk1WqSzI4s9JlSFw9Ia/bzf0QstJL8N1T7uYqfV+xlz3uibe+iWT73Ow0m7XZZfVZCc8B0LEeCSxJxGvHCqs4i/Luh5xpx6IvF5Lgud27CJFU2DWKCFITBsWuiutvY3W1xBuAIrv+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759270666; c=relaxed/simple;
-	bh=e+Hq89cOeLWVV6clf1MlgKl/7jpDuLWfqCWqWH4LKaY=;
+	s=arc-20240116; t=1759270671; c=relaxed/simple;
+	bh=1GuUWS7oZuy2It1bhxEzOSDxWmjL3rQtT/gkILDr5u0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=a82cRT1rLNdSi7OaWDTUT/Jr+IuLzz+bJXJjoyXYrBm/gk/rlJd4AbhfPsfH8skhnIJhf70Su5r4sEY5VZrrF4phXzbjZZHCWRgJGchrfO7pz3kDVkrM3mpuuxOm+4hQf0bkdQ+YkwAeiPivQ0NM8McWfnqCXHIjm0/JMUP3wMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KHe8wrOq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E89C4CEF0;
-	Tue, 30 Sep 2025 22:17:45 +0000 (UTC)
+	 MIME-Version; b=DsG9O/yZtBjiY6Jw0GP+ARrlZaBb38JmwRK4ZgVfVxgBa5f/Xxqay+RVwf82SRFKUsu5gqp/VyCE/jZWeZZYTZ8DIm6lYE/Se7rBfISBaDM3w7rcaCMEqD/EeyXdO2facGqAdM04KsY8HgkECKqvAsEPDgHO/XM+Vc3rWsgLtM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vDR1G4Gf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D204C4CEF0;
+	Tue, 30 Sep 2025 22:17:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759270666;
-	bh=e+Hq89cOeLWVV6clf1MlgKl/7jpDuLWfqCWqWH4LKaY=;
+	s=k20201202; t=1759270670;
+	bh=1GuUWS7oZuy2It1bhxEzOSDxWmjL3rQtT/gkILDr5u0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KHe8wrOqXRmb9OinkoCXl5K5aRu965tiKXkGdP+OKXGXhD7Y7vazP+rcwfYlfJ37w
-	 fFJREy7z9QTKvEFfSK9czLL4foPQMN+Z6hjzzVqAR+C1ErAkC8dMJ8zlXkT7f6tsXC
-	 ON9bWtBru39gp8z5qFB1036Sg/qzT+9wdWqmzPBPosaRVhaTkSUj3Dyo4gIc4sRREB
-	 0KSRXrpF8EdQeo4Q8qhedXkQBkJo7s122dmAt50N+5f7J9Re5ppU4/tROWbh0znJCO
-	 jH41fFDlecsnIJT/Dqn/+9DayjJe64A4PNpMAawDMu+Jw3Cv+AFSi9vTnXVsJgRVZ1
-	 2Ewny6BdSkSoA==
+	b=vDR1G4GfNsJB7jWdfgU6GD4HYlRGdhKcgJEeRoG0t1m/4IxC+7jiDhkKVAXZ1Mfc1
+	 Je8qyhbsQBEr04X/EXQ1B2GZu2cqZIzQ6RGVpuXe46ujdRr+S/Gn5UZTHUJ/SC8o3T
+	 lHCxMFDgpBDI+umrO+Q62JXypBiad0grrmPmoAjOfDbauqLYsdwl/2UseuL7GY6J3I
+	 GiKCBV4+uHwsYKxJXAbBuUptG6nrBDx8qbptjJvr+Qs/A4gxkmrVkEhmoSGIiQ7DJN
+	 n+Q7yx3Z+BJiVnBPAvHuDGEfY7hziqboibci1uWfkRjW+VdQPagHSZDWoW/2LEiWYG
+	 NZhrqrkp798BA==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: dpsmith@apertussolutions.com,
@@ -54,14 +54,12 @@ Cc: dpsmith@apertussolutions.com,
 	Paul Moore <paul@paul-moore.com>,
 	James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
 	linux-kernel@vger.kernel.org (open list),
 	keyrings@vger.kernel.org (open list:KEYS/KEYRINGS),
 	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v4 7/9] tpm-buf: check for corruption in tpm_buf_append_handle()
-Date: Wed,  1 Oct 2025 01:17:05 +0300
-Message-Id: <20250930221707.1373912-8-jarkko@kernel.org>
+Subject: [PATCH v4 8/9] tpm-buf: Remove chip parameter from tpm_buf_append_handle
+Date: Wed,  1 Oct 2025 01:17:06 +0300
+Message-Id: <20250930221707.1373912-9-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250930221707.1373912-1-jarkko@kernel.org>
 References: <20250930221707.1373912-1-jarkko@kernel.org>
@@ -75,11 +73,11 @@ Content-Transfer-Encoding: 8bit
 
 From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-Unify TPM_BUF_BOUNDARY_ERROR and TPM_BUF_OVERFLOW into TPM_BUF_INVALID
-flag because semantically they are identical.
-
-Test and set TPM_BUF_INVALID in tpm_buf_append_handle() following the
-pattern from other functions in tpm-buf.c.
+Remove chip parameter from tpm_buf_append_handle() in order to maintain
+decoupled state with tpm-buf. This is mandatory change in order to re-use
+the module in early boot code of Trenchboot, and the binding itself brings
+no benefit. Use WARN like in other functions, as the error condition can
+happen only as a net effect of a trivial programming mistake.
 
 Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 Reviewed-by: Jonathan McDowell <noodles@meta.com>
@@ -89,114 +87,80 @@ v4:
 v3:
 - No changes.
 v2:
-- A new patch.
+- No changes.
 ---
- drivers/char/tpm/tpm-buf.c                | 14 ++++++++------
- include/linux/tpm.h                       |  8 +++-----
- security/keys/trusted-keys/trusted_tpm2.c |  6 +++---
- 3 files changed, 14 insertions(+), 14 deletions(-)
+ drivers/char/tpm/tpm-buf.c       | 5 ++---
+ drivers/char/tpm/tpm2-cmd.c      | 2 +-
+ drivers/char/tpm/tpm2-sessions.c | 2 +-
+ include/linux/tpm.h              | 2 +-
+ 4 files changed, 5 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-index dc882fc9fa9e..69ee77400539 100644
+index 69ee77400539..1b9dee0d0681 100644
 --- a/drivers/char/tpm/tpm-buf.c
 +++ b/drivers/char/tpm/tpm-buf.c
-@@ -104,13 +104,12 @@ EXPORT_SYMBOL_GPL(tpm_buf_length);
+@@ -147,20 +147,19 @@ EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
+ 
+ /**
+  * tpm_buf_append_handle() - Add a handle
+- * @chip:	&tpm_chip instance
+  * @buf:	&tpm_buf instance
+  * @handle:	a TPM object handle
+  *
+  * Add a handle to the buffer, and increase the count tracking the number of
+  * handles in the command buffer. Works only for command buffers.
   */
- void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
+-void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u32 handle)
++void tpm_buf_append_handle(struct tpm_buf *buf, u32 handle)
  {
--	/* Return silently if overflow has already happened. */
--	if (buf->flags & TPM_BUF_OVERFLOW)
-+	if (buf->flags & TPM_BUF_INVALID)
+ 	if (buf->flags & TPM_BUF_INVALID)
  		return;
  
- 	if ((buf->length + new_length) > PAGE_SIZE) {
- 		WARN(1, "tpm_buf: write overflow\n");
--		buf->flags |= TPM_BUF_OVERFLOW;
-+		buf->flags |= TPM_BUF_INVALID;
- 		return;
- 	}
- 
-@@ -157,8 +156,12 @@ EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
-  */
- void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u32 handle)
- {
-+	if (buf->flags & TPM_BUF_INVALID)
-+		return;
-+
  	if (buf->flags & TPM_BUF_TPM2B) {
- 		dev_err(&chip->dev, "Invalid buffer type (TPM2B)\n");
-+		buf->flags |= TPM_BUF_INVALID;
+-		dev_err(&chip->dev, "Invalid buffer type (TPM2B)\n");
++		WARN(1, "tpm-buf: invalid type: TPM2B\n");
+ 		buf->flags |= TPM_BUF_INVALID;
  		return;
  	}
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 254003e5dd8b..e548b0ac7654 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -190,7 +190,7 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 		tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
+ 		tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
+ 	} else {
+-		tpm_buf_append_handle(chip, &buf, pcr_idx);
++		tpm_buf_append_handle(&buf, pcr_idx);
+ 		tpm_buf_append_auth(chip, &buf, NULL, 0);
+ 	}
  
-@@ -177,14 +180,13 @@ static void tpm_buf_read(struct tpm_buf *buf, off_t *offset, size_t count, void
- {
- 	off_t next_offset;
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index 13f019d1312a..bbc05f0997a8 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -232,7 +232,7 @@ void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+ #endif
  
--	/* Return silently if overflow has already happened. */
--	if (buf->flags & TPM_BUF_BOUNDARY_ERROR)
-+	if (buf->flags & TPM_BUF_INVALID)
- 		return;
- 
- 	next_offset = *offset + count;
- 	if (next_offset > buf->length) {
- 		WARN(1, "tpm_buf: read out of boundary\n");
--		buf->flags |= TPM_BUF_BOUNDARY_ERROR;
-+		buf->flags |= TPM_BUF_INVALID;
+ 	if (!tpm2_chip_auth(chip)) {
+-		tpm_buf_append_handle(chip, buf, handle);
++		tpm_buf_append_handle(buf, handle);
  		return;
  	}
  
 diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index e3c65d33e041..4613216e9d95 100644
+index 4613216e9d95..e86c22b30153 100644
 --- a/include/linux/tpm.h
 +++ b/include/linux/tpm.h
-@@ -370,12 +370,10 @@ struct tpm_header {
- } __packed;
- 
- enum tpm_buf_flags {
--	/* the capacity exceeded: */
--	TPM_BUF_OVERFLOW	= BIT(0),
- 	/* TPM2B format: */
--	TPM_BUF_TPM2B		= BIT(1),
--	/* read out of boundary: */
--	TPM_BUF_BOUNDARY_ERROR	= BIT(2),
-+	TPM_BUF_TPM2B		= BIT(0),
-+	/* The buffer is in invalid and unusable state: */
-+	TPM_BUF_INVALID		= BIT(1),
- };
+@@ -427,7 +427,7 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
+ u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset);
+ u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset);
+ u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset);
+-void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u32 handle);
++void tpm_buf_append_handle(struct tpm_buf *buf, u32 handle);
  
  /*
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 8e3b283a59b2..119d5152c0db 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -295,7 +295,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 	/* creation PCR */
- 	tpm_buf_append_u32(&buf, 0);
- 
--	if (buf.flags & TPM_BUF_OVERFLOW) {
-+	if (buf.flags & TPM_BUF_INVALID) {
- 		rc = -E2BIG;
- 		tpm2_end_auth_session(chip);
- 		goto out;
-@@ -308,7 +308,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		goto out;
- 
- 	blob_len = tpm_buf_read_u32(&buf, &offset);
--	if (blob_len > MAX_BLOB_SIZE || buf.flags & TPM_BUF_BOUNDARY_ERROR) {
-+	if (blob_len > MAX_BLOB_SIZE || buf.flags & TPM_BUF_INVALID) {
- 		rc = -E2BIG;
- 		goto out;
- 	}
-@@ -414,7 +414,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 
- 	tpm_buf_append(&buf, blob, blob_len);
- 
--	if (buf.flags & TPM_BUF_OVERFLOW) {
-+	if (buf.flags & TPM_BUF_INVALID) {
- 		rc = -E2BIG;
- 		tpm2_end_auth_session(chip);
- 		goto out;
+  * Check if TPM device is in the firmware upgrade mode.
 -- 
 2.39.5
 
