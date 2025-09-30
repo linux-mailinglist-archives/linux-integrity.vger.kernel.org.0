@@ -1,169 +1,157 @@
-Return-Path: <linux-integrity+bounces-7307-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7308-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DA35BAB051
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 04:35:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D15F8BAC755
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 12:24:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3D1819235B5
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 02:35:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 716AF3B2E64
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 10:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B271E1E04;
-	Tue, 30 Sep 2025 02:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11A12F6581;
+	Tue, 30 Sep 2025 10:24:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OpkN4hYz"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eMBHta3C"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52F8618859B
-	for <linux-integrity@vger.kernel.org>; Tue, 30 Sep 2025 02:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9642F83C5;
+	Tue, 30 Sep 2025 10:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759199719; cv=none; b=i87Xvl8j7nk6GSdyuYX4tc+oxYlWCVX3egNDz4vya50plBHY+R91OTwBYdt0eHdyz4dwrCURmWz5xTTUj6OS2KuXNd6I9Fr0w764VpC9fiAVnr4T/jEQjYiK2NA/bOKNoLhuBoj9iHysH+0MyW70p1NqGapSmNhk4PwhoQYZUss=
+	t=1759227845; cv=none; b=cxGQix9AXuuHWcBiAr8Y926x3wyEs/edbKQB2ES1Se8piEp47tnAoyln9egfr0vLxF/G44cMpP4CYokkvg2YJ4fLD18iSItv6pku94rFGyZSVn5AZgXvfQTaenYP/Vx0X7epTwTigW5euCALIGCX3tI4XmehUOyTejV6OFu14SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759199719; c=relaxed/simple;
-	bh=wJQGgVCMFj3J2tRZt+e5H18nK9hedKnUGtmvcZcCFLc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sK908KZEnL6FKxYv/cppuAOScmSrW/GkBeDF+oWq6stXnYQ2psWQlSIoel28HLeKBVdklExLq5WVqG+SSxDF9PMGTk7spNkeHH4H9cxaRkBLuLZSUMjrD8WcecwuIrrCY/iF1OjYGyeH32lJDRINEk31OHoM+9EDTm9qqvzBkWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OpkN4hYz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759199717;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=03NexLO5UHcDiL6BtGZCzs9TJxia4xSP+LO1xkJ8UJI=;
-	b=OpkN4hYz7vQomBRNL4cjZlCLqajEkUk78GOE5W9YcQEDE00HmArJjdQqyTFJvAuFTQWPB5
-	vXuxiOBmEYDQKku1ARCRqvaj3xs7QsjzdInvdnNYhrtEKCJshpgLIum6/rx6Do2ASs5AaO
-	hkK8/6B81uj+B24rR0mRC6PHT4G0B4w=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-637-k-wOHCCNP4azXTb-_a5Eug-1; Mon, 29 Sep 2025 22:35:15 -0400
-X-MC-Unique: k-wOHCCNP4azXTb-_a5Eug-1
-X-Mimecast-MFC-AGG-ID: k-wOHCCNP4azXTb-_a5Eug_1759199715
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-781171fe1c5so3460937b3a.0
-        for <linux-integrity@vger.kernel.org>; Mon, 29 Sep 2025 19:35:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759199714; x=1759804514;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=03NexLO5UHcDiL6BtGZCzs9TJxia4xSP+LO1xkJ8UJI=;
-        b=vViwKSWFVPS+7nBJ+cMl9DkQT4verAzRG4XxPIiJlvDCpvAiE9Qi6Xkm7/1Vsb1G3x
-         4x+22kfP4Cac04+efi+iOJ+hNwnuYspu66gZfP8q9UavXsV1w4dwscCN3/pl8eE12vyX
-         Oyf9m+lebr49QCm6KAx5qW5yPtMgH7WXrDlhtvNynnG76x+O4KoLoK86M9xwfBBhUxIu
-         eUn7np17uXVqEEPMHWTbsPfZkQU+RyX+oU3NL/zDkDjSuptasr0k4C6blKLKFLfUvMt8
-         XZa/hQCggM+1TSJJDrty0boa8s5MNfv94fr7DhfH8gNZTXzhhNhrCeuNdhHLRG598E0A
-         Y15g==
-X-Gm-Message-State: AOJu0YwNevC+PrNDQIsL2nMq10aKQ8Ke31JNSszSl9Vg8K03ot3X78Ld
-	oLhH9wEIswdRJwEWrfLfbJv8cvSE0PQCzzv7j4gBeDsQuayuaIoXs5gGb+pVNIwlPMi92zSJ43N
-	CMtwhkvM40msN7zgHgUojJfdBOMxVfixO3mIEAFXWO8REl7nfUDsov0nDDFh7UdAhEDO8fQ==
-X-Gm-Gg: ASbGncsYPjGFkhPNJHvhy+AgDjZ2ngx7I3+/BzKon4AZIc2P5sGege74QLstvmCC7Qz
-	2CVrdMVbvLJcklGYM4URzb/B4dhEJlLrz+TujF/+jm4GpSPLaIKv7Cq+khrCm39I4rCsLBlG6u0
-	GM2bNUfssw4VWJQ+z58QdeN7CSJE74lOMfPlWi8F4P7Nc9unJ1+BFIstvcloEO1PUMW3BmDUO6i
-	lA2oHHiCTbByAcjozJ2Xj2ZG1WUwxfVhV3dDnsGDpRJ3wzKouLDIxBH5PMC79iaf/x5WjzASie5
-	STtukcr93j2i5NDugLE8MdVkLt4THIuDVlUu
-X-Received: by 2002:a05:6a00:2e2a:b0:781:22cf:b916 with SMTP id d2e1a72fcca58-78122cfbb2cmr10060864b3a.23.1759199714601;
-        Mon, 29 Sep 2025 19:35:14 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHk6lf5UdCs5HU9KjvZY3Dx8H8dMrpHuoGYVyn5iK1EraZ+Yd9xN0D7C0jcRRi5VYye/wwQ0w==
-X-Received: by 2002:a05:6a00:2e2a:b0:781:22cf:b916 with SMTP id d2e1a72fcca58-78122cfbb2cmr10060841b3a.23.1759199714246;
-        Mon, 29 Sep 2025 19:35:14 -0700 (PDT)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-781023edda8sm12356376b3a.43.2025.09.29.19.35.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Sep 2025 19:35:13 -0700 (PDT)
-Date: Tue, 30 Sep 2025 10:31:45 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ima: setting security.ima to fix security.evm for a file
- with IMA signature
-Message-ID: <22ya7mhqv3fenf5olfa6nrtpj7ch6vbdhngiblhqaml3zlrbx4@fqf46sgckoay>
-References: <20250909041954.1626914-1-coxu@redhat.com>
- <5aeecf1aa6eff8ae0ea0a9e95d5df79aee338b32.camel@linux.ibm.com>
- <r3himk4z2aiyqsjstlpnda4wafeo7i4oum3n2dbvnasmtep5ex@zqodcpjmyx5b>
- <cbcbdb3e4aed17f387ae1d357906796551e2f470.camel@linux.ibm.com>
+	s=arc-20240116; t=1759227845; c=relaxed/simple;
+	bh=kFbjzKu4C1FIUbz3Du4tI6MtJPnBh7S5QIrZlxj8QZY=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=IZ69QcS0KmhiswfzERawms321xDO76WS7CcbhkIihNqk2Geu1g6omnKAmS/E3U5o3eF8l0FF5Nf7RBq7HoiCqEPMpBGxq5ElGUoyMpJZuUfeeZ6RsJdw+vXZDmO8sfYX33E6FH/yfErkBFu4SB1lkXo3apwIuE6EvZDP8il36QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eMBHta3C; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58U7NRKU016159;
+	Tue, 30 Sep 2025 10:23:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=q+A6AB
+	FPSBqxNX7wJhRsHf/mKikSfIHWXLZ/RDka+AQ=; b=eMBHta3COcHPnnF7LGIynZ
+	3E8c6TP2VXnqVbfv9cruhvVn8WbnsPA9rKGK4/fZMbliyM6AYcbxiKEvQ8WB2UUu
+	NsxXbuKxdcraf6+dSdZF0Y8uSOqOf/oHJoSOAwvAF58LZSBoY/7iNeHfshfKX7eA
+	zW6lkxYkZbsAzx+9Tt/4EL0XXd7t9ExdNRiGkMmdcR0v6Tw8/i77p9MPl5KLW99N
+	xm3h2cCXQtRqv0R6J40KNSHBBGzMEBI/o66zQ+DsPtZz2afTjbF4QoSL+PbV4D5d
+	lq5bwiW8Qm7wUjfi7mYGyVS1pr3KMZ6dj6TULnZlOX2h0kq86wN/7UiyzzMFFxGQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49e7ku85a2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 10:23:53 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58UALfDi027088;
+	Tue, 30 Sep 2025 10:23:53 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49e7ku859v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 10:23:53 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58U81UA6020057;
+	Tue, 30 Sep 2025 10:23:49 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 49et8s32dm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 10:23:49 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58UANmZS23724612
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Sep 2025 10:23:48 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 915F05804E;
+	Tue, 30 Sep 2025 10:23:48 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C75A95803F;
+	Tue, 30 Sep 2025 10:23:47 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.25.147])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 30 Sep 2025 10:23:47 +0000 (GMT)
+Message-ID: <ef7c07585e41c8afbb2b97df98fd47c9374b15cb.camel@linux.ibm.com>
+Subject: Re: [PATCH 0/2] ima: add dont_audit and fs_subtype to policy
+ language
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Jann Horn <jannh@google.com>, Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg
+ <eric.snowberg@oracle.com>
+Cc: Frank Dinoff <fdinoff@google.com>, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+In-Reply-To: <20250926-ima-audit-v1-0-64d75fdc8fdc@google.com>
+References: <20250926-ima-audit-v1-0-64d75fdc8fdc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Sep 2025 06:23:47 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <cbcbdb3e4aed17f387ae1d357906796551e2f470.camel@linux.ibm.com>
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=T7WBjvKQ c=1 sm=1 tr=0 ts=68dbafb9 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=1XWaLZrsAAAA:8 a=Dp9FQI8HATi7HZ4XbgAA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: vkFhW_iLldhKBo0qD5CUO-Lgtt-gqC3o
+X-Proofpoint-ORIG-GUID: YdTilexLCFbJWiq3Bhg22xQhLhmW8szR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAyNSBTYWx0ZWRfX/5QVs33hE10z
+ 9cEBivf8VZ7+Mv7A2nw7t1XTE6tPKPmRLpjXml8mtUFnQLv31e7uG/Unfb1gb7C0CmRG/4innQM
+ YPtpdWo7Pq1IOhFHHw6abdenXBBjDKf2uxEMxf9tJjYd4P+0ipx0Tly6W0+5w5fC8lIJ8ig5sbX
+ oVJldNhLgCA+No/OLykIBDFf9V7GeHWqtQI9qanmdsF4oGTP5I+FkzoY/e/eKGFDm+o41txHrgL
+ 5DGzTd4axgGcO3wy+Q+xWCfvYwCiBEFil6A4SNcvGUa9IuzFKIRL1Ebv7FNIhRqq6YpOHiGGZtT
+ 8zn6V1PB2+IjJChTnOFLEsXsHHHeRX/XEN9BWGgTF4lgu8v3xZK3/g5X6yv9MhRhYe8HeSXnM9t
+ LemWrcghNIrqQXJ9imd+R4mK2wGSkA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-30_01,2025-09-29_04,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 clxscore=1015 spamscore=0 suspectscore=0 priorityscore=1501
+ bulkscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270025
 
-On Wed, Sep 10, 2025 at 07:15:19AM -0400, Mimi Zohar wrote:
->On Wed, 2025-09-10 at 09:20 +0800, Coiby Xu wrote:
->> On Tue, Sep 09, 2025 at 11:31:20AM -0400, Mimi Zohar wrote:
->> > On Tue, 2025-09-09 at 12:19 +0800, Coiby Xu wrote:
->> > > When both IMA and EVM fix modes are enabled, accessing a file with IMA
->> > > signature won't cause security.evm to be fixed. But this doesn't happen
->> > > to a file with correct IMA hash already set because accessing it will
->> > > cause setting security.ima again which triggers fixing security.evm
->> > > thanks to security_inode_post_setxattr->evm_update_evmxattr.
->> > >
->> > > Let's use the same mechanism to fix security.evm for a file with IMA
->> > > signature.
->> > >
->> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
->> >
->> > Agreed, re-writing the file signature stored as security.ima would force
->> > security.evm to be updated.
->> >
->> > Unfortunately, I'm missing something. ima_appraise_measurement() first verifies
->> > the existing security.evm xattr, before verifying the security.ima xattr.  If
->> > the EVM HMAC fails to verify, it immediately exits ima_appraise_measurement().
->> > security.ima in this case is never verified.
->> >
->> > This patch seems to address the case where the existing security.evm is valid,
->> > but the file signature stored in security.ima is invalid.  (To get to the new
->> > code, the "status" flag is not INTEGRITY_PASS.)  Re-writing the same invalid
->> > file signature would solve an invalid security.evm, but not an invalid IMA file
->> > signature.  What am I missing?
->>
->> Hi, Mimi,
->>
->> Thanks for raising the question! This patch is to address the case where
->> IMA signature is already added but security.evm doesn't yet exist. So
->> EVM HMAC fails to verify but there is no exiting
->> ima_appraise_measurement immediately.
->>
->> And you are right that re-writing an invalid IMA file won't fix an
->> invalid IMA file signature. And even when IMA signature is valid, the
->> verification may fail because the key is missing from .ima keyring. This
->> happens because we need to turn off secure boot to enable fix mode. As a
->> result, CA keys won't be loaded into .machine keyring.
->
->> Btw, if I'm not
->> mistaken, current IMA code assumes we are not supposed to fix IMA file
->> signature.
->
->Right, unlike file hashes, new or the same file signature can be written, but
->cannot be "fixed" in the literal sense, as that would require calculating the
->file hash and signing it with a private key.
-
-Thanks for the confirmation! I also added some code comments to explain
-the IMA iint cache atomic_flags including IMA_DIGSIG in v2.
-
->
->This patch triggers "fixing" the EVM HMAC by re-writing the existing IMA file
->signature.  I assume the same result could be achieved by simply re-installing
->the file signature.  In both cases, the EVM HMAC key needs to exist and be
->loaded.
+On Fri, 2025-09-26 at 01:45 +0200, Jann Horn wrote:
+> This series adds a "dont_audit" action that cancels out following
+> "audit" actions (as we already have for other action types), and also
+> adds an "fs_subtype" that can be used to distinguish between FUSE
+> filesystems.
+>=20
+> With these two patches applied, as a toy example, you can use the
+> following policy:
+> ```
+> dont_audit fsname=3Dfuse fs_subtype=3Dsshfs
+> audit func=3DBPRM_CHECK fsname=3Dfuse
+> ```
+>=20
+> I have tested that with this policy, executing a binary from a
+> "fuse-zip" FUSE filesystem results in an audit log entry:
+> ```
+> type=3DINTEGRITY_RULE msg=3Daudit([...]): file=3D"/home/user/ima/zipmount=
+/usr/bin/echo" hash=3D"sha256:1d82e8[...]
+> ```
+> while executing a binary from an "sshfs" FUSE filesystem does not
+> generate any audit log entries.
+>=20
+> Signed-off-by: Jann Horn <jannh@google.com>
 
 
--- 
-Best regards,
-Coiby
+Thanks, Jann.  The patches look fine.  Assuming the "toy" test program crea=
+tes
+and mounts the fuse filesystems, not just loads the IMA policy rules, could=
+ you
+share it?
 
+thanks,
+
+Mimi
 
