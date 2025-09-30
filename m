@@ -1,270 +1,237 @@
-Return-Path: <linux-integrity+bounces-7328-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7329-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AD84BAE807
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 22:11:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EACAABAE88F
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 22:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 741EC189C0A2
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 20:11:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A05903C4FD1
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 20:28:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9503528B7EA;
-	Tue, 30 Sep 2025 20:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F93B241663;
+	Tue, 30 Sep 2025 20:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="R50h/6CR"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hI90/ig1"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF77289E30
-	for <linux-integrity@vger.kernel.org>; Tue, 30 Sep 2025 20:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71344C81;
+	Tue, 30 Sep 2025 20:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759263093; cv=none; b=ZqYcoaYNV+/Ylk5DnyNJnSaQYrJtYvOEAoK4lP9cKD7Q4FoKt4LmVcKdW5wFWrSWhf2L3O9UQhLLLXdMZ1f1/AUh99fAbwxQ/dJxUxGRen72odctTRuMMLGfWhd6nsPcyRbGRp5swu7zzS2GF806BQUHm5wm16vrV+WY3ubK2MM=
+	t=1759264114; cv=none; b=Gxt5JFcA6iVtQ8+2qSfzkoPHZEX3ugCruOM2SHuC08KhLV5aJvGr7SMRB2CrZDZ2Xqftz1U9WZbJpg8zACOMWCQcqo+nYIeP0QQBHieiKGTnjxP5aVaddq8V87FQSWYUPiC9Nzn71ZoaLA84fmFYkt73FcMYUEVuDzxiCkdHxjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759263093; c=relaxed/simple;
-	bh=4S7jZ3uC4JBPtyAOlsnSX2bqFuLQK8X7sOt+PRLiduc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hPfmB0XgCMlprdm5V4ff7qOqSooqlSbKoQqXNNy3ebIOFnnyRxHvBiaaAG2ul66pKzd243Pwui3QrPcPJCOooAJuj6umqDLIrSdXLjv1dx9nMY1C0Y/UFWV9tFaLOlvmvH3XGT7Ef7b33Oi0qWI6wIN1XgoYSnBTEKRT4kVLpto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=R50h/6CR; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-32eb76b9039so7488926a91.1
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Sep 2025 13:11:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1759263091; x=1759867891; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sGGTuNMSpK/IX2jcE2kdw78gs62apiEUig7wcWdCPrA=;
-        b=R50h/6CR66QxXK4Mwqd5Ta2uMRpyDfCBwXbCi8GGIp7v6AM/BfJkKwxD15KrEI7+9Z
-         iyokZXprclWko3bfEH0LeodQvO8IpKdizWehEE78K1JTJDpx693lnCcnSyC385y7Z9NP
-         fufBqGzd6kBv3GjzRfFFFX6NEiDdzgymWvZPDz8evSnwq9uaKK7wDU+zi/oN6iLHA7DA
-         mQM7KuogjwfCB637+JIcaAUB9ENVGKBJo0Xg85ilR0MQUeA6JeLFAKtdHDvwEudO15Xu
-         CvLVSZdKiZpNVtVq8Fpxl5UPViSClNI4PtkaMsE2QcqGTlQcDy46ME0C3riKr3gedgtX
-         TyKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759263091; x=1759867891;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sGGTuNMSpK/IX2jcE2kdw78gs62apiEUig7wcWdCPrA=;
-        b=LsblrOEeamv2oHg0EeymleUYniOyLqhdJsMXMG5zEYEtm+98wKmwnGaxLOCWCzlXeJ
-         AXASU8jayL+CClJ7JCahc8qT+Xc/O+dhWPE4BE0NRcpdJzB9pS8uHVrPd6YxeA78feE9
-         xhQOfYR2j1OOV1JV/R9t7lPGvSj7GbZIzMxUwUMuboSXvOmpEkee+kkEHjgRZtG8r4yn
-         CUBv2yDQEuG0uTzw/X+fbHEf1KyBTR7gB6R3b7oqHlhrhcJEB+Y5Wz+fioPtRxXQCBfo
-         t9GMHtBM1H74L4dNabET6lOw/r0LDJBkq3YNzt2+KQd2wbHOXGJVSmT9DgNdtcTkMeru
-         VbiA==
-X-Forwarded-Encrypted: i=1; AJvYcCUpix7eNqCj89o9HQSAVS0/qPjUxCz9Tr692w2mJdfDDWEPn8sYUdbbNwRzxxouyPzxDuaMasrDxBNksKg+9k4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW+pbr0ZADg7bGsREud//i//IZIZSfIqwLdxX7yDT+ggi+VlKw
-	4fANZ2NS8WNj4CRXlKE+p0SbGyFEf7AspLjxKjh3KsAuLF0Brf+eRTe/qXjSE52OKUcRXx2zQOO
-	EDVKlOPjaYcsIhR6TW+uk/qxuvSrox4I+poupT7Yq
-X-Gm-Gg: ASbGncsF0QeY+t8o0RhciN7VtMrsBTHS66peEOHvPcv8rCK5EsoqDcGJLaoc6JYFI4d
-	NRdCG4PA/8RumV2JloJkXmuf+BVM9DhhEwjlRtdo/zRyUGrSHgRD7NaBefqSDk4ZK9Hwxv07zXt
-	4vYJKLqGPjzRoBrgRQ4E7yr9KTnjnUic7QqFsD8Mra+fBNLXq6wWCYi0IEbB8ekXpv5oJNL5NBW
-	s1dAeFi9fRbNdFRmgdGVN7jBMcL0kk=
-X-Google-Smtp-Source: AGHT+IH19QaUhYGV0YsoCoE1LU0CmmNRvyL6yd0SCrGLdokCAFDK+kSvCCPTwgIB0Agj0AUOYRQz9b4VVeztVQwQKPE=
-X-Received: by 2002:a17:90b:4f8b:b0:330:6edd:9cf with SMTP id
- 98e67ed59e1d1-339a6f06e29mr760547a91.22.1759263090694; Tue, 30 Sep 2025
- 13:11:30 -0700 (PDT)
+	s=arc-20240116; t=1759264114; c=relaxed/simple;
+	bh=rVT8LLqQ2BIIqhRUGOt1DEgpSaOhe56wD2gSY9BrNjg=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=XIYoCIU7PQMqQY2OLqsCVM4hvx5ZlU7vcj5wsI3iK+VREnK9ovkahCt+50pnK3T+RQzzxYhltAkA7hxukgK9lYd7ZboF42y3DuyMIbvIZM3hkdXHG7nCcymU3rPh7yazqaM78c7ZYK3mizZjuuabRdUDB5Y7kNd1dp2njabz/14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hI90/ig1; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58UJt0oc002106;
+	Tue, 30 Sep 2025 20:28:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ZgxRUx
+	J+4q2dn8A5VIJXA3qVsUiULbZMIbn7ozado9A=; b=hI90/ig1hSxFSWKDr9PcA9
+	CMHVS5XkEkF6oAnQwAo9HFIEQAJkX+R8Ey/t5ERu5eH8DzPIizOfDIRZ/KRL+1FD
+	CMn4qg8v3VzSbM2DH+ludkqA1RhzvwOagPExAbeeX2Ib8M8c02ESodapHmkc2Vo+
+	KuVS0gWRQNwpbFYsY9ydISZpe5NcelwW0W5azO1S5yP5zYe9wIqdP0UWRkeADFoB
+	VYHfzpnXMr2usiKPjoopBYu/ZC2ft1V4CcEDK5iNgnqnlRwzDlHmTu8ZHT1QWBNQ
+	vYLUzHKjnSaAbn3WwnZwFG7XjmHQm08u+O+wn70uPmME15TM9LRZwQH7anD02MhA
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49e7jwjshh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 20:28:17 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58UKOYFg001786;
+	Tue, 30 Sep 2025 20:28:17 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49e7jwjshd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 20:28:17 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58UJ1nGh020098;
+	Tue, 30 Sep 2025 20:28:16 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 49et8s5kus-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 20:28:16 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58UKSF9n18154016
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Sep 2025 20:28:15 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 85AC958054;
+	Tue, 30 Sep 2025 20:28:15 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7EB055805A;
+	Tue, 30 Sep 2025 20:28:14 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 30 Sep 2025 20:28:14 +0000 (GMT)
+Message-ID: <bcd1f7b48311aff55711cdff4a6cdbb72aae1d04.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fall back to default kernel module signature
+ verification
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karel Srot
+ <ksrot@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry
+ Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg	
+ <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris	
+ <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open
+ list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+        open list
+ <linux-kernel@vger.kernel.org>
+In-Reply-To: <896f4fb0c0146512a66daf0b4c1e033aca4bd6d4.camel@linux.ibm.com>
+References: <20250928030358.3873311-1-coxu@redhat.com>
+	 <896f4fb0c0146512a66daf0b4c1e033aca4bd6d4.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Sep 2025 16:28:14 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250916220355.252592-36-paul@paul-moore.com> <20250916220355.252592-67-paul@paul-moore.com>
-In-Reply-To: <20250916220355.252592-67-paul@paul-moore.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 30 Sep 2025 16:11:17 -0400
-X-Gm-Features: AS18NWCP-Q5jq8SXy7IkNbNEbfERyy-dg84QqfHzyCZ7GFhRE-mFkbyKDIwrsVc
-Message-ID: <CAHC9VhQCmFJQ1=Eyu1D+Mcg2FVDByrk8QcwV5HaZdB95esiA7Q@mail.gmail.com>
-Subject: Re: [PATCH v4 31/34] ima,evm: move initcalls to the LSM framework
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: selinux@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, 
-	John Johansen <john.johansen@canonical.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Fan Wu <wufan@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Kees Cook <kees@kernel.org>, Micah Morton <mortonm@chromium.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAyNSBTYWx0ZWRfX9wXa+qUPKdkw
+ h7ohSrateouz8s8IRgIyn/th/P2PeNjoImjN5h4izFYvcTrNZJE17/6mBW+Tj6FvpifeFoRdvUH
+ +aadSST/9YnPeOIbqXPYF8nVu2aFf1b59YOYpRep2PCb9fAdLKs8elgk0MUc382kebDggeHeUyX
+ kpDjV4b+AUIt743Uvqui6ItBDgLxqNmmqgi+JNg2db5zV4eGcD6GFArSV5J1i2WJr/NW/x8w/w/
+ gfb+7q8VA6KVXkg3MUUjQHtHA8kGR/UXq0U5FBFCPyncVDq7DwKBCvjzLwFL0oIGWlEfxjQSedS
+ Hdz++IW581EZqHlU3955zHKoOKC4zD+VNGAb7EccGN3D8nRUXub2LraZBoUoCBNtbYdEEN70u9H
+ XCZRRc/MR2fZY/PvbIu8i4BaI1wfQA==
+X-Proofpoint-ORIG-GUID: NHCRxGbQrnjHikw_TyU3VMHH7EuT4LRr
+X-Proofpoint-GUID: nOqafXKuj9pQmT9ZXLXn0MNV4CTV1aCQ
+X-Authority-Analysis: v=2.4 cv=GdUaXAXL c=1 sm=1 tr=0 ts=68dc3d61 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=i0EeH86SAAAA:8
+ a=20KFwNOVAAAA:8 a=16uMmaMVKecfaAtURF4A:9 a=QEXdDO2ut3YA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-30_04,2025-09-29_04,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501
+ malwarescore=0 spamscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270025
 
-On Tue, Sep 16, 2025 at 6:14=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> This patch converts IMA and EVM to use the LSM frameworks's initcall
-> mechanism. It moved the integrity_fs_init() call to ima_fs_init() and
-> evm_init_secfs(), to work around the fact that there is no "integrity" LS=
-M,
-> and introduced integrity_fs_fini() to remove the integrity directory, if
-> empty. Both integrity_fs_init() and integrity_fs_fini() support the
-> scenario of being called by both the IMA and EVM LSMs.
->
-> This patch does not touch any of the platform certificate code that
-> lives under the security/integrity/platform_certs directory as the
-> IMA/EVM developers would prefer to address that in a future patchset.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> [PM: adjust description as discussed over email]
-> Signed-off-by: Paul Moore <paul@paul-moore.com>
-> ---
->  security/integrity/evm/evm_main.c  |  3 +--
->  security/integrity/evm/evm_secfs.c | 11 +++++++++--
->  security/integrity/iint.c          | 14 ++++++++++++--
->  security/integrity/ima/ima_fs.c    | 11 +++++++++--
->  security/integrity/ima/ima_main.c  |  4 ++--
->  security/integrity/integrity.h     |  2 ++
->  6 files changed, 35 insertions(+), 10 deletions(-)
+On Tue, 2025-09-30 at 09:57 -0400, Mimi Zohar wrote:
+> On Sun, 2025-09-28 at 11:03 +0800, Coiby Xu wrote:
+> > Currently, for any IMA policy that requires appraisal for kernel module=
+s
+> > e.g. ima_policy=3Dsecure_boot, PowerPC architecture specific policy,
+> > booting will fail because IMA will reject a kernel module which will
+> > be decompressed in the kernel space and then have its signature
+> > verified.
+> >=20
+> > This happens because when in-kernel module decompression
+> > (CONFIG_MODULE_DECOMPRESS) is enabled, kmod will use finit_module
+> > syscall instead of init_module to load a module. And IMA mandates IMA
+> > xattr verification for finit_module unless appraise_type=3Dimasig|modsi=
+g
+> > is specified in the rule.  However currently initramfs doesn't support
+> > xattr. And IMA rule "func=3DMODULE_CHECK appraise_type=3Dimasig|modsig"
+> > doesn't work either because IMA will treat to-be-decompressed kernel
+> > module as not having module signature as it can't decompress kernel
+> > module to check if signature exists.
+> >=20
+> > So fall back to default kernel module signature verification when we ha=
+ve
+> > no way to verify IMA xattr.
+> >=20
+> > Reported-by: Karel Srot <ksrot@redhat.com>
+> > Signed-off-by: Coiby Xu <coxu@redhat.com>
+> > ---
+> > Another approach will be to make IMA decompress the kernel module to
+> > check the signature. This requires refactoring kernel module code to
+> > make the in-kernel module decompressing feature modular and seemingly
+> > more efforts are needed. A second disadvantage is it feels
+> > counter-intuitive to verify the same kernel module signature twice. And
+> > we still need to make ima_policy=3Dsecure_boot allow verifying appended
+> > module signature.
+> >=20
+> > Anyways, I'm open to suggestions and can try the latter approach if
+> > there are some benefits I'm not aware of or a better approach.
+>=20
+> Coiby, there are multiple issues being discussed here.  Before deciding o=
+n an
+> appropriate solution, let's frame the issues(s) properly.
+>=20
+> 1. The finit_module syscall eventually calls init_module_from_file() to r=
+ead the
+> module into memory and then decompress it.  The problem is that the kerne=
+l
+> module signature verification occurs during the kernel_read_file(), befor=
+e the
+> kernel module is decompressed.  Thus, the appended kernel module signatur=
+e
+> cannot be verified.
+>=20
+> 2. CPIO doesn't have xattr support. There were multiple attempts at inclu=
+ding
+> xattrs in CPIO, but none were upstreamed [1].  If file signatures stored =
+in
+> security.ima were available in the initramfs, then finit_module() could v=
+erify
+> them, as opposed to the appended kernel module signature.
+>=20
+> 3. The issues described above are generic, not limited to Power.  When
+> CONFIG_MODULE_SIG is configured, the arch specific IMA policy rules do no=
+t
+> include an "appraise func=3DMODULE_CHECK".
+>=20
+> 4. Unlike the arch specific IMA policy rules, the built-in secure boot IM=
+A
+> policy, specified on the boot command line as "ima_policy=3Dsecure_boot",=
+ always
+> enforces the IMA signature stored in security.ima.
+>=20
+> Partial solutions without kernel changes:
+> - Enable CONFIG_MODULE_SIG  (Doesn't solve 4)
+> - Disable kernel module compression.
+>=20
+> Complete solution:
+> - Pick up and upstream Roberto Sassu's last version of initramfs support =
+[1].
+> - Somehow prevent kernel_read_file() from failing when the kernel_read_fi=
+le_id
+> enumeration is READING_MODULE and the kernel module is compressed.  The c=
+hange
+> might be limited to ima_post_read_file().
 
-I appreciate you reviewing most (all?) of the other patches in this
-patchset, but any chance you could review the IMA/EVM from Roberto?
-This is the only patch that really needs your review ...
+or perhaps not totally.
 
-> diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/e=
-vm_main.c
-> index db8e324ed4e6..73d500a375cb 100644
-> --- a/security/integrity/evm/evm_main.c
-> +++ b/security/integrity/evm/evm_main.c
-> @@ -1179,6 +1179,5 @@ DEFINE_LSM(evm) =3D {
->         .init =3D init_evm_lsm,
->         .order =3D LSM_ORDER_LAST,
->         .blobs =3D &evm_blob_sizes,
-> +       .initcall_late =3D init_evm,
->  };
-> -
-> -late_initcall(init_evm);
-> diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/=
-evm_secfs.c
-> index b0d2aad27850..c26724690cec 100644
-> --- a/security/integrity/evm/evm_secfs.c
-> +++ b/security/integrity/evm/evm_secfs.c
-> @@ -302,10 +302,16 @@ int __init evm_init_secfs(void)
->         int error =3D 0;
->         struct dentry *dentry;
->
-> -       evm_dir =3D securityfs_create_dir("evm", integrity_dir);
-> -       if (IS_ERR(evm_dir))
-> +       error =3D integrity_fs_init();
-> +       if (error < 0)
->                 return -EFAULT;
->
-> +       evm_dir =3D securityfs_create_dir("evm", integrity_dir);
-> +       if (IS_ERR(evm_dir)) {
-> +               error =3D -EFAULT;
-> +               goto out;
-> +       }
-> +
->         dentry =3D securityfs_create_file("evm", 0660,
->                                       evm_dir, NULL, &evm_key_ops);
->         if (IS_ERR(dentry)) {
-> @@ -329,5 +335,6 @@ int __init evm_init_secfs(void)
->  out:
->         securityfs_remove(evm_symlink);
->         securityfs_remove(evm_dir);
-> +       integrity_fs_fini();
->         return error;
->  }
-> diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-> index 068ac6c2ae1e..8ec1a3436a71 100644
-> --- a/security/integrity/iint.c
-> +++ b/security/integrity/iint.c
-> @@ -42,8 +42,11 @@ void __init integrity_load_keys(void)
->                 evm_load_x509();
->  }
->
-> -static int __init integrity_fs_init(void)
-> +int __init integrity_fs_init(void)
->  {
-> +       if (integrity_dir)
-> +               return 0;
-> +
->         integrity_dir =3D securityfs_create_dir("integrity", NULL);
->         if (IS_ERR(integrity_dir)) {
->                 int ret =3D PTR_ERR(integrity_dir);
-> @@ -58,4 +61,11 @@ static int __init integrity_fs_init(void)
->         return 0;
->  }
->
-> -late_initcall(integrity_fs_init)
-> +void __init integrity_fs_fini(void)
-> +{
-> +       if (!integrity_dir || !simple_empty(integrity_dir))
-> +               return;
-> +
-> +       securityfs_remove(integrity_dir);
-> +       integrity_dir =3D NULL;
-> +}
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima=
-_fs.c
-> index 87045b09f120..012a58959ff0 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -499,9 +499,15 @@ int __init ima_fs_init(void)
->         struct dentry *dentry;
->         int ret;
->
-> +       ret =3D integrity_fs_init();
-> +       if (ret < 0)
-> +               return ret;
-> +
->         ima_dir =3D securityfs_create_dir("ima", integrity_dir);
-> -       if (IS_ERR(ima_dir))
-> -               return PTR_ERR(ima_dir);
-> +       if (IS_ERR(ima_dir)) {
-> +               ret =3D PTR_ERR(ima_dir);
-> +               goto out;
-> +       }
->
->         ima_symlink =3D securityfs_create_symlink("ima", NULL, "integrity=
-/ima",
->                                                 NULL);
-> @@ -555,6 +561,7 @@ int __init ima_fs_init(void)
->  out:
->         securityfs_remove(ima_symlink);
->         securityfs_remove(ima_dir);
-> +       integrity_fs_fini();
->
->         return ret;
->  }
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index eade8e1e3cb1..b703bfc2f470 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -1283,6 +1283,6 @@ DEFINE_LSM(ima) =3D {
->         .init =3D init_ima_lsm,
->         .order =3D LSM_ORDER_LAST,
->         .blobs =3D &ima_blob_sizes,
-> +       /* Start IMA after the TPM is available */
-> +       .initcall_late =3D init_ima,
->  };
-> -
-> -late_initcall(init_ima);       /* Start IMA after the TPM is available *=
-/
-> diff --git a/security/integrity/integrity.h b/security/integrity/integrit=
-y.h
-> index c2c2da691123..7b388b66cf80 100644
-> --- a/security/integrity/integrity.h
-> +++ b/security/integrity/integrity.h
-> @@ -114,6 +114,8 @@ struct ima_file_id {
->
->  int integrity_kernel_read(struct file *file, loff_t offset,
->                           void *addr, unsigned long count);
-> +int __init integrity_fs_init(void);
-> +void __init integrity_fs_fini(void);
->
->  #define INTEGRITY_KEYRING_EVM          0
->  #define INTEGRITY_KEYRING_IMA          1
-> --
-> 2.51.0
+init_module_from_file() doesn't pass the flags variable to kernel_read_file=
+().=20
+You might want to consider defining a new kernel_read_file_id enumeration n=
+amed
+READING_COMPRESSED_MODULE.
 
---=20
-paul-moore.com
+Mimi
+
+>=20
+> [1] [PATCH v4 0/3] initramfs: add support for xattrs in the initial ram d=
+isk
+> https://lore.kernel.org/linux-fsdevel/20190523121803.21638-1-roberto.sass=
+u@huawei.com/
+>=20
+>=20
+
 
