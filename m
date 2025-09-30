@@ -1,464 +1,219 @@
-Return-Path: <linux-integrity+bounces-7324-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7325-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C534EBAD0AC
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 15:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 802B5BAD20D
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 15:58:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCF1A3B0367
-	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 13:20:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 361FA4A55C0
+	for <lists+linux-integrity@lfdr.de>; Tue, 30 Sep 2025 13:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40621303C93;
-	Tue, 30 Sep 2025 13:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E187418CBE1;
+	Tue, 30 Sep 2025 13:57:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cjRkOyTM"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TLw1KVQf"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2805C303A35
-	for <linux-integrity@vger.kernel.org>; Tue, 30 Sep 2025 13:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037F13081B5;
+	Tue, 30 Sep 2025 13:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759238423; cv=none; b=LQJc1BbLXYZf2ALvkcVEg6hzDknfZS8S5bAsqSyeDB8Eqa5JE+LkDX6euRHaMqAy7qNr/6xBsV+42qw5MSAEpv+Y42V6VQcMkFB/KwMrSlX1QVvAae+qNRZo3Yxs/FKaJ94yubdOWRpNC09e/5eJMt20EFfPgw3gOY2juGJH6yU=
+	t=1759240655; cv=none; b=H4IxSKhhbkotH67SLjtPTEoh4vuHeHf+gjktQSfzKYf5lsPu+Osamdh2CGt2tNHV9JluBCCWueP63tbqh1Saeu0ZmVN0v7jAMolz4aKDWgpqvEc/cY5fUBVCB8hqDqSKFjhZoPlDRE35WAo/XjBXHgyM8PIxngldrI0JyGS0/Do=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759238423; c=relaxed/simple;
-	bh=0gt7Imcha5nhBbjTVRVb9VCIjM5iV2M2me59OvgGD/s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dUGkry3aoEExtLEdATX/vIet5ZwjS+uRfXYjAu5M2099a1kKel6/n325Jp8/D100++SopQw1SGcji8gdbS8DSOcCY5eTtiBeUw1Q2UJ7d4YMgYrhMImmNqzYNAjEw4eOdQgdSz5+e2ZryQ777hajxWcwr5hmWdB7gi2RV3Z6kj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cjRkOyTM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759238420;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EyxTKauyxVNianX8/+votp7jB4vVMi9cSLVUSmppWwE=;
-	b=cjRkOyTMWoIpkPDXR/UjUWjncUc942oDffiUa5KkRlTNVZk0xgjrb2/TJAwdW8r+gf9UYR
-	Htkm1/Ilw/ynuftYONa3mKj3BDL61hwEHSKkzlGk8Cp0khMk6TSxOP/AGG9B1Vwj46ZfWw
-	8dcDhOvWQMXE7HfFbW/qX4XabRiGhvo=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-537-1zhdJBctOcmkDV-7iccAmQ-1; Tue, 30 Sep 2025 09:20:16 -0400
-X-MC-Unique: 1zhdJBctOcmkDV-7iccAmQ-1
-X-Mimecast-MFC-AGG-ID: 1zhdJBctOcmkDV-7iccAmQ_1759238415
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-b3afaf5defdso396511666b.0
-        for <linux-integrity@vger.kernel.org>; Tue, 30 Sep 2025 06:20:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759238415; x=1759843215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EyxTKauyxVNianX8/+votp7jB4vVMi9cSLVUSmppWwE=;
-        b=nEFtLUNJOrkQVFw9WIFNGD/XjYU8dAPQxNu7pUPnsZ0fKGpmwMvgIJNSKdxiH4gC94
-         jHMogRaE5pXW8FninXqG4vWvAXKazrtjliRcwBWWN3KSESiqBC+sjo0r4JrJaoO6GZuG
-         Ilc++sW3violIGC+zuW85bgfUnScb3IeBcJViVPNwZHMpprEYYUe0LxZkwR909NC0mRN
-         BaR9m8+gOO8HsCePY7bnv1JSHxGNZnsmcm2AkIttIDTduoYH3Wve//wy+Ffp5hynzYLg
-         H16G4EmKLNYPg6f0D+bHvECFbaj+sYYHezz9PJOboYzbMCFtX62lo5MzIfVZqzTYnWrC
-         dPJg==
-X-Gm-Message-State: AOJu0YxUdy9xXEPEejZJl+l1UcEhksnayXM3ct5RcyWCGWlps3GFSg9i
-	6YHHqy4crSdPz+Ayop/LOMcGhMHVkGDuFT8hd+4Tp2cgFGq+gn2Cdzpb+dzoSXuZTXtcrDYe7uD
-	VC1UalBQBeRlshtAYaEFDgQnnKCyp1YVZa1JbdhuEg5vb1lZoH7qZBaplulV3fkW41LfaSg==
-X-Gm-Gg: ASbGncvhl/nahyqAI4jnNsBQkrVj1xhAvmlfhLBQv4EnGZNej3Wf1JDsctV+VfbYIaX
-	kjw019zMqU5WYMcrTouSqjBdXNvcTey1Y23r7OKVhbMe+ZYcb/wmjGpkHANDNuRDDqKz0uDUjYF
-	TKuF2Kp31NI4g7Z1DrvVYQJ43K73aHSPpo8tAJkYEOeu6o66XMDG8OIaqVHWPxrLtvvA5l9VcV8
-	085TW6UFzezndO9Q9dJs8UTvdg36S8jj2MZBRDrx//V51jdyaXbVsfrivzXxCTzMUAL1gpZXSlv
-	1i8wfnVtwCdcGJ5kJ9c35FUlMPyMeRnWQRZ0xr6H/SG/U4JWgVdq98ognx78NWNxmOFKkTT4cVx
-	yOR5NhVfAK1pnW71w3FYCdg==
-X-Received: by 2002:a17:907:3f08:b0:b30:c9d5:3adc with SMTP id a640c23a62f3a-b34be8c494cmr2118416966b.49.1759238415118;
-        Tue, 30 Sep 2025 06:20:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFaYcvIMKoSQC/Zi4TpQRN/u0+h50CyMz6seRvb6OBrTemNIW+nvVtdLh5QN4h5O7N8P4Lpaw==
-X-Received: by 2002:a17:907:3f08:b0:b30:c9d5:3adc with SMTP id a640c23a62f3a-b34be8c494cmr2118409866b.49.1759238414408;
-        Tue, 30 Sep 2025 06:20:14 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-153.retail.telecomitalia.it. [79.46.200.153])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b353efa46b2sm1142788766b.24.2025.09.30.06.20.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Sep 2025 06:20:13 -0700 (PDT)
-Date: Tue, 30 Sep 2025 15:20:07 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, dpsmith@apertussolutions.com, 
-	ross.philipson@oracle.com, Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>, 
-	Stefan Berger <stefanb@linux.ibm.com>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	open list <linux-kernel@vger.kernel.org>, "open list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH v3 10/10] tpm-buf: Enable managed and stack allocations.
-Message-ID: <g3ayj2gxzbjmkghbwskrbza2fn546obkul3zistnxvoeie7ync@fpejz33wnpmq>
-References: <20250929194832.2913286-1-jarkko@kernel.org>
- <20250929194832.2913286-11-jarkko@kernel.org>
- <u7zay2gb3dff4ptbh34qw7ini63ar3246ivd4xnxtdxc6ijktx@lutatpeg7f7z>
- <aNvW5KMUO2C0i233@kernel.org>
+	s=arc-20240116; t=1759240655; c=relaxed/simple;
+	bh=In9r7c+wdcbNtEpOOZ44XfXzAN+ZfSmb7k4T8LbLBbI=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=WQwmk8CX1Hu6o/UtEYN5Kok8udlIQrxjAD253jKuGpMw3i9zGHsDv+k0za7C8GuS/6uFVpIGmTXV4yiVTzNSd2L4Gvw5lKamR8cIzm+9kykxFeGXy6IR4Tk9r+GFaLIUkMoYmSF9APJaRvxC5QYQ6ZvpD2sGDij3RXbiT3+yL+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TLw1KVQf; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58U7R8kJ014796;
+	Tue, 30 Sep 2025 13:57:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=mc5QBp
+	F0Q6KVKJJ9Xaf/eq8K5qiEWRGkQWTHOSi5bIE=; b=TLw1KVQfdmAaGxEbm17wNY
+	lwtS66PJGp3n6gT8FTjWkArxDAiBlSr2roYIee4GK0sv2xWw0H3TVNOiHjQY43hu
+	Y19NBuXO4IJUvJYLqPLb4iqkj89YJZC539sMb8PoHx/BIgIbA6Z4033gNfed3doL
+	lNz6y0P5MIQRREXZVSiUCeRvgTpF37OXJjxO2N8PhDrs1yPuIJqpuS6opl53jy9L
+	WfHzr0Ck+CFq1ustEDtYhwRAmglaVtksXCQvG8gfdP4A2Ab/CnTphAaUJVs9Vxy/
+	oVN2kcibSz10SJ0d0s1aneApCRTGISuuNyzEhia371kG5y0Wh7+hpxNZAOLmeKzQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49e6bhh03k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 13:57:11 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58UDputd009852;
+	Tue, 30 Sep 2025 13:57:11 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49e6bhh03e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 13:57:11 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58UDWdJf001667;
+	Tue, 30 Sep 2025 13:57:10 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 49evfj3dv5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 30 Sep 2025 13:57:10 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58UDv9Wh13959796
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Sep 2025 13:57:09 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 526B858059;
+	Tue, 30 Sep 2025 13:57:09 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1AA0558043;
+	Tue, 30 Sep 2025 13:57:08 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.16.91])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 30 Sep 2025 13:57:07 +0000 (GMT)
+Message-ID: <896f4fb0c0146512a66daf0b4c1e033aca4bd6d4.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fall back to default kernel module signature
+ verification
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Karel Srot
+ <ksrot@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Dmitry
+ Kasatkin <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg	
+ <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris	
+ <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "open
+ list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+        open list
+ <linux-kernel@vger.kernel.org>
+In-Reply-To: <20250928030358.3873311-1-coxu@redhat.com>
+References: <20250928030358.3873311-1-coxu@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 30 Sep 2025 09:57:07 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <aNvW5KMUO2C0i233@kernel.org>
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=Se/6t/Ru c=1 sm=1 tr=0 ts=68dbe1b7 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=yJojWOMRYYMA:10 a=VwQbUJbxAAAA:8 a=i0EeH86SAAAA:8
+ a=20KFwNOVAAAA:8 a=IwvpNu1LYuw_ebdDn2kA:9 a=QEXdDO2ut3YA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTI3MDAxMCBTYWx0ZWRfX+/V5A4iDfgTZ
+ JdAK48//JjlhZxfwDPDbXj59pnMIGkkGrLEANbNClXe+LwIhuyVXVrga0s49F2B1CycVpad92AC
+ O9H7ZQ+gRjWGnFU6nyGr8j1rtPFr5Ymlk8T6evtMzQOLNviYV+tCi3ciBpxpwa2DmSZDtVvRzou
+ nfgftcTLJivX/BwVzzTBepT4Zzbs1FKyx3IGeHdjh5HYNatwuPzSX5gBNt4S/sGkyLsXLd154wA
+ Jxnuetn/cyNcMmRxRjVOKpx3WjYJHoK7l/MifvoXSEnRHtu5ezCM83J4oIH0marSGsJ89jz/9GP
+ 8YmahdF37us/0LE8W4JbVsXQFH+pQHTKdLE9WZzbIPKKxKVsRR4FBsmHtTGmx5slKZ4YR6cbYm8
+ lFyKo5fN6R7U2/fJ2h0I/as7SPXqXw==
+X-Proofpoint-GUID: BPmjQx43MbM_zqqdAXGY0s0-lHnc55ah
+X-Proofpoint-ORIG-GUID: RAKkLfJ8ze8ZUMi4wI7P9nwzksqjxj-k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-30_03,2025-09-29_04,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 malwarescore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0
+ clxscore=1011 phishscore=0 priorityscore=1501 adultscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2509150000 definitions=main-2509270010
 
-On Tue, Sep 30, 2025 at 04:11:00PM +0300, Jarkko Sakkinen wrote:
->On Tue, Sep 30, 2025 at 02:44:52PM +0200, Stefano Garzarella wrote:
->> On Mon, Sep 29, 2025 at 10:48:32PM +0300, Jarkko Sakkinen wrote:
->> > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
->> >
->> > Decouple kzalloc from buffer creation, so that  a managed allocation can be
->> > done trivially:
->> >
->> > 	struct tpm_buf *buf __free(kfree) buf = kzalloc(TPM_BUFSIZE,
->>                                                         ^
->> In the code, we use PAGE_SIZE instead of TPM_BUFSIZE with kzalloc().
->> Should we do the same in this example? (Perhaps adding the reason, if you
->> think it would be useful)
->
->I think that should be fixed up in the patch and use TPM_BUFSIZE
->consistently for kzallocs. Thanks for the remark.
+On Sun, 2025-09-28 at 11:03 +0800, Coiby Xu wrote:
+> Currently, for any IMA policy that requires appraisal for kernel modules
+> e.g. ima_policy=3Dsecure_boot, PowerPC architecture specific policy,
+> booting will fail because IMA will reject a kernel module which will
+> be decompressed in the kernel space and then have its signature
+> verified.
+>=20
+> This happens because when in-kernel module decompression
+> (CONFIG_MODULE_DECOMPRESS) is enabled, kmod will use finit_module
+> syscall instead of init_module to load a module. And IMA mandates IMA
+> xattr verification for finit_module unless appraise_type=3Dimasig|modsig
+> is specified in the rule.  However currently initramfs doesn't support
+> xattr. And IMA rule "func=3DMODULE_CHECK appraise_type=3Dimasig|modsig"
+> doesn't work either because IMA will treat to-be-decompressed kernel
+> module as not having module signature as it can't decompress kernel
+> module to check if signature exists.
+>=20
+> So fall back to default kernel module signature verification when we have
+> no way to verify IMA xattr.
+>=20
+> Reported-by: Karel Srot <ksrot@redhat.com>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+> Another approach will be to make IMA decompress the kernel module to
+> check the signature. This requires refactoring kernel module code to
+> make the in-kernel module decompressing feature modular and seemingly
+> more efforts are needed. A second disadvantage is it feels
+> counter-intuitive to verify the same kernel module signature twice. And
+> we still need to make ima_policy=3Dsecure_boot allow verifying appended
+> module signature.
+>=20
+> Anyways, I'm open to suggestions and can try the latter approach if
+> there are some benefits I'm not aware of or a better approach.
 
-I thought it was done on purpose to alleviate pressure on the allocator 
-regardless of the page size value.
-In any case, it's up to you, I would just be consistent between the 
-example in the commit and the code.
+Coiby, there are multiple issues being discussed here.  Before deciding on =
+an
+appropriate solution, let's frame the issues(s) properly.
 
->
->>
->> > 							GFP_KERNEL);
->> > 	if (!buf)
->> > 		return -ENOMEM;
->> > 	tpm_buf_init(buf, TPM_BUFSIZE);
->> >
->> > Alternatively, stack allocations are also possible:
->> >
->> > 	u8 buf_data[512];
->> > 	struct tpm_buf *buf = (struct tpm_buf *)buf_data;
->> > 	tpm_buf_init(buf, sizeof(buf_data));
->> >
->> > Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
->> > Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
->> > ---
->> > v3:
->> > - A new patch from the earlier series with more scoped changes and
->> >  less abstract commit message.
->> > ---
->> > drivers/char/tpm/tpm-buf.c                | 122 +++++----
->> > drivers/char/tpm/tpm-sysfs.c              |  20 +-
->> > drivers/char/tpm/tpm.h                    |   1 -
->> > drivers/char/tpm/tpm1-cmd.c               | 147 +++++------
->> > drivers/char/tpm/tpm2-cmd.c               | 290 ++++++++++------------
->> > drivers/char/tpm/tpm2-sessions.c          | 121 +++++----
->> > drivers/char/tpm/tpm2-space.c             |  44 ++--
->> > drivers/char/tpm/tpm_vtpm_proxy.c         |  30 +--
->> > include/linux/tpm.h                       |  18 +-
->> > security/keys/trusted-keys/trusted_tpm1.c |  34 ++-
->> > security/keys/trusted-keys/trusted_tpm2.c | 176 ++++++-------
->> > 11 files changed, 482 insertions(+), 521 deletions(-)
->> >
->> > diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
->> > index c9e6e5d097ca..1cb649938c01 100644
->> > --- a/drivers/char/tpm/tpm-buf.c
->> > +++ b/drivers/char/tpm/tpm-buf.c
->> > @@ -7,82 +7,109 @@
->> > #include <linux/module.h>
->> > #include <linux/tpm.h>
->> >
->> > -/**
->> > - * tpm_buf_init() - Allocate and initialize a TPM command
->> > - * @buf:	A &tpm_buf
->> > - * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
->> > - * @ordinal:	A command ordinal
->> > - *
->> > - * Return: 0 or -ENOMEM
->> > - */
->> > -int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal)
->> > +static void __tpm_buf_size_invariant(struct tpm_buf *buf, u16 buf_size)
->> > {
->> > -	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
->> > -	if (!buf->data)
->> > -		return -ENOMEM;
->> > -
->> > -	tpm_buf_reset(buf, tag, ordinal);
->> > -	return 0;
->> > +	u32 buf_size_2 = (u32)buf->capacity + (u32)sizeof(*buf);
->> > +
->> > +	if (!buf->capacity) {
->> > +		if (buf_size > TPM_BUFSIZE) {
->> > +			WARN(1, "%s: size overflow: %u\n", __func__, buf_size);
->> > +			buf->flags |= TPM_BUF_INVALID;
->> > +		}
->> > +	} else {
->> > +		if (buf_size != buf_size_2) {
->> > +			WARN(1, "%s: size mismatch: %u != %u\n", __func__, buf_size,
->> > +			     buf_size_2);
->> > +			buf->flags |= TPM_BUF_INVALID;
->> > +		}
->> > +	}
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_init);
->> >
->> > -/**
->> > - * tpm_buf_reset() - Initialize a TPM command
->> > - * @buf:	A &tpm_buf
->> > - * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
->> > - * @ordinal:	A command ordinal
->> > - */
->> > -void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
->> > +static void __tpm_buf_reset(struct tpm_buf *buf, u16 buf_size, u16 tag, u32 ordinal)
->> > {
->> > 	struct tpm_header *head = (struct tpm_header *)buf->data;
->> >
->> > +	__tpm_buf_size_invariant(buf, buf_size);
->> > +
->> > +	if (buf->flags & TPM_BUF_INVALID)
->> > +		return;
->> > +
->> > 	WARN_ON(tag != TPM_TAG_RQU_COMMAND && tag != TPM2_ST_NO_SESSIONS &&
->> > 		tag != TPM2_ST_SESSIONS && tag != 0);
->> >
->> > 	buf->flags = 0;
->> > 	buf->length = sizeof(*head);
->> > +	buf->capacity = buf_size - sizeof(*buf);
->> > +	buf->handles = 0;
->> > 	head->tag = cpu_to_be16(tag);
->> > 	head->length = cpu_to_be32(sizeof(*head));
->> > 	head->ordinal = cpu_to_be32(ordinal);
->> > +}
->> > +
->> > +static void __tpm_buf_reset_sized(struct tpm_buf *buf, u16 buf_size)
->> > +{
->> > +	__tpm_buf_size_invariant(buf, buf_size);
->> > +
->> > +	if (buf->flags & TPM_BUF_INVALID)
->> > +		return;
->> > +
->> > +	buf->flags = TPM_BUF_TPM2B;
->> > +	buf->length = 2;
->> > +	buf->capacity = buf_size - sizeof(*buf);
->> > 	buf->handles = 0;
->> > +	buf->data[0] = 0;
->> > +	buf->data[1] = 0;
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_reset);
->> >
->> > /**
->> > - * tpm_buf_init_sized() - Allocate and initialize a sized (TPM2B) buffer
->> > - * @buf:	A @tpm_buf
->> > - *
->> > - * Return: 0 or -ENOMEM
->> > + * tpm_buf_init() - Initialize a TPM command
->> > + * @buf:	A &tpm_buf
->> > + * @buf_size:	Size of the buffer.
->> >  */
->> > -int tpm_buf_init_sized(struct tpm_buf *buf)
->> > +void tpm_buf_init(struct tpm_buf *buf, u16 buf_size)
->> > {
->> > -	buf->data = (u8 *)__get_free_page(GFP_KERNEL);
->> > -	if (!buf->data)
->> > -		return -ENOMEM;
->> > +	memset(buf, 0, buf_size);
->> > +	__tpm_buf_reset(buf, buf_size, TPM_TAG_RQU_COMMAND, 0);
->> > +}
->> > +EXPORT_SYMBOL_GPL(tpm_buf_init);
->> >
->> > -	tpm_buf_reset_sized(buf);
->> > -	return 0;
->> > +/**
->> > + * tpm_buf_init_sized() - Initialize a sized buffer
->> > + * @buf:	A &tpm_buf
->> > + * @buf_size:	Size of the buffer.
->> > + */
->> > +void tpm_buf_init_sized(struct tpm_buf *buf, u16 buf_size)
->> > +{
->> > +	memset(buf, 0, buf_size);
->> > +	__tpm_buf_reset_sized(buf, buf_size);
->> > }
->> > EXPORT_SYMBOL_GPL(tpm_buf_init_sized);
->> >
->> > /**
->> > - * tpm_buf_reset_sized() - Initialize a sized buffer
->> > + * tpm_buf_reset() - Re-initialize a TPM command
->> >  * @buf:	A &tpm_buf
->> > + * @tag:	TPM_TAG_RQU_COMMAND, TPM2_ST_NO_SESSIONS or TPM2_ST_SESSIONS
->> > + * @ordinal:	A command ordinal
->> >  */
->> > -void tpm_buf_reset_sized(struct tpm_buf *buf)
->> > +void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal)
->> > {
->> > -	buf->flags = TPM_BUF_TPM2B;
->> > -	buf->length = 2;
->> > -	buf->data[0] = 0;
->> > -	buf->data[1] = 0;
->> > +	u16 buf_size = buf->capacity + sizeof(*buf);
->> > +
->> > +	__tpm_buf_reset(buf, buf_size, tag, ordinal);
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_reset_sized);
->> > +EXPORT_SYMBOL_GPL(tpm_buf_reset);
->> >
->> > -void tpm_buf_destroy(struct tpm_buf *buf)
->> > +/**
->> > + * tpm_buf_reset_sized() - Re-initialize a sized buffer
->> > + * @buf:	A &tpm_buf
->> > + */
->> > +void tpm_buf_reset_sized(struct tpm_buf *buf)
->> > {
->> > -	free_page((unsigned long)buf->data);
->> > +	u16 buf_size = buf->capacity + sizeof(*buf);
->> > +
->> > +	__tpm_buf_reset_sized(buf, buf_size);
->> > }
->> > -EXPORT_SYMBOL_GPL(tpm_buf_destroy);
->> > +EXPORT_SYMBOL_GPL(tpm_buf_reset_sized);
->> >
->> > /**
->> >  * tpm_buf_length() - Return the number of bytes consumed by the data
->> > @@ -92,6 +119,9 @@ EXPORT_SYMBOL_GPL(tpm_buf_destroy);
->> >  */
->> > u32 tpm_buf_length(struct tpm_buf *buf)
->>
->> Should we update the return value to u16?
->>
->> > {
->> > +	if (buf->flags & TPM_BUF_INVALID)
->> > +		return 0;
->> > +
->> > 	return buf->length;
->> > }
->> > EXPORT_SYMBOL_GPL(tpm_buf_length);
->> > @@ -104,10 +134,12 @@ EXPORT_SYMBOL_GPL(tpm_buf_length);
->> >  */
->> > void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
->> > {
->> > +	u32 total_length = (u32)buf->length + (u32)new_length;
->> > +
->> > 	if (buf->flags & TPM_BUF_INVALID)
->> > 		return;
->> >
->> > -	if ((buf->length + new_length) > PAGE_SIZE) {
->> > +	if (total_length > (u32)buf->capacity) {
->> > 		WARN(1, "tpm_buf: write overflow\n");
->> > 		buf->flags |= TPM_BUF_INVALID;
->> > 		return;
->>
->> [...]
->>
->> > diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
->> > index 636acb66a4f6..6e6a9fb48e63 100644
->> > --- a/security/keys/trusted-keys/trusted_tpm1.c
->> > +++ b/security/keys/trusted-keys/trusted_tpm1.c
->> > @@ -310,9 +310,8 @@ static int TSS_checkhmac2(unsigned char *buffer,
->> >  * For key specific tpm requests, we will generate and send our
->> >  * own TPM command packets using the drivers send function.
->> >  */
->> > -static int trusted_tpm_send(unsigned char *cmd, size_t buflen)
->> > +static int trusted_tpm_send(void *cmd, size_t buflen)
->> > {
->> > -	struct tpm_buf buf;
->> > 	int rc;
->> >
->> > 	if (!chip)
->> > @@ -322,15 +321,12 @@ static int trusted_tpm_send(unsigned char *cmd, size_t buflen)
->> > 	if (rc)
->> > 		return rc;
->> >
->> > -	buf.flags = 0;
->> > -	buf.length = buflen;
->> > -	buf.data = cmd;
->> > 	dump_tpm_buf(cmd);
->> > -	rc = tpm_transmit_cmd(chip, &buf, 4, "sending data");
->> > +	rc = tpm_transmit_cmd(chip, cmd, 4, "sending data");
->>
->> Is it fine here to remove the intermediate tpm_buf ?
->>
->> IIUC tpm_transmit_cmd() needs a tpm_buf, while here we are passing just
->> the "data", or in some way it's a nested tpm_buf?
->>
->> (Sorry if it's a stupid question, but I'm still a bit new with this code).
->>
->> > 	dump_tpm_buf(cmd);
->> >
->> > +	/* Convert TPM error to -EPERM. */
->> > 	if (rc > 0)
->> > -		/* TPM error */
->> > 		rc = -EPERM;
->> >
->> > 	tpm_put_ops(chip);
->> > @@ -624,23 +620,23 @@ static int tpm_unseal(struct tpm_buf *tb,
->> > static int key_seal(struct trusted_key_payload *p,
->> > 		    struct trusted_key_options *o)
->> > {
->> > -	struct tpm_buf tb;
->> > 	int ret;
->> >
->> > -	ret = tpm_buf_init(&tb, 0, 0);
->> > -	if (ret)
->> > -		return ret;
->> > +	struct tpm_buf *tb __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
->> > +	if (!tb)
->> > +		return -ENOMEM;
->> > +
->> > +	tpm_buf_init(tb, TPM_BUFSIZE);
->> >
->> > 	/* include migratable flag at end of sealed key */
->> > 	p->key[p->key_len] = p->migratable;
->> >
->> > -	ret = tpm_seal(&tb, o->keytype, o->keyhandle, o->keyauth,
->> > +	ret = tpm_seal(tb, o->keytype, o->keyhandle, o->keyauth,
->> > 		       p->key, p->key_len + 1, p->blob, &p->blob_len,
->> > 		       o->blobauth, o->pcrinfo, o->pcrinfo_len);
->> > 	if (ret < 0)
->> > 		pr_info("srkseal failed (%d)\n", ret);
->> >
->> > -	tpm_buf_destroy(&tb);
->> > 	return ret;
->> > }
->> >
->> > @@ -650,14 +646,15 @@ static int key_seal(struct trusted_key_payload *p,
->> > static int key_unseal(struct trusted_key_payload *p,
->> > 		      struct trusted_key_options *o)
->> > {
->> > -	struct tpm_buf tb;
->> > 	int ret;
->> >
->> > -	ret = tpm_buf_init(&tb, 0, 0);
->> > -	if (ret)
->> > -		return ret;
->> > +	struct tpm_buf *tb __free(kfree) = kzalloc(PAGE_SIZE, GFP_KERNEL);
->> > +	if (!tb)
->> > +		return -ENOMEM;
->> > +
->> > +	tpm_buf_init(tb, TPM_BUFSIZE);
->> >
->> > -	ret = tpm_unseal(&tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
->> > +	ret = tpm_unseal(tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
->> > 			 o->blobauth, p->key, &p->key_len);
->> > 	if (ret < 0)
->> > 		pr_info("srkunseal failed (%d)\n", ret);
->> > @@ -665,7 +662,6 @@ static int key_unseal(struct trusted_key_payload *p,
->> > 		/* pull migratable flag out of sealed key */
->> > 		p->migratable = p->key[--p->key_len];
->> >
->> > -	tpm_buf_destroy(&tb);
->> > 	return ret;
->> > }
->>
->> The rest LGTM, but it's a huge patch (not your issue at all), so yeah not
->> sure :-)
->
->It's still a single logical change :-)
+1. The finit_module syscall eventually calls init_module_from_file() to rea=
+d the
+module into memory and then decompress it.  The problem is that the kernel
+module signature verification occurs during the kernel_read_file(), before =
+the
+kernel module is decompressed.  Thus, the appended kernel module signature
+cannot be verified.
 
-Yep, and good set of patches to prepare this!
+2. CPIO doesn't have xattr support. There were multiple attempts at includi=
+ng
+xattrs in CPIO, but none were upstreamed [1].  If file signatures stored in
+security.ima were available in the initramfs, then finit_module() could ver=
+ify
+them, as opposed to the appended kernel module signature.
 
-BTW I'm still bit concerned about the changes in trusted_tpm_send() 
-which I left a few lines above, can you check it?
+3. The issues described above are generic, not limited to Power.  When
+CONFIG_MODULE_SIG is configured, the arch specific IMA policy rules do not
+include an "appraise func=3DMODULE_CHECK".
 
-Thanks,
-Stefano
+4. Unlike the arch specific IMA policy rules, the built-in secure boot IMA
+policy, specified on the boot command line as "ima_policy=3Dsecure_boot", a=
+lways
+enforces the IMA signature stored in security.ima.
+
+Partial solutions without kernel changes:
+- Enable CONFIG_MODULE_SIG  (Doesn't solve 4)
+- Disable kernel module compression.
+
+Complete solution:
+- Pick up and upstream Roberto Sassu's last version of initramfs support [1=
+].
+- Somehow prevent kernel_read_file() from failing when the kernel_read_file=
+_id
+enumeration is READING_MODULE and the kernel module is compressed.  The cha=
+nge
+might be limited to ima_post_read_file().
+
+thanks,
+
+Mimi
+
+[1] [PATCH v4 0/3] initramfs: add support for xattrs in the initial ram dis=
+k
+https://lore.kernel.org/linux-fsdevel/20190523121803.21638-1-roberto.sassu@=
+huawei.com/
+
 
 
