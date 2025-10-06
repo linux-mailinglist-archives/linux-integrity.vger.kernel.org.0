@@ -1,57 +1,57 @@
-Return-Path: <linux-integrity+bounces-7380-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7381-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2805BBE0AA
-	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 14:34:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85369BBE4B3
+	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 16:13:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0F0704E7E55
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 12:34:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 400D13AD260
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 14:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73A1527F19F;
-	Mon,  6 Oct 2025 12:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750162D47F2;
+	Mon,  6 Oct 2025 14:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R68ShRWG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lauosvz1"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4637827F19B;
-	Mon,  6 Oct 2025 12:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483707081C;
+	Mon,  6 Oct 2025 14:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759754041; cv=none; b=Uo7bR4F4e8KuJqOZSaP2v2N8Lb8XTrBsxej3ObE6R8BdASP1WSnmifY138ASGcL+934GVypDPLWvzs3qiuNVInCtyCICafVz9JxVcq898zYeYnNCwOHShe0F+dcMdrHD+JCFSid70BkUY6uYGl+KbUjH2pIskHyzipEDr6mwm4A=
+	t=1759759980; cv=none; b=XN7WBXGPOCIx7crj/tZvBr3MC5YPESTthIbDZPjM6K0OtH9PFt89L6uzjR3ta6erPrGmJ5NpHYsiLYauypuCKT6aF2wY0A+DlLjkm7PVEpjU/iO0phSPzkLq77+VbtQ8ZwWhMj5KPWS1h1mxYP3/HYBlF5az4XcTOzZDPyezRm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759754041; c=relaxed/simple;
-	bh=8VmwHQcM7eKSObwCmeLkPF9BGD08kWjJhvO+reIghP8=;
+	s=arc-20240116; t=1759759980; c=relaxed/simple;
+	bh=N1JwOwZWW+alEo9sr5K2TEW+fCnZkVPMIHwGFU0/oCA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KIJ68WM4GeyhZH9ep2qf99PMZukfxs1CHbQMvmQuZF2I/HzLi1BPNh6fu5InFtafaSl7rZ5I9KkknIf+ZgQ8FkvlHG5mrFWYJtuVNGoaQS5LtMm3UzNpXA/KvkJGINTec/5TsZGa1b+qPlp9hHRxJVfaQXe9ooCpP7AfTIy5008=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R68ShRWG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E1F2C4CEF5;
-	Mon,  6 Oct 2025 12:33:59 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lweAJlqETs13Km8FvQNW+wk3CJLfqEaUshygQOauxUMFmNnZL++oZD+mBmViu98aqL+ZT8Peww2UjV8qFK+08ev5NOCWuPaTMLTzHQwV6G5wHXkxn2WkeyHHFaO4GQG16sn+m4BdmB4TRh37OpfCEaC6fHPmhi7XtwB1VB8SGTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lauosvz1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7233BC4CEF9;
+	Mon,  6 Oct 2025 14:12:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759754039;
-	bh=8VmwHQcM7eKSObwCmeLkPF9BGD08kWjJhvO+reIghP8=;
+	s=k20201202; t=1759759979;
+	bh=N1JwOwZWW+alEo9sr5K2TEW+fCnZkVPMIHwGFU0/oCA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R68ShRWGRLtcHqRnjUkjdkUuTgNdiOq9QZFckK/Q0EX+tST1ZM+ew1hflsio103zA
-	 MGvoTgNGeukynFx7w9b7DBOz+vlDfjSCB0s7hQx8sIyr39LBW4oKMfqd8Bk+1Qjd1l
-	 TXL1cmPcOQzpicV1KI8vAs12ixcKUIyFVa8WhUG+CSps9DoyK9APbsLGyMpLrVnLBe
-	 JhE7/6MIalhbfWOHsK2nmvGURi1lWGh2YFXen4dtpG7gYZjyVorZrl+iEBiwinXhfR
-	 3yueVN5IrQXkPT0J0In/OOFjTmUt4FTg/hHG7nfoPCOEWNZRDHjNyLGk/1fv4mF+AA
-	 wQ5rlgXF7LiXA==
-Date: Mon, 6 Oct 2025 15:33:56 +0300
+	b=lauosvz1EdiD+Ku/vkGJq7XsXje/Z8bzXMmqVvsjGAjE47jLVp1bXpXXIqXEgZ3Hl
+	 fNAsdiHj5j3sZm7wjfKdQpVuMyabf1cLrsWoQf1c7zQ6sQYoIhYSnMCoGsmZgJlnTn
+	 ebvvsDuZnYu2b+/FaQnFwR2xP4RcdQ91ZwYJ0fa8hJh6GrqQeLXiLwFLKcmcv3ikJp
+	 bhDlPWOuBXam8MjBY5OnJUMhT34hNJyjLgAkjusEWyEaUfAU6ax7ZQgtdbtMye9xWl
+	 aLrzQDsRass504V5QN4psHjUOhqYden0hyGe5DPCHONy96Lh3Kq+1tVwjVIqi05JEs
+	 +ewZOn9kmDIvw==
+Date: Mon, 6 Oct 2025 17:12:55 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jonathan McDowell <noodles@meta.com>
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-v6.18
-Message-ID: <aOO3NKegSrUQ4ewg@kernel.org>
+Message-ID: <aOPOZwp_inGui9Bx@kernel.org>
 References: <aOKTFv1vh1cvvcLk@kernel.org>
- <CAHk-=whSe9AGigVydkwo=ewE6_GFTJ_rU=XzO=v1N1sWyfVmAw@mail.gmail.com>
+ <CAHk-=wiCWiDcLEE3YqQo78piVHpwY2iXFW--6FbmFAURtor2+w@mail.gmail.com>
+ <aOOu1f1QWQNtkl6c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -60,81 +60,85 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=whSe9AGigVydkwo=ewE6_GFTJ_rU=XzO=v1N1sWyfVmAw@mail.gmail.com>
+In-Reply-To: <aOOu1f1QWQNtkl6c@kernel.org>
 
-On Sun, Oct 05, 2025 at 11:24:09AM -0700, Linus Torvalds wrote:
-> On Sun, 5 Oct 2025 at 08:47, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> >
-> > and apologies for this late pull request. This pull request disables
-> > TCG_TPM2_HMAC from the default configuration as it does not perform well
-> > enough
+On Mon, Oct 06, 2025 at 02:58:17PM +0300, Jarkko Sakkinen wrote:
+> On Sun, Oct 05, 2025 at 11:09:08AM -0700, Linus Torvalds wrote:
+> > On Sun, 5 Oct 2025 at 08:47, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > >
+> > >      This pull request disables
+> > > TCG_TPM2_HMAC from the default configuration as it does not perform well
+> > > enough [1].
+> > >
+> > > [1] https://lore.kernel.org/linux-integrity/20250825203223.629515-1-jarkko@kernel.org/
+> > 
+> > This link is entirely useless, and doesn't explain what the problem
+> > was and *why* TPM2_TCG_HMAC shouldn't be on by default.
+> > 
+> > I think a much better link is
+> > 
+> >    https://lore.kernel.org/linux-integrity/20250814162252.3504279-1-cfenn@google.com/
+> > 
+> > which talks about the problems that TPM2_TCG_HMAC causes.
+> > 
+> > Which weren't just about "not performing well enough", but actually
+> > about how it breaks TPM entirely for some cases.
 > 
-> So having looked more at this, not only does it disable that
-> TCG_TPM2_HMAC, it does a lot of other things too.
-> 
-> I really am going to require a better pull request, and I have thrown
-> this one away.
+> Fair enough. I'll also enumerate the issues, and also roadmap
+> to heal the feature.
 
-What I think I think it is good call.
+So some of the arguments in Chris' email are debatable, such as
+this list:
 
-> 
-> The exclusive access looks debatable to me too. I think you should
-> also require that the open was done not only with O_EXCL, but as a
-> write too.
-> 
-> Exclusive reads do not make sense.
-
-True, I agree with this.
-
-After reading this email I realized also another issue with these patch
-when I tested them sequentially building a VM for each commit ID.
-
-Without "tpm: Require O_EXCL for exclusive /dev/tpm access" applied,
-there's a regression: usually a daemon of some sort opens /dev/tpm0:
-
-COMMAND      PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
-tpm2-abrm 771444  tss    5u   CHR 10,224      0t0   94 /dev/tpm0
-
-Without top patch this leaves /dev/tpmrm0 unusuable, which is a huge
-developer experience downgrade as it is nice and covenient device
-to try and do things. I.e. tail patch needs to be squashed and
-the whole patch set needs to be re-reviewed.
-
-I don't know systemd source code too well, but after eading
-documentation of systemd-cryptenroll, it can also use /dev/tpmrm0:
-
-https://www.freedesktop.org/software/systemd/man/latest/systemd-cryptenroll.html
-
-Based on this it's now like there's a breaking patch and the top
-most patch fixes the bug.
-
-And based on this I'm happy to postpone O_EXCL changes to 6.19.
-Patch set just needs to be restructured better so that in-the
-middle of the series patches don't break things. And also it'd
-be better if this patch would be relocated as the first in the
-series: "tpm: Remove tpm_find_get_ops".
+- TPM_RH_NULL
+- TPM2_CreatePrimary
+- TPM2_ContextSave
+- ECDH-P256
+- AES-128-CFB
 
 
-> 
-> Now, I certainly *hope* that nobody has /dev/tmp being world-readable,
-> so it probably doesn't matter, but that new exclusive access thing is
-> very different than what the code used to do, and if I read it
-> correctly it will also disable the kernel doing certain operations. So
-> it needs to be as limited as possible.
+We've never encountered a TPM chip without those TPM commands, and e.g.
+/dev/tpmrm0 heavily relies on TPM2_ContextSave, and has been in the
+mainline since 2017. And further, this has been the case on ARM too.
 
-Not disagreeing with this.
+So using all of the arguments as rationale for the change that according
+to Chris' email are broken because I cannnot objectively on all of the
+arguments.
 
-> 
-> And damn it, it needs to be *explained*. Not have a pull request where
-> one single line is explained badly.
+E.g. I have to assume to this day that all known TPM chips have those
+commands because no smoking gun exists. And if DID exist, then I'd
+assume someone would fixed /dev/tpmrm0 ages ago.
 
-'ll send tomorrow a new PR without O_EXCL patches.
+That said, I do agree on disabling the feature for the time being:
+we have consensus on actions but not really on stimulus tbh.
+And if there is stimulus I would postpone this patch to create
+fix also for /dev/tpmrm0.
 
-As per hmac encryption, I think my decision was the right call
-but cover letter did suck agreed (sorry about that).
+Argument where I meet with Chris suggestion are:
 
-> 
->              Linus
+1. Performance. The key generation during boot is extremely bad
+   idea and depending on the deployment the encryption cost is
+   too much (e.g. with my laptop having fTPM it does not really
+   matter).
+2. Null seed was extremely bad idea. The way I'm planning to actually
+   fix this is to parametrize the primary key to a persistent key handle
+   stored into nvram of the chip instead of genration. This will address
+   also ambiguity and can be linked directly to vendor ceritifcate
+   for e.g. to perfom remote attesttion.
+
+Things don't go broken by saying that they are broken and nothing
+elsewhere in the mainline has supporting evidence that those commands
+would be optional. I cannot agree on argument which I have zero
+means to measure in any possible way.
+
+This is exactly also the root reason why I wrote my own commit instead
+with the same change: I could have never signed off the commit that
+I don't believe is true in its storyline.
+
+So if I write cover for the pull request where I use the subset of
+arguments with shared consensus would that be enough to get this
+through? As for primary key handle fix I rather do that with
+time and proper care.
 
 BR, Jarkko
 
