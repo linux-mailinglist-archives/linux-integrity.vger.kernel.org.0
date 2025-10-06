@@ -1,174 +1,110 @@
-Return-Path: <linux-integrity+bounces-7383-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7384-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36D8BBBE592
-	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 16:30:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ACF4BBE5C2
+	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 16:33:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E62F73BF031
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 14:30:19 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3DA364E2B45
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 14:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817EE137923;
-	Mon,  6 Oct 2025 14:30:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF94D286890;
+	Mon,  6 Oct 2025 14:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBmeTHEd"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="ssOWecS8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5679E24B28;
-	Mon,  6 Oct 2025 14:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BE319E819;
+	Mon,  6 Oct 2025 14:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759761018; cv=none; b=CaY06M06uj34wLNAdDiWe2QWdYXbHa8h4+KNAsu+W37VyASAaE4hDzfDCh6tI6muMzP2q6mb4ZIQ11XHzVnlnAVEYHF7jP1qe9YqA2h6y5Scbt2RWZd/9NW4K1dJ5UpR5y6x/lawGSPKIRSAFUF+TvfTBHL8uJjhZjcu6k08y8k=
+	t=1759761224; cv=none; b=ZJxbGep9dnP4DFmrFOwTZJkOuTezrW0/t7k77Dqh67H30Yo8tNCplT5exKN8/IIO7ARdeGp3vxPyTPs7SKAcwrnRwQWBjUNh76VG2aF0uLDaPEpBVb+HmM6GNiFazqbxaetnduf8j7vhwFqpl87p0l0Msk9DXhhbkPV0GCGuifg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759761018; c=relaxed/simple;
-	bh=voL61pr7tpXNE7UVtTh1JilvSM6+IA0wwZxpEOl0whI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qu9OGwgIurMqF0ICS4j+lk7sqjzJ9lNMko4MAZ+EPoy+jiwg63UUx6Sku6OYO9MlPlBWPNpJQiYW2Yo3BrXwiwnslCtetU4ABQk0EOzs9Ff4Dn7hZEK7Hu3lhgiNc+782b+Az1CQpxQtZwFqC1KuFc57hj/WASq5qM80Iu2ACo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBmeTHEd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8871FC4CEF9;
-	Mon,  6 Oct 2025 14:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759761017;
-	bh=voL61pr7tpXNE7UVtTh1JilvSM6+IA0wwZxpEOl0whI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rBmeTHEd7NuFo1jgnvRcZSNaXhsnQPuQsbFDKS4E5H4u+AV+AO7kK/oQMGzwzMPof
-	 WTq77WOP2j38MKJ/kmKpqz0KJR7NPE7Na+7H4t1dHlmvZgIX4CqQziK8+inb+ZnN3H
-	 mBqOocfZFqf6zBB67g8v/8pwp6ZsWc0VSVwd3YKPWvsdaotK+5frbMF+7K0b0acfw2
-	 3mx5uCNUQw7dNvieGaRerKJmEZBp+l1nbguj0JKn9jXqs4i+hD93rXNnysIDdxCxCu
-	 DEzg3xyj22KDSnVosNGbPtECL6b2iSm5mCyXcm3pilxjuCCjM4rFtbyix6dli0KlKV
-	 WbtVmN8R44aGw==
-Date: Mon, 6 Oct 2025 17:30:14 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1759761224; c=relaxed/simple;
+	bh=eL8zaXbuE87oHpq2J2KkB3O9/66XbXwzU6jzZNIv3KA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eclTmJNY0SdYZ+NOezQlboaw8tB0mwx3pkKSYafxK7JxkuF9tV0pcVIE4YvsB9fVVnyoHZomyWrIe4kCDP26Aj47Vusa5mY2soPnIoCRvUaidupm8c23SAsnkQQhabzI8XgtGxDMsGXI3a2DOFM38IucVLEsjeOSMG/lTM3FtJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=ssOWecS8; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1759761221;
+	bh=eL8zaXbuE87oHpq2J2KkB3O9/66XbXwzU6jzZNIv3KA=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=ssOWecS8aQrkKTGxyPlxc96rlVht/0LgsKTmvre3UsnjOsKQSgxBM0LeUHJKhJnr/
+	 ghf3HAZ+gm7vKPTjfAfiqOEAyOSfjp5sQERAarU/OIg3PWrPt1ihubLXIiu3mSLyD3
+	 8z8d6nfob1BsgNf15Z8lqQ9/IIFFh8X3T7oUs1dg=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id C60B61C02DF;
+	Mon, 06 Oct 2025 10:33:40 -0400 (EDT)
+Message-ID: <125ba81bb222cdffef05ef9868c68002efd61235.camel@HansenPartnership.com>
 Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-v6.18
-Message-ID: <aOPSdstd1bk0pM3R@kernel.org>
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, Linus Torvalds
+	 <torvalds@linux-foundation.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, David
+ Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+ linux-integrity@vger.kernel.org,  linux-kernel@vger.kernel.org
+Date: Mon, 06 Oct 2025 10:33:40 -0400
+In-Reply-To: <aOPOZwp_inGui9Bx@kernel.org>
 References: <aOKTFv1vh1cvvcLk@kernel.org>
- <CAHk-=wiCWiDcLEE3YqQo78piVHpwY2iXFW--6FbmFAURtor2+w@mail.gmail.com>
- <aOOu1f1QWQNtkl6c@kernel.org>
- <aOPOZwp_inGui9Bx@kernel.org>
- <aOPPpVK8rJUuDgWD@kernel.org>
+	 <CAHk-=wiCWiDcLEE3YqQo78piVHpwY2iXFW--6FbmFAURtor2+w@mail.gmail.com>
+	 <aOOu1f1QWQNtkl6c@kernel.org> <aOPOZwp_inGui9Bx@kernel.org>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aOPPpVK8rJUuDgWD@kernel.org>
 
-On Mon, Oct 06, 2025 at 05:18:13PM +0300, Jarkko Sakkinen wrote:
-> On Mon, Oct 06, 2025 at 05:13:02PM +0300, Jarkko Sakkinen wrote:
-> > On Mon, Oct 06, 2025 at 02:58:17PM +0300, Jarkko Sakkinen wrote:
-> > > On Sun, Oct 05, 2025 at 11:09:08AM -0700, Linus Torvalds wrote:
-> > > > On Sun, 5 Oct 2025 at 08:47, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > > >
-> > > > >      This pull request disables
-> > > > > TCG_TPM2_HMAC from the default configuration as it does not perform well
-> > > > > enough [1].
-> > > > >
-> > > > > [1] https://lore.kernel.org/linux-integrity/20250825203223.629515-1-jarkko@kernel.org/
-> > > > 
-> > > > This link is entirely useless, and doesn't explain what the problem
-> > > > was and *why* TPM2_TCG_HMAC shouldn't be on by default.
-> > > > 
-> > > > I think a much better link is
-> > > > 
-> > > >    https://lore.kernel.org/linux-integrity/20250814162252.3504279-1-cfenn@google.com/
-> > > > 
-> > > > which talks about the problems that TPM2_TCG_HMAC causes.
-> > > > 
-> > > > Which weren't just about "not performing well enough", but actually
-> > > > about how it breaks TPM entirely for some cases.
-> > > 
-> > > Fair enough. I'll also enumerate the issues, and also roadmap
-> > > to heal the feature.
-> > 
-> > So some of the arguments in Chris' email are debatable, such as
-> > this list:
-> > 
-> > - TPM_RH_NULL
-> > - TPM2_CreatePrimary
-> > - TPM2_ContextSave
-> > - ECDH-P256
-> > - AES-128-CFB
-> > 
-> > 
-> > We've never encountered a TPM chip without those TPM commands, and e.g.
-> > /dev/tpmrm0 heavily relies on TPM2_ContextSave, and has been in the
-> > mainline since 2017. And further, this has been the case on ARM too.
-> > 
-> > So using all of the arguments as rationale for the change that according
-> > to Chris' email are broken because I cannnot objectively on all of the
-> > arguments.
-> > 
-> > E.g. I have to assume to this day that all known TPM chips have those
-> > commands because no smoking gun exists. And if DID exist, then I'd
-> > assume someone would fixed /dev/tpmrm0 ages ago.
-> > 
-> > That said, I do agree on disabling the feature for the time being:
-> > we have consensus on actions but not really on stimulus tbh.
-> > And if there is stimulus I would postpone this patch to create
-> > fix also for /dev/tpmrm0.
-> > 
-> > Argument where I meet with Chris suggestion are:
-> > 
-> > 1. Performance. The key generation during boot is extremely bad
-> >    idea and depending on the deployment the encryption cost is
-> >    too much (e.g. with my laptop having fTPM it does not really
-> >    matter).
-> > 2. Null seed was extremely bad idea. The way I'm planning to actually
-> >    fix this is to parametrize the primary key to a persistent key handle
-> >    stored into nvram of the chip instead of genration. This will address
-> >    also ambiguity and can be linked directly to vendor ceritifcate
-> >    for e.g. to perfom remote attesttion.
-> > 
-> > Things don't go broken by saying that they are broken and nothing
-> > elsewhere in the mainline has supporting evidence that those commands
-> > would be optional. I cannot agree on argument which I have zero
-> > means to measure in any possible way.
-> > 
-> > This is exactly also the root reason why I wrote my own commit instead
-> > with the same change: I could have never signed off the commit that
-> > I don't believe is true in its storyline.
-> > 
-> > So if I write cover for the pull request where I use the subset of
-> > arguments with shared consensus would that be enough to get this
-> > through? As for primary key handle fix I rather do that with
-> > time and proper care.
-> 
-> I had to use few hours to remind why I did my commit instead of acking
-> the original and this is the root. We've never had e.g. a bug in the
-> wild that would /dev/tpmrm0 to be broken because ContextSave is not
-> available, and it is *widely* used device across all major platforms.
+On Mon, 2025-10-06 at 17:12 +0300, Jarkko Sakkinen wrote:
+> 2. Null seed was extremely bad idea. The way I'm planning to actually
+> =C2=A0=C2=A0 fix this is to parametrize the primary key to a persistent k=
+ey
+> handle
+> =C2=A0=C2=A0 stored into nvram of the chip instead of genration. This wil=
+l
+> address
+> =C2=A0=C2=A0 also ambiguity and can be linked directly to vendor ceritifc=
+ate
+> =C2=A0=C2=A0 for e.g. to perfom remote attesttion.
 
-Here's mobile client profile:
+Just a minute, there's been no discussion or debate about this on the
+list.  The rationale for using the NULL seed is clearly laid out here:
 
-https://trustedcomputinggroup.org/wp-content/uploads/TPM_2.0_Mobile_Common_Profile_v2r31_FINAL.pdf
+https://docs.kernel.org/security/tpm/tpm-security.html
 
-Unless I missed a tidbit I see nothing in it saying that ContextSave
-would be optional. If there was even a known legit spec bringing some
-context to the claims, that would move things forward.
+But in brief it is the only way to detect reset attacks against the TPM
+and a reset attack is the single simplest attack an interposer can do.
 
-Section 2.3 states this about ContextSave:
+If you think there's a problem with the approach, by all means let's
+have a debate, since TPM security is always a trade off, but you can't
+simply come to your own opinion and try to impose it by fiat without at
+least raising whatever issue you think you've found with the parties
+who contributed the code in the first place.
 
-"The symmetric cipher mode TPM_ALG_CFB is REQUIRED by TCG TPM 2.0
-Library specification Part 1 [1] and is also necessary for
-implementation of TPM2_Create, TPM2_Load, TPM 2_ContextSave,
-TPM2_ContextLoad, and other TPM commands"
+Regards,
 
-which actually claims that TPM_ALG_CFB is required where as Chris'
-patch claims 180 degrees opposite what the spec says.
+James
 
-Perhaps there's some other random TCG spec that I've missed, it's
-entirely possible...
-
-BR, Jarkko 
 
