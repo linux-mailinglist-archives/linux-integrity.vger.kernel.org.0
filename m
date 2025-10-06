@@ -1,126 +1,159 @@
-Return-Path: <linux-integrity+bounces-7375-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7376-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA7ABBD351
-	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 09:26:44 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1915BBD74B
+	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 11:35:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D51EC348727
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 07:26:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E2AFD4E29FE
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 09:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95BC823B604;
-	Mon,  6 Oct 2025 07:26:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5943F1EA7C6;
+	Mon,  6 Oct 2025 09:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TsoJ18nV"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="MuR8qeLz";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="C+LvNU6Z";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="MuR8qeLz";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="C+LvNU6Z"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68294231829
-	for <linux-integrity@vger.kernel.org>; Mon,  6 Oct 2025 07:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C53E1EA7CB
+	for <linux-integrity@vger.kernel.org>; Mon,  6 Oct 2025 09:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759735600; cv=none; b=dLXqj8b+Gq5hGU2KQ1wK4CfN6QqcMTrjoDbXC/mcurS77q06S9iQ8kn0/zv3B+M1t68KW1Y/8mPCANA4003eAEGdLLh2Z4SeyurJq1x/j5RC40z69fobOyRf/ZGfJLDc5m+z5z0HXm1ls5NJR/0172X5pRwi8EcGGIe+ykKxcsE=
+	t=1759743343; cv=none; b=Ud7bf+cU7zTbUHNw8CW11zPZ/4HdNOtzT19XUl1YVD25sHvEGPwxjuj+7YBsxEa0uW8x3hNGWSgej4tMDORont9BuvQqlRxH34edxdI3wkbM4aMFDmkYxL3wtu83KxFG/g9/1oVxn21WXm1kh/JZu8NbaCH4bJVqNbOjjItKcls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759735600; c=relaxed/simple;
-	bh=q4XtfKIFy7egdQZ8O5c76y9F/lMwipzSkZTt+u6XlkQ=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:Mime-Version:
-	 References:In-Reply-To; b=ATSGcGVuHrS+hC+PkxEkk799FOKzTDgqIoK4YmaDfPUXjHhvFncvLN8mmIpkwfZTNN+6+egFFNYMCg8k9aHEQdAQzHhUh1URHaL+sNsP1RYHiwtchwyyBD4SPtSHdjfqEvgRYxM1VRsDdJvQ01wfJV9Hvlu74gahmEze+zgOvYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TsoJ18nV; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3ee64bc6b85so3388060f8f.3
-        for <linux-integrity@vger.kernel.org>; Mon, 06 Oct 2025 00:26:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1759735597; x=1760340397; darn=vger.kernel.org;
-        h=in-reply-to:references:content-transfer-encoding:mime-version:to
-         :from:subject:cc:message-id:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yTR0CyiAIr67VQqq00olrSMeF2cnaGO7A1U+4VJPX1o=;
-        b=TsoJ18nVz3MG9KAdZIw/Aqz417rHzVSW70unw1+MoZVejQBzNCso/dKmX1LnAgcGzV
-         Zfyyo258CxuCY3HAa0c8zpgz8vnSBngsG+sRIuSJeG0bZjmUKkiVtcRjVMSQUBZh3Y0f
-         X2QdABh1Exyck5rnyUH4wCL0wLQHQ3XXovfBOG3OrOZejOf/KYCgkTfnDHDr5xDTsLno
-         rMxaWfZCnLoDUOKUm9hJLTsSzargrKERNNxUsRsI4CNjN3bOFyK1RnxfNBI9FNvASouj
-         xpJkxprdMAiJBDLLYqusrgNjHTfIBZBSubL29LpkMLFP+6D7F4GgYKGpbVcbnkzCXUOA
-         XgFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759735597; x=1760340397;
-        h=in-reply-to:references:content-transfer-encoding:mime-version:to
-         :from:subject:cc:message-id:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yTR0CyiAIr67VQqq00olrSMeF2cnaGO7A1U+4VJPX1o=;
-        b=fhA8XH+cP3OrDvAn4sluMUH+F7WwEwRVcF2KKMEZy760yZ4Gh0xqgkZWMhU+h3Dcow
-         apViPlABjuVCLu8V0qFUER5CGizA+/tA3Zt+BeSfs4uchuIHjg1q67c66m0snU66kh3O
-         8wC8CKQ4M/R8Wp2vvb4XD8kE+I9LCOms59haVaQ/shTK9nSZaKF0Gd8boCwEAp+Hqi5h
-         dgLoOvLKOed1x+dFTuYo5HvEDtNctFgvSV6cZIt2V8v1LwGH0MbgcqaB1FBCfVb2P+Qn
-         cGM3XIfNjAt2ORv6zELOKToU73H8mWBygIb6nIkKy1jdmgIf0N3BZKl9sysb4agD4Cju
-         YBjA==
-X-Gm-Message-State: AOJu0Yz2TAdI4yC0krE/UhO/xX0ZDqoOTYty/c284s3HILaEnQyUek/c
-	DFEfk+fvTdc3Lg6A9VRtGrvYkzo4E9O7cVgA6oF8Y7HZdHk3nLMviR5YT6/TspU1B5I=
-X-Gm-Gg: ASbGncs7ruLjkEaDrJKmC9MDXFkOLL5afq6Tina8HwnF5EYGD+z8ckW6QeKnEDKgFZg
-	cdpqSIrkKdh+wQhVTlBFlKtFZ9v2LiwSyXqctbq6DWt5CQDsgYaxRHjIzoWP+jiosC+F+TrmLlK
-	9I1hrEWIwWS5O/4CF5h+6Sg8Jhj8m2t6eCnsd1b3seW8kA4PboNQwQ36UqEBl5jdlgCZM99aDdL
-	L1K63HXFjXTUwjZpcvIxjcdXbRhwkPJjDP5i5pvxPO2jPC7CSpvkoGWIlEY7rKEVZet9EW829Yg
-	2MUXVDlbzAv99NoirCWhpY68nTCb/kElc/qPGqN1OCKozvUOFKqhIFLbf5ihoZUZyBPqAd75gQM
-	k0cvAwTArQ2RHU7wRkyeQg73GvkZ6WNPxKFzka/mBL5AdyaijJz37xKfj7j8a7DrrJf0=
-X-Google-Smtp-Source: AGHT+IFHEH19rfceHAnCRXrpoJGYzTt6CqW8DJ1a31IQ8jWN2W99GfnTaJf8FmBZ6mOHdQ4uPZ3N7w==
-X-Received: by 2002:a05:6000:2010:b0:3eb:5245:7c1f with SMTP id ffacd0b85a97d-4256713ac87mr6945703f8f.2.1759735596677;
-        Mon, 06 Oct 2025 00:26:36 -0700 (PDT)
-Received: from localhost ([2a02:a31b:84a1:b780:5af0:a75d:357e:866e])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-878bb53b8absm108152536d6.22.2025.10.06.00.26.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Oct 2025 00:26:36 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 06 Oct 2025 09:26:33 +0200
-Message-Id: <DDB27F9FQ4B3.11FGF9PVV0DAE@suse.com>
-Cc: <linux-integrity@vger.kernel.org>
-Subject: Re: [LTP] [PATCH 2/4] ima_conditionals.sh: Split test by request
-From: "Andrea Cervesato" <andrea.cervesato@suse.com>
-To: "Petr Vorel" <pvorel@suse.cz>, <ltp@lists.linux.it>
+	s=arc-20240116; t=1759743343; c=relaxed/simple;
+	bh=MIKGvbg7G2meU14KSmH35tkTzGrasWbNJ/rdqPPFnkM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hhFeGuxfcGB+adx14GuycF5UHaQpqTaI2qGQzzcOiKKZyiKzpjWTbYcl7/JqbwNg7Ku0J4DHLhVyuHHlGRYhwo9W330qQuxxPDK4l1fxWInkJsS1iObaIW2pjNQLbdUKhiPbLYV25+kKAEzq4kBqJg9qhw2Cr464JqGv/RI72uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=MuR8qeLz; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=C+LvNU6Z; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=MuR8qeLz; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=C+LvNU6Z; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 814AB1F7DE;
+	Mon,  6 Oct 2025 09:35:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1759743339;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MIKGvbg7G2meU14KSmH35tkTzGrasWbNJ/rdqPPFnkM=;
+	b=MuR8qeLzx/k+M3urYrvkqVZprq3RG4WU2XRSL7W6WFvBYWv3Z8bJ2bG3E2sO+WcMGrkQf4
+	rWbx+y3+LxBcjEfsI7oPHhdKGfaYXK+AdL8D5GhP8mLi8mh0HBiUqcptftP+nPqdCnG6y6
+	ufFoeH/fmux4lvMch1MwpuOv13Wh66A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1759743339;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MIKGvbg7G2meU14KSmH35tkTzGrasWbNJ/rdqPPFnkM=;
+	b=C+LvNU6Zk/GAl+9ljhy2UvDxGFr/zLXt4Tc6awd/oWFneELrA3Sq/L0CJB8T7bqVJ1usOA
+	jQNjNHnwjWw9PgDg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=MuR8qeLz;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=C+LvNU6Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1759743339;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MIKGvbg7G2meU14KSmH35tkTzGrasWbNJ/rdqPPFnkM=;
+	b=MuR8qeLzx/k+M3urYrvkqVZprq3RG4WU2XRSL7W6WFvBYWv3Z8bJ2bG3E2sO+WcMGrkQf4
+	rWbx+y3+LxBcjEfsI7oPHhdKGfaYXK+AdL8D5GhP8mLi8mh0HBiUqcptftP+nPqdCnG6y6
+	ufFoeH/fmux4lvMch1MwpuOv13Wh66A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1759743339;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MIKGvbg7G2meU14KSmH35tkTzGrasWbNJ/rdqPPFnkM=;
+	b=C+LvNU6Zk/GAl+9ljhy2UvDxGFr/zLXt4Tc6awd/oWFneELrA3Sq/L0CJB8T7bqVJ1usOA
+	jQNjNHnwjWw9PgDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5ACD413700;
+	Mon,  6 Oct 2025 09:35:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id uSFvFGuN42i/QQAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Mon, 06 Oct 2025 09:35:39 +0000
+Date: Mon, 6 Oct 2025 11:35:38 +0200
+From: Petr Vorel <pvorel@suse.cz>
+To: Andrea Cervesato <andrea.cervesato@suse.com>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+Subject: Re: [LTP] [PATCH 0/4] ima_{conditionals,measurements}.sh enhancements
+Message-ID: <20251006093538.GA66983@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20251002083701.315334-1-pvorel@suse.cz>
+ <DDB27AD5V8CC.HACBLFITNI9R@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: aerc 0.21.0
-References: <20251002083701.315334-1-pvorel@suse.cz>
- <20251002083701.315334-3-pvorel@suse.cz>
-In-Reply-To: <20251002083701.315334-3-pvorel@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DDB27AD5V8CC.HACBLFITNI9R@suse.com>
+X-Spamd-Result: default: False [-3.71 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:replyto,suse.cz:dkim];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 814AB1F7DE
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.71
 
-Hi!
+Hi Andrea,
 
-On Thu Oct 2, 2025 at 10:36 AM CEST, Petr Vorel wrote:
-> This helps to run all testcases on systems without CONFIG_IMA_WRITE_POLIC=
-Y=3Dy
-> (disabled by default in mainline, therefore disabled for some distros,
-> e.g. openSUSE Tumbleweed), if SUT reboots.
->
-> The downside is creating user account 4x instead just once.
->
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> ---
->  runtest/ima                                   |  5 +-
->  .../integrity/ima/tests/ima_conditionals.sh   | 67 ++++++++++++-------
->  2 files changed, 47 insertions(+), 25 deletions(-)
->
-> diff --git a/runtest/ima b/runtest/ima
-> index 01942eefa3..c8d0c6801e 100644
-> --- a/runtest/ima
-> +++ b/runtest/ima
-> @@ -6,5 +6,8 @@ ima_violations ima_violations.sh
->  ima_keys ima_keys.sh
->  ima_kexec ima_kexec.sh
->  ima_selinux ima_selinux.sh
-> -ima_conditionals ima_conditionals.sh
-> +ima_conditionals_uid ima_conditionals.sh -r uid
-> +ima_conditionals_fowner ima_conditionals.sh -r fowner
-> +ima_conditionals_gid ima_conditionals.sh -r gid
-> +ima_conditionals_fgroup ima_conditionals.sh -r fgroup
+...
+> What about creating a tool simulating sudo? I thought that was our main
+> goal. Using 'su' is ok, but this forces us to create a new user all the
+> times we execute a new suite, while our new sudo implementation would
+> create and destroy the user only for the specific session.
 
-Why not using multiple test cases inside the test?
+Jan suggested to implement it [1] ("changes uid/git based on parameters and
+executes whatever we give it"). I'll move the discussion under that thread so
+that we have it on single place.
 
+Kind regards,
+Petr
+
+[1] https://lore.kernel.org/ltp/CAASaF6yjdrLLVnehESx1TjsrB_z48nmN_2i585GPfkG3Vvg15Q@mail.gmail.com/
+
+> - Andrea
 
