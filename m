@@ -1,63 +1,65 @@
-Return-Path: <linux-integrity+bounces-7388-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7389-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E549CBBF04B
-	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 20:50:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28019BBF976
+	for <lists+linux-integrity@lfdr.de>; Mon, 06 Oct 2025 23:40:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DC5E3B5B6F
-	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 18:50:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B753188FFDA
+	for <lists+linux-integrity@lfdr.de>; Mon,  6 Oct 2025 21:41:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19992D480F;
-	Mon,  6 Oct 2025 18:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1616625FA13;
+	Mon,  6 Oct 2025 21:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="huyGJNgw"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="V5ItXtRd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9538523A58E;
-	Mon,  6 Oct 2025 18:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820C438DD8;
+	Mon,  6 Oct 2025 21:40:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759776615; cv=none; b=IwCHYSPmENPPAC4vZvEDJve7fLI+uBSKzGBDR4XUxzwBaX9g5zbswi/NGIg/hHr283THdSF6LibAliOy4pAcazkD+ezrvRFklfxMih6MYwZKlQm115c0aUOc0yB7RoXOAttkO6rErD3Crg8jMpgz81t9vFHwGHiZyecqeC+McaA=
+	t=1759786848; cv=none; b=JFg0n95JYLkOAeQSn+4tRKirBOyUjqZ1smXQSveoYSlBqdLn8msyrKG2nHaLkYAn1mOkbUmDo+ixg287cS/RYfVWyNJq8PayP0s6ihVCC4UqUbheAw9Q0pJvzpvvA4NLAC+xvdUwhavYO3rThZ5ITf5GQ3l8uplZX2qHL/tbFzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759776615; c=relaxed/simple;
-	bh=oYXN7rLD3gtjZiRSYbxun0bwTVmxYxH26vAytle1D1g=;
+	s=arc-20240116; t=1759786848; c=relaxed/simple;
+	bh=R7XJ2TwiqWioySK4ASyyWjFauTibf7eH+Ah4O0qelOc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sQ1Zp4knQSlLZfET9fn5o/cVoVnj65GMMvTzR+GqRwAJVKUgIHHl0wfgEMtS5PKLF3ViqOH+04qPudHmR03EPbL+a0Zzp+W8yB2fa947Lyj6S7JoNj5107qR1SzZ5/qE/oYsyDwDnIXqMc2NZdpMZJOBQeDqGtpC2PjthYLYpEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=huyGJNgw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82FBC4CEF5;
-	Mon,  6 Oct 2025 18:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759776615;
-	bh=oYXN7rLD3gtjZiRSYbxun0bwTVmxYxH26vAytle1D1g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=huyGJNgwS8oUZZCDdWvf7PVife/G+HjSgd6ai1LBsd2Osf5gJGQ/gB12rsrybsFsf
-	 0I5C+BgmBwX6sPoHTs7o6NFkgvQUNyEx8rBLoDomWfZ0NnG0qbFrMkcAWoC+URt/TJ
-	 NI0E9BsCKEN0KkgYeGMv1RlKQbw9OOlRERv+9d5+ta+dX7eUpd5OnSsWiNPbj793qW
-	 YYml5oQqCGyzrznclN8BHHgcO2r6HQt7Et110KFrkprCX1OAOaUAVBiwknSuKjkssU
-	 OXtv6R3VXrINSd1AZalqqW/H5ziHwvNpuBZZVxFXjUfDKG0u5o8wS04V8pouhfy7MX
-	 G/usjs+XAjqjg==
-Date: Mon, 6 Oct 2025 21:50:11 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Jonathan McDowell <noodles@earth.li>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=XLm5M6qLXMGkic05liJLrClpmP5RBKJ2ZGjbShKwQTDPpnxNlKlCA4ZZsGIfWIA6oUsmMirUd/6DM9zPl5f13Ku4uY32/Qtz8nkZtNJG4Gbb6ijlUOBk6pNTQsY1qEy86tz/uw3aLy2QovTXa86FC94y0CppzE3eyD9CHP9SQ5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=V5ItXtRd; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=nNVpGvBktBIV6LStDv6qPWdxU9sKQpVF+6HYIuoef9Y=; b=V5ItXtRdPH7mZRf/7Zq0xp3wum
+	jBbDngG7xBpJnFvh8Q7gofz96DMetMPLcYJG5wuDQYPVTCzQE9Cw/lch2OxGuDV61WZkELaJQNH7a
+	QGBQ9xLZ93BDvSB4ndIhMH/vU3Zh/NBdZek2Zi/3q+mzL6MOMei91C0KxLVj9PobkvAjpmdgCY6Hw
+	mL96x7v5C2nUen2JOxnM3y/mWKH6WDGBkD5OYI1MvKRFLmIFz5BsZ8Entm8QL8p0tdJ09171jAbXi
+	Z+e34steG9axVXvQ6s5CzDpA38R9EX8oKGm3wddZ0newHfmGmsSntRm/IYxaTtswn1hILG6ca03Kb
+	ERRljmUA==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1v5swh-003CRO-2Q;
+	Mon, 06 Oct 2025 22:40:39 +0100
+Date: Mon, 6 Oct 2025 22:40:39 +0100
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jonathan McDowell <noodles@meta.com>
 Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-v6.18
-Message-ID: <aOQPYwrGwZfP-GsV@kernel.org>
+Message-ID: <aOQ3V6M-wWQxxCWK@earth.li>
 References: <aOKTFv1vh1cvvcLk@kernel.org>
- <CAHk-=wiCWiDcLEE3YqQo78piVHpwY2iXFW--6FbmFAURtor2+w@mail.gmail.com>
- <aOOu1f1QWQNtkl6c@kernel.org>
- <aOPOZwp_inGui9Bx@kernel.org>
- <125ba81bb222cdffef05ef9868c68002efd61235.camel@HansenPartnership.com>
- <aOPzovsBYlH3ojTR@kernel.org>
- <aOP2DUj67yB0afUt@earth.li>
+ <CAHk-=whSe9AGigVydkwo=ewE6_GFTJ_rU=XzO=v1N1sWyfVmAw@mail.gmail.com>
+ <aOO3NKegSrUQ4ewg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,54 +68,55 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aOP2DUj67yB0afUt@earth.li>
+In-Reply-To: <aOO3NKegSrUQ4ewg@kernel.org>
 
-On Mon, Oct 06, 2025 at 06:02:05PM +0100, Jonathan McDowell wrote:
-> On Mon, Oct 06, 2025 at 07:51:46PM +0300, Jarkko Sakkinen wrote:
-> > My main issue preventing sending a new pull request is that weird list
-> > of core TPM2 features that is claimed "not to be required" with zero
-> > references. Especially it is contraditory claim that TPM2_CreatePrimary
-> > would be optional feature as the whole chip standard is based on three
-> > random seeds from which primary keys are templated and used as root
-> > keys for other keys.
+On Mon, Oct 06, 2025 at 03:33:56PM +0300, Jarkko Sakkinen wrote:
+> On Sun, Oct 05, 2025 at 11:24:09AM -0700, Linus Torvalds wrote:
+> > On Sun, 5 Oct 2025 at 08:47, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > The exclusive access looks debatable to me too. I think you should
+> > also require that the open was done not only with O_EXCL, but as a
+> > write too.
+> > 
+> > Exclusive reads do not make sense.
 > 
-> My understanding here is that the main specification about what's 
-> "required" for TPMs to implement is from the PC Client Platform TPM 
-> Profile. There's no specific server PTP (though there is talk about 
-> creating one), so _most_ vendors just implement the PC Client PTP. It 
-> doesn't mean a TPM that doesn't do so isn't TPM compliant, just not PC 
-> Client PTP compliant.
+> True, I agree with this.
+
+I'm not sure _reads_ make sense for the TPM device files at all. It's a 
+command + response interface.
+
+What should we do if we get O_EXCL and O_RDONLY? Return an error? Ignore 
+the O_EXCL flag?
+
+> After reading this email I realized also another issue with these patch
+> when I tested them sequentially building a VM for each commit ID.
 > 
-> Google have taken the approach in their Titan based TPM implementation 
-> to avoid implementing features they don't need, to reduce attack 
-> surface.
-
-If it is an internal product, it does not qualify for as an argument but
-good that you brought this detail out. I mean the action is the same
-and debate is really what are correct preconditions for taking any
-action.
-
-So I'll cover the next trial for PR with:
-
-1. I'll retain my existing commit with no changes.
-2. In the cover letter I can address the details brough by Chris with
-   the clause that Titan specific arguments are not basis for any
-   decision making, as it is wrong and does not scale given that
-   any possible company in this planet can have their own random
-   incompatible partial TPM implementation (and most likely there
-   are at least few of such).
-3. I'll link Chris' message to the email. I.e. based on other
-   claims in that mail we can already fully justify the action
-   itself. I'm just knowingly ignoring that list of "incompatible"
-   features, and remark that so that the process is transparent.
-
+> Without "tpm: Require O_EXCL for exclusive /dev/tpm access" applied,
+> there's a regression: usually a daemon of some sort opens /dev/tpm0:
 > 
-> I'm not aware of anyone else who has done this.
+> COMMAND      PID USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+> tpm2-abrm 771444  tss    5u   CHR 10,224      0t0   94 /dev/tpm0
 > 
-> J.
-> 
-> -- 
-> ... You non-conformists are all alike.
+> Without top patch this leaves /dev/tpmrm0 unusuable, which is a huge
+> developer experience downgrade as it is nice and covenient device
+> to try and do things. I.e. tail patch needs to be squashed and
+> the whole patch set needs to be re-reviewed.
 
-BR, Jarkko
+That's a fair point; I structured the patches in that fashion because I 
+felt the O_EXCL patch was potentially contentious and might not be 
+accepted.
+
+> And based on this I'm happy to postpone O_EXCL changes to 6.19.
+> Patch set just needs to be restructured better so that in-the
+> middle of the series patches don't break things. And also it'd
+> be better if this patch would be relocated as the first in the
+> series: "tpm: Remove tpm_find_get_ops".
+
+I'll spin a set with the tpm_find_get_ops removal first, then the O_EXCL 
+patch, then the other two, which I think fixes all the ordering 
+concerns.
+
+J.
+
+-- 
+... Nice world. Let's make it weirder.
 
