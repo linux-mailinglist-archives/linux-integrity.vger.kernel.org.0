@@ -1,115 +1,154 @@
-Return-Path: <linux-integrity+bounces-7392-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7393-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4023CBC0D08
-	for <lists+linux-integrity@lfdr.de>; Tue, 07 Oct 2025 11:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C821BC1C13
+	for <lists+linux-integrity@lfdr.de>; Tue, 07 Oct 2025 16:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E692F3AAAD7
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Oct 2025 09:07:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBA103E0D48
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Oct 2025 14:32:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27EC42D5C97;
-	Tue,  7 Oct 2025 09:07:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF752E03FB;
+	Tue,  7 Oct 2025 14:32:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="B7rpfU+S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mYgn04xP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7447E2D46D0
-	for <linux-integrity@vger.kernel.org>; Tue,  7 Oct 2025 09:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227E32C9D;
+	Tue,  7 Oct 2025 14:32:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759828071; cv=none; b=N4fg6zaxhrXiWW+kUql8PCu4PvuaBvf+EQjyzFSYviqGWW3YTsyKhQ4bpOLbdvjlnbQppVHy2HGl/amWZmL/PIKm6M9u3wtNhAqcNXofUCSehC/LERBtWHluB+X70UCzbN6r6dAyGngNj5mDZqtcba3FIM7eKPP13fbIgpfTVRY=
+	t=1759847544; cv=none; b=AXqJFk9UvknfUn4eZJaQMEKAvkzfDyQHo88RnpVtwrpCDOvVCfiRXhgLcaiS3heax5PJ0y5M3sOj2vXY0UzvJBx8W7V2S1TnoBVeepUS8JYoOPTtoR6/2WpYIx1ShGSBT5y8jfR1db8wmRZzCRyvoBju1/AFUU2WsxIIcAiRee4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759828071; c=relaxed/simple;
-	bh=ZHX+FiPSiE2E1Wigo8Og8gIZxYADFUEaJAsKoo/q/SI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qseRFjhyxgoN1YvizAkbSgScIZP8VYPHv4T1G6cAzyag/qABFJugQfpHBDKa29EyZ68dGmo6LypALxxv21OaNPbqG8kRX3efXr/9lZcwTrCuWSZU++aNSmNvvGqsJPrgn1CfF7QKRQGXLy1LEZxi/52JaDzdthLg5KZU3JTkECA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=B7rpfU+S; arc=none smtp.client-ip=185.67.36.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
-Received: from submission (posteo.de [185.67.36.169]) 
-	by mout01.posteo.de (Postfix) with ESMTPS id CB95F240028
-	for <linux-integrity@vger.kernel.org>; Tue,  7 Oct 2025 11:07:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
-	t=1759828059; bh=tLnL2HT54F+560rMBs/uFtu/cmzwUuzUU1HYryiA84Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:
-	 Content-Transfer-Encoding:From;
-	b=B7rpfU+S1vA6PeSETcuv2uIUilWTOZ/lZbeTqhuM1rETJQQkeVJXfnVxVR7OV4uuw
-	 1mQYvAB16+/9LuQj855Pt6JtVf44Eex15SsXAA4bO3lveoC6NMn+EbMi+a+EyfLZN3
-	 q2T14HuesnyUEvl9xXcWH6+055SZmEwVF5qIjZMZhjVSrfklTvFB1Aw8h05I6eZnrq
-	 uay72vhxGglmUCW5hsseURHTkNcAFUVNslFR/42lsNZI0vf/A/33MiKwkCJnpoUdWu
-	 I74NMpCT/Q6ixmVhIlfdUJXmw/vrAitJQ0UfiOE3EA7at36eurV5yqbR4KaAJ3RN11
-	 GEL7LU4GghiYg==
-Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4cgqzG5MRZz9rxD;
-	Tue,  7 Oct 2025 11:07:38 +0200 (CEST)
-From: Shahriyar Jalayeri <shahriyar@posteo.de>
-To: jarkko@kernel.org
-Cc: shahriyar@posteo.de,
-	peterhuewe@gmx.de,
-	jgg@ziepe.ca,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: infineon: add bounds check in tpm_inf_recv
-Date: Tue, 07 Oct 2025 09:07:39 +0000
-Message-ID: <20251007090736.17942-1-shahriyar@posteo.de>
+	s=arc-20240116; t=1759847544; c=relaxed/simple;
+	bh=SNZlQduDmkrbb8A9OTpcsD2pm0v3K9oAEfqQdtCbwkk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g1E/kUHDuhBSZYdA+C63Gj4lE6hD6nPkLbepD85dgBOeyYrdLVtB6N3KxVRYW50Kz4NwHKJujioZJ85VllLaIaPniiDmMoxkvCzT4med8UOOsjb2WpAPi1P5EN1KV6AEMdQqWOrc+njoOEwFNFucbvyWbcOfGaN8jGwIC1srwWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mYgn04xP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94EF7C4CEF1;
+	Tue,  7 Oct 2025 14:32:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759847544;
+	bh=SNZlQduDmkrbb8A9OTpcsD2pm0v3K9oAEfqQdtCbwkk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mYgn04xPDk5/JYXQq4HnF4LHTeOIYcGoQ1hoDnnxPp5jocvXmaM2sssLDZ8VHC0pN
+	 XCQYLOlS178QWUg2/fTZdaOwVr64L/m0uTDV+FyNCjRrPRDS/dRoz2iiti2zuzkdNa
+	 R1Numl5ouDv+l0qOOkPNUMkHUQ82WBsOaPawIAvP6Zc+EhVOeX4kDWEGl7brSTFIDp
+	 HSim9DMg5z8PrN3moa2E6iBAl/2Y05S31G7lt9vLp8+ndUIcntmbJQj4f805jN1R+2
+	 Q/vFt2/H1LlzskodOBjhq2CKabuyUUnc1YmqGJ9MCwnfomb4BRRbgnqnf+SOP43byR
+	 mUhpF2Q+CfTjg==
+Date: Tue, 7 Oct 2025 17:32:19 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-v6.18
+Message-ID: <aOUkcytS21zQs71I@kernel.org>
+References: <aOKTFv1vh1cvvcLk@kernel.org>
+ <CAHk-=wiCWiDcLEE3YqQo78piVHpwY2iXFW--6FbmFAURtor2+w@mail.gmail.com>
+ <aOOu1f1QWQNtkl6c@kernel.org>
+ <aOPOZwp_inGui9Bx@kernel.org>
+ <125ba81bb222cdffef05ef9868c68002efd61235.camel@HansenPartnership.com>
+ <aOPzovsBYlH3ojTR@kernel.org>
+ <aOP04Yy3m23E4kjf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <aOP04Yy3m23E4kjf@kernel.org>
 
-Add two buffer size validations to prevent buffer overflows in
-tpm_inf_recv():
+On Mon, Oct 06, 2025 at 07:57:10PM +0300, Jarkko Sakkinen wrote:
+> On Mon, Oct 06, 2025 at 07:51:51PM +0300, Jarkko Sakkinen wrote:
+> > On Mon, Oct 06, 2025 at 10:33:40AM -0400, James Bottomley wrote:
+> > > On Mon, 2025-10-06 at 17:12 +0300, Jarkko Sakkinen wrote:
+> > > > 2. Null seed was extremely bad idea. The way I'm planning to actually
+> > > >    fix this is to parametrize the primary key to a persistent key
+> > > > handle
+> > > >    stored into nvram of the chip instead of genration. This will
+> > > > address
+> > > >    also ambiguity and can be linked directly to vendor ceritifcate
+> > > >    for e.g. to perfom remote attesttion.
+> > > 
+> > > Just a minute, there's been no discussion or debate about this on the
+> > > list.  The rationale for using the NULL seed is clearly laid out here:
+> > > 
+> > > https://docs.kernel.org/security/tpm/tpm-security.html
+> > > 
+> > > But in brief it is the only way to detect reset attacks against the TPM
+> > > and a reset attack is the single simplest attack an interposer can do.
+> > > 
+> > > If you think there's a problem with the approach, by all means let's
+> > > have a debate, since TPM security is always a trade off, but you can't
+> > > simply come to your own opinion and try to impose it by fiat without at
+> > > least raising whatever issue you think you've found with the parties
+> > > who contributed the code in the first place.
+> > 
+> > Ok fair enough, it's quite context dependent what is not secure and
+> > what is secure.
+> > 
+> > What I've thought, or have planned to implement, is not to discard null
+> > seed but instead parmetrize the primary key as a kernel command-line
+> > parameter.
+> > 
+> > E.g. "tpm.integrity_key={off,null,handle}" and
+> > "tpm.integrity_key_handle" to specify an NV index. The default value is
+> > off and I think also that with this change and possibly with some
+> > additional polishing it can reappear in default config,
+> > 
+> > This out of context for the PR but I will take your comment into account
+> > in the pull request.
+> > 
+> > My main issue preventing sending a new pull request is that weird list
+> > of core TPM2 features that is claimed "not to be required" with zero
+> > references. Especially it is contraditory claim that TPM2_CreatePrimary
+> > would be optional feature as the whole chip standard is based on three
+> > random seeds from which primary keys are templated and used as root
+> > keys for other keys.
+> > 
+> > So I guess I cherry-pick the claims from Chris' patch that I can cope
+> > with, look what I wrote to my commit and adjust that accordingly and
+> > finally write a tag message with summarization of all this. I exactly
+> > drop the arguments with no quantitative evidence, which is probably
+> > a sane way to move forward.
+> 
+> Personally I think that once there's correctly implemented command-line
+> option, the feature flag is somewhat redundant (and we've never had one
+> for /dev/tpmrm0). And it will help a lot with kernel QA as you can run
+> tests with same kernel image without recompilation.
 
-1. Validate that the provided buffer can hold at least the 4-byte header
-   before attempting to read it.
-2. Validate that the buffer is large enough to hold the data size reported
-   by the TPM before reading the payload.
+I don't really see any possible security issues either with null seed.
 
-Without these checks, a malicious or malfunctioning TPM could cause buffer
-overflows by reporting data sizes larger than the provided buffer, leading
-to memory corruption.
+It's no different as per remote attestation when compared storage keys.
+In a power cycle it's like same as per TPM2_Certify is considered. It's
+pretty much exactly performance issues but depending on deployment.
+Sometimes storage key root would be probably a better choice.
 
-Fixes: ebb81fdb3dd0 ("[PATCH] tpm: Support for Infineon TPM")
-Signed-off-by: Shahriyar Jalayeri <shahriyar@posteo.de>
----
- drivers/char/tpm/tpm_infineon.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+I really tried to dig something else than exactly perf stuff but was
+unsuccessful to find anything, and I've actually done a lot of work
+at work on remote attestation so everything is also somewhat fresh
+on my mind.
 
-diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
-index 7638b65b8..8b90a8191 100644
---- a/drivers/char/tpm/tpm_infineon.c
-+++ b/drivers/char/tpm/tpm_infineon.c
-@@ -250,6 +250,11 @@ static int tpm_inf_recv(struct tpm_chip *chip, u8 * buf, size_t count)
- 	number_of_wtx = 0;
- 
- recv_begin:
-+    /* expect at least 1-byte VL header, 1-byte ctrl-tag, 2-byte data size */
-+	if (count < 4) {
-+		return -EIO;
-+	}
-+
- 	/* start receiving header */
- 	for (i = 0; i < 4; i++) {
- 		ret = wait(chip, STAT_RDA);
-@@ -268,6 +273,10 @@ static int tpm_inf_recv(struct tpm_chip *chip, u8 * buf, size_t count)
- 		/* size of the data received */
- 		size = ((buf[2] << 8) | buf[3]);
- 
-+		if (size + 6 > count) {
-+			return -EIO;
-+		}
-+
- 		for (i = 0; i < size; i++) {
- 			wait(chip, STAT_RDA);
- 			buf[i] = tpm_data_in(RDFIFO);
--- 
-2.43.0
+Still rooting to perf, immediate action being default option disable,
+and long term action being replacing the compilation option with
+kernel command-line options. I.e., I'll stay on track what I'e
+been already doing for some time :-)
 
+That said, my PR cover letter (or the tag message) did suck and
+I'll just address next during exactly why something is or isn't
+an issue. I think this is really good outcome for everyone in
+the long run (because everyone will get the outcome they were
+looking for).
+
+BR, Jarkko
 
