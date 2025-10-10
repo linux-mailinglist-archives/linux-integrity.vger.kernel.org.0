@@ -1,109 +1,141 @@
-Return-Path: <linux-integrity+bounces-7414-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7415-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC094BCDC15
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Oct 2025 17:15:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D6D1BCDE10
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Oct 2025 17:53:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E8DAC500A23
-	for <lists+linux-integrity@lfdr.de>; Fri, 10 Oct 2025 15:12:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E49611886A71
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Oct 2025 15:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BE5B2F8BC0;
-	Fri, 10 Oct 2025 15:12:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B414126A0A7;
+	Fri, 10 Oct 2025 15:51:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BybgFjSK"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ZHgOGbbe"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97112EF673;
-	Fri, 10 Oct 2025 15:12:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02922609D9
+	for <linux-integrity@vger.kernel.org>; Fri, 10 Oct 2025 15:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760109149; cv=none; b=jBgBHg1Et7UgtSGP+kqIiS0OCCD0RIBZhrSr2aMCzsfKA7GvjB11NupARWnRH93vmFKLL9lP1Np90OmRJBY6pCcO+tqSRIWLIcENfXCR0Ky9d0VfXSQJ7uQZ/Nq9luC/2PECKlAp93GK/4Zpk56nKJVvriBQFI0UnZA9+ATAl1Q=
+	t=1760111494; cv=none; b=h+x74mqlgZrkRKq1Adn16Qmd+cXzgLpUdLTt7RynRwzjsKXl+BVTag65jbAWq6PqnSevARiGB9IgQlJJorucGY0alyLLaRRu0/3iM6cQXoqyJlHHNN32dgguvEGiAV0ls02j2N56X6UT0wg29bRoYEXA2Bn8KRyBte07qI4OvKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760109149; c=relaxed/simple;
-	bh=yshfDsTOOWK6gqSvXr7KOoCHt5sbdAxuEqM16sfOhz0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j9a+zcXkcAN+XyD9p13pGx2MWj/GXTlsu2yNQxftMGId8DxljPJlGm1vxkKmxVfx+oVdTk6NIZ7dBeu2S7HTChWRCUVBvvMpUkrEm6x3HnI4ijZDKVE0nyFNffqhjbgBoXXYcrOgS9QPw0ZSoFlCfS615OmemVVL2vljjRh7SjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BybgFjSK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64D2BC4CEF1;
-	Fri, 10 Oct 2025 15:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760109148;
-	bh=yshfDsTOOWK6gqSvXr7KOoCHt5sbdAxuEqM16sfOhz0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BybgFjSK9i2YumvD5/RNEp3khQ03alvRBzSCVbrUtEV4j/CqANuE382VIvazr/lOI
-	 ad+sK3RK8Sk16oDu4VfPbTI338ejwx3JuR7U/dor2EP5+iIPxcboDxbpwirjUtLyy8
-	 CwvdNBo7pk58CXG3fYve9+buYvQsfROYyIC1buxDBxzXlPdC7Y8F6bviKM/GWiGc8H
-	 G9aE3urx2neadGQ9szCxNuvZ6ajdJcr9f3gnt4YQmwOpju7wzvMYWLP2+fKNwDpRlN
-	 LBYveurSldBOIQFRFywYLchHnUc7KGenEM1lJr8YbTxrrfynFbMt149/XC2FtOzrid
-	 zd7aneQXB5KQw==
-Date: Fri, 10 Oct 2025 08:12:28 -0700
-From: Kees Cook <kees@kernel.org>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-hardening@vger.kernel.org, linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] keys: Replace deprecated strncpy in
- ecryptfs_fill_auth_tok
-Message-ID: <202510100808.E634CF9@keescook>
-References: <20251009180316.394708-3-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1760111494; c=relaxed/simple;
+	bh=XDEDQFIBQ5A8m0eHH6XygH67a3FLRj7kfzfNZO/Y+ks=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=luhAGutpJLXwDCg/peeaUiYK+PiwuqVdWUKVvN1xdNIQ/VKAMzfZmbLKXXx+vSRJB+GaJTt1o2782YfAJMxRieARm6GfYQrPttEp6xoFjYpWN3GncMP6CjWLxPyYO0q0jkI8gJYGZs81BRAeUwtHnOfwbtdr2VwzucVXJ+8QNNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ZHgOGbbe; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so371893966b.3
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Oct 2025 08:51:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1760111491; x=1760716291; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hMHZynW42pdW0SGBO2CIy8IPA/iqePnhTXX2tj/DjpU=;
+        b=ZHgOGbbe9XafYiaAAtKkYOU9HwumgXPYAoBVgoMm8ntQaDeeJZqamZX25Glewurto3
+         t/SHgt01eOWPz9QZyms+Xr/WmyeWjY4KWv6Dh3mCWJ5VBi2KVrGxvp4eS1HJOaR26hvB
+         vH6KRGW8Nh1z/JEvkcBb/JI0/+37d2Ec65uNY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760111491; x=1760716291;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hMHZynW42pdW0SGBO2CIy8IPA/iqePnhTXX2tj/DjpU=;
+        b=BBSKjnr3LZ9nKkXavPYqx1nTNJpVjmDb5T857/E+DQA+8vgdsahub9PNpYwUopRcn8
+         zsXpX/y9gtPfoxtIwGsEwKQk0CBjCsgDV41kD6wqrSFrJYyZka+sOf23CqTzVXHryAld
+         9J9gZtQigBRk1Ebp6gaO/Ieo+CFz2hWKTuEI3cmCMO0nveD80MemtTWP39+8vSkpu3qp
+         GMq90Z7tNOGLYWR6tsE3TLasiOBwRpmRaVc7bkwYZ38a4ZLLHcNfyBhm8wyEdSciwX80
+         rUqNY9nbL8XYq5d1CQ+xpcM/x+xJSN7N4mBXXES1+li/5AC7J7Oad1NlyZ7wm0Gr/jcY
+         g/Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCWmQJbMt+iRJgahPBSvg5MD+RrSOWMZ1XfmkO8qeqwSQOIDBmKw2fsLP/hL3ZwY21JqOGo6y1UoQfetI/FOQaU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywnj8IMMJ8+SLuCJEawZoGJREy7k3w6PKrbhMY257e9rHhRY6lF
+	lAWjRAE1/hkrBulQR0UhQoR0AAiHwtRYU7e1oJX61kWxnOyX7A+ma2m1ienS+Gi+Glju309eINe
+	x+o6K5Dk=
+X-Gm-Gg: ASbGncufQDQVlA1FnK93y7eDM4C+VtkBOp2rmLHarWOj5hR9Q/vtP46BZrDc7IyQ601
+	mBziMwjyRbmRGorzCw9/PVzPjxzdUio9I5pFZPvFPsQXDqH+R9DJjcWXQEXHcLCOhBGSkUm9s6g
+	atGS1aUFEtu8K1OddCRq6z+QxbTY6pCBoSzS71NzbHIaGB4qcYfU4qMDlflpd7FJSzVwxO3/u4A
+	GIgEjmi35zuOVHJL0gIQMqujlSTdIbzI7/li1879XkUVHgciybSi3i4IgjrfAhMthsJz26O5ep8
+	5qe8O/L+RYAgcI62aRI61ZzeSUnJjIhvrHTGLouPvXF4NcFmAIUCrYZTF8/a65xHektt58vxNnE
+	s9r2KOnR+LQTjre3ue39DeUacRX7bcs5ib4nwIxLCe7z60OOxC3vJqqsnZzNtcspNVgUkWsmt6o
+	AlZz9boBQFimLdLtcE/LOkm/d2L1nJL4KA+jMA
+X-Google-Smtp-Source: AGHT+IEYB04uKLTuLxj8mqX2Szt2dQ+GQJgC10d7/MkJhCFVNx4CznwR2bpNQce7ljvvaov6SndVCQ==
+X-Received: by 2002:a17:907:7f8a:b0:b43:2a3c:c74a with SMTP id a640c23a62f3a-b50acd28ef1mr1143900066b.60.1760111490665;
+        Fri, 10 Oct 2025 08:51:30 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-63a52b715ffsm2640438a12.22.2025.10.10.08.51.27
+        for <linux-integrity@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Oct 2025 08:51:30 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6399328ff1fso3769254a12.0
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Oct 2025 08:51:27 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVVkaKp/31ZGhH3NlmPY9yJZ5ryVp/ukeD02nyBlq2sFcHYViVvaqEutpFx/DrFTSZrSzMdl951+luHJKLWooo=@vger.kernel.org
+X-Received: by 2002:a05:6402:42c3:b0:639:e7f1:92ef with SMTP id
+ 4fb4d7f45d1cf-639e7f195dbmr9233647a12.19.1760111486075; Fri, 10 Oct 2025
+ 08:51:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251009180316.394708-3-thorsten.blum@linux.dev>
+References: <aOibAOKu_lEsSlC8@kernel.org>
+In-Reply-To: <aOibAOKu_lEsSlC8@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 10 Oct 2025 08:51:09 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whUUZpENHKMrrVQwqfBgP9Lm=SxW+a3WmoxZR3JObdrUA@mail.gmail.com>
+X-Gm-Features: AS18NWDVmzykydf7s6nuNWo79bD8III-oyk_dOxNA4c_F8d-omvq9FosXPkL62U
+Message-ID: <CAHk-=whUUZpENHKMrrVQwqfBgP9Lm=SxW+a3WmoxZR3JObdrUA@mail.gmail.com>
+Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-v6.18-2
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, David Howells <dhowells@redhat.com>, 
+	keyrings@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Oct 09, 2025 at 08:03:17PM +0200, Thorsten Blum wrote:
-> strncpy() is deprecated for NUL-terminated destination buffers; use
-> strscpy_pad() instead.
+On Thu, 9 Oct 2025 at 22:35, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-v6.18-2
 
-Remember for strncpy->strscpy conversions, the commit message needs
-to include:
+So I've pulled this, but I'm still unhappy about the explanation.
 
-- how did you determine this was a NUL-terminated destination?
-- how did you determine the need for padding or not?
-- how do you know that final byte truncation is not a problem?
+You tried to explain a one-line single-character change in that pull
+request, and even in that explanation you spent most effort on
+dismissing other peoples concerns.
 
--Kees
+That one-liner would have been - and is - sufficiently explained by
+"it performs badly and breaks some configurations". There's absolutely
+no reason to then go on to describe how *you* don't care about those
+configurations.
 
-> 
-> Link: https://github.com/KSPP/linux/issues/90
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  security/keys/encrypted-keys/ecryptfs_format.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/security/keys/encrypted-keys/ecryptfs_format.c b/security/keys/encrypted-keys/ecryptfs_format.c
-> index 8fdd76105ce3..2fc6f3a66135 100644
-> --- a/security/keys/encrypted-keys/ecryptfs_format.c
-> +++ b/security/keys/encrypted-keys/ecryptfs_format.c
-> @@ -54,8 +54,7 @@ int ecryptfs_fill_auth_tok(struct ecryptfs_auth_tok *auth_tok,
->  	auth_tok->version = (((uint16_t)(major << 8) & 0xFF00)
->  			     | ((uint16_t)minor & 0x00FF));
->  	auth_tok->token_type = ECRYPTFS_PASSWORD;
-> -	strncpy((char *)auth_tok->token.password.signature, key_desc,
-> -		ECRYPTFS_PASSWORD_SIG_SIZE);
-> +	strscpy_pad(auth_tok->token.password.signature, key_desc);
->  	auth_tok->token.password.session_key_encryption_key_bytes =
->  		ECRYPTFS_MAX_KEY_BYTES;
->  	/*
-> -- 
-> 2.51.0
-> 
-> 
+But lookie here:
 
--- 
-Kees Cook
+ 8 files changed, 137 insertions(+), 199 deletions(-)
+
+that's the actual meat of the pull request, and it gets not a peep of
+commentary.
+
+I'd also like to point out that Microsoft spent *years* trying to do
+the "we require certain typical TPM setups", and people complained
+about their idiocy.
+
+For all I know, they still push that crap.
+
+I would certainly are *NOT* that stupid, and we are not going down that path.
+
+So when it comes to TPM, the rule is not "typical cases work".
+
+The rule is "if it causes problems, we acknowledge them and we avoid them".
+
+Thus the whole "disable TCG_TPM2_HMAC" really doesn't merit this kind
+of long explanation.
+
+In contrast, the *other* changes are probably much more interesting than that.
+
+             Linus
 
