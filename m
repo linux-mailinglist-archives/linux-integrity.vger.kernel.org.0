@@ -1,79 +1,79 @@
-Return-Path: <linux-integrity+bounces-7477-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7478-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47D19BEBBF9
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 22:49:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16D67BEBBCC
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 22:49:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D42674F25C8
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 20:49:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7263319C70A3
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 20:49:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40EF8277C98;
-	Fri, 17 Oct 2025 20:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092CD2620E4;
+	Fri, 17 Oct 2025 20:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="bnJSKTOP"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Wjxmixrb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C9D263C8A
-	for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 20:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4CA2773E5
+	for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 20:49:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760734149; cv=none; b=d9ahPnWoW8UowaEQeIYo2P/S1WKFcStXmD2PbUXciOqsRXcrTm7Tvy/5a/gYyQn0uNVBp4zmMn7996zkjbHzMtbn/3HVA2Cpd6SBuSX5WGIsL4e5IGDg3KHOGbBIwT202ZirstJ/PV7ZxLJLULduA++/qMzh71aGzqRbbgEfmw0=
+	t=1760734151; cv=none; b=iCkAy8WYW+GDAJJe5n2THbWjyqLdboIZZ/+oeb7O+Hz9RdMqiEsR9l9o4KfX12TmXIH05PC9cuWPn2s7GM/jsbKgwYtSkQV502dEAJeziMaPBlzheRNaf8kux3NchldAxMSNRmMr123Y9A6tBukuXgcXe5M5v+Ej0Jnlv+Ufl1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760734149; c=relaxed/simple;
-	bh=ErnEjTlP2oL3lgKe6cM77ZFrK56hTD14qS7xELtvXqU=;
+	s=arc-20240116; t=1760734151; c=relaxed/simple;
+	bh=1c4n6HtJDdqC2fKKtAAQ4HuGj3ytXevRhgSdgXsKw9c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ii8Lx6mrw1zQdNXf6nmVKIwG9N69a2GHhO97N8AASU00CyilfVrl6+NQKOe99Glrty9i3MyI5YQ1jKlikhc5lTKHfBgK9vRwjKUA4tExC054En71v0uwlSFK57tdRBR1RsFyoS3UclVtDAu8m8lAURSOCACUcCTkx202HnASxCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=bnJSKTOP; arc=none smtp.client-ip=209.85.222.180
+	 MIME-Version; b=ntEwhDS4zqCZm/sp9g4tc5CuhLyeCw1LsyXQ+Dt/Kj1a6QxNSVfb7pUWqkQB1pRMTVoKjI4x6oW4aVTQh9wSpjm2imvNTfF/NCUEXrlstvphyKrpEotn1EVgyMYchjk9ueXeE4y2FRaHyxAq59or33ToK4PIzxPmvWfGtJa1jgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Wjxmixrb; arc=none smtp.client-ip=209.85.222.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-88e68c0a7bfso464333685a.0
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 13:49:07 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-84827ef386aso279487885a.0
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 13:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1760734146; x=1761338946; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1760734148; x=1761338948; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MoEmhYC6PZh0/oZ7DQlj7GDuJDMxQv+wwBLqgTr2Qyg=;
-        b=bnJSKTOPjm+/8O8ZR43/JD7gtM5BgGsKS1p4apTDr4NNmzVvADp+KRZAgTTSjKeGGx
-         EFZhUXirnQ+5mv3RurmHWJNqFt/EBrLLKyxSj3EyPZXlBXBrxaRiuXnIZF7vss9MTptT
-         iiSpRupjsBAo7Q2+tL5Xg/+mdCC159qycpt666jlzY8VVC5fZIiFqGDnKD1j9FHHFWxB
-         q6VWFbTDnplRuUImv6AzIAkdzrwvQBfo2GrZQ52m2BL6OuU0KOursvySbXjfmkZppZ07
-         XydsBzoRKpMZrBjr7Ug0gmL1kRJ/iYfCNbVNjyVA8RvJM4RT/v/LSgj9tK5M5oRhJLtG
-         kcMg==
+        bh=ljMZa0GwDl82RYjdEHNE/O8/cKSjuAH/npQsD2B0C1k=;
+        b=Wjxmixrb277PgO07uS4O8Ncyy/IyQytPXahJrhcDUW/GsCCimm4+LUbTbJ21+uGOLB
+         f39a+jIkP6hfxR4ud9Jg2BVX9Vi2YgYtAagD/d7VEG3oUCIElZqJYSNY4zP5KOrOVUZK
+         k4BMqh+UmsvRkP0afXAHcbN++/Kbprm2rk29f4YDGUrf6dCMuLyzw/OLR/5fxwRGE7Gh
+         gET/Da1ee0G9t2t2ibjVGF5RrWu+pfCSBQ6zkAJjVBJhhnaKENsCVAFFPcjCxjE91841
+         UpBMCrtzEDY2KpYj1CtrKSp7sF+E3wxHuMvA/Q8E3PtqvyE/5CKKr255oNUbU8J30Ge1
+         aA6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760734146; x=1761338946;
+        d=1e100.net; s=20230601; t=1760734148; x=1761338948;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MoEmhYC6PZh0/oZ7DQlj7GDuJDMxQv+wwBLqgTr2Qyg=;
-        b=Msx9ImBx4R8AsPBJ72/rjJTak6H5x9Acn1nhNq98y6xd/qD7J2W/FPHURQ61YRox0p
-         BlSWmxlP3sxJvzGt53wFVXe5JCBjJIlGukvAFc1ko9yDJdvKZfdhTzrHCnzkKeoka7iB
-         +nPo65Ubm8MPj3Pyml9UlcB3PfseF15/pTsxG0qekjpco2BDWjPWo1O9FuQISbCLM2yc
-         9VS8YR1W6QnNxyq6fAi2q/yW0bfu22sfJ/H5eI04B/1+Dg1tVywbaYX9YhQhwsVwkg0h
-         JK1rZpeLxl2P4Ck11YNO/wiHcenrQ3O8tKcAnvaL10UH/A8jcU8Ag13RuOx0yIhLwUIi
-         Cq4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXzG+b9r3kfsnKpC9XCB97xj+MqLPK4viSBlG7iFeClq1gUaN8TwkBXVFJo+KIyNlhrq+c0Aw6F1nRM4GbM/Ro=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzW20ES4f+RjttZeimsjrEbCNf0R0+B4V4FbdHKrWFyPxGog+R/
-	/Q8BuZhI4wPplDFrDDxigVLbWZ1kyjOKjqgpk1i0268WbIDMyQ8sobyIogtPH0mr1g==
-X-Gm-Gg: ASbGncuNSEwBa4n6Vw16MAy1m4mflhhIZ9blGsrpljD9h+z7e6oyndLTD2X4wzH8zm2
-	YtA3Azt/CYrtPHVchkHgWZryuTR/PHTTnpx1xCses9EgVTVWKdV//dfI98y3zzRSwQ9NvnkWiS/
-	MbaMcLd5jQSltFNzf+JtVOWhBt1IZH6llcGQ56t//JYAiSBpkAXLrBuCble9IvhuCdiLdBDpzzV
-	3uNTEfWK6YlYW9zUf7PS4jRktvb3s7AHp5csO3EF1Oh8swjmKZ44cBRQua4q4WlSAJQJcorte2l
-	IHT7Ekq/nWO++QxzQFolpOMHWsZhJsfzl/TQ93YiLI9Jrj1yoWZnKuG1SSFEInxitsU6jLArdaU
-	lgVqRCryczHRjIxfi7i11aAqW5jrceCqr5yMHDcNmlGJ5Q3yEZ7PcriqMhoYedoiJqZxu1MY+RR
-	3HTDGYpMzeIn5PIUxzCmwSYK/hh0U/vQrmMJgHmyFm7mPex2Z9u9m+4Wnt
-X-Google-Smtp-Source: AGHT+IGU9MrpopUz/Xf/ETZZmknqUgbSRpgllUgKHyesHpJWr1fGTVcgkNtvoeIK4GEUaZ6y4SIxXA==
-X-Received: by 2002:a05:620a:19a0:b0:86f:40d1:642a with SMTP id af79cd13be357-8906fd18352mr665016985a.46.1760734146211;
-        Fri, 17 Oct 2025 13:49:06 -0700 (PDT)
+        bh=ljMZa0GwDl82RYjdEHNE/O8/cKSjuAH/npQsD2B0C1k=;
+        b=mzNGK6f24Ue4KUMDy9PpAgFQk4SH99xU9KrwCY3QO8bmQ+Z3dvKse/QRT0lX60A045
+         ZK814S+CtMTddd0Jahn83x/Le+8vzb5oubgf2aylJnJeBYeYkeF7ZYvAycHRK+ODabS4
+         p4pGLSqYvEd+spAbLogcbjwm5bHrD7myUSNiVBk+uOcywYV/HpyKWcYwbmj0IAl1wMHt
+         2sw7fZ7Wft28VHVmsfvrAz+p9niEpvyyYZqnfjsYbTmGL5byaPiBuw2/SEnSuntBpIj8
+         RamDBPqQsuhgQ5sKZf9pX41Kt38cK5CEwzu+rWmwGXs16ocwKOf4pbhdCEbUwzQibjgd
+         Lz4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWW888rZTI+n3Q/fzBZr6Nd2K1QY3GNSrROmprxDebzn26t8RusqQ3/xadF+OyG1Y7SoekefY8lZ5hPIjvp4NA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhioCzSKDwlFJ7Q98tZPC0BuouQY2yS3QM9EqTQYkeSNzqAsPy
+	bhvSJjh1pihQQ07RkMQ36U3y5IBBGMDnMz46wnSJedvDZHN1Qt9sGv+huwqt9Oqx9g==
+X-Gm-Gg: ASbGncs+6pm3HLdOhBxN2OTGHqzOp0azuDovg1LDdBdhyN0xKu63w4jocqA+aTeDHl9
+	ULhifq7wEQ6cLv+EMAr/+9TNBSBrZWzTSn1XEayOx3JwMOe5U1zQPxmryJPxTCHUnea4IrrwYbz
+	bZOfISn6A8+u5StaPblQBUVi4xMWNnAI8/dKjgVdusNXfApVyrRFURagd6ZFrYzhDG11fJUGcYc
+	GH80YkDFAJD9G3Ldut3kblmxO2WgBX9PdwtrlK1zXfBJk6U2r8whJnZtMGw1qKXsWu2F3hqhx6H
+	chVlZa2QpzHbIAnoE1YOuyBAmQn4t55zcNP+kwZamy1geWCvBZn4iNN0YJFwzRi8M3gRO4EQRqL
+	7duEfsszJisxhoQiKCsO2LC6YwwsodMMVcVA/RpKMsvKYM9tl68G2PEc7L6MbrbfZx4m9ULZYDK
+	2zf5YLgtfRCkuA7eUW9vG3yuSUyhaC4nI/BKkpx9mCsx8G/oJwrn4WuC3M
+X-Google-Smtp-Source: AGHT+IHhzWyNHwMpoeOG9JHmS//B0vnVOftEBR8ayv9SBrvTL89azet5ERhRw45Rx+d1h+3BfIfn/g==
+X-Received: by 2002:a05:620a:19a0:b0:85e:d345:a088 with SMTP id af79cd13be357-8906e8aff78mr659912585a.11.1760734147999;
+        Fri, 17 Oct 2025 13:49:07 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-891cc8d6112sm43952285a.5.2025.10.17.13.49.04
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-891cf0af4aasm42716085a.39.2025.10.17.13.49.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 13:49:05 -0700 (PDT)
+        Fri, 17 Oct 2025 13:49:07 -0700 (PDT)
 From: Paul Moore <paul@paul-moore.com>
 To: linux-security-module@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
@@ -90,9 +90,9 @@ Cc: john.johansen@canonical.com,
 	penguin-kernel@I-love.SAKURA.ne.jp,
 	nicolas.bouchinet@oss.cyber.gouv.fr,
 	xiujianfeng@huawei.com
-Subject: [PATCH v5 08/11] ima,evm: move initcalls to the LSM framework
-Date: Fri, 17 Oct 2025 16:48:22 -0400
-Message-ID: <20251017204815.505363-19-paul@paul-moore.com>
+Subject: [PATCH v5 09/11] selinux: move initcalls to the LSM framework
+Date: Fri, 17 Oct 2025 16:48:23 -0400
+Message-ID: <20251017204815.505363-20-paul@paul-moore.com>
 X-Mailer: git-send-email 2.51.1.dirty
 In-Reply-To: <20251017204815.505363-12-paul@paul-moore.com>
 References: <20251017202456.484010-36-paul@paul-moore.com>
@@ -103,164 +103,401 @@ List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5079; i=paul@paul-moore.com; h=from:subject; bh=gwoUolnGu0iyXZybPYEg8kunGtOfuXadxit1lO57m6A=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBo8qumJ6O8yDoyDBKm1OgBDdANu72h6bRjwW2XF m8D3x9XqW+JAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaPKrpgAKCRDqIPLalzeJ cx/DEACvMDuWKdEgxtP+0o5owt/8DJRlPic6M0fizDPEX0ozXCLs+Xr0l3vPdyu5PUq2s5R11cK m0HAk7a4v8XEcbP7UOZcj5blHg4Qqy7pb2XNdT9w59+R6N95L0E6VAplYHXibWbSACfxVDfZOE4 Bc5u7zbIyMCMJwp+cWUm3Z+yKyuYzw6jyJpUKuk06ZtvDebbFX9AVDFAQQpzbZW+nO1YSgJ/fxG gkc9tc0FFq+KASrhMgJjOJSaxCU3Hoxj8vNIgZjcZGe8Oic2gRXpQc8YUlfqMoB3m87M0ainv4d VHCjDJK3suI/ihbKIDLLmoK5zH2qGXpBQVmcoqP5sSTCd5/qu45YvtjUh5VzphQ86ZE8ZA23pY3 Kf58/3aTvzXmbxff/kYHivWSQN3lgG3ab9dY32DY6z3IvldkEpZIDADHciHuD1XtirwLuXckI1I RKcu7B6LweUZbePusx9ODtT/yOEKYSw8Rz7GKnRsShFXbVGMIwJBS2jiA770i6rEuAD0F3bIcbg Z3BRKvHVANlmMs9D9mTQ9slvJhT11SxayflYtmVBYcv44jELr46coaIBfWE1ZaBPfjYcocBd0qb S1zZ9lyQsrUzvAv3ya+9M4QxNsc2/XtqJ7QEHoIqADJvl33URUNj0v18XzbUQn7E0dYvV9CQ/fD rz3VYQNeNyWJK6g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10966; i=paul@paul-moore.com; h=from:subject; bh=1c4n6HtJDdqC2fKKtAAQ4HuGj3ytXevRhgSdgXsKw9c=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBo8qupaUixE5dTbcqBiXZOom2ZJffz16u23bnXq lCQxktUgG2JAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaPKrqQAKCRDqIPLalzeJ c0KlEADT3pKXLZoGNzEnmjZBlzuAs+3bNRtg1MZITasejMktmD8aNi0nvTFU84oBMA/dm0CfMyg tkoPC3b9HCxPjPIsg6MhSIpOceIJBlQMBh4ecpRkYhuDkDKXkwfWpAIyhSiHlDlLAEqJ6emSrVW Z7NKK98JvHPIHfkkBOIikmqsDy6KgYW63Di9jQ8/thWhdnRnfvxq4X5VWSqsME4Sw0yiZERjbnc GVHZ9Cg7AoDiYjkRoCCjzyKHrMuooGPS5i2Y500UDiL+zyHn7QEe3eWDLkYyrNlomuwuAktZ2KG HPYMWQgILcQ30elHsQ3RtH9UQ3qhdGsFa09y2H/QVth/6zN8ESCEaR6xRJNB3TtxdRYZCP8mdZS 6QlakfPi8y/1uRUjRNDFs8XtJAZAQ2A7oxo6RNu221YhmaxZeSCEp6DB8OPaoLpc40+oka+8nhb MDzr/lmdklawPiZau7SPeXRcnpi+U8IHcbv7K7PfEdoBQTJEieLQETW6gNiHZ1S8XUKzkZuYd2/ Hy0J2VJI0uQCmXJzpIN4xy6ooMNoJDXn3aq+RhGGSvpdpN9LmE8HyIrzI8r41jW8w3I8hkZuPed JMOh3q7REaoET/CQu6/D1K2nuJXFhMdI7YF6dctgqvEDctSTnEJH2wZmNjeK0PD+1g6bRVsm58c VnnPZgYLSYWqnvQ==
 X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+SELinux currently has a number of initcalls so we've created a new
+function, selinux_initcall(), which wraps all of these initcalls so
+that we have a single initcall function that can be registered with the
+LSM framework.
 
-This patch converts IMA and EVM to use the LSM frameworks's initcall
-mechanism. It moved the integrity_fs_init() call to ima_fs_init() and
-evm_init_secfs(), to work around the fact that there is no "integrity" LSM,
-and introduced integrity_fs_fini() to remove the integrity directory, if
-empty. Both integrity_fs_init() and integrity_fs_fini() support the
-scenario of being called by both the IMA and EVM LSMs.
-
-This patch does not touch any of the platform certificate code that
-lives under the security/integrity/platform_certs directory as the
-IMA/EVM developers would prefer to address that in a future patchset.
-
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
-[PM: adjust description as discussed over email]
 Signed-off-by: Paul Moore <paul@paul-moore.com>
 ---
- security/integrity/evm/evm_main.c  |  3 +--
- security/integrity/evm/evm_secfs.c | 11 +++++++++--
- security/integrity/iint.c          | 14 ++++++++++++--
- security/integrity/ima/ima_fs.c    | 11 +++++++++--
- security/integrity/ima/ima_main.c  |  4 ++--
- security/integrity/integrity.h     |  2 ++
- 6 files changed, 35 insertions(+), 10 deletions(-)
+ security/selinux/Makefile            |  2 +-
+ security/selinux/hooks.c             |  9 +++--
+ security/selinux/ibpkey.c            |  5 ++-
+ security/selinux/include/audit.h     |  9 +++++
+ security/selinux/include/initcalls.h | 19 ++++++++++
+ security/selinux/initcalls.c         | 52 ++++++++++++++++++++++++++++
+ security/selinux/netif.c             |  5 ++-
+ security/selinux/netlink.c           |  5 ++-
+ security/selinux/netnode.c           |  5 ++-
+ security/selinux/netport.c           |  5 ++-
+ security/selinux/selinuxfs.c         |  5 ++-
+ security/selinux/ss/services.c       | 26 ++++----------
+ 12 files changed, 107 insertions(+), 40 deletions(-)
+ create mode 100644 security/selinux/include/initcalls.h
+ create mode 100644 security/selinux/initcalls.c
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index db8e324ed4e6..73d500a375cb 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -1179,6 +1179,5 @@ DEFINE_LSM(evm) = {
- 	.init = init_evm_lsm,
- 	.order = LSM_ORDER_LAST,
- 	.blobs = &evm_blob_sizes,
-+	.initcall_late = init_evm,
+diff --git a/security/selinux/Makefile b/security/selinux/Makefile
+index 66e56e9011df..72d3baf7900c 100644
+--- a/security/selinux/Makefile
++++ b/security/selinux/Makefile
+@@ -15,7 +15,7 @@ ccflags-y := -I$(srctree)/security/selinux -I$(srctree)/security/selinux/include
+ ccflags-$(CONFIG_SECURITY_SELINUX_DEBUG) += -DDEBUG
+ 
+ selinux-y := avc.o hooks.o selinuxfs.o netlink.o nlmsgtab.o netif.o \
+-	     netnode.o netport.o status.o \
++	     netnode.o netport.o status.o initcalls.o \
+ 	     ss/ebitmap.o ss/hashtab.o ss/symtab.o ss/sidtab.o ss/avtab.o \
+ 	     ss/policydb.o ss/services.o ss/conditional.o ss/mls.o ss/context.o
+ 
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 299b656ac007..cd5f6974f9e6 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -94,6 +94,7 @@
+ #include <linux/io_uring/cmd.h>
+ #include <uapi/linux/lsm.h>
+ 
++#include "initcalls.h"
+ #include "avc.h"
+ #include "objsec.h"
+ #include "netif.h"
+@@ -7612,6 +7613,10 @@ static __init int selinux_init(void)
+ 	if (avc_add_callback(selinux_lsm_notifier_avc_callback, AVC_CALLBACK_RESET))
+ 		panic("SELinux: Unable to register AVC LSM notifier callback\n");
+ 
++	if (avc_add_callback(selinux_audit_rule_avc_callback,
++			     AVC_CALLBACK_RESET))
++		panic("SELinux: Unable to register AVC audit callback\n");
++
+ 	if (selinux_enforcing_boot)
+ 		pr_debug("SELinux:  Starting in enforcing mode\n");
+ 	else
+@@ -7644,6 +7649,7 @@ DEFINE_LSM(selinux) = {
+ 	.enabled = &selinux_enabled_boot,
+ 	.blobs = &selinux_blob_sizes,
+ 	.init = selinux_init,
++	.initcall_device = selinux_initcall,
  };
--
--late_initcall(init_evm);
-diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
-index b0d2aad27850..c26724690cec 100644
---- a/security/integrity/evm/evm_secfs.c
-+++ b/security/integrity/evm/evm_secfs.c
-@@ -302,10 +302,16 @@ int __init evm_init_secfs(void)
- 	int error = 0;
- 	struct dentry *dentry;
  
--	evm_dir = securityfs_create_dir("evm", integrity_dir);
--	if (IS_ERR(evm_dir))
-+	error = integrity_fs_init();
-+	if (error < 0)
- 		return -EFAULT;
+ #if defined(CONFIG_NETFILTER)
+@@ -7705,7 +7711,7 @@ static struct pernet_operations selinux_net_ops = {
+ 	.exit = selinux_nf_unregister,
+ };
  
-+	evm_dir = securityfs_create_dir("evm", integrity_dir);
-+	if (IS_ERR(evm_dir)) {
-+		error = -EFAULT;
-+		goto out;
-+	}
-+
- 	dentry = securityfs_create_file("evm", 0660,
- 				      evm_dir, NULL, &evm_key_ops);
- 	if (IS_ERR(dentry)) {
-@@ -329,5 +335,6 @@ int __init evm_init_secfs(void)
- out:
- 	securityfs_remove(evm_symlink);
- 	securityfs_remove(evm_dir);
-+	integrity_fs_fini();
- 	return error;
- }
-diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-index 068ac6c2ae1e..8ec1a3436a71 100644
---- a/security/integrity/iint.c
-+++ b/security/integrity/iint.c
-@@ -42,8 +42,11 @@ void __init integrity_load_keys(void)
- 		evm_load_x509();
- }
- 
--static int __init integrity_fs_init(void)
-+int __init integrity_fs_init(void)
+-static int __init selinux_nf_ip_init(void)
++int __init selinux_nf_ip_init(void)
  {
-+	if (integrity_dir)
-+		return 0;
+ 	int err;
+ 
+@@ -7720,5 +7726,4 @@ static int __init selinux_nf_ip_init(void)
+ 
+ 	return 0;
+ }
+-__initcall(selinux_nf_ip_init);
+ #endif /* CONFIG_NETFILTER */
+diff --git a/security/selinux/ibpkey.c b/security/selinux/ibpkey.c
+index 470481cfe0e8..ea1d9b2c7d2b 100644
+--- a/security/selinux/ibpkey.c
++++ b/security/selinux/ibpkey.c
+@@ -23,6 +23,7 @@
+ #include <linux/list.h>
+ #include <linux/spinlock.h>
+ 
++#include "initcalls.h"
+ #include "ibpkey.h"
+ #include "objsec.h"
+ 
+@@ -218,7 +219,7 @@ void sel_ib_pkey_flush(void)
+ 	spin_unlock_irqrestore(&sel_ib_pkey_lock, flags);
+ }
+ 
+-static __init int sel_ib_pkey_init(void)
++int __init sel_ib_pkey_init(void)
+ {
+ 	int iter;
+ 
+@@ -232,5 +233,3 @@ static __init int sel_ib_pkey_init(void)
+ 
+ 	return 0;
+ }
+-
+-subsys_initcall(sel_ib_pkey_init);
+diff --git a/security/selinux/include/audit.h b/security/selinux/include/audit.h
+index d5b0425055e4..85a531ac737b 100644
+--- a/security/selinux/include/audit.h
++++ b/security/selinux/include/audit.h
+@@ -15,6 +15,15 @@
+ #include <linux/audit.h>
+ #include <linux/types.h>
+ 
++/**
++ * selinux_audit_rule_avc_callback - update the audit LSM rules on AVC events.
++ * @event: the AVC event
++ *
++ * Update any audit LSM rules based on the AVC event specified in @event.
++ * Returns 0 on success, negative values otherwise.
++ */
++int selinux_audit_rule_avc_callback(u32 event);
 +
- 	integrity_dir = securityfs_create_dir("integrity", NULL);
- 	if (IS_ERR(integrity_dir)) {
- 		int ret = PTR_ERR(integrity_dir);
-@@ -58,4 +61,11 @@ static int __init integrity_fs_init(void)
+ /**
+  * selinux_audit_rule_init - alloc/init an selinux audit rule structure.
+  * @field: the field this rule refers to
+diff --git a/security/selinux/include/initcalls.h b/security/selinux/include/initcalls.h
+new file mode 100644
+index 000000000000..6674cf489473
+--- /dev/null
++++ b/security/selinux/include/initcalls.h
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * SELinux initcalls
++ */
++
++#ifndef _SELINUX_INITCALLS_H
++#define _SELINUX_INITCALLS_H
++
++int init_sel_fs(void);
++int sel_netport_init(void);
++int sel_netnode_init(void);
++int sel_netif_init(void);
++int sel_netlink_init(void);
++int sel_ib_pkey_init(void);
++int selinux_nf_ip_init(void);
++
++int selinux_initcall(void);
++
++#endif
+diff --git a/security/selinux/initcalls.c b/security/selinux/initcalls.c
+new file mode 100644
+index 000000000000..f6716a1d38c1
+--- /dev/null
++++ b/security/selinux/initcalls.c
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * SELinux initcalls
++ */
++
++#include <linux/init.h>
++
++#include "initcalls.h"
++
++/**
++ * selinux_initcall - Perform the SELinux initcalls
++ *
++ * Used as a device initcall in the SELinux LSM definition.
++ */
++int __init selinux_initcall(void)
++{
++	int rc = 0, rc_tmp = 0;
++
++	rc_tmp = init_sel_fs();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++	rc_tmp = sel_netport_init();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++	rc_tmp = sel_netnode_init();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++	rc_tmp = sel_netif_init();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++	rc_tmp = sel_netlink_init();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++
++#if defined(CONFIG_SECURITY_INFINIBAND)
++	rc_tmp = sel_ib_pkey_init();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++#endif
++
++#if defined(CONFIG_NETFILTER)
++	rc_tmp = selinux_nf_ip_init();
++	if (!rc && rc_tmp)
++		rc = rc_tmp;
++#endif
++
++	return rc;
++}
+diff --git a/security/selinux/netif.c b/security/selinux/netif.c
+index 78afbecdbe57..e24b2cba28ea 100644
+--- a/security/selinux/netif.c
++++ b/security/selinux/netif.c
+@@ -22,6 +22,7 @@
+ #include <linux/rcupdate.h>
+ #include <net/net_namespace.h>
+ 
++#include "initcalls.h"
+ #include "security.h"
+ #include "objsec.h"
+ #include "netif.h"
+@@ -265,7 +266,7 @@ static struct notifier_block sel_netif_netdev_notifier = {
+ 	.notifier_call = sel_netif_netdev_notifier_handler,
+ };
+ 
+-static __init int sel_netif_init(void)
++int __init sel_netif_init(void)
+ {
+ 	int i;
+ 
+@@ -280,5 +281,3 @@ static __init int sel_netif_init(void)
  	return 0;
  }
  
--late_initcall(integrity_fs_init)
-+void __init integrity_fs_fini(void)
-+{
-+	if (!integrity_dir || !simple_empty(integrity_dir))
-+		return;
-+
-+	securityfs_remove(integrity_dir);
-+	integrity_dir = NULL;
-+}
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 87045b09f120..012a58959ff0 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -499,9 +499,15 @@ int __init ima_fs_init(void)
- 	struct dentry *dentry;
- 	int ret;
- 
-+	ret = integrity_fs_init();
-+	if (ret < 0)
-+		return ret;
-+
- 	ima_dir = securityfs_create_dir("ima", integrity_dir);
--	if (IS_ERR(ima_dir))
--		return PTR_ERR(ima_dir);
-+	if (IS_ERR(ima_dir)) {
-+		ret = PTR_ERR(ima_dir);
-+		goto out;
-+	}
- 
- 	ima_symlink = securityfs_create_symlink("ima", NULL, "integrity/ima",
- 						NULL);
-@@ -555,6 +561,7 @@ int __init ima_fs_init(void)
- out:
- 	securityfs_remove(ima_symlink);
- 	securityfs_remove(ima_dir);
-+	integrity_fs_fini();
- 
- 	return ret;
- }
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index eade8e1e3cb1..b703bfc2f470 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -1283,6 +1283,6 @@ DEFINE_LSM(ima) = {
- 	.init = init_ima_lsm,
- 	.order = LSM_ORDER_LAST,
- 	.blobs = &ima_blob_sizes,
-+	/* Start IMA after the TPM is available */
-+	.initcall_late = init_ima,
- };
+-__initcall(sel_netif_init);
 -
--late_initcall(init_ima);	/* Start IMA after the TPM is available */
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index c2c2da691123..7b388b66cf80 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -114,6 +114,8 @@ struct ima_file_id {
+diff --git a/security/selinux/netlink.c b/security/selinux/netlink.c
+index 1760aee712fd..eb40e4603475 100644
+--- a/security/selinux/netlink.c
++++ b/security/selinux/netlink.c
+@@ -17,6 +17,7 @@
+ #include <net/net_namespace.h>
+ #include <net/netlink.h>
  
- int integrity_kernel_read(struct file *file, loff_t offset,
- 			  void *addr, unsigned long count);
-+int __init integrity_fs_init(void);
-+void __init integrity_fs_fini(void);
++#include "initcalls.h"
+ #include "security.h"
  
- #define INTEGRITY_KEYRING_EVM		0
- #define INTEGRITY_KEYRING_IMA		1
+ static struct sock *selnl __ro_after_init;
+@@ -105,7 +106,7 @@ void selnl_notify_policyload(u32 seqno)
+ 	selnl_notify(SELNL_MSG_POLICYLOAD, &seqno);
+ }
+ 
+-static int __init selnl_init(void)
++int __init sel_netlink_init(void)
+ {
+ 	struct netlink_kernel_cfg cfg = {
+ 		.groups	= SELNLGRP_MAX,
+@@ -117,5 +118,3 @@ static int __init selnl_init(void)
+ 		panic("SELinux:  Cannot create netlink socket.");
+ 	return 0;
+ }
+-
+-__initcall(selnl_init);
+diff --git a/security/selinux/netnode.c b/security/selinux/netnode.c
+index 5d0ed08d46e5..9b3da5ce8d39 100644
+--- a/security/selinux/netnode.c
++++ b/security/selinux/netnode.c
+@@ -30,6 +30,7 @@
+ #include <net/ip.h>
+ #include <net/ipv6.h>
+ 
++#include "initcalls.h"
+ #include "netnode.h"
+ #include "objsec.h"
+ 
+@@ -290,7 +291,7 @@ void sel_netnode_flush(void)
+ 	spin_unlock_bh(&sel_netnode_lock);
+ }
+ 
+-static __init int sel_netnode_init(void)
++int __init sel_netnode_init(void)
+ {
+ 	int iter;
+ 
+@@ -304,5 +305,3 @@ static __init int sel_netnode_init(void)
+ 
+ 	return 0;
+ }
+-
+-__initcall(sel_netnode_init);
+diff --git a/security/selinux/netport.c b/security/selinux/netport.c
+index 6fd7da4b3576..9e62f7285e81 100644
+--- a/security/selinux/netport.c
++++ b/security/selinux/netport.c
+@@ -29,6 +29,7 @@
+ #include <net/ip.h>
+ #include <net/ipv6.h>
+ 
++#include "initcalls.h"
+ #include "netport.h"
+ #include "objsec.h"
+ 
+@@ -218,7 +219,7 @@ void sel_netport_flush(void)
+ 	spin_unlock_bh(&sel_netport_lock);
+ }
+ 
+-static __init int sel_netport_init(void)
++int __init sel_netport_init(void)
+ {
+ 	int iter;
+ 
+@@ -232,5 +233,3 @@ static __init int sel_netport_init(void)
+ 
+ 	return 0;
+ }
+-
+-__initcall(sel_netport_init);
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index 232e087bce3e..93ea27acbfef 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -35,6 +35,7 @@
+ /* selinuxfs pseudo filesystem for exporting the security policy API.
+    Based on the proc code and the fs/nfsd/nfsctl.c code. */
+ 
++#include "initcalls.h"
+ #include "flask.h"
+ #include "avc.h"
+ #include "avc_ss.h"
+@@ -2122,7 +2123,7 @@ static struct file_system_type sel_fs_type = {
+ 
+ struct path selinux_null __ro_after_init;
+ 
+-static int __init init_sel_fs(void)
++int __init init_sel_fs(void)
+ {
+ 	struct qstr null_name = QSTR_INIT(NULL_FILE_NAME,
+ 					  sizeof(NULL_FILE_NAME)-1);
+@@ -2166,5 +2167,3 @@ static int __init init_sel_fs(void)
+ 
+ 	return err;
+ }
+-
+-__initcall(init_sel_fs);
+diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+index 713130bd43c4..13fc712d5923 100644
+--- a/security/selinux/ss/services.c
++++ b/security/selinux/ss/services.c
+@@ -3570,6 +3570,13 @@ struct selinux_audit_rule {
+ 	struct context au_ctxt;
+ };
+ 
++int selinux_audit_rule_avc_callback(u32 event)
++{
++	if (event == AVC_CALLBACK_RESET)
++		return audit_update_lsm_rules();
++	return 0;
++}
++
+ void selinux_audit_rule_free(void *vrule)
+ {
+ 	struct selinux_audit_rule *rule = vrule;
+@@ -3820,25 +3827,6 @@ int selinux_audit_rule_match(struct lsm_prop *prop, u32 field, u32 op, void *vru
+ 	return match;
+ }
+ 
+-static int aurule_avc_callback(u32 event)
+-{
+-	if (event == AVC_CALLBACK_RESET)
+-		return audit_update_lsm_rules();
+-	return 0;
+-}
+-
+-static int __init aurule_init(void)
+-{
+-	int err;
+-
+-	err = avc_add_callback(aurule_avc_callback, AVC_CALLBACK_RESET);
+-	if (err)
+-		panic("avc_add_callback() failed, error %d\n", err);
+-
+-	return err;
+-}
+-__initcall(aurule_init);
+-
+ #ifdef CONFIG_NETLABEL
+ /**
+  * security_netlbl_cache_add - Add an entry to the NetLabel cache
 -- 
 2.51.1.dirty
 
