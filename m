@@ -1,77 +1,79 @@
-Return-Path: <linux-integrity+bounces-7447-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7448-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42273BEBA3A
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 22:28:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ECEABEBAD6
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 22:29:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 106914FF403
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 20:28:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B09D7460FF
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Oct 2025 20:28:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FF4D354AC9;
-	Fri, 17 Oct 2025 20:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 236F1354ADD;
+	Fri, 17 Oct 2025 20:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="PLBUAaIe"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="MnHzkBtB"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9FB354AC7
-	for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 20:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379F6354ACC
+	for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 20:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760732927; cv=none; b=Q0yRDtzrz1PxnuIuYpfl7rfGDfRWZ6FW5yqLEGehzMOgrk3+7Hmyt9+t4NxDhpaJ+1uzb0Ilb0pBfPDscvxdyFkzhnXltTwR6H/d7eqBoX7r8cFkGpp+rftjKbSN/0edIx66IrDuTzqd4BA4l4kFxHIsO9MTVDWQjtykAcMdDdo=
+	t=1760732930; cv=none; b=ZvSNIRPHmddlfBeK1l7JYRG24wZ0POFlO7LvDar3NRYnqZLCAwjB8jQI0NX04DsXoqjG8rMY0P6OJzOvnbgLFr+HenBuP5MaOsjiwuN9YVKFoD3sa9Bt1rrEUzO4kbYEW5N1gTXk/wB5GNDDwtVs2B5ltSm39iypLdjEcKVmK9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760732927; c=relaxed/simple;
-	bh=iuXlvEP4RWicw4SMNuBF275xFR1ztz7FQKPfurRD1Wk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=r2X9g7OSJRI/eKJmFTVSwB+Eeb2MqoANwGoSzHHQrz1gub2dpjeBZsg2wffDAtiGC0Icl0mStZvV2wfK0Ck0tnAye030V07Y9/UBmmUkefG5K3CAStspVW6aFnDl6obcM4EPMxfjsgSLIfTYZzrkFePPTCxyZYsk2ozFAGT6yhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=PLBUAaIe; arc=none smtp.client-ip=209.85.222.175
+	s=arc-20240116; t=1760732930; c=relaxed/simple;
+	bh=MRGM52AqEsf9Z+LXMMXpA/bYEwQJ2hQVih+OOqO3InE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=p9yCZRyJ0p6dieYm3KHoYknWUdPBk8Fa89Hq9sRbtomvw1OzgUyWuWz6uSXWpGTwqeL/qyy9OPPuinO/7HBwcnQwHDRA5bCfqX2l9b6UIMhAKbEZJti/edqoSc9JHRE9L6Wc2O+geoxAaZ2KlVbcqM4glAlGYD5iIHiLtmc+4/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=MnHzkBtB; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-890521c116fso235138785a.3
-        for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 13:28:45 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-87bf3d1e7faso48110606d6.3
+        for <linux-integrity@vger.kernel.org>; Fri, 17 Oct 2025 13:28:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1760732924; x=1761337724; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9uBbjIUU74h1ZDdgDIYFE6I7PBb7cxOEFrM5zScIsrk=;
-        b=PLBUAaIe5jLqf0aU10hmnqbPmyObSJVkuqg+fhMz8g343Cf3v9cQgSlGgOv//XejT4
-         +9w4rpLNF94qr95hHB97goy8mXL0uED9WV2eMUWQ3HGrFGMIbzgyjQ7cS5NbdTiZdYYh
-         hYug9/3u8zTEXDTqy2W5nIAXCYfd2pd+61XEDHgh6gxXTtoSpAcYnMIb+iOckjj8dE/J
-         k/RvE7gdRP6hGWWCSOt+QGHFNl9SWU3clndE3igFZQHyTR6PIQnm2RhhaadzDA0X8zUt
-         NLw6c2JcgiyWl+t55HrYcpBrOJO3nXbwV6abEaYfUoYDbe1rHXkDvcbau91St+PTOsQg
-         9Rkw==
+        d=paul-moore.com; s=google; t=1760732927; x=1761337727; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=80RF/oVAJBAd+QSyQNgUIOfWs8Q3n/gCRoXqutYVYoc=;
+        b=MnHzkBtBCNNE4+vLA4aaXFrLo37qAeYMxSIcA2rWQy7KOkuDaMF3Wynu4I8YZiqmVt
+         gs4c85r+FemTvKEQ5JeNrdBE96l7B12ch0NreQH611MJWMTVJnzeRPdg9C3duFOUTghk
+         FT5y99WSmwOGDbtN1EopxdtAxDvktcEeIuQA7zy/VT7to5adcP07zdz99K6Nxgv8et5M
+         TQ6VOOim0+YxQWmSFDim9cxeCeN/x7Cd5+zFkWF5A7MJRrATrWvqgICX7Y/WLKEuU/u5
+         956BD9V9KJ/2SCEn/TvZgi/p1HLPQFjOYFs/ptAdyWOed1yUVGIzAbkDdyaJabbQPhmA
+         dykw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760732924; x=1761337724;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9uBbjIUU74h1ZDdgDIYFE6I7PBb7cxOEFrM5zScIsrk=;
-        b=Tvq+BJ2lmh/wot88nQ5q44/cOAfAFchGbEn+mQyJeP/1moZj/Tq2nEdbzfkcuX243J
-         5/GWDcf/KPM5XNm+PaRUbOqhaEtchPitg17CiNxY7kbIq/B/h7qBaex33Rbr6uRzWr7i
-         yV+Cluxk25sNnKWKxjnCiK7mdjxlQE3lLm3doM7S2sJI6Z+dA9Ib7qp7Vwh+5AEop4aV
-         eSMmWgnaoBQPNMyXv9HXXYzjbF+C5ArYi0EmanIqYtdi+c+wegcA0KOOufA9qEUFYvx2
-         mcj5+dlogmiwJP55qG7RLtuHT89OtGuWYULpj4bpX5sQX9kjutfbdxLQrgB7qRLQrv1a
-         4xOw==
-X-Forwarded-Encrypted: i=1; AJvYcCWPObHA/rELPC2tYrLP5zPRb9syfD6NMCjeWA3mcgCy4Oaj/wA38IXcals0BxTu1Nc5Dce5dhjdMAj2KaNmV/0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrYMuUZz5MIdGIl/NpkQZkNpouEk3ZYJJI897IROUsrH+n4a/7
-	7kVs1+hNZOoEslhthxR7ok+3gtARLXDoWpdd838AnNFht5n3sQbyFJGvXcNzgezQAw==
-X-Gm-Gg: ASbGncvDsZCn4GlNr9bPNnd9uyd9DIfuv58xs+HqchcurvdaaAmj5DtgSpeVukzHbNm
-	VOK5kE3irUczSwYCjk8Sj+Ha5Yzf3l1xmRujAC3TbwWu1DBqJZPUFhq9qypD2v2hti9+PWAdxCc
-	n2sBRUtG/EwIpHf4V6HVhybjrX/pnegSL22iKTDMW8GNIP0MmKwaR4nOB7kgri4ysIVa5rrP8Sb
-	bTHWBj7upZYMbt2MHs/NwrbiwmNl4PZwwaxGUky8jxWLH7KvJjzJMp9eOIpHGpdfOl/yuoMVJZs
-	4p/jIfiJCaED1ECG8UxeEWM2lru2uZUkfhTdVo+tPe3q/BGfNdzUv558kzH95hu83NFuy4KYLJ5
-	ltXTqp7lAjR9wyosUfjBvxIZ4RI/VoeuMDV3kgv1tTSaD9izaaqFO0P1zfyfW+xbSVSHAJ00pAC
-	Q7g6SHZqGFz6vdrmG7NBWzkcEthVn/fTbQedFopJjlSgUJ9Q==
-X-Google-Smtp-Source: AGHT+IGU83kYhlHhrPIm0RnfAz1WwXuAOKzXLce53bDxHAbB5mzVCypK8r4pC/cQrYZhzGpjh4cVgA==
-X-Received: by 2002:ac8:5fd6:0:b0:4e8:a376:4345 with SMTP id d75a77b69052e-4e8a3764648mr37620811cf.43.1760732924100;
-        Fri, 17 Oct 2025 13:28:44 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760732927; x=1761337727;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=80RF/oVAJBAd+QSyQNgUIOfWs8Q3n/gCRoXqutYVYoc=;
+        b=L/z4D/KNWVX3CUKMYJ5ZfXpLrlZHDv/MDIOr7CSk4NwZzbbhMlQfUQYdoAc2z7vDTg
+         AacbhWfCBbllNDLcmtU+tY/CYPG0Byqc1HK8WZLVRNW221tNEVbzOB9VpCt4X33Vx3ZK
+         QqtagrjgbAkqvfayicKYFMr8X0FJtuBkO/DbwPckVbOvADT3mdh0BuZ3sWfuTAhS99wd
+         drO1kZjBapn0eRJ1QpLQjU0txJtU+ya4VIZFsXAnJxsW+oZpTs+fKDD9ePPjZZc+LM81
+         lifQacjwkVFLTsRDQl+Q+a9Vd1b59Wb3Ukm0NBe3nra8kZJ3Xm5drlNAgzr1LDHUMRDF
+         suNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUD2ny+rKsR4p0ZBIVaJDpqrGcwwTeie8gy7xsrgDjf7vIaLjCEWszIuJsbIEQgInMGQOru/M/cdnv4EAgF/7I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOdE+u92G20STKO1wdITBc6lCMQm8PlrmA+gIOsBqTVRKXVOB1
+	QZZOiIJeUMogyi0Ytzd0RJe8Y8E8MgDlcKMSrNKHnIiItsPYvf8O0rSjlaKg5DS+HQ==
+X-Gm-Gg: ASbGncsp5onprl6PMqP3JNFV3bgjCe/6v2pfBrzoX2IP930L3F02S3DJF6EKluIbcM0
+	5804Sf3UH0yVPvh6TNmmiAENZCBSayDRiWCUOmrIKZUwjEm8P7bV9br1L4vsPDXuIBjMWkV83cH
+	EGi3i5VikL6PAmarTaxmmPZCLHdEnVsCViqQugRJedaZnfZmoryuZkefTVbb8Q6Rwz28hME/3tX
+	o07pAEJBDkZKAQXCD02pTY+WRgyg/acHOlW3fezO3b79QuC8VYkVuurnko/Svm7LumBjZF1qSsr
+	uV/CYizGXFEySZbNc8roUR0lbAvMuUEL2myOvkT0GE/68+OPcfYlsJyVBsasMDqYJogscVuV3yE
+	GrPBMBlHSPEXzslWy0EH47ZTOPh37MZ6M5Jnpc0DoTw/V+Zb2S3G2PrRqJuAiIPspjwcDhglo4E
+	y6DirngG+XpFde3yERCkdsvYrbWHm2f0fkt3fDHmyIR9UNlC7c3CFEg8cW
+X-Google-Smtp-Source: AGHT+IHyKvhqf4oRXwb4UIxToUbyQbx0fDMr72QMdpZ+WhNdai5Jch1SIpJ65sxJ7v2ZuIRNIvpgGA==
+X-Received: by 2002:ad4:4ea1:0:b0:87c:a721:42f7 with SMTP id 6a1803df08f44-87ca7214384mr17288166d6.22.1760732926058;
+        Fri, 17 Oct 2025 13:28:46 -0700 (PDT)
 Received: from localhost (pool-71-126-255-178.bstnma.fios.verizon.net. [71.126.255.178])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8ab0c8705sm4967831cf.26.2025.10.17.13.28.42
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87cf521b309sm4902366d6.17.2025.10.17.13.28.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 13:28:42 -0700 (PDT)
+        Fri, 17 Oct 2025 13:28:44 -0700 (PDT)
 From: Paul Moore <paul@paul-moore.com>
 To: linux-security-module@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
@@ -88,171 +90,132 @@ Cc: John Johansen <john.johansen@canonical.com>,
 	Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
 	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
 	Xiu Jianfeng <xiujianfeng@huawei.com>
-Subject: [PATCH v5 0/34] Rework the LSM initialization
-Date: Fri, 17 Oct 2025 16:24:28 -0400
-Message-ID: <20251017202456.484010-36-paul@paul-moore.com>
+Subject: [PATCH v5 01/34] lsm: split the notifier code out into lsm_notifier.c
+Date: Fri, 17 Oct 2025 16:24:29 -0400
+Message-ID: <20251017202456.484010-37-paul@paul-moore.com>
 X-Mailer: git-send-email 2.51.1.dirty
+In-Reply-To: <20251017202456.484010-36-paul@paul-moore.com>
+References: <20251017202456.484010-36-paul@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3581; i=paul@paul-moore.com; h=from:subject; bh=MRGM52AqEsf9Z+LXMMXpA/bYEwQJ2hQVih+OOqO3InE=; b=owEBbQKS/ZANAwAKAeog8tqXN4lzAcsmYgBo8qYYShYFAcgaFd7bg9zaKYxEFxv7tTdKN4Scx gnVyFix8xaJAjMEAAEKAB0WIQRLQqjPB/KZ1VSXfu/qIPLalzeJcwUCaPKmGAAKCRDqIPLalzeJ c8sBD/9oK0DPRQkycOuEaKCqeIoM86KRstqD8VEtuRUZ9CTVRl/lmqyMCIIAVdkhh8sqrT9PRdj xf3XNfEV+pkx4Ve6v5gInJpsrex0+G+bl13E8VGll5KZJc2KFVKafYpRomuZSW7DSyzt1SZAQmC 3PHZ8jqbGBFOKPGe1SIYGFpBmfRA6nCWm2qtFun1rPLFdflpCPTMIHuwHn3rdqlRtPCQIiuBd7e GnBC1/BxbfRzcbzX/8JMRzqQitb8HPFvsjtz+ao4DiD0dEvhaagVSg2c/uhjq+IWspQbdFOuooT EIZI4FJRt87rvwyOrcZi1wDkt5oVajJY0gjOHCU+3YSLK7ZsyEF1k37JC5VznNG89RUYZ6exrtr 1+edo3GJJGDPipSj7PujdeqihtCgugDdl0DeAynS0j4FL8hb+ZeCl7iMtafJxW19am4LobzouUU 02bGFaAH7um5u5jBUrhJIPWCDamAQUxY8dNmVepNtJzXIevSzv0wuc49HgzodfdkLOn/VBZLe/V v+TcBxcuPhpt0JTRlQzmehIDJ5mXFMe/Fo9nndGwZzDU7KuF2HGGJEc8Humv9ypu8uC57bYFLID vkCKkr+ccypBk1vflHMeIyI2Ldi8Kj6pajbR4OqBuplTASNKuhpTgP61ryQkUDeoVk831eA3nad bT6NxS5+FX3iiJg==
+X-Developer-Key: i=paul@paul-moore.com; a=openpgp; fpr=7100AADFAE6E6E940D2E0AD655E45A5AE8CA7C8A
 Content-Transfer-Encoding: 8bit
 
-This is the fifth, and likely final, revision of the LSM rework patchset.
-The number of changes in this revision are very minor and barring any
-surprises I expect to merge this into the lsm/dev branch next week; I'll
-send a notice when I do.  While there isn't anything in this revision
-that people haven't seen previously, if you do have any concerns or
-feedback, please let me know.  Once again, thank you to all of you that
-have taken the time to review these patches.
+In an effort to decompose security/security.c somewhat to make it less
+twisted and unwieldy, pull out the LSM notifier code into a new file
+as it is fairly well self-contained.
 
-I've aldo updated the working-lsm_init_rework branch of the main LSM
-tree to contain the latest v5 revision of the patchset:
-https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/log/?h=working-lsm_init_rework
+No code changes.
 
-The v4 patchset:
-https://lore.kernel.org/linux-security-module/20250916220355.252592-36-paul@paul-moore.com/
+Reviewed-by: Kees Cook <kees@kernel.org>
+Reviewed-by: John Johansen <john.johansen@canonical.com>
+Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Paul Moore <paul@paul-moore.com>
+---
+ security/Makefile       |  2 +-
+ security/lsm_notifier.c | 31 +++++++++++++++++++++++++++++++
+ security/security.c     | 23 -----------------------
+ 3 files changed, 32 insertions(+), 24 deletions(-)
+ create mode 100644 security/lsm_notifier.c
 
-The RFC/v3 patchset:
-https://lore.kernel.org/linux-security-module/20250814225159.275901-36-paul@paul-moore.com/
-
-The RFC/v2 patchset:
-https://lore.kernel.org/linux-security-module/20250721232142.77224-36-paul@paul-moore.com/
-
-The RFC/v1 patchset is below, the cover letter provides some background
-and motivation for this series which still applies:
-https://lore.kernel.org/linux-security-module/20250409185019.238841-31-paul@paul-moore.com/
-
-CHANGELOG
-v5:
-- rebased to lsm/dev branch post v6.18-rc1
-- fixed a !CONFIG_SECURITYFS bug (kernel test robot)
-- fixed a missing "__rcu" annotation on a cast (kernel test robot)
-v4:
-- reworked the lsm_read() function (John, Roberto, Tetsuo)
-- replaced the IMA/EVM patch with one from Roberto
-RFC/v3:
-- rebased to lsm/dev branch
-- fixed IMA/EVM initcall comment (Roberto)
-- fixed CONFIG_IMA and CONFIG_EVM problems (Nicolas, Roberto)
-- fixed CONFIG_SECURITY_SMACK_NETFILTER problems (Roberto)
-- fixed the IMA/EVM header file include macro protections
-- fixed an off-by-one string length issue in lsm_read() (Casey)
-RFC/v2:
-- rename lsm_prep_single() to lsm_prepare()
-- drop the lsm_prop counting patch
-- drop the platform_certs changes from the IMA/EVM patch (Mimi)
-- split/reorder anough patches in the patchset that I lost track
-- added missing function comment blocks in the SELinux patches
-- split patch 04/29 into smaller patches (Kees)
-- fix an LSM list output problem in an intermediate patch (Kees)
-- preserve the "lsm_active_cnt" variable name (Casey)
-- cache the lsm_read() string (Kees)
-- squashed, split, and reordered the enabled/ordering patches
-- reworked the Smack patch (Casey)
-- conditionalized the SELinux IB init code (Stephen)
-- fixed missing Smack "__init" annotation (Fan)
-- fixed a potential unused variable warning in IMA/EVM (John)
-- fixed the placeholder commit descriptions (various)
-RFC/v1:
-- initial version
-
---
-Paul Moore (33):
-      lsm: split the notifier code out into lsm_notifier.c
-      lsm: split the init code out into lsm_init.c
-      lsm: consolidate lsm_allowed() and prepare_lsm() into
-         lsm_prepare()
-      lsm: introduce looping macros for the initialization code
-      lsm: integrate report_lsm_order() code into caller
-      lsm: integrate lsm_early_cred() and lsm_early_task() into caller
-      lsm: rename ordered_lsm_init() to lsm_init_ordered()
-      lsm: replace the name field with a pointer to the lsm_id struct
-      lsm: rename the lsm order variables for consistency
-      lsm: rework lsm_active_cnt and lsm_idlist[]
-      lsm: get rid of the lsm_names list and do some cleanup
-      lsm: rework the LSM enable/disable setter/getter functions
-      lsm: rename exists_ordered_lsm() to lsm_order_exists()
-      lsm: rename/rework append_ordered_lsm() into lsm_order_append()
-      lsm: rename/rework ordered_lsm_parse() to lsm_order_parse()
-      lsm: cleanup the LSM blob size code
-      lsm: cleanup initialize_lsm() and rename to lsm_init_single()
-      lsm: fold lsm_init_ordered() into security_init()
-      lsm: add/tweak function header comment blocks in lsm_init.c
-      lsm: cleanup the debug and console output in lsm_init.c
-      lsm: output available LSMs when debugging
-      lsm: group lsm_order_parse() with the other lsm_order_*()
-         functions
-      lsm: introduce an initcall mechanism into the LSM framework
-      loadpin: move initcalls to the LSM framework
-      ipe: move initcalls to the LSM framework
-      smack: move initcalls to the LSM framework
-      tomoyo: move initcalls to the LSM framework
-      safesetid: move initcalls to the LSM framework
-      apparmor: move initcalls to the LSM framework
-      lockdown: move initcalls to the LSM framework
-      selinux: move initcalls to the LSM framework
-      lsm: consolidate all of the LSM framework initcalls
-      lsm: add a LSM_STARTED_ALL notification event
-
-Roberto Sassu (1):
-      ima,evm: move initcalls to the LSM framework
-
- include/linux/lsm_hooks.h              |   73 +-
- include/linux/security.h               |    3 
- security/Makefile                      |    2 
- security/apparmor/apparmorfs.c         |    4 
- security/apparmor/crypto.c             |    3 
- security/apparmor/include/apparmorfs.h |    2 
- security/apparmor/include/crypto.h     |    1 
- security/apparmor/lsm.c                |   11 
- security/bpf/hooks.c                   |    2 
- security/commoncap.c                   |    2 
- security/inode.c                       |   46 +
- security/integrity/evm/evm_main.c      |    5 
- security/integrity/evm/evm_secfs.c     |   11 
- security/integrity/iint.c              |   14 
- security/integrity/ima/ima_fs.c        |   11 
- security/integrity/ima/ima_main.c      |    6 
- security/integrity/integrity.h         |    2 
- security/ipe/fs.c                      |    4 
- security/ipe/ipe.c                     |    3 
- security/ipe/ipe.h                     |    2 
- security/landlock/setup.c              |    2 
- security/loadpin/loadpin.c             |   15 
- security/lockdown/lockdown.c           |    5 
- security/lsm.h                         |   58 ++
- security/lsm_init.c                    |  563 ++++++++++++++++++++++
- security/lsm_notifier.c                |   31 +
- security/lsm_syscalls.c                |    2 
- security/min_addr.c                    |    5 
- security/safesetid/lsm.c               |    3 
- security/safesetid/lsm.h               |    2 
- security/safesetid/securityfs.c        |    3 
- security/security.c                    |  623 +------------------------
- security/selinux/Makefile              |    2 
- security/selinux/hooks.c               |   11 
- security/selinux/ibpkey.c              |    5 
- security/selinux/include/audit.h       |    9 
- security/selinux/include/initcalls.h   |   19 
- security/selinux/initcalls.c           |   52 ++
- security/selinux/netif.c               |    5 
- security/selinux/netlink.c             |    5 
- security/selinux/netnode.c             |    5 
- security/selinux/netport.c             |    5 
- security/selinux/selinuxfs.c           |    5 
- security/selinux/ss/services.c         |   26 -
- security/smack/smack.h                 |   14 
- security/smack/smack_lsm.c             |   11 
- security/smack/smack_netfilter.c       |    4 
- security/smack/smackfs.c               |    4 
- security/tomoyo/common.h               |    2 
- security/tomoyo/securityfs_if.c        |    4 
- security/tomoyo/tomoyo.c               |    3 
- security/yama/yama_lsm.c               |    2 
- 52 files changed, 1000 insertions(+), 712 deletions(-)
+diff --git a/security/Makefile b/security/Makefile
+index 22ff4c8bd8ce..14d87847bce8 100644
+--- a/security/Makefile
++++ b/security/Makefile
+@@ -11,7 +11,7 @@ obj-$(CONFIG_SECURITY) 			+= lsm_syscalls.o
+ obj-$(CONFIG_MMU)			+= min_addr.o
+ 
+ # Object file lists
+-obj-$(CONFIG_SECURITY)			+= security.o
++obj-$(CONFIG_SECURITY)			+= security.o lsm_notifier.o
+ obj-$(CONFIG_SECURITYFS)		+= inode.o
+ obj-$(CONFIG_SECURITY_SELINUX)		+= selinux/
+ obj-$(CONFIG_SECURITY_SMACK)		+= smack/
+diff --git a/security/lsm_notifier.c b/security/lsm_notifier.c
+new file mode 100644
+index 000000000000..c92fad5d57d4
+--- /dev/null
++++ b/security/lsm_notifier.c
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * LSM notifier functions
++ *
++ */
++
++#include <linux/notifier.h>
++#include <linux/security.h>
++
++static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
++
++int call_blocking_lsm_notifier(enum lsm_event event, void *data)
++{
++	return blocking_notifier_call_chain(&blocking_lsm_notifier_chain,
++					    event, data);
++}
++EXPORT_SYMBOL(call_blocking_lsm_notifier);
++
++int register_blocking_lsm_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_register(&blocking_lsm_notifier_chain,
++						nb);
++}
++EXPORT_SYMBOL(register_blocking_lsm_notifier);
++
++int unregister_blocking_lsm_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_unregister(&blocking_lsm_notifier_chain,
++						  nb);
++}
++EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
+diff --git a/security/security.c b/security/security.c
+index 4d3c03a4524c..667479c2e82f 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -90,8 +90,6 @@ const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX + 1] = {
+ 	[LOCKDOWN_CONFIDENTIALITY_MAX] = "confidentiality",
+ };
+ 
+-static BLOCKING_NOTIFIER_HEAD(blocking_lsm_notifier_chain);
+-
+ static struct kmem_cache *lsm_file_cache;
+ static struct kmem_cache *lsm_inode_cache;
+ 
+@@ -649,27 +647,6 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+ 	}
+ }
+ 
+-int call_blocking_lsm_notifier(enum lsm_event event, void *data)
+-{
+-	return blocking_notifier_call_chain(&blocking_lsm_notifier_chain,
+-					    event, data);
+-}
+-EXPORT_SYMBOL(call_blocking_lsm_notifier);
+-
+-int register_blocking_lsm_notifier(struct notifier_block *nb)
+-{
+-	return blocking_notifier_chain_register(&blocking_lsm_notifier_chain,
+-						nb);
+-}
+-EXPORT_SYMBOL(register_blocking_lsm_notifier);
+-
+-int unregister_blocking_lsm_notifier(struct notifier_block *nb)
+-{
+-	return blocking_notifier_chain_unregister(&blocking_lsm_notifier_chain,
+-						  nb);
+-}
+-EXPORT_SYMBOL(unregister_blocking_lsm_notifier);
+-
+ /**
+  * lsm_blob_alloc - allocate a composite blob
+  * @dest: the destination for the blob
+-- 
+2.51.1.dirty
 
 
