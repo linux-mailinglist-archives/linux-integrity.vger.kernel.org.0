@@ -1,302 +1,204 @@
-Return-Path: <linux-integrity+bounces-7506-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7507-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7924DBF11A9
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Oct 2025 14:18:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DD0ABF127E
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Oct 2025 14:27:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 575334F3BC9
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Oct 2025 12:18:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6119A3AD654
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Oct 2025 12:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9274930DD33;
-	Mon, 20 Oct 2025 12:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0AE16DEB3;
+	Mon, 20 Oct 2025 12:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UYiPj0CK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3182FB08C;
-	Mon, 20 Oct 2025 12:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E1430F555;
+	Mon, 20 Oct 2025 12:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760962417; cv=none; b=ktM1f5nnilRs9LDxYKjBLiRXcdzx4/FdAIS/3mAzZl+aiCuGzcxXnouIScoH+pHgGQ3ZpFTHOJESD/4KznRv2ULtJYsacBd/H9O7CGB7ho6l7BV0JOTGwXIUBH4aeZv5xnzJBPUVszhSYVWQ0OFvQJcL7R29Sr5ffDDg/Cpy7cU=
+	t=1760962936; cv=none; b=sHVVd7yTg4xvPKqCcj+Sj9y0Ix1hZMaDru/yBQzF4AdjgAHdAiUdQA9MCHmwpl8EMcDIN/XMP4JjhyYklkdYzkliyZErlLr9iR+k9pi7TOcyYGwj7oelnyQ7HOSk64WF/N7LqVg5+Sts3uQqvCpD1sPWnC5AOARsjPGWXGAkPWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760962417; c=relaxed/simple;
-	bh=uRQt2BLn66gYf65UQCYarlFoLBJ3MSeRb88u26ArA/U=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TaYdgtljeEPfJdh87kEC6jc8l/nAz+seqTIpabayso5i4w5276ZIbgEhSvykLjqaNDu1TSfhpfd90mtSViADewZ+UxwGYOVrAvOLRvLMIGylj8p3R3jL3FS56qwZ8s4EeIU2l6AG4/vw8kgLn85rbebCbVJ/6fR+//kOOLKR35Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4cqv295YFxz1HBMx;
-	Mon, 20 Oct 2025 19:53:05 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id D70CE1402EC;
-	Mon, 20 Oct 2025 19:53:40 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwD3th68IvZo8MqQAA--.3781S2;
-	Mon, 20 Oct 2025 12:53:40 +0100 (CET)
-Message-ID: <cec499d5130f37a7887d39b44efd8538dd361fe3.camel@huaweicloud.com>
-Subject: Re: [PATCH v3 4/4] tpm: Allow for exclusive TPM access when using
- /dev/tpm<n>
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Jonathan McDowell <noodles@earth.li>, Peter Huewe <peterhuewe@gmx.de>, 
- Jarkko Sakkinen <jarkko@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, James Bottomley
-	 <James.Bottomley@hansenpartnership.com>, linux-integrity@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, zohar@linux.ibm.com
-Date: Mon, 20 Oct 2025 13:53:30 +0200
-In-Reply-To: <61049f236fe1eaf72402895cea6892b52ce7e279.1760958898.git.noodles@meta.com>
-References: <cover.1760958898.git.noodles@meta.com>
-	 <61049f236fe1eaf72402895cea6892b52ce7e279.1760958898.git.noodles@meta.com>
+	s=arc-20240116; t=1760962936; c=relaxed/simple;
+	bh=of3wZAUHKMfCVZYVBcIRSyBLTUb2ezn0Z1hO3nSqfII=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=IxlUqrFTmvmIT3Pikbm+hImgtjIrkG6oI9v/2oTZKMe9x6Qt2xGymuRHWM+fNnlxQA0G37ykrG3O0RoVDzTuY1zs7aPrfDa3BnAfKbV815+vnTLYFleI0MYY3jdVnWOBCzbvsgIXyUMIXgYrzinr0DIdP/QB5mHO7xIrnfpDISw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UYiPj0CK; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59JMhEtm001343;
+	Mon, 20 Oct 2025 12:21:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=cNpXfp
+	oUFXhapoL9sTv4eIMTnzU91hptS30+pXpGrF8=; b=UYiPj0CKqgZy73ViJ56a0u
+	3jJrk/2vG9i7ESpwny3f8CRJo2DcQEbRfhsK/CNH5AEECg2swVN8EHyj6ZgRSw0z
+	zYyrgsaI+0oPRsIjYn3oLbNbV1X9I+arvl55c9OMmDCp7TQlRYQqEGKITnTtvDA0
+	0Z5sbU3Dh8nXS9bH9A4WNH4BpYHsaE5Qz5CmvCM8D4aG6s+AH5RdDQVPxZCo1c6Z
+	N45NCvyNJ9TmKWUoVSsUxmks/KM6Hj3SVXv+1XNLWxDHQQRoYbQDLVo1XzuodCBN
+	ZJFjNuhPfPwbG/5GhsuyBM5zi3/UXpdqiJ86pElu1KI75ONnfRwVjoF7GXN0H/3g
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49v32h88pt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Oct 2025 12:21:53 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 59KCIaFx030654;
+	Mon, 20 Oct 2025 12:21:52 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49v32h88pq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Oct 2025 12:21:52 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59KBxp43002306;
+	Mon, 20 Oct 2025 12:21:52 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 49vqej5dbr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Oct 2025 12:21:51 +0000
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59KCLp2029557300
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 20 Oct 2025 12:21:51 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2E39558059;
+	Mon, 20 Oct 2025 12:21:51 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EFAC558063;
+	Mon, 20 Oct 2025 12:21:49 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.31.144])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 20 Oct 2025 12:21:49 +0000 (GMT)
+Message-ID: <559f6ebf4a19da321fffc2a3ca180dc3d6216a22.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fall back to default kernel module signature
+ verification
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Coiby Xu <coxu@redhat.com>
+Cc: linux-integrity@vger.kernel.org,
+        Dmitry Torokhov
+ <dmitry.torokhov@gmail.com>,
+        Karel Srot <ksrot@redhat.com>,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin	 <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn"	 <serge@hallyn.com>,
+        "open list:SECURITY SUBSYSTEM"	 <linux-security-module@vger.kernel.org>,
+        open list	 <linux-kernel@vger.kernel.org>
+In-Reply-To: <z6f4getlayaxaxvlxfxn2yvn5dvhrct64wke4uu2s3dfll3bqq@754bklrku55n>
+References: <20250928030358.3873311-1-coxu@redhat.com>
+	 <896f4fb0c0146512a66daf0b4c1e033aca4bd6d4.camel@linux.ibm.com>
+	 <bcd1f7b48311aff55711cdff4a6cdbb72aae1d04.camel@linux.ibm.com>
+	 <xq7bgyg63xlbogcik2we26yr5uf62f6kj3qn7ooljmqaoccrix@kkmuhza5cfdr>
+	 <9d279fd3d7b3cbb2778183ec777d6b9da8a64b82.camel@linux.ibm.com>
+	 <5bzredottmp2tdm3uebzjfqjr6c7bwssqkrbdqvudruvzr764e@37j6ycjci2sk>
+	 <27bb0c218084f51eba07f041d0fffea8971865b9.camel@linux.ibm.com>
+	 <z6f4getlayaxaxvlxfxn2yvn5dvhrct64wke4uu2s3dfll3bqq@754bklrku55n>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+Date: Mon, 20 Oct 2025 08:21:49 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwD3th68IvZo8MqQAA--.3781S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Gry8CF1DGw15KF4UGw15Arb_yoWxtw18pF
-	45CF93urs8Jr4qqFn7ZanruF1a9w4IgayUG397K3s3Cwn0gF15Wrn8KFy3Zry7Wr1rCrsY
-	y3y0vFyUCFyjkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUymb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
-	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
-	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
-	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UAwIDUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAHBGj1k+sH2QAAs6
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAyMiBTYWx0ZWRfXx2sXdzBFqE/3
+ Chand0NEWi5yJUE1JpE90Efp/BTQYh2L0GvsDXlVKVvAPAWQb+tBY5SlZgKUZMY03h+XYauSXu4
+ ECGSrrtVP9zWs943kOlEDzrEmYfPPz3vXQVONhvGKfehCJPxeSNfmbqe6wp+GzcSkUuSdITksRS
+ 0EA9isfnRfH0+6efN/MWQL+8C4gWMWpwPfwA0UDU84cTksGlsZtj5wWREEuazm23c1unrrusamj
+ FiCKb1fjOIf46UIVzB5sUWusHKQNPRly7vaEjzHrw2y0AJWLde8RpTjms2P1NkAOufzCdJJGF7O
+ 9oo4UKLaNHEmEs3eBrdnCs2X/BZkZ2EHCZoYguXWWA3F0ea65tIbLqVkUg9OJOy5aAAuq57ZQFn
+ 3zf/Kh0Nmv/cKZsCmlbNzW5tuCJi+g==
+X-Authority-Analysis: v=2.4 cv=OrVCCi/t c=1 sm=1 tr=0 ts=68f62961 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=gQ7tohhNsIfWToB5Hf4A:9 a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-GUID: -wQ3BsphU_0TP5q_Rdhw-GwkOHurO_Lm
+X-Proofpoint-ORIG-GUID: FbuxV6urzwBcOUH24ky1XvU7_oMffsb7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-20_03,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ clxscore=1015 bulkscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510180022
 
-On Mon, 2025-10-20 at 12:31 +0100, Jonathan McDowell wrote:
-> From: Jonathan McDowell <noodles@meta.com>
+On Sat, 2025-10-18 at 07:19 +0800, Coiby Xu wrote:
+> > > > 2. Instead of defining an additional process_measurement() argument=
+ to identify
+> > > > compressed kernel modules, to simplify the code it might be possibl=
+e to define a
+> > > > new "func" named COMPRESSED_MODULE_CHECK.
+> > > >=20
+> > > > +       [READING_COMPRESSED_MODULE] =3D MODULE_CHECK,  -> COMPRESSE=
+D_MODULE_CHECK
+> > >=20
+> > > I also thought about this approach. But IMA rule maps kernel module
+> > > loading to MODULE_CHECK. If we define a new rule and ask users to use
+> > > this new rule, ima_policy=3Dsecure_boot still won't work.
+> >=20
+> > I don't have a problem with extending the "secure-boot" policy to suppo=
+rt
+> > uncompressed kernel modules appended signatures, based on whether
+> > CONFIG_MODULE_SIG is enabled.  The new rule would be in addition to the=
+ existing
+> > MODULE_CHECK rule.
 >=20
-> There are situations where userspace might reasonably desire exclusive
-> access to the TPM, or the kernel's internal context saving + flushing
-> may cause issues, for example when performing firmware upgrades. Extend
-> the locking already used for avoiding concurrent userspace access to
-> prevent internal users of the TPM when /dev/tpm<n> is in use.
+> I assume once the new rule get added, we can't remove it for userspace
+> backward compatibility, right? And with CPIO xattr supported, it seems
+> there is no need to keep this rule. So if this concern is valid, do you
+> think we shall switch to another approach i.e. to make IMA support
+> verifying decompressed module and then make "secure-boot" to allow
+> appended module signature?
+
+Yes, once the rule is added, it wouldn't be removed.  As for "to make IMA
+support verifying decompressed module", yes that might be a better solution=
+,
+than relying on "sig_enforce" being enabled. IMA already supports verifying=
+ the
+appended signatures.  A new IMA specific or LSM hook would need to be defin=
+ed
+after module_decompress().
+
+Remember based on policy, IMA supports:
+1. verifying the signature stored in security.ima xattr
+2. verifying the appended signature (not for compressed kernel modules)
+3. verifying both the xattr and appended signatures
+4. none
+
+To prevent 3 - verifying both types of signatures, the IMA arch specific po=
+licy
+rule only adds the "appraise func=3DMODULE_CHECK ..." rule if CONFIG_MODULE=
+_SIG is
+NOT enabled.  Calling set_module_sig_enforced() from ima_appraise_measureme=
+nt()
+to set sig_enforce could inadvertently result in requiring both the xattr a=
+nd
+the appended signature kernel module verification.  To prevent this from
+happening, "sig_enforce" should not be set, only verified in
+ima_appraise_measurement().
+
 >=20
-> The few internal users who already hold the open_lock are changed to use
-> tpm_internal_(try_get|put)_ops, with the old tpm_(try_get|put)_ops
-> functions changing to obtain read access to the open_lock.  We return
-> -EBUSY when another user has exclusive access, rather than adding waits.
->=20
-> Signed-off-by: Jonathan McDowell <noodles@meta.com>
-> ---
-> v2: Switch to _locked instead of _internal_ for function names.
-> v3: Move to end of patch series.
->=20
->  drivers/char/tpm/tpm-chip.c       | 53 +++++++++++++++++++++++++------
->  drivers/char/tpm/tpm-dev-common.c |  8 ++---
->  drivers/char/tpm/tpm.h            |  2 ++
->  drivers/char/tpm/tpm2-space.c     |  5 ++-
->  4 files changed, 52 insertions(+), 16 deletions(-)
->=20
-> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-> index ba906966721a..687f6d8cd601 100644
-> --- a/drivers/char/tpm/tpm-chip.c
-> +++ b/drivers/char/tpm/tpm-chip.c
-> @@ -144,7 +144,7 @@ void tpm_chip_stop(struct tpm_chip *chip)
->  EXPORT_SYMBOL_GPL(tpm_chip_stop);
-> =20
->  /**
-> - * tpm_try_get_ops() - Get a ref to the tpm_chip
-> + * tpm_try_get_ops_locked() - Get a ref to the tpm_chip
->   * @chip: Chip to ref
->   *
->   * The caller must already have some kind of locking to ensure that chip=
- is
-> @@ -154,7 +154,7 @@ EXPORT_SYMBOL_GPL(tpm_chip_stop);
->   *
->   * Returns -ERRNO if the chip could not be got.
->   */
-> -int tpm_try_get_ops(struct tpm_chip *chip)
-> +int tpm_try_get_ops_locked(struct tpm_chip *chip)
->  {
->  	int rc =3D -EIO;
-> =20
-> @@ -185,22 +185,57 @@ int tpm_try_get_ops(struct tpm_chip *chip)
->  	put_device(&chip->dev);
->  	return rc;
->  }
-> -EXPORT_SYMBOL_GPL(tpm_try_get_ops);
-> =20
->  /**
-> - * tpm_put_ops() - Release a ref to the tpm_chip
-> + * tpm_put_ops_locked() - Release a ref to the tpm_chip
->   * @chip: Chip to put
->   *
-> - * This is the opposite pair to tpm_try_get_ops(). After this returns ch=
-ip may
-> - * be kfree'd.
-> + * This is the opposite pair to tpm_try_get_ops_locked(). After this ret=
-urns
-> + * chip may be kfree'd.
->   */
-> -void tpm_put_ops(struct tpm_chip *chip)
-> +void tpm_put_ops_locked(struct tpm_chip *chip)
->  {
->  	tpm_chip_stop(chip);
->  	mutex_unlock(&chip->tpm_mutex);
->  	up_read(&chip->ops_sem);
->  	put_device(&chip->dev);
->  }
-> +
-> +/**
-> + * tpm_try_get_ops() - Get a ref to the tpm_chip
-> + * @chip: Chip to ref
-> + *
-> + * The caller must already have some kind of locking to ensure that chip=
- is
-> + * valid. This function will attempt to get the open_lock for the chip,
-> + * ensuring no other user is expecting exclusive access, before locking =
-the
-> + * chip so that the ops member can be accessed safely. The locking preve=
-nts
-> + * tpm_chip_unregister from completing, so it should not be held for lon=
-g
-> + * periods.
-> + *
-> + * Returns -ERRNO if the chip could not be got.
-> + */
-> +int tpm_try_get_ops(struct tpm_chip *chip)
-> +{
-> +	if (!down_read_trylock(&chip->open_lock))
-> +		return -EBUSY;
+> Another thought is to make CPIO support xattr. Today I realize that
+> ima_policy=3Dsecure_boot can also cause failure of loading kdump kernel.
+> So the issue this patch tries to resolves has much less impact than I
+> thought. Maybe we can wait until CPIO xattr support is ready? I'll help
+> review and test Roberto's patches if this is the best way forward.
 
-Hi Jonathan
+I'm not sure of the status of the CPIO patch set.  Roberto?
 
-do I understand it correctly, that a process might open the TPM with
-O_EXCL, and this will prevent IMA from extending a PCR until that
-process closes the file descriptor?
+Mimi
 
-If yes, this might be a concern, and I think an additional API to
-prevent such behavior would be needed (for example when IMA is active,
-i.e. there is a measurement policy loaded).
-
-Thanks
-
-Roberto
-
-> +
-> +	return tpm_try_get_ops_locked(chip);
-> +}
-> +EXPORT_SYMBOL_GPL(tpm_try_get_ops);
-> +
-> +/**
-> + * tpm_put_ops() - Release a ref to the tpm_chip
-> + * @chip: Chip to put
-> + *
-> + * This is the opposite pair to tpm_try_get_ops(). After this returns
-> + * chip may be kfree'd.
-> + */
-> +void tpm_put_ops(struct tpm_chip *chip)
-> +{
-> +	tpm_put_ops_locked(chip);
-> +
-> +	up_read(&chip->open_lock);
-> +}
->  EXPORT_SYMBOL_GPL(tpm_put_ops);
-> =20
->  /**
-> @@ -644,10 +679,10 @@ void tpm_chip_unregister(struct tpm_chip *chip)
->  #ifdef CONFIG_TCG_TPM2_HMAC
->  	int rc;
-> =20
-> -	rc =3D tpm_try_get_ops(chip);
-> +	rc =3D tpm_try_get_ops_locked(chip);
->  	if (!rc) {
->  		tpm2_end_auth_session(chip);
-> -		tpm_put_ops(chip);
-> +		tpm_put_ops_locked(chip);
->  	}
->  #endif
-> =20
-> diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev=
--common.c
-> index f2a5e09257dd..0f5bc63411aa 100644
-> --- a/drivers/char/tpm/tpm-dev-common.c
-> +++ b/drivers/char/tpm/tpm-dev-common.c
-> @@ -65,7 +65,7 @@ static void tpm_dev_async_work(struct work_struct *work=
-)
-> =20
->  	mutex_lock(&priv->buffer_mutex);
->  	priv->command_enqueued =3D false;
-> -	ret =3D tpm_try_get_ops(priv->chip);
-> +	ret =3D tpm_try_get_ops_locked(priv->chip);
->  	if (ret) {
->  		priv->response_length =3D ret;
->  		goto out;
-> @@ -73,7 +73,7 @@ static void tpm_dev_async_work(struct work_struct *work=
-)
-> =20
->  	ret =3D tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
->  			       sizeof(priv->data_buffer));
-> -	tpm_put_ops(priv->chip);
-> +	tpm_put_ops_locked(priv->chip);
-> =20
->  	/*
->  	 * If ret is > 0 then tpm_dev_transmit returned the size of the
-> @@ -220,14 +220,14 @@ ssize_t tpm_common_write(struct file *file, const c=
-har __user *buf,
->  	 * lock during this period so that the tpm can be unregistered even if
->  	 * the char dev is held open.
->  	 */
-> -	if (tpm_try_get_ops(priv->chip)) {
-> +	if (tpm_try_get_ops_locked(priv->chip)) {
->  		ret =3D -EPIPE;
->  		goto out;
->  	}
-> =20
->  	ret =3D tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
->  			       sizeof(priv->data_buffer));
-> -	tpm_put_ops(priv->chip);
-> +	tpm_put_ops_locked(priv->chip);
-> =20
->  	if (ret > 0) {
->  		priv->response_length =3D ret;
-> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> index 02c07fef41ba..57ef8589f5f5 100644
-> --- a/drivers/char/tpm/tpm.h
-> +++ b/drivers/char/tpm/tpm.h
-> @@ -272,6 +272,8 @@ struct tpm_chip *tpm_chip_alloc(struct device *dev,
->  				const struct tpm_class_ops *ops);
->  struct tpm_chip *tpmm_chip_alloc(struct device *pdev,
->  				 const struct tpm_class_ops *ops);
-> +int tpm_try_get_ops_locked(struct tpm_chip *chip);
-> +void tpm_put_ops_locked(struct tpm_chip *chip);
->  int tpm_chip_register(struct tpm_chip *chip);
->  void tpm_chip_unregister(struct tpm_chip *chip);
-> =20
-> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.=
-c
-> index 60354cd53b5c..0ad5e18355e0 100644
-> --- a/drivers/char/tpm/tpm2-space.c
-> +++ b/drivers/char/tpm/tpm2-space.c
-> @@ -58,10 +58,9 @@ int tpm2_init_space(struct tpm_space *space, unsigned =
-int buf_size)
-> =20
->  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
->  {
-> -
-> -	if (tpm_try_get_ops(chip) =3D=3D 0) {
-> +	if (tpm_try_get_ops_locked(chip) =3D=3D 0) {
->  		tpm2_flush_sessions(chip, space);
-> -		tpm_put_ops(chip);
-> +		tpm_put_ops_locked(chip);
->  	}
-> =20
->  	kfree(space->context_buf);
 
 
