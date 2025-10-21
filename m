@@ -1,787 +1,264 @@
-Return-Path: <linux-integrity+bounces-7510-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7511-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E71B7BF67AB
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Oct 2025 14:38:49 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E7BBF687A
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Oct 2025 14:48:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79383426A2A
-	for <lists+linux-integrity@lfdr.de>; Tue, 21 Oct 2025 12:38:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EF28850588A
+	for <lists+linux-integrity@lfdr.de>; Tue, 21 Oct 2025 12:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B85E2F28EB;
-	Tue, 21 Oct 2025 12:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0293321DE;
+	Tue, 21 Oct 2025 12:46:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSoEyG3g"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="jJ7yrR9Y"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010070.outbound.protection.outlook.com [52.101.69.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28EC335502D;
-	Tue, 21 Oct 2025 12:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761050325; cv=none; b=vEEMAZWPv+ldUP2qlb4euIjqlH9kj7ZC5qG+3TnH4JAS3g6T6W/vOMtRUtGwkoQ13RQXB+4vHdlkSPIfCN6vjOjKwNfGCf5K8OLCLfx/NtBspYU4T+V96TrpdANIbKSNVigcUpmMjoro7/AMh9Jy+x02YEEwB+5+JTzIFd/IQTM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761050325; c=relaxed/simple;
-	bh=y6YYy7q/y4BTHzil9RMlZJdPPv2cOHjahbUPQ36FXdY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EkIE5OSVjRoqUwAK3sBNhlaWxoOYY9hTTiY6kcff2wKeGHUYfczq8+CurmIrbvLo2DnmQ+oMQiBCMggCOSxvc5ChL6XJj5c9Ou8u1yzUe5gvxY+Uxgg+nYkGcWy1Rfwzv4QRvP1YrQPKt4scPpCfEeaXjy5Zv08ef/1h3x5TE7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSoEyG3g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCC76C4CEF1;
-	Tue, 21 Oct 2025 12:38:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761050324;
-	bh=y6YYy7q/y4BTHzil9RMlZJdPPv2cOHjahbUPQ36FXdY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DSoEyG3gOmtglahIVhhdxwn237T1qxuOR8T3dlqF16KPV+I2I8jNEeEH3rPLrMUBQ
-	 Dvd7rjRhqZP8gtYdc0FShk/MRdtodUXMyXFDFzA7rZnBxAh8hUyGOoU0IkmonB0kt5
-	 Yp12V77NQqH7jCAq4NCsKwHF8GuQw/oaIK4N56BHbFmTwlkxrzEP7GbgZS3BCU09VN
-	 W9KdFlvVamgJDMf2kNMsoV2fn5puWnzaQnncOJAMwLZ6UwOkAZO728XRv94kYmfUTM
-	 sGmXOryWuJSc2lduIczitQJMBunn4f8dEhFudcFtAIzmE1NE1xHY8FJXxpyZ9J7y3I
-	 SO1xB2s+G5L5g==
-Date: Tue, 21 Oct 2025 14:38:38 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <christian@brauner.io>, Marc Dionne <marc.dionne@auristor.com>, 
-	Jeffrey Altman <jaltman@auristor.com>, Steve French <sfrench@samba.org>, linux-afs@lists.infradead.org, 
-	openafs-devel@openafs.org, linux-cifs@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Etienne Champetier <champetier.etienne@gmail.com>, Chet Ramey <chet.ramey@case.edu>, 
-	Cheyenne Wills <cwills@sinenomine.net>, Mimi Zohar <zohar@linux.ibm.com>, 
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 1/2] vfs: Allow filesystems with foreign owner IDs to
- override UID checks
-Message-ID: <20251021-agieren-spruch-65c107748c09@brauner>
-References: <20251014133551.82642-1-dhowells@redhat.com>
- <20251014133551.82642-2-dhowells@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3404D3314DE;
+	Tue, 21 Oct 2025 12:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761050783; cv=fail; b=fs5o7DZJYgEyw7IbS+Rf7+D83oRRuGErGlqSbC3ZwWcFQ63nOs9LUn6a6lN6ml2gRQzt5fYLP4TTZMYDYibTfAXOvlqLDw7Lt1eRVVsGTF704sRR0sZuCodciNzY3Y2dWYFCI+zMz5KAQm3AU/0PGz/HopNf3pz7UQDLEPU6q9I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761050783; c=relaxed/simple;
+	bh=rKFDNRUaqofbunaMhOcxPDHiwF+1rv8fo9cPbGBD5gw=;
+	h=Message-ID:Date:From:Subject:To:Cc:Content-Type:MIME-Version; b=JjKYAzu+z8FF9L8YO4fyZEzX3jRQkqp+8255jtH0p6wv+HVyrMwewNiBFlffDp5S4QbIlGRZSzRQxCsbdjnCya86OeGaDe2YjC9DjhRc5Sp+C3J0dQgdiH2ReMfczKrZxKDZSCBl3jGfz5rkzdjpQGjplMUGTMXTSJtth/YACuM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=jJ7yrR9Y; arc=fail smtp.client-ip=52.101.69.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WMZwRYqeG+OSbJegJIeaDTCMd7+1vvcGeHrpE2p3Wxk87ziSkjN9WyDH1JIElPw/yiW9mKoQimvs1yc66aUZ3BNjlQD3ZlM+cAS7SazJyRJqG9Ndf7epO3KhxYDmhApugC/pB7X8lzmfGEmOJWPIrxmTolUbmL0Y2oplXjyy600lv1q59sMv4FoRkgjt6g4rh2+dY2z/W5cZA46UNuo+8tPH3QJ/QEteVi4PG8jYDk172177fisInZ6zDxaWLBndn46Cm/RNBLlpg+SibzVhf+QpzW32hIx16beAh8YW2B8K1e9pKH2BWFrKeIjK4H+AUwPgQM2s3QFpzOmsEhYz+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PD/rWWf/cmzpL0oDg+SI2HgDKqI+QHP1IlyXBTQ58pY=;
+ b=ln+377udcpJozDO+f/BPoez1OgL9FkPr0pq16TpeeZRt8HQcUigPjH8azvoEXBPuCsmAJ42X6lseVtYY9YBQ6ejHXUtnkRl7NHw/pfpt/Iq7bswzPa45ndwt1xGuypKJ7jAmM6fB0reP3JVzFUd3dLQyyc9kVoInemiTN+7Wrx680fYlLi3cvCU3fsgnRTVlQOwX5C5oLsa/nbdSrk+qEoGkBOV2zewzOEVYA4ichRLArFS5MSTuvMzG0/h7sOnu6qa8ce55GbocxbvFCRBDHxXseCadFSJRT/SY+T8bcl28yVefj12TuuB+vpyyqZn2mXXHIARP8r12Gn8hAgMIKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PD/rWWf/cmzpL0oDg+SI2HgDKqI+QHP1IlyXBTQ58pY=;
+ b=jJ7yrR9Yap/hPFZw1rbtysEByESTNL0P0gGkZ/iXYQ4J5iMMiUIg2Cn3GFAzjdZJGbqLSyBnrZJwT3tllAbO+77q2LRUZRuYLBBVuxpB4unabECGQ8dL0ojScbVBzfBuJ8A0XQYtb2drkXTfNwIgyjS2bIkuDxLoDoJ7k6QskRzqnT4jRTzHLM0W1CRLQpesP8/iaT9TQRptKbUJnoeXYNSvwLgvm12eOTXgimvzO0n26I/kgQYdJunW86zp14nyFv05BPwU5X8rxa07LOCwB60Cx9WyPBuHs9hQd6cKWzTVh1Lf2zON82zN+fvQp1Yko9AIXCmN48zyvW+Oo0v2hA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
+ by DB5PR10MB7890.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:48f::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.16; Tue, 21 Oct
+ 2025 12:46:17 +0000
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8fe1:7e71:cf4a:7408]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::8fe1:7e71:cf4a:7408%6]) with mapi id 15.20.9228.015; Tue, 21 Oct 2025
+ 12:46:17 +0000
+Message-ID: <bbc41534-a2d9-42dc-ac8a-ff8a0b4fd41f@siemens.com>
+Date: Tue, 21 Oct 2025 14:46:15 +0200
+User-Agent: Mozilla Thunderbird
+From: Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH] hwrng: tpm: Do not enable by default
+Content-Language: en-US
+To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
+ linux-integrity@vger.kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Jens Wiklander <jens.wiklander@linaro.org>,
+ OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
+ linux-crypto@vger.kernel.org
+Autocrypt: addr=jan.kiszka@siemens.com; keydata=
+ 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
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0398.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cf::16) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:588::19)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251014133551.82642-2-dhowells@redhat.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|DB5PR10MB7890:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ca769bc-5f2c-45f9-09fa-08de109fd394
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eUZRZEVIc2RFVGt5aGRMVFhIU3haUzQ5UzcyVGlQcU4vaVpSVEFDcDUxVDhN?=
+ =?utf-8?B?ZmVXZDBOUUVrL2k1N0FBSTNVTnp4aW95dVhYYmVvdmhCLzVSS1Rqbk9uTERW?=
+ =?utf-8?B?MUlOOVBKbHA3MHJWVm05YzN0bk9UNHpqeUdYRDFiUmpUL2VodDUzT0xSb2V3?=
+ =?utf-8?B?VjNBRkFUUjZ3RXBmci9iL1U5SWhoRHJ5eFptKzJTdUVzeTBRRlpVMVo2TXNB?=
+ =?utf-8?B?VkMvUmhuU2JKdnZpR0VjVkdmYUFjSGZFSElHU01jWXlURWJsZit3Mm9meTdB?=
+ =?utf-8?B?KzFXSWxCb1Z3YkN1dVUxK0x5eU9VT21ML3BvbUFaQ2JCeEh4WEhEaWxGamZw?=
+ =?utf-8?B?Tml0WWczMFcxUStBOGVIZzQ4UmF1eTJwMDB5VS94dmZoNFFTdTlqeC9BYklz?=
+ =?utf-8?B?bDYrZ0U5S0FKVnQ2M1NlMWNJd0pmcWVPWjQ3YUx3MjhPbFJCVzJCMEk4U3dC?=
+ =?utf-8?B?MEVDS1hBbmJxTkNZTmJnUGE1Vmo2OU5DcWkzTmg4dGU2K0xlR1Z1MGt2am5Z?=
+ =?utf-8?B?M0FzRm12UkJESTVROWo2M1d5V3VaSkJtUUgwaXUraVg4VHdCdDB5eURUOWI5?=
+ =?utf-8?B?cmRNTTBuVFM2YUJSQWlPWFRGMThLQVptLzVMNHorbElzZlNKVXhLbWtJY2lH?=
+ =?utf-8?B?QkExSkJ2YVAzOUdtWmRDL21PS2p5TWRZM21XRFN5SlFEalUwOWRmNko3bFdn?=
+ =?utf-8?B?V2FTUmJKeUYzTER1Tm0vUWpFQ0IrVVZaOXVrdW9rU0thZ2sxNFVXYUVaeWhz?=
+ =?utf-8?B?YllWSDdPNDgrL0RibFdnNmo0NE9Tc2ZSQkczczY0ME5WbW9NZ2xjQ1NrRXNX?=
+ =?utf-8?B?eGk4TUM3bzY5QlB3dSsvbVI2QlN5OE84YUVNY21MVjFJTVZmSmh1bGZ1dEtB?=
+ =?utf-8?B?Z0cyQ0p1cWlJb3U3R2E4cXhrWWwyQkhoVUR4UGE3STZvdmJWOURjLzBEZE5k?=
+ =?utf-8?B?VFJhaHlyd2NwendHTEgxYnhmM0lXblZVSWJEUHY2MnJTb0grUGo5RWpYV040?=
+ =?utf-8?B?NEVHUER2WEFHK3VWZ0RYNU1PME4xRS9jQmM2OXZ5NFFXdi95UmZudDVRU3hI?=
+ =?utf-8?B?TlhobTM3RHhvQitKcWMxbnNRdWZZTUlNMyt3MXZ1VnFCVEkvR2JQckhYQWpF?=
+ =?utf-8?B?NzRRZzgvWUh6US8xc3FRV1dFVVp0bjVYcVBZSnRWRklrMmI2cmtGb05qWTBI?=
+ =?utf-8?B?MXpUMEFzQTVKTU9YSHpxa3UzTE92ZXVFRVRzTmY3aXVKOHQrWTBzekVPWWtJ?=
+ =?utf-8?B?NmNMNUtCajAzdHNMd01PZWVUZGxKTjRoejV1RUZ3S2RXNEdhVmw4dnRtTmdB?=
+ =?utf-8?B?NVZFd2Nob3locllTRjhpNEJVdXZ6cEJGMVFDeWJZUWxxNExCOUxoUE81VDV3?=
+ =?utf-8?B?R2c0TU1pVEQvTitMSW5kbkJMKytHTXB1SFlZdGo2R0tPYzNOY09NbmljVXlv?=
+ =?utf-8?B?Y2pGRDN1bWFhT1h6ZjlNMmc1UEc3UXpNL3VITGNTN2hhSTVDdTExeHZHT0tn?=
+ =?utf-8?B?bVF3bGd4UjlONmVHenY3UmxkVzNnR21aUGR0YXU2Mi9SOWZoTlZHZVRWOFJz?=
+ =?utf-8?B?VTlvRndFbHZXTEd6RU1UbDVzK2xZRmxTVWt1QTNUMzErMHJ4c3JxbTU0OUJV?=
+ =?utf-8?B?MHN6eWlqYzl0TktiUEkwY244bytQZWtaa1cwc2duV24zYkJNT0t5MHMxa3dm?=
+ =?utf-8?B?UU9qVHRUNElqRVRaamFXY0t3T0tsRnAxaTl0bFIrQ25jYWppSWk5WkFicWF1?=
+ =?utf-8?B?M1kvT2hvMXJqN1dzYi9KUGtTSERld29SUVhZVEIvV2FIRm9QMVZUWC9UT3kz?=
+ =?utf-8?B?ckZWZkRSYVZaRzhGK3NWYjZBMEpPMW5GTGNVeGg0MGVQWjltYlVaMHNXSGpY?=
+ =?utf-8?B?OGFJTmUrQnIzbzNqN1VyU2I4ekh0Qnk3bDk2YkZ1SStPVUcwdkI1ZWtvOWNO?=
+ =?utf-8?Q?ejUqVqR4/qJ1tlPlhWrEFuS1h+wfwAZo?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dUxpN2sxdHd6NGZUclRtR3VVRjdaYWc4ZEFnZmNka2FHUmRwWWx4TGZaUmsw?=
+ =?utf-8?B?R2xybDEyVk5mR1o4MnM0c1dWdFpwWnZYc3pOa2xLS082ME84QVJXR2dRSnhT?=
+ =?utf-8?B?K1Q4R1kvelpmMlFWTmdiV3JDSUdVOFJPSTJHcGtOOVJ2L09DZGdRTnUzeTRG?=
+ =?utf-8?B?VUZwU1N2V0wwS3JxNnpKYURrd0RlSHFpM0lCeERGUjJPRUlSZThCT2xQZUMz?=
+ =?utf-8?B?M0JCbFV5S1JnOWk0SktmOGlpckFKTjdydHNmSmQyUVBnTlI2cTZJUzl3Tzd6?=
+ =?utf-8?B?Qm1OWVFER1R3QTZyL3QvQm5rQUU0YjFPajQwOEJFVExuQW9XOTJ6ZWR5T1FM?=
+ =?utf-8?B?RGVPNm5NVEJ2QVU5WENOdjQrcnlXZlMyQVl6azlpY1h0NDEzRjZabkdqOG5v?=
+ =?utf-8?B?dE1pS0hXVlk2Y0F1MUxncWtoeDVRT2lIM0NvanFXRDBPRjJjV0NKWG1PNlFX?=
+ =?utf-8?B?VlVTekxMTWxlMjJVWGloelNhRDczTjNUSG45REZidk1STmk3bGx1c2V2YnA4?=
+ =?utf-8?B?R0hqYVJjRGZ6M0NSUDVTRVZpUWNrN2JSa2wyQ3UwMUJpcXJUN01FcmIrYjBx?=
+ =?utf-8?B?OVNMTUJBcURRQU9CZ2dsMUhUL3hqejZsaHFUWmZMSTVEWmEvTFBpRDNVWFFH?=
+ =?utf-8?B?eFdNaGVIWmppZWNjM253dS9iWm85UThBUFFIazZ4MGFSbFIzNjNHczFEOSsr?=
+ =?utf-8?B?dXVNOXBjSWtPeE1abldnd05WMktyQXBPVEdYZEdCZFZ1SzVxamtBa201YVlH?=
+ =?utf-8?B?clRJUitvbzhXUXVTOXhrSTQwN204emoxTFR5eEFsUFJ0TzY2WkpEUmpSbkp2?=
+ =?utf-8?B?WmJJTFpkQnFHTDRQK3ZaZ2xFaVh4UUdkbkVXSUQvYmNvbGlWZDh3TFhLdVpS?=
+ =?utf-8?B?bVJEcmUyaG42eWpZVmxvOFJGWEUzK3ZKWW5tci9pdi9yUUZlODJoaGZ6QUpl?=
+ =?utf-8?B?RjlYQVFsL0UxSy9zYlg5SjRGL1JUNE5JQzBFYXZIa3dhejdKaGZaSk1qNW0y?=
+ =?utf-8?B?b0NsM0ozV04zaCt0YUJpTExvSUVkOEdYdzEyWXE5N2JxZjVKSktwdUVHMEZu?=
+ =?utf-8?B?YmRJbC8wS1dsLzNnVnpMaFBPeVl2dFExZ3RqNlRMdVFJQTdYVzVYMTYwQzAz?=
+ =?utf-8?B?UDhGbGxnY3VkYTh4MFpXbmtGOFNVTWtxUFRNSFhMczM1VWM5U0x3aERqaHdJ?=
+ =?utf-8?B?b0RjbE51K2pVblNXZHJhMVMwZW1oODd2dnlRTnJZTlFubHZVRCtpdGg3UHh4?=
+ =?utf-8?B?TGtlU1FFRnNvN1dadWk2eUlWSit1aWhkRU1PZlgxOFd0aCtwMVVsaEwydWx4?=
+ =?utf-8?B?aEVMNnRJdnlZVDV3WnRHRzQ0UTdZTDQ3MFpDcGtxWkJyaUJpdEN2Zm1teVVq?=
+ =?utf-8?B?K0pzRnB5aFBYbGtYUGZNNi9aaFc4d0tycXhKb09qdmxMbk11MDAzUE9OYUM0?=
+ =?utf-8?B?MWhhMjFQN2lTMzl3WDVQdFg5bUx5S0QzRGpaTXlsbFVQNWN6WldDaHl2ZExu?=
+ =?utf-8?B?NllPcTc1QnhLZHRRSjZUVElualJPRk9XR0JrMSsvUVZSUjFGVjBsWlhyN0tJ?=
+ =?utf-8?B?b3FQQmo1NmJmR24xb0lISUZoMi9qUTQwSndaTExsZmxLSWVaUTV5VGx0T0JH?=
+ =?utf-8?B?Y2xqUC8ySXUxOWcyUTZTNUgxa2tTRXpsdmYzK1h6eDhvZXBQR2ZvcGpLVzJP?=
+ =?utf-8?B?WW5UOGk4bVdTSWQ0UThreFE2SmpZaUh3YWF5ZnJZQUpFdGFPSUV1R0plVCt3?=
+ =?utf-8?B?TWk0dEdVWkZkcVpFdmNBZ1YrVS9GemlITEVTVEc1UUlsZzVKRFJyRS9Lc2JB?=
+ =?utf-8?B?WlplU1V4cFQxZ0x6OURzLzFhQ3RxWkNDZHArY3Frei9JZWNqUFZDTEoxNDRw?=
+ =?utf-8?B?SFMxMkNiNC9weVIrUUFGUDQ4KzhtZC93ekZ1ZmI5aWtCcTl3VHRUc2FWSVhV?=
+ =?utf-8?B?SnFSUDFUMGdzeTVWNFJoMndPenoyR1RmOFcyWFBNeVhKTVNFSGs2NmJ5S01R?=
+ =?utf-8?B?b0E5NzVJbjFmKzUrQWQzamdicmdab2pLL0xLVjkxU2JtNHRIbU1CKzJhenhw?=
+ =?utf-8?B?MzlYbm9Uc1NST3FKaERGYklEUkI1ckczRVROK1FnMjRiWjNkeXdWZkVJd0dC?=
+ =?utf-8?Q?GrL5u0E0NdJN1sfqHhcQ+BiNa?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ca769bc-5f2c-45f9-09fa-08de109fd394
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2025 12:46:17.0835
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: acsGeyUX9iFxSe6MadRtsCIWeiEg/Ie5zeKQRd3GpOvLe3GxebPzZ4feEiUSEk3ZsL1QeguNv7gV1AwU2o1aAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR10MB7890
 
-On Tue, Oct 14, 2025 at 02:35:44PM +0100, David Howells wrote:
-> A number of ownership checks made by the VFS make a number of assumptions:
-> 
->  (1) that it is meaningful to compare inode->i_uid to a second ->i_uid or
->      to current_fsuid(),
-> 
->  (2) that current_fsuid() represents the subject of the action,
-> 
->  (3) that the number in ->i_uid belong to the system's ID space and
-> 
->  (4) that the IDs can be represented by 32-bit integers.
-> 
-> Network filesystems, however, may violate all four of these assumptions.
-> Indeed, a network filesystem may not even have an actual concept of a UNIX
-> integer UID (cifs without POSIX extensions, for example).  Plug-in block
-> filesystems (e.g. USB drives) may also violate this assumption.
-> 
-> In particular, AFS implements its own ACL security model with its own
-> per-cell user ID space with 64-bit IDs for some server variants.  The
-> subject is represented by a token in a key, not current_fsuid().  The AFS
-> user IDs and the system user IDs for a cell may be numerically equivalent,
-> but that's matter of administrative policy and should perhaps be noted in
-> the cell definition or by mount option.  A subsequent patch will address
-> AFS.
-> 
-> To help fix this, three functions are defined to perform UID comparison
-> within the VFS:
-> 
->  (1) vfs_inode_is_owned_by_me().  This defaults to comparing i_uid to
->      current_fsuid(), with appropriate namespace mapping, assuming that the
->      fsuid identifies the subject of the action.  The filesystem may
->      override it by implementing an inode op:
-> 
-> 	int (*is_owned_by_me)(struct mnt_idmap *idmap, struct inode *inode);
-> 
->      This should return 0 if owned, 1 if not or an error if there's some
->      sort of lookup failure.  It may use a means of identifying the subject
->      of the action other than fsuid, for example by using an authentication
->      token stored in a key.
-> 
->  (2) vfs_inodes_have_same_owner().  This defaults to comparing the i_uids
->      of two different inodes with appropriate namespace mapping.  The
->      filesystem may override it by implementing another inode op:
-> 
-> 	int (*have_same_owner)(struct mnt_idmap *idmap, struct inode *inode1,
-> 			       struct inode *inode2);
-> 
->      Again, this should return 0 if matching, 1 if not or an error if
->      there's some sort of lookup failure.
-> 
->  (3) vfs_inode_and_dir_have_same_owner().  This is similar to (2), but
->      assumes that the second inode is the parent directory to the first and
->      takes a nameidata struct instead of a second inode pointer.
-> 
-> Fix a number of places within the VFS where such UID checks are made that
-> should be deferring interpretation to the filesystem.
-> 
->  (*) chown_ok()
->  (*) chgrp_ok()
-> 
->      Call vfs_inode_is_owned_by_me().  Possibly these need to defer all
->      their checks to the network filesystem as the interpretation of the
->      new UID/GID depends on the netfs too, but the ->setattr() method gets
->      a chance to deal with that.
-> 
->  (*) coredump_file()
-> 
->      Call vfs_is_owned_by_me() to check that the file created is owned by
->      the caller - but the check that's there might be sufficient.
-> 
->  (*) inode_owner_or_capable()
-> 
->      Call vfs_is_owned_by_me().  I'm not sure whether the namespace mapping
->      makes sense in such a case, but it probably could be used.
-> 
->  (*) vfs_setlease()
-> 
->      Call vfs_is_owned_by_me().  Actually, it should query if leasing is
->      permitted.
-> 
->      Also, setting locks could perhaps do with a permission call to the
->      filesystem driver as AFS, for example, has a lock permission bit in
->      the ACL, but since the AFS server checks that when the RPC call is
->      made, it's probably unnecessary.
-> 
->  (*) acl_permission_check()
->  (*) posix_acl_permission()
-> 
->      Unchanged.  These functions are only used by generic_permission()
->      which is overridden if ->permission() is supplied, and when evaluating
->      a POSIX ACL, it should arguably be checking the UID anyway.
-> 
->      AFS, for example, implements its own ACLs and evaluates them in
->      ->permission() and on the server.
-> 
->  (*) may_follow_link()
-> 
->      Call vfs_inode_and_dir_have_same_owner() and vfs_is_owned_by_me() on
->      the the link and its parent dir.
-> 
->  (*) may_create_in_sticky()
-> 
->      Call vfs_is_owned_by_me() and also vfs_inode_and_dir_have_same_owner()
->      both.
-> 
->      [?] Should this return ok immediately if the open call we're in
->      created the file being checked.
-> 
->  (*) __check_sticky()
-> 
->      Call vfs_is_owned_by_me() on both the dir and the inode, but for AFS
->      vfs_is_owned_by_me() on a directory doesn't work, so call
->      vfs_inodes_have_same_owner() instead to check the directory (as is
->      done in may_create_in_sticky()).
-> 
->  (*) may_dedupe_file()
-> 
->      Call vfs_is_owned_by_me().
-> 
->  (*) IMA policy ops.
-> 
->      Unchanged for now.  I'm not sure what the best way to deal with this
->      is - if, indeed, it needs any changes.
-> 
-> Note that wrapping stuff up into vfs_inode_is_owned_by_me() isn't
-> necessarily the most efficient as it means we may end up doing the uid
-> idmapping an extra time - though this is only done in three places, all to
-> do with world-writable sticky dir checks.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Etienne Champetier <champetier.etienne@gmail.com>
-> cc: Marc Dionne <marc.dionne@auristor.com>
-> cc: Jeffrey Altman <jaltman@auristor.com>
-> cc: Chet Ramey <chet.ramey@case.edu>
-> cc: Cheyenne Wills <cwills@sinenomine.net>
-> cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> cc: Christian Brauner <brauner@kernel.org>
-> cc: Steve French <sfrench@samba.org>
-> cc: Mimi Zohar <zohar@linux.ibm.com>
-> cc: linux-afs@lists.infradead.org
-> cc: openafs-devel@openafs.org
-> cc: linux-cifs@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-integrity@vger.kernel.org
-> Link: https://groups.google.com/g/gnu.bash.bug/c/6PPTfOgFdL4/m/2AQU-S1N76UJ
-> Link: https://git.savannah.gnu.org/cgit/bash.git/tree/redir.c?h=bash-5.3-rc1#n733
-> ---
->  Documentation/filesystems/vfs.rst |  21 ++++
->  fs/attr.c                         |  58 ++++++-----
->  fs/coredump.c                     |   2 +-
->  fs/inode.c                        |  11 +-
->  fs/internal.h                     |   1 +
->  fs/locks.c                        |   7 +-
->  fs/namei.c                        | 161 ++++++++++++++++++++++++------
->  fs/remap_range.c                  |  20 ++--
->  include/linux/fs.h                |   6 +-
->  9 files changed, 216 insertions(+), 71 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
-> index 4f13b01e42eb..5acbad3be4fd 100644
-> --- a/Documentation/filesystems/vfs.rst
-> +++ b/Documentation/filesystems/vfs.rst
-> @@ -495,6 +495,9 @@ As of kernel 2.6.22, the following members are defined:
->  				    struct dentry *dentry, struct file_kattr *fa);
->  		int (*fileattr_get)(struct dentry *dentry, struct file_kattr *fa);
->  	        struct offset_ctx *(*get_offset_ctx)(struct inode *inode);
-> +		int (*is_owned_by_me)(struct mnt_idmap *idmap, struct inode *inode);
-> +		int (*have_same_owner)(struct mnt_idmap *idmap, struct inode *inode,
-> +				       struct dentry *dentry);
->  	};
->  
->  Again, all methods are called without any locks being held, unless
-> @@ -679,6 +682,24 @@ otherwise noted.
->          filesystem must define this operation to use
->          simple_offset_dir_operations.
->  
-> +``is_owned_by_me``
-> +	called to determine if the file can be considered to be 'owned' by
-> +	the owner of the process or if the process has a token that grants
-> +	it ownership privileges.  If unset, the default is to compare i_uid
-> +	to current_fsuid() - but this may give incorrect results for some
-> +	network or plug-in block filesystems.  For example, AFS determines
-> +	ownership entirely according to an obtained token and i_uid may not
-> +	even be from the same ID space as current_uid().
-> +
-> +``have_same_owner``
-> +	called to determine if an inode has the same owner as its immediate
-> +	parent on the path walked.  If unset, the default is to simply
-> +	compare the i_uid of both.  For example, AFS compares the owner IDs
-> +	of both - but these are a 64-bit values on some variants that might
-> +	not fit into a kuid_t and cifs has GUIDs that cannot be compared to
-> +	kuid_t.
-> +
-> +
->  The Address Space Object
->  ========================
->  
-> diff --git a/fs/attr.c b/fs/attr.c
-> index 795f231d00e8..096401a4815d 100644
-> --- a/fs/attr.c
-> +++ b/fs/attr.c
-> @@ -16,6 +16,7 @@
->  #include <linux/fcntl.h>
->  #include <linux/filelock.h>
->  #include <linux/security.h>
-> +#include "internal.h"
->  
->  /**
->   * setattr_should_drop_sgid - determine whether the setgid bit needs to be
-> @@ -91,19 +92,21 @@ EXPORT_SYMBOL(setattr_should_drop_suidgid);
->   * permissions. On non-idmapped mounts or if permission checking is to be
->   * performed on the raw inode simply pass @nop_mnt_idmap.
->   */
-> -static bool chown_ok(struct mnt_idmap *idmap,
-> -		     const struct inode *inode, vfsuid_t ia_vfsuid)
-> +static int chown_ok(struct mnt_idmap *idmap,
-> +		    struct inode *inode, vfsuid_t ia_vfsuid)
->  {
->  	vfsuid_t vfsuid = i_uid_into_vfsuid(idmap, inode);
-> -	if (vfsuid_eq_kuid(vfsuid, current_fsuid()) &&
-> -	    vfsuid_eq(ia_vfsuid, vfsuid))
-> -		return true;
-> +	int ret;
-> +
-> +	ret = vfs_inode_is_owned_by_me(idmap, inode);
-> +	if (ret <= 0)
-> +		return ret;
->  	if (capable_wrt_inode_uidgid(idmap, inode, CAP_CHOWN))
-> -		return true;
-> +		return 0;
->  	if (!vfsuid_valid(vfsuid) &&
->  	    ns_capable(inode->i_sb->s_user_ns, CAP_CHOWN))
-> -		return true;
-> -	return false;
-> +		return 0;
-> +	return -EPERM;
->  }
->  
->  /**
-> @@ -118,23 +121,27 @@ static bool chown_ok(struct mnt_idmap *idmap,
->   * permissions. On non-idmapped mounts or if permission checking is to be
->   * performed on the raw inode simply pass @nop_mnt_idmap.
->   */
-> -static bool chgrp_ok(struct mnt_idmap *idmap,
-> -		     const struct inode *inode, vfsgid_t ia_vfsgid)
-> +static int chgrp_ok(struct mnt_idmap *idmap,
-> +		    struct inode *inode, vfsgid_t ia_vfsgid)
->  {
->  	vfsgid_t vfsgid = i_gid_into_vfsgid(idmap, inode);
-> -	vfsuid_t vfsuid = i_uid_into_vfsuid(idmap, inode);
-> -	if (vfsuid_eq_kuid(vfsuid, current_fsuid())) {
-> +	int ret;
-> +
-> +	ret = vfs_inode_is_owned_by_me(idmap, inode);
-> +	if (ret < 0)
-> +		return ret;
-> +	if (ret == 0) {
->  		if (vfsgid_eq(ia_vfsgid, vfsgid))
-> -			return true;
-> +			return 0;
->  		if (vfsgid_in_group_p(ia_vfsgid))
-> -			return true;
-> +			return 0;
->  	}
->  	if (capable_wrt_inode_uidgid(idmap, inode, CAP_CHOWN))
-> -		return true;
-> +		return 0;
->  	if (!vfsgid_valid(vfsgid) &&
->  	    ns_capable(inode->i_sb->s_user_ns, CAP_CHOWN))
-> -		return true;
-> -	return false;
-> +		return 0;
-> +	return -EPERM;
->  }
->  
->  /**
-> @@ -163,6 +170,7 @@ int setattr_prepare(struct mnt_idmap *idmap, struct dentry *dentry,
->  {
->  	struct inode *inode = d_inode(dentry);
->  	unsigned int ia_valid = attr->ia_valid;
-> +	int ret;
->  
->  	/*
->  	 * First check size constraints.  These can't be overriden using
-> @@ -179,14 +187,18 @@ int setattr_prepare(struct mnt_idmap *idmap, struct dentry *dentry,
->  		goto kill_priv;
->  
->  	/* Make sure a caller can chown. */
-> -	if ((ia_valid & ATTR_UID) &&
-> -	    !chown_ok(idmap, inode, attr->ia_vfsuid))
-> -		return -EPERM;
-> +	if (ia_valid & ATTR_UID) {
-> +		ret = chown_ok(idmap, inode, attr->ia_vfsuid);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
->  
->  	/* Make sure caller can chgrp. */
-> -	if ((ia_valid & ATTR_GID) &&
-> -	    !chgrp_ok(idmap, inode, attr->ia_vfsgid))
-> -		return -EPERM;
-> +	if (ia_valid & ATTR_GID) {
-> +		ret = chgrp_ok(idmap, inode, attr->ia_vfsgid);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
->  
->  	/* Make sure a caller can chmod. */
->  	if (ia_valid & ATTR_MODE) {
-> diff --git a/fs/coredump.c b/fs/coredump.c
-> index b5fc06a092a4..ac113e41d090 100644
-> --- a/fs/coredump.c
-> +++ b/fs/coredump.c
-> @@ -951,7 +951,7 @@ static bool coredump_file(struct core_name *cn, struct coredump_params *cprm,
->  	 * filesystem.
->  	 */
->  	idmap = file_mnt_idmap(file);
-> -	if (!vfsuid_eq_kuid(i_uid_into_vfsuid(idmap, inode), current_fsuid())) {
-> +	if (vfs_inode_is_owned_by_me(idmap, inode) != 0) {
->  		coredump_report_failure("Core dump to %s aborted: cannot preserve file owner", cn->corename);
->  		return false;
->  	}
-> diff --git a/fs/inode.c b/fs/inode.c
-> index ec9339024ac3..61e6b1d71e86 100644
-> --- a/fs/inode.c
-> +++ b/fs/inode.c
-> @@ -2628,16 +2628,19 @@ EXPORT_SYMBOL(inode_init_owner);
->   * On non-idmapped mounts or if permission checking is to be performed on the
->   * raw inode simply pass @nop_mnt_idmap.
->   */
-> -bool inode_owner_or_capable(struct mnt_idmap *idmap,
-> -			    const struct inode *inode)
-> +bool inode_owner_or_capable(struct mnt_idmap *idmap, struct inode *inode)
->  {
->  	vfsuid_t vfsuid;
->  	struct user_namespace *ns;
-> +	int ret;
->  
-> -	vfsuid = i_uid_into_vfsuid(idmap, inode);
-> -	if (vfsuid_eq_kuid(vfsuid, current_fsuid()))
-> +	ret = vfs_inode_is_owned_by_me(idmap, inode);
-> +	if (ret == 0)
->  		return true;
-> +	if (ret < 0)
-> +		return false;
->  
-> +	vfsuid = i_uid_into_vfsuid(idmap, inode);
->  	ns = current_user_ns();
->  	if (vfsuid_has_mapping(ns, vfsuid) && ns_capable(ns, CAP_FOWNER))
->  		return true;
-> diff --git a/fs/internal.h b/fs/internal.h
-> index 9b2b4d116880..29682c6edecd 100644
-> --- a/fs/internal.h
-> +++ b/fs/internal.h
-> @@ -52,6 +52,7 @@ extern int finish_clean_context(struct fs_context *fc);
->  /*
->   * namei.c
->   */
-> +int vfs_inode_is_owned_by_me(struct mnt_idmap *idmap, struct inode *inode);
->  extern int filename_lookup(int dfd, struct filename *name, unsigned flags,
->  			   struct path *path, const struct path *root);
->  int do_rmdir(int dfd, struct filename *name);
-> diff --git a/fs/locks.c b/fs/locks.c
-> index 04a3f0e20724..b710bf0733b0 100644
-> --- a/fs/locks.c
-> +++ b/fs/locks.c
-> @@ -68,6 +68,7 @@
->  #include <trace/events/filelock.h>
->  
->  #include <linux/uaccess.h>
-> +#include "internal.h"
->  
->  static struct file_lock *file_lock(struct file_lock_core *flc)
->  {
-> @@ -2013,10 +2014,12 @@ int
->  vfs_setlease(struct file *filp, int arg, struct file_lease **lease, void **priv)
->  {
->  	struct inode *inode = file_inode(filp);
-> -	vfsuid_t vfsuid = i_uid_into_vfsuid(file_mnt_idmap(filp), inode);
->  	int error;
->  
-> -	if ((!vfsuid_eq_kuid(vfsuid, current_fsuid())) && !capable(CAP_LEASE))
-> +	error = vfs_inode_is_owned_by_me(file_mnt_idmap(filp), inode);
-> +	if (error < 0)
-> +		return error;
-> +	if (error != 0 && !capable(CAP_LEASE))
->  		return -EACCES;
->  	if (!S_ISREG(inode->i_mode))
->  		return -EINVAL;
-> diff --git a/fs/namei.c b/fs/namei.c
-> index 7377020a2cba..7dbcb5d50339 100644
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -53,8 +53,8 @@
->   * The new code replaces the old recursive symlink resolution with
->   * an iterative one (in case of non-nested symlink chains).  It does
->   * this with calls to <fs>_follow_link().
-> - * As a side effect, dir_namei(), _namei() and follow_link() are now 
-> - * replaced with a single function lookup_dentry() that can handle all 
-> + * As a side effect, dir_namei(), _namei() and follow_link() are now
-> + * replaced with a single function lookup_dentry() that can handle all
->   * the special cases of the former code.
->   *
->   * With the new dcache, the pathname is stored at each inode, at least as
-> @@ -1149,6 +1149,72 @@ fs_initcall(init_fs_namei_sysctls);
->  
->  #endif /* CONFIG_SYSCTL */
->  
-> +/*
-> + * Determine if an inode is owned by the process (allowing for fsuid override),
-> + * returning 0 if so, 1 if not and a negative error code if there was a problem
-> + * making the determination.
-> + */
-> +int vfs_inode_is_owned_by_me(struct mnt_idmap *idmap, struct inode *inode)
-> +{
-> +	if (unlikely(inode->i_op->is_owned_by_me))
-> +		return inode->i_op->is_owned_by_me(idmap, inode);
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-Similar to IOP_FASTPERM this should use a flag to avoid pointer derefs.
+As seen with optee_ftpm, which uses ms-tpm-20-ref [1], a TPM may write
+the current time epoch to its NV storage every 4 seconds if there are
+commands sent to it. The 60 seconds periodic update of the entropy pool
+that the hwrng kthread does triggers this, causing about 4 writes per
+requests. Makes 2 millions per year for a 24/7 device, and that is a lot
+for its backing NV storage.
 
-> +	if (vfsuid_eq_kuid(i_uid_into_vfsuid(idmap, inode), current_fsuid()))
-> +		return 0;
-> +	return 1; /* Not same. */
-> +}
-> +
-> +/*
-> + * Determine if an inode has the same owner as its parent, returning 0 if so, 1
-> + * if not and a negative error code if there was a problem making the
-> + * determination.
-> + */
-> +static int vfs_inode_and_dir_have_same_owner(struct mnt_idmap *idmap, struct inode *inode,
-> +					     const struct nameidata *nd)
-> +{
-> +	if (unlikely(inode->i_op->have_same_owner)) {
+It is therefore better to make the user intentionally enable this,
+providing a chance to read the warning.
 
-Same, as above: similar to IOP_FASTPERM this should use a flag to avoid pointer derefs.
+[1] https://github.com/Microsoft/ms-tpm-20-ref
 
-Really, we should very properly bias this towards the common case where
-the filesystem will not have a custom ownership comparison callback at all.
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ drivers/char/tpm/Kconfig | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-> +		struct dentry *parent;
-> +		struct inode *dir;
-> +		int ret;
-> +
-> +		if (inode != nd->inode) {
-> +			dir = nd->inode;
-> +			ret = inode->i_op->have_same_owner(idmap, inode, dir);
-> +		} else if (nd->flags & LOOKUP_RCU) {
-> +			parent = READ_ONCE(nd->path.dentry);
-> +			dir = READ_ONCE(parent->d_inode);
-> +			if (!dir)
-> +				return -ECHILD;
-> +			ret = inode->i_op->have_same_owner(idmap, inode, dir);
-> +		} else {
-> +			parent = dget_parent(nd->path.dentry);
-> +			dir = parent->d_inode;
-> +			ret = inode->i_op->have_same_owner(idmap, inode, dir);
-> +			dput(parent);
-> +		}
-> +		return ret;
-> +	}
-
-This about as ugly as it can get and costly...
-
-> +
-> +	if (vfsuid_valid(nd->dir_vfsuid) &&
-> +	    vfsuid_eq(i_uid_into_vfsuid(idmap, inode), nd->dir_vfsuid))
-> +		return 0;
-> +	return 1; /* Not same. */
-
-Why is this returning 1? This will cause may_follow_link() to return 1
-and that will bubble up as an error code? So shouldn't this return a
-negative error code instead?
-
-> +}
-> +
-> +/*
-> + * Determine if two inodes have the same owner, returning 0 if so, 1 if not and
-> + * a negative error code if there was a problem making the determination.
-> + */
-> +static int vfs_inodes_have_same_owner(struct mnt_idmap *idmap, struct inode *inode,
-> +				      struct inode *dir)
-> +{
-> +	if (unlikely(inode->i_op->have_same_owner))
-> +		return inode->i_op->have_same_owner(idmap, inode, dir);
-> +	if (vfsuid_eq(i_uid_into_vfsuid(idmap, inode),
-> +		      i_uid_into_vfsuid(idmap, dir)))
-> +		return 0;
-> +	return 1; /* Not same. */
-> +}
-> +
->  /**
->   * may_follow_link - Check symlink following for unsafe situations
->   * @nd: nameidata pathwalk data
-> @@ -1165,27 +1231,28 @@ fs_initcall(init_fs_namei_sysctls);
->   *
->   * Returns 0 if following the symlink is allowed, -ve on error.
->   */
-> -static inline int may_follow_link(struct nameidata *nd, const struct inode *inode)
-> +static inline int may_follow_link(struct nameidata *nd, struct inode *inode)
->  {
->  	struct mnt_idmap *idmap;
-> -	vfsuid_t vfsuid;
-> +	int ret;
->  
->  	if (!sysctl_protected_symlinks)
->  		return 0;
->  
-> -	idmap = mnt_idmap(nd->path.mnt);
-> -	vfsuid = i_uid_into_vfsuid(idmap, inode);
-> -	/* Allowed if owner and follower match. */
-> -	if (vfsuid_eq_kuid(vfsuid, current_fsuid()))
-> -		return 0;
-> -
->  	/* Allowed if parent directory not sticky and world-writable. */
->  	if ((nd->dir_mode & (S_ISVTX|S_IWOTH)) != (S_ISVTX|S_IWOTH))
->  		return 0;
->  
-> +	idmap = mnt_idmap(nd->path.mnt);
-> +	/* Allowed if owner and follower match. */
-> +	ret = vfs_inode_is_owned_by_me(idmap, inode);
-> +	if (ret <= 0)
-> +		return ret;
-> +
->  	/* Allowed if parent directory and link owner match. */
-> -	if (vfsuid_valid(nd->dir_vfsuid) && vfsuid_eq(nd->dir_vfsuid, vfsuid))
-> -		return 0;
-> +	ret = vfs_inode_and_dir_have_same_owner(idmap, inode, nd);
-> +	if (ret <= 0)
-> +		return ret;
-
-Ok, so while that doesn't exactly surface the error it's still weird.
-Please make that consistent. Either have those two new helper functions
-return negative error codes and zero on success or have it be a proper
-boolean instead so there's no possible confusion. This is just begging
-for someone to do if (ret) return ret and bubble up that positive return
-value.
-
->  
->  	if (nd->flags & LOOKUP_RCU)
->  		return -ECHILD;
-> @@ -1283,12 +1350,12 @@ int may_linkat(struct mnt_idmap *idmap, const struct path *link)
->   * @inode: the inode of the file to open
->   *
->   * Block an O_CREAT open of a FIFO (or a regular file) when:
-> - *   - sysctl_protected_fifos (or sysctl_protected_regular) is enabled
-> - *   - the file already exists
-> - *   - we are in a sticky directory
-> - *   - we don't own the file
-> + *   - sysctl_protected_fifos (or sysctl_protected_regular) is enabled,
-> + *   - the file already exists,
-> + *   - we are in a sticky directory,
-> + *   - the directory is world writable,
-> + *   - we don't own the file and
->   *   - the owner of the directory doesn't own the file
-> - *   - the directory is world writable
->   * If the sysctl_protected_fifos (or sysctl_protected_regular) is set to 2
->   * the directory doesn't have to be world writable: being group writable will
->   * be enough.
-> @@ -1299,13 +1366,45 @@ int may_linkat(struct mnt_idmap *idmap, const struct path *link)
->   * On non-idmapped mounts or if permission checking is to be performed on the
->   * raw inode simply pass @nop_mnt_idmap.
->   *
-> + * For a filesystem (e.g. a network filesystem) that has a separate ID space
-> + * and has foreign IDs (maybe even non-integer IDs), i_uid cannot be compared
-> + * to current_fsuid() and may not be directly comparable to another i_uid.
-> + * Instead, the filesystem is asked to perform the comparisons.  With network
-> + * filesystems, there also exists the possibility of doing anonymous
-> + * operations and having anonymously-owned objects.
-> + *
-> + * We have the following scenarios:
-> + *
-> + *	USER	DIR	FILE	FILE	ALLOWED
-> + *		OWNER	OWNER	STATE
-> + *	=======	=======	=======	=======	=======
-> + *	A	A	-	New	Yes
-> + *	A	A	A	Exists	Yes
-> + *	A	A	C	Exists	No
-> + *	A	B	-	New	Yes
-> + *	A	B	A	Exists	Yes, FO==U
-> + *	A	B	B	Exists	Yes, FO==DO
-> + *	A	B	C	Exists	No
-> + *	A	anon[1]	-	New	Yes
-> + *	A	anon[1]	A	Exists	Yes
-> + *	A	anon[1]	C	Exists	No
-> + *	anon	A	-	New	Yes
-> + *	anon	A	A	Exists	Yes, FO==DO
-> + *	anon	anon[1]	-	New	Yes
-> + *	anon	anon[1]	-	Exists	No
-> + *	anon	A	A	Exists	Yes, FO==DO
-> + *	anon	A	C	Exists	No
-> + *	anon	A	anon	Exists	No
-> + *
-> + * [1] Can anonymously-owned dirs be sticky?
-> + *
->   * Returns 0 if the open is allowed, -ve on error.
->   */
->  static int may_create_in_sticky(struct mnt_idmap *idmap, struct nameidata *nd,
-> -				struct inode *const inode)
-> +				struct inode *inode)
->  {
->  	umode_t dir_mode = nd->dir_mode;
-> -	vfsuid_t dir_vfsuid = nd->dir_vfsuid, i_vfsuid;
-> +	int ret;
->  
->  	if (likely(!(dir_mode & S_ISVTX)))
->  		return 0;
-> @@ -1316,13 +1415,13 @@ static int may_create_in_sticky(struct mnt_idmap *idmap, struct nameidata *nd,
->  	if (S_ISFIFO(inode->i_mode) && !sysctl_protected_fifos)
->  		return 0;
->  
-> -	i_vfsuid = i_uid_into_vfsuid(idmap, inode);
-> -
-> -	if (vfsuid_eq(i_vfsuid, dir_vfsuid))
-> -		return 0;
-> +	ret = vfs_inode_and_dir_have_same_owner(idmap, inode, nd);
-> +	if (ret <= 0)
-> +		return ret;
->  
-> -	if (vfsuid_eq_kuid(i_vfsuid, current_fsuid()))
-> -		return 0;
-> +	ret = vfs_inode_is_owned_by_me(idmap, inode);
-> +	if (ret <= 0)
-> +		return ret;
->  
->  	if (likely(dir_mode & 0002)) {
->  		audit_log_path_denied(AUDIT_ANOM_CREAT, "sticky_create");
-> @@ -3222,12 +3321,14 @@ EXPORT_SYMBOL(user_path_at);
->  int __check_sticky(struct mnt_idmap *idmap, struct inode *dir,
->  		   struct inode *inode)
->  {
-> -	kuid_t fsuid = current_fsuid();
-> +	int ret;
->  
-> -	if (vfsuid_eq_kuid(i_uid_into_vfsuid(idmap, inode), fsuid))
-> -		return 0;
-> -	if (vfsuid_eq_kuid(i_uid_into_vfsuid(idmap, dir), fsuid))
-> -		return 0;
-> +	ret = vfs_inode_is_owned_by_me(idmap, inode);
-> +	if (ret <= 0)
-> +		return ret;
-> +	ret = vfs_inodes_have_same_owner(idmap, inode, dir);
-> +	if (ret <= 0)
-> +		return ret;
->  	return !capable_wrt_inode_uidgid(idmap, inode, CAP_FOWNER);
->  }
->  EXPORT_SYMBOL(__check_sticky);
-> diff --git a/fs/remap_range.c b/fs/remap_range.c
-> index 26afbbbfb10c..9eee93c27001 100644
-> --- a/fs/remap_range.c
-> +++ b/fs/remap_range.c
-> @@ -413,20 +413,22 @@ loff_t vfs_clone_file_range(struct file *file_in, loff_t pos_in,
->  EXPORT_SYMBOL(vfs_clone_file_range);
->  
->  /* Check whether we are allowed to dedupe the destination file */
-> -static bool may_dedupe_file(struct file *file)
-> +static int may_dedupe_file(struct file *file)
->  {
->  	struct mnt_idmap *idmap = file_mnt_idmap(file);
->  	struct inode *inode = file_inode(file);
-> +	int ret;
->  
->  	if (capable(CAP_SYS_ADMIN))
-> -		return true;
-> +		return 0;
->  	if (file->f_mode & FMODE_WRITE)
-> -		return true;
-> -	if (vfsuid_eq_kuid(i_uid_into_vfsuid(idmap, inode), current_fsuid()))
-> -		return true;
-> +		return 0;
-> +	ret = vfs_inode_is_owned_by_me(idmap, inode);
-> +	if (ret <= 0)
-> +		return ret;
->  	if (!inode_permission(idmap, inode, MAY_WRITE))
-> -		return true;
-> -	return false;
-> +		return 0;
-> +	return -EPERM;
->  }
->  
->  loff_t vfs_dedupe_file_range_one(struct file *src_file, loff_t src_pos,
-> @@ -459,8 +461,8 @@ loff_t vfs_dedupe_file_range_one(struct file *src_file, loff_t src_pos,
->  	if (ret)
->  		return ret;
->  
-> -	ret = -EPERM;
-> -	if (!may_dedupe_file(dst_file))
-> +	ret = may_dedupe_file(dst_file);
-> +	if (ret < 0)
->  		goto out_drop_write;
->  
->  	ret = -EXDEV;
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index c895146c1444..f59a7456852f 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -2104,8 +2104,7 @@ static inline bool sb_start_intwrite_trylock(struct super_block *sb)
->  	return __sb_start_write_trylock(sb, SB_FREEZE_FS);
->  }
->  
-> -bool inode_owner_or_capable(struct mnt_idmap *idmap,
-> -			    const struct inode *inode);
-> +bool inode_owner_or_capable(struct mnt_idmap *idmap, struct inode *inode);
->  
->  /*
->   * VFS helper functions..
-> @@ -2376,6 +2375,9 @@ struct inode_operations {
->  			    struct dentry *dentry, struct file_kattr *fa);
->  	int (*fileattr_get)(struct dentry *dentry, struct file_kattr *fa);
->  	struct offset_ctx *(*get_offset_ctx)(struct inode *inode);
-> +	int (*is_owned_by_me)(struct mnt_idmap *idmap, struct inode *inode);
-> +	int (*have_same_owner)(struct mnt_idmap *idmap, struct inode *inode1,
-> +			       struct inode *inode2);
->  } ____cacheline_aligned;
->  
->  /* Did the driver provide valid mmap hook configuration? */
-> 
+diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+index 8a8f692b6088..d64c929cacbe 100644
+--- a/drivers/char/tpm/Kconfig
++++ b/drivers/char/tpm/Kconfig
+@@ -45,13 +45,17 @@ config TCG_TPM2_HMAC
+ config HW_RANDOM_TPM
+ 	bool "TPM HW Random Number Generator support"
+ 	depends on TCG_TPM && HW_RANDOM && !(TCG_TPM=y && HW_RANDOM=m)
+-	default y
+ 	help
+ 	  This setting exposes the TPM's Random Number Generator as a hwrng
+ 	  device. This allows the kernel to collect randomness from the TPM at
+ 	  boot, and provides the TPM randomines in /dev/hwrng.
+ 
+-	  If unsure, say Y.
++	  WARNING: Specifically firmware-based TPMs, possibly also hardware
++	  variants, can wear-out from the frequent requests issued by the
++	  Hardware Random Number Generator Core when filling the kernel's
++	  entropy pool. These requests are sent once every minute by default,
++	  and the TPM may write the current time to its NV storage for each of
++	  them.
+ 
+ config TCG_TIS_CORE
+ 	tristate
+-- 
+2.51.0
 
