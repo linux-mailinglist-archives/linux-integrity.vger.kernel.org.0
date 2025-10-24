@@ -1,61 +1,58 @@
-Return-Path: <linux-integrity+bounces-7524-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7525-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 562F7C07D1A
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Oct 2025 20:51:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72C6FC07D35
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Oct 2025 20:55:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CDC31C256CF
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Oct 2025 18:51:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 313753BD5B1
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Oct 2025 18:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66FCB31A7F6;
-	Fri, 24 Oct 2025 18:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3341D34BA28;
+	Fri, 24 Oct 2025 18:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KL0dsQ0v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PwipBgnB"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD972FF169;
-	Fri, 24 Oct 2025 18:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B57432C326;
+	Fri, 24 Oct 2025 18:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761331838; cv=none; b=XjglBHpArZ6GOsxe3acovqvmOCqsscjcsEvH8D4O7abl+ao7NGyITqx38uHyt59Yhi4x1sIN9opJEAsJaphDAU618IO6Leok+Npn5Vr8292ez89Xa/rOo+2s1V26Cf4jttMu6JuQL1kr+vkvPL0roqnSH6jEpnenUeg69psQ+Ok=
+	t=1761332155; cv=none; b=riZRuQM+Lo9oWUXbSnZ50cfyll4SYZ/eGGouopjdXnq+lf9NOOXvvxPJQi1jlGN+3IhzIScHh2l2ydk9fK1qkNUeYXP2dkJqCYBAd5WkbBPWR+VTG5POT3EGswSpYoTdozGVD/vQkRTsn8AWMCuLAgtYeew/fo0EG6XtB15nNKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761331838; c=relaxed/simple;
-	bh=rs7pgTz+6/lllI9GQMbhWiFipksS/qFcyNhMz7XVixY=;
+	s=arc-20240116; t=1761332155; c=relaxed/simple;
+	bh=famBaXMKjGMjTdpCralBLaTsc6lnULzc0/kuaQo7X/I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kSWfZxWFat58cRUVt5WTdg+GYqDKanUIMjqoAhZUcdK9pao5NtQLRqiOU05uCJZR++On7F5WKha/yKerLTXKwPEbTprfJiZiS3QjI67LOYgeK5paXHHEGI0+HjQlUan/Ku0NtkQHNCbTIIv2oH+NiopoHk3Mp4wE7+KD8+nr8p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KL0dsQ0v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791CFC4CEF1;
-	Fri, 24 Oct 2025 18:50:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=f+e5s8y7gRTdom190FmNPeXT+0/E4kbklogL0hJ45zxKj5i01aF9KyD2PPu0NtD6vzX13Taej23lXBCxYPrHxNOugJV9i5J62yJ3hiW7Y562cxAQNfZ6D6ttLEGAlO0RVhcVQiC6Q4GkjiOwL27wdon5cdZqjB7bgfxvOuLGuoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PwipBgnB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C863C4CEF1;
+	Fri, 24 Oct 2025 18:55:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761331837;
-	bh=rs7pgTz+6/lllI9GQMbhWiFipksS/qFcyNhMz7XVixY=;
+	s=k20201202; t=1761332154;
+	bh=famBaXMKjGMjTdpCralBLaTsc6lnULzc0/kuaQo7X/I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KL0dsQ0vZllZeJyXWdny+jxcd3v881M6J26itqBz6AUwBuzxk1bz7svxtQgNmegQ7
-	 Gexcfmpi41y3VZD3AznL+rTy7ycqKUpfSr6b3RATeM8iTLsycjnBOdKazIjgsIlWkv
-	 MNwNcdaGXGmI87f8UGtwgX+9oPjcpPz2TN7Re4i/x8F9Gk5BdelpaY/uD4GT0bOyKN
-	 +bfQWjH6Es2EiXP8RKbb9qP3kT4GDQrfvreBJ7W/Igm2f22Zjcx0HBQMeg49ZROSj7
-	 Q0dLLEtvjuSUSBkk+I8ClZOUPK1/KPgGCmgDZ9c/D3mLC2rrpqz0MurW5D6S3ccQ95
-	 Y7wFxT0kl5jqw==
-Date: Fri, 24 Oct 2025 21:50:34 +0300
+	b=PwipBgnBlD/BRRpJFMHjANsn9yEE5ny9iJmLOKR4+ixQiJbNQCA3NkQcedn5bD1Q1
+	 5W1+kI82nzvUI0K1kTofVR+9gNSsfASrKzs4N/ciqSyDPyAg7fyM5wlc3OYMCWsYaO
+	 9Wf/JRPwN36/4bOzn9pCA4QJ9lSTFl+n2mzg7t2CXUzld7yjsmH+22qyGDHFJlyXJ9
+	 K8wso4yQh1rHd0UFp11SwVT9uBaSYGDj+y2+Jv6HXXOgRuExE5p/gfeNbH7/oQX0vh
+	 drYnvhGS4M4t6eOd4gwC8zH59sJ68E0qVHn/+TTV0gSVPfMgaUf9QcqhFvJJ3ynbrh
+	 vS/ksEQ2Ix3bg==
+Date: Fri, 24 Oct 2025 21:55:50 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Jonathan McDowell <noodles@earth.li>
-Cc: linux-integrity@vger.kernel.org, keyring@vger.kernel.org,
-	dpsmith@apertussolutions.com, ross.philipson@oracle.com,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 01/10] tpm: Cap the number of PCR banks
-Message-ID: <aPvKetjkUh-_f0yl@kernel.org>
-References: <20251018111725.3116386-1-jarkko@kernel.org>
- <20251018111725.3116386-2-jarkko@kernel.org>
- <aPYg1N0TvrkG6AJI@earth.li>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] pm: Ensure exclusive userspace access when using
+ /dev/tpm<n>
+Message-ID: <aPvLtt7a7X0Y1LBI@kernel.org>
+References: <cover.1758646791.git.noodles@meta.com>
+ <cover.1760958898.git.noodles@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -64,21 +61,78 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aPYg1N0TvrkG6AJI@earth.li>
+In-Reply-To: <cover.1760958898.git.noodles@meta.com>
 
-On Mon, Oct 20, 2025 at 12:45:24PM +0100, Jonathan McDowell wrote:
-> On Sat, Oct 18, 2025 at 02:17:16PM +0300, Jarkko Sakkinen wrote:
-> > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> > 
-> > tpm2_get_pcr_allocation() does not cap any upper limit for the number of
-> > banks. Cap the limit to four banks so that out of bounds values coming
-> > from external I/O cause on only limited harm.
+On Mon, Oct 20, 2025 at 12:30:32PM +0100, Jonathan McDowell wrote:
+> I hit a problem where ~ 1% of TPM firmware upgrades were failing.
+> Investigating revealed the issue was that although the upgrade tool uses
+> /dev/tpm0 this does not actually prevent access via /dev/tpmrm0, nor
+> internal kernel users. It *does* prevent access to others via /dev/tpm0
 > 
-> Comment no longer matches code - we cap at 8. With the comment fixed:
+> So the upgrade process started, the HW RNG came in to get some
+> randomness in the middle, did the HMAC context dance, and confused
+> everything to the point the TPM was no longer visible to the OS even
+> after a reboot.
 > 
-> Reviewed-By: Jonathan McDowell <noodles@meta.com>
+> Thankfully I've been able to recover those devices, but really what I'd
+> like is the ability for a userspace tool to exclusively access the TPM
+> without something coming in behind it. Given the lightweight attempt at
+> locking that already exists I think this was the original intention.
+> 
+> I've reworked this series based on feedback received.
+> 
+> Firstly, it's been reordered TPM sharing functionality doesn't break
+> during bisection.
+> 
+> Secondly, the O_EXCL check has been tightend up to ensure the caller is
+> also opening the device O_RDWR. Callers shouldn't really be opening the
+> TPM except for reading + writing, but this should help guard against
+> unexpected flags usage a bit more.
+> 
+> Finally, this revision keeps the prohibition on more than one user of
+> /dev/tpm#, to avoid unexpected breakages for clients that expect this to
+> guard against multiple invocations. A client only then needs to use
+> O_EXCL if it wants to prevent *all* other access, even with
+> ContextSaves, such as the firmware upgrade case.
+> 
+> (I've sent a separate standalone patch that allows the TPM HW RNG to be
+> disabled at run time, and it's now in -next, but even with that I think
+> something like this is a good idea as well.)
+> 
+> Jonathan McDowell (4):
+>   tpm: Remove tpm_find_get_ops
+>   tpm: Add O_EXCL for exclusive /dev/tpm access
+>   tpm: Include /dev/tpmrm<n> when checking exclusive userspace TPM
+>     access
+>   tpm: Allow for exclusive TPM access when using /dev/tpm<n>
+> 
+>  drivers/char/tpm/tpm-chip.c       | 90 +++++++++++++++----------------
+>  drivers/char/tpm/tpm-dev-common.c |  8 +--
+>  drivers/char/tpm/tpm-dev.c        | 35 ++++++++++--
+>  drivers/char/tpm/tpm-dev.h        |  1 +
+>  drivers/char/tpm/tpm-interface.c  | 20 +++++--
+>  drivers/char/tpm/tpm.h            |  3 +-
+>  drivers/char/tpm/tpm2-space.c     |  5 +-
+>  drivers/char/tpm/tpm_tis_core.c   |  3 +-
+>  drivers/char/tpm/tpmrm-dev.c      | 20 ++++++-
+>  include/linux/tpm.h               |  4 +-
+>  10 files changed, 124 insertions(+), 65 deletions(-)
+> 
+> -- 
+> 2.51.0
+> 
 
-Oops, sorry I'll address that and add your tag! Thank you.
+I will put to queue with my tags but I just want to make first sure that we do not
+break anything.
+
+I'll upgrade my test suite first to have TPM 1.2 tests (which is also
+needed for my own series) and run it in bunch of configurations.  And on
+TPM2 I check the behavior with TSS2 daemon on / off.
+
+I have no doubts on the code changes, and it is most importantly a
+security improvement, given that "who has the access and how long" 
+can be deduced for a system configuration. I just feel that with
+this code change it is better to check and verify everything :-)
 
 BR, Jarkko
 
