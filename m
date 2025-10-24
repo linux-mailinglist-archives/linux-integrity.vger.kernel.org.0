@@ -1,292 +1,144 @@
-Return-Path: <linux-integrity+bounces-7517-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7518-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A05AC01BFC
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Oct 2025 16:26:00 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83489C04744
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Oct 2025 08:12:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89FC51AA25F2
-	for <lists+linux-integrity@lfdr.de>; Thu, 23 Oct 2025 14:25:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C139635121C
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Oct 2025 06:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1963B28C00D;
-	Thu, 23 Oct 2025 14:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="xEyT9lP7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF775265606;
+	Fri, 24 Oct 2025 06:12:09 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF3B32AACB;
-	Thu, 23 Oct 2025 14:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A9CC141;
+	Fri, 24 Oct 2025 06:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761229485; cv=none; b=gHyIhvaWGlbDrSf1BSv47jnFY8Yh0UM5ZvQc75IHCXzLyVeKL8eKXl9izSTzolY6+0iYmf/iVeui41jolX2ncJTReD3+QPT54knuXGrcmRlM3/1BBX9qgPz7R719kN4heSFxOyOycUljpIrsGcStcqC4eiWE4Kp0s7RoMpWGJTQ=
+	t=1761286329; cv=none; b=tU7sHSISaMiaFFeG7kJZ23tRB9pWiCAuQK37uOGidEzBdCjTqPj+6RH/pgClr03hfM6WBJ+N3tdP0xOxuClVHoJr2OLF6l8XOATdF6Ri9zJnlyhRkjwsR5BqZ2ZDKrFYD0kWjDxDAbIYtcc6qr4pfGUOLshXloJjo9SVHX0iP3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761229485; c=relaxed/simple;
-	bh=ejT+gSMRl71D9FrJAHgYWi6zvu2pJa3A5weKAUpjry4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RijFH/Lb1Hew35AUzPtLDiGQe6sC3vfVsFsSdtcP1aLewjnAybVAVbKRHh/sZ+QsltdMopKOk2HvbkW78t85GmoS+wgadgZ6xEcAMwU8fJQG42fMSYLP0fjC+eRw8na6XpF6iWuLyXMUW/FHUR4C2xYMnPhmC+eU46Da7TLnml0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=xEyT9lP7; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=7xYDDmBG3SXcp4rXu1j0cg9M+z9JOy8rvqaztOPzzns=; b=xEyT9lP76ehv1CRcrQ9rl/L8zi
-	aGo4Ct0SFk++tsbWRDrvijyrZOusk9EMnOqtnVkO4KGfFBxhLisN8wu6gvU/r3b9N+z8MqL6K/lhx
-	Yg0C02/njSCyyQoSD0WMZwc3lQNaaJXyV2IbinGY07qdmC/YQR68mBDiTk0LOOJGUIpvydv1wLhNZ
-	5FcJ32HuX5Xn6c92pcmj3yaulTXfp4n+0a3y/tqf5ZhEE6yg0+BA2CLb7yg+0xvNBR4wdcUUf3Rib
-	TLKpUdci4pY7QdtbmRN//avLOMXVxANqIghGdJ8Uk0As+7M5RsKJf9lZqWqDz+BKVDddkGFMcJ5jA
-	fJXXnOzA==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1vBwEm-000Jjc-1I;
-	Thu, 23 Oct 2025 15:24:20 +0100
-Date: Thu, 23 Oct 2025 15:24:20 +0100
-From: Jonathan McDowell <noodles@earth.li>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	zohar@linux.ibm.com
-Subject: Re: [PATCH v3 4/4] tpm: Allow for exclusive TPM access when using
- /dev/tpm<n>
-Message-ID: <aPo6lF6W5id5U_i9@earth.li>
-References: <cover.1760958898.git.noodles@meta.com>
- <61049f236fe1eaf72402895cea6892b52ce7e279.1760958898.git.noodles@meta.com>
- <cec499d5130f37a7887d39b44efd8538dd361fe3.camel@huaweicloud.com>
+	s=arc-20240116; t=1761286329; c=relaxed/simple;
+	bh=JHUJkSdHanYTCFYFFsB2WciSNPaCojLOlMIkm/lc3bs=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type; b=oY7SOhoLwr92wJBUOBbCRtbk3JaxDrCP7iMmaSKiEp58wqv4nMoMb74jASQfCwgOKWs9SXA72db2MrQcypFMN1OlsNj96XOSg3CJa35kTy5uDIR0oI96m/nQjzKKJC09tunnjr6bgkMqCcTr58+Vuk58WHi2y4tYguGWO8hj+So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4ctCFj09JszKHMVb;
+	Fri, 24 Oct 2025 14:11:05 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 6AE191A0194;
+	Fri, 24 Oct 2025 14:11:55 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.50.159.234])
+	by APP2 (Coremail) with SMTP id Syh0CgCHK0SpGPto3WC1BQ--.60135S4;
+	Fri, 24 Oct 2025 14:11:55 +0800 (CST)
+From: Ye Bin <yebin@huaweicloud.com>
+To: a.fatoum@pengutronix.de,
+	kernel@pengutronix.de,
+	James.Bottomley@HansenPartnership.com,
+	jarkko@kernel.org,
+	zohar@linux.ibm.com,
+	dhowells@redhat.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	yebin@huaweicloud.com,
+	yebin10@huawei.com
+Subject: [PATCH] KEYS: fix compilation warnings in the dump_options() function
+Date: Fri, 24 Oct 2025 14:11:53 +0800
+Message-Id: <20251024061153.61470-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <cec499d5130f37a7887d39b44efd8538dd361fe3.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgCHK0SpGPto3WC1BQ--.60135S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrW5CF1DCrykJrW8JF4fKrg_yoW8tF17pa
+	1Yka4UXrWjyF9Fg3yUGF4kCa43C395KFW7Gws7tayYgFnxA347XFyUurWa9r13ZFySgryU
+	Za4jyF1Fgwsrur7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+	zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
 
-On Mon, Oct 20, 2025 at 01:53:30PM +0200, Roberto Sassu wrote:
->On Mon, 2025-10-20 at 12:31 +0100, Jonathan McDowell wrote:
->> From: Jonathan McDowell <noodles@meta.com>
->>
->> There are situations where userspace might reasonably desire exclusive
->> access to the TPM, or the kernel's internal context saving + flushing
->> may cause issues, for example when performing firmware upgrades. Extend
->> the locking already used for avoiding concurrent userspace access to
->> prevent internal users of the TPM when /dev/tpm<n> is in use.
->>
->> The few internal users who already hold the open_lock are changed to use
->> tpm_internal_(try_get|put)_ops, with the old tpm_(try_get|put)_ops
->> functions changing to obtain read access to the open_lock.  We return
->> -EBUSY when another user has exclusive access, rather than adding waits.
->>
->> Signed-off-by: Jonathan McDowell <noodles@meta.com>
->> ---
->> v2: Switch to _locked instead of _internal_ for function names.
->> v3: Move to end of patch series.
->>
->>  drivers/char/tpm/tpm-chip.c       | 53 +++++++++++++++++++++++++------
->>  drivers/char/tpm/tpm-dev-common.c |  8 ++---
->>  drivers/char/tpm/tpm.h            |  2 ++
->>  drivers/char/tpm/tpm2-space.c     |  5 ++-
->>  4 files changed, 52 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
->> index ba906966721a..687f6d8cd601 100644
->> --- a/drivers/char/tpm/tpm-chip.c
->> +++ b/drivers/char/tpm/tpm-chip.c
->> @@ -144,7 +144,7 @@ void tpm_chip_stop(struct tpm_chip *chip)
->>  EXPORT_SYMBOL_GPL(tpm_chip_stop);
->>
->>  /**
->> - * tpm_try_get_ops() - Get a ref to the tpm_chip
->> + * tpm_try_get_ops_locked() - Get a ref to the tpm_chip
->>   * @chip: Chip to ref
->>   *
->>   * The caller must already have some kind of locking to ensure that chip is
->> @@ -154,7 +154,7 @@ EXPORT_SYMBOL_GPL(tpm_chip_stop);
->>   *
->>   * Returns -ERRNO if the chip could not be got.
->>   */
->> -int tpm_try_get_ops(struct tpm_chip *chip)
->> +int tpm_try_get_ops_locked(struct tpm_chip *chip)
->>  {
->>  	int rc = -EIO;
->>
->> @@ -185,22 +185,57 @@ int tpm_try_get_ops(struct tpm_chip *chip)
->>  	put_device(&chip->dev);
->>  	return rc;
->>  }
->> -EXPORT_SYMBOL_GPL(tpm_try_get_ops);
->>
->>  /**
->> - * tpm_put_ops() - Release a ref to the tpm_chip
->> + * tpm_put_ops_locked() - Release a ref to the tpm_chip
->>   * @chip: Chip to put
->>   *
->> - * This is the opposite pair to tpm_try_get_ops(). After this returns chip may
->> - * be kfree'd.
->> + * This is the opposite pair to tpm_try_get_ops_locked(). After this returns
->> + * chip may be kfree'd.
->>   */
->> -void tpm_put_ops(struct tpm_chip *chip)
->> +void tpm_put_ops_locked(struct tpm_chip *chip)
->>  {
->>  	tpm_chip_stop(chip);
->>  	mutex_unlock(&chip->tpm_mutex);
->>  	up_read(&chip->ops_sem);
->>  	put_device(&chip->dev);
->>  }
->> +
->> +/**
->> + * tpm_try_get_ops() - Get a ref to the tpm_chip
->> + * @chip: Chip to ref
->> + *
->> + * The caller must already have some kind of locking to ensure that chip is
->> + * valid. This function will attempt to get the open_lock for the chip,
->> + * ensuring no other user is expecting exclusive access, before locking the
->> + * chip so that the ops member can be accessed safely. The locking prevents
->> + * tpm_chip_unregister from completing, so it should not be held for long
->> + * periods.
->> + *
->> + * Returns -ERRNO if the chip could not be got.
->> + */
->> +int tpm_try_get_ops(struct tpm_chip *chip)
->> +{
->> +	if (!down_read_trylock(&chip->open_lock))
->> +		return -EBUSY;
->
->Hi Jonathan
->
->do I understand it correctly, that a process might open the TPM with
->O_EXCL, and this will prevent IMA from extending a PCR until that
->process closes the file descriptor?
->
->If yes, this might be a concern, and I think an additional API to
->prevent such behavior would be needed (for example when IMA is active,
->i.e. there is a measurement policy loaded).
+From: Ye Bin <yebin10@huawei.com>
 
-Yes, this definitely provides a path where userspace could prevent a 
-measurement hitting the TPM from IMA. I did think about this when 
-working out what to do if the lock was held elsewhere, but punted on 
-making any changes because there are several other avenues where that 
-can already happen.
+There's issue as follows:
+security/keys/trusted-keys/trusted_caam.c: In function ‘dump_options’:
+security/keys/trusted-keys/trusted_caam.c:37:20: note: the ABI of passing struct with a flexible array member has changed in GCC 4.4
+   37 | static inline void dump_options(struct caam_pkey_info pkey_info)
+      |                    ^~~~~~~~~~~~
 
->> +
->> +	return tpm_try_get_ops_locked(chip);
->> +}
->> +EXPORT_SYMBOL_GPL(tpm_try_get_ops);
->> +
->> +/**
->> + * tpm_put_ops() - Release a ref to the tpm_chip
->> + * @chip: Chip to put
->> + *
->> + * This is the opposite pair to tpm_try_get_ops(). After this returns
->> + * chip may be kfree'd.
->> + */
->> +void tpm_put_ops(struct tpm_chip *chip)
->> +{
->> +	tpm_put_ops_locked(chip);
->> +
->> +	up_read(&chip->open_lock);
->> +}
->>  EXPORT_SYMBOL_GPL(tpm_put_ops);
->>
->>  /**
->> @@ -644,10 +679,10 @@ void tpm_chip_unregister(struct tpm_chip *chip)
->>  #ifdef CONFIG_TCG_TPM2_HMAC
->>  	int rc;
->>
->> -	rc = tpm_try_get_ops(chip);
->> +	rc = tpm_try_get_ops_locked(chip);
->>  	if (!rc) {
->>  		tpm2_end_auth_session(chip);
->> -		tpm_put_ops(chip);
->> +		tpm_put_ops_locked(chip);
->>  	}
->>  #endif
->>
->> diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
->> index f2a5e09257dd..0f5bc63411aa 100644
->> --- a/drivers/char/tpm/tpm-dev-common.c
->> +++ b/drivers/char/tpm/tpm-dev-common.c
->> @@ -65,7 +65,7 @@ static void tpm_dev_async_work(struct work_struct *work)
->>
->>  	mutex_lock(&priv->buffer_mutex);
->>  	priv->command_enqueued = false;
->> -	ret = tpm_try_get_ops(priv->chip);
->> +	ret = tpm_try_get_ops_locked(priv->chip);
->>  	if (ret) {
->>  		priv->response_length = ret;
->>  		goto out;
->> @@ -73,7 +73,7 @@ static void tpm_dev_async_work(struct work_struct *work)
->>
->>  	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
->>  			       sizeof(priv->data_buffer));
->> -	tpm_put_ops(priv->chip);
->> +	tpm_put_ops_locked(priv->chip);
->>
->>  	/*
->>  	 * If ret is > 0 then tpm_dev_transmit returned the size of the
->> @@ -220,14 +220,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
->>  	 * lock during this period so that the tpm can be unregistered even if
->>  	 * the char dev is held open.
->>  	 */
->> -	if (tpm_try_get_ops(priv->chip)) {
->> +	if (tpm_try_get_ops_locked(priv->chip)) {
->>  		ret = -EPIPE;
->>  		goto out;
->>  	}
->>
->>  	ret = tpm_dev_transmit(priv->chip, priv->space, priv->data_buffer,
->>  			       sizeof(priv->data_buffer));
->> -	tpm_put_ops(priv->chip);
->> +	tpm_put_ops_locked(priv->chip);
->>
->>  	if (ret > 0) {
->>  		priv->response_length = ret;
->> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
->> index 02c07fef41ba..57ef8589f5f5 100644
->> --- a/drivers/char/tpm/tpm.h
->> +++ b/drivers/char/tpm/tpm.h
->> @@ -272,6 +272,8 @@ struct tpm_chip *tpm_chip_alloc(struct device *dev,
->>  				const struct tpm_class_ops *ops);
->>  struct tpm_chip *tpmm_chip_alloc(struct device *pdev,
->>  				 const struct tpm_class_ops *ops);
->> +int tpm_try_get_ops_locked(struct tpm_chip *chip);
->> +void tpm_put_ops_locked(struct tpm_chip *chip);
->>  int tpm_chip_register(struct tpm_chip *chip);
->>  void tpm_chip_unregister(struct tpm_chip *chip);
->>
->> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
->> index 60354cd53b5c..0ad5e18355e0 100644
->> --- a/drivers/char/tpm/tpm2-space.c
->> +++ b/drivers/char/tpm/tpm2-space.c
->> @@ -58,10 +58,9 @@ int tpm2_init_space(struct tpm_space *space, unsigned int buf_size)
->>
->>  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space)
->>  {
->> -
->> -	if (tpm_try_get_ops(chip) == 0) {
->> +	if (tpm_try_get_ops_locked(chip) == 0) {
->>  		tpm2_flush_sessions(chip, space);
->> -		tpm_put_ops(chip);
->> +		tpm_put_ops_locked(chip);
->>  	}
->>
->>  	kfree(space->context_buf);
->
+To solve the above problem, pass 'struct caam_pkey_info*' type parameter
+to the dump_options() function.
 
-J.
+Fixes: 9eb25ca6c973 ("KEYS: trusted: caam based protected key")
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ security/keys/trusted-keys/trusted_caam.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
+index 090099d1b04d..dd7a69bcf6a3 100644
+--- a/security/keys/trusted-keys/trusted_caam.c
++++ b/security/keys/trusted-keys/trusted_caam.c
+@@ -29,12 +29,12 @@ static const match_table_t key_tokens = {
+ };
+ 
+ #ifdef CAAM_DEBUG
+-static inline void dump_options(struct caam_pkey_info pkey_info)
++static inline void dump_options(struct caam_pkey_info *pkey_info)
+ {
+-	pr_info("key encryption algo %d\n", pkey_info.key_enc_algo);
++	pr_info("key encryption algo %d\n", pkey_info->key_enc_algo);
+ }
+ #else
+-static inline void dump_options(struct caam_pkey_info pkey_info)
++static inline void dump_options(struct caam_pkey_info *pkey_info)
+ {
+ }
+ #endif
+@@ -108,7 +108,7 @@ static int trusted_caam_seal(struct trusted_key_payload *p, char *datablob)
+ 		ret = get_pkey_options(datablob, &info.pkey_info);
+ 		if (ret < 0)
+ 			return 0;
+-		dump_options(info.pkey_info);
++		dump_options(&info.pkey_info);
+ 	}
+ 
+ 	ret = caam_encap_blob(blobifier, &info);
+@@ -140,7 +140,7 @@ static int trusted_caam_unseal(struct trusted_key_payload *p, char *datablob)
+ 		ret = get_pkey_options(datablob, &info.pkey_info);
+ 		if (ret < 0)
+ 			return 0;
+-		dump_options(info.pkey_info);
++		dump_options(&info.pkey_info);
+ 
+ 		p->key_len = p->blob_len + sizeof(struct caam_pkey_info);
+ 		memcpy(p->key, &info.pkey_info, sizeof(struct caam_pkey_info));
 -- 
-"I'm a compsci. I don't write code." -- Noodles.  "I'm a DB coder.
-Neither do I." -- Adrian.
+2.34.1
+
 
