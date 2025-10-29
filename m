@@ -1,88 +1,114 @@
-Return-Path: <linux-integrity+bounces-7542-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7543-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AACEC1A7F0
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Oct 2025 14:05:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD62BC1C177
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Oct 2025 17:32:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEE001A63021
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Oct 2025 12:59:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 592F8347FED
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Oct 2025 16:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1F63590D2;
-	Wed, 29 Oct 2025 12:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E4D2334C08;
+	Wed, 29 Oct 2025 16:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQVzvhI4"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Dsfb1GSa"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB34A3590CC;
-	Wed, 29 Oct 2025 12:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FDA22F0C6F
+	for <linux-integrity@vger.kernel.org>; Wed, 29 Oct 2025 16:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761741593; cv=none; b=I2YQf2h4ihtqiFd58C6b/JxgWZ93JX27pl4eR5qE9j5oitRBslSEk2FPReUMRb7IOlwRyX/vg6RtBkq3OvvTjzBd3ywxh9e2tpY30erLViT9lyiETP6UciZfNb+8YW171N9ykBGh5YEptwOiSVldG9GAekM6er+pXn+z14YoVhY=
+	t=1761755558; cv=none; b=WC2SBRrDrKM83W7Yz2s/L7Am81dIBhMxsFrU7TXmdGAJNJVmogTCPa9vCKPyNS6JxBCsfaacdqCQRyuyAADSvQRwcUs4RAEiS9R9TJfPUIiF0NEvm4e/1xYcNkGCSmmFqcIe2pPA0JsuUeoFHgG/yUTVevFAnAGxQor8J1Gk/KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761741593; c=relaxed/simple;
-	bh=oItGI3gaeX0LbA7f+lmtznbanR9gHvj7um23N51MZD0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QUJtdf90N1b73mYusuCJD0NG3NJfimAwC7o1zJ+V3p9YWcJauNA84SUPnsW596ZEN3JLfsDG+dhM0siampN5CFdPzN/FZFg7fJICgHZpuA1zjTMW890rqU59ZLdkqxC7t5qw59oH1u8YgH6LEm9GTm28ZYlLeA7Ont95oM7/NVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQVzvhI4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C08DC4CEF7;
-	Wed, 29 Oct 2025 12:39:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761741591;
-	bh=oItGI3gaeX0LbA7f+lmtznbanR9gHvj7um23N51MZD0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oQVzvhI4br2EUD6cJ6INSkNPzmq/N0lp1dCm1XyG2KSN5m7FVqFc8hVygLWZFAAFB
-	 j2/mcCNv9Na9WPoeVd+OHn85jkvfIu+pCDyJbUXWCxDJf7mjIrj88GvmZXJOP7t6QJ
-	 krgIT/KwdKIsXqTb7dmZ4DV+tbU6mXGCP9QjnqccHdKREbu/OndEC+REoYiAogTZPM
-	 Mb6Hdq3uFLURgMsRN/nsB7ZlDuqtBK5DDa7Fm9ex7A564KwI51ftFiE6LL+re8lD1F
-	 6SW/g35xF/FtTGUlqPwa5r46HWaG4QTZrk6QJia0ICHD5mQc4HCF33wC8yeCnL2rAH
-	 pcbKlTK/B+bcA==
-Date: Wed, 29 Oct 2025 13:39:45 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: David Howells <dhowells@redhat.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <christian@brauner.io>, Marc Dionne <marc.dionne@auristor.com>, 
-	Jeffrey Altman <jaltman@auristor.com>, Steve French <sfrench@samba.org>, linux-afs@lists.infradead.org, 
-	openafs-devel@openafs.org, linux-cifs@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Etienne Champetier <champetier.etienne@gmail.com>, Chet Ramey <chet.ramey@case.edu>, 
-	Cheyenne Wills <cwills@sinenomine.net>, Mimi Zohar <zohar@linux.ibm.com>, 
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH 1/2] vfs: Allow filesystems with foreign owner IDs to
- override UID checks
-Message-ID: <20251029-brust-reden-b61f1a55dc3b@brauner>
-References: <20251021-agieren-spruch-65c107748c09@brauner>
- <20251014133551.82642-1-dhowells@redhat.com>
- <20251014133551.82642-2-dhowells@redhat.com>
- <1523597.1761052821@warthog.procyon.org.uk>
+	s=arc-20240116; t=1761755558; c=relaxed/simple;
+	bh=Ca7xEzFRwrwszkpl4txHQpXwetMMS+OAj7NM+yP3tuk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SJ5HyxRL6tK2sH2YVAj7/NEhJEFKeQl+EEGIKYxe+gsxQi5qdqrcUQl/djwj8TdpoEE+SHLMz5gh3vgBRYnuRe/ilVxxWmgylb/bG+4MZKlxObldK17oUm6GR0d8wPmHUbPa50CzBqreqPf+1FbZ9MnJOJAMCay3e+tyJ2Bol3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Dsfb1GSa; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761755543;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=GOAJ/2xYVpU7WKRC8hlYtRql72lR/1lCG+XFgyo4CmM=;
+	b=Dsfb1GSa8mB+EMKzo+G38eO/WnewpdrJhs1oiAo1Li435FydEB6Afj4u9H9uG0Oe569RrQ
+	BLD+KIslC0Z3QEForE0vzS4NojqugJLrS7SM43Sa3lV6u/qQ+QmKHY2AH5w1Xzx1qbNt09
+	/ZiesvcXOAgBy7p1GCXac+1orbPZuA0=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] KEYS: encrypted: Return early on allocation failure and drop goto
+Date: Wed, 29 Oct 2025 17:31:56 +0100
+Message-ID: <20251029163157.119000-1-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1523597.1761052821@warthog.procyon.org.uk>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Oct 21, 2025 at 02:20:21PM +0100, David Howells wrote:
-> Christian Brauner <brauner@kernel.org> wrote:
-> 
-> > > +	if (unlikely(inode->i_op->have_same_owner)) {
-> > 
-> > Same, as above: similar to IOP_FASTPERM this should use a flag to avoid pointer derefs.
-> 
-> Can we do these IOP_* flags better?  Surely we can determine at the point the
-> inode has its ->i_op assigned that these things are provided?  This optimises
-> the case where they don't exist at the expense of the case where they do (we
-> still have to check the pointer every time).
-> 
-> > > +	if (unlikely(inode->i_op->have_same_owner)) {
+Return ERR_PTR(-ENOMEM) immediately if memory allocation fails, instead
+of using goto and returning a NULL pointer, and remove the now-unused
+'out' label.
 
-I think I mentioned this off-list. It looks like we can but I don't know
-if there was any history behind not doing it that way. But please try.
+At the call site, check 'ascii_buf' with IS_ERR() and propagate the
+error code returned by datablob_format().
+
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ security/keys/encrypted-keys/encrypted.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+index be1f2118447c..25df00b7dbe9 100644
+--- a/security/keys/encrypted-keys/encrypted.c
++++ b/security/keys/encrypted-keys/encrypted.c
+@@ -276,7 +276,7 @@ static char *datablob_format(struct encrypted_key_payload *epayload,
+ 
+ 	ascii_buf = kmalloc(asciiblob_len + 1, GFP_KERNEL);
+ 	if (!ascii_buf)
+-		goto out;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	ascii_buf[asciiblob_len] = '\0';
+ 
+@@ -288,7 +288,6 @@ static char *datablob_format(struct encrypted_key_payload *epayload,
+ 	bufp = &ascii_buf[len];
+ 	for (i = 0; i < (asciiblob_len - len) / 2; i++)
+ 		bufp = hex_byte_pack(bufp, iv[i]);
+-out:
+ 	return ascii_buf;
+ }
+ 
+@@ -932,8 +931,8 @@ static long encrypted_read(const struct key *key, char *buffer,
+ 		goto out;
+ 
+ 	ascii_buf = datablob_format(epayload, asciiblob_len);
+-	if (!ascii_buf) {
+-		ret = -ENOMEM;
++	if (IS_ERR(ascii_buf)) {
++		ret = PTR_ERR(ascii_buf);
+ 		goto out;
+ 	}
+ 
+-- 
+2.51.0
+
 
