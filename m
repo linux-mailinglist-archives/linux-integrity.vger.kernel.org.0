@@ -1,210 +1,200 @@
-Return-Path: <linux-integrity+bounces-7558-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7559-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9AD4C2912F
-	for <lists+linux-integrity@lfdr.de>; Sun, 02 Nov 2025 16:43:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 171FDC2DCFA
+	for <lists+linux-integrity@lfdr.de>; Mon, 03 Nov 2025 20:13:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 976583AE2D3
-	for <lists+linux-integrity@lfdr.de>; Sun,  2 Nov 2025 15:43:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F13FE4E4C71
+	for <lists+linux-integrity@lfdr.de>; Mon,  3 Nov 2025 19:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BE311DF965;
-	Sun,  2 Nov 2025 15:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C22C280017;
+	Mon,  3 Nov 2025 19:13:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="W5/mo3jc"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="or+t/Mk6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from the.earth.li (the.earth.li [93.93.131.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210DC15530C
-	for <linux-integrity@vger.kernel.org>; Sun,  2 Nov 2025 15:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E56347C3;
+	Mon,  3 Nov 2025 19:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762098198; cv=none; b=oPSTrKx4iNQBtGxsz09/DtP1g+cVKp+wTuOGv3qpkTaCSNZnvF4CgGO3NMUIJ0UuT+mF1y2NXhaytb/ic3pjdiuDjE+gq5yLxHOddJ9j1exBv8viczqMb6HY5/wx0v4Qu/9B7mrolefx3hPYGLMqXouuwKq6aUS3DoS75qNwcPc=
+	t=1762197186; cv=none; b=WIZXuUAOnMPEth4/OJopQAmeXFuPRIif2AJtoCz9+VB7afARE/ZgVqHJFgMniU2ZQF9dsbetvbAcTqx8mSTxUSew21L0K/mfy2redHmOXJ6b7kzTg+GgNrFT+O2m8JsaATiqxaNtXTgTZ2zzeQBqY2k9is14CCYOfFBIuVLJ+lQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762098198; c=relaxed/simple;
-	bh=z+74uzTwOyQM+smLB/z8SPLxSH3L8uwlQ61epXaQDqs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a8WbB4iDNsCVjay4248ZibVX5NV3+ARfeCNS2HtXG4CNzSG3LW3HNtxK0WYqam+oCZn2L2eFZwujXkUf50/+DcQ0wG4Gq1nJPyAYdDGMEbOKsrmJU+y+wH+EhYEKXyqNfLAg9f19y4z/Bxo+3DJQ6eZd4jNdY2og2vjhuRTQe4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=W5/mo3jc; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-34088fbd65aso2665865a91.0
-        for <linux-integrity@vger.kernel.org>; Sun, 02 Nov 2025 07:43:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1762098195; x=1762702995; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XR4hLMCuTJEX4w71czl1e00xwifRRggH9ZtmKhZRHec=;
-        b=W5/mo3jcV+LLYgNuvlgcKBT/U2DkWk0B4bUxXDKaDSbrVNkK5NKOwxwiWgiJ5CtCJr
-         PaiNZkYcZtOkrxMFS63oUHO+0qASyjqxoIo7QP7H+/SX0eSY2eO8kpfzPZlPrSR3oeb0
-         9Dl4L2Vne59kpwaC+XYSuIfhGdXQOucIrVB0wwX14HjcnyjNGfNykofC2rRumFBe3NDR
-         tC7+jl13DrjNpaBgfB7YJEoXjhQ/yxKSKzmhhU2riamNSikfuecsEKE8gl9Dj9MrUol2
-         VyAh9RZdPHCq5C737qxQ8LII1i48RK9Jx1BRp0fUyAdJj81w71rnCmIK1mx6KMqebtop
-         XySw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762098195; x=1762702995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XR4hLMCuTJEX4w71czl1e00xwifRRggH9ZtmKhZRHec=;
-        b=ukqVZYuDR8rSKeCq5EjXIAP845ubrLhqj6MmIKj8CALW72YAQvL7PXDLX1oymP+Zjq
-         Kog9CeCHgg+M3AfM99RN9m8PSH+J83sunWRcnrs38ij3ETq6dEEisMlQwm1sKHoAB6Bc
-         OmEFVwQN4TCB82wGjqpwL40wP8OdUCn8UKrJytiwYqIJgbRdvWl8nOrhofJL1VZEhCTx
-         s7Nnpt38JGLg+E3XIuBAJrQtY9YOxYeunKc5dofGdU5ApDGf9KNo7oWjgtwDqYCa6kZQ
-         s33/fKv5+e5VjOwfpLd6kIeilPRxXcAc2huk2+u2Nvp1A0ymVxvnlJrJmdY38ocSijza
-         b+SA==
-X-Forwarded-Encrypted: i=1; AJvYcCWiCRhmCBBUjaqed1tps1POxhyBZ8ThM12kc+qmBK/ZNBxevAvN1P23A6JtuFf49iUR1JuXI9TqGVkadquzcxg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfHVXyS1RzhYPfkbduZ7tdbhOPWIG14Vn175O2I2szzdRZQmIu
-	EBMX0y/xz66zUEgaRZHD/trBoH7owoFNpDp/C7CnBfhu8eQnX0uG+E/Qz0SjfrVeivB+CyUM1Ro
-	BjuzMIlY7Y0j5A8L02pdDAbzyJQHgxnBPTZWfBuGm
-X-Gm-Gg: ASbGnctqibD/FHQjlJP/1JAM53xSRvYK1kppgGprUBh34HeZ4GNPhIY0LNMZuz34dfT
-	7nPURG+vDEt95VCyBI0/3ntll5IdmU+UzsHjqh5oRDqi7fSNbd2DCqdc8sJV1xzVshH+Vy7zACz
-	VxBGLUgHUw2ylIPe141TQ5br4R+GRWdZwnp/9WT/WdXYWl0nIOXxnGR1AlegXXtknOeXDWuLq3/
-	wwBvdz2Jpsw77gC+o2dA05xQwQWzhLaLJr06ldOf+yhP8qSTWG9PkS794AB
-X-Google-Smtp-Source: AGHT+IH+gdQyYqpCRFbM6fBI2tvP8h9njQCEvK/Ytm9+WC6sCBHRr/IlfFcCz6CZrkFk8ifrfaRZlu6u7GUboUGzPBM=
-X-Received: by 2002:a17:90b:5628:b0:32e:a54a:be4a with SMTP id
- 98e67ed59e1d1-34082fc6369mr10716770a91.2.1762098195358; Sun, 02 Nov 2025
- 07:43:15 -0800 (PST)
+	s=arc-20240116; t=1762197186; c=relaxed/simple;
+	bh=X28PVM1pHjUBiCIDklQDJk1W4z0EHRhbaDNCwuFLW8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CSkzWAWKDK2NtmJfOzr/qLqXyZGh0tT5urWcJZSPNaBEYivGCmHXXuw1L/7OzbXhtBX5CrbSiBlyllOn08FbQ734rjQnkuweQr10vv9N6ivK7lyuh7vSEP9RAzPDOa18vaH5wBVPh+gePSYhStBPtiJO8GtlldJMn+ce8d0Jz4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=or+t/Mk6; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=AD67qlxIc6SDg/FLv0M1cX7SsFiaMOMP5oXhvhvdN90=; b=or+t/Mk6szqFsgIMcgzUQARmRr
+	mc9VLYQZQzapLpKaNTi7BrqsRln/KYFAaCoqqBexxI3h9ShxJqnciS+WkZiKM//ZygdEPJsAPnSD1
+	gZIHcpxED0kD87vfRc5GP+tl3oWdf+X+to9FFeK/r8F2MywJ9NSHvbDMCuThl6wwp5du+GsC3s8Xn
+	TteEQD4qjomNgk20372MdHTkc8sbIkK6vcjproJC/0n4z9fv8X/9zWFtzfZHETGXM738BCHfEuhKD
+	L7JRnqAooyFcP5QJcOP++oQxIM8YbK86b4rsLFiBUcyURjxNuW1VaF9K8TeEia6iJCnqIC+MaxsZQ
+	001xgSkw==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1vFzSD-00Daab-0n;
+	Mon, 03 Nov 2025 18:38:57 +0000
+Date: Mon, 3 Nov 2025 18:38:57 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	zohar@linux.ibm.com
+Subject: Re: [PATCH v3 4/4] tpm: Allow for exclusive TPM access when using
+ /dev/tpm<n>
+Message-ID: <aQj2wZrnV7vgoAcq@earth.li>
+References: <cover.1760958898.git.noodles@meta.com>
+ <61049f236fe1eaf72402895cea6892b52ce7e279.1760958898.git.noodles@meta.com>
+ <cec499d5130f37a7887d39b44efd8538dd361fe3.camel@huaweicloud.com>
+ <aP_KT0GiQSzt1ClO@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250928030358.3873311-1-coxu@redhat.com> <20251031074016.1975356-1-coxu@redhat.com>
- <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com> <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-In-Reply-To: <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sun, 2 Nov 2025 10:43:04 -0500
-X-Gm-Features: AWmQ_bkhQmp1JdfxKhTFwi5MkVou1XmV320Ca5zT8aVFM_Vs-ciEtv2q9tc7P2M
-Message-ID: <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook security_kernel_module_read_file
- to access decompressed kernel module
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <aP_KT0GiQSzt1ClO@kernel.org>
 
-On Sun, Nov 2, 2025 at 10:06=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Sat, 2025-11-01 at 12:50 -0400, Paul Moore wrote:
-> > On Fri, Oct 31, 2025 at 3:41=E2=80=AFAM Coiby Xu <coxu@redhat.com> wrot=
-e:
-> > >
-> > > Currently, when in-kernel module decompression (CONFIG_MODULE_DECOMPR=
-ESS)
-> > > is enabled, IMA has no way to verify the appended module signature as=
- it
-> > > can't decompress the module.
-> > >
-> > > Define a new LSM hook security_kernel_module_read_file which will be
-> > > called after kernel module decompression is done so IMA can access th=
-e
-> > > decompressed kernel module to verify the appended signature.
-> > >
-> > > Since IMA can access both xattr and appended kernel module signature
-> > > with the new LSM hook, it no longer uses the security_kernel_post_rea=
-d_file
-> > > LSM hook for kernel module loading.
-> > >
-> > > Before enabling in-kernel module decompression, a kernel module in
-> > > initramfs can still be loaded with ima_policy=3Dsecure_boot. So adjus=
-t the
-> > > kernel module rule in secure_boot policy to allow either an IMA
-> > > signature OR an appended signature i.e. to use
-> > > "appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig".
-> > >
-> > > Reported-by: Karel Srot <ksrot@redhat.com>
-> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> > > Signed-off-by: Coiby Xu <coxu@redhat.com>
-> > > ---
-> > > v1: https://lore.kernel.org/linux-integrity/20250928030358.3873311-1-=
-coxu@redhat.com/
-> > >
-> > >  include/linux/lsm_hook_defs.h       |  2 ++
-> > >  include/linux/security.h            |  7 +++++++
-> > >  kernel/module/main.c                | 10 +++++++++-
-> > >  security/integrity/ima/ima_main.c   | 26 ++++++++++++++++++++++++++
-> > >  security/integrity/ima/ima_policy.c |  2 +-
-> > >  security/security.c                 | 17 +++++++++++++++++
-> > >  6 files changed, 62 insertions(+), 2 deletions(-)
-> >
-> > We don't really need a new LSM hook for this do we?  Can't we just
-> > define a new file read type, e.g.  READING_MODULE_DECOMPRESS, and do
-> > another call to security_kernel_post_read_file() after the module is
-> > unpacked?  Something like the snippet below ...
+On Mon, Oct 27, 2025 at 09:38:55PM +0200, Jarkko Sakkinen wrote:
+>On Mon, Oct 20, 2025 at 01:53:30PM +0200, Roberto Sassu wrote:
+>> On Mon, 2025-10-20 at 12:31 +0100, Jonathan McDowell wrote:
+>> > From: Jonathan McDowell <noodles@meta.com>
+>> >
+>> > There are situations where userspace might reasonably desire exclusive
+>> > access to the TPM, or the kernel's internal context saving + flushing
+>> > may cause issues, for example when performing firmware upgrades. Extend
+>> > the locking already used for avoiding concurrent userspace access to
+>> > prevent internal users of the TPM when /dev/tpm<n> is in use.
+>> >
+>> > The few internal users who already hold the open_lock are changed to use
+>> > tpm_internal_(try_get|put)_ops, with the old tpm_(try_get|put)_ops
+>> > functions changing to obtain read access to the open_lock.  We return
+>> > -EBUSY when another user has exclusive access, rather than adding waits.
+>> >
+>> > Signed-off-by: Jonathan McDowell <noodles@meta.com>
+>> > ---
+>> > v2: Switch to _locked instead of _internal_ for function names.
+>> > v3: Move to end of patch series.
+>> >
+>> >  drivers/char/tpm/tpm-chip.c       | 53 +++++++++++++++++++++++++------
+>> >  drivers/char/tpm/tpm-dev-common.c |  8 ++---
+>> >  drivers/char/tpm/tpm.h            |  2 ++
+>> >  drivers/char/tpm/tpm2-space.c     |  5 ++-
+>> >  4 files changed, 52 insertions(+), 16 deletions(-)
+>> >
+>> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+>> > index ba906966721a..687f6d8cd601 100644
+>> > --- a/drivers/char/tpm/tpm-chip.c
+>> > +++ b/drivers/char/tpm/tpm-chip.c
+>> > @@ -144,7 +144,7 @@ void tpm_chip_stop(struct tpm_chip *chip)
+>> >  EXPORT_SYMBOL_GPL(tpm_chip_stop);
+>> >
+>> >  /**
+>> > - * tpm_try_get_ops() - Get a ref to the tpm_chip
+>> > + * tpm_try_get_ops_locked() - Get a ref to the tpm_chip
+>> >   * @chip: Chip to ref
+>> >   *
+>> >   * The caller must already have some kind of locking to ensure that chip is
+>> > @@ -154,7 +154,7 @@ EXPORT_SYMBOL_GPL(tpm_chip_stop);
+>> >   *
+>> >   * Returns -ERRNO if the chip could not be got.
+>> >   */
+>> > -int tpm_try_get_ops(struct tpm_chip *chip)
+>> > +int tpm_try_get_ops_locked(struct tpm_chip *chip)
+>> >  {
+>> >  	int rc = -EIO;
+>> >
+>> > @@ -185,22 +185,57 @@ int tpm_try_get_ops(struct tpm_chip *chip)
+>> >  	put_device(&chip->dev);
+>> >  	return rc;
+>> >  }
+>> > -EXPORT_SYMBOL_GPL(tpm_try_get_ops);
+>> >
+>> >  /**
+>> > - * tpm_put_ops() - Release a ref to the tpm_chip
+>> > + * tpm_put_ops_locked() - Release a ref to the tpm_chip
+>> >   * @chip: Chip to put
+>> >   *
+>> > - * This is the opposite pair to tpm_try_get_ops(). After this returns chip may
+>> > - * be kfree'd.
+>> > + * This is the opposite pair to tpm_try_get_ops_locked(). After this returns
+>> > + * chip may be kfree'd.
+>> >   */
+>> > -void tpm_put_ops(struct tpm_chip *chip)
+>> > +void tpm_put_ops_locked(struct tpm_chip *chip)
+>> >  {
+>> >  	tpm_chip_stop(chip);
+>> >  	mutex_unlock(&chip->tpm_mutex);
+>> >  	up_read(&chip->ops_sem);
+>> >  	put_device(&chip->dev);
+>> >  }
+>> > +
+>> > +/**
+>> > + * tpm_try_get_ops() - Get a ref to the tpm_chip
+>> > + * @chip: Chip to ref
+>> > + *
+>> > + * The caller must already have some kind of locking to ensure that chip is
+>> > + * valid. This function will attempt to get the open_lock for the chip,
+>> > + * ensuring no other user is expecting exclusive access, before locking the
+>> > + * chip so that the ops member can be accessed safely. The locking prevents
+>> > + * tpm_chip_unregister from completing, so it should not be held for long
+>> > + * periods.
+>> > + *
+>> > + * Returns -ERRNO if the chip could not be got.
+>> > + */
+>> > +int tpm_try_get_ops(struct tpm_chip *chip)
+>> > +{
+>> > +	if (!down_read_trylock(&chip->open_lock))
+>> > +		return -EBUSY;
+>>
+>> Hi Jonathan
+>>
+>> do I understand it correctly, that a process might open the TPM with
+>> O_EXCL, and this will prevent IMA from extending a PCR until that
+>> process closes the file descriptor?
+>>
+>> If yes, this might be a concern, and I think an additional API to
+>> prevent such behavior would be needed (for example when IMA is active,
+>> i.e. there is a measurement policy loaded).
 >
-> Yes, this is similar to my suggestion based on defining multiple enumerat=
-ions:
-> READING_MODULE, READING_COMPRESSED_MODULE, and READING_DECOMPRESSED_MODUL=
-E.
-> With this solution, IMA would need to make an exception in the post kerne=
-l
-> module read for the READING_COMPRESSED_MODULE case, since the kernel modu=
-le has
-> not yet been decompressed.
+>Also this would be a problem with hwrng.
 >
-> Coiby suggested further simplification by moving the call later.  At whic=
-h point
-> either there is or isn't an appended signature for non-compressed and
-> decompressed kernel modules.
->
-> As long as you don't have a problem calling the security_kernel_post_read=
-_file()
-> hook again, could we move the call later and pass READING_MODULE_UNCOMPRE=
-SSED?
+>This probably needs to be refined somehow. I don't have a solution at
+>hand but "invariant" is that in-kernel caller should override user space
+>exclusion, even when O_EXCL is used.
 
-It isn't clear from these comments if you are talking about moving
-only the second security_kernel_post_read_file() call that was
-proposed for init_module_from_file() to later in the function, leaving
-the call in kernel_read_file() intact, or something else?
+Kernel access is exactly what caused the issue for me, in particular the 
+HW RNG access during a firmware upgrade. My patch to be able to disable 
+the HW RNG at runtime has landed in -next, which helps a lot, but it 
+really would be nice to be able to say "Hands off, I'm busy with this", 
+which is what led to this patch set.
 
-I think we want to leave the hook calls in kernel_read_file() intact,
-in which case I'm not certain what advantage there is in moving the
-security_kernel_post_read_file() call to a location where it is called
-in init_module_from_file() regardless of if the module is compressed
-or not.  In the uncompressed case you are calling the hook twice for
-no real benefit?  It may be helpful to submit a patch with your
-proposal as a patch can be worth a thousand words ;)
+To James' query about the fact the upgrade process should be properly 
+handled, I think the issue is probably that the HMAC context saving 
+around HW RNG access hit errors that were not gracefully handled, and we 
+marked the TPM as disabled in tpm2_load_null, causing failure 
+mid-upgrade.
 
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index c66b26184936..f127000d2e0a 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3693,6 +3693,14 @@ static int init_module_from_file(struct file *f,=
- const ch
-> > ar __user * uargs, int
-> >                        mod_stat_add_long(len, &invalid_decompress_bytes=
-);
-> >                        return err;
-> >                }
-> > +
-> > +               err =3D security_kernel_post_read_file(f,
-> > +                                                    (char *)info.hdr, =
-info.len,
-> > +                                                    READING_MODULE_DEC=
-OMPRESS);
-> > +               if (err) {
-> > +                       mod_stat_inc(&failed_kreads);
-> > +                       return err;
-> > +               }
-> >        } else {
-> >                info.hdr =3D buf;
-> >                info.len =3D len;
->
-> =3D=3D defer security_kernel_post_read_file() call to here =3D=3D
+J.
 
---=20
-paul-moore.com
+-- 
+What have you got in your pocket?
 
