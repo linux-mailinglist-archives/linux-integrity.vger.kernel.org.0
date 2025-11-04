@@ -1,200 +1,164 @@
-Return-Path: <linux-integrity+bounces-7559-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7560-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 171FDC2DCFA
-	for <lists+linux-integrity@lfdr.de>; Mon, 03 Nov 2025 20:13:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3BF1C2EDEC
+	for <lists+linux-integrity@lfdr.de>; Tue, 04 Nov 2025 02:48:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F13FE4E4C71
-	for <lists+linux-integrity@lfdr.de>; Mon,  3 Nov 2025 19:13:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E93AE188505E
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Nov 2025 01:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C22C280017;
-	Mon,  3 Nov 2025 19:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92081E3787;
+	Tue,  4 Nov 2025 01:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="or+t/Mk6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C937CMCF"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E56347C3;
-	Mon,  3 Nov 2025 19:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890BA1C5F13;
+	Tue,  4 Nov 2025 01:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762197186; cv=none; b=WIZXuUAOnMPEth4/OJopQAmeXFuPRIif2AJtoCz9+VB7afARE/ZgVqHJFgMniU2ZQF9dsbetvbAcTqx8mSTxUSew21L0K/mfy2redHmOXJ6b7kzTg+GgNrFT+O2m8JsaATiqxaNtXTgTZ2zzeQBqY2k9is14CCYOfFBIuVLJ+lQ=
+	t=1762220800; cv=none; b=sHiaITA3JAsEeBlx0ykRlwsY4erG3gRBLHn86M3RypAb0Gsk5S1lVDmMegxBnysjos0b4OCdGYmTCHHQdtRp8o1q+xrHXJ66LNKue3UuwWq5yM3dNlkX1p9g4dMbN1wOds39fOnBjHkaOloYttLmB8kDQ6Tshs/OISepOPY6flY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762197186; c=relaxed/simple;
-	bh=X28PVM1pHjUBiCIDklQDJk1W4z0EHRhbaDNCwuFLW8k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CSkzWAWKDK2NtmJfOzr/qLqXyZGh0tT5urWcJZSPNaBEYivGCmHXXuw1L/7OzbXhtBX5CrbSiBlyllOn08FbQ734rjQnkuweQr10vv9N6ivK7lyuh7vSEP9RAzPDOa18vaH5wBVPh+gePSYhStBPtiJO8GtlldJMn+ce8d0Jz4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=or+t/Mk6; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=AD67qlxIc6SDg/FLv0M1cX7SsFiaMOMP5oXhvhvdN90=; b=or+t/Mk6szqFsgIMcgzUQARmRr
-	mc9VLYQZQzapLpKaNTi7BrqsRln/KYFAaCoqqBexxI3h9ShxJqnciS+WkZiKM//ZygdEPJsAPnSD1
-	gZIHcpxED0kD87vfRc5GP+tl3oWdf+X+to9FFeK/r8F2MywJ9NSHvbDMCuThl6wwp5du+GsC3s8Xn
-	TteEQD4qjomNgk20372MdHTkc8sbIkK6vcjproJC/0n4z9fv8X/9zWFtzfZHETGXM738BCHfEuhKD
-	L7JRnqAooyFcP5QJcOP++oQxIM8YbK86b4rsLFiBUcyURjxNuW1VaF9K8TeEia6iJCnqIC+MaxsZQ
-	001xgSkw==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1vFzSD-00Daab-0n;
-	Mon, 03 Nov 2025 18:38:57 +0000
-Date: Mon, 3 Nov 2025 18:38:57 +0000
-From: Jonathan McDowell <noodles@earth.li>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	zohar@linux.ibm.com
-Subject: Re: [PATCH v3 4/4] tpm: Allow for exclusive TPM access when using
- /dev/tpm<n>
-Message-ID: <aQj2wZrnV7vgoAcq@earth.li>
-References: <cover.1760958898.git.noodles@meta.com>
- <61049f236fe1eaf72402895cea6892b52ce7e279.1760958898.git.noodles@meta.com>
- <cec499d5130f37a7887d39b44efd8538dd361fe3.camel@huaweicloud.com>
- <aP_KT0GiQSzt1ClO@kernel.org>
+	s=arc-20240116; t=1762220800; c=relaxed/simple;
+	bh=dPVBT7JGqP6QWM8M6gGC/TKPc3oU08ulbidUfqz/Bms=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Rx5RqqrAaL1Dwze0ArciEmceAHrT/ipLJ0XSeCPoScjJ9lQ1PuGXO7wfdQ1bU849gAKkqa1uMa+LIK3oQ5N3s+N0HLv7OhcLz59swdP0ibPcm2BdmAQdgTzqoBvACXl7CPCzjtdnt7OBVGr0nyUHux5pY/vx+voAg4wSLjnbahY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C937CMCF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1314C4CEE7;
+	Tue,  4 Nov 2025 01:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762220800;
+	bh=dPVBT7JGqP6QWM8M6gGC/TKPc3oU08ulbidUfqz/Bms=;
+	h=Date:From:To:Cc:Subject:From;
+	b=C937CMCFP1T5T53kGi8Agbf5dGry1EhhXyZjIiBG10m1WKfC/MDXhH++lMQ9V2xat
+	 sw4KO9r3UWWcaGZ/cQjX0V1a+QQpuP2E31Aa02AxQjhy6NLzwHSQq7N4RB8Zsu6uc2
+	 YW40Au8R10knAOPb7R+UaW4H7EFI4gcmPVD8Khxqe/s24G6pWH2ljFvFviey22FNlG
+	 rNGGIcOSakMmVQLZ4BGDpEXQZgHAalxFgkP4AiDVo/9e52Aj/hG9bLbOiFJwTypy2r
+	 964vsewKmKiOFVmaLU9pUS4IAjXhzY9RLQHT9K9plU3bYn4mf9n4jtSBeO8ENulIzj
+	 OxCtbFtWJSZJQ==
+Date: Tue, 4 Nov 2025 03:46:36 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: tpm2@lists.linux.dev
+Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
+Subject: tpm2h 0.15.0
+Message-ID: <aQla8R85uQVTIodS@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aP_KT0GiQSzt1ClO@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 27, 2025 at 09:38:55PM +0200, Jarkko Sakkinen wrote:
->On Mon, Oct 20, 2025 at 01:53:30PM +0200, Roberto Sassu wrote:
->> On Mon, 2025-10-20 at 12:31 +0100, Jonathan McDowell wrote:
->> > From: Jonathan McDowell <noodles@meta.com>
->> >
->> > There are situations where userspace might reasonably desire exclusive
->> > access to the TPM, or the kernel's internal context saving + flushing
->> > may cause issues, for example when performing firmware upgrades. Extend
->> > the locking already used for avoiding concurrent userspace access to
->> > prevent internal users of the TPM when /dev/tpm<n> is in use.
->> >
->> > The few internal users who already hold the open_lock are changed to use
->> > tpm_internal_(try_get|put)_ops, with the old tpm_(try_get|put)_ops
->> > functions changing to obtain read access to the open_lock.  We return
->> > -EBUSY when another user has exclusive access, rather than adding waits.
->> >
->> > Signed-off-by: Jonathan McDowell <noodles@meta.com>
->> > ---
->> > v2: Switch to _locked instead of _internal_ for function names.
->> > v3: Move to end of patch series.
->> >
->> >  drivers/char/tpm/tpm-chip.c       | 53 +++++++++++++++++++++++++------
->> >  drivers/char/tpm/tpm-dev-common.c |  8 ++---
->> >  drivers/char/tpm/tpm.h            |  2 ++
->> >  drivers/char/tpm/tpm2-space.c     |  5 ++-
->> >  4 files changed, 52 insertions(+), 16 deletions(-)
->> >
->> > diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
->> > index ba906966721a..687f6d8cd601 100644
->> > --- a/drivers/char/tpm/tpm-chip.c
->> > +++ b/drivers/char/tpm/tpm-chip.c
->> > @@ -144,7 +144,7 @@ void tpm_chip_stop(struct tpm_chip *chip)
->> >  EXPORT_SYMBOL_GPL(tpm_chip_stop);
->> >
->> >  /**
->> > - * tpm_try_get_ops() - Get a ref to the tpm_chip
->> > + * tpm_try_get_ops_locked() - Get a ref to the tpm_chip
->> >   * @chip: Chip to ref
->> >   *
->> >   * The caller must already have some kind of locking to ensure that chip is
->> > @@ -154,7 +154,7 @@ EXPORT_SYMBOL_GPL(tpm_chip_stop);
->> >   *
->> >   * Returns -ERRNO if the chip could not be got.
->> >   */
->> > -int tpm_try_get_ops(struct tpm_chip *chip)
->> > +int tpm_try_get_ops_locked(struct tpm_chip *chip)
->> >  {
->> >  	int rc = -EIO;
->> >
->> > @@ -185,22 +185,57 @@ int tpm_try_get_ops(struct tpm_chip *chip)
->> >  	put_device(&chip->dev);
->> >  	return rc;
->> >  }
->> > -EXPORT_SYMBOL_GPL(tpm_try_get_ops);
->> >
->> >  /**
->> > - * tpm_put_ops() - Release a ref to the tpm_chip
->> > + * tpm_put_ops_locked() - Release a ref to the tpm_chip
->> >   * @chip: Chip to put
->> >   *
->> > - * This is the opposite pair to tpm_try_get_ops(). After this returns chip may
->> > - * be kfree'd.
->> > + * This is the opposite pair to tpm_try_get_ops_locked(). After this returns
->> > + * chip may be kfree'd.
->> >   */
->> > -void tpm_put_ops(struct tpm_chip *chip)
->> > +void tpm_put_ops_locked(struct tpm_chip *chip)
->> >  {
->> >  	tpm_chip_stop(chip);
->> >  	mutex_unlock(&chip->tpm_mutex);
->> >  	up_read(&chip->ops_sem);
->> >  	put_device(&chip->dev);
->> >  }
->> > +
->> > +/**
->> > + * tpm_try_get_ops() - Get a ref to the tpm_chip
->> > + * @chip: Chip to ref
->> > + *
->> > + * The caller must already have some kind of locking to ensure that chip is
->> > + * valid. This function will attempt to get the open_lock for the chip,
->> > + * ensuring no other user is expecting exclusive access, before locking the
->> > + * chip so that the ops member can be accessed safely. The locking prevents
->> > + * tpm_chip_unregister from completing, so it should not be held for long
->> > + * periods.
->> > + *
->> > + * Returns -ERRNO if the chip could not be got.
->> > + */
->> > +int tpm_try_get_ops(struct tpm_chip *chip)
->> > +{
->> > +	if (!down_read_trylock(&chip->open_lock))
->> > +		return -EBUSY;
->>
->> Hi Jonathan
->>
->> do I understand it correctly, that a process might open the TPM with
->> O_EXCL, and this will prevent IMA from extending a PCR until that
->> process closes the file descriptor?
->>
->> If yes, this might be a concern, and I think an additional API to
->> prevent such behavior would be needed (for example when IMA is active,
->> i.e. there is a measurement policy loaded).
->
->Also this would be a problem with hwrng.
->
->This probably needs to be refined somehow. I don't have a solution at
->hand but "invariant" is that in-kernel caller should override user space
->exclusion, even when O_EXCL is used.
+tpm2sh 0.15.0 is much more stabilized than previous iterations, and
+enhances key management with a proper support for compiling command
+lists from policy expressions embedded to the TPM 2.0 ASN.1 key
+files:
 
-Kernel access is exactly what caused the issue for me, in particular the 
-HW RNG access during a firmware upgrade. My patch to be able to disable 
-the HW RNG at runtime has landed in -next, which helps a lot, but it 
-really would be nice to be able to say "Hands off, I'm busy with this", 
-which is what led to this patch set.
+~ main ≡
+❯ tpm2sh create tpm:81000001 --data deadbeef --policy  '(pcr(sha256:16) or pcr(sha256:7)) and secret(tpm:81000001)' keyedhash:sha256 | tpm2sh load
+vtpm:80000000
 
-To James' query about the fact the upgrade process should be properly 
-handled, I think the issue is probably that the HMAC context saving 
-around HW RNG access hit errors that were not gracefully handled, and we 
-marked the TPM as disabled in tpm2_load_null, causing failure 
-mid-upgrade.
+~ main ≡
+❯ tpm2sh cache
+HANDLE    TYPE       DETAILS
+80000000  transient  keyedhash:sha256
 
-J.
+~ main ≡
+❯ tpm2sh unseal vtpm:80000000
+deadbeef
 
--- 
-What have you got in your pocket?
+
+RustCrypto crates have been erased and all software crypto is based
+on openssl crate and libssl in order to have a patchable crypto:
+
+❯ ldd target/release/tpm2sh
+        linux-vdso.so.1 (0x00007f4eddc64000)
+        libssl.so.3 => /lib/x86_64-linux-gnu/libssl.so.3 (0x00007f4edd757000)
+        libcrypto.so.3 => /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007f4edd2d0000)
+        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f4eddc0a000)
+        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4edd1f0000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4edd00e000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f4eddc66000)
+
+Total size of dependency graph is 129, which is not whole a lot in the
+usual Rust metrics and tpm2sh is fine-tuned to compile nicely with rustc
+1.7x toolchains. This allows to compile it fluently to e.g., BuildRoot
+and Yocto images. E.g., to keep some control and narrow down
+dependencies I wrote my own custom PKCS#1, PCKS#8, SEC1 and X.509
+parsers using rasn [1].
+
+Converting external keys to TPM keys is super trivial:
+
+~ main ≡
+❯ tpm2sh create-primary ecc-nist-p256:sha256
+vtpm:80000000
+
+~ main ≡
+❯ tpm2sh cache
+HANDLE    TYPE       DETAILS
+80000000  transient  ecc-nist-p256:sha256
+
+~ main ≡
+❯ tpm2sh convert vtpm:80000000 -I private.pem | tpm2sh load
+vtpm:80000001
+
+~ main ≡
+❯ tpm2sh cache
+HANDLE    TYPE       DETAILS
+80000000  transient  ecc-nist-p256:sha256
+80000001  transient  rsa-2048:sha256
+
+`tpm2-tpmkey` crate reads and writes otherwise the format following the
+standard, except it adds an optional `parentPubkey` attribute, which
+enable parent auto-discovery from persistent handles and vtpm cache
+for the tpm2sh load subcommand.
+
+The custom (and stripped off) X.509 parser allows to trivially download
+EC certificates:
+
+~ main ≡
+❯ tpm2sh memory
+HANDLE    TYPE         DETAILS
+01c00002  certificate  rsa-2048:sha256
+01c0000a  certificate  ecc-nist-p256:sha256
+81000001  persistent   rsa-2048:sha256
+81000002  persistent   ecc-nist-p256:sha256
+
+~ main ≡
+❯ tpm2sh memory tpm:01c0000a | openssl x509 -text -noout | head -15
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1298017026 (0x4d5e2b02)
+        Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C = DE, O = Infineon Technologies AG, OU = OPTIGA(TM), CN = Infineon OPTIGA(TM) TPM 2.0 ECC CA 042
+        Validity
+            Not Before: Sep 16 22:18:38 2020 GMT
+            Not After : Sep 16 22:18:38 2035 GMT
+        Subject:
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub:
+                    04:a5:09:12:cd:a6:0d:79:49:2f:b0:fa:39:bf:cf:
+
+The stack overall has grown into a micro-ecosystem of re-usable components:
+
+1. https://crates.io/crates/tpm2sh
+3. https://crates.io/crates/tpm2-tpmkey
+2. https://crates.io/crates/tpm2-policy-language
+4. https://crates.io/crates/tpm2-crypto
+5. https://crates.io/crates/tpm2-protocol
+
+[1] https://github.com/librasn/compiler
+
+BR, Jarkko
 
