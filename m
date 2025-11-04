@@ -1,164 +1,212 @@
-Return-Path: <linux-integrity+bounces-7560-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7561-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3BF1C2EDEC
-	for <lists+linux-integrity@lfdr.de>; Tue, 04 Nov 2025 02:48:29 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFAA5C2F0E2
+	for <lists+linux-integrity@lfdr.de>; Tue, 04 Nov 2025 04:05:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E93AE188505E
-	for <lists+linux-integrity@lfdr.de>; Tue,  4 Nov 2025 01:47:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 996784E231D
+	for <lists+linux-integrity@lfdr.de>; Tue,  4 Nov 2025 03:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B92081E3787;
-	Tue,  4 Nov 2025 01:46:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77F3B262FCB;
+	Tue,  4 Nov 2025 03:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C937CMCF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iTCMlU9l";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="jJT7ALQW"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890BA1C5F13;
-	Tue,  4 Nov 2025 01:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA17B23A99E
+	for <linux-integrity@vger.kernel.org>; Tue,  4 Nov 2025 03:05:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762220800; cv=none; b=sHiaITA3JAsEeBlx0ykRlwsY4erG3gRBLHn86M3RypAb0Gsk5S1lVDmMegxBnysjos0b4OCdGYmTCHHQdtRp8o1q+xrHXJ66LNKue3UuwWq5yM3dNlkX1p9g4dMbN1wOds39fOnBjHkaOloYttLmB8kDQ6Tshs/OISepOPY6flY=
+	t=1762225519; cv=none; b=ETgeDKWkQCRrEKC9PkCR7Sdr6yw5kjVkzkGBo+nzk9VBXHxcDC5KWPbPlKlsuOLgP3MZKWFFAdIcgsnvyGyaNJAe0UNOCmYunHM3Yx5Cjxcj0pbEcGs6gEox6vxmNer4JqSsyXuhlycmumRk6ZhEXNB7n0253CM3mVDU+uZfdls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762220800; c=relaxed/simple;
-	bh=dPVBT7JGqP6QWM8M6gGC/TKPc3oU08ulbidUfqz/Bms=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Rx5RqqrAaL1Dwze0ArciEmceAHrT/ipLJ0XSeCPoScjJ9lQ1PuGXO7wfdQ1bU849gAKkqa1uMa+LIK3oQ5N3s+N0HLv7OhcLz59swdP0ibPcm2BdmAQdgTzqoBvACXl7CPCzjtdnt7OBVGr0nyUHux5pY/vx+voAg4wSLjnbahY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C937CMCF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1314C4CEE7;
-	Tue,  4 Nov 2025 01:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762220800;
-	bh=dPVBT7JGqP6QWM8M6gGC/TKPc3oU08ulbidUfqz/Bms=;
-	h=Date:From:To:Cc:Subject:From;
-	b=C937CMCFP1T5T53kGi8Agbf5dGry1EhhXyZjIiBG10m1WKfC/MDXhH++lMQ9V2xat
-	 sw4KO9r3UWWcaGZ/cQjX0V1a+QQpuP2E31Aa02AxQjhy6NLzwHSQq7N4RB8Zsu6uc2
-	 YW40Au8R10knAOPb7R+UaW4H7EFI4gcmPVD8Khxqe/s24G6pWH2ljFvFviey22FNlG
-	 rNGGIcOSakMmVQLZ4BGDpEXQZgHAalxFgkP4AiDVo/9e52Aj/hG9bLbOiFJwTypy2r
-	 964vsewKmKiOFVmaLU9pUS4IAjXhzY9RLQHT9K9plU3bYn4mf9n4jtSBeO8ENulIzj
-	 OxCtbFtWJSZJQ==
-Date: Tue, 4 Nov 2025 03:46:36 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: tpm2@lists.linux.dev
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Subject: tpm2h 0.15.0
-Message-ID: <aQla8R85uQVTIodS@kernel.org>
+	s=arc-20240116; t=1762225519; c=relaxed/simple;
+	bh=zfM81kXC6sJ/IE4hirAILuUoNxe19cJF3g0TTlIFdkk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GqlSmf24EFHEnWuWBBwHDQpyJ44INyKCqZPyKIaqj+IDqb9WzNdsyw2OuopYkK3K1lQvKndCyxXMPLI9cN8IMFo6bVlkxm2+sVlOIlpBuzMx0TajgeZALiiQfx9hLJ+ahZ75UfkeBDxXAFmiqQCrwf5jcF9s61Ogj14k8UTqSpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iTCMlU9l; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=jJT7ALQW; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762225516;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jkuPUHUimKy1GkV2j4jms8ezPzMfA+mYVSVtk+5pXSk=;
+	b=iTCMlU9lqRwLT25rLdekyJ8U0pjihFsd8oHlqi5mEwr41aDC4ejUwX7JueIH7CfYrICRhB
+	wKVbIBasR3khVE0K4T0TOQIR6aONrT0yZKftCLUXUXI0y2aMase0SjuZr117/ZHrAnQF6V
+	1AcSs/ygBlYoHQ+Qeh4l4U+JgnKJMzM=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-462-uAMrCvioOWy_AkDHx1HDAw-1; Mon, 03 Nov 2025 22:05:15 -0500
+X-MC-Unique: uAMrCvioOWy_AkDHx1HDAw-1
+X-Mimecast-MFC-AGG-ID: uAMrCvioOWy_AkDHx1HDAw_1762225514
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-32eb18b5500so9104320a91.2
+        for <linux-integrity@vger.kernel.org>; Mon, 03 Nov 2025 19:05:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1762225514; x=1762830314; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jkuPUHUimKy1GkV2j4jms8ezPzMfA+mYVSVtk+5pXSk=;
+        b=jJT7ALQWLO+u3bXprk6DCUx6bcvFCZJFjR4prwnROBSIfpKQINm9naRTF8YheqE0GW
+         LxhR1KEsKaRCFek/3T4+7qxF2Kz/thjaWX16llYM3wcXlXFLoz5jFU5/bPvotjHtXQf7
+         yy+p8D+2BOQNPZy8kEou0vUBTYC99UzL3fIUNGpgK88p+A7Ik61umEHFKFpJ0OqrIbJs
+         Qgv43SmgQ6MNmwbfzKMCaK4WcdkHeNawsGXFVYCz9WQ73rWkXpW0mEjOQ26c3EEvGDlq
+         AAiKEqWVmCiDCmbV3an3zHX2Qgi0cXHdrPUSMZqb79bfJUVncCcCTt8XQ9ohF3dOGRND
+         2udw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762225514; x=1762830314;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jkuPUHUimKy1GkV2j4jms8ezPzMfA+mYVSVtk+5pXSk=;
+        b=PxTYTfhxNYOWatVPwTsHtv+wtcMcbJVhEEjqmxnRGOPeSgKQrRG6TggSlR+d6IsdPm
+         adfs5H+H3+UsozEEKFGigfWcPHYKe1YbO8WC06gle0M3xwt4ilk2ePwfIp0JvSn7r71n
+         GpImyLrz3n/jJb7Sg3AUhqVXyuq3Z+C80tVTCCsQ+RZXUvpSh3VqNg38RvvZiA79x6B2
+         cl6KxiGvtTKcOLykbKlEljJZrUa5o4P3uh4gQ5EkfZvt6Yh1Jq82DvAgbLeSoQEZAcCx
+         auE9cmLfcQIC1WZjUCat4CSpqy6TEyjDc9oKcQOtkJbtFvBr71ArXEh6Gj9m2QTPSSrY
+         iV6g==
+X-Forwarded-Encrypted: i=1; AJvYcCUqhU89cA7eRf7pTzKBP3AWy/vXbxqyYyDvsmArc53N8z1olj0165nCY/zaCkHjNJ0zmmCUCYye0kOh2Kcc5As=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUyrmDGYi9aDesLtVnth2VFprJ+Ro2MEHVot/jVnlJXoBolwt8
+	fU4IWFp9oSBho4O7fFVPEEwRymjS0UGW6TkBhBrUa10rpXSLqnE/0zHsfoPzVdor1l/OFbJxUe7
+	NBOhKBxtCBES8o2g6MIir3l01PintHWEGfn2I2fGUc9QAznxr8ca7DfPi8iUtOrIKzSSZEg==
+X-Gm-Gg: ASbGncu76WNIgV+Sq4Jz5oXUqFS0HlUU/QijYDefcQCK4WqIesh/ftTiULm1L9qs60p
+	eNDkL61Fjwm9MonZM24A0u1nXUwQbs3sBHkA9XehtCxmXiERfDQgAoiLSIH6Cf4guvQeTymghNp
+	R5mDgXEPPzW0X3ODy5oomr8kIW0i/VuwhuOKShC7AsD/yUo5ixrNayldhULs6PB9te9XzlVftSf
+	eY4c4F7q1bO2CIv0MI6WX22G8azf99Dh3U98nU2Q3GrqjWcdDL3NAm/E8AW6SqzP6wDVg70W6ng
+	RRvnDyHbjHydogc507Uhym+o01+XdLMDhSOgvwZYdrercs3oXkNGQTjj6vWLI8xMtA==
+X-Received: by 2002:a17:90b:3a8b:b0:340:b572:3b88 with SMTP id 98e67ed59e1d1-340b5723ccbmr15221841a91.29.1762225513797;
+        Mon, 03 Nov 2025 19:05:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEJd5vKmSnQxMzaRaQ3Rd5VhOUdSMMQJmUVb1XRRUOp/C5RPft4OPbOqk0XuYt3iNt5Q/pwyA==
+X-Received: by 2002:a17:90b:3a8b:b0:340:b572:3b88 with SMTP id 98e67ed59e1d1-340b5723ccbmr15221795a91.29.1762225513197;
+        Mon, 03 Nov 2025 19:05:13 -0800 (PST)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba1f87a7287sm615886a12.31.2025.11.03.19.05.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Nov 2025 19:05:12 -0800 (PST)
+Date: Tue, 4 Nov 2025 11:04:28 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Daniel Gomez <da.gomez@kernel.org>
+Cc: linux-modules@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	"open list:MODULE SUPPORT" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] module: Only declare set_module_sig_enforced when
+ CONFIG_MODULE_SIG=y
+Message-ID: <r5ssavk3cwtggwdzixgmc3atagbc66nswzsk2ns7aguumtlv4w@4mij5owmfsuo>
+References: <20251031080949.2001716-1-coxu@redhat.com>
+ <3bf85718-8cea-4982-944d-b4c7a4faaf8f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <3bf85718-8cea-4982-944d-b4c7a4faaf8f@kernel.org>
 
-tpm2sh 0.15.0 is much more stabilized than previous iterations, and
-enhances key management with a proper support for compiling command
-lists from policy expressions embedded to the TPM 2.0 ASN.1 key
-files:
+On Sat, Nov 01, 2025 at 11:10:51PM +0100, Daniel Gomez wrote:
+>On 31/10/2025 09.09, Coiby Xu wrote:
+>> Currently, set_module_sig_enforced is declared as long as CONFIG_MODULES
+>> is enabled. This can lead to a linking error if
+>> set_module_sig_enforced is called with CONFIG_MODULE_SIG=n,
+>>
+>>     ld: security/integrity/ima/ima_appraise.o: in function `ima_appraise_measurement':
+>>     security/integrity/ima/ima_appraise.c:587:(.text+0xbbb): undefined reference to `set_module_sig_enforced'
+>
+>It's a bit unclear whether you're referring to a current upstream issue (which I
+>couldn't find as of -rc3), or if this is just a hypothetical scenario.
 
-~ main ≡
-❯ tpm2sh create tpm:81000001 --data deadbeef --policy  '(pcr(sha256:16) or pcr(sha256:7)) and secret(tpm:81000001)' keyedhash:sha256 | tpm2sh load
-vtpm:80000000
+Hi Daniel,
 
-~ main ≡
-❯ tpm2sh cache
-HANDLE    TYPE       DETAILS
-80000000  transient  keyedhash:sha256
+Yes, this issue is hypothetical and currently doesn't cause any real
+trouble. lkp found this issue in one of my proposed patches
+https://lore.kernel.org/lkml/20250928030358.3873311-1-coxu@redhat.com/
+But I'll use a different solution so the above patch will be abandoned
+and will not be applied.
 
-~ main ≡
-❯ tpm2sh unseal vtpm:80000000
-deadbeef
+>
+>>
+>> So only declare set_module_sig_enforced when CONFIG_MODULE_SIG is
+>> enabled.
+>
+>I only see cases where code has a safeguard like in
+>security/integrity/ima/ima_efi.c:71
+>
+>		if (IS_ENABLED(CONFIG_MODULE_SIG))
+>			set_module_sig_enforced();
+>
+>>
+>> Note this issue hasn't caused a real problem because all current callers
+>> of set_module_sig_enforced e.g. security/integrity/ima/ima_efi.c
+>> depend on CONFIG_MODULE_SIG=y.
+>
+>I think the correct term we should use here is runtime safeguard. The code does
+>not actually depend on that config, nor is there any dep in Kconfig.
 
+Thanks for correcting me! Sorry I didn't realize the constant folding
+compiler optimization and made a false claim while forgetting the fact
+security/integrity/ima/ima_efi.c also explicitly use
+"#if !IS_ENABLED(CONFIG_MODULE_SIG)".
 
-RustCrypto crates have been erased and all software crypto is based
-on openssl crate and libssl in order to have a patchable crypto:
+>
+>>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202510030029.VRKgik99-lkp@intel.com/
+>> Signed-off-by: Coiby Xu <coxu@redhat.com>
+>
+>
+>Just minor nits regarding the commit message structure. This change should allow
+>us to remove the safeguard from users of set_module_sig_enforced().
 
-❯ ldd target/release/tpm2sh
-        linux-vdso.so.1 (0x00007f4eddc64000)
-        libssl.so.3 => /lib/x86_64-linux-gnu/libssl.so.3 (0x00007f4edd757000)
-        libcrypto.so.3 => /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007f4edd2d0000)
-        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f4eddc0a000)
-        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4edd1f0000)
-        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4edd00e000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007f4eddc66000)
+Thanks for the suggestion! Does the following commit address address you
+concern?
 
-Total size of dependency graph is 129, which is not whole a lot in the
-usual Rust metrics and tpm2sh is fine-tuned to compile nicely with rustc
-1.7x toolchains. This allows to compile it fluently to e.g., BuildRoot
-and Yocto images. E.g., to keep some control and narrow down
-dependencies I wrote my own custom PKCS#1, PCKS#8, SEC1 and X.509
-parsers using rasn [1].
+     module: Only declare set_module_sig_enforced when CONFIG_MODULE_SIG=y
+     
+     Currently if set_module_sig_enforced is called with CONFIG_MODULE_SIG=n
+     e.g. [1], it can lead to a linking error,
+     
+         ld: security/integrity/ima/ima_appraise.o: in function `ima_appraise_measurement':
+         security/integrity/ima/ima_appraise.c:587:(.text+0xbbb): undefined reference to `set_module_sig_enforced'
+     
+     This happens because the actual implementation of
+     set_module_sig_enforced comes from CONFIG_MODULE_SIG but both the
+     function declaration and the empty stub definition are tied to
+     CONFIG_MODULES.
+     
+     So bind set_module_sig_enforced to CONFIG_MODULE_SIG instead. This
+     allows (future) users to call set_module_sig_enforced directly without
+     the "if IS_ENABLED(CONFIG_MODULE_SIG)" safeguard.
+     
+     Note this issue hasn't caused a real problem because all current callers
+     of set_module_sig_enforced e.g. security/integrity/ima/ima_efi.c
+     use "if IS_ENABLED(CONFIG_MODULE_SIG)" safeguard.
+     
+     [1] https://lore.kernel.org/lkml/20250928030358.3873311-1-coxu@redhat.com/
+     
+     Reported-by: kernel test robot <lkp@intel.com>
+     Closes: https://lore.kernel.org/oe-kbuild-all/202510030029.VRKgik99-lkp@intel.com/
 
-Converting external keys to TPM keys is super trivial:
+>
+>
+>Other than that, LGTM,
+>
+>Reviewed-by: Daniel Gomez <da.gomez@samsung.com>
 
-~ main ≡
-❯ tpm2sh create-primary ecc-nist-p256:sha256
-vtpm:80000000
+Thanks for reviewing the patch!
 
-~ main ≡
-❯ tpm2sh cache
-HANDLE    TYPE       DETAILS
-80000000  transient  ecc-nist-p256:sha256
+>
 
-~ main ≡
-❯ tpm2sh convert vtpm:80000000 -I private.pem | tpm2sh load
-vtpm:80000001
+-- 
+Best regards,
+Coiby
 
-~ main ≡
-❯ tpm2sh cache
-HANDLE    TYPE       DETAILS
-80000000  transient  ecc-nist-p256:sha256
-80000001  transient  rsa-2048:sha256
-
-`tpm2-tpmkey` crate reads and writes otherwise the format following the
-standard, except it adds an optional `parentPubkey` attribute, which
-enable parent auto-discovery from persistent handles and vtpm cache
-for the tpm2sh load subcommand.
-
-The custom (and stripped off) X.509 parser allows to trivially download
-EC certificates:
-
-~ main ≡
-❯ tpm2sh memory
-HANDLE    TYPE         DETAILS
-01c00002  certificate  rsa-2048:sha256
-01c0000a  certificate  ecc-nist-p256:sha256
-81000001  persistent   rsa-2048:sha256
-81000002  persistent   ecc-nist-p256:sha256
-
-~ main ≡
-❯ tpm2sh memory tpm:01c0000a | openssl x509 -text -noout | head -15
-Certificate:
-    Data:
-        Version: 3 (0x2)
-        Serial Number: 1298017026 (0x4d5e2b02)
-        Signature Algorithm: ecdsa-with-SHA256
-        Issuer: C = DE, O = Infineon Technologies AG, OU = OPTIGA(TM), CN = Infineon OPTIGA(TM) TPM 2.0 ECC CA 042
-        Validity
-            Not Before: Sep 16 22:18:38 2020 GMT
-            Not After : Sep 16 22:18:38 2035 GMT
-        Subject:
-        Subject Public Key Info:
-            Public Key Algorithm: id-ecPublicKey
-                Public-Key: (256 bit)
-                pub:
-                    04:a5:09:12:cd:a6:0d:79:49:2f:b0:fa:39:bf:cf:
-
-The stack overall has grown into a micro-ecosystem of re-usable components:
-
-1. https://crates.io/crates/tpm2sh
-3. https://crates.io/crates/tpm2-tpmkey
-2. https://crates.io/crates/tpm2-policy-language
-4. https://crates.io/crates/tpm2-crypto
-5. https://crates.io/crates/tpm2-protocol
-
-[1] https://github.com/librasn/compiler
-
-BR, Jarkko
 
