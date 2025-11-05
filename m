@@ -1,204 +1,139 @@
-Return-Path: <linux-integrity+bounces-7573-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7574-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21AD6C36852
-	for <lists+linux-integrity@lfdr.de>; Wed, 05 Nov 2025 16:58:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78194C36BDE
+	for <lists+linux-integrity@lfdr.de>; Wed, 05 Nov 2025 17:39:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5A14D5013FF
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Nov 2025 15:45:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFEFC1A205FD
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Nov 2025 16:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6115633C52A;
-	Wed,  5 Nov 2025 15:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118CC335567;
+	Wed,  5 Nov 2025 16:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NaXLpIL/"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="J3kwHk50"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011CE33BBD5
-	for <linux-integrity@vger.kernel.org>; Wed,  5 Nov 2025 15:42:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDD33328FF;
+	Wed,  5 Nov 2025 16:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762357340; cv=none; b=XoWZdRStxfjqEmQ5mTxkim/rlO1WuOwxm4QAlmgeeZbDolbvgfZu3IxGexDNiXSy7qdcEeObpFfg9FXCWAgGNpprO3D2BuhHz5ZkLMLt6Frs8f1M06nbcMI/UoMpSxvM/tN3YMfe6aTBwzGbc/MGaupj37SYlw4agEwPpUZvz/M=
+	t=1762360423; cv=none; b=rvZCOJa2Z7vXN+8I0AMXPPmgs2gVkldIsNmQFyAZ8XGezRoMbD9ITu0+uM3OfIG9+YXitEBMncaP7zHvKkoS1lwi7TAufT7mZxtUNyqQK9Q6LHtfscbgNabaKeTT8JyV6SMNMzg0xL8e71so6CNZ2NlnVdXJqeX6lVXt0+AyjjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762357340; c=relaxed/simple;
-	bh=Iba7LH/Bs8qFsrpJypki6edNxDKATUSsuPANrTlNJQ0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d9az4lIXByxsLSx3ORVD6qhxhsBvh1QhpJAUtqEAR3nK6jL7AncrbM1VeuEOWsrHwdHw3ujb2mC3FPs8Vr7B7GYKH8SAcYthA9ZqZXn9olNNi046IE31Ikb0KHvVGC8uGgRlPqbzkbnzJ2hww9DZS2XCoeyYfAVLTsQfjKnryoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=NaXLpIL/; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29555b384acso48107615ad.1
-        for <linux-integrity@vger.kernel.org>; Wed, 05 Nov 2025 07:42:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1762357337; x=1762962137; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=H32OZm73A90v3osjPzr+/wU/KyfXBz0Q5coNZvD4LuY=;
-        b=NaXLpIL/zrLoL3Er2MxzYSkoT7QM/u0WS/f5teKMA4ll2lSfpq/1Eodpucp/gmBYlM
-         UVDwwxunEGM9GsR5ON7K8Hh1Irjnqu2XM58JpbOMyC7M4NiLhW+3MluzY1KC5vSpMF/m
-         sTP8HKxPjJDlWO+rS+hvOnGoWQ/nsyFOaBWKh6KfqOhpkNo9hO+ucd2q+ghlubbBqo0Y
-         +7EhabB+DQCrSgH6Z3xlO29bcB67ogvZJLrATWbf1WEQhwmSGFnCsMRjGmgTvPbLAC/C
-         o4/EfL7/pIHboOWORoQgyz7skwuwDY0bJE1XPoIb0uoA49VeyQy+FRQJEhWEe0eWMK+B
-         +tZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762357337; x=1762962137;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H32OZm73A90v3osjPzr+/wU/KyfXBz0Q5coNZvD4LuY=;
-        b=l6215U2RynxHR7iKAJsa/BSyfwOb4y5X0og2Y3/9Uh3OXe5j9x1jCdfQo7uuhZ5YTO
-         xHmT8wWr2fZM4iQraS6Cxb0ry967lWZji/M3tjlfmusjQgNYtbx8ey9/EdsRWzJ3whox
-         reTP5MCF/YvoflPcRGqPr5B70YGFLWYWxKxQFlY4LEF3Hc4yCO4YdCsgc1wGFNYpDsR1
-         95IZ/S1TVTnRNhaFaPExjsRH3LZzvjfJWmLYEDtMk2O97VoXzPvvA8M3mxlyhAUXDdnJ
-         yO+7ap1iEXc6b/2abS+PUk14bQN6qgoWgXoROvVAVS4GpP3j/ay/OH1QdxSWjM1hDZvS
-         VgmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWMmK7w62GBtrmbCpS0+3HT/JaKcyVtDaeLtEN3kBo87jj5tMUvWivvyqwbkqAVh7t0BjFlyfMyK7w0FqfT6Mo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdyujWF9qgjdLgAonHbvs7Q+SYkZmlH7d8mesy/r5yIYASRdy+
-	sX2gUJhgLEAxmwxyQNjXzbhMEObmMCoZWwQoeqXKeoXfskun0nFNh0mRXvweZ91ilYOfSYyo4cr
-	MNwyyWTAiA0e/TBvNUyxRTdXKB26Qb+PRUTgqauGw
-X-Gm-Gg: ASbGncuoS6Po+Cuc418afGCy1md71wCChsp7kcn5m+U1k6Af/mArdRrQKg/5eyba0Td
-	WsUBcAJclQ4LBmkkxLwSWrvokcMOuqc1XJs24St9orzKbCTh2LEuBqQurnw5R+bQFjs4T8Op+EM
-	fIGkayjmf3I23/HlffcM2SeOv4m/3fO5ZhkKPX4sCQ3OtN7b+av+rMTSOlIIoT3jnlheXd8XmeO
-	w3HGkMPaA515fKe1HnLevUALDqm1MlIcTJ3N1+PGlyp7uL/MJQH82fhH61a
-X-Google-Smtp-Source: AGHT+IGd/j4s18IFElpzZGFgP4ETfYaHvFGNh7TpktX+wcy4cq6aEqn3mplaYtty5v4Q54o05/rNfTw5Wcf3twZ5Giw=
-X-Received: by 2002:a17:902:ef49:b0:295:4620:3e18 with SMTP id
- d9443c01a7336-2962ad2b255mr61501535ad.24.1762357337298; Wed, 05 Nov 2025
- 07:42:17 -0800 (PST)
+	s=arc-20240116; t=1762360423; c=relaxed/simple;
+	bh=ywRBhza80goh1Vu/IHS771Tl/MLD53LtC1CC4gXWxLo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=u1r9ZDa3h/bxX+EY1MEI1cCaAO2nvgwiuL45xVjmgHXeHZz4zBeA9vXX/Iga1hrMI4xd2kWWGO4d+L1IOOkAimy3uXn7PImRCWiQVrTKEyWiF8sQohXHYAP9mhi7xy0hwvS1wkCmchhZlFwCkBBBuXIi8Nc46O4XEmnxMlNTBUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=J3kwHk50; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1762360421;
+	bh=ywRBhza80goh1Vu/IHS771Tl/MLD53LtC1CC4gXWxLo=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=J3kwHk50A98NvxcMvNV3xf5S7Wa9z7PZ3M9e/yE/CufXnAmbh+ROwdcZPRVixvPCF
+	 cOIl1J/EVjWz0EzmlQpGWYhQ7RDMseBi5z9Cj5HUk2cae/HRZveDd7kRn79H8O44V8
+	 jz+hKaPB0Z9xr24YsRlMlRh9I2gCLyIJWa+Sfjxg=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id BF56E1C01D7;
+	Wed, 05 Nov 2025 11:33:40 -0500 (EST)
+Message-ID: <bbba0752a40859a114bac987d279a8b268e5e5eb.camel@HansenPartnership.com>
+Subject: Re: [PATCH] Documentation: tpm: tpm-security: Demote "Null Primary
+ Key Certification in Userspace" section
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Documentation
+ <linux-doc@vger.kernel.org>,  Linux Integrity
+ <linux-integrity@vger.kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Jason Gunthorpe
+	 <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>
+Date: Wed, 05 Nov 2025 11:33:39 -0500
+In-Reply-To: <aQtLerZYehQRWdqe@archie.me>
+References: <20251104131312.23791-1-bagasdotme@gmail.com>
+	 <50acd6bfbc8b9006bef5d7d0376b7ce4ab35f94c.camel@HansenPartnership.com>
+	 <aQqvEsdoj0El2Dq4@archie.me>
+	 <a8a5b95e06e2d5d1c04aab8933f25cd07903a3e8.camel@HansenPartnership.com>
+	 <aQtLerZYehQRWdqe@archie.me>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: multipart/signed; micalg="pgp-sha256";
+	protocol="application/pgp-signature"; boundary="=-S+kpVTU4tb2vwvpz/Dk3"
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250928030358.3873311-1-coxu@redhat.com> <20251031074016.1975356-1-coxu@redhat.com>
- <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
- <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
- <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
- <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
- <CAHC9VhRGwXvhU64Nk5jdmtPfrt9bbkzpLVqS0LRbtN3Q3HhnCw@mail.gmail.com> <0c7e94a436a3742003e5e1155a48480d8307a9c7.camel@linux.ibm.com>
-In-Reply-To: <0c7e94a436a3742003e5e1155a48480d8307a9c7.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 5 Nov 2025 10:42:05 -0500
-X-Gm-Features: AWmQ_bk9pEteWi73RS9euB226vzsor-YYmPiiJS9QGZvrRveM1VMwnJqW9ds-64
-Message-ID: <CAHC9VhS6xWvu5TjjS4MRGFEWxdAhg-Xsf6L+=K0k8U+fgiAtTQ@mail.gmail.com>
-Subject: Re: [PATCH v2] lsm,ima: new LSM hook security_kernel_module_read_file
- to access decompressed kernel module
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
+
+
+--=-S+kpVTU4tb2vwvpz/Dk3
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 5, 2025 at 9:07=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wro=
-te:
-> On Tue, 2025-11-04 at 21:47 -0500, Paul Moore wrote:
-> > Assuming I'm understanding the problem correctly, I think you're
-> > making this harder than it needs to be.  I believe something like this
-> > should solve the problem without having to add more conditionals
-> > around the hooks in kernel_read_file(), and limiting the multiple
-> > security_kernel_post_read_file() calls to just the compressed case ...
-> > and honestly in each of the _post_read_file() calls in the compressed
-> > case, the buffer contents have changed so it somewhat makes sense.
->
-> > Given the code below, IMA could simply ignore the
-> > READING_MODULE_COMPRESSED case (or whatever it is the IMA needs to do
-> > in that case) and focus on the READING_MODULE case as it does today.
-> > I expect the associated IMA patch would be both trivial and small.
-> >
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index c66b26184936..b435c498ec01 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3675,17 +3675,19 @@ static int idempotent_wait_for_completion(struc=
-t idempot
-> > ent *u)
-> >
-> > static int init_module_from_file(struct file *f, const char __user * ua=
-rgs, int
-> > flags)
-> > {
-> > +       bool compressed =3D !!(flags & MODULE_INIT_COMPRESSED_FILE);
-> >        struct load_info info =3D { };
-> >        void *buf =3D NULL;
-> >        int len;
-> >
-> > -       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_MOD=
-ULE);
-> > +       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL,
-> > +                              compressed ? READING_MODULE_COMPRESSED :=
- READING_
-> > MODULE);
-> >        if (len < 0) {
-> >                mod_stat_inc(&failed_kreads);
-> >                return len;
-> >        }
-> >
-> > -       if (flags & MODULE_INIT_COMPRESSED_FILE) {
-> > +       if (compressed) {
-> >                int err =3D module_decompress(&info, buf, len);
-> >                vfree(buf); /* compressed data is no longer needed */
-> >                if (err) {
-> > @@ -3693,6 +3695,14 @@ static int init_module_from_file(struct file *f,=
- const ch
-> > ar __user * uargs, int
-> >                        mod_stat_add_long(len, &invalid_decompress_bytes=
-);
-> >                        return err;
-> >                }
-> > +
-> > +               err =3D security_kernel_post_read_file(f,
-> > +                                                    (char *)info.hdr, =
-info.len,
-> > +                                                    READING_MODULE);
->
-> Without changing the enumeration here, IMA would not be able to different=
-iate
-> the first call to security_kernel_post_read_file() and this one.  The fir=
-st call
-> would result in unnecessary error messages.
+On Wed, 2025-11-05 at 20:04 +0700, Bagas Sanjaya wrote:
+> On Tue, Nov 04, 2025 at 10:32:50PM -0500, James Bottomley wrote:
+> > On Wed, 2025-11-05 at 08:57 +0700, Bagas Sanjaya wrote:
+> > > On Tue, Nov 04, 2025 at 09:55:08AM -0500, James Bottomley wrote:
+> > > > On Tue, 2025-11-04 at 20:13 +0700, Bagas Sanjaya wrote:
+> > > > > The last section heading in TPM security docs is formatted as
+> > > > > title heading instead. As such, it shows up as TPM toctree
+> > > > > entry. Demote it to section heading as appropriate.
+> > > >=20
+> > > > It's supposed to be a separate heading.=C2=A0 It's explaining how t=
+o
+> > > > certify your booted kernel rather than describing TPM security
+> > > > within the kernel.
+> > >=20
+> > > Should I keep the whole section as-is or should I move it to
+> > > separate docs?
+> >=20
+> > Why might it need moving?
+>=20
+> Just to tidy up toctree then...
 
-Given the patch snippet above, in the case where an uncompressed
-module is passed into init_module_from_file() there would be the
-following checks, in this order:
+I'd really rather have the files in the doc tree grouped for ease (and
+reminder of) maintenance.  The two headings belong together in one file
+because if someone updates the doc for one, there's at least a chance
+they'll notice the other might need an update as well; whereas if we do
+separate files for every heading the tree becomes very fragmented and
+the chance of something being missed increases.
 
- * kernel_read_file()
- -> security_kernel_read_file(READING_MODULE)
- -> security_kernel_post_read_file(READING_MODULE)
- * init_module_from_file()
- -> NONE
+Regards,
 
-... this should be the same as the current behavior.
+James
 
-In the case where a compressed module is passed into
-init_module_from_file() there would be the following checks, in this
-order:
 
- * kernel_read_file()
- -> security_kernel_read_file(READING_MODULE_COMPRESSED)
- -> security_kernel_post_read_file(READING_MODULE_COMPRESSED)
- * init_module_from_file()
- -> security_kernel_post_read_file(READING_MODULE)
 
-... the two differences being that the hook calls in
-kernel_read_file() use the READING_MODULE_COMPRESSED id, which seems
-appropriate as the data passed to the hook is the compressed
-representation, and the additional _post_read_file() hook call in
-init_module_from_file() using the READING_MODULE id, as the data
-passed to the hook is now uncompressed.  Not only should IMA be able
-to easily differentiate between the two _post_read_file() calls, but
-it should have access to both the compressed and uncompressed data.
 
---=20
-paul-moore.com
+--=-S+kpVTU4tb2vwvpz/Dk3
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABMIADkWIQTnYEDbdso9F2cI+arnQslM7pishQUCaQt8YxsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIACgkQ50LJTO6YrIXOzAEAmUarb4vaiYaQUts/VDZq
+9cRtDLUGLeHLnCc1HUX8RcoA/30aV5i67oB4ZfITBFxqJbfQ0FuSOxVV2X3TVGPK
+1MHZ
+=BjV1
+-----END PGP SIGNATURE-----
+
+--=-S+kpVTU4tb2vwvpz/Dk3--
 
