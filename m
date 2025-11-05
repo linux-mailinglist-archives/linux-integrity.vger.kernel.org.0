@@ -1,139 +1,249 @@
-Return-Path: <linux-integrity+bounces-7574-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7575-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78194C36BDE
-	for <lists+linux-integrity@lfdr.de>; Wed, 05 Nov 2025 17:39:19 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2697C37B86
+	for <lists+linux-integrity@lfdr.de>; Wed, 05 Nov 2025 21:28:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFEFC1A205FD
-	for <lists+linux-integrity@lfdr.de>; Wed,  5 Nov 2025 16:34:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D64B74F461F
+	for <lists+linux-integrity@lfdr.de>; Wed,  5 Nov 2025 20:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 118CC335567;
-	Wed,  5 Nov 2025 16:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34892346FB3;
+	Wed,  5 Nov 2025 20:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="J3kwHk50"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VdFSaBnN"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDD33328FF;
-	Wed,  5 Nov 2025 16:33:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D347280CD5;
+	Wed,  5 Nov 2025 20:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762360423; cv=none; b=rvZCOJa2Z7vXN+8I0AMXPPmgs2gVkldIsNmQFyAZ8XGezRoMbD9ITu0+uM3OfIG9+YXitEBMncaP7zHvKkoS1lwi7TAufT7mZxtUNyqQK9Q6LHtfscbgNabaKeTT8JyV6SMNMzg0xL8e71so6CNZ2NlnVdXJqeX6lVXt0+AyjjA=
+	t=1762374331; cv=none; b=n9xjenb81iUuebp/A4tG2rKFw3nN09/eJ/jb5rsxxGdd8vX9QDeIXZ5Ue+TzW2lI/FfiHX3z7sA5D7s70D0cxjJ93X9wqdoOIGemLxw6kGM8N22b4+Ko+OxzG2ttqyo97AVrarCv3Rd2Fd310QUL3lufEi7QT0x5lJNCN7pCV/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762360423; c=relaxed/simple;
-	bh=ywRBhza80goh1Vu/IHS771Tl/MLD53LtC1CC4gXWxLo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=u1r9ZDa3h/bxX+EY1MEI1cCaAO2nvgwiuL45xVjmgHXeHZz4zBeA9vXX/Iga1hrMI4xd2kWWGO4d+L1IOOkAimy3uXn7PImRCWiQVrTKEyWiF8sQohXHYAP9mhi7xy0hwvS1wkCmchhZlFwCkBBBuXIi8Nc46O4XEmnxMlNTBUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=J3kwHk50; arc=none smtp.client-ip=198.37.111.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1762360421;
-	bh=ywRBhza80goh1Vu/IHS771Tl/MLD53LtC1CC4gXWxLo=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=J3kwHk50A98NvxcMvNV3xf5S7Wa9z7PZ3M9e/yE/CufXnAmbh+ROwdcZPRVixvPCF
-	 cOIl1J/EVjWz0EzmlQpGWYhQ7RDMseBi5z9Cj5HUk2cae/HRZveDd7kRn79H8O44V8
-	 jz+hKaPB0Z9xr24YsRlMlRh9I2gCLyIJWa+Sfjxg=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id BF56E1C01D7;
-	Wed, 05 Nov 2025 11:33:40 -0500 (EST)
-Message-ID: <bbba0752a40859a114bac987d279a8b268e5e5eb.camel@HansenPartnership.com>
-Subject: Re: [PATCH] Documentation: tpm: tpm-security: Demote "Null Primary
- Key Certification in Userspace" section
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Documentation
- <linux-doc@vger.kernel.org>,  Linux Integrity
- <linux-integrity@vger.kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
-	Jason Gunthorpe
-	 <jgg@ziepe.ca>, Jonathan Corbet <corbet@lwn.net>
-Date: Wed, 05 Nov 2025 11:33:39 -0500
-In-Reply-To: <aQtLerZYehQRWdqe@archie.me>
-References: <20251104131312.23791-1-bagasdotme@gmail.com>
-	 <50acd6bfbc8b9006bef5d7d0376b7ce4ab35f94c.camel@HansenPartnership.com>
-	 <aQqvEsdoj0El2Dq4@archie.me>
-	 <a8a5b95e06e2d5d1c04aab8933f25cd07903a3e8.camel@HansenPartnership.com>
-	 <aQtLerZYehQRWdqe@archie.me>
-Autocrypt: addr=James.Bottomley@HansenPartnership.com;
- prefer-encrypt=mutual;
- keydata=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
-Content-Type: multipart/signed; micalg="pgp-sha256";
-	protocol="application/pgp-signature"; boundary="=-S+kpVTU4tb2vwvpz/Dk3"
-User-Agent: Evolution 3.50.3 
+	s=arc-20240116; t=1762374331; c=relaxed/simple;
+	bh=XKvcNgj58R3KJ+Z876rQ/nWPNZUPDyEmGCwRtcrKYTk=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=rpE9/G9nZuGZUHuBaQYH+apG8wuCb4K/4JDbe9LFoz7qJtckuHzBNP4QW0MoSB4ElKjtQFgeNOMJaJvztbJYrh0mbM1hCTJhG4uyrTnknqma/JidCO8QjV5Zi7xxc3zf3qybN6lAUjyS0hHWQG56L9mORlhuRqQVs+t8obRn/Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VdFSaBnN; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A5HaGJt014150;
+	Wed, 5 Nov 2025 20:25:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=c6lakh
+	1DWNQtJoQevb+PjeqhHVik2qq3INjLuu3tERM=; b=VdFSaBnN9GIgFM8ptphtJp
+	N0nSwXo2yygzzc9S3u9u9HXxEv5sYeTTdhUeUPOzHx3zsiaYpmDs4EpjVdfDw31H
+	PVAjZVJ1yffgqmRRk559tswJkQujdxba/rSGgEjBzSoVq6FG/x99CVnLqSMRrXJ+
+	1bWXmLYtCwiwwRjckGW6TMbHZj+m9mtnqwJv1Z4V4rArk6qnbbGaxVoPq3a57zvr
+	aLjCuKfhAMqpI9bYPrXqPHuOl8UVoHY6xTr1kka6bXhauxTlpe7Q73w+AeypeAM0
+	L9xs8VY8tVjN+sIUhAFccFkVN2v26flovwKLgN5NEzRjLLpcaongnNvmxPfBAt1w
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a59v22ywe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Nov 2025 20:25:10 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5A5KP9t1014026;
+	Wed, 5 Nov 2025 20:25:09 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a59v22ywa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Nov 2025 20:25:09 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5A5J5uIR018804;
+	Wed, 5 Nov 2025 20:25:08 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4a5whnj1tv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Nov 2025 20:25:08 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5A5KP7TD15729318
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 5 Nov 2025 20:25:07 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8C5985805E;
+	Wed,  5 Nov 2025 20:25:07 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ED86358056;
+	Wed,  5 Nov 2025 20:25:05 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.187.69])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  5 Nov 2025 20:25:05 +0000 (GMT)
+Message-ID: <8646ad03f2f14f45c0ade7c7d7cc148f56d964b1.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] lsm,ima: new LSM hook
+ security_kernel_module_read_file to access decompressed kernel module
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>,
+        James
+ Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Luis
+ Chamberlain	 <mcgrof@kernel.org>,
+        Petr Pavlu <petr.pavlu@suse.com>, Daniel
+ Gomez	 <da.gomez@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Roberto Sassu	 <roberto.sassu@huawei.com>,
+        Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:MODULE SUPPORT"
+ <linux-modules@vger.kernel.org>
+In-Reply-To: <CAHC9VhS6xWvu5TjjS4MRGFEWxdAhg-Xsf6L+=K0k8U+fgiAtTQ@mail.gmail.com>
+References: <20250928030358.3873311-1-coxu@redhat.com>
+	 <20251031074016.1975356-1-coxu@redhat.com>
+	 <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
+	 <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
+	 <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
+	 <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
+	 <CAHC9VhRGwXvhU64Nk5jdmtPfrt9bbkzpLVqS0LRbtN3Q3HhnCw@mail.gmail.com>
+	 <0c7e94a436a3742003e5e1155a48480d8307a9c7.camel@linux.ibm.com>
+	 <CAHC9VhS6xWvu5TjjS4MRGFEWxdAhg-Xsf6L+=K0k8U+fgiAtTQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 05 Nov 2025 15:25:05 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: kxEO1YW_F4PIvuR3DU2AEpwxnkIpKcvb
+X-Proofpoint-ORIG-GUID: h7VMnFIcOyeJNaUbUfCkTc_WVvsSwbyg
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDAyMSBTYWx0ZWRfX07jFlEHUaQIW
+ Bcz30fwCHHZb//Ff4vvWkomttWSIJf4bC+I0Zzr+DgxuovzdyVo2VTWvx1oJycWAFZ8v0ZemNjb
+ 8/CnXId9V7DTzM0ZcyCLwzmuATiaMHtQuzT5bXZ5qgVdqWEgNjfu1dTFFQcqWOvDiNuuBEsEM82
+ uZz48sco60ZtC6QWNGbmzfTxLjXsiPhNqwcnei0tY+vYBJzp4XL/AwV/jPWabiBLFJklaGpa9Aj
+ QcP2UQou8d+xQNs90uFAMe2R5sVUd+QuunnwIkXZl/rtcgBqT7heuUH5dLqc8UuM5Px9MWn3YQ9
+ MBQrLNLr8v8GlWkCrQBQY1dnR6zGmwDLVHuXS5+4HK7cG9FDMsTkjgVlGU1q6KIPw1m8ssDpfAF
+ qo7Pue9pltRCU4taF9llg0v09uX6Ig==
+X-Authority-Analysis: v=2.4 cv=H8HWAuYi c=1 sm=1 tr=0 ts=690bb2a6 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=D47IpgBTf8qnc8UESFAA:9 a=QEXdDO2ut3YA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-05_07,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ impostorscore=0 clxscore=1015 bulkscore=0 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511010021
 
-
---=-S+kpVTU4tb2vwvpz/Dk3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, 2025-11-05 at 20:04 +0700, Bagas Sanjaya wrote:
-> On Tue, Nov 04, 2025 at 10:32:50PM -0500, James Bottomley wrote:
-> > On Wed, 2025-11-05 at 08:57 +0700, Bagas Sanjaya wrote:
-> > > On Tue, Nov 04, 2025 at 09:55:08AM -0500, James Bottomley wrote:
-> > > > On Tue, 2025-11-04 at 20:13 +0700, Bagas Sanjaya wrote:
-> > > > > The last section heading in TPM security docs is formatted as
-> > > > > title heading instead. As such, it shows up as TPM toctree
-> > > > > entry. Demote it to section heading as appropriate.
-> > > >=20
-> > > > It's supposed to be a separate heading.=C2=A0 It's explaining how t=
-o
-> > > > certify your booted kernel rather than describing TPM security
-> > > > within the kernel.
-> > >=20
-> > > Should I keep the whole section as-is or should I move it to
-> > > separate docs?
+On Wed, 2025-11-05 at 10:42 -0500, Paul Moore wrote:
+> On Wed, Nov 5, 2025 at 9:07=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> w=
+rote:
+> > On Tue, 2025-11-04 at 21:47 -0500, Paul Moore wrote:
+> > > Assuming I'm understanding the problem correctly, I think you're
+> > > making this harder than it needs to be.  I believe something like thi=
+s
+> > > should solve the problem without having to add more conditionals
+> > > around the hooks in kernel_read_file(), and limiting the multiple
+> > > security_kernel_post_read_file() calls to just the compressed case ..=
+.
+> > > and honestly in each of the _post_read_file() calls in the compressed
+> > > case, the buffer contents have changed so it somewhat makes sense.
 > >=20
-> > Why might it need moving?
+> > > Given the code below, IMA could simply ignore the
+> > > READING_MODULE_COMPRESSED case (or whatever it is the IMA needs to do
+> > > in that case) and focus on the READING_MODULE case as it does today.
+> > > I expect the associated IMA patch would be both trivial and small.
+> > >=20
+> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > > index c66b26184936..b435c498ec01 100644
+> > > --- a/kernel/module/main.c
+> > > +++ b/kernel/module/main.c
+> > > @@ -3675,17 +3675,19 @@ static int idempotent_wait_for_completion(str=
+uct idempot
+> > > ent *u)
+> > >=20
+> > > static int init_module_from_file(struct file *f, const char __user * =
+uargs, int
+> > > flags)
+> > > {
+> > > +       bool compressed =3D !!(flags & MODULE_INIT_COMPRESSED_FILE);
+> > >        struct load_info info =3D { };
+> > >        void *buf =3D NULL;
+> > >        int len;
+> > >=20
+> > > -       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL, READING_M=
+ODULE);
+> > > +       len =3D kernel_read_file(f, 0, &buf, INT_MAX, NULL,
+> > > +                              compressed ? READING_MODULE_COMPRESSED=
+ : READING_
+> > > MODULE);
+> > >        if (len < 0) {
+> > >                mod_stat_inc(&failed_kreads);
+> > >                return len;
+> > >        }
+> > >=20
+> > > -       if (flags & MODULE_INIT_COMPRESSED_FILE) {
+> > > +       if (compressed) {
+> > >                int err =3D module_decompress(&info, buf, len);
+> > >                vfree(buf); /* compressed data is no longer needed */
+> > >                if (err) {
+> > > @@ -3693,6 +3695,14 @@ static int init_module_from_file(struct file *=
+f, const ch
+> > > ar __user * uargs, int
+> > >                        mod_stat_add_long(len, &invalid_decompress_byt=
+es);
+> > >                        return err;
+> > >                }
+> > > +
+> > > +               err =3D security_kernel_post_read_file(f,
+> > > +                                                    (char *)info.hdr=
+, info.len,
+> > > +                                                    READING_MODULE);
+> >=20
+> > Without changing the enumeration here, IMA would not be able to differe=
+ntiate
+> > the first call to security_kernel_post_read_file() and this one.  The f=
+irst call
+> > would result in unnecessary error messages.
 >=20
-> Just to tidy up toctree then...
+> Given the patch snippet above, in the case where an uncompressed
+> module is passed into init_module_from_file() there would be the
+> following checks, in this order:
+>=20
+>  * kernel_read_file()
+>  -> security_kernel_read_file(READING_MODULE)
+>  -> security_kernel_post_read_file(READING_MODULE)
+>  * init_module_from_file()
+>  -> NONE
+>=20
+> ... this should be the same as the current behavior.
+>=20
+> In the case where a compressed module is passed into
+> init_module_from_file() there would be the following checks, in this
+> order:
+>=20
+>  * kernel_read_file()
+>  -> security_kernel_read_file(READING_MODULE_COMPRESSED)
+>  -> security_kernel_post_read_file(READING_MODULE_COMPRESSED)
+>  * init_module_from_file()
+>  -> security_kernel_post_read_file(READING_MODULE)
+>=20
+> ... the two differences being that the hook calls in
+> kernel_read_file() use the READING_MODULE_COMPRESSED id, which seems
+> appropriate as the data passed to the hook is the compressed
+> representation, and the additional _post_read_file() hook call in
+> init_module_from_file() using the READING_MODULE id, as the data
+> passed to the hook is now uncompressed.  Not only should IMA be able
+> to easily differentiate between the two _post_read_file() calls, but
+> it should have access to both the compressed and uncompressed data.
 
-I'd really rather have the files in the doc tree grouped for ease (and
-reminder of) maintenance.  The two headings belong together in one file
-because if someone updates the doc for one, there's at least a chance
-they'll notice the other might need an update as well; whereas if we do
-separate files for every heading the tree becomes very fragmented and
-the chance of something being missed increases.
+Thanks, Paul.  Yes, a single additional enumeration is enough.
 
-Regards,
-
-James
-
-
-
-
---=-S+kpVTU4tb2vwvpz/Dk3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABMIADkWIQTnYEDbdso9F2cI+arnQslM7pishQUCaQt8YxsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQ50LJTO6YrIXOzAEAmUarb4vaiYaQUts/VDZq
-9cRtDLUGLeHLnCc1HUX8RcoA/30aV5i67oB4ZfITBFxqJbfQ0FuSOxVV2X3TVGPK
-1MHZ
-=BjV1
------END PGP SIGNATURE-----
-
---=-S+kpVTU4tb2vwvpz/Dk3--
+Mimi
 
