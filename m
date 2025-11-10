@@ -1,82 +1,47 @@
-Return-Path: <linux-integrity+bounces-7615-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7616-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DACCC43D85
-	for <lists+linux-integrity@lfdr.de>; Sun, 09 Nov 2025 13:29:14 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 365E2C48EA2
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Nov 2025 20:12:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E69C2188B0B4
-	for <lists+linux-integrity@lfdr.de>; Sun,  9 Nov 2025 12:29:38 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2030D4EF398
+	for <lists+linux-integrity@lfdr.de>; Mon, 10 Nov 2025 19:06:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109462EC0A7;
-	Sun,  9 Nov 2025 12:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8702F1A76BB;
+	Mon, 10 Nov 2025 19:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K4XHjkXy"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="YYPrpmME"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0FE2EC088
-	for <linux-integrity@vger.kernel.org>; Sun,  9 Nov 2025 12:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8824F21CFF6;
+	Mon, 10 Nov 2025 19:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762691348; cv=none; b=sS70KpKE5X/JEm3OzS3eXW+Pp0pm/HRTso5Qd+CvsO2pX+5AKgd68130cu1fRU7Jd4tzuxRyzQjldJzK7rXbg+Jj05qUmJvFVQHIy9I5AyC/egfyQ758KpLGBA+VroULfuDh7UnTDAmslGxE/74Umf0tQArPtbzKMx7xt0ukP/c=
+	t=1762801604; cv=none; b=lb/l5IMfLAr/Gtq+0r5tie5nmdGJ02K2dU0jTrO+TAnHGDrXZ6n9A6SUaL81QgjX6sW7rdd14mVEeXOsTjm2ClueHZJIdGi+nnnOLzhmM+OHMff5g3/A5PKs1wcK3AqKRow5bxjklI9Y4xeJrKIVnLffMkAXDmsK+jOqlzmy66o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762691348; c=relaxed/simple;
-	bh=+Fj8UCA6PFYAVUdnQDCZ7U9phZKfSbyakTHFESM1D7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Bzif9+UVx/B6pgr6jV5WFiR8oH96ybfg/FJshx0OcTFBw6eDAItboJ4AbijJtonBWw8iXCe44Z4Rz/RSYWjK6Da9dR6XPOyPfnTzlHprVhKYjB1VxKNXILyPgl6LukxID/sRV1zEFPODQfHVO23ew9I5gdBFquwQ+B4eY/7rNjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K4XHjkXy; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7a9fb6fccabso1650521b3a.0
-        for <linux-integrity@vger.kernel.org>; Sun, 09 Nov 2025 04:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762691345; x=1763296145; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1Sfh23gMPuSgFh9wP8m+RA7LgOjNZR3fljD+XVnQlZc=;
-        b=K4XHjkXyWwOD1LN3ttrU8mst/IAcGQcqk2M9yWKv7e64+MzXp8wpEXrcMDoAwTqUnb
-         ZiL//Etns/PYZb7FkedKuwlCAlRp37sFby0uLvMW0ZYkzL019tAUWAlURcaG99c+TZZ3
-         X7YdOxvxy6qZfavELowgl64T9VUBJrowrbs1jAmE8vl8EA5i0aP5Vty21a4ivZn3JvUO
-         4Mey0Y3jBNM51ACA/AUhPc1J0wetkLw5ZqmuwzHiGGJuVOxJsr/LCmO/pNiJB9f587bz
-         +WH31G/7h45teVibVEq7/GNhhd/qSYcsuQD003aKE/+7wznOTIx6w4bFV1EgsJHcfT96
-         w+0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762691345; x=1763296145;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Sfh23gMPuSgFh9wP8m+RA7LgOjNZR3fljD+XVnQlZc=;
-        b=LtmY0/C3qQzfY/dAdeYOMUSIu/xGLDkaCu6wIbojuOAXAmSJEOUBFjuAeRFPg8lsp7
-         11EjWk7QYDGTBtH43ql42EFAVyeIvmi/Q0S/7OusxmM8igsd+U4bLsAOVkScpzQa8gp2
-         iFLEYQkJz3ujt+bsHWnwPyfSIG4W4VNSUZFSz+W/+AsThqOjFuOzQjrf/gvqkoz9S2gd
-         r5gmESNOZeTvLaTtUXyFyCnBOvqnqcfz9bU/xsyDawjdQE+R1mKR1gs/mQy4WTh1BaJY
-         GLp57v2ihMy0XypU1DFlF/JWL9VV+k03Fjzd9w9r7hzYneIGv92H2MZGXl6EdDmuHnrB
-         tzsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUKV7i/87UnL5CPQJlOklJ5ROfOPRg+TH3msSyHH4W4nTSEBbzfmtlyRNT2N5m3E8B6pAGE+UzKQr/2rRQQ+2M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOBCS/Qb3eodM+7TgSMibVCKs4g5vOgpToxgEnVwyMuKjmjFxW
-	CW70Q+h2ZsP2F0e7cr9G0saW0mYDi4WAxyKZWNk48LB8O1usypMXuNv+
-X-Gm-Gg: ASbGnctoAhpkrVsWDRfbd/IAu7IUUU3PQwGlvB9UUCPe1rsDqa7uru0cbisTVXr7p8+
-	tsH9dBg3ILCND9NH4k26j/s6EH0z0HISIZ28XFG9V60YPCHz8U/edaSUtn2RHb8Gxit0sNKSvdl
-	cTLiEzyourmTEYHRW9Mol4gNAgE2+ZlIJrNWDfsxuRX57dnpmprjceCo4iHzvVouRiMNfW+Ccqy
-	H3SnrpiBiXC9RdtoowrwRriITinSruXcH4igH3u1qAtZtH7eI4+YiSiV5xbQlhRqiVVE7XlwGKS
-	OgtyWJLn0T0E7L3xl7h98QXSyzTp/yZtYlExQbMU8CdDak63jLsTIhH6LQB0YJSfKgpzJmH5xEI
-	xdxovWwZmrxJspu8Im3AwDdp/xcpVHTF49OX1K2+y0U5xelzcbpSLwzaPxRW2MdPsmDIccsR4iq
-	1XknDIXVsZyJ1CMYyJRw==
-X-Google-Smtp-Source: AGHT+IEkKiASBAM/v8nmSr1bnyXvE15oiC0TbeFeqMLmzAA0Ln0KLA0nGZWhrWf0I/1B3xOi0IZyGw==
-X-Received: by 2002:a05:6a20:734f:b0:2cc:acef:95ee with SMTP id adf61e73a8af0-353a428d5fcmr5965129637.52.1762691344990;
-        Sun, 09 Nov 2025 04:29:04 -0800 (PST)
-Received: from [192.168.1.50] ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba8ffd3f6easm10211085a12.21.2025.11.09.04.29.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Nov 2025 04:29:04 -0800 (PST)
-Message-ID: <e5e3a542-ee07-4fe5-a6d5-2bc5b2fa873f@gmail.com>
-Date: Sun, 9 Nov 2025 19:29:00 +0700
+	s=arc-20240116; t=1762801604; c=relaxed/simple;
+	bh=vQeVAwk5sq/tkYRtAWnrKM/KKGE7zX3tLhzF1I7Fcfc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=l2cT3GdukW0YjuKX3FV+rzKGBu+cZGkeIyh8sKSVdcab71t5JdgVcn7+0K4OptwxKQmZba32mf+kX8XQ2pgZWLO36t2c95SQXMbq58WtDMgro8fe/0aQ+IWNNbXfMqhapPlq2meYAuYpL6/ryBGeHtyc5oLxn0C+72LhPOQk6Dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=YYPrpmME; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.7.99.24] (unknown [167.220.24.24])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 8EF0E212AE27;
+	Mon, 10 Nov 2025 11:06:40 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8EF0E212AE27
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1762801601;
+	bh=CsAnkBqnZdIY6zqI2ne3jOW9PXyCkUm75iAMTc0HF/4=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=YYPrpmMEPMNQPSYxErP2uo6CQ+Gtc9ChYivCoBRUcKYIg9NmN8gBL+w/6DmkVp6cF
+	 BOqJIt+XV9OyXRcPR2KWuHhjFNAZO6l3rT8HJNSFC5jcsHBcjJKsTU5SYpCSct9GZ+
+	 TTD8SlJH8xaY13CJ7E0lHWoPgd7RhGCfnMl1CnvM=
+Message-ID: <14c61ba5-437f-496d-8356-5712ddb37d47@linux.microsoft.com>
+Date: Mon, 10 Nov 2025 11:06:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -84,59 +49,274 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: tpm: tpm-security: Demote "Null Primary
- Key Certification in Userspace" section
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Documentation <linux-doc@vger.kernel.org>,
- Linux Integrity <linux-integrity@vger.kernel.org>,
- Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
- Jonathan Corbet <corbet@lwn.net>
-References: <20251104131312.23791-1-bagasdotme@gmail.com>
- <aRAdiUB9otJk5i9U@kernel.org>
+Subject: Re: [Patch V1] ima: avoid duplicate policy rules insertions
+To: Anirudh Venkataramanan <anirudhve@linux.microsoft.com>,
+ zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com, linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+ code@tyhicks.com
+References: <20251106181404.3429710-1-taherafahimi@linux.microsoft.com>
+ <b36a6508-1b2a-4c87-b3b5-9af0b402dc0b@linux.microsoft.com>
 Content-Language: en-US
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <aRAdiUB9otJk5i9U@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Tahera Fahimi <taherafahimi@linux.microsoft.com>
+In-Reply-To: <b36a6508-1b2a-4c87-b3b5-9af0b402dc0b@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 11/9/25 11:50, Jarkko Sakkinen wrote:
-> On Tue, Nov 04, 2025 at 08:13:12PM +0700, Bagas Sanjaya wrote:
->> The last section heading in TPM security docs is formatted as title
->> heading instead. As such, it shows up as TPM toctree entry. Demote it
->> to section heading as appropriate.
+On 11/6/2025 12:32 PM, Anirudh Venkataramanan wrote:
+> On 11/6/2025 10:14 AM, Tahera Fahimi wrote:
+>> Prevent redundant IMA policy rules by checking for duplicates before insertion. This ensures that
+>> rules are not re-added when userspace is restarted (using systemd-soft-reboot) without a full system
+>> reboot. ima_rule_exists() detects duplicates in both temporary and active rule lists.
+> 
+> I have run into this too. Thanks for proposing a patch!
+> 
+> FWIW - I am fairly new to the IMA subsystem, so feedback below is mostly structural, with some IMA specific comments.
+Hi Ahirudh, Thanks for your feedback.
 >>
->> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>> Signed-off-by: Tahera Fahimi <taherafahimi@linux.microsoft.com>
 >> ---
->>   Documentation/security/tpm/tpm-security.rst | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>   security/integrity/ima/ima_policy.c | 157 +++++++++++++++++++++++++++-
+>>   1 file changed, 156 insertions(+), 1 deletion(-)
 >>
->> diff --git a/Documentation/security/tpm/tpm-security.rst b/Documentation/security/tpm/tpm-security.rst
->> index 4f633f2510336b..bf73bbe66db2fa 100644
->> --- a/Documentation/security/tpm/tpm-security.rst
->> +++ b/Documentation/security/tpm/tpm-security.rst
->> @@ -153,7 +153,7 @@ protect key sealing and parameter decryption to protect key unsealing
->>   and random number generation.
->>   
->>   Null Primary Key Certification in Userspace
->> -===========================================
->> +-------------------------------------------
->>   
->>   Every TPM comes shipped with a couple of X.509 certificates for the
->>   primary endorsement key.  This document assumes that the Elliptic
->>
->> base-commit: 27600b51fbc8b9a4eba18c8d88d7edb146605f3f
->> -- 
->> An old man doll... just what I always wanted! - Clara
->>
+>> diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
+>> index 164d62832f8ec..3dd902101dbda 100644
+>> --- a/security/integrity/ima/ima_policy.c
+>> +++ b/security/integrity/ima/ima_policy.c
+>> @@ -1953,6 +1953,153 @@ static int ima_parse_rule(char *rule, struct ima_rule_entry *entry)
+>>       return result;
+>>   }
+>>   +static bool template_has_field(const char *field_id, const struct ima_template_desc *template2)
+>> +{
+>> +    int j;
 > 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> j is declared in the loop header below too, which is more correct because it keeps the scope of j to be within the loop. So I'd say get rid of the above declaration.
+The declaration of j is at the beginning to adhere proper kernel style and ancient compile support. 
+>> +
+>> +    for (int j = 0; j < template2->num_fields; j++)
+>> +        if (strcmp(field_id, template2->fields[j]->field_id) == 0)
+>> +            return true;
+> I believe the preferred kernel style is to use if (!strcmp(...)).
 > 
-> Should I pick this?
+>> +
+>> +    return false;
+>> +}
+>> +
+>> +static bool keyring_has_item(const char *item, const struct ima_rule_opt_list *keyrings)
+>> +{
+>> +    int j;
+>> +
+>> +    for (j = 0; j < keyrings->count; j++) {
+>> +        if (strcmp(item, keyrings->items[j]) == 0)
+>> +            return true;
+>> +    }
+>> +    return false;
+>> +}
+>> +
+>> +static bool labels_has_item(const char *item, const struct ima_rule_opt_list *labels)
+>> +{
+>> +    int j;
+>> +
+>> +    for (j = 0; j < labels->count; j++) {
+>> +        if (strcmp(item, labels->items[j]) == 0)
+>> +            return true;
+>> +    }
+>> +    return false;
+>> +}
+>> +
+>> +static bool ima_rules_equal(const struct ima_rule_entry *rule1, const struct ima_rule_entry *rule2)
+>> +{
+>> +    int i;
 > 
+> i is used further down in this function, and even in all those cases, the scope of i can be limited to the loop body where it's used.
+> 
+> If you didn't know this already - you can use cppcheck to identify and reduce the scope of variables.
+> 
+>> +
+>> +    if (rule1->flags != rule2->flags)
+>> +        return false;
+>> +
+>> +    if (rule1->action != rule2->action)
+>> +        return false;
+>> +
+>> +    if (((rule1->flags & IMA_FUNC) && rule1->func != rule2->func) ||
+>> +        ((rule1->flags & (IMA_MASK | IMA_INMASK)) && rule1->mask != rule2->mask) ||
+>> +        ((rule1->flags & IMA_FSMAGIC) && rule1->fsmagic != rule2->fsmagic) ||
+>> +        ((rule1->flags & IMA_FSUUID) && !uuid_equal(&rule1->fsuuid, &rule2->fsuuid)) ||
+>> +        ((rule1->flags & IMA_UID) && !uid_eq(rule1->uid, rule2->uid)) ||
+>> +        ((rule1->flags & IMA_GID) && !gid_eq(rule1->gid, rule2->gid)) ||
+>> +        ((rule1->flags & IMA_FOWNER) && !uid_eq(rule1->fowner, rule2->fowner)) ||
+>> +        ((rule1->flags & IMA_FGROUP) && !gid_eq(rule1->fgroup, rule2->fgroup)) ||
+>> +        ((rule1->flags & IMA_FSNAME) && (strcmp(rule1->fsname, rule2->fsname) != 0)) ||
+>> +        ((rule1->flags & IMA_PCR) && rule1->pcr != rule2->pcr) ||
+>> +        ((rule1->flags & IMA_VALIDATE_ALGOS) &&
+>> +          rule1->allowed_algos != rule2->allowed_algos) ||
+>> +        ((rule1->flags & IMA_EUID) && !uid_eq(rule1->uid, rule2->uid)) ||
+>> +        ((rule1->flags & IMA_EGID) && !gid_eq(rule1->gid, rule2->gid)))
+>> +        return false;
+> 
+> So the goal is to prevent the exact same policy rule from being added, not to update an existing rule, correct? IOW, you could end up with two very similar rules, because the new rule has one thing that's different compared to the existing rule?
 
-Of course!
+The purpose of this patch is to prohibit two exact same rule.
+We can have other approaches like merging the new rule to the previously existing rule, ignore
+new rule if a similar rule exists. However, this approaches would add more complexity to the code
+and are not the purpose of this patch.
 
--- 
-An old man doll... just what I always wanted! - Clara
+> I feel that a little bit of commentary around what makes two rules the same would be useful.
+> 
+>> +
+>> +    if (!rule1->template && !rule2->template) {
+>> +        ;
+> You're trying to do nothing and continue on. A goto statement would communicate intent better. There are other places below with the same noop structure.
+> 
+> To be fair, I also don't completely understand what you're trying to achieve here, Regardless, this "do nothing inside a conditional" looks weird and I feel like there should be a way to structure your logic without resorting to this.
+> 
+>> +    } else if (!rule1->template || !rule2->template) {
+>> +        return false;
+>> +    } else if (rule1->template->num_fields != rule2->template->num_fields) {
+>> +        return false;
+>> +    } else if (rule1->template->num_fields != 0) {
+>> +        for (i = 0; i < rule1->template->num_fields; i++) {
+>> +            if (!template_has_field(rule1->template->fields[i]->field_id,
+>> +                        rule2->template))
+>> +                return false;
+>> +        }
+>> +    }
+> 
+> if + return will achieve the same end goals as else if + return, with lesser clutter. I have seen some static analyzers flag this pattern, but I can't remember which one at the moment.
+> 
+> So something like this:
+> 
+> if (!rule1->template && !rule2->template)
+>     goto some_target;
+> 
+> if (!rule1->template || !rule2->template)
+>     return false;
+> 
+> if (rule1->template->num_fields != rule2->template->num_fields)
+>     return false;
+> 
+> if (rule1->template->num_fields != 0) {
+>     for (i = 0; i < rule1->template->num_fields; i++) {
+>         if (!template_has_field(rule1->template->fields[i]->field_id,
+>                                 rule2->template))
+>               return false;
+>         }
+> }> some_target:
+> ...
+> ...
+I don't think having two goto in the code will improve its readability.
+
+>> +
+>> +    if (rule1->flags & IMA_KEYRINGS) {
+>> +        if (!rule1->keyrings && !rule2->keyrings) {
+>> +            ;
+> 
+> Another if block no-op
+> 
+>> +        } else if (!rule1->keyrings || !rule2->keyrings) {
+>> +            return false;
+>> +        } else if (rule1->keyrings->count != rule2->keyrings->count) {
+>> +            return false;
+>> +        } else if (rule1->keyrings->count != 0) {
+> 
+> if (rule1->keyrings->count)
+> 
+>> +            for (i = 0; i < rule1->keyrings->count; i++) {
+> 
+> for (int i,
+> 
+>> +                if (!keyring_has_item(rule1->keyrings->items[i], rule2->keyrings))
+>> +                    return false;
+>> +            }
+>> +        }
+>> +    }
+>> +
+>> +    if (rule1->flags & IMA_LABEL) {
+>> +        if (!rule1->label && !rule2->label) {
+>> +            ;
+> 
+> Another if block no-op
+> 
+>> +        } else if (!rule1->label || !rule2->label) {
+>> +            return false;
+>> +        } else if (rule1->label->count != rule2->label->count) {
+>> +            return false;
+>> +        } else if (rule1->label->count != 0) {
+>> +            for (i = 0; i < rule1->label->count; i++) {
+>> +                if (!labels_has_item(rule1->label->items[i], rule2->label))
+>> +                    return false;
+>> +            }
+>> +        }
+>> +    }
+>> +
+>> +    for (i = 0; i < MAX_LSM_RULES; i++) {
+> 
+> for (int i,
+> 
+>> +        if (!rule1->lsm[i].rule && !rule2->lsm[i].rule)
+>> +            continue;
+>> +
+>> +        if (!rule1->lsm[i].rule || !rule2->lsm[i].rule)
+>> +            return false;
+>> +
+>> +        if (strcmp(rule1->lsm[i].args_p, rule2->lsm[i].args_p) != 0)
+>> +            return false;
+>> +    }
+>> +
+>> +    return true;
+>> +}
+>> +
+>> +/**
+>> + * ima_rule_exists - check if a rule already exists in the policy
+>> + *
+>> + * Checking both the active policy and the temporary rules list.
+>> + */
+>> +static bool ima_rule_exists(struct ima_rule_entry *new_rule)
+>> +{
+>> +    struct ima_rule_entry *entry;
+>> +    struct list_head *ima_rules_tmp;
+>> +
+>> +    if (!list_empty(&ima_temp_rules)) {
+>> +        list_for_each_entry(entry, &ima_temp_rules, list) {
+>> +            if (ima_rules_equal(entry, new_rule))
+>> +                return true;
+>> +        }
+>> +    }
+>> +
+>> +    rcu_read_lock();
+>> +    ima_rules_tmp = rcu_dereference(ima_rules);
+>> +    list_for_each_entry_rcu(entry, ima_rules_tmp, list) {
+>> +        if (ima_rules_equal(entry, new_rule)) {
+>> +            rcu_read_unlock();
+>> +            return true;
+>> +        }
+>> +    }
+>> +    rcu_read_unlock();
+>> +
+>> +    return false;
+>> +}
+>> +
+>>   /**
+>>    * ima_parse_add_rule - add a rule to ima_policy_rules
+>>    * @rule: ima measurement policy rule
+>> @@ -1993,7 +2140,15 @@ ssize_t ima_parse_add_rule(char *rule)
+>>           return result;
+>>       }
+>>   -    list_add_tail(&entry->list, &ima_temp_rules);
+>> +    if (!ima_rule_exists(entry)) {
+>> +        list_add_tail(&entry->list, &ima_temp_rules);
+>> +    } else {
+>> +        result = -EEXIST;
+> Is it necessary to set result? Or can you just pass -EEXIST to the audit call below?
+> 
+>> +        ima_free_rule(entry);
+>> +        integrity_audit_msg(AUDIT_INTEGRITY_STATUS, NULL,
+>> +                    NULL, op, "duplicate-policy", result,
+>> +                    audit_info);
+>> +    }
+>>         return len;
+>>   }
+I
 
