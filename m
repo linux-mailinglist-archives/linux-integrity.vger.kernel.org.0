@@ -1,162 +1,214 @@
-Return-Path: <linux-integrity+bounces-7618-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7619-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC1E6C4D7AB
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Nov 2025 12:48:33 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5548C55A0B
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Nov 2025 05:10:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C55A189CEC6
-	for <lists+linux-integrity@lfdr.de>; Tue, 11 Nov 2025 11:44:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4FFE8343310
+	for <lists+linux-integrity@lfdr.de>; Thu, 13 Nov 2025 04:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8618B2F7479;
-	Tue, 11 Nov 2025 11:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2326829D281;
+	Thu, 13 Nov 2025 04:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JkwyYsJA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DGzsAt+Q";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="j8m3MUhF"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D671D63C2;
-	Tue, 11 Nov 2025 11:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5762C1586
+	for <linux-integrity@vger.kernel.org>; Thu, 13 Nov 2025 04:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762861236; cv=none; b=kQu38c9CJ7hBgQgKH5Eh/+kz9CxAFMyjjQuJYx+jLEGfJEWCSgWT4a6ehHpP4pBx2h8H4U8ZRSzZPwik5NuuC1ApXRA7S0dIbvL0qiT/pq/ndx1SsbuEczz28dcKga1f+DNZEL4VPqbp5sPAPivZxzZYMu0xW09+vgyIslGykWM=
+	t=1763007021; cv=none; b=nllLgdGLoijS7qskZeyL8qn0cVVKWY5gMeBFQ4barRXQEgalimK1WSJpHDR3xgs9HAt8zM4SqUwEcLyZ1CrPFCl2oD8uT5fm4rY7vtTiTZDlLa/DoOAL5wKNoKiOF02qZik31hX0GoBnQGUvU+BOKcZUlVGULJQNIajxSGTCpz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762861236; c=relaxed/simple;
-	bh=hR91vdwpSfpmbKbLu2l5eJHLKqT5dbj+LrLS8yyS+a8=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=lEG/jfSO2kHSb7PLN5xa5Yk+hvGDc/LeaSq9K6PcyNveD0LbwOZge5fYY/7eKtgCVh+/pHyeEmqW6aPPUpS9Aq2+/iUmanY81NdK4qTt/Lx0Fey296rbT0IOFJLENV0/TlTyE0wfocNsnlaHO5T9lnI0QCXx85ItK8LOFYD4lc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JkwyYsJA; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AB2xXUJ023600;
-	Tue, 11 Nov 2025 11:40:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=8ie7IM
-	GwHdNKCBVnPOW7BNm7UFdHOm5GlpkqJRFNifY=; b=JkwyYsJAS+pUgrTx0Md3Nz
-	xFewumww2vYdaQoDrmPnHHeY2KZXK/EoMJ9rmUUS0HgfffvZ+mbL9ObpGtYhfpDf
-	iPPjGCPCSUuGG1IOHKfIQKR0CqaNhWTtQbJRPUxbLulB/nuN7cnx18wfrCKUsgb9
-	UCLlN/gVdVNEH1OG2cgIIqDHsn14za/6yIHQfqfEqNC2raGumlMXQgA822i+M0AF
-	VePJXFukS8UXy3Qv0IDCyf4+2OfQ216GpzedIosbioR6JGA+8QAJ60DE25DbyC/b
-	QXUnI9uumDD+Z4VezVNRJ+pPxBDVmz1rr+VQwXIbiYRIwvAgdva2wVYACm/rWkYA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aa5tjtm3m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 11 Nov 2025 11:40:09 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5ABBe98B001479;
-	Tue, 11 Nov 2025 11:40:09 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aa5tjtm3h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 11 Nov 2025 11:40:09 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AB9ehkM008193;
-	Tue, 11 Nov 2025 11:40:08 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4aah6mth9h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 11 Nov 2025 11:40:08 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5ABBe8oU53412136
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 11 Nov 2025 11:40:08 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2901E58054;
-	Tue, 11 Nov 2025 11:40:08 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1397F58045;
-	Tue, 11 Nov 2025 11:40:07 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.139.215])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 11 Nov 2025 11:40:06 +0000 (GMT)
-Message-ID: <16c73b4e0761a1622770102d1d48982fe9ae86ac.camel@linux.ibm.com>
-Subject: Re: [Patch V1] ima: avoid duplicate policy rules insertions
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Tahera Fahimi <taherafahimi@linux.microsoft.com>, roberto.sassu@huawei.com,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, code@tyhicks.com
-Cc: Lennart Poettering <mzxreary@0pointer.de>
-In-Reply-To: <20251106181404.3429710-1-taherafahimi@linux.microsoft.com>
-References: <20251106181404.3429710-1-taherafahimi@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 11 Nov 2025 06:40:06 -0500
+	s=arc-20240116; t=1763007021; c=relaxed/simple;
+	bh=zdLHuuMTe46EsyhV/bM1eTvKdfpTyHz80agisPFVCuo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FQMYgWTT7eWRjaErgSDPBJPcP/I0Hju+L74aW0PF3lwLfPUB7iNPWZKuCLc8qBB6Ekto9/enuciqqVen8L66gpbrdqPwlblinUXxz1j+dAnBWodyYJp7OK+vH55Z1jBb9Muh7Ha8YGRXjB9fdZ8bk4lD3ch0inXXoZ0Xm5W/vic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DGzsAt+Q; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=j8m3MUhF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763007018;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nZIBY6eCn23Q+siVmn68NakRPUJnSr/kT+giBlXwV0A=;
+	b=DGzsAt+Q4yb3i0rO0RXWY4BUYGVjwBAcZlvW4Ba3+hC3NVM6v17+kb8g4q3J/I45eFQ75O
+	RW1q28UHMYz3iQmMmKWaUHrb7+6p6bslSCoofDTLY96X/gWm+AWJZxqPcW+qcqrGoC23Gm
+	2JgX+Ij2Y5gl/OK0ixOp2RAEAkBoCvE=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-252-gU-fGBfEOcyOdIbX-7azdw-1; Wed, 12 Nov 2025 23:10:11 -0500
+X-MC-Unique: gU-fGBfEOcyOdIbX-7azdw-1
+X-Mimecast-MFC-AGG-ID: gU-fGBfEOcyOdIbX-7azdw_1763007011
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-bc349a8a3easo331064a12.0
+        for <linux-integrity@vger.kernel.org>; Wed, 12 Nov 2025 20:10:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1763007011; x=1763611811; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=nZIBY6eCn23Q+siVmn68NakRPUJnSr/kT+giBlXwV0A=;
+        b=j8m3MUhFP4VoIKntrt2otGgVvRIN7lcPhhSQI6q46Bv8xC6CCKnuIXLS1UWTvHlY9P
+         IY/RumUpFc1lsKlmspqYc0MG4rM9FC5KioukykMX7/GltaAYhwF6AMye0ecgSMsPoA2P
+         X7yPGe2DBAS+UcN0tQ61URojhc+9CbKK0IuUZi8ROVmvcm6yIAhKbP3Us76mc/x21g60
+         9534qZ51EMNdiBsLi+2dVuOABzrHttorjVOdJzIkD2oPiXhgY7tLA47tfGwTXjgC1q+b
+         9DS98kacBwGwM9Qg/gWDAhWe4eyl/4EySY2Eso1zZ5QDQCgJFwIYpusliDmPnagQ9CIB
+         ogbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763007011; x=1763611811;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nZIBY6eCn23Q+siVmn68NakRPUJnSr/kT+giBlXwV0A=;
+        b=jUuzDtmm68GRpIkFpi2kteedUjScYppfU+f1/aE/CWF5yoN+zUYuVhZ6v8BOPoXBcs
+         Ov4xyWBhJI3BgNRWKBGEtUFpIz/95NbTnuF+DPS6vaRXoG+5esBW4fcLDRplSsjvP8a2
+         /O9Zx6AqTEPd+PZ2mPkYfdEvBGla1RsQ0dRm62MLNSggVbiA3I+en1IBuJUsmYbD6TRF
+         ktEOja4kD8rjhn470lTNzZeAY9B3EamA3LbFPdVoZgPqKBGqFAKfOhP4RNdQQdWfMfGi
+         j9rM1FFsWRYBHP2RI1eNnSqrY2hxi4PeJ07Ib5jDRNzU+j7LAiVNE0G76R6nt8b0w8PK
+         raUw==
+X-Forwarded-Encrypted: i=1; AJvYcCWJeXkcmBUEhQELZIki3X+nxDxlUq07Ba9lNmxLdbzraAPuU43Vxiu6NjN5eMdOdjtKmeUAla/z0uAVtYQKu1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0jzOlhEkB1UFgqJUT+1lDd7GQmQJ4wMlGcgKqDCFXs0QfaYEY
+	/vU5YQyZPmQwSVB70+zFdgUOHPrhCiI0wniPe2Eo8QitM3nlTBx9wxkVk/EzZSq3sIDvimhYfe/
+	p/gAcleMJSyTLhDED0uF+IUzaZ6CVFWaKOOZZijhfMwJDcR2ThorPPUQ/RpWGa6nk1WbPuQ==
+X-Gm-Gg: ASbGncs7iH1LgV3XZZASQZkXLRkS4N1J6lfd99wMDz762FDVRUeI9wJPSIOc56dvAJr
+	JSZAo7kcofRFV03ylhB4PBDvOruBKW6enhQWTSo4HyZuP+sI3wd7gNo/yI9akE7l+gqi+NcNOSY
+	Gb03bpjyYqCFCojoTMV6Urut3lPVYV8DiL5wFXH5qSrr2ND9y50P1QQRAeMqIHRKsc/H3XXNU5i
+	UpiWQ0aQxSQ9K318ZkiblLZdxMYDHKck+t58V52LCsdMEm5zqJTfNF+VX19QQZ/gMVjqfyyYnXR
+	t3RUfS4OwiH+RDC6ZiJ6QX+L24cBZVW6q/CSbPYiNu6GIbwvuz6dkBOtyVwqwFJw7Q==
+X-Received: by 2002:a17:903:4b04:b0:298:529b:8956 with SMTP id d9443c01a7336-298529b8bd1mr54723675ad.56.1763007010485;
+        Wed, 12 Nov 2025 20:10:10 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFWDwN+5E+tsPmc61Ky6R88DQMezRVeNlZMFO+j6cmwW//kMzz/cF3f2/ywvf8oGJ38G1y9PQ==
+X-Received: by 2002:a17:903:4b04:b0:298:529b:8956 with SMTP id d9443c01a7336-298529b8bd1mr54723255ad.56.1763007009881;
+        Wed, 12 Nov 2025 20:10:09 -0800 (PST)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2346dasm8193665ad.7.2025.11.12.20.10.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 20:10:09 -0800 (PST)
+Date: Thu, 13 Nov 2025 12:06:02 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Paul Moore <paul@paul-moore.com>, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Karel Srot <ksrot@redhat.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	open list <linux-kernel@vger.kernel.org>, "open list:MODULE SUPPORT" <linux-modules@vger.kernel.org>
+Subject: Re: [PATCH v2] lsm,ima: new LSM hook
+ security_kernel_module_read_file to access decompressed kernel module
+Message-ID: <42qcfcxxlmwphctzvji76hy5tycfabiiv5u6zw6lgg2p3e2jwv@fp4g2y7ecf2y>
+References: <20250928030358.3873311-1-coxu@redhat.com>
+ <20251031074016.1975356-1-coxu@redhat.com>
+ <CAHC9VhRBXkW+XuqhxJvEOYR_VMxFh4TRWUtXzZky=AG_nyBYEQ@mail.gmail.com>
+ <baa39fcd1b6b485f14b8f06dcd96b81359e6e491.camel@linux.ibm.com>
+ <CAHC9VhToe-VNqbh6TY2iYnRvqTHRfQjnHYSRWYgt8K7NcLKMdg@mail.gmail.com>
+ <fftfj4o3kqxmfu3hb655xczqcddoeqjv55llsnwkrdu5isdm4z@6sqe3k24a6kk>
+ <84a0e1785c7f0ff816b3246be49012092ae12126.camel@linux.ibm.com>
+ <d24wnmefebnheerigmh6ts5yskkutz726l6a2f6g5s3s5fhhrv@osaactobwb5g>
+ <b9eb78105115a00731b3677a5f3a39d5dde4d2ec.camel@linux.ibm.com>
+ <0dfec96bf98b1c18d51bf40f4329c3ede48a9f32.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Y3HENMEAaKwFjPzQZBz4-AHpwTJjDbBO
-X-Proofpoint-ORIG-GUID: BrrJooCEo-ClC07HzSrPnYFuIOCppHAW
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA4MDA5OSBTYWx0ZWRfX9934H9BHLfYy
- tu2xJ5e7hh7EFtIkfFcb7YB2vIHcut/CdsHlnYZYU4PN6MInxdifu2FDx/algA2fmDpepUNn+xY
- gG/HCJDiVXIRUJmpVBaW5NbmUjOiJyh9M08V2mAPhyhinxV6Zsbka54LMINNpUCvZNd7mlw4J21
- QHkMJq3iwcMzywjXUjoE6Ml1C/qVUN92+mthb4n5G0iEfPJ8oJpD2hQ2gjYg8hi03g+AkdYnGIT
- XBmILK0sAGb1Zsq3nLk4k0U8FIoMrCsdM7WTBMKBfoRMjUL1EMoI1UzM8lC2wZVRceKGcE9GMtG
- vwHq98DyDFtzIGVJPWQhPM/fQRZFrcN7XK9ZDWhr7YZPEJjYHweBLUw9sLK/1M2URfNz/T2D3KY
- nveQpq5Yeq7DwyqvjlOeedrzjO2dSg==
-X-Authority-Analysis: v=2.4 cv=V6xwEOni c=1 sm=1 tr=0 ts=69132099 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=yMhMjlubAAAA:8 a=Te6HIuTWUB4XkS3UWhoA:9 a=QEXdDO2ut3YA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-11_02,2025-11-11_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 priorityscore=1501 phishscore=0 bulkscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511080099
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <0dfec96bf98b1c18d51bf40f4329c3ede48a9f32.camel@linux.ibm.com>
 
-[Cc'ing Lennart Poettering]
+On Fri, Nov 07, 2025 at 02:28:13PM -0500, Mimi Zohar wrote:
+>On Thu, 2025-11-06 at 17:15 -0500, Mimi Zohar wrote:
+>> On Thu, 2025-11-06 at 21:29 +0800, Coiby Xu wrote:
+>> > On Wed, Nov 05, 2025 at 03:47:25PM -0500, Mimi Zohar wrote:
+>> > > On Wed, 2025-11-05 at 08:18 +0800, Coiby Xu wrote:
+>> > [...]
+>> > >
+>> > > Hi Coiby,
+>> > >
+>> > > Based on the conversation with Paul, there is no reason to remove the existing
+>> > > security_kernel_post_read_file() call.
+>> > >
+>> > > The changes are similar to the 2nd link, but a bit different.
+>> > > - Define a single enumeration named READING_MODULE_COMPRESSED.
+>> > >
+>> > > - In module/main.c add a new security_kernel_post_read_file() call immediately
+>> > > after decompressing the kernel module.  Like a previous version of this patch,
+>> > > call kernel_read_file() with either READING_MODULE or READING_MODULE_COMPRESSED
+>> > > based on MODULE_INIT_COMPRESSED_FILE.
+>> > >
+>> > > - In ima_post_read_file() defer verifying the signature when the enumeration is
+>> > > READING_MODULE_COMPRESSED.  (No need for a new function ima_read_kernel_module.)
+>> >
+>> > Hi Mimi,
+>> >
+>> > Thanks for summarizing your conversation with Paul! I can confirm Paul's
+>> > approach works
+>> > https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_hook_paul
+>> >
+>> > While testing the patch today, I realized there is another
+>> > issue/challenge introduced by in-kernel module decompression. IMA
+>> > appraisal is to verify the digest of compressed kernel module but
+>> > currently the passed buffer is uncompressed module. When IMA uses
+>> > uncompressed module data to calculate the digest, xattr signature
+>> > verification will fail. If we always make IMA read the original kernel
+>> > module data again to calculate the digest, does it look like a
+>> > quick-and-dirty fix? If we can assume people won't load kernel module so
+>> > often, the performance impact is negligible. Otherwise we may have to
+>> > introduce a new LSM hook so IMA can access uncompressed and original
+>> > module data one time.
+>>
+>> ima_collect_measurement() stores the file hash info in the iint and uses that
+>> information to verify the signature as stored in the security xattr.
+>> Decompressing the kernel module shouldn't affect the xattr signature
+>> verification.
+>
+>In the case when the compressed kernel module hasn't previously been measured or
+>appraised before loading the kernel module, we need to "collect" the file data
+>hash on READING_MODULE_COMPRESSED, but defer appraising/measuring it.
+>
+>An alternative to your suggestion of re-reading the original kernel module data
+>to calculate the digest or defining a new hook, would be to define "collect" as
+>a new "action" and pass the kernel_read_file_id enumeration to
+>process_measurement().  IMA_COLLECTED already exists.  Only IMA_COLLECT would
+>need to be defined.  The new collect "action" should be limited to
+>func=MODULE_CHECK.
+>
+>The downside of this alternative is that it requires a new collect rule:
+>collect func=MODULE_CHECK mask=MAY_READ uid=0
+>appraise func=MODULE_CHECK appraise_type=imasig|modsig
 
-On Thu, 2025-11-06 at 18:14 +0000, Tahera Fahimi wrote:
-> Prevent redundant IMA policy rules by checking for duplicates before inse=
-rtion. This ensures that
-> rules are not re-added when userspace is restarted (using systemd-soft-re=
-boot) without a full system
-> reboot. ima_rule_exists() detects duplicates in both temporary and active=
- rule lists.
->=20
-> Signed-off-by: Tahera Fahimi <taherafahimi@linux.microsoft.com>
+Thank for suggesting an alternative! I've implemented the idea in
+https://github.com/coiby/linux/tree/in_kernel_decompression_ima_collect
 
-Sorry for the delay in responding ...
+Note besides a new collect rule, another change is needed. Currently,
+process_measurement only accepts enum ima_hooks thus it can't tell if
+it's READING_MODULE_COMPRESSED so to only do collect action. So I
+create a fake MODULE_COMPRESSED_CHECK func.
 
-Before trying to fix the "problem", let's try to understand it first.  At l=
-east
-on my test system (-rc5), kexec is working as designed.  On boot, systemd
-replaces the existing builtin IMA policy with a custom IMA policy.  The arc=
-h
-specific policies are not affected, as they are persistent.  On a soft rebo=
-ot
-(kexec), the IMA custom policy is re-loaded as expected.
+And for the idea of re-reading the original kernel module data, it has
+been implemented in 
+https://github.com/coiby/linux/tree/in_kernel_decompression_ima_no_lsm_hook_paul
 
-To verify the above behavior, extend the IMA policy before the soft reboot.=
-=20
-Notice after the soft reboot that the original custom IMA policy is loaded =
-and
-not the extended IMA policy.  Roberto, if there is a problem with this beha=
-vior,
-we'll discuss it independently of this proposed patch.
+Both branches have applied your requested three changes including
+respecting the 80 char line limit. Additionally, I made a change to the
+IPE LSM because of the new READING_MODULE_COMPRESSED kernel_read_file_id
+enumerate.
 
-The question is why are you seeing duplicate IMA policy rules?  What is spe=
-cial
-about your environment?
+After comparing the two implementations, personally I prefer re-reading
+the original kernel module data because the change is smaller and it's
+more user-friendly. But if there are other reasons I don't know, I'll
+post the patches of the new collect action approach to the mailing list.
 
---=20
-thanks,
 
-Mimi
+-- 
+Best regards,
+Coiby
+
 
