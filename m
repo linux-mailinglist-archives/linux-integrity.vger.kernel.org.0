@@ -1,169 +1,161 @@
-Return-Path: <linux-integrity+bounces-7638-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7639-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0B7C6FA84
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Nov 2025 16:30:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EED9EC6FD09
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Nov 2025 16:53:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 8889128E23
-	for <lists+linux-integrity@lfdr.de>; Wed, 19 Nov 2025 15:30:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id F04422F388
+	for <lists+linux-integrity@lfdr.de>; Wed, 19 Nov 2025 15:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FBD35F8B5;
-	Wed, 19 Nov 2025 15:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA757369984;
+	Wed, 19 Nov 2025 15:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="VXwgIrj2"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VRh9ulT9";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XK8cAQQ9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E759E33C195;
-	Wed, 19 Nov 2025 15:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D952E368280;
+	Wed, 19 Nov 2025 15:48:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763566200; cv=none; b=juTSktJ0lBhbm3Iskwc7/hVg8zNf1KvJCqkQBL5EijcQj2/pV48+lVBMb/aMrl98lgnaJWhFil5SqM43uPQgm5PWNqAkq1tYiPU4eJlSmX8ijO+/qSVf3rrupEyPrFkMklM3CUysiBVVE5c2+wQXuR99oYTFPn67UhYZ6riwCDw=
+	t=1763567325; cv=none; b=iKb83G2tbB2gg1T28TeFpGi0C7MVlBs0SQpEPQyI6vrqBpZqS8NgAB2Q+/hdknKAOrNiSq8/YZFrVGXwq+MosWI6Beq0EwhtzT5HbIwTPbz7MquzFV0TwdqD8rlSdX4lr9dSzZYoMTqus5t1FtIXS/WNv8PsWPYA5pvcnCR9AIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763566200; c=relaxed/simple;
-	bh=9+bfJz/6I8aRoScteWrYNqbPnvWMzfdijiEhQ43E8TU=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=LvqCWCpiqb06PJqjQNVRuOUi/lv97AnswIyzj6yi76eFMlj3veN1zeO0GZpk6+eoW+N0+emqPw1G5RkBUCkhA11JO2uaWrppPcsoFnZtFVVXZRemHaUvY7LUCjwaF8mfeMqMzQI/WkAmkQgvyKri2roQDlc9GVSokCkpbndYOAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=VXwgIrj2; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJ8SExl010859;
-	Wed, 19 Nov 2025 15:29:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=1aRhZa
-	7snvOM5oWKF8QoQlfa7Ar0YPQolGsuf2AHAsc=; b=VXwgIrj2v5Skg0G1txBtnx
-	gLrKZU1XrCXgiUDAU4pPv/REIQd+GOZTiSUnowhZAxA7rwXkxWA3IWHMMG4K6MPj
-	dolJmtcw0F56dwDtBEXGVs8qsfosKHfkLrn9lGgl5BPFqirUnPjzgrMTm+S+TWfa
-	ZS2apo5uaL6cg75mRHLmUU9mkollHtVfC75NkW0W9iqO10haFMkTUKNJkn2Nce+b
-	P41ITs1DIcT18SIwSN6QEY9FYtxuYsIwFdcUJzeDK/Xc2ClP7yAATgXozFQEv3Bk
-	AHIROz71zeTBS7RTpnbRf1VXas4zMpqlpYCXlcHfphHD/PUScXXrP5vfIT+qVC3g
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk1h9x9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Nov 2025 15:29:18 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AJFTFdZ028527;
-	Wed, 19 Nov 2025 15:29:18 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk1h9x7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Nov 2025 15:29:18 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AJEY4Ww010448;
-	Wed, 19 Nov 2025 15:29:17 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af3us9h9u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 19 Nov 2025 15:29:17 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AJFTG3223855624
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 19 Nov 2025 15:29:16 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CD2A558043;
-	Wed, 19 Nov 2025 15:29:16 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A935A58055;
-	Wed, 19 Nov 2025 15:29:15 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.42.2])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 19 Nov 2025 15:29:15 +0000 (GMT)
-Message-ID: <b4b89006e56e0d1c02e503ea3c2f2ec3a0856b04.camel@linux.ibm.com>
-Subject: Re: [PATCH v4] ima: Access decompressed kernel module to verify
- appended signature
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
-Cc: Karel Srot <ksrot@redhat.com>, Paul Moore <paul@paul-moore.com>,
-        Luis
- Chamberlain <mcgrof@kernel.org>,
-        Petr Pavlu <petr.pavlu@suse.com>, Daniel
- Gomez <da.gomez@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin	
- <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
-        Fan
- Wu <wufan@kernel.org>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        open list	
- <linux-kernel@vger.kernel.org>,
-        "open list:MODULE SUPPORT"	
- <linux-modules@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM"	
- <linux-security-module@vger.kernel.org>,
-        "open list:SELINUX SECURITY
- MODULE"	 <selinux@vger.kernel.org>
-In-Reply-To: <20251119140326.787451-1-coxu@redhat.com>
-References: <20251031074016.1975356-1-coxu@redhat.com>
-	 <20251119140326.787451-1-coxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 19 Nov 2025 10:29:15 -0500
+	s=arc-20240116; t=1763567325; c=relaxed/simple;
+	bh=MStiUWaHLnkFbuKIFe0Os1WT6o/77tkLZdxBURkti9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pEiQS3e/IFaHszi1Hjs6WxaCqGzHdFiFj5XkZ4l6F717c+pzGN8xS2MPjcr3A3BYRaf5o+gTsyF47UquIkdre21dUnkN9SjLo0br5VY0hovjxfctY+U4FT4NlHBAGC621j97TP3dDLN8QDdoY1Kba0hxncFuuFcnWo301Uo1j2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=VRh9ulT9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XK8cAQQ9; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 19 Nov 2025 16:48:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1763567317;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dQnlE2n5aekx+v6zObGqphQStw7ib6XRN1BfScwnLic=;
+	b=VRh9ulT9FxvWXw7qMNvg+9uqEbxMCDbNhTdu0TX5v8Jes0ESbXArTw+TvOAvrxRS9JJ2HV
+	JXYinsWrLLUTIDhNkVDo8fLhscZVlJtULXtH2F8ss4EgU+hPaS3aGl1MektltakP3CN5AS
+	MR+m66XxqYw6tAt0DewTszz+Lq+yBh+ZO9bCCdD5EgizYN/0aHF3aHdNeVAqNlAE1p0xnH
+	anshj0nr96xb7MViJ6sK/AT50w5MEHipWVDn3a7naUaCV36XkpcXZRam5SR1Ldaz6/+zlK
+	edwu9fTV5jAk4FXDjYH0+qekDRokeOz/zYC1UIQt1SZJHvgDN8NzzGqdt45AMw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1763567317;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dQnlE2n5aekx+v6zObGqphQStw7ib6XRN1BfScwnLic=;
+	b=XK8cAQQ9othT6G++4p2Pn+74xeBwkh0bSY/TQQSgsoPxSMehVrp8KtnZXI7Biuir2r6hnA
+	WYH4a8uF8T6ihmBw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
+Message-ID: <20251119154834.A-tQsLzh@linutronix.de>
+References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
+ <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=C/nkCAP+ c=1 sm=1 tr=0 ts=691de24f cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=sWKEhP36mHoA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=20KFwNOVAAAA:8 a=VnNF1IyMAAAA:8 a=xVhDTqbCAAAA:8
- a=TJo3RIopB0RH3hlNab8A:9 a=QEXdDO2ut3YA:10 a=GrmWmAYt4dzCMttCBZOh:22
-X-Proofpoint-GUID: 1Aacmr1lel3MWLuiEaRqdV5WAhY95P6C
-X-Proofpoint-ORIG-GUID: Tz2BsdnjY_28B6-MXgTzcSUCq8Xp729G
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfXxUozr5/BEu6D
- 4uHt7aRLp8Nr9REH58s1B1cvJZVsinX18ju3wwKTsH8afes+ylqDPCqNauHUndTJx0TvOCD2riw
- EXn4AY1in877S5dsXJKP7ApNL7FqhmFzm6gEVPJ6VgFQ8lfyihpLgZAfi1JipH0sKtKYkoxfO7E
- +8pHXaA4dYB6yo9UuMiQeCDUWBmqHVp4zTertDYAfuM29BQBSxX8z36DhiJZNUFh5nYdFGiFduk
- cEqcC8mj9PteL/I5up2CjYzb7s0zCIjc0diLqLxgjovhan9mhdoAsAulr1ay7AWcNFORhUB+qg2
- XDf54QGV9AY3G/uhztJlSCMYv6y27tuNNGkIcutS4DLiQTUds2nzKK0pODoQKtkPqpmdNNOZ1b1
- cb+yrg+dIOZXnknFoipTYEYhnqwsVw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-19_04,2025-11-18_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0
- malwarescore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
 
-On Wed, 2025-11-19 at 22:03 +0800, Coiby Xu wrote:
-> Currently, when in-kernel module decompression (CONFIG_MODULE_DECOMPRESS)
-> is enabled, IMA has no way to verify the appended module signature as it
-> can't decompress the module.
+On 2025-04-29 10:05:04 [-0400], James Bottomley wrote:
+> On Tue, 2025-04-29 at 15:04 +0200, Thomas Wei=C3=9Fschuh wrote:
+> > The current signature-based module integrity checking has some
+> > drawbacks in combination with reproducible builds:
+> > Either the module signing key is generated at build time, which makes
+> > the build unreproducible,
 >=20
-> Define a new kernel_read_file_id enumerate READING_MODULE_COMPRESSED so
-> IMA can calculate the compressed kernel module data hash on
-> READING_MODULE_COMPRESSED and defer appraising/measuring it until on
-> READING_MODULE when the module has been decompressed.
->=20
-> Before enabling in-kernel module decompression, a kernel module in
-> initramfs can still be loaded with ima_policy=3Dsecure_boot. So adjust th=
-e
-> kernel module rule in secure_boot policy to allow either an IMA
-> signature OR an appended signature i.e. to use
-> "appraise func=3DMODULE_CHECK appraise_type=3Dimasig|modsig".
->=20
-> Reported-by: Karel Srot <ksrot@redhat.com>
-> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> Suggested-by: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> I don't believe it does: as long as you know what the key was, which
+> you can get from the kernel keyring, you can exactly reproduce the core
+> build (it's a public key after all and really equivalent to built in
+> configuration).  Is the fact that you have to boot the kernel to get
+> the key the problem?  In which case we could insist it be shipped in
+> the kernel packaging.
 
-Thanks, Coiby!  The patch is now queued in next-integrity.
+The kernel itself is signed. This is not a problem because distros have
+the "unsigned" package which is used for comparison.
+The modules are signed by an ephemeral key which is created at build
+time. This is where the problem starts:
+- the public key is embedded into the kernel. Extracting it with tooling
+  is possible (or it is part of the kernel package). Adding this key
+  into the build process while rebuilding the kernel should work.
+  This will however alter the build process and is not *the* original
+  one, which was used to build the image.
 
---=20
-Mimi
+- the private key remains unknown which means the modules can not be
+  signed. The rebuilding would need to get past this limitation and the
+  logic must not be affected by this "change". Then the modules need to
+  be stripped of their signature for the comparison.
+
+Doing all this requires additional handling/ tooling on the "validation"
+infrastructure. This infrastructure works currently without special
+care.
+Adding special care will not build the package exactly like it has been
+built originally _and_ the results need to be interpreted (as in we
+remove this signature and do this and now it is fine).
+
+Adding hashes of each module into the kernel image looks like a
+reasonable thing to do. I don't see any downsides to this. Yes, you are
+limited to the modules available at build time but this is also the case
+today with the ephemeral key. It is meant for distros not for individual
+developers testing their code.
+
+With this change it is possible to build a kernel and its modules and
+put the result in an archive such as tar/ deb/ rpm. You can build the
+package _again_ following exactly the same steps as you did before and
+the result will be the identical archive.
+Bit by bit.
+No need for interpreting the results, stripping signatures or altering
+the build process.
+
+I fully agree with this approach. I don't like the big hash array but I
+have an idea how to optimize that part. So I don't see a problem in the
+long term.
+
+> Regards,
+>=20
+> James
+
+Sebastian
 
