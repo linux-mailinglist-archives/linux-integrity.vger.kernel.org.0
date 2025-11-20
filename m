@@ -1,454 +1,459 @@
-Return-Path: <linux-integrity+bounces-7648-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7649-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9102EC73429
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Nov 2025 10:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96EAAC739AB
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Nov 2025 12:03:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DBADC4E9F84
-	for <lists+linux-integrity@lfdr.de>; Thu, 20 Nov 2025 09:40:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0F3234E6EB4
+	for <lists+linux-integrity@lfdr.de>; Thu, 20 Nov 2025 11:03:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CA0308F39;
-	Thu, 20 Nov 2025 09:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AB4Hlr77";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="RLXnG1Za"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA7A730DD19;
+	Thu, 20 Nov 2025 11:02:55 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC21628689B;
-	Thu, 20 Nov 2025 09:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763631617; cv=fail; b=hcOgKoCS5+mC5dkiWTA4jfp9p0yO+bn7hDGzpk2aFQ7atuY++kuAk9uJz7MdTMh+eRrYKtjE3vR+RGNKYz6k1bu4pSJAwjiAug2NUnli6ouqD6+nLMScUdisXAHpQVD4tHdhFIF5Nl9IaHxuID95th7jU9yrpkTn97MGZ0UhAQE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763631617; c=relaxed/simple;
-	bh=uF8hIycoC2zBUGLrsEuUQ0KoNk+VhW6ErwvhZaco9H4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=hmMnqikVEJHm5MhvHCsuDllPBAFBrBFleZO89jAFUsbHwhLR4i6umd6EHs5u3Jg1Q8u4/2ycFd8F5JIf1z1dv3v0UCz/fCWqJGmJKQX2CM2usJjv+aJActPNVZhPRc57CMX0aTjq5TurDJYqhaNdw0PIlMHijcIR/kBnhRJ+0BQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AB4Hlr77; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=RLXnG1Za; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK8psgo025083;
-	Thu, 20 Nov 2025 09:39:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=x4fUEt2dY48v08qsyq
-	D9z9bao7UeIcMWh+YtvJ7Wa8M=; b=AB4Hlr77en1zgu1iHk+B7Apaq3MqGGIEQ/
-	LJPRtUuMhWhDPaxaVa8d9RCv2WkwtmQyQGbvbfSX/X3ZI5PCxribrfPwZ7SkYOUs
-	Mm3w/pFzWHW5Q/uQeRg5PE4+PF61p0O+oehQ1HEg8yivz/khZDYd6Pni+35DcrzY
-	v5/+F/xcFdHF8S7clbtEMJsAIwLTEdoCJItKirj5IPyiml/LWuK9XkY/qqsjxzjX
-	lGZgmMQI9AXnc7WunZ1BATwjHe70ovuNtMP5ScOj0oE4I/4pelk/0zdCwg1fJ0bV
-	IBATtE6JZk1Q6LKxrGOYdIsrKky4J+jqAXLaJ5JO7GginDhFr6XA==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aej968raq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 09:39:13 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AK7gVgs003837;
-	Thu, 20 Nov 2025 09:39:13 GMT
-Received: from mw6pr02cu001.outbound.protection.outlook.com (mail-westus2azon11012012.outbound.protection.outlook.com [52.101.48.12])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aefybt6cu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 09:39:12 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qumUVLD8P0uKYvJ7uVWudq9i4wKFIjLo5no4cipmWp7FgGDeMROJ9SLikEwdIXLQx3hYL8JWxIRO0+H6BY7R35oh1oyhUMYADamCGTilmDupeWH8oe9SOtk/JIrZiO+nEiMzsI+PC/7Z0RgL85ulIRioCi0/dN1Q1aEihQJg81pMT6SzPAfPZuvLzqgk/6BjBOQt1WnsEQSoD/Prlf9I0AjsAwUqDu//d3vRN2fNOouqkUnNmVzuJmHobEsSCl7DN8Dd4l36Utsq12doFC6kt6xo1FN1wFrn9SGVQB5iBKtECSmH2tzwUKqkvbtABelETM2nhoB5tfnbV/v8rayefQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x4fUEt2dY48v08qsyqD9z9bao7UeIcMWh+YtvJ7Wa8M=;
- b=EPadCiow1JLm5mXLBKnooPPkY+Dv/TOCMNeKn9m7TdoA5SBor3HvaFzmsge5AZKNn919vjgcqiN2ZqtQgrSMRVGjFOdwGVxqQAZ/52ja1wYxk1Tsd6zXWsFjqma8ePfjVczzT8u3XFzAhYLvwP6egaLb5k5Y90IYroTqesKaUkXN5w+0TEeTtXL82RpGu4HCx6wIkGKLqnprLIC64NTbAum8ztFFuKy92nE0VzBb1LJhH+EHBO7RMcn3ZTQrFTVI1kDV84YPkaEYYsWjIrAkX3tDfK0TX0TY/i7beypYd4SqTNAV6EPpj7Qmf3Xe6J4yUgX1t8z6WELoUtfGK6mhGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x4fUEt2dY48v08qsyqD9z9bao7UeIcMWh+YtvJ7Wa8M=;
- b=RLXnG1Za6wMrmX2TAQBIw5BpkcE78ld/LLbOQrT5M5d/6AZjS6jh9rVYbibmI0/2G5qcqodlDWuEYuZpYc7vSqNUwligEryQt4aRN9akeKpIOGqe+X4GLYfDyWtFdyGQBXRLV8B8Bb8UIQVEzQLF9sQiA1sai0ycIgKt/k2fib8=
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
- by DS4PPFA043F25E4.namprd10.prod.outlook.com (2603:10b6:f:fc00::d39) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.11; Thu, 20 Nov
- 2025 09:38:59 +0000
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2%7]) with mapi id 15.20.9343.009; Thu, 20 Nov 2025
- 09:38:59 +0000
-Date: Thu, 20 Nov 2025 09:38:57 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: david.laight.linux@gmail.com
-Cc: linux-kernel@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>,
-        Christian Brauner <brauner@kernel.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Christoph Hellwig <hch@lst.de>, Daniel Borkmann <daniel@iogearbox.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, David Ahern <dsahern@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dennis Zhou <dennis@kernel.org>, Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Jens Axboe <axboe@kernel.dk>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, John Allen <john.allen@amd.com>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Juergen Gross <jgross@suse.com>, Kees Cook <kees@kernel.org>,
-        KP Singh <kpsingh@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Mika Westerberg <westeri@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Miklos Szeredi <miklos@szeredi.hu>, Namhyung Kim <namhyung@kernel.org>,
-        Neal Cardwell <ncardwell@google.com>, nic_swsd@realtek.com,
-        OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-        Olivia Mackall <olivia@selenic.com>, Paolo Abeni <pabeni@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Peter Huewe <peterhuewe@gmx.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Srinivas Kandagatla <srini@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, Tejun Heo <tj@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>, Thomas Gleixner <tglx@linutronix.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>, x86@kernel.org,
-        Yury Norov <yury.norov@gmail.com>, amd-gfx@lists.freedesktop.org,
-        bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, io-uring@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-mm@kvack.org,
-        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mptcp@lists.linux.dev,
-        netdev@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH 00/44] Change a lot of min_t() that might mask high bits
-Message-ID: <6ef2fb97-56a5-4cf1-9dc4-b46fa04cbdae@lucifer.local>
-References: <20251119224140.8616-1-david.laight.linux@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251119224140.8616-1-david.laight.linux@gmail.com>
-X-ClientProxiedBy: LO0P123CA0010.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:354::19) To DM4PR10MB8218.namprd10.prod.outlook.com
- (2603:10b6:8:1cc::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C14032E6AB;
+	Thu, 20 Nov 2025 11:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763636575; cv=none; b=Mxb+UI17DXdKpHhpMPmuiqjktR1UC9GkUOM75MVaYDb/h/laQirUrWlDmk0VU+yxhK/hPeGSYCxI3WUacm9QwMh6c7u+EgmhmCw+9ho4mn86NnKIMJOkRm96MQX7uqPlyFoEl/r0re+wHEyrmuzZO1smNsWRqTDUBgnErnbzuDo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763636575; c=relaxed/simple;
+	bh=Mc6q0niDggAnALgO/QT+hxX+nahMCu65H+Br5A5odJg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G4dXYKQKHOxgo05qjlFYLcVnaB9a0yBlp9N8FTsTZlVcWy0fyIB2MxXzeYscly9Nr/vY6SnMaPAymBtNZ8+A0jFDSH2PCLd3ZThWwEb1WEBjhzrgnahlV5niOel3Q2bQRrXqlrZqn+mTkWb2+8Lo6E69yqYvMpGGL3kzmv3pslU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4dBwQV3b83ztdJv;
+	Thu, 20 Nov 2025 19:01:38 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id A57721402F6;
+	Thu, 20 Nov 2025 19:02:48 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwAHPyNO9R5pJxe+AA--.26075S2;
+	Thu, 20 Nov 2025 12:02:48 +0100 (CET)
+Message-ID: <7722dff4e68ef5fb7f39bd732a8a77422bad5549.camel@huaweicloud.com>
+Subject: Re: [RFC v1 0/1] Implement IMA Event Log Trimming
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Anirudh Venkataramanan <anirudhve@linux.microsoft.com>, 
+	linux-integrity@vger.kernel.org
+Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
+ linux-security-module@vger.kernel.org, Steven Chen
+ <chenste@linux.microsoft.com>, Gregory Lumen
+ <gregorylumen@linux.microsoft.com>,  Lakshmi Ramasubramanian
+ <nramas@linux.microsoft.com>, Sush Shringarputale
+ <sushring@linux.microsoft.com>
+Date: Thu, 20 Nov 2025 12:02:34 +0100
+In-Reply-To: <20251119213359.39397-1-anirudhve@linux.microsoft.com>
+References: <20251119213359.39397-1-anirudhve@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|DS4PPFA043F25E4:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63b535ed-f831-4444-84b2-08de2818a215
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?c9/CcJ7O60eQP7KLrCZxQFr3Q8U8cBg+5mO4hB6PRYN1T3QIDxN2grHVLHw6?=
- =?us-ascii?Q?TKs4x3ONPpB5+jtTKf7Nw86mws2Z/yGNS9epYtS0h/Sa4zMJrOeE+8gG+gTk?=
- =?us-ascii?Q?X7MMFaMcSxnD2yQ91Jb/7e+lvUD3OHTA78ZuEb154amMdJrxxuHN5MfUSw3k?=
- =?us-ascii?Q?cRThLzGheaOk/8OyRerEdXw5YyaHgxTelJ/1IxAhFTzU3DpoSBBBh8iIr1im?=
- =?us-ascii?Q?0kq0p1wl+W6yxHWQy3ORLkrRdG4FPwIBbDdzCM/JPLopr8eP0ynpZ+zupbbk?=
- =?us-ascii?Q?KcX+Q/Koof/iVc1kgykBW3pN0ERkdCGalezZMG2ZtcUhpOv0TIv+BY9ifdJA?=
- =?us-ascii?Q?UQSVBHehFiHC+JKj5o+An4G6xWm1kvvsJChPE97KjDHFDol0S4pJnBSzSN9y?=
- =?us-ascii?Q?BBLDy2iiI757oepk8e0MVuTMeQXuz0aJuQyQIC89dRAemyhInQ+xDet5+mQu?=
- =?us-ascii?Q?hM8qv+A7A8HuZHwyApUTTU7uBN3WJJejKDnmD6CqJseHOpzgINLV1lpZHd3r?=
- =?us-ascii?Q?3BwzwMKSc1UnIEilqDMenIyZ1dYa9GIPY68bapQnnZXkiX4fdfic5cPrRLds?=
- =?us-ascii?Q?KOLIrV3KavsouaTCQtaELQjLSQTChUCFtxBPVitIcnWSuoWRmTDtMcHYth+g?=
- =?us-ascii?Q?Qu6fJ8ebIpAoqO4HhOkatNNmHcE4mV1ltApCBQ6qSvFsOvA1rY0JZM2ERsPw?=
- =?us-ascii?Q?gErnb9+gYt3p3YGP1tuAZ2J1oNJjmtyMW9KnbzavtI65FZS3UALs+FlkAHdg?=
- =?us-ascii?Q?OEXmD5Wxn6BBdQXx/lqVKFKoK0gxldZTNkMds24+zAqhEfDmk06ooRdvNraw?=
- =?us-ascii?Q?zSHDA/rGqiP6h+e37GZ4P7qnEZ14pty6bBqY7MOLVXqX6CW3Q/O+x4un5Xe1?=
- =?us-ascii?Q?cC7UYL8WkSba//fEBQAfsrAc1szn7ypZvjpjp07JOEjY9WTUyJYWeJsJbGLB?=
- =?us-ascii?Q?mBomKueBFkZf+hhHnsnRTlvMDwcL2aNh2MCIGKoWMYr7ev7bTZaa/3/jhOEu?=
- =?us-ascii?Q?gUEn8aDdNa0PiFu1oYAN/l3Zv8dj9JSHB+HA1TjKMyNBW48Wc2rcW0y0ZZb7?=
- =?us-ascii?Q?advIteVDFgdwYgsN3+2LZe0XyDoVEaOR+RmlZPY4xmRdkeCM1Wp8ey18lg/A?=
- =?us-ascii?Q?+A1qKGRsNOSvM8+sUsDHLwMNxoKL/cELW3ykuJ7rVr5mib3C65HCOqSU672P?=
- =?us-ascii?Q?Nv+V+WQj0EVMOmr1F3S2cVbLlGyntc/gyJJSSsr7Trm6Xtta6G1Y2sd3AVtb?=
- =?us-ascii?Q?2tkKMThSd4GkywWpuFdXkVYQfBAJGUXNzE7GiXxgSnfE1bUG5FNqjk+Oydy7?=
- =?us-ascii?Q?mcD/FNGceMjf0JSLVv2p9Poj0aG2KCk9pjcpmiX9Hwb3pJf4H99Rzl3l7eNG?=
- =?us-ascii?Q?0wntEwY8uGnW501P1N15JLtk19LGOTCCbRjrvX1KaijWSlGxCcJZFXjEGF/R?=
- =?us-ascii?Q?/kYy7l7qwImf/snQObrGrY181BRdOAYG?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kPRWY1LIwS5S+D/L+x8VTm9PTXQwjo2HENrTSiBL4yuumMrLXTWwdbpU5r9W?=
- =?us-ascii?Q?mAkDtwRm/3YlQxL/4xhbbKlRCQbZ3YN5O1+hNdX0w+GbFqpmkztV2OK/rb8N?=
- =?us-ascii?Q?Y2aSRqdtiuBzTC4YnI3KMSvWJIM6146cw3wRVbStas3EG2rGlycuYpOnBlzD?=
- =?us-ascii?Q?agcHk/JxFwpyFQBnRQnDM0F27l6qaCghYvfZZwR4Jm7/26UQPbVAG4z8uz8Y?=
- =?us-ascii?Q?aCpsqMjbqE0jkplok//0MOC8WuvWijf+3o8G2b+SvKi5hja1ehhsoLjFrj+5?=
- =?us-ascii?Q?Wjdm51ZYTEKpUe+Ntir9dvafBLYsftdiZj4ytDlG9aOD2E7op2yOnMaEjZ0V?=
- =?us-ascii?Q?SjRSMp54wNvi2SRmla5MHdwc3reVek6AZBUETf6D0AHSIBIvrsP0DVrjekMY?=
- =?us-ascii?Q?s0z0ddbwPNYnvY1+2P9Fl9xO2GPyHsCRMEs/I7N9vCwxQb2TP/mlLlapd7I4?=
- =?us-ascii?Q?VRVEADyXrgDGTefu9DB5YSEKRAKpYjIT/ciWQydQkYHcs+KFhct4NKkvfViJ?=
- =?us-ascii?Q?4Qvfb9d1Z5VBPDMkn+I2tpE0FHgyiJmLSQBiRuCQrn4Yku7s8z0SwqVOhXkt?=
- =?us-ascii?Q?sjs48IOWIwwNoJs+c/PTJ2IJJp5wn8kOn7nmfbIcAHZ7dwTlQy6zCFtdOIdt?=
- =?us-ascii?Q?t3qYuTZpPvWpMZKt2oMDFtIakSQmy/dia0RPuBPFjiRFiv1MmYtz/uLyCVUV?=
- =?us-ascii?Q?qJ1P933vB6vRc2q9I7j3e6n5pEm5G7i3TOE7Cpd4fXGM2Js3r0XcrdqHJIjS?=
- =?us-ascii?Q?DtHDiiw/Gn655DDunBC7Cgtfnp11N5Ft8TPB8akL5UY9eABrzFrX6yLR10OC?=
- =?us-ascii?Q?Wx8Vhn1OZ8aHYi/swZEAIRCOPyUtWOwvRZn+jwn+cXnFF8/0z0FQ+6wq0MO6?=
- =?us-ascii?Q?dkCY197auRmY0l7h9/OMaVLOTeIIbIH8yRirwWdzayjaE24UeTDjbPxJjDO1?=
- =?us-ascii?Q?qlIHhI2qwHu4jH4cuQPxMsYl4VpX3OHEt2JfDTzPpZJ01FXrahsaDYtGSfud?=
- =?us-ascii?Q?a19fWW2NAL7kQUA6SMzwRNFdlM3uNDJkOyTtCmdPzOLy1vPBjtpop3rMUWfE?=
- =?us-ascii?Q?Q6N1XSY67waBy8146iAJFW6dND3eyb9guJY8b8Bzwp+sWNySrZERyF9t9DzV?=
- =?us-ascii?Q?K8MVFssjKHGbrx+vogdqTcTVFMGJ7XqMc36sO8H5FWY3bf0HZq2dDfafyhyf?=
- =?us-ascii?Q?tyTTG4Fe1bSaXBg70qUqN4TU1Od2A0R+chbpxQS3rBJ/q56J0LZbARFaCwc1?=
- =?us-ascii?Q?NoEUwObIcb/xt/Y3o4mQhMfVOeq8byLQ3hT8SAiF07n58Kx2B5yB7t5aUwFt?=
- =?us-ascii?Q?lyEpocmUmWK+OA7cX+KxrnLCNHjfIAEqqbnp4+rLPBdCRBoKf3c4gUG0iRun?=
- =?us-ascii?Q?nFNKH9Zu7hXkExmVF5VULFttq7mXoKrMWNSJMIQk6lTuujq4FKW43EA5Mbo3?=
- =?us-ascii?Q?Zfdm3MGQYarA55IjxUjCNDkOK+V6KL2sM3fwKAv01J8TuU0SwW0SV1+VlEtl?=
- =?us-ascii?Q?Q2ql1qNK49iz0m6jrBo4Q3zIyTbBma98snvo31b5AXg1BXWg1uCV1qR/1PzL?=
- =?us-ascii?Q?TN8K0SdxFBxk8ffmj0mqmzGEc46NFvfzWecQt8Fv3vrjkAh2qD7joo7UmEbr?=
- =?us-ascii?Q?Hw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	4mxMIwaVn/X497q5Wi5JUtAxmEf3wjrEIy4nzUFPT/jD42SftGbN4p5Rz70m+EYpEQEGs0Ube3/twWm/2YxPm0y9Rj+w/tHx5SCLNOrWrSAgu5PxK3EhAz68hADb9iyr15uLM04z+boMFb10tzH8KTL0m8PVx8/6ysNDCOLbVsk6+M0jL21n64SujDsSIrDnhnAD5BnY3rCg6OI/nKGLhuyTk3QXTrlCyokW1yvAkBU76PxRpPFxwIywnu5KRUgklBfmb/0Y3cAD2B5ejR9BHj6u0wERyx2PgoRnpi4WOBIXGEqxB8O3b0YEVk3UFk7JHWncl4qAvXIgLMDDXNGIGUvcpvFEcLh9iAz+VL72rSy0X5EfOwGNFYFaIndAmOnqsjD1dyOAgJJ6KOW12S1vwmwXDibM9GtHEA74ckN4Q7ZGxt3yzeHZiN6l7/wtYz25Sw1kDtwHyzH+Ya32rqGa/AtzrwzZW0CxLByYmt6AkzmfDnXXB8ljC1ef8z65/t55/k8eGurdtnDh86qOLtXr4CBZZAW02zh84yi+GU1OF+Dj2BkSEFkWCtYTgfKIqtnk8OljlnwBz0T1weEgkk883Tnb2atFRHMMuIpavc4dBD8=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63b535ed-f831-4444-84b2-08de2818a215
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2025 09:38:59.8734
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5ItduNliVtAqDKxYryyBeUrZMlHyQ5n8PkmB+iBXaQXZfE2lMdgCPgtX3mDnbFNa6n1HScfGbp2FCwJ2jr6nIo1m2TAzUmSBipCwRwAfUTQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPFA043F25E4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-20_03,2025-11-18_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
- malwarescore=0 suspectscore=0 bulkscore=0 spamscore=0 mlxlogscore=968
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2510240000 definitions=main-2511200058
-X-Authority-Analysis: v=2.4 cv=DYoaa/tW c=1 sm=1 tr=0 ts=691ee1c1 b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=pGLkceISAAAA:8 a=Wzxjd0fUqIwO4rn60qQA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-GUID: vHyM1L6ZHbOR8-4PRZUdcGdHQ1UfesM4
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMSBTYWx0ZWRfX9uw9B2QCWmyu
- YM7K3vh3wz+R/ZYJ4uUoPPImvw9SUAIzKiQ7diBcQnKJh8dyimqs6Tf+RIZdZdq4NqykmuMiQ6/
- C9MCakf8ppETzIeiclvCorDztPdQDnqDA6qkIjRD3LxTTjLC89MwDnwfUeBXY6I1mWH4ew4dVDa
- f5mmOh6Ad+P07cCPaWf7NUXqrRganjVL+jmeUCiSE4Uj3ta2Oj4ztxh0PMhDyXVTVMNdi20thva
- xOfsYAUhK1jH4uJ2npIlStUAg3RjSKomM4JeA3JkUYfVLJSZdSVUHP6mFcvlcol86IX5zzClIRM
- u6MEgWxTuCQYBy0bSYu46I1T9c/iKNg8ZcDWf+4dgtvzViAGm7uNNg+5JOfHx22izInBQpJS0Bx
- A3CIo0+iB/qTd4yJ4nvbpbbO0HFAaA==
-X-Proofpoint-ORIG-GUID: vHyM1L6ZHbOR8-4PRZUdcGdHQ1UfesM4
+X-CM-TRANSID:GxC2BwAHPyNO9R5pJxe+AA--.26075S2
+X-Coremail-Antispam: 1UD129KBjvAXoWfJw1ftFy7Xr4rZw1UZrW5Wrg_yoW8Gr4UWo
+	W0vrW3uw48Kr13Jr1UJ3WDWr15WFyUCFnxJr1UWr1DGF1UXF17tF18Jr15Gr1rJr45tF1U
+	Jw1UJr15t3Z8Jrn3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUY77kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
+	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
+	7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBGkeebEGmgAAs0
 
-On Wed, Nov 19, 2025 at 10:40:56PM +0000, david.laight.linux@gmail.com wrote:
-> From: David Laight <david.laight.linux@gmail.com>
->
-> It in not uncommon for code to use min_t(uint, a, b) when one of a or b
-> is 64bit and can have a value that is larger than 2^32;
-> This is particularly prevelant with:
-> 	uint_var = min_t(uint, uint_var, uint64_expression);
->
-> Casts to u8 and u16 are very likely to discard significant bits.
->
-> These can be detected at compile time by changing min_t(), for example:
-> #define CHECK_SIZE(fn, type, val) \
-> 	BUILD_BUG_ON_MSG(sizeof (val) > sizeof (type) && \
-> 		!statically_true(((val) >> 8 * (sizeof (type) - 1)) < 256), \
-> 		fn "() significant bits of '" #val "' may be discarded")
->
-> #define min_t(type, x, y) ({ \
-> 	CHECK_SIZE("min_t", type, x); \
-> 	CHECK_SIZE("min_t", type, y); \
-> 	__cmp_once(min, type, x, y); })
->
-> (and similar changes to max_t() and clamp_t().)
+On Wed, 2025-11-19 at 13:33 -0800, Anirudh Venkataramanan wrote:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > A. Introduction                                                        =
+|
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> IMA events are kept in kernel memory and preserved across kexec soft
+> reboots. This can lead to increased kernel memory usage over time,
+> especially with aggressive IMA policies that measure everything. To reduc=
+e
+> memory pressure, it becomes necessary to discard IMA events but given tha=
+t
+> IMA events are extended into PCRs in the TPM, just discarding events will
+> break the PCR extension chain, making future verification of the IMA even=
+t
+> log impossible.
+>=20
+> This patch series proposes a method to discard IMA events while keeping t=
+he
+> log verifiable. While reducing memory pressure is the primary objective,
+> the second order benefit of trimming the IMA log is that IMA log verifier=
+s
+> (local userspace daemon or a remote cloud service) can process smaller IM=
+A
+> logs on a rolling basis, thus avoiding re-verification of previously
+> verified events.
 
-Have we made sure that the introduction of these don't cause a combinatorial
-explosion like previous min()/max() changes did?
+Hi Anirudh
 
->
-> This shows up some real bugs, some unlikely bugs and some false positives.
-> In most cases both arguments are unsigned type (just different ones)
-> and min_t() can just be replaced by min().
->
-> The patches are all independant and are most of the ones needed to
-> get the x86-64 kernel I build to compile.
-> I've not tried building an allyesconfig or allmodconfig kernel.
+I will rephrase this paragraph, to be sure that I understood it
+correctly.
 
-Well I have a beefy box at my disposal so tried thiese for you :)
+You are proposing a method to trim the measurement list and, at the
+same time, to keep the measurement list verifiable after trimming. The
+way you would like to achieve that is to keep the verification state in
+the kernel in the form of PCR values.
 
-Both allyesconfig & allmodconfig works fine for x86-64 (I tried both for good
-measure)
+Those values mean what verifiers have already verified. Thus, for the
+next verification attempt, verifiers take the current PCR values as
+starting values, replay the truncated IMA measurement list, and again
+you match with the current PCR values and you trim until that point.
 
-> I've also not included the patch to minmax.h itself.
->
-> I've tried to put the patches that actually fix things first.
-> The last one is 0009.
->
-> I gave up on fixing sched/fair.c - it is too broken for a single patch!
-> The patch for net/ipv4/tcp.c is also absent because do_tcp_getsockopt()
-> needs multiple/larger changes to make it 'sane'.
+So the benefit of this proposal is that you keep the verification of
+the IMA measurement list self-contained by using the last verification
+state (PCR starting value) and the truncated IMA measurement list as
+the inputs of your verification.
 
-I guess this isn't broken per se there just retain min_t()/max_t() right?
+Let me reiterate on the trusted computing principles IMA relies on for
+providing the evidence about a system's integrity.
 
->
-> I've had to trim the 124 maintainers/lists that get_maintainer.pl finds
-> from 124 to under 100 to be able to send the cover letter.
-> The individual patches only go to the addresses found for the associated files.
-> That reduces the number of emails to a less unsane number.
->
-> David Laight (44):
->   x86/asm/bitops: Change the return type of variable__ffs() to unsigned
->     int
->   ext4: Fix saturation of 64bit inode times for old filesystems
->   perf: Fix branch stack callchain limit
->   io_uring/net: Change some dubious min_t()
->   ipc/msg: Fix saturation of percpu counts in msgctl_info()
->   bpf: Verifier, remove some unusual uses of min_t() and max_t()
->   net/core/flow_dissector: Fix cap of __skb_flow_dissect() return value.
->   net: ethtool: Use min3() instead of nested min_t(u16,...)
->   ipv6: __ip6_append_data() don't abuse max_t() casts
->   x86/crypto: ctr_crypt() use min() instead of min_t()
->   arch/x96/kvm: use min() instead of min_t()
->   block: use min() instead of min_t()
->   drivers/acpi: use min() instead of min_t()
->   drivers/char/hw_random: use min3() instead of nested min_t()
->   drivers/char/tpm: use min() instead of min_t()
->   drivers/crypto/ccp: use min() instead of min_t()
->   drivers/cxl: use min() instead of min_t()
->   drivers/gpio: use min() instead of min_t()
->   drivers/gpu/drm/amd: use min() instead of min_t()
->   drivers/i2c/busses: use min() instead of min_t()
->   drivers/net/ethernet/realtek: use min() instead of min_t()
->   drivers/nvme: use min() instead of min_t()
->   arch/x86/mm: use min() instead of min_t()
->   drivers/nvmem: use min() instead of min_t()
->   drivers/pci: use min() instead of min_t()
->   drivers/scsi: use min() instead of min_t()
->   drivers/tty/vt: use umin() instead of min_t(u16, ...) for row/col
->     limits
->   drivers/usb/storage: use min() instead of min_t()
->   drivers/xen: use min() instead of min_t()
->   fs: use min() or umin() instead of min_t()
->   block: bvec.h: use min() instead of min_t()
->   nodemask: use min() instead of min_t()
->   ipc: use min() instead of min_t()
->   bpf: use min() instead of min_t()
->   bpf_trace: use min() instead of min_t()
->   lib/bucket_locks: use min() instead of min_t()
->   lib/crypto/mpi: use min() instead of min_t()
->   lib/dynamic_queue_limits: use max() instead of max_t()
->   mm: use min() instead of min_t()
->   net: Don't pass bitfields to max_t()
->   net/core: Change loop conditions so min() can be used
->   net: use min() instead of min_t()
->   net/netlink: Use umin() to avoid min_t(int, ...) discarding high bits
->   net/mptcp: Change some dubious min_t(int, ...) to min()
->
->  arch/x86/crypto/aesni-intel_glue.c            |  3 +-
->  arch/x86/include/asm/bitops.h                 | 18 +++++-------
->  arch/x86/kvm/emulate.c                        |  3 +-
->  arch/x86/kvm/lapic.c                          |  2 +-
->  arch/x86/kvm/mmu/mmu.c                        |  2 +-
->  arch/x86/mm/pat/set_memory.c                  | 12 ++++----
->  block/blk-iocost.c                            |  6 ++--
->  block/blk-settings.c                          |  2 +-
->  block/partitions/efi.c                        |  3 +-
->  drivers/acpi/property.c                       |  2 +-
->  drivers/char/hw_random/core.c                 |  2 +-
->  drivers/char/tpm/tpm1-cmd.c                   |  2 +-
->  drivers/char/tpm/tpm_tis_core.c               |  4 +--
->  drivers/crypto/ccp/ccp-dev.c                  |  2 +-
->  drivers/cxl/core/mbox.c                       |  2 +-
->  drivers/gpio/gpiolib-acpi-core.c              |  2 +-
->  .../gpu/drm/amd/amdgpu/amdgpu_doorbell_mgr.c  |  4 +--
->  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c        |  2 +-
->  .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  2 +-
->  drivers/i2c/busses/i2c-designware-master.c    |  2 +-
->  drivers/net/ethernet/realtek/r8169_main.c     |  3 +-
->  drivers/nvme/host/pci.c                       |  3 +-
->  drivers/nvme/host/zns.c                       |  3 +-
->  drivers/nvmem/core.c                          |  2 +-
->  drivers/pci/probe.c                           |  3 +-
->  drivers/scsi/hosts.c                          |  2 +-
->  drivers/tty/vt/selection.c                    |  9 +++---
->  drivers/usb/storage/protocol.c                |  3 +-
->  drivers/xen/grant-table.c                     |  2 +-
->  fs/buffer.c                                   |  2 +-
->  fs/exec.c                                     |  2 +-
->  fs/ext4/ext4.h                                |  2 +-
->  fs/ext4/mballoc.c                             |  3 +-
->  fs/ext4/resize.c                              |  2 +-
->  fs/ext4/super.c                               |  2 +-
->  fs/fat/dir.c                                  |  4 +--
->  fs/fat/file.c                                 |  3 +-
->  fs/fuse/dev.c                                 |  2 +-
->  fs/fuse/file.c                                |  8 ++---
->  fs/splice.c                                   |  2 +-
->  include/linux/bvec.h                          |  3 +-
->  include/linux/nodemask.h                      |  9 +++---
->  include/linux/perf_event.h                    |  2 +-
->  include/net/tcp_ecn.h                         |  5 ++--
->  io_uring/net.c                                |  6 ++--
->  ipc/mqueue.c                                  |  4 +--
->  ipc/msg.c                                     |  6 ++--
->  kernel/bpf/core.c                             |  4 +--
->  kernel/bpf/log.c                              |  2 +-
->  kernel/bpf/verifier.c                         | 29 +++++++------------
->  kernel/trace/bpf_trace.c                      |  2 +-
->  lib/bucket_locks.c                            |  2 +-
->  lib/crypto/mpi/mpicoder.c                     |  2 +-
->  lib/dynamic_queue_limits.c                    |  2 +-
->  mm/gup.c                                      |  4 +--
->  mm/memblock.c                                 |  2 +-
->  mm/memory.c                                   |  2 +-
->  mm/percpu.c                                   |  2 +-
->  mm/truncate.c                                 |  3 +-
->  mm/vmscan.c                                   |  2 +-
->  net/core/datagram.c                           |  6 ++--
->  net/core/flow_dissector.c                     |  7 ++---
->  net/core/net-sysfs.c                          |  3 +-
->  net/core/skmsg.c                              |  4 +--
->  net/ethtool/cmis_cdb.c                        |  7 ++---
->  net/ipv4/fib_trie.c                           |  2 +-
->  net/ipv4/tcp_input.c                          |  4 +--
->  net/ipv4/tcp_output.c                         |  5 ++--
->  net/ipv4/tcp_timer.c                          |  4 +--
->  net/ipv6/addrconf.c                           |  8 ++---
->  net/ipv6/ip6_output.c                         |  7 +++--
->  net/ipv6/ndisc.c                              |  5 ++--
->  net/mptcp/protocol.c                          |  8 ++---
->  net/netlink/genetlink.c                       |  9 +++---
->  net/packet/af_packet.c                        |  2 +-
->  net/unix/af_unix.c                            |  4 +--
->  76 files changed, 141 insertions(+), 176 deletions(-)
->
-> --
-> 2.39.5
->
+Unless you are at the beginning of the measurement chain, where the
+Root of Trust for Measurement (RTM) is trusted by assumption, the
+measurements done by a component can be trusted because that component
+was already measured by the previous component in the boot chain,
+before it had any chance to corrupt the system.
+
+In the context of IMA, IMA can be trusted to make new measurements
+because it measures every file before those files could cause any harm
+to the system. So, potentially IMA and the kernel can be corrupted by
+any file.
+
+What you are proposing would not work, because you are placing trust in
+an input (the PCR starting value) that can be manipulated at any time
+by a corrupted kernel, before you had the chance to detect such
+corruption.
+
+Let me describe a scenario where I could take advantage of such
+weakness. After the first measurement list trim, I perform an attack on
+the system such that it corrupts the kernel. IMA added a new entry in
+the measurement list, which would reveal the attack.
+
+But, since I have control of the kernel, I conveniently update the PCR
+starting value to replay the new measurement entry, and remove the
+measurement entry from the measurement list.
+
+Now, from the perspective of the user space verifiers everything is
+fine, the truncated IMA measurement list is clean, no attack, and the
+current PCR values match by replaying the new PCR starting value with
+the remaining of the IMA measurement list.
+
+So, in my opinion the kernel should just offer the ability to trim the
+measurement list, and a remote verifier should be responsible to verify
+the measurement list, without relying on anything from the system being
+evaluated.
+
+Sure, the remote verifier can verify just the trimmed IMA measurement
+list, but the remote verifier must solely rely on state information
+maintained internally.
+
+Roberto
+
+> The method has other advantages too:
+>=20
+>  1. It provides a userspace interface that can be used to precisely contr=
+ol
+>     trim point, allowing for trim points to be optionally aligned with
+>     userspace IMA event log validation.
+>=20
+>  2. It ensures that all necessary information required for continued IMA
+>     log validation is made available via the userspace interface at all
+>     times.
+>=20
+>  3. It provides a simple mechanism for userspace applications to determin=
+e
+>     if the event log has been unexpectedly trimmed.
+>=20
+>  4. The duration for which the IMA Measurement list mutex must be held (f=
+or
+>     trimming) is minimal.
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > B. Solution                                                            =
+|
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> -------------------------------------------------------------------------=
+-
+> > B.1 Overview                                                           =
+|
+> -------------------------------------------------------------------------=
+-
+>=20
+> The kernel trims the IMA event log based on PCR values supplied by usersp=
+ace.
+> The core principles leveraged are as follows:
+>=20
+>  - Given an IMA event log, PCR values for each IMA event can be obtained =
+by
+>    recalulating the PCR extension for each event. Thus processing N event=
+s
+>    from the start will yield PCR values as of event N. This is referred t=
+o
+>    as "IMA event log replay".
+>=20
+>  - To get the PCR value for event N + 1, only the PCR value as of event N
+>    is needed. If this can be known, events till and including N can be
+>    safely purged.
+>=20
+> Putting it all together, we get the following userspace + kernel flow:
+>=20
+>  1. A userspace application replays the IMA event log to generate PCR
+>     values and then triggers a trim by providing these values to the kern=
+el
+>     (by writing to a pseudo file).=20
+>=20
+>     Optionally, the userspace application may verify these PCR values
+>     against the corresponding TPM quote, and trigger trimming only if
+>     the calculated PCR values match up to the expectations in the quote's
+>     PCR digest.
+>=20
+>  2. The kernel uses the userspace supplied PCR values to trim the IMA
+>     measurements list at a specific point, and so these are referred to a=
+s
+>     "trim-to PCR values" in this context.
+>=20
+>     Note that the kernel doesn't really understand what these userspace
+>     provided PCR values mean or what IMA event they correspond to, and so
+>     it does its own IMA event replay till either the replayed PCR values
+>     match with the userspace provided ones, or it runs out of events.
+>=20
+>     If a match is found, the kernel can proceed with trimming the IMA
+>     measurements list. This is done in two steps, to keep locking context
+>     minimal.
+>=20
+>     step 1: Find and return the list entry (as a count from head) of exac=
+t
+>             match. This does not lock the measurements list mutex, ensuri=
+ng
+>             new events can be appended to the log.
+>=20
+>     step 2: Lock the measurements list mutex and trim the measurements li=
+st
+>             at the previously identified list entry.
+>=20
+>    If the trim is successful, the trim-to PCR values are saved as "starti=
+ng
+>    PCR values". The next time userspace wants to replay the IMA event log=
+,
+>    it will use the starting PCR values as the base for the IMA event log
+>    replay.
+>=20
+> -------------------------------------------------------------------------=
+-
+> > B.2 Kernel Interfaces                                                  =
+|
+> -------------------------------------------------------------------------=
+-
+>=20
+> A new configfs pseudo file /sys/kernel/config/ima/pcrs that supports the
+> following operations is exposed.
+>=20
+>   read: returns starting PCR values stored in the kernel (within IMA
+>         specifically).
+>=20
+>  write: writes trim-to PCR values to trigger trimming. If trimming is
+>         successful, trim-to PCR values are stored as starting PCR values.
+>         requires root privileges.
+>=20
+> -------------------------------------------------------------------------=
+-
+> > B.3 Walk-through with a real example                                   =
+|
+> -------------------------------------------------------------------------=
+-
+>=20
+> This is a real example from a test run.
+>=20
+> Suppose this IMA policy is deployed:
+>=20
+>   measure func=3DFILE_CHECK mask=3DMAY_READ pcr=3D10
+>   measure func=3DFILE_CHECK mask=3DMAY_WRITE pcr=3D11
+>=20
+> When the policy is deployed, a zero digest starting PCR value will be set
+> for each PCR used. If the TPM supports multiple hashbanks, there will be
+> one starting PCR value per PCR, per TPM hashbank. This can be seen in the
+> following hexdump:
+>=20
+> $ sudo hexdump -vC /sys/kernel/config/ima/pcrs
+> 00000000  70 63 72 31 30 3a 73 68  61 31 3a 00 00 00 00 00  |pcr10:sha1:.=
+....|
+> 00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 70  |............=
+...p|
+> 00000020  63 72 31 31 3a 73 68 61  31 3a 00 00 00 00 00 00  |cr11:sha1:..=
+....|
+> 00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 70 63  |............=
+..pc|
+> 00000040  72 31 30 3a 73 68 61 32  35 36 3a 00 00 00 00 00  |r10:sha256:.=
+....|
+> 00000050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |............=
+....|
+> 00000060  00 00 00 00 00 00 00 00  00 00 00 70 63 72 31 31  |...........p=
+cr11|
+> 00000070  3a 73 68 61 32 35 36 3a  00 00 00 00 00 00 00 00  |:sha256:....=
+....|
+> 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |............=
+....|
+> 00000090  00 00 00 00 00 00 00 00  70 63 72 31 30 3a 73 68  |........pcr1=
+0:sh|
+> 000000a0  61 33 38 34 3a 00 00 00  00 00 00 00 00 00 00 00  |a384:.......=
+....|
+> 000000b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |............=
+....|
+> 000000c0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |............=
+....|
+> 000000d0  00 00 00 00 00 70 63 72  31 31 3a 73 68 61 33 38  |.....pcr11:s=
+ha38|
+> 000000e0  34 3a 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |4:..........=
+....|
+> 000000f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |............=
+....|
+> 00000100  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |............=
+....|
+> 00000110  00 00                                             |..|
+> 00000112
+>=20
+> Let's say that a userspace utility replays the IMA event log, and trigger=
+s
+> trimming by writing the following PCR values (i.e. trim-to PCR values) to=
+ the
+> pseudo file:
+>=20
+> pcr10:sha256:8268782906555cf3aefc179f815c878527dd4e67eaa836572ebabab31977=
+922c
+> pcr11:sha256:4c7f31927183eacb53d51d95b0162916fd3fca51a8d1efc6dde3805eb891=
+fe41
+>=20
+> The trim is successful,=20
+>=20
+> 1. Some number of entries from the measurements log will disappear. This
+>    can be verified by reading out the ASCII or binary IMA measurements
+>    file.
+>=20
+> 2. The trim-to PCR values are saved as starting PCR values. This can be
+>    verified by reading out the pseudo file again as shown below. Note tha=
+t
+>    even through only sha256 PCR values were written, the kernel populated
+>    sha1 and sha384 starting values as well.
+>=20
+> $ sudo hexdump -vC /sys/kernel/config/ima/pcrs
+>=20
+> 00000000  70 63 72 31 30 3a 73 68  61 31 3a c4 7f 9d 00 68  |pcr10:sha1:.=
+...h|
+> 00000010  e4 86 71 bf bc ae f0 10  12 ff 68 e2 9e 74 e4 70  |..q.......h.=
+.t.p|
+> 00000020  63 72 31 31 3a 73 68 61  31 3a 90 d7 17 ac 60 4d  |cr11:sha1:..=
+..`M|
+> 00000030  c8 25 ce 77 7d 9d 94 cf  44 7b b2 2e 2e e2 70 63  |.%.w}...D{..=
+..pc|
+> 00000040  72 31 30 3a 73 68 61 32  35 36 3a 82 68 78 29 06  |r10:sha256:.=
+hx).|
+> 00000050  55 5c f3 ae fc 17 9f 81  5c 87 85 27 dd 4e 67 ea  |U\......\..'=
+.Ng.|
+> 00000060  a8 36 57 2e ba ba b3 19  77 92 2c 70 63 72 31 31  |.6W.....w.,p=
+cr11|
+> 00000070  3a 73 68 61 32 35 36 3a  4c 7f 31 92 71 83 ea cb  |:sha256:L.1.=
+q...|
+> 00000080  53 d5 1d 95 b0 16 29 16  fd 3f ca 51 a8 d1 ef c6  |S.....)..?.Q=
+....|
+> 00000090  dd e3 80 5e b8 91 fe 41  70 63 72 31 30 3a 73 68  |...^...Apcr1=
+0:sh|
+> 000000a0  61 33 38 34 3a 8e d6 12  18 b1 d6 cd 95 16 98 33  |a384:.......=
+...3|
+> 000000b0  2b 7d a2 d6 d9 05 c7 e8  5b 15 b0 91 c5 fc 23 d1  |+}......[...=
+..#.|
+> 000000c0  f9 a8 8d 60 50 5c e9 64  5f d7 b3 b2 f1 9c 90 0a  |...`P\.d_...=
+....|
+> 000000d0  45 53 5d b2 57 70 63 72  31 31 3a 73 68 61 33 38  |ES].Wpcr11:s=
+ha38|
+> 000000e0  34 3a 25 fc 21 28 31 5a  f7 c6 fb 0f 40 c9 06 e6  |4:%.!(1Z....=
+@...|
+> 000000f0  c5 da ed 20 61 a1 03 54  4f 67 18 88 82 0f 48 d1  |... a..TOg..=
+..H.|
+> 00000100  2f e0 3d 36 46 5e 94 a4  88 51 f8 91 39 7e e5 97  |/.=3D6F^...Q=
+..9~..|
+> 00000110  2c c5                                             |,.|
+> 00000112
+>=20
+> -------------------------------------------------------------------------=
+-
+> > C. Footnotes                                                           =
+|
+> -------------------------------------------------------------------------=
+-
+>=20
+> 1. The 'pcrs' pseudo file is currently part of configfs. This was due to
+>    some early internal feedback in a different context. This can as well =
+be
+>    in securityfs with the rest of the IMA pseudo files.
+>=20
+> 2. PCR values are never read out of the TPM at any point. All PCR values
+>    used are derived from IMA event log replay.
+>=20
+> 3. Code is "RFC quality". Refinements can be made if the method is accept=
+ed.
+>=20
+> 4. For functional validation, base kernel version was 6.17 stable, with t=
+he
+>    most recent tested version being 6.17.8.
+>=20
+> 5. Code has been validated to some degree using a python-based internal t=
+est
+>    tool. This can be published if there is community interest.=20
+>=20
+> Steven Chen (1):
+>   ima: Implement IMA event log trimming
+>=20
+>  drivers/Kconfig                       |   2 +
+>  drivers/Makefile                      |   1 +
+>  drivers/ima/Kconfig                   |  13 +
+>  drivers/ima/Makefile                  |   2 +
+>  drivers/ima/ima_config_pcrs.c         | 291 ++++++++++++++++++
+>  include/linux/ima.h                   |  27 ++
+>  security/integrity/ima/Makefile       |   4 +
+>  security/integrity/ima/ima.h          |   8 +
+>  security/integrity/ima/ima_init.c     |  44 +++
+>  security/integrity/ima/ima_log_trim.c | 421 ++++++++++++++++++++++++++
+>  security/integrity/ima/ima_policy.c   |   7 +-
+>  security/integrity/ima/ima_queue.c    |   5 +-
+>  12 files changed, 821 insertions(+), 4 deletions(-)
+>  create mode 100644 drivers/ima/Kconfig
+>  create mode 100644 drivers/ima/Makefile
+>  create mode 100644 drivers/ima/ima_config_pcrs.c
+>  create mode 100644 security/integrity/ima/ima_log_trim.c
+>=20
+
 
