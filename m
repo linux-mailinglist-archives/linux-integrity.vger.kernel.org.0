@@ -1,133 +1,117 @@
-Return-Path: <linux-integrity+bounces-7660-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7661-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 204A2C7B97B
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Nov 2025 20:54:06 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2573FC7B9EA
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Nov 2025 21:10:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C97233A59C9
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Nov 2025 19:54:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C0903362673
+	for <lists+linux-integrity@lfdr.de>; Fri, 21 Nov 2025 20:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553DB2E041A;
-	Fri, 21 Nov 2025 19:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F1427FD7D;
+	Fri, 21 Nov 2025 20:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="drYTpxhG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G7tQnAgA"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC670299931;
-	Fri, 21 Nov 2025 19:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8858923ABA1;
+	Fri, 21 Nov 2025 20:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763754842; cv=none; b=mvvwv0yfDmWrybc1SdYjBo+Cx5wVwmBxyEBQLBobIMO91kAHFfh8rC1ipdc08/cDLnaGyzL4fnCu5VIsucjKiEqZV771+DAszZXImy7QduRbfhCNZN9U70CxAKNi2r7LKZJVdThKwsrdFsLk7ICzkV8xv7njqeSi858izcmodpM=
+	t=1763755837; cv=none; b=aFbauRluZ0BXin3vYKux4T1rN0f05rcFcW1I8uT27wd6aMS6eGXY//WGDEN7CfXorlRxdnsJQii3WnPnLkD7a9VRQi3slsI/96BpdU/clbmP69w0iU/It0gU1rHxtpkNAieiirxTI/xqrBOlA+AfgJ/EuMGLagGYFAnREVgNq8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763754842; c=relaxed/simple;
-	bh=O9bbpUQKrHol6x52s1vMoVkdVKLBpHGD/HARRVaR4HY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d8FzlUo00mwGAWOF8M+YRptzbnTihTfhMPQd+bZChh9xWQY85vsPxlz6MZwyPUzda8ydMqL/wWS58Z5tbSfPhqZALW9iKOmZaOaqMaPCEqSshwHjum2oRU+yJpP48KwcfCIG6Bh5kZel0YjdnhdPzEztUdOeET1yFq5sWQwhnu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=drYTpxhG; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.65.232.236] (unknown [20.236.10.163])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 4B55821203B1;
-	Fri, 21 Nov 2025 11:53:59 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4B55821203B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1763754839;
-	bh=8wkyrbdJcd0NmYmrtFqPIBRTPhZvZjdiBtdnal/Beik=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=drYTpxhG6bNwnFCaf71MGeN9+9edF+82bJpc6fD2C06EGVO04LALA0hviIIhlHaQm
-	 7bTH+b4XYRcOxwfZkkTuJUNhSJaUJQ5bRgqf4MCDPJsCik2lYvz5zIOPF2LxTKkVIM
-	 KAwK9loS602DI4VpLJr0q4OObQubgc36Ty6gLLUI=
-Message-ID: <1d9d1c8d-671b-4956-abb3-6f069c9f5a22@linux.microsoft.com>
-Date: Fri, 21 Nov 2025 11:53:57 -0800
+	s=arc-20240116; t=1763755837; c=relaxed/simple;
+	bh=bi5gOBnMp9lCWlfLvzLC3aQnkpo+i7fsjzxBk/+4wRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sSw8ArigHcRzeaSws2wqwotw4RXdqCB4vsnaeYqoEi6k49WnVqUL/yXnW2lYHsqM2w99/E4TQcj83+1o6VJkRr/S1Njc20RJ84wwOaZGteb75AILZszp4HGVOV5wwUHYLFz/lYUA/qhUoPzBdHIDoJvyEmjMitQ4NqOSCP2zMWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G7tQnAgA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83ED4C4CEF1;
+	Fri, 21 Nov 2025 20:10:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763755837;
+	bh=bi5gOBnMp9lCWlfLvzLC3aQnkpo+i7fsjzxBk/+4wRs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=G7tQnAgAGPLymxjLyM5VGr9XBqsvTb0t5X3Yox2HSLBUV8Qw4dtZPxeBTH41XA9sD
+	 MhGeF0d2ME/hap5ENDRmeux4yFQGuOlN4pQsQNINpTM7Kn00aYqnI4+0wYTrwg8zYi
+	 v3O6xJgqkGpk9OZVAOFbX4+dXFBw2hf0Ne/4AsqeCxUT4dRiBvQm5fdyeHLA2ax9L1
+	 mJpuvxRhoMh7TW6mkbH1s4YZ6oB3OgRapYOzbPnhvkJkRoAb+OWC0mVkcIZe390s94
+	 1DgX9rxY6Rl0bFgZYEuYMMnX1yAtGTelTnRaBewyVEv4hAVtGW+7meKXCsaP84K2y1
+	 JuU4u/lWgX8vg==
+Date: Fri, 21 Nov 2025 22:10:33 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KEYS: encrypted: Use pr_fmt()
+Message-ID: <aSDHOfdaoBJgNqFN@kernel.org>
+References: <20251113123544.11287-2-thorsten.blum@linux.dev>
+ <aR0v9mLOKJsr_0Zm@kernel.org>
+ <83C83079-0354-4642-A980-DBC7AE572A53@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v1 0/1] Implement IMA Event Log Trimming
-To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc: Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
- linux-security-module@vger.kernel.org,
- Steven Chen <chenste@linux.microsoft.com>,
- Gregory Lumen <gregorylumen@linux.microsoft.com>,
- Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
- Sush Shringarputale <sushring@linux.microsoft.com>
-References: <20251119213359.39397-1-anirudhve@linux.microsoft.com>
- <629289c119a1a71d8d7a1208ec3676e006d4d527.camel@linux.ibm.com>
-Content-Language: en-US
-From: Anirudh Venkataramanan <anirudhve@linux.microsoft.com>
-In-Reply-To: <629289c119a1a71d8d7a1208ec3676e006d4d527.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <83C83079-0354-4642-A980-DBC7AE572A53@linux.dev>
 
-On 11/20/2025 2:58 PM, Mimi Zohar wrote:
-> On Wed, 2025-11-19 at 13:33 -0800, Anirudh Venkataramanan wrote:
->>
->>
->>   2. The kernel uses the userspace supplied PCR values to trim the IMA
->>      measurements list at a specific point, and so these are referred to as
->>      "trim-to PCR values" in this context.
->>
->>      Note that the kernel doesn't really understand what these userspace
->>      provided PCR values mean or what IMA event they correspond to, and so
->>      it does its own IMA event replay till either the replayed PCR values
->>      match with the userspace provided ones, or it runs out of events.
->>
->>      If a match is found, the kernel can proceed with trimming the IMA
->>      measurements list. This is done in two steps, to keep locking context
->>      minimal.
->>
->>      step 1: Find and return the list entry (as a count from head) of exact
->>              match. This does not lock the measurements list mutex, ensuring
->>              new events can be appended to the log.
->>
->>      step 2: Lock the measurements list mutex and trim the measurements list
->>              at the previously identified list entry.
->>
->>     If the trim is successful, the trim-to PCR values are saved as "starting
->>     PCR values". The next time userspace wants to replay the IMA event log,
->>     it will use the starting PCR values as the base for the IMA event log
->>     replay.
+On Wed, Nov 19, 2025 at 03:45:02PM +0100, Thorsten Blum wrote:
+> On 19. Nov 2025, at 03:48, Jarkko Sakkinen wrote:
+> > On Thu, Nov 13, 2025 at 01:35:44PM +0100, Thorsten Blum wrote:
+> >> Use pr_fmt() to automatically prefix all pr_<level>() log messages with
+> > 
+> > This fails to describe what "use" means.
 > 
-> Depending on the IMA policy, the IMA measurement list may contain integrity
-> violations, such as "ToM/ToU" (Time of Measurement/Time of Use) or "open-
-> writer". Either the userspace supplied PCR values will not match any measurement
-> record or the PCR values will be "fixed" to match the well known violation hash
-> value extended into the TPM.  Depending on how the userspace PCR values will
-> subsequently be used, saving the "fixed" PCR values could result in whitewashing
-> the integrity of the measurement list.
+> I don't understand what you mean. What's wrong with "use ... to ..."?
+
+I think e.g., "Rewrite the definition of ..." describes better what
+you're doing.
+
+> 
+> >> "encrypted_key: " and remove all manually added prefixes.
+> >> 
+> >> Reformat the code accordingly and avoid line breaks in log messages.
+> >> 
+> >> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> >> ---
+> >> security/keys/encrypted-keys/encrypted.c | 74 +++++++++++-------------
+> >> security/keys/encrypted-keys/encrypted.h |  2 +-
+> >> 2 files changed, 35 insertions(+), 41 deletions(-)
+> >> 
+> >> diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
+> >> index 513c09e2b01c..a8e8bf949b4b 100644
+> >> --- a/security/keys/encrypted-keys/encrypted.c
+> >> +++ b/security/keys/encrypted-keys/encrypted.c
+> >> @@ -11,6 +11,8 @@
+> >>  * See Documentation/security/keys/trusted-encrypted.rst
+> >>  */
+> >> 
+> > 
+> > Should have undef prepending.
+> 
+> Why is this necessary when the #define is at the top of a source file?
+> The kernel documentation [1] doesn't mention this anywhere. Isn't #undef
+> only needed when redefining 'pr_fmt' in the middle of a file to avoid a
+> compiler warning/error?
+> 
+> >> +#define pr_fmt(fmt) "encrypted_key: " fmt
+> >> +
+> >> [...]
+> 
+> Thanks,
+> Thorsten
+> 
+> [1] https://docs.kernel.org/core-api/printk-basics.html
 > 
 
-Yes, we account for this. IMA documentation [1] notes that:
-
-"An all zeros hash indicates a measurement log violation. IMA is 
-invalidating an entry. Trust in entries after that are up to the end 
-user. If the Template Data Hash is all zeros, an all ones digest is 
-extended."
-
-A userspace verifier could be designed with a user option like 
-"--ignore-violations". This would extend a digest of all ones in the 
-event replay process and arrive at the same per-event PCR values that 
-the TPM originally did. The trimming logic in the kernel would do the 
-same thing.
-
-By "whitewashing", you mean that violations will also get trimmed? Given 
-that trust in entries post violation is up to the user, is this a 
-problem? The IMA log itself can still be saved by userspace for further 
-analysis, auditing, etc. The point of trimming is to get it out of the 
-kernel memory.
-
-Thanks!
-Ani
-
-[1] 
-https://ima-doc.readthedocs.io/en/latest/event-log-format.html#template-data-hash
+BR, Jarkko
 
