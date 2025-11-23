@@ -1,122 +1,117 @@
-Return-Path: <linux-integrity+bounces-7662-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7663-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00FF7C7B9F9
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Nov 2025 21:12:04 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CB43C7E004
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Nov 2025 12:19:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ED6D54E13FB
-	for <lists+linux-integrity@lfdr.de>; Fri, 21 Nov 2025 20:12:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5B491347A3E
+	for <lists+linux-integrity@lfdr.de>; Sun, 23 Nov 2025 11:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C502FFDFC;
-	Fri, 21 Nov 2025 20:12:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE1D2D5937;
+	Sun, 23 Nov 2025 11:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P3IBgL9A"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="CkJBynGW";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="mLDeGtcE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 607DA21D3F4;
-	Fri, 21 Nov 2025 20:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384B828B4E2;
+	Sun, 23 Nov 2025 11:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763755921; cv=none; b=HwJsePTQW0ZleEMwmPMnVVh7SmRYX+a6jXFcVBitbwWpBY9O2GhFFtHQkKs85DaWZQg2KZHSkRHVPEUmucNsNFJypBGMnZRC6qXI4+K3SRfT88CnSsfLCygaMIm4IsKkiq3TSragpGeXlcLyqz2/TjhF7jZF4ke4VLJzKDLsSDQ=
+	t=1763896709; cv=none; b=VaAH6UDmBC37JexwrxOoqYfBvWE2VkVURjJ0NoYV12yPkohVX2hEJcGwto0VwwBfLm+TBIMFo09pok7k26S6y5ouKWJ1dB/tuaRTUCHRlNQpBScMeqsrb8vC6+6srP2vU+3piko/m9zVtaVwUFxdlZTNyzfQZTNd7Ct9pUzxBSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763755921; c=relaxed/simple;
-	bh=t8WuAagLnagFTNPF+qV1fvQjQU7fsUNuW4m2jbbCn10=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BPMKJNW7IWrs0XbUONNjafjHMKjGPack5WZOOMF3eV0015GFjQPC4BrTv/J01X9hUKlBCC+sUrGkTsG2Ra+AaVWchxvtTrTH9tIFX3vyGJOtwXRrXW+odA78noA7OlGNIA17GjLVtoBBmBVU/GHLAlwci5Rddq2taGQzVgN2NtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P3IBgL9A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C2E6C4CEF1;
-	Fri, 21 Nov 2025 20:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763755918;
-	bh=t8WuAagLnagFTNPF+qV1fvQjQU7fsUNuW4m2jbbCn10=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P3IBgL9AdA3fvomyhMijUHxZtnWg8zoXuq0oxN1aWq0tm2pOjWulhbSnfP+b31WuF
-	 wWFJ++8nZsglYrN77dn40bqHycqNI72Ik6U23eAn7NrtXPPxHdET+ZNASY1umlRyFU
-	 K6i5zYLlTQSEcYjrgw9tY1w7IH3YvwOdFJtF6dS3ls6i9Qw+rqyNawsLTLrnOI7T4A
-	 +sFeASoj9+18jJQKhGeXRNa6xg9xjkmDmXSO1BbSiAVMi7GL1vZ5WmAmg6LZkZa1Gq
-	 LKNEjy5MzUP11WU6G1hewpeIjO1vQOGnyn3Xa49m8Xmh8tcbFw4T3rs6ReQ9X+YyNo
-	 JiiomL2BlHsIw==
-Date: Fri, 21 Nov 2025 22:11:54 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: david.laight.linux@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH 15/44] drivers/char/tpm: use min() instead of min_t()
-Message-ID: <aSDHihcWOHGLAjTb@kernel.org>
-References: <20251119224140.8616-1-david.laight.linux@gmail.com>
- <20251119224140.8616-16-david.laight.linux@gmail.com>
+	s=arc-20240116; t=1763896709; c=relaxed/simple;
+	bh=BtA8rCDyqdSX6xKFIIw2rFqZONqzippVVBtr+CBsuy8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oyH7i0XAoitCaTS7TagV9HsJUmO+oJVg23nqOXQBsA6WXolpvqdtG5B2MfAlFTPjScGQcjrb1Cl0zSEmgARDMXEnXWysoekueH0szAav/m5enhFI/u5GxxGyQDp2afexXR8jcqm1mjZJk7kYD10LslJ7JzuAbWWZsIraUghnzfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=CkJBynGW; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=mLDeGtcE; arc=none smtp.client-ip=80.241.56.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4dDmfK4fG3z9t74;
+	Sun, 23 Nov 2025 12:18:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1763896697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+y0O9fq4Z5XBWU3EmYrjzVlObvd6zfqXVNW+py4U72c=;
+	b=CkJBynGW/D+dlDxwlXy/auxcXNrACqEwXITlH3WlCdYECmaoy4+WUWc/H1k+fwyO/rVQ/V
+	jrl6AAvbQD6PjGPmrRkkkRUOMoAw6Ss63c7OMgZHb2l/QpF/BJ/DcH7mjXE92/j5EsWfY1
+	+w5HW9RFuHUi8vqpw0UKfLNbKXGmp234wr6PxbC4A3SMOeA5bmI3o/G6KdtT+4VraEUIJQ
+	DaLBWDEp34LdldsVxHgn7k8yxff7MV7iZrZ5yhajqnLJaMC3h25F3lveqV2yXsADGmRCrQ
+	CZE+XwiOLeAopV1i/apxyiu2l8LRkxa2PlIYrJ7SI+EWIEHcnIUvsszjCFvOjQ==
+From: Maurice Hieronymus <mhi@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1763896695;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+y0O9fq4Z5XBWU3EmYrjzVlObvd6zfqXVNW+py4U72c=;
+	b=mLDeGtcEH/Ihx6U0Qinp5OVCBpa3V5itBuGl8HHgijFENcMR5fsioNz48eeCl8x5EJ/6z6
+	z56MIqKr/YSAklCGsEYGtt+H42B84f4SIUS9AGxVxszeR/Sw5jfqnFq9vrPnKaxx0CkD1L
+	hmeE1HY93KLTXlH29xKwFX90TFMLCY93yOpR+Innc5drfG2kaawFtgBwok9O7UC7uZ36ha
+	aSJDiWrhfJXrC/mCYnt0KfIo3yGGbkGDyjBubgp1YTGLX982V1ynvZyYAKyeNPEsRqC1p9
+	JmN+BlYNs/bDLiwa1nivQIDuDcL8cDu33jrbaSmkakyM5tHvNP9/TLVrUJ9qrw==
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: linux-integrity@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Maurice Hieronymus <mhi@mailbox.org>
+Subject: [PATCH] selftests: tpm2: Fix ill defined assertions
+Date: Sun, 23 Nov 2025 12:18:09 +0100
+Message-ID: <20251123111809.24634-1-mhi@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251119224140.8616-16-david.laight.linux@gmail.com>
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: ysc4ezr16c164mo1anqkucm4rupe3fma
+X-MBO-RS-ID: db62f58e38074497985
 
-On Wed, Nov 19, 2025 at 10:41:11PM +0000, david.laight.linux@gmail.com wrote:
-> From: David Laight <david.laight.linux@gmail.com>
-> 
-> min_t(int, a, b) casts an 'long' to 'int'.
-> Use min(a, b) instead as it promotes any 'int' to 'long'
-> and so cannot discard significant bits.
-> 
-> In this case the 'long' value is small enough that the result is ok.
-> 
-> Detected by an extra check added to min_t().
-> 
-> Signed-off-by: David Laight <david.laight.linux@gmail.com>
-> ---
->  drivers/char/tpm/tpm1-cmd.c     | 2 +-
->  drivers/char/tpm/tpm_tis_core.c | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
-> index cf64c7385105..11088bda4e68 100644
-> --- a/drivers/char/tpm/tpm1-cmd.c
-> +++ b/drivers/char/tpm/tpm1-cmd.c
-> @@ -530,7 +530,7 @@ struct tpm1_get_random_out {
->  int tpm1_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
->  {
->  	struct tpm1_get_random_out *out;
-> -	u32 num_bytes =  min_t(u32, max, TPM_MAX_RNG_DATA);
-> +	u32 num_bytes =  min(max, TPM_MAX_RNG_DATA);
->  	struct tpm_buf buf;
->  	u32 total = 0;
->  	int retries = 5;
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 8954a8660ffc..2676e3a241b5 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -310,7 +310,7 @@ static int get_burstcount(struct tpm_chip *chip)
->  	return -EBUSY;
->  }
->  
-> -static int recv_data(struct tpm_chip *chip, u8 *buf, size_t count)
-> +static int recv_data(struct tpm_chip *chip, u8 *buf, u32 count)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  	int size = 0, burstcnt, rc;
-> @@ -453,7 +453,7 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
->  			rc = burstcnt;
->  			goto out_err;
->  		}
-> -		burstcnt = min_t(int, burstcnt, len - count - 1);
-> +		burstcnt = min(burstcnt, len - count - 1);
->  		rc = tpm_tis_write_bytes(priv, TPM_DATA_FIFO(priv->locality),
->  					 burstcnt, buf + count);
->  		if (rc < 0)
-> -- 
-> 2.39.5
-> 
+Remove parentheses around assert statements in Python. With parentheses,
+assert always evaluates to True, making the checks ineffective.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Maurice Hieronymus <mhi@mailbox.org>
+---
+ tools/testing/selftests/tpm2/tpm2.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-BR, Jarkko
+diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+index bba8cb54548e..3d130c30bc7c 100644
+--- a/tools/testing/selftests/tpm2/tpm2.py
++++ b/tools/testing/selftests/tpm2/tpm2.py
+@@ -437,7 +437,7 @@ class Client:
+ 
+     def extend_pcr(self, i, dig, bank_alg = TPM2_ALG_SHA1):
+         ds = get_digest_size(bank_alg)
+-        assert(ds == len(dig))
++        assert ds == len(dig)
+ 
+         auth_cmd = AuthCommand()
+ 
+@@ -589,7 +589,7 @@ class Client:
+     def seal(self, parent_key, data, auth_value, policy_dig,
+              name_alg = TPM2_ALG_SHA1):
+         ds = get_digest_size(name_alg)
+-        assert(not policy_dig or ds == len(policy_dig))
++        assert not policy_dig or ds == len(policy_dig)
+ 
+         attributes = 0
+         if not policy_dig:
+
+base-commit: 821e6e2a328bb907d40f8d1141d8b6c079aa7340
+-- 
+2.50.1
+
 
