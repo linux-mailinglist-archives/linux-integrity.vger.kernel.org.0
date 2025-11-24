@@ -1,571 +1,163 @@
-Return-Path: <linux-integrity+bounces-7668-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7669-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FCA8C7FD93
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Nov 2025 11:21:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 402A2C82A2C
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Nov 2025 23:16:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2FAD74E5325
-	for <lists+linux-integrity@lfdr.de>; Mon, 24 Nov 2025 10:21:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E35F14E1189
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Nov 2025 22:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841BA2727E5;
-	Mon, 24 Nov 2025 10:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FF31A3160;
+	Mon, 24 Nov 2025 22:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="U3kJ8b5N"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763A727056D;
-	Mon, 24 Nov 2025 10:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350E238D;
+	Mon, 24 Nov 2025 22:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763979665; cv=none; b=e0cVcbr3q5v5T9LlPy2jxRWp/nSWfDabkUymJgBMJhGJLvJ4/d+rOvGl+q0aeNtqkUQfYLtfn5qLXXrBqHTmhvyCGjPkpD4mTT/Y2DBYUtWrg6gxL/M8gdBUPoKx7Jr7M9oRYMY3wqtfSl7RPZ3sLsO+GUcgT+gsDGwV7m7zlec=
+	t=1764022583; cv=none; b=MLDYFR7yD2mY3o9TF/Wk2mfVLUGOmvd7cDY+6KGFYiirx3v2oaGdiSp73IcLz6SpdriPRKgWf+s91pIW4uimbFugUEiN+cpYmGD3yELksi82U9zJvSdPRW8TGQLbVnQjqt2NRfF3DfpjDEL6COp08aU2hDCUSUVwV7r26wgEXkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763979665; c=relaxed/simple;
-	bh=mWmRP+2tZGKvBsXfnBD+ZpMULbGKcnA9yMUD9LuSuAo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LM3bMyTiG0uFawRdwag0wxBC8cI4aHy2ee8s0rXggMs/Em8HfNckAjp+oFnsSwz9lIV7lUGmgN3QEyWjvTvs5FuEzCY3Zj+3nmSLJx4KsL2fCeyjJYMtah2lw7/Njb5M5LTInxDioT/bipTxLnXIQ75dVKlaQgr7WAGDZ3HfJOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4dFLsf2Fx7zpTld;
-	Mon, 24 Nov 2025 18:00:06 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 8F8C71402EB;
-	Mon, 24 Nov 2025 18:01:25 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwAHkonrLCRpZTH8AA--.58348S2;
-	Mon, 24 Nov 2025 11:01:25 +0100 (CET)
-Message-ID: <1e5a3b427fe2783e57e88ca14630f5e38e01fac5.camel@huaweicloud.com>
-Subject: Re: [RFC v1 0/1] Implement IMA Event Log Trimming
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Anirudh Venkataramanan <anirudhve@linux.microsoft.com>, 
-	linux-integrity@vger.kernel.org
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
- linux-security-module@vger.kernel.org, Steven Chen
- <chenste@linux.microsoft.com>, Gregory Lumen
- <gregorylumen@linux.microsoft.com>,  Lakshmi Ramasubramanian
- <nramas@linux.microsoft.com>, Sush Shringarputale
- <sushring@linux.microsoft.com>
-Date: Mon, 24 Nov 2025 11:01:12 +0100
-In-Reply-To: <a77e9609-f6bd-4e6d-88be-5422f780b496@linux.microsoft.com>
-References: <20251119213359.39397-1-anirudhve@linux.microsoft.com>
-	 <7722dff4e68ef5fb7f39bd732a8a77422bad5549.camel@huaweicloud.com>
-	 <a77e9609-f6bd-4e6d-88be-5422f780b496@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1764022583; c=relaxed/simple;
+	bh=GOp5yKMHo3eVqVHkrd/G0zl12EV/VQsYrfuHXNZh7kw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=a8D6SW7/71nbwlCBbdYl1gTiIsAMGsDrmcbykZM6qamiGnbqJXjF/JRpiOlIY/E4rghV1hnrRux8JfdogR2ZjPKNkmIBFvvfZUbMcqO2PWPQh+S8cvVPOC8xYa+xK/eA8Tu1mhVgT3KWmGmjFEZOnbF3AUicCQa8iiyGGUTUIPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=U3kJ8b5N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D140C4CEF1;
+	Mon, 24 Nov 2025 22:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1764022581;
+	bh=GOp5yKMHo3eVqVHkrd/G0zl12EV/VQsYrfuHXNZh7kw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=U3kJ8b5NBNgEEd9LwD3J5j7xvNlg6icnkz9UTERPiTHQbfDUqBzNaYwZRCBzYEzQ6
+	 tEnjHRl3aTn3d5PHcT+RXVM0jF11hvwHNtPa9C4lmwkYHS/LzYbKg8n7PsvmDjvk6m
+	 fuixOeQ4QvOLSYTI8rmM4wkrCvlj4b9gly9K+UGU=
+Date: Mon, 24 Nov 2025 14:16:20 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Pingfan Liu <piliu@redhat.com>
+Cc: kexec@lists.infradead.org, linux-integrity@vger.kernel.org, Baoquan He
+ <bhe@redhat.com>, Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
+ <roberto.sassu@huawei.com>, Alexander Graf <graf@amazon.com>, Steven Chen
+ <chenste@linux.microsoft.com>, stable@vger.kernel.org
+Subject: Re: [PATCHv2 1/2] kernel/kexec: Change the prototype of
+ kimage_map_segment()
+Message-Id: <20251124141620.eaef984836fe2edc7acf9179@linux-foundation.org>
+In-Reply-To: <20251106065904.10772-1-piliu@redhat.com>
+References: <20251106065904.10772-1-piliu@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwAHkonrLCRpZTH8AA--.58348S2
-X-Coremail-Antispam: 1UD129KBjvAXoWfJw4UGr15XrW5tw4fCr1xXwb_yoW8Ar4kto
-	WSvry3ua18Kr13Ar1UJ3WDWry5Wa45CFnrJryjgr1DGF1jq3W7t3W8Jr45Gr4rtr4rtF1U
-	J34UJw1Yy3Z8Jwn3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUY77kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBGkjv7IEwAAAsE
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2025-11-21 at 11:13 -0800, Anirudh Venkataramanan wrote:
-> On 11/20/2025 3:02 AM, Roberto Sassu wrote:
-> > On Wed, 2025-11-19 at 13:33 -0800, Anirudh Venkataramanan wrote:
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> > > > A. Introduction                                                    =
-    |
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> > >=20
-> > > IMA events are kept in kernel memory and preserved across kexec soft
-> > > reboots. This can lead to increased kernel memory usage over time,
-> > > especially with aggressive IMA policies that measure everything. To r=
-educe
-> > > memory pressure, it becomes necessary to discard IMA events but given=
- that
-> > > IMA events are extended into PCRs in the TPM, just discarding events =
-will
-> > > break the PCR extension chain, making future verification of the IMA =
-event
-> > > log impossible.
-> > >=20
-> > > This patch series proposes a method to discard IMA events while keepi=
-ng the
-> > > log verifiable. While reducing memory pressure is the primary objecti=
-ve,
-> > > the second order benefit of trimming the IMA log is that IMA log veri=
-fiers
-> > > (local userspace daemon or a remote cloud service) can process smalle=
-r IMA
-> > > logs on a rolling basis, thus avoiding re-verification of previously
-> > > verified events.
-> >=20
-> > Hi Anirudh
->=20
-> Hi Roberto,
->=20
-> Thanks for the feedback! Few questions below.
->=20
-> >=20
-> > I will rephrase this paragraph, to be sure that I understood it
-> > correctly.
-> >=20
-> > You are proposing a method to trim the measurement list and, at the
-> > same time, to keep the measurement list verifiable after trimming. The
-> > way you would like to achieve that is to keep the verification state in
-> > the kernel in the form of PCR values.
-> >=20
-> > Those values mean what verifiers have already verified. Thus, for the
-> > next verification attempt, verifiers take the current PCR values as
-> > starting values, replay the truncated IMA measurement list, and again
-> > you match with the current PCR values and you trim until that point.
-> >=20
-> > So the benefit of this proposal is that you keep the verification of
-> > the IMA measurement list self-contained by using the last verification
-> > state (PCR starting value) and the truncated IMA measurement list as
-> > the inputs of your verification.
->=20
-> Your understanding as described above is correct.
->=20
-> >=20
-> > Let me reiterate on the trusted computing principles IMA relies on for
-> > providing the evidence about a system's integrity.
-> >=20
-> > Unless you are at the beginning of the measurement chain, where the
-> > Root of Trust for Measurement (RTM) is trusted by assumption, the
-> > measurements done by a component can be trusted because that component
-> > was already measured by the previous component in the boot chain,
-> > before it had any chance to corrupt the system.
-> >=20
-> > In the context of IMA, IMA can be trusted to make new measurements
-> > because it measures every file before those files could cause any harm
-> > to the system. So, potentially IMA and the kernel can be corrupted by
-> > any file.
-> >=20
-> > What you are proposing would not work, because you are placing trust in
-> > an input (the PCR starting value) that can be manipulated at any time
-> > by a corrupted kernel, before you had the chance to detect such
-> > corruption.
->=20
-> If starting PCR values can be corrupted, the IMA measurements list can=
-=20
-> also be corrupted, right?
+On Thu,  6 Nov 2025 14:59:03 +0800 Pingfan Liu <piliu@redhat.com> wrote:
 
-Yes, my point was that there could be a malicious update of the PCR
-starting value, so that the IMA measurements list with omitted entries
-looks not corrupted.
+> The kexec segment index will be required to extract the corresponding
+> information for that segment in kimage_map_segment(). Additionally,
+> kexec_segment already holds the kexec relocation destination address and
+> size. Therefore, the prototype of kimage_map_segment() can be changed.
 
-> More generally, what integrity guarantees can be provided (if any) if=20
-> the kernel itself is corrupted?
+Could we please have some reviewer input on thee two patches?
 
-None. This is exactly the point: measuring the files before they get
-accessed is the only way to provide reliable measurements. After that,
-we assume that the operation can corrupt both the user space processes
-and the kernel itself (the threat model takes into consideration only
-regular files).
+Thanks.
 
-But if that happened, replaying the IMA measurements list will reveal
-the attack at that point, and the remote verifier can conclude that any
-measurement after that cannot be trusted.
+(Pingfan, please cc linux-kernel on patches - it's where people go to
+find emails on lists which they aren't suscribed to)
 
-Your solution is storing the verification state in the kernel, and make
-remote verifiers rely on it for resuming their verification. But,
-because the kernel can get potentially corrupted by every measurement,
-the verification state can also get potentially corrupted by every
-measurement, thus cannot be trusted.
+(akpm goes off and subscribes to kexec@)
 
-The only way to make the verification of measurements list snapshots
-work is that the verification state is stored outside the system to
-evaluate (which can be assumed to be trusted), so that you are sure
-that the system is not advancing the PCR starting value by itself.
-
-> > Let me describe a scenario where I could take advantage of such
-> > weakness. After the first measurement list trim, I perform an attack on
-> > the system such that it corrupts the kernel. IMA added a new entry in
-> > the measurement list, which would reveal the attack.
-> >=20
-> > But, since I have control of the kernel, I conveniently update the PCR
-> > starting value to replay the new measurement entry, and remove the
-> > measurement entry from the measurement list.
-> >=20
-> > Now, from the perspective of the user space verifiers everything is
-> > fine, the truncated IMA measurement list is clean, no attack, and the
-> > current PCR values match by replaying the new PCR starting value with
-> > the remaining of the IMA measurement list.
->=20
-> Wouldn't the verifier detect the attack when it sees that its=20
-> recalculated PCR values don't match up to the PCR digest in the TPM quote=
-?
-
-I think not, because the system replayed the entries it wants to omit
-by itself. If the remote verifier is trusting the PCR starting value
-from the system, the remote verifier will replay the remaining
-measurement entries and will obtain the PCR current values.
-
-The same will happen if someone in the system just did a regular trim
-without the remote attestation agent noticing it. Unless the agent
-stored which was the last PCR starting value it took, it would not
-notice.
-
-But, again, if you rely on the remote attestation agent to maintain the
-verification state locally in the system, you are assuming that the
-agent will not be corrupted, which is a much stronger assumption than
-just letting the agent pass data to the remote verifier (which instead
-can be trusted to detect the PCR mismatch).
-
-So, yes, the point of trimming is to just get the IMA measurements list
-out of the kernel memory. I'm not opposing to trim N entries instead of
-the entire IMA measurements list, as long as: (1) the PCR matching is
-done in user space and is done only for convenience (can be totally
-untrusted); (2) the verification state is stored in the remote verifier
-(outside the system evaluated), and latter detects the PCR mismatch.
-
-Roberto
-
-> > So, in my opinion the kernel should just offer the ability to trim the
-> > measurement list, and a remote verifier should be responsible to verify
-> > the measurement list, without relying on anything from the system being
-> > evaluated.
-> >=20
-> > Sure, the remote verifier can verify just the trimmed IMA measurement
-> > list, but the remote verifier must solely rely on state information
-> > maintained internally.
-> >=20
-> > Roberto
-> >=20
-> > > The method has other advantages too:
-> > >=20
-> > >   1. It provides a userspace interface that can be used to precisely =
-control
-> > >      trim point, allowing for trim points to be optionally aligned wi=
-th
-> > >      userspace IMA event log validation.
-> > >=20
-> > >   2. It ensures that all necessary information required for continued=
- IMA
-> > >      log validation is made available via the userspace interface at =
-all
-> > >      times.
-> > >=20
-> > >   3. It provides a simple mechanism for userspace applications to det=
-ermine
-> > >      if the event log has been unexpectedly trimmed.
-> > >=20
-> > >   4. The duration for which the IMA Measurement list mutex must be he=
-ld (for
-> > >      trimming) is minimal.
-> > >=20
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> > > > B. Solution                                                        =
-    |
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> > >=20
-> > > ---------------------------------------------------------------------=
------
-> > > > B.1 Overview                                                       =
-    |
-> > > ---------------------------------------------------------------------=
------
-> > >=20
-> > > The kernel trims the IMA event log based on PCR values supplied by us=
-erspace.
-> > > The core principles leveraged are as follows:
-> > >=20
-> > >   - Given an IMA event log, PCR values for each IMA event can be obta=
-ined by
-> > >     recalulating the PCR extension for each event. Thus processing N =
-events
-> > >     from the start will yield PCR values as of event N. This is refer=
-red to
-> > >     as "IMA event log replay".
-> > >=20
-> > >   - To get the PCR value for event N + 1, only the PCR value as of ev=
-ent N
-> > >     is needed. If this can be known, events till and including N can =
-be
-> > >     safely purged.
-> > >=20
-> > > Putting it all together, we get the following userspace + kernel flow=
-:
-> > >=20
-> > >   1. A userspace application replays the IMA event log to generate PC=
-R
-> > >      values and then triggers a trim by providing these values to the=
- kernel
-> > >      (by writing to a pseudo file).
-> > >=20
-> > >      Optionally, the userspace application may verify these PCR value=
-s
-> > >      against the corresponding TPM quote, and trigger trimming only i=
-f
-> > >      the calculated PCR values match up to the expectations in the qu=
-ote's
-> > >      PCR digest.
-> > >=20
-> > >   2. The kernel uses the userspace supplied PCR values to trim the IM=
-A
-> > >      measurements list at a specific point, and so these are referred=
- to as
-> > >      "trim-to PCR values" in this context.
-> > >=20
-> > >      Note that the kernel doesn't really understand what these usersp=
-ace
-> > >      provided PCR values mean or what IMA event they correspond to, a=
-nd so
-> > >      it does its own IMA event replay till either the replayed PCR va=
-lues
-> > >      match with the userspace provided ones, or it runs out of events=
-.
-> > >=20
-> > >      If a match is found, the kernel can proceed with trimming the IM=
-A
-> > >      measurements list. This is done in two steps, to keep locking co=
-ntext
-> > >      minimal.
-> > >=20
-> > >      step 1: Find and return the list entry (as a count from head) of=
- exact
-> > >              match. This does not lock the measurements list mutex, e=
-nsuring
-> > >              new events can be appended to the log.
-> > >=20
-> > >      step 2: Lock the measurements list mutex and trim the measuremen=
-ts list
-> > >              at the previously identified list entry.
-> > >=20
-> > >     If the trim is successful, the trim-to PCR values are saved as "s=
-tarting
-> > >     PCR values". The next time userspace wants to replay the IMA even=
-t log,
-> > >     it will use the starting PCR values as the base for the IMA event=
- log
-> > >     replay.
-> > >=20
-> > > ---------------------------------------------------------------------=
------
-> > > > B.2 Kernel Interfaces                                              =
-    |
-> > > ---------------------------------------------------------------------=
------
-> > >=20
-> > > A new configfs pseudo file /sys/kernel/config/ima/pcrs that supports =
-the
-> > > following operations is exposed.
-> > >=20
-> > >    read: returns starting PCR values stored in the kernel (within IMA
-> > >          specifically).
-> > >=20
-> > >   write: writes trim-to PCR values to trigger trimming. If trimming i=
-s
-> > >          successful, trim-to PCR values are stored as starting PCR va=
-lues.
-> > >          requires root privileges.
-> > >=20
-> > > ---------------------------------------------------------------------=
------
-> > > > B.3 Walk-through with a real example                               =
-    |
-> > > ---------------------------------------------------------------------=
------
-> > >=20
-> > > This is a real example from a test run.
-> > >=20
-> > > Suppose this IMA policy is deployed:
-> > >=20
-> > >    measure func=3DFILE_CHECK mask=3DMAY_READ pcr=3D10
-> > >    measure func=3DFILE_CHECK mask=3DMAY_WRITE pcr=3D11
-> > >=20
-> > > When the policy is deployed, a zero digest starting PCR value will be=
- set
-> > > for each PCR used. If the TPM supports multiple hashbanks, there will=
- be
-> > > one starting PCR value per PCR, per TPM hashbank. This can be seen in=
- the
-> > > following hexdump:
-> > >=20
-> > > $ sudo hexdump -vC /sys/kernel/config/ima/pcrs
-> > > 00000000  70 63 72 31 30 3a 73 68  61 31 3a 00 00 00 00 00  |pcr10:sh=
-a1:.....|
-> > > 00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 70  |........=
-.......p|
-> > > 00000020  63 72 31 31 3a 73 68 61  31 3a 00 00 00 00 00 00  |cr11:sha=
-1:......|
-> > > 00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 70 63  |........=
-......pc|
-> > > 00000040  72 31 30 3a 73 68 61 32  35 36 3a 00 00 00 00 00  |r10:sha2=
-56:.....|
-> > > 00000050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |........=
-........|
-> > > 00000060  00 00 00 00 00 00 00 00  00 00 00 70 63 72 31 31  |........=
-...pcr11|
-> > > 00000070  3a 73 68 61 32 35 36 3a  00 00 00 00 00 00 00 00  |:sha256:=
-........|
-> > > 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |........=
-........|
-> > > 00000090  00 00 00 00 00 00 00 00  70 63 72 31 30 3a 73 68  |........=
-pcr10:sh|
-> > > 000000a0  61 33 38 34 3a 00 00 00  00 00 00 00 00 00 00 00  |a384:...=
-........|
-> > > 000000b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |........=
-........|
-> > > 000000c0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |........=
-........|
-> > > 000000d0  00 00 00 00 00 70 63 72  31 31 3a 73 68 61 33 38  |.....pcr=
-11:sha38|
-> > > 000000e0  34 3a 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |4:......=
-........|
-> > > 000000f0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |........=
-........|
-> > > 00000100  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |........=
-........|
-> > > 00000110  00 00                                             |..|
-> > > 00000112
-> > >=20
-> > > Let's say that a userspace utility replays the IMA event log, and tri=
-ggers
-> > > trimming by writing the following PCR values (i.e. trim-to PCR values=
-) to the
-> > > pseudo file:
-> > >=20
-> > > pcr10:sha256:8268782906555cf3aefc179f815c878527dd4e67eaa836572ebabab3=
-1977922c
-> > > pcr11:sha256:4c7f31927183eacb53d51d95b0162916fd3fca51a8d1efc6dde3805e=
-b891fe41
-> > >=20
-> > > The trim is successful,
-> > >=20
-> > > 1. Some number of entries from the measurements log will disappear. T=
-his
-> > >     can be verified by reading out the ASCII or binary IMA measuremen=
-ts
-> > >     file.
-> > >=20
-> > > 2. The trim-to PCR values are saved as starting PCR values. This can =
-be
-> > >     verified by reading out the pseudo file again as shown below. Not=
-e that
-> > >     even through only sha256 PCR values were written, the kernel popu=
-lated
-> > >     sha1 and sha384 starting values as well.
-> > >=20
-> > > $ sudo hexdump -vC /sys/kernel/config/ima/pcrs
-> > >=20
-> > > 00000000  70 63 72 31 30 3a 73 68  61 31 3a c4 7f 9d 00 68  |pcr10:sh=
-a1:....h|
-> > > 00000010  e4 86 71 bf bc ae f0 10  12 ff 68 e2 9e 74 e4 70  |..q.....=
-..h..t.p|
-> > > 00000020  63 72 31 31 3a 73 68 61  31 3a 90 d7 17 ac 60 4d  |cr11:sha=
-1:....`M|
-> > > 00000030  c8 25 ce 77 7d 9d 94 cf  44 7b b2 2e 2e e2 70 63  |.%.w}...=
-D{....pc|
-> > > 00000040  72 31 30 3a 73 68 61 32  35 36 3a 82 68 78 29 06  |r10:sha2=
-56:.hx).|
-> > > 00000050  55 5c f3 ae fc 17 9f 81  5c 87 85 27 dd 4e 67 ea  |U\......=
-\..'.Ng.|
-> > > 00000060  a8 36 57 2e ba ba b3 19  77 92 2c 70 63 72 31 31  |.6W.....=
-w.,pcr11|
-> > > 00000070  3a 73 68 61 32 35 36 3a  4c 7f 31 92 71 83 ea cb  |:sha256:=
-L.1.q...|
-> > > 00000080  53 d5 1d 95 b0 16 29 16  fd 3f ca 51 a8 d1 ef c6  |S.....).=
-.?.Q....|
-> > > 00000090  dd e3 80 5e b8 91 fe 41  70 63 72 31 30 3a 73 68  |...^...A=
-pcr10:sh|
-> > > 000000a0  61 33 38 34 3a 8e d6 12  18 b1 d6 cd 95 16 98 33  |a384:...=
-.......3|
-> > > 000000b0  2b 7d a2 d6 d9 05 c7 e8  5b 15 b0 91 c5 fc 23 d1  |+}......=
-[.....#.|
-> > > 000000c0  f9 a8 8d 60 50 5c e9 64  5f d7 b3 b2 f1 9c 90 0a  |...`P\.d=
-_.......|
-> > > 000000d0  45 53 5d b2 57 70 63 72  31 31 3a 73 68 61 33 38  |ES].Wpcr=
-11:sha38|
-> > > 000000e0  34 3a 25 fc 21 28 31 5a  f7 c6 fb 0f 40 c9 06 e6  |4:%.!(1Z=
-....@...|
-> > > 000000f0  c5 da ed 20 61 a1 03 54  4f 67 18 88 82 0f 48 d1  |... a..T=
-Og....H.|
-> > > 00000100  2f e0 3d 36 46 5e 94 a4  88 51 f8 91 39 7e e5 97  |/.=3D6F^=
-...Q..9~..|
-> > > 00000110  2c c5                                             |,.|
-> > > 00000112
-> > >=20
-> > > ---------------------------------------------------------------------=
------
-> > > > C. Footnotes                                                       =
-    |
-> > > ---------------------------------------------------------------------=
------
-> > >=20
-> > > 1. The 'pcrs' pseudo file is currently part of configfs. This was due=
- to
-> > >     some early internal feedback in a different context. This can as =
-well be
-> > >     in securityfs with the rest of the IMA pseudo files.
-> > >=20
-> > > 2. PCR values are never read out of the TPM at any point. All PCR val=
-ues
-> > >     used are derived from IMA event log replay.
-> > >=20
-> > > 3. Code is "RFC quality". Refinements can be made if the method is ac=
-cepted.
-> > >=20
-> > > 4. For functional validation, base kernel version was 6.17 stable, wi=
-th the
-> > >     most recent tested version being 6.17.8.
-> > >=20
-> > > 5. Code has been validated to some degree using a python-based intern=
-al test
-> > >     tool. This can be published if there is community interest.
-> > >=20
-> > > Steven Chen (1):
-> > >    ima: Implement IMA event log trimming
-> > >=20
-> > >   drivers/Kconfig                       |   2 +
-> > >   drivers/Makefile                      |   1 +
-> > >   drivers/ima/Kconfig                   |  13 +
-> > >   drivers/ima/Makefile                  |   2 +
-> > >   drivers/ima/ima_config_pcrs.c         | 291 ++++++++++++++++++
-> > >   include/linux/ima.h                   |  27 ++
-> > >   security/integrity/ima/Makefile       |   4 +
-> > >   security/integrity/ima/ima.h          |   8 +
-> > >   security/integrity/ima/ima_init.c     |  44 +++
-> > >   security/integrity/ima/ima_log_trim.c | 421 +++++++++++++++++++++++=
-+++
-> > >   security/integrity/ima/ima_policy.c   |   7 +-
-> > >   security/integrity/ima/ima_queue.c    |   5 +-
-> > >   12 files changed, 821 insertions(+), 4 deletions(-)
-> > >   create mode 100644 drivers/ima/Kconfig
-> > >   create mode 100644 drivers/ima/Makefile
-> > >   create mode 100644 drivers/ima/ima_config_pcrs.c
-> > >   create mode 100644 security/integrity/ima/ima_log_trim.c
-> > >=20
-> >=20
->=20
-
+> Fixes: 07d24902977e ("kexec: enable CMA based contiguous allocation")
+> Signed-off-by: Pingfan Liu <piliu@redhat.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Baoquan He <bhe@redhat.com>
+> Cc: Mimi Zohar <zohar@linux.ibm.com>
+> Cc: Roberto Sassu <roberto.sassu@huawei.com>
+> Cc: Alexander Graf <graf@amazon.com>
+> Cc: Steven Chen <chenste@linux.microsoft.com>
+> Cc: <stable@vger.kernel.org>
+> To: kexec@lists.infradead.org
+> To: linux-integrity@vger.kernel.org
+> ---
+>  include/linux/kexec.h              | 4 ++--
+>  kernel/kexec_core.c                | 9 ++++++---
+>  security/integrity/ima/ima_kexec.c | 4 +---
+>  3 files changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index ff7e231b0485..8a22bc9b8c6c 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -530,7 +530,7 @@ extern bool kexec_file_dbg_print;
+>  #define kexec_dprintk(fmt, arg...) \
+>          do { if (kexec_file_dbg_print) pr_info(fmt, ##arg); } while (0)
+>  
+> -extern void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size);
+> +extern void *kimage_map_segment(struct kimage *image, int idx);
+>  extern void kimage_unmap_segment(void *buffer);
+>  #else /* !CONFIG_KEXEC_CORE */
+>  struct pt_regs;
+> @@ -540,7 +540,7 @@ static inline void __crash_kexec(struct pt_regs *regs) { }
+>  static inline void crash_kexec(struct pt_regs *regs) { }
+>  static inline int kexec_should_crash(struct task_struct *p) { return 0; }
+>  static inline int kexec_crash_loaded(void) { return 0; }
+> -static inline void *kimage_map_segment(struct kimage *image, unsigned long addr, unsigned long size)
+> +static inline void *kimage_map_segment(struct kimage *image, int idx)
+>  { return NULL; }
+>  static inline void kimage_unmap_segment(void *buffer) { }
+>  #define kexec_in_progress false
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index fa00b239c5d9..9a1966207041 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -960,17 +960,20 @@ int kimage_load_segment(struct kimage *image, int idx)
+>  	return result;
+>  }
+>  
+> -void *kimage_map_segment(struct kimage *image,
+> -			 unsigned long addr, unsigned long size)
+> +void *kimage_map_segment(struct kimage *image, int idx)
+>  {
+> +	unsigned long addr, size, eaddr;
+>  	unsigned long src_page_addr, dest_page_addr = 0;
+> -	unsigned long eaddr = addr + size;
+>  	kimage_entry_t *ptr, entry;
+>  	struct page **src_pages;
+>  	unsigned int npages;
+>  	void *vaddr = NULL;
+>  	int i;
+>  
+> +	addr = image->segment[idx].mem;
+> +	size = image->segment[idx].memsz;
+> +	eaddr = addr + size;
+> +
+>  	/*
+>  	 * Collect the source pages and map them in a contiguous VA range.
+>  	 */
+> diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+> index 7362f68f2d8b..5beb69edd12f 100644
+> --- a/security/integrity/ima/ima_kexec.c
+> +++ b/security/integrity/ima/ima_kexec.c
+> @@ -250,9 +250,7 @@ void ima_kexec_post_load(struct kimage *image)
+>  	if (!image->ima_buffer_addr)
+>  		return;
+>  
+> -	ima_kexec_buffer = kimage_map_segment(image,
+> -					      image->ima_buffer_addr,
+> -					      image->ima_buffer_size);
+> +	ima_kexec_buffer = kimage_map_segment(image, image->ima_segment_index);
+>  	if (!ima_kexec_buffer) {
+>  		pr_err("Could not map measurements buffer.\n");
+>  		return;
+> -- 
+> 2.49.0
 
