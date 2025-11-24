@@ -1,121 +1,128 @@
-Return-Path: <linux-integrity+bounces-7665-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7666-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0E21C7E4A4
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Nov 2025 18:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F191C7FAC7
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Nov 2025 10:42:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 845F64E148F
-	for <lists+linux-integrity@lfdr.de>; Sun, 23 Nov 2025 17:11:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0FCDF4E2846
+	for <lists+linux-integrity@lfdr.de>; Mon, 24 Nov 2025 09:42:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C85233722;
-	Sun, 23 Nov 2025 17:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087582F60D6;
+	Mon, 24 Nov 2025 09:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wo8WQpA6";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="H8a+b7E4"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="U58iFAJL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFEA14F125;
-	Sun, 23 Nov 2025 17:10:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99021DEFE9;
+	Mon, 24 Nov 2025 09:42:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763917860; cv=none; b=K++/V/Ye4GGVMMVI7ch5SinaBQhunRrEKTwRMDur3QU1zyTRoLcqB3Emh9i2fEyBiGG7lfa8vfhEOl2Wr/vFks8NoQvdI+ykzmKf8W52C92HqLXJzSFP0cuJEvQjnjGysONQAlfgUyFSqJFNdH02yxRMuyLgOVcoUb24qn+tSc8=
+	t=1763977323; cv=none; b=a9YbMp9daI5sLlap/znnv8ghkVvBm0qZNtIgDVJKiTBHroUP/JbuglzCLNXhjRh1dawrig8YDyYsZEFkZr1BaNIhP7ycX4kSTpmCzmlWRiit7Uedyqanr6JyQbz9Pwru4ynTcpEcUL6RN363nwpWz8Cc2xr6gdJUXBJUUpL/4eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763917860; c=relaxed/simple;
-	bh=1TvV2CIHODDVvcsCFmEG146E5nX65wm9DJeM5XXQwW8=;
+	s=arc-20240116; t=1763977323; c=relaxed/simple;
+	bh=ggo0FIh6yZF0vZdd1wccMpu7GQYzL53JaLhCrTFUHSc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IyQw9rNx7Y83G9VuO8fNSOybgs1V6SSB1o2n2QAXsv+7Gc9tPvHD3YGy4/+kpJuhNrnrktc+uwsEljtsO+lRz3JfK2QMFP2CuWG67pZEaqa3Qpf9Qn0uhGhIeKtxybS0F4zI4I8mwZbjD9ip+dd6tC2uCcTOb79B/1Iixf9wJU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wo8WQpA6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=H8a+b7E4; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Sun, 23 Nov 2025 18:10:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763917856;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1TvV2CIHODDVvcsCFmEG146E5nX65wm9DJeM5XXQwW8=;
-	b=wo8WQpA6NfO5oq1yU5MNIxMljtmOFymvIKwf+z4UpWIwlmWK66C9CioLMyGAOPzFA0j76x
-	feTDuA2whfyAklcQwWO/kFWvgwWMGymo+2py2F9m0snFPcsiGb2px0IjJZXqcGHrvur9VH
-	JltI0wdrt+vgV2fQLaCE9TaaYnJ1sEPv3Xcrqp0ibg+AnJOIAG+nn4YMVG874FGgvxpo2n
-	MJMTZztLqBmS37z8mUn6XD5/rXrSl5JNZ15qQTziNCOzq622/JthL+xDeTbEIH+I9kWOCg
-	JKL5L5uhHGwBitxvsz2++MsIcD4j/XrNx79t/M05VLbd8rdWlYJFtlifZn2GHw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763917856;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1TvV2CIHODDVvcsCFmEG146E5nX65wm9DJeM5XXQwW8=;
-	b=H8a+b7E4pwlDvJgRrStalE/DblBpY6KGjVhb8qJAv2yo/f7vbjkwGdH54cVGXBkqaDHNNk
-	EznfI2lT8cZDOYBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Paul Moore <paul@paul-moore.com>
-Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v3 7/9] module: Move lockdown check into generic module
- loader
-Message-ID: <20251123171054.wnPvVQrF@linutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PxMR+jnN1zVEX52nQ9iWam/o1T8e6tsCPWUlF5Ypc9yGMXfeaJUp+f6FbAPs0qziVRPdMW4s04gy1c1DaA56Qkg6PYSvgwZmiWOGnICsRt8NXxvSLgwK2K2XjfeoKZgxDGN1RSMP3ut+o+tSfIN/elthx7ch8DFXQOau269dLqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=U58iFAJL; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1763977313;
+	bh=ggo0FIh6yZF0vZdd1wccMpu7GQYzL53JaLhCrTFUHSc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=U58iFAJLixclCXqRuNo0HJp1vUKu08nuKIB/G0v66x/wLz2rOHOAdU7iWZmANdZ0L
+	 OxN1WL/KFOB3VA2k+WEf+wGRZ0ObkZhP2BdZqKFF9GbzjB+opzoU/Ep9EEw+75oCNx
+	 En12qDqZaV2WgkqGfVMzxnf7Jo6mqaQMTEmZwMho=
+Date: Mon, 24 Nov 2025 10:41:52 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+Cc: James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
+	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
+	kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>, 
+	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3 0/9] module: Introduce hash-based integrity checking
+Message-ID: <a8802164-60c0-441f-973a-5fda415caff7@t-8ch.de>
 References: <20250429-module-hashes-v3-0-00e9258def9e@weissschuh.net>
- <20250429-module-hashes-v3-7-00e9258def9e@weissschuh.net>
- <20251119112055.W1l5FOxc@linutronix.de>
- <CAHC9VhTuf1u4B3uybZxdojcmz5sFG+_JHUCC=C0N=9gFDmurHg@mail.gmail.com>
+ <f1dca9daa01d0d2432c12ecabede3fa1389b1d29.camel@HansenPartnership.com>
+ <20251119154834.A-tQsLzh@linutronix.de>
+ <20251123170502.Ai5Ig66Z@breakpoint.cc>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAHC9VhTuf1u4B3uybZxdojcmz5sFG+_JHUCC=C0N=9gFDmurHg@mail.gmail.com>
+In-Reply-To: <20251123170502.Ai5Ig66Z@breakpoint.cc>
 
-On 2025-11-19 14:55:47 [-0500], Paul Moore wrote:
-> On Wed, Nov 19, 2025 at 6:20=E2=80=AFAM Sebastian Andrzej Siewior
-> <bigeasy@linutronix.de> wrote:
-> > On 2025-04-29 15:04:34 [+0200], Thomas Wei=C3=9Fschuh wrote:
-> > > The lockdown check buried in module_sig_check() will not compose well
-> > > with the introduction of hash-based module validation.
-> >
-> > An explanation of why would be nice.
->=20
-> /me shrugs
->=20
-> I thought the explanation was sufficient.
+Hi Sebastian,
 
-Okay. So if it is just me and everyone is well aware then okay.
+On 2025-11-23 18:05:02+0100, Sebastian Andrzej Siewior wrote:
+> On 2025-11-19 16:48:34 [+0100], Sebastian Andrzej Siewior wrote:
+> > I fully agree with this approach. I don't like the big hash array but I
+> > have an idea how to optimize that part. So I don't see a problem in the
+> > long term.
+> 
+> The following PoC creates a merkle tree from a set files ending with .ko
+> within the specified directory. It will write a .hash files containing
+> the required hash for each file for its validation. The root hash is
+> saved as "hash_root" and "hash_root.h" in the directory.
 
-Sebastian
+Thanks a lot!
+
+> The Debian kernel shipps 4256 modules:
+> 
+> | $ time ./compute_hashes mods_deb
+> | Files 4256 levels: 13 root hash: 97f8f439d63938ed74f48ec46dbd75c2b5e5b49f012a414e89b6f0e0f06efe84
+> | 
+> | real    0m0,732s
+> | user    0m0,304s
+> | sys     0m0,427s
+> 
+> This computes the hashes for all the modules it found in the mods_deb
+> folder.
+> The kernel needs the root hash (for sha256 32 bytes) and the depth of
+> the tree (4 bytes). That are 36 bytes regardless of the number of
+> modules that are built.
+> In this case, the attached hash for each module is 420 bytes. This is 4
+> bytes (position in the tree) + 13 (depth) * 32.
+> The verification process requires 13 hash operation to hash through the
+> tree and verify against the root hash.
+
+We'll need to store the proof together with the modules somewhere.
+Regular module signatures are stored as PKCS#7 and appended to the module
+file. If we can also encode the merkle proof as PKCS#7, the integration
+into the existing infrastructure should be much easier.
+It will require some changes to this series, but honestly the Merkle
+tree aproach looks like the clear winner here.
+
+> For convience, the following PoC can also be found at
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/mtree-hashed-mods.git/
+> 
+> which also includes a small testsuite.
+
+(...)
+
+
+Thomas
 
