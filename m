@@ -1,54 +1,54 @@
-Return-Path: <linux-integrity+bounces-7693-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7694-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C552C8EA19
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 14:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92336C8EA22
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 14:56:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C054E3527F8
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 13:55:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 43EBE352049
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 13:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A753328E1;
-	Thu, 27 Nov 2025 13:55:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6129232E74B;
+	Thu, 27 Nov 2025 13:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZQxChmo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y1K7fa1U"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C745E32E74B;
-	Thu, 27 Nov 2025 13:55:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BC632E749;
+	Thu, 27 Nov 2025 13:55:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764251713; cv=none; b=AvfU3s8AON7fjDKvtZGZdAtFtymm4Sra4QAtBe0xC7/3gFxvppaCjbYozQLnuFQTmL98t7QGML5M9X4+oE7qhaBizPXHeD85iKccPxTH3KuBWH0vWakMOHh/xHVJZAIBOxGvCSzejeDqC1+TeKgvHtQSSxGdQbIBubU+IFBTQD8=
+	t=1764251719; cv=none; b=HHkv4s3VciL1U8uRVtvdgNhaMfnam5GscWgUQJQd/Ci3RX6EgIVxs4jmPkekivbNUbPjQ8/b8ZGKZd/JjjphTHgCj+PBmObwKNkWIKxC14EWqtJQxfeKZM/iyJz7UDuE6DyjjS3EQ0BpQjodrwZc7XWQKMQqQwsoNbSWAcfcqss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764251713; c=relaxed/simple;
-	bh=eA0cfKfU41iaZNTEtKcAhl4jAiD+DBmTitPZhDCP/Ek=;
+	s=arc-20240116; t=1764251719; c=relaxed/simple;
+	bh=rU1D2RrYSE4OoU7aSIo1o0h6l5hzXHRKOJ/MUDPasdM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gGOPVIDscyzw896ZPNiuw/h9HVYVP8L5IKne6guiilNQJIg/NkvZ685S03o6eoXIWrRq6St4a0Frq8XndyfQrT7oUP9bUZXIcR36bK+IXAxmscnJqNGX7C3+rPwATUjqT79ZNaVL1dHzAg3iXUQVu+RLAtuCe85g1ICtmJs0jIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZQxChmo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9991C116C6;
-	Thu, 27 Nov 2025 13:55:12 +0000 (UTC)
+	 MIME-Version; b=r60eZ00VGVFV5cLKbF4ekIC6gWRO/f9lvkeKdjIV7HGsCIwSuJU3+JBMTZTGIpE+mdNIqOBR5kKI5m5psQz+7agnZdYPLNxNfHcGa+jCBRyGDCIeYjALhJwxHI9LROxIQO4zgGx7ZphRawv9j5HLvkXhAH15WwFO7muo/P1dZt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y1K7fa1U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270C7C4CEF8;
+	Thu, 27 Nov 2025 13:55:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764251713;
-	bh=eA0cfKfU41iaZNTEtKcAhl4jAiD+DBmTitPZhDCP/Ek=;
+	s=k20201202; t=1764251718;
+	bh=rU1D2RrYSE4OoU7aSIo1o0h6l5hzXHRKOJ/MUDPasdM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SZQxChmoLmeBM5Kj77kceX0TlaPIakJY2Llxix3vDNrhqIk6PtvgkVxsUN4IEQpY5
-	 8yJIbuBA+1accaX4VEEui4frFGZMoVLQN6RTIWrx4w12PIfhQOYyVwWuX0cGJx5rMC
-	 KP3fUgIpI31PPX+DRD5WTy1306as4byhXPs2iTDlOVYpJAAFvCs6uETYtvz5j/UCQD
-	 iVGVPiQHBSzR5v5IbSpkZlTsYWQD8ieR4tPIKjtzaC0SBeHrBKrjzuf93+/sjAzP5c
-	 hPxs9RPHyVq0gKcU89S+1wOLtF3y11bWnus5rQQcDShNiY62HbeA81MBAHh1gS/6D2
-	 8cCZQZG+IV5hQ==
+	b=Y1K7fa1U2lFRJU4mQPeIk6lu5Gf7Bq9ZFIdrNojSyH/T2Jz/0gilTvP+ogaLqfYfq
+	 UFXzxg1vMMMXlKWyX+C7NlC+GXeZ8UngSLgG2Iy+QmYqwO4OcPQ2pvCuye2P34chud
+	 jGrJPWGzR0XvwXZ4tyluXdrjKWqvMLNzge8j5RnVgjTWKmH2RNncyoH/zdvXDcG5VO
+	 DRCvpB7jS93exR8J8IG+XkBJ1o0cYY2dcURFT0DzbPcfC+sgypoBQI0oNuhrHZzcN0
+	 oa54G+KqfVtl2pVAnyhRKg5kKcI3d2SIvPkJ2CU3K3ORyeGuqEJ8t/syWvFPBhq50b
+	 W4uaLj5bd0j6A==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: ross.philipson@oracle.com,
 	Jonathan McDowell <noodles@earth.li>,
 	Stefano Garzarella <sgarzare@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	stable@vger.kernel.org,
+	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
 	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
 	Mimi Zohar <zohar@linux.ibm.com>,
 	David Howells <dhowells@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
@@ -57,9 +57,9 @@ Cc: ross.philipson@oracle.com,
 	keyrings@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v7 04/11] KEYS: trusted: Fix memory leak in tpm2_load()
-Date: Thu, 27 Nov 2025 15:54:36 +0200
-Message-ID: <20251127135445.2141241-5-jarkko@kernel.org>
+Subject: [PATCH v7 05/11] KEYS: trusted: Use tpm_ret_to_err() in trusted_tpm2
+Date: Thu, 27 Nov 2025 15:54:37 +0200
+Message-ID: <20251127135445.2141241-6-jarkko@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251127135445.2141241-1-jarkko@kernel.org>
 References: <20251127135445.2141241-1-jarkko@kernel.org>
@@ -71,102 +71,99 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tpm2_load() allocates a blob indirectly via tpm2_key_decode() but it is
-not freed in all failure paths. Address this with a scope-based cleanup
-helper __free(). For legacy blobs, the implicit de-allocation is gets
-disable by no_free_ptr().
+From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-Cc: stable@vger.kernel.org # v5.13+
-Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Use tpm_ret_to_err() to transmute TPM return codes in trusted_tpm2.
+
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+Acked-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
-v7:
-- Fix compiler warning.
 v6:
-- A new patch in this version.
+- No changes.
+v5:
+- No changes.
+v4:
+- No changes.
+v3:
+- No changes.
+v2:
+- New patch split out from the fix.
 ---
- security/keys/trusted-keys/trusted_tpm2.c | 24 +++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ security/keys/trusted-keys/trusted_tpm2.c | 26 ++++++-----------------
+ 1 file changed, 7 insertions(+), 19 deletions(-)
 
 diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 3205732fb4b7..00bc1afb32c8 100644
+index 00bc1afb32c8..c9973ac46041 100644
 --- a/security/keys/trusted-keys/trusted_tpm2.c
 +++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -98,9 +98,8 @@ struct tpm2_key_context {
- 	u32 priv_len;
- };
- 
--static int tpm2_key_decode(struct trusted_key_payload *payload,
--			   struct trusted_key_options *options,
--			   u8 **buf)
-+static void *tpm2_key_decode(struct trusted_key_payload *payload,
-+			     struct trusted_key_options *options)
- {
- 	int ret;
- 	struct tpm2_key_context ctx;
-@@ -111,16 +110,15 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
- 	ret = asn1_ber_decoder(&tpm2key_decoder, &ctx, payload->blob,
- 			       payload->blob_len);
- 	if (ret < 0)
--		return ret;
-+		return ERR_PTR(ret);
- 
- 	if (ctx.priv_len + ctx.pub_len > MAX_BLOB_SIZE)
--		return -EINVAL;
-+		return ERR_PTR(-EINVAL);
- 
- 	blob = kmalloc(ctx.priv_len + ctx.pub_len + 4, GFP_KERNEL);
- 	if (!blob)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
--	*buf = blob;
- 	options->keyhandle = ctx.parent;
- 
- 	memcpy(blob, ctx.priv, ctx.priv_len);
-@@ -128,7 +126,7 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
- 
- 	memcpy(blob, ctx.pub, ctx.pub_len);
- 
--	return 0;
-+	return blob;
- }
- 
- int tpm2_key_parent(void *context, size_t hdrlen,
-@@ -372,6 +370,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 			 struct trusted_key_options *options,
- 			 u32 *blob_handle)
- {
-+	u8 *blob_ref __free(kfree) = NULL;
- 	struct tpm_buf buf;
- 	unsigned int private_len;
- 	unsigned int public_len;
-@@ -380,11 +379,14 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 	int rc;
- 	u32 attrs;
- 
--	rc = tpm2_key_decode(payload, options, &blob);
--	if (rc) {
-+	blob = tpm2_key_decode(payload, options);
-+	if (IS_ERR(blob)) {
- 		/* old form */
- 		blob = payload->blob;
- 		payload->old_format = 1;
-+	} else {
-+		/* Bind to cleanup: */
-+		blob_ref = blob;
+@@ -331,25 +331,19 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
  	}
  
- 	/* new format carries keyhandle but old format doesn't */
-@@ -449,8 +451,6 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 			(__be32 *) &buf.data[TPM_HEADER_SIZE]);
+ 	blob_len = tpm2_key_encode(payload, options, &buf.data[offset], blob_len);
++	if (blob_len < 0)
++		rc = blob_len;
  
  out:
--	if (blob != payload->blob)
--		kfree(blob);
+ 	tpm_buf_destroy(&sized);
  	tpm_buf_destroy(&buf);
  
- 	if (rc > 0)
+-	if (rc > 0) {
+-		if (tpm2_rc_value(rc) == TPM2_RC_HASH)
+-			rc = -EINVAL;
+-		else
+-			rc = -EPERM;
+-	}
+-	if (blob_len < 0)
+-		rc = blob_len;
+-	else
++	if (!rc)
+ 		payload->blob_len = blob_len;
+ 
+ out_put:
+ 	tpm_put_ops(chip);
+-	return rc;
++	return tpm_ret_to_err(rc);
+ }
+ 
+ /**
+@@ -453,10 +447,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ out:
+ 	tpm_buf_destroy(&buf);
+ 
+-	if (rc > 0)
+-		rc = -EPERM;
+-
+-	return rc;
++	return tpm_ret_to_err(rc);
+ }
+ 
+ /**
+@@ -519,8 +510,6 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 	tpm_buf_fill_hmac_session(chip, &buf);
+ 	rc = tpm_transmit_cmd(chip, &buf, 6, "unsealing");
+ 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+-	if (rc > 0)
+-		rc = -EPERM;
+ 
+ 	if (!rc) {
+ 		data_len = be16_to_cpup(
+@@ -553,7 +542,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 
+ out:
+ 	tpm_buf_destroy(&buf);
+-	return rc;
++	return tpm_ret_to_err(rc);
+ }
+ 
+ /**
+@@ -585,6 +574,5 @@ int tpm2_unseal_trusted(struct tpm_chip *chip,
+ 
+ out:
+ 	tpm_put_ops(chip);
+-
+-	return rc;
++	return tpm_ret_to_err(rc);
+ }
 -- 
 2.52.0
 
