@@ -1,125 +1,228 @@
-Return-Path: <linux-integrity+bounces-7703-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7705-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 620BCC8FA11
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 18:18:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79849C8FBFF
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 18:46:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03C963ABCDC
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 17:18:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16EFC3A9048
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 17:46:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C782E7BDF;
-	Thu, 27 Nov 2025 17:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B63D2ED848;
+	Thu, 27 Nov 2025 17:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="agMNamLv"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02A22DC780;
-	Thu, 27 Nov 2025 17:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891232D6E5C;
+	Thu, 27 Nov 2025 17:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764263885; cv=none; b=KdMS5i80Wca/hw8/OQXjXFy3wl7XbfFf+WKbm9rmomzKhgCtXJl/TMp4JQA6ZZ2TlW7BkhO3Jw9a5jhKHamLbCduiTEN56kUOSXhgr03PHRVTrq1eYfVWUqfU/LoGuhOzcFLKxwQUjf81fltokrFXoWNEcM7fnx++i8u17Ok/nw=
+	t=1764265575; cv=none; b=Rvoyf5KUNmpJ1IEtePhXQrj8ZmThu3P5mSj0zu4ldaT6BaFwyDgNK2yuCySdrCZTmOgYRRK4d5TTNSwq2RlJKoIu87N5i8UUg2ARj03btX1+iWFPXKWWcqptKaGFyuaXK/lcb1D2hMyt6R0mT6vTr5Z3FJl5WxYUKQJY8wVvrxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764263885; c=relaxed/simple;
-	bh=a8WR3f67LKcyBamT2NsN62oLNE7f8zUSAqolLpJGnps=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jh3o8Zq0eeYLrOe1Tr1WQwPaMRbH0zHLO+xlB1N5x4DpH2UeJsx5shBGcgTgzK1BMlHeduFxWGrHw1PMqyizqHzrEJPsm7DhDY/uRuLJbymn/FR/a9OZpMuOlNErul+y14ocPqGJ1vXFMl0KqJPniTROh7atx+b3/ZbhZQ6YETA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dHNPt3XPjz1HC5W;
-	Fri, 28 Nov 2025 01:16:34 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id E9F371402DB;
-	Fri, 28 Nov 2025 01:17:54 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDnwIi6hyhpM2cvAQ--.65380S2;
-	Thu, 27 Nov 2025 18:17:54 +0100 (CET)
-Message-ID: <a6e73690e73b7a3e190719d179dbc73b93d1c1f1.camel@huaweicloud.com>
-Subject: Re: [PATCH v7 01/11] tpm: Cap the number of PCR banks
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+	s=arc-20240116; t=1764265575; c=relaxed/simple;
+	bh=I447F3im92CkiC4QnAuGz/QXkpu56lpsbIDxx+gs1so=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ee4gIEeuDD37ffHGeLb9zTOoTlyyUdMsFHMyN9gff95uS05QJGl/ex9NjsZJQezMpRowyF7ZNeIKkU7Xrh3wm5yqAOwGv5aoBTTinopb2sSJFix0Xfj/hfAdWnYvOBgEvWh3CGc/eo0xWSsouLzmcqcLwnDFM5bB+XlwLXQ96f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=agMNamLv; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=QrKycfT9IfRwE/BOnl/WKSFo6N/MNlM3l+vogwvl0FQ=; b=agMNamLvk284WO4eJj5MpOF3EV
+	Wy18iThzqhanalbLfI5nMdWP2DkyomLLtARvOpBnH1XJvN/X5Vlz5MIaJx6f2nMd/Mn9JEOdqNCx5
+	8XWRsacaS+GGHXMt2gV8J0r8BWbY4vSzJonT0wYizLee5XA6ibIKJUadYymGnaWJRB9FMieki7w50
+	m+UVn7Si27h1/3d9dUFqrkPpKYETfX12d4vRfAfKZzvUS4TzYaQ7EavcBMxX76llhVlQQws3iHpfl
+	SP1xienMbRMmSxO0mNDt2OKwt31eb8HAuEOZR8Y0iK0GdGwTbsRT+c6QBLdnCetdhwh5Pid+6B2Kn
+	U2NTXvHg==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1vOg43-003SKZ-2s;
+	Thu, 27 Nov 2025 17:45:55 +0000
+Date: Thu, 27 Nov 2025 17:45:55 +0000
+From: Jonathan McDowell <noodles@earth.li>
 To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, ross.philipson@oracle.com, Jonathan
- McDowell <noodles@earth.li>, Stefano Garzarella <sgarzare@redhat.com>,
- Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>, Roberto Sassu
- <roberto.sassu@huawei.com>,  Jonathan McDowell <noodles@meta.com>, Peter
- Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
- linux-kernel@vger.kernel.org
-Date: Thu, 27 Nov 2025 18:17:42 +0100
-In-Reply-To: <aSiG7l_1E12r_56c@kernel.org>
+Cc: linux-integrity@vger.kernel.org, ross.philipson@oracle.com,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v7 03/11] KEYS: trusted: remove redundant instance of
+ tpm2_hash_map
+Message-ID: <aSiOU7G1DEf-5-1a@earth.li>
 References: <20251127135445.2141241-1-jarkko@kernel.org>
-	 <20251127135445.2141241-2-jarkko@kernel.org>
-	 <69de8fea4851ef378613e66685c3c34c43d71f05.camel@huaweicloud.com>
-	 <aSiG7l_1E12r_56c@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+ <20251127135445.2141241-4-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDnwIi6hyhpM2cvAQ--.65380S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrtFW5GFy5Jr43uryrAF1DWrg_yoW8JF1kpF
-	Zaq3W7ZF1Yqr4rA34qka4Ikryvka97KFnrXwn5Zr18Zr97Wr1akw1Iq34xWa4F9ryUt3W8
-	t343Za4xA3ZFvaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAFBGkntCQLBQACsR
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20251127135445.2141241-4-jarkko@kernel.org>
 
-On Thu, 2025-11-27 at 19:14 +0200, Jarkko Sakkinen wrote:
-> On Thu, Nov 27, 2025 at 05:09:38PM +0100, Roberto Sassu wrote:
-> > On Thu, 2025-11-27 at 15:54 +0200, Jarkko Sakkinen wrote:
-> > > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-> > >=20
-> > > tpm2_get_pcr_allocation() does not cap any upper limit for the number=
- of
-> > > banks. Cap the limit to eight banks so that out of bounds values comi=
-ng
-> > > from external I/O cause on only limited harm.
-> > >=20
-> > > Cc: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > Sorry, I realized that you are expecting me to review.
-> >=20
-> > I have a couple of questions:
-> > - Could you explain better how out of bounds would occur, since one
-> >   could check the number of PCR banks?
-> > - Is dynamic allocation that bad? And if yes, why?
-> > - Couldn't you just check that the number of available PCR banks is=C2=
-=A0
-> >   below the threshold you like and keep dynamic allocation?
-> > - Is removing tpm1_get_pcr_allocation() improving code readability?
->=20
-> nr_possible_banks is read from external source i.e., neither kernel nor
-> CPU fully control its value. This causes *uncontrolled* dynamic
-> allocation. Thus, it must be capped to some value.
+On Thu, Nov 27, 2025 at 03:54:35PM +0200, Jarkko Sakkinen wrote:
+>Trusted keys duplicates tpm2_hash_map from TPM driver internals. Implement
+>and export `tpm2_find_hash_alg()` in order to address this glitch, and
+>replace redundant code block with a call this new function.
+>
+>Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+>---
+>v7:
+>- A new patch.
+>---
+> drivers/char/tpm/tpm2-cmd.c               | 19 +++++++++++++++--
+> include/linux/tpm.h                       |  7 ++-----
+> security/keys/trusted-keys/trusted_tpm2.c | 25 +++++------------------
+> 3 files changed, 24 insertions(+), 27 deletions(-)
+>
+>diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+>index 97501c567c34..1393bfbeca64 100644
+>--- a/drivers/char/tpm/tpm2-cmd.c
+>+++ b/drivers/char/tpm/tpm2-cmd.c
+>@@ -18,7 +18,10 @@ static bool disable_pcr_integrity;
+> module_param(disable_pcr_integrity, bool, 0444);
+> MODULE_PARM_DESC(disable_pcr_integrity, "Disable integrity protection of TPM2_PCR_Extend");
+>
+>-static struct tpm2_hash tpm2_hash_map[] = {
+>+static struct {
+>+	unsigned int crypto_id;
+>+	unsigned int alg_id;
+>+} tpm2_hash_map[] = {
+> 	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+> 	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+> 	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+>@@ -26,6 +29,18 @@ static struct tpm2_hash tpm2_hash_map[] = {
+> 	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+> };
+>
+>+int tpm2_find_hash_alg(unsigned int crypto_id)
+>+{
+>+	int i;
+>+
+>+	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++)
+>+		if (crypto_id == tpm2_hash_map[i].crypto_id)
+>+			return tpm2_hash_map[i].alg_id;
+>+
+>+	return -EINVAL;
+>+}
+>+EXPORT_SYMBOL_GPL(tpm2_find_hash_alg);
+>+
+> int tpm2_get_timeouts(struct tpm_chip *chip)
+> {
+> 	chip->timeout_a = msecs_to_jiffies(TPM2_TIMEOUT_A);
+>@@ -490,7 +505,7 @@ static int tpm2_init_bank_info(struct tpm_chip *chip, u32 bank_index)
+> 	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+> 		enum hash_algo crypto_algo = tpm2_hash_map[i].crypto_id;
+>
+>-		if (bank->alg_id != tpm2_hash_map[i].tpm_id)
+>+		if (bank->alg_id != tpm2_hash_map[i].alg_id)
+> 			continue;
+>
+> 		bank->digest_size = hash_digest_size[crypto_algo];
+>diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+>index 0e9e043f728c..e5fc7b73de2d 100644
+>--- a/include/linux/tpm.h
+>+++ b/include/linux/tpm.h
+>@@ -410,11 +410,6 @@ enum tpm2_session_attributes {
+> 	TPM2_SA_AUDIT			= BIT(7),
+> };
+>
+>-struct tpm2_hash {
+>-	unsigned int crypto_id;
+>-	unsigned int tpm_id;
+>-};
+>-
+> int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
+> void tpm_buf_reset(struct tpm_buf *buf, u16 tag, u32 ordinal);
+> int tpm_buf_init_sized(struct tpm_buf *buf);
+>@@ -465,6 +460,7 @@ static inline ssize_t tpm_ret_to_err(ssize_t ret)
+>
+> #if defined(CONFIG_TCG_TPM) || defined(CONFIG_TCG_TPM_MODULE)
+>
+>+unsigned int tpm2_alg_to_crypto_id(unsigned int alg_id);
+> extern int tpm_is_tpm2(struct tpm_chip *chip);
+> extern __must_check int tpm_try_get_ops(struct tpm_chip *chip);
+> extern void tpm_put_ops(struct tpm_chip *chip);
 
-Sure, I'm fine with capping. Isn't that enough?
+This looks like an errant chunk? I can't see tpm2_alg_to_crypto_id 
+defined or used?
 
-Thanks
+>@@ -477,6 +473,7 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+> extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+> extern struct tpm_chip *tpm_default_chip(void);
+> void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
+>+int tpm2_find_hash_alg(unsigned int crypto_id);
+>
+> static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 handle)
+> {
+>diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+>index 024be262702f..3205732fb4b7 100644
+>--- a/security/keys/trusted-keys/trusted_tpm2.c
+>+++ b/security/keys/trusted-keys/trusted_tpm2.c
+>@@ -18,14 +18,6 @@
+>
+> #include "tpm2key.asn1.h"
+>
+>-static struct tpm2_hash tpm2_hash_map[] = {
+>-	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
+>-	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
+>-	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
+>-	{HASH_ALGO_SHA512, TPM_ALG_SHA512},
+>-	{HASH_ALGO_SM3_256, TPM_ALG_SM3_256},
+>-};
+>-
+> static u32 tpm2key_oid[] = { 2, 23, 133, 10, 1, 5 };
+>
+> static int tpm2_key_encode(struct trusted_key_payload *payload,
+>@@ -244,24 +236,17 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+> 	off_t offset = TPM_HEADER_SIZE;
+> 	struct tpm_buf buf, sized;
+> 	int blob_len = 0;
+>-	u32 hash;
+>+	int hash;
+> 	u32 flags;
+>-	int i;
+> 	int rc;
+>
+>-	for (i = 0; i < ARRAY_SIZE(tpm2_hash_map); i++) {
+>-		if (options->hash == tpm2_hash_map[i].crypto_id) {
+>-			hash = tpm2_hash_map[i].tpm_id;
+>-			break;
+>-		}
+>-	}
+>-
+>-	if (i == ARRAY_SIZE(tpm2_hash_map))
+>-		return -EINVAL;
+>-
+> 	if (!options->keyhandle)
+> 		return -EINVAL;
+>
+>+	hash = tpm2_find_hash_alg(options->hash);
+>+	if (hash)
+>+		return hash;
+>+
+> 	rc = tpm_try_get_ops(chip);
+> 	if (rc)
+> 		return rc;
+>-- 
+>2.52.0
 
-Roberto
+J.
 
-> > Thanks
-> >=20
-> > Roberto
->=20
-> BR, Jarkko
-
+-- 
+Design a system any fool can use, and only a fool will want to use it.
 
