@@ -1,55 +1,64 @@
-Return-Path: <linux-integrity+bounces-7689-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7690-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D04A2C8EA79
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 14:59:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC0B9C8EA7D
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 14:59:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25BA13B6574
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 13:54:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F29E3B6E99
+	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 13:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1163B330323;
-	Thu, 27 Nov 2025 13:54:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54EEA274B46;
+	Thu, 27 Nov 2025 13:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="joKI+B33"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n0SViLNh"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91DF32C93C
-	for <linux-integrity@vger.kernel.org>; Thu, 27 Nov 2025 13:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B66F134CF;
+	Thu, 27 Nov 2025 13:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764251692; cv=none; b=cZskAbQEgKOR4gY3vjadOpLQwWBkHnwEHrJPYtHJ9Bi6vBFLvI4f0q1FOoFqq2J8PuM2wlOZoSpULFdsBj4Wi1vbkVT/bYavn9Z2f8hWHcnvEdUHm++zsOQmRF4beoq5Tas4N5rOV2NkWZvGdlcbjerU/cxSCsyFgJeTqyFLUcc=
+	t=1764251698; cv=none; b=aujesl95l8ia8dbxquZv53ZXpLKmKEZUHbKx33V1s8hvu0XVUCxSDewRY9q3JTrAMh95FPf/W2VH62akD1pE3fbBEdjslGJlU5fB8f3ycyRR+5D5Yzvp9fBWUdDEMV9Vri/UyeDEQbfe2s9iVvqPGRd+M/berO0bh+tQCohspOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764251692; c=relaxed/simple;
-	bh=w+N87en27rsJ3NJ8h8Yka8oSv3mpvx4ldcbDQkyBU5I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cpmCaQm3IHUNDZ56nCSKct3ULu1qy+heRy7Vfnub2cZh6G7ZwuES+jUnkAypxIDF6ihGbMvCyRhcC+of5KRyPDVjHbbdDqUT45+TfFZFfEoIARJCOyCidH+ZBPF2z3wYt9o5mPesHo4sboP+Vv9B+u7yl/stvav2lZ5RykSvvrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=joKI+B33; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA247C4CEF8;
-	Thu, 27 Nov 2025 13:54:51 +0000 (UTC)
+	s=arc-20240116; t=1764251698; c=relaxed/simple;
+	bh=wET9bi424JpymhxvzfWXbagA/8gOcV0nQTdaaMcNrzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PRptcnHD1J7AP3dECjmtjuMBPJXa2n5PXkOqxnvb8CDGYbuc+qdnZzFu72UwGCbtuMLm4gfHh4vJ35EAiaMZUbu3CnZ3KlHoLyZyJw41/XcJCO9ofmUyw92bTSJKs+lxiPAE/yx9FWMHO2z4bwFxGMiwIwntma17MjfNnaQh+ZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n0SViLNh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EFD6C4CEF8;
+	Thu, 27 Nov 2025 13:54:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764251692;
-	bh=w+N87en27rsJ3NJ8h8Yka8oSv3mpvx4ldcbDQkyBU5I=;
-	h=From:To:Cc:Subject:Date:From;
-	b=joKI+B33wwgcgZJ10giW0OEneq5zRoJlEc0hEv9KjFinmrkB6ktgpJwu9JR9D0x53
-	 ZlnxJc+tVg8FdO0UZ6r5fJa7mKKDsUhePcs5dLIOgOG/t1vjTy4rY48/FbGDyHB5kk
-	 KAqr+6dg4boRLfToMjc2ityuR32DPHsif/+FUUmNbsKZqXVGpF/Q3G51RMXFEsb38z
-	 41nR4qQsvHvJlEWXsolaFBGEU8cGmlJlO+EZ9pclVXHmMssPPK60uJEgkzfJHpaonZ
-	 pArgSssWIXf2OVXvv/3mZG9sY/B0Jg5xJL4ftM9tU8h76QS5A8RDbQxOS9Ij5bx1tL
-	 +qI/15k6G7o5A==
+	s=k20201202; t=1764251697;
+	bh=wET9bi424JpymhxvzfWXbagA/8gOcV0nQTdaaMcNrzw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=n0SViLNhqu74e+SjfDgQe/Xh2QOhkLHRKXGv89Tho9wVYWTmweTGujnwO0lvBXkeX
+	 Y689DYX3I3wz97880bVRAsgLmkewqW+kDdW3wgm5CcyRY3bYV/6f2QU/LWTgdbuyOI
+	 gBL+vATTUQI9s2s18RsvKxiHO7wMOTEHhuNNGUQrPi1ofaV/YpL05XaTmbHvF44Mhe
+	 aEdoZaqLXiPQbZNhkBkPmi/ONhBKCC6muiAfUcaLzJ4x82DykLGupw0f78SlxHDCN8
+	 /e71cRrjsohbK4pbeeFXPtJZUnb+XKRMdiq1/HXSFwAsckrhGRmi2oyU71Y+zsDqxq
+	 77RqAX2hnA3ug==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: ross.philipson@oracle.com,
 	Jonathan McDowell <noodles@earth.li>,
 	Stefano Garzarella <sgarzare@redhat.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH v7 00/11] Prepare TPM driver for Trenchboot
-Date: Thu, 27 Nov 2025 15:54:32 +0200
-Message-ID: <20251127135445.2141241-1-jarkko@kernel.org>
+	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Jonathan McDowell <noodles@meta.com>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v7 01/11] tpm: Cap the number of PCR banks
+Date: Thu, 27 Nov 2025 15:54:33 +0200
+Message-ID: <20251127135445.2141241-2-jarkko@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251127135445.2141241-1-jarkko@kernel.org>
+References: <20251127135445.2141241-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -58,73 +67,171 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Overview
-========
+From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-Start preparing TPM driver for Trenchboot by decoupling tpm_buf from
-driver and memory allocation.
+tpm2_get_pcr_allocation() does not cap any upper limit for the number of
+banks. Cap the limit to eight banks so that out of bounds values coming
+from external I/O cause on only limited harm.
 
-Backlog (of stuff that will end up to a follow-up patch sets):
-
-1. Static flat duration table for TPM 1.2. Such feature already landed
-   in v6.17 for TPM 2.0. We probably can figure out some sane roof
-   values for the legacy standard, right? This allows to share more
-   code "via data".
-2. Not a blocker for sending subsequent versions of Trenchboot patch set
-   but we could look at slicing tpm_tis code at some point of future.
-   It could be even that redundant parts could be "merged" after the
-   feature lands but this is neither a promise (depends on how things
-   look overall).
-
-This patch set does not do a lot heavy-lifting but is beefed enough that
-it is better not fatten it up too much anymore. Sane buffering is a
-great starting point.
-
+Cc: Roberto Sassu <roberto.sassu@huawei.com>
+Fixes: bcfff8384f6c ("tpm: dynamically allocate the allocated_banks array")
+Reviewed-By: Jonathan McDowell <noodles@meta.com>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+---
 v7:
-- Fixed reported issues.
-v6:
-- Fixed a memory leak that I found trom trusted keys.
+- In Ryzen desktop there is total three banks so yep, eight is probably
+  much safer bet than four banks. Fixed the commit message as per remark
+  from Jonathan:
+
+  https://lore.kernel.org/linux-integrity/aPYg1N0TvrkG6AJI@earth.li/#t
+
+  And with that added also reviewed-by.
+v6
+- No changes.
 v5:
-- Order sobs correctly.
-- Fixed a minor glitch in 9/9.
+- No changes.
 v4:
-- PCR patch has been removed because it does not fly without Trenchboot
-  context.
+- Revert spurious changes from include/linux/tpm.h.
+- Increase TPM2_MAX_BANKS to 8.
+- Rename TPM2_MAX_BANKS as TPM2_MAX_PCR_BANKS for the sake of clarity.
 v3:
-- I think 6.19 is a better goal for this and thus expanded the series to
-  be a generic Trenchboot enablers series. This version also consolidates
-  my two separate ongoing series.
+- Wrote a more clear commit message.
+- Fixed pr_err() message.
 v2:
-- While including fixes from v1, this patch set has a refocus in order to
-  do minimal changes to make code base more compatible  Trenchboot.
+- A new patch.
+---
+ drivers/char/tpm/tpm-chip.c | 13 +++++++++----
+ drivers/char/tpm/tpm.h      |  1 -
+ drivers/char/tpm/tpm1-cmd.c | 25 -------------------------
+ drivers/char/tpm/tpm2-cmd.c |  8 +++-----
+ include/linux/tpm.h         |  8 +++++---
+ 5 files changed, 17 insertions(+), 38 deletions(-)
 
-Jarkko Sakkinen (11):
-  tpm: Cap the number of PCR banks
-  tpm: Use -EPERM as fallback error code in tpm_ret_to_err
-  KEYS: trusted: remove redundant instance of tpm2_hash_map
-  KEYS: trusted: Fix memory leak in tpm2_load()
-  KEYS: trusted: Use tpm_ret_to_err() in trusted_tpm2
-  tpm2-sessions: Remove 'attributes' from tpm_buf_append_auth
-  tpm2-sessions: Unmask tpm_buf_append_hmac_session()
-  KEYS: trusted: Open code tpm2_buf_append()
-  tpm-buf: unify TPM_BUF_BOUNDARY_ERROR and TPM_BUF_OVERFLOW
-  tpm-buf: Remove chip parameter from tpm_buf_append_handle
-  tpm-buf: Enable managed and stack allocations.
-
- drivers/char/tpm/tpm-buf.c                | 143 ++++++----
- drivers/char/tpm/tpm-chip.c               |  13 +-
- drivers/char/tpm/tpm-sysfs.c              |  21 +-
- drivers/char/tpm/tpm.h                    |   2 -
- drivers/char/tpm/tpm1-cmd.c               | 185 +++++-------
- drivers/char/tpm/tpm2-cmd.c               | 332 +++++++++++-----------
- drivers/char/tpm/tpm2-sessions.c          | 129 ++++-----
- drivers/char/tpm/tpm2-space.c             |  44 ++-
- drivers/char/tpm/tpm_vtpm_proxy.c         |  30 +-
- include/linux/tpm.h                       |  74 ++---
- security/keys/trusted-keys/trusted_tpm1.c |  36 +--
- security/keys/trusted-keys/trusted_tpm2.c | 291 ++++++++-----------
- 12 files changed, 584 insertions(+), 716 deletions(-)
-
+diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
+index e25daf2396d3..6cb25862688f 100644
+--- a/drivers/char/tpm/tpm-chip.c
++++ b/drivers/char/tpm/tpm-chip.c
+@@ -559,14 +559,19 @@ static int tpm_add_hwrng(struct tpm_chip *chip)
+ 
+ static int tpm_get_pcr_allocation(struct tpm_chip *chip)
+ {
+-	int rc;
++	int rc = 0;
+ 
+ 	if (tpm_is_firmware_upgrade(chip))
+ 		return 0;
+ 
+-	rc = (chip->flags & TPM_CHIP_FLAG_TPM2) ?
+-	     tpm2_get_pcr_allocation(chip) :
+-	     tpm1_get_pcr_allocation(chip);
++	if (!(chip->flags & TPM_CHIP_FLAG_TPM2)) {
++		chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
++		chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
++		chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
++		chip->nr_allocated_banks = 1;
++	} else {
++		rc = tpm2_get_pcr_allocation(chip);
++	}
+ 
+ 	if (rc > 0)
+ 		return -ENODEV;
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 2726bd38e5ac..a37712c02e44 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -252,7 +252,6 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf);
+ ssize_t tpm1_getcap(struct tpm_chip *chip, u32 subcap_id, cap_t *cap,
+ 		    const char *desc, size_t min_cap_length);
+ int tpm1_get_random(struct tpm_chip *chip, u8 *out, size_t max);
+-int tpm1_get_pcr_allocation(struct tpm_chip *chip);
+ unsigned long tpm_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal);
+ int tpm_pm_suspend(struct device *dev);
+ int tpm_pm_resume(struct device *dev);
+diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+index 11088bda4e68..708bc553437b 100644
+--- a/drivers/char/tpm/tpm1-cmd.c
++++ b/drivers/char/tpm/tpm1-cmd.c
+@@ -786,28 +786,3 @@ int tpm1_pm_suspend(struct tpm_chip *chip, u32 tpm_suspend_pcr)
+ 
+ 	return rc;
+ }
+-
+-/**
+- * tpm1_get_pcr_allocation() - initialize the allocated bank
+- * @chip: TPM chip to use.
+- *
+- * The function initializes the SHA1 allocated bank to extend PCR
+- *
+- * Return:
+- * * 0 on success,
+- * * < 0 on error.
+- */
+-int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+-{
+-	chip->allocated_banks = kcalloc(1, sizeof(*chip->allocated_banks),
+-					GFP_KERNEL);
+-	if (!chip->allocated_banks)
+-		return -ENOMEM;
+-
+-	chip->allocated_banks[0].alg_id = TPM_ALG_SHA1;
+-	chip->allocated_banks[0].digest_size = hash_digest_size[HASH_ALGO_SHA1];
+-	chip->allocated_banks[0].crypto_id = HASH_ALGO_SHA1;
+-	chip->nr_allocated_banks = 1;
+-
+-	return 0;
+-}
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 7d77f6fbc152..97501c567c34 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -538,11 +538,9 @@ ssize_t tpm2_get_pcr_allocation(struct tpm_chip *chip)
+ 
+ 	nr_possible_banks = be32_to_cpup(
+ 		(__be32 *)&buf.data[TPM_HEADER_SIZE + 5]);
+-
+-	chip->allocated_banks = kcalloc(nr_possible_banks,
+-					sizeof(*chip->allocated_banks),
+-					GFP_KERNEL);
+-	if (!chip->allocated_banks) {
++	if (nr_possible_banks > TPM2_MAX_PCR_BANKS) {
++		pr_err("tpm: unexpected number of banks: %u > %u",
++		       nr_possible_banks, TPM2_MAX_PCR_BANKS);
+ 		rc = -ENOMEM;
+ 		goto out;
+ 	}
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index dc0338a783f3..eb0ff071bcae 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -26,7 +26,9 @@
+ #include <crypto/aes.h>
+ 
+ #define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
+-#define TPM_MAX_DIGEST_SIZE SHA512_DIGEST_SIZE
++
++#define TPM2_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
++#define TPM2_MAX_PCR_BANKS	8
+ 
+ struct tpm_chip;
+ struct trusted_key_payload;
+@@ -68,7 +70,7 @@ enum tpm2_curves {
+ 
+ struct tpm_digest {
+ 	u16 alg_id;
+-	u8 digest[TPM_MAX_DIGEST_SIZE];
++	u8 digest[TPM2_MAX_DIGEST_SIZE];
+ } __packed;
+ 
+ struct tpm_bank_info {
+@@ -189,7 +191,7 @@ struct tpm_chip {
+ 	unsigned int groups_cnt;
+ 
+ 	u32 nr_allocated_banks;
+-	struct tpm_bank_info *allocated_banks;
++	struct tpm_bank_info allocated_banks[TPM2_MAX_PCR_BANKS];
+ #ifdef CONFIG_ACPI
+ 	acpi_handle acpi_dev_handle;
+ 	char ppi_version[TPM_PPI_VERSION_LEN + 1];
 -- 
 2.52.0
 
