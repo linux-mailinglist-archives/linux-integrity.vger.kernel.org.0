@@ -1,96 +1,136 @@
-Return-Path: <linux-integrity+bounces-7722-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7723-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26AB2C904D4
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 23:36:32 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25C0AC90A96
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Nov 2025 03:54:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C87704E3F07
-	for <lists+linux-integrity@lfdr.de>; Thu, 27 Nov 2025 22:36:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A313934C06F
+	for <lists+linux-integrity@lfdr.de>; Fri, 28 Nov 2025 02:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2547231771B;
-	Thu, 27 Nov 2025 22:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76C6A2868A9;
+	Fri, 28 Nov 2025 02:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c5WKq6IW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YXIt+PeB"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F145030DECA;
-	Thu, 27 Nov 2025 22:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2271D285CBC
+	for <linux-integrity@vger.kernel.org>; Fri, 28 Nov 2025 02:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764282987; cv=none; b=KTOeWeLbDBiWZxG1nKx1zUJOEmYaYR4g7MuuOju5aM+qC4YZFu1DIe/4/jIsD0zyHPDcua9/Eby0V9SfpqJ9TIArMulqmeoENXw4tZSw9cRBvgFugSf3x9WwinWN4XsJLBfApHsQq05FpThT6fQILfyYbu685pNSViY8plDrwII=
+	t=1764298457; cv=none; b=ogyMXAKd4/Ib+O3H8FV3XSX6rIBK9UnzxHuNE6KMWsFOzm1uiuvVQbRoEfyZUA1f3EDJ/USSI2UphiVJIhakvtAWT4fgX9X31IW0k+w2tjhIsahBVq0MLhShKPpxy8G61r8x4HU83bLCgJtCEYGROth1GQAKiZtYCNXjdi7CZRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764282987; c=relaxed/simple;
-	bh=Ak37bImlPoiqUPvToZ1ajFQ0luYRtVu47yezi1mhZ5M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PHwP7CWKjQSfkEnZekKogG5MEhpFoO70wf4tUJrVhfnZQ/9EBRfFjEgX2V0ONNvj639BsbiMolI3GzbA6INABErknCvzc4M5d9HjyYMeiqPiXGl4zKIp9vzuQM2/n2/g7MH5PbbME9CuHihW2uh0trzh9BwbCXmzYb7NvuIXV7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c5WKq6IW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E645DC4CEF8;
-	Thu, 27 Nov 2025 22:36:25 +0000 (UTC)
+	s=arc-20240116; t=1764298457; c=relaxed/simple;
+	bh=7pY8lnEz9opqkve/tK4DPGuyG4b5CKHfaRYlfdFPMvs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UOn25+L0VJEFiMAbWh/l78s5dBUjf1xS6NhjVjTH51Gajs6HOt6gbSZmTLlhVlQUHoq1hSZu+qGNSBOyCKtHplJmTNh8TG2Ojv9v6URV+5rSSRx4cDRLKuq30F5MoPpmD9lvEEQs60ohK3yfSy2TQDr5+q1pBbKUU0QeZzfIpjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YXIt+PeB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B9FC4CEF8;
+	Fri, 28 Nov 2025 02:54:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764282986;
-	bh=Ak37bImlPoiqUPvToZ1ajFQ0luYRtVu47yezi1mhZ5M=;
-	h=Date:From:To:Cc:Subject:From;
-	b=c5WKq6IW/P5t2aNyp/KpDssa34oxy+ylYq3Pt3CPbDvglLbGzW0TKPE7bE5CpMBBA
-	 JuPsHHBgz8G9742GGwi1spf3MX0AEoWmCzK9xyGM8/P0mKa5M5yIRQFwf5yeSm+YmM
-	 HCRxdiCCN9jc6J6ZyEBnZctl1YxdcOq0Zbu6Y18XZcaXqeSahH5ueA232cZAgQU79e
-	 CLOu5c4ZwmOKZ+n/rZr3GTDgAxfwFt/J5ETUB5pv8wP3r6s3ivawFz9ZBexlE+cqVS
-	 oFACDYl8qyr0l850pwvRaxclkKiQ96AlBZ6k/tdLnbKfzNIwdoteCUw3yptYjhMeDX
-	 05ghOiAfWJBSw==
-Date: Fri, 28 Nov 2025 00:36:22 +0200
+	s=k20201202; t=1764298456;
+	bh=7pY8lnEz9opqkve/tK4DPGuyG4b5CKHfaRYlfdFPMvs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YXIt+PeBMrSLXNsgLJu1S4cidRY4D72+F5Ea6HkmZARuEhpxqkSGEaxn1z+iBz1K2
+	 eb2FvDOMqjpY7vYXcGDiy6JdvvC2+yIA+gzuRGjM1/kI8rJjxZleKVAgTsIYmu93cM
+	 zeuDostwCxPnQkQJvwqpOSa0fnqtoY3fOdPCyslg4oH05qYxfK/KNnU+fjsHp1RWaz
+	 Liq++pHrs/bkal5KFcOTfajmDKw9LX7ysmPlzVi0ZSYfNLfp+StKaKN9R/gK/Kxuso
+	 XBRvq/Xy1lrjyC9tL6F+YYRUaK243DjBkZqkxauOzeUFCZCbZvOH/0D8uViVO+7hFP
+	 wuxNGgnkqw8Xw==
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	Thorsten Blum <thorsten.blum@linux.dev>
-Subject: [GIT PULL] KEYS: keys-next-6.19-rc1
-Message-ID: <aSjSZj47-p_3i_Xn@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: ross.philipson@oracle.com,
+	Jonathan McDowell <noodles@earth.li>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Subject: [PATCH v9 0/8] Prepare TPM driver for Trenchboot
+Date: Fri, 28 Nov 2025 04:53:52 +0200
+Message-ID: <20251128025402.4147024-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: aerc {{version}}
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit e1afacb68573c3cd0a3785c6b0508876cd3423bc:
+Overview
+========
 
-  Merge tag 'ceph-for-6.18-rc8' of https://github.com/ceph/ceph-client (2025-11-27 11:11:03 -0800)
+Start preparing TPM driver for Trenchboot by decoupling tpm_buf from
+driver and memory allocation.
 
-are available in the Git repository at:
+Backlog (of stuff that will end up to a follow-up patch sets):
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/keys-next-6.19-rc1
+1. Static flat duration table for TPM 1.2. Such feature already landed
+   in v6.17 for TPM 2.0. We probably can figure out some sane roof
+   values for the legacy standard, right? This allows to share more
+   code "via data".
+2. Not a blocker for sending subsequent versions of Trenchboot patch set
+   but we could look at slicing tpm_tis code at some point of future.
+   It could be even that redundant parts could be "merged" after the
+   feature lands but this is neither a promise (depends on how things
+   look overall).
 
-for you to fetch changes up to 8c8e3df3d2f51e9a3f6f1a1112adf250f7652d42:
+This patch set does not do a lot heavy-lifting but is beefed enough that
+it is better not fatten it up too much anymore. Sane buffering is a
+great starting point.
 
-  keys: Fix grammar and formatting in 'struct key_type' comments (2025-11-27 23:56:58 +0200)
+v9:
+- Dropped patches that went into 6.19 pull request (and that is main
+  reason for sending update so quickly).
+- I went through the commit message and polished a bit most of them
+- Simplified the patch fixing memory leak in  tpm2_load_cmd.
+v8:
+- Fixed reported issues.
+- Did some focused testing on TPM 1.2 using swtpm to make sure that
+  it is working correctly.
+v7:
+- Fixed reported issues.
+v6:
+- Fixed a memory leak that I found trom trusted keys.
+v5:
+- Order sobs correctly.
+- Fixed a minor glitch in 9/9.
+v4:
+- PCR patch has been removed because it does not fly without Trenchboot
+  context.
+v3:
+- I think 6.19 is a better goal for this and thus expanded the series to
+  be a generic Trenchboot enablers series. This version also consolidates
+  my two separate ongoing series.
+v2:
+- While including fixes from v1, this patch set has a refocus in order to
+  do minimal changes to make code base more compatible  Trenchboot.
 
-----------------------------------------------------------------
-Hi,
+Jarkko Sakkinen (8):
+  tpm2-sessions: Remove 'attributes' parameter from tpm_buf_append_auth
+  tpm2-sessions: Open code tpm_buf_append_hmac_session()
+  KEYS: trusted: Replace a redundant instance of tpm2_hash_map
+  KEYS: trusted: Fix a memory leak in tpm2_load_cmd
+  KEYS: trusted: Open code tpm2_buf_append()
+  tpm-buf: Merge TPM_BUF_BOUNDARY_ERROR and TPM_BUF_OVERFLOW
+  tpm-buf: Remove chip parameter from tpm_buf_append_handle
+  tpm-buf: Enable managed and stack allocations.
 
-This first pull request for keys contains only three fixes.
+ drivers/char/tpm/tpm-buf.c                | 143 ++++++----
+ drivers/char/tpm/tpm-sysfs.c              |  21 +-
+ drivers/char/tpm/tpm.h                    |   1 -
+ drivers/char/tpm/tpm1-cmd.c               | 162 +++++------
+ drivers/char/tpm/tpm2-cmd.c               | 319 +++++++++++-----------
+ drivers/char/tpm/tpm2-sessions.c          | 129 +++++----
+ drivers/char/tpm/tpm2-space.c             |  44 ++-
+ drivers/char/tpm/tpm_vtpm_proxy.c         |  30 +-
+ include/linux/tpm.h                       |  56 ++--
+ security/keys/trusted-keys/trusted_tpm1.c |  36 +--
+ security/keys/trusted-keys/trusted_tpm2.c | 245 +++++++----------
+ 11 files changed, 544 insertions(+), 642 deletions(-)
 
-BR, Jarkko
+-- 
+2.52.0
 
-----------------------------------------------------------------
-Thorsten Blum (3):
-      keys: Remove redundant less-than-zero checks
-      keys: Replace deprecated strncpy in ecryptfs_fill_auth_tok
-      keys: Fix grammar and formatting in 'struct key_type' comments
-
- include/linux/key-type.h                       | 9 ++++++---
- security/keys/big_key.c                        | 2 +-
- security/keys/encrypted-keys/ecryptfs_format.c | 3 +--
- security/keys/encrypted-keys/encrypted.c       | 4 ++--
- security/keys/trusted-keys/trusted_core.c      | 4 ++--
- security/keys/user_defined.c                   | 2 +-
- 6 files changed, 13 insertions(+), 11 deletions(-)
 
