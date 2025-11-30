@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-7742-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7743-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id A95FBC954D6
-	for <lists+linux-integrity@lfdr.de>; Sun, 30 Nov 2025 22:18:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EE29C954E8
+	for <lists+linux-integrity@lfdr.de>; Sun, 30 Nov 2025 22:35:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 93C80341350
-	for <lists+linux-integrity@lfdr.de>; Sun, 30 Nov 2025 21:18:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D4B73A1A83
+	for <lists+linux-integrity@lfdr.de>; Sun, 30 Nov 2025 21:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 290D01F8723;
-	Sun, 30 Nov 2025 21:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C384B2080C8;
+	Sun, 30 Nov 2025 21:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcXRXDzg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BSrNyxMN"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10E736D4FC;
-	Sun, 30 Nov 2025 21:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8755E36D4EF;
+	Sun, 30 Nov 2025 21:35:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764537512; cv=none; b=DWrDUQfgSsGyANduv+Qa5HNCOOSShYxHkZyld93mXiCvPvsiTLAOxajROcfOZbtWPFJQ/TJeUK7cb4ztA3ai5tGjEdbTqYXIVRUtBJzEcalxU3piWdCU1c7Hsuv5CnycCo895etP4fqIuupSxlTInZ/SYamyvQ+9AvhKdt80+ho=
+	t=1764538554; cv=none; b=ourAuyrzVfBYMY2dA6apBNLv7GWiDMvCH5ND5JArLXwMV7cI+gSNNsbRBb6k0TGG6VhyyeBdPJYsN/a99Few4AcCeTlrl5803eOU6JqXbp9w8xsSxSleXgHbEz8RKTiPzeu2apjNTLXvIYBgEgPTbyfvs6jnK5sPTNXbD60vrqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764537512; c=relaxed/simple;
-	bh=eep+PoaegdjE9CqLVaHfhxC2CgtBr0lqHcXJCs1P/Nk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LjUsxnMFLyM/WubfdyDrqgiXgoeJ8CEgSHg/uZKEZGFj/RHAXDLA5e1hA2gNIRVY7yYrvcQqijxalI1GKwxT1piEEhrpW0lOHKKRNUAKtOqZKUV0mbRdhaC5MWswbEXChDx50P8xRqnQ9oBfdqpv2J0kWmk1WfNfia6GV+M7Jss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcXRXDzg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3AAFC4CEF8;
-	Sun, 30 Nov 2025 21:18:30 +0000 (UTC)
+	s=arc-20240116; t=1764538554; c=relaxed/simple;
+	bh=5oR+QBk8Q0fmRWFKG4nhigL/APRearymNZOO4gVOs8c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZcfEnJOmly1cwbR7pgNbbUmQoS9y8cVfDHv9IRDknP9SQdhwAC0PMYzFrhAprcYj3jk4zQosK9wuHboQosMvAMQzdpDh9h6YlH5ioXa8sOmvXHhmgeDyfE7edmMNL64hgcMAXfQbpLGzpf9/CSzKIOHLp3tDgzZPUN+wlXhzkww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BSrNyxMN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BEF1C4CEF8;
+	Sun, 30 Nov 2025 21:35:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764537511;
-	bh=eep+PoaegdjE9CqLVaHfhxC2CgtBr0lqHcXJCs1P/Nk=;
+	s=k20201202; t=1764538553;
+	bh=5oR+QBk8Q0fmRWFKG4nhigL/APRearymNZOO4gVOs8c=;
 	h=From:To:Cc:Subject:Date:From;
-	b=kcXRXDzg2kGqYWFrVbymGr7CDax0/JCzeXUpBRXZ3ISDpsIb0C2WUKuKUa3foaR+B
-	 sSu2oQEFq4qIvhVxP4YRqZk/Nw2/Oik+yKgqeDBwAEMg5SNrgk4pBDu66TrfmKzjsF
-	 uYpqQnbKF1fRc4sIrWEQn2z+ptzEU8xrBGIKKtZus/DzDHS/u9KwEKFnjr3pKIGrS3
-	 m/B20I2T0hn1A3gDlZ/GySF4CCNvG8fXi/ZsE+BsMkfnwhSIm5dfoe9/+kk7XHaDNr
-	 cc8pGZYmRbilsVvYLptuB3yif7dOtuF8RcCuB+hpGPopfqh/gxlLfZ2ZYRPB8eNZ74
-	 zA4075jvuTMaA==
+	b=BSrNyxMN+s6a7z3y+M4jGckNbpxplZHBw/nmy7fC71TcsnDc5zzLGiC57DXPG5e0t
+	 HKR0Tn63gDFgFxznmmHBGDBBKSdn2ybSIgmehUhoi+k/HMDZWmUmBv9UcAvOLs7Va0
+	 3HTghyTm3+Q1ZAKYq2PcfxIUqY0SzyajYsjYRpE+t8qIDtZQIHeSv3DMYUNQLn5YbN
+	 V99M7aIxOF25J/CPr1Tx64Wgs/JmDHTX1KV7sK6quW42oHcFzWK1bsuXhgFTXdvMvf
+	 rh1qk9WzxzNRyVDFBQHxFbi364dCHZnEcYQ+y76VJPeHzkPd3Jq4XnCtSFHyUZye6V
+	 jXazBXXOf5fRg==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
@@ -56,9 +56,9 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	keyrings@vger.kernel.org,
 	linux-security-module@vger.kernel.org
-Subject: [PATCH] tpm2-sessions: address out-of-range indexing
-Date: Sun, 30 Nov 2025 23:18:14 +0200
-Message-ID: <20251130211816.1195997-1-jarkko@kernel.org>
+Subject: [PATCH v2] tpm2-sessions: address out-of-range indexing
+Date: Sun, 30 Nov 2025 23:35:47 +0200
+Message-ID: <20251130213548.1340706-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -85,11 +85,13 @@ Cc: stable@vger.kernel.org # v6.10+
 Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
+v2:
+There was spurious extra field added to tpm2_hash by mistake.
  drivers/char/tpm/tpm2-cmd.c               |  23 ++++-
  drivers/char/tpm/tpm2-sessions.c          | 108 ++++++++++++++--------
- include/linux/tpm.h                       |   7 +-
+ include/linux/tpm.h                       |   6 +-
  security/keys/trusted-keys/trusted_tpm2.c |  38 ++++++--
- 4 files changed, 125 insertions(+), 51 deletions(-)
+ 4 files changed, 124 insertions(+), 51 deletions(-)
 
 diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
 index 5b6ccf901623..e63254135a74 100644
@@ -366,18 +368,10 @@ index 6d03c224e6b2..82b9d9096fd1 100644
  EXPORT_SYMBOL(tpm_buf_fill_hmac_session);
  
 diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 0e9e043f728c..f168c547abae 100644
+index 0e9e043f728c..1a59f0190eb3 100644
 --- a/include/linux/tpm.h
 +++ b/include/linux/tpm.h
-@@ -413,6 +413,7 @@ enum tpm2_session_attributes {
- struct tpm2_hash {
- 	unsigned int crypto_id;
- 	unsigned int tpm_id;
-+	unsigned int hash_size;
- };
- 
- int tpm_buf_init(struct tpm_buf *buf, u16 tag, u32 ordinal);
-@@ -528,8 +529,8 @@ static inline struct tpm2_auth *tpm2_chip_auth(struct tpm_chip *chip)
+@@ -528,8 +528,8 @@ static inline struct tpm2_auth *tpm2_chip_auth(struct tpm_chip *chip)
  #endif
  }
  
@@ -388,7 +382,7 @@ index 0e9e043f728c..f168c547abae 100644
  void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
  				 u8 attributes, u8 *passphrase,
  				 int passphraselen);
-@@ -562,7 +563,7 @@ static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
+@@ -562,7 +562,7 @@ static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
  #ifdef CONFIG_TCG_TPM2_HMAC
  
  int tpm2_start_auth_session(struct tpm_chip *chip);
