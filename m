@@ -1,304 +1,175 @@
-Return-Path: <linux-integrity+bounces-7748-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7749-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08CF7C98616
-	for <lists+linux-integrity@lfdr.de>; Mon, 01 Dec 2025 17:55:59 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13CBEC98904
+	for <lists+linux-integrity@lfdr.de>; Mon, 01 Dec 2025 18:42:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B61B23A30FD
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Dec 2025 16:55:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C8D7C4E1584
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Dec 2025 17:42:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF88334C1A;
-	Mon,  1 Dec 2025 16:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253693191A2;
+	Mon,  1 Dec 2025 17:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sxeHnCxm"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="PHeTay+N"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C5E315D30;
-	Mon,  1 Dec 2025 16:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8656221CC4F;
+	Mon,  1 Dec 2025 17:42:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764608155; cv=none; b=Zgsn/sO5plqfPXVx9L4tIXJG330CDWvvJ9hba0+you8SNEeOswp2jN3Bk+s7Dh3sqCvou57b2fEcEcFGgCxG7OMTcZsWNrDsAlmMBKcsOK9NcaRC7oCYyFmu0tQnxPcw31vHgkjIcResEKF9gd8O/T1NweLAmZe2pbJMQ/7vsVU=
+	t=1764610960; cv=none; b=PzMdGgEOsJi8gKnMha7JZvhB8O5Ur5h32BytPt8rSvi2nFDgQWp60FY9b0HOMpUlDRLe7ardWS8PVaroDC8ZdNJJ1vlN4Vpdy0IH+4/9cJWChcezUQ0UKzJxfmuG5g3A1L9oylQkkZowHb6jha0a/QC2sYlROGmLGn5wPCS3U34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764608155; c=relaxed/simple;
-	bh=EUIjqavuIeUzMiAYONWEg7x6sMK2XPW3egS5wTGSHuA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bjpmSYaFUhzFFc8fA8zzx6ZSEKoQHqWnayVWRER3TOYqLEflYKU7hMAjyq6o3InxFn154pw4hIPCq8/20E7NkvUFv/gKkpIlIIa98dHA5G5cDMIIxTl1L88+gXGQUhgbukPnnGXYVqHGA+ZEW2n8Z1kFrOGt4Wp8YwGA3xPSaOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sxeHnCxm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7FDC4CEF1;
-	Mon,  1 Dec 2025 16:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764608155;
-	bh=EUIjqavuIeUzMiAYONWEg7x6sMK2XPW3egS5wTGSHuA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sxeHnCxmrnm586BzJ/MYUZmjS2inD096CbMlpLhPfAfJ3E67Q/rIkdvDWAB05IYRg
-	 qwnR0bZOXXaUocwROnUhFGOUrOP/x+p6DXSvGeF4a0pPsZ19TWtjiOZCnS6NN7kGel
-	 m6DtSf77P830FOQomLHHpDg3oigDQnyiWVcVF4kE63uI7dzlUt7OQLB/ZSuD8xJzaM
-	 h+fnAhIKQrZBtVnf9pF6enT/wmHaoqTBUqPiJEIENzkbhaFNO8vHVweCuMmhSkLVGT
-	 KJF2oHhtgBmtOtjBc5UVyMVm1OHsLPOtF7pDnLk5TzdOuw5GJVaAFzszg+gZ9ec5VE
-	 YOjoW5Utp7qnA==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	stable@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm2-sessions: Fix tpm2_read_public range checks
-Date: Mon,  1 Dec 2025 18:55:45 +0200
-Message-ID: <20251201165545.629875-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1764610960; c=relaxed/simple;
+	bh=15JvH6JyAOdfU2dbA0LcnPWilh0Np9iZya+hi+M2l48=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JHKPHoovvGzPlJKHE0Q3oyQX+SVSskDaOW/a7R+oW0/oZzYxIu84e8KFRybs3LJAF1Ih5/xveBYOHV21eFmLEiXfpRWUaBzxLpf04xKO/B6Yym1L81oFX2Gc9HemnAw08DjRI5uyHKQxceKVP1YhtSGfYkoMxWhdee7DlZbdc0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=PHeTay+N; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.17.64.147] (unknown [131.107.1.211])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 7A6812012085;
+	Mon,  1 Dec 2025 09:42:37 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A6812012085
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1764610957;
+	bh=15JvH6JyAOdfU2dbA0LcnPWilh0Np9iZya+hi+M2l48=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PHeTay+NT3vQVhzAmGxWFzrTgRWdo++4FNdGGW9zOtnQic/EXhpPlog189FX4O0cX
+	 Au2rdy3lWjfPmrNXH4usdXBDY7fhGJ/9liv/6k1khvJ5spgtK60aVyiUYKe7rnXcJ8
+	 OLJfdS2wLGx5AC1g7NBNWHtfiNTmJFERfRN9+Ylo=
+Message-ID: <2e7b89ae-2fac-45a6-928a-094a2d972c91@linux.microsoft.com>
+Date: Mon, 1 Dec 2025 09:42:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC v1 0/1] Implement IMA Event Log Trimming
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+ Gregory Lumen <gregorylumen@linux.microsoft.com>
+Cc: Anirudh Venkataramanan <anirudhve@linux.microsoft.com>,
+ linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, "Serge E . Hallyn" <serge@hallyn.com>,
+ linux-security-module@vger.kernel.org,
+ Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+ Sush Shringarputale <sushring@linux.microsoft.com>
+References: <20251119213359.39397-1-anirudhve@linux.microsoft.com>
+ <7722dff4e68ef5fb7f39bd732a8a77422bad5549.camel@huaweicloud.com>
+ <a77e9609-f6bd-4e6d-88be-5422f780b496@linux.microsoft.com>
+ <1e5a3b427fe2783e57e88ca14630f5e38e01fac5.camel@huaweicloud.com>
+ <bbafa611-3a6c-5cf8-631c-20f72f651d9@linux.microsoft.com>
+ <3f85e98e2e4ef6a0de4fe4f6c2093791def1e30b.camel@huaweicloud.com>
+Content-Language: en-US
+From: steven chen <chenste@linux.microsoft.com>
+In-Reply-To: <3f85e98e2e4ef6a0de4fe4f6c2093791def1e30b.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-'tpm2_read_public' has some rudimentary range checks but does not
-explicitly check that both fields of TPMT_HA actually fit within the buffer
-size limits.
+On 11/27/2025 1:45 AM, Roberto Sassu wrote:
+> On Wed, 2025-11-26 at 15:40 -0800, Gregory Lumen wrote:
+>> Greetings Roberto,
+>>
+>> If I may chime in a bit:
+>>
+>>> The only way to make the verification of measurements list snapshots
+>>> work is that the verification state is stored outside the system to
+>>> evaluate (which can be assumed to be trusted), so that you are sure
+>>> that the system is not advancing the PCR starting value by itself.
+>> You are correct; to make the described approach work, an external source
+>> of trust is required in order to detect unexpected or unauthorized
+>> trimming of the event log (for example, by signing the trim-to PCR values
+>> from the previous verification/attestation cycle). This should be true
+>> regardless of the mechanism of trimming. More generally, I will go so far
+>> as to suggest that any attempt to attest the integrity of a system using
+>> IMA will likely fall into one of two general approaches: either the entire
+>> IMA event log is retained (either in kernel or user space) from boot and
+>> claims of system integrity are built by validating and examining the
+>> entire log for signs of tampering, or an external source of trust is
+>> introduced to allow incremental validation and examination of the log.
+>> Other more innovative approaches may exist, but we make no such claims.
+>>
+>> I will also say that it should be possible to implement either approach to
+>> attestation (retaining the entire log, or relying on an external source of
+>> trust) with any sane implementation for IMA log trimming.
+>>
+>> As for our proposed implementation, storing the starting PCR values in the
+>> kernel preserving the ability for any arbitrary user space entity to
+>> validate the retained portion of the IMA event log against the TPM PCRs at
+>> any time, without requiring awareness of other user space mechanisms
+>> implemented by other entities that may be initiating IMA trimming
+>> operations. My personal sense is that this capability is worth preserving,
+>> but it is entirely possible the general consensus is that the value
+>> offered does not balance against the additional technical complexity when
+>> compared to simpler alternatives (discussed in a moment). To stress the
+>> point, this capability would only enable validation of the integrity of
+>> the retained portion of the event log and its continuity with the PCRs,
+>> and could not be used to make any claims as to the overall integrity of
+>> the system since, as you observed, an attacker who has successfully
+>> compromised the system could simply trim the event log in order to discard
+>> evidence of the compromise.
+> Hi Gregory
+>
+> all you said can be implemented by maintaining the PCR starting value
+> outside the system, in a trusted entity. This would allow the
+> functionality you are hoping for to validate the retained portion of
+> the measurement list.
+>
+> Keeping the PCR starting value in the kernel has the potential of
+> misleading users that this is an information they can rely on. I would
+> rather prefer to not run in such risk.
+>
+>> If the ability to validate the retained portion of the IMA event log is
+>> not worth designing for, we could instead go with a simpler "Trim-to-N"
+>> approach, where the user space interface allows for the specification of
+>> an absolute index into the IMA log to be used as the trim position (as
+>> opposed to using calculated PCR values to indicate trim position in our
+>> current proposal). To protect against unexpected behavior in the event of
+> >From implementation point of view, it looks much simpler to me to
+> specify N relative to the current measurement list.
 
-Introduce a new function 'tpm2_resolve_name' to address all the possible
-out-of-range issues, and in addition do handle type validation.
+Hi Roberto,
 
-Cc: stable@vger.kernel.org # v6.10+
-Fixes: d0a25bb961e6 ("tpm: Add HMAC session name/handle append")
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/char/tpm/tpm2-cmd.c      | 95 ++++++++++++++++++++++++++++++++
- drivers/char/tpm/tpm2-sessions.c | 78 +-------------------------
- include/linux/tpm.h              |  2 +
- 3 files changed, 98 insertions(+), 77 deletions(-)
+I will send "trim N entries" patch out this week.
 
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index e63254135a74..d51272573004 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -11,8 +11,11 @@
-  * used by the kernel internally.
-  */
- 
-+#include "linux/dev_printk.h"
-+#include "linux/tpm.h"
- #include "tpm.h"
- #include <crypto/hash_info.h>
-+#include <linux/unaligned.h>
- 
- static bool disable_pcr_integrity;
- module_param(disable_pcr_integrity, bool, 0444);
-@@ -769,3 +772,95 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
- 
- 	return -1;
- }
-+
-+/**
-+ * tpm2_name_size() - Resolve size of a TPMT_HA instance
-+ * @name:	Pointer to TPMT_HA structure extracted from TPM2B_NAME.
-+ *
-+ * Calculate size of the TPMT_HA payload of TPM2B_NAME. It is used with
-+ * transient keys, persistent and NV indexes.
-+ *
-+ * Returns zero when the hash size was successfully calculated.
-+ * Returns -EINVAL when the hash algorithm was not recognized.
-+ */
-+int tpm2_name_size(const u8 *name)
-+{
-+	u16 hash_alg = get_unaligned_be16(name);
-+
-+	switch (hash_alg) {
-+	case TPM_ALG_SHA1:
-+		return SHA1_DIGEST_SIZE + 2;
-+	case TPM_ALG_SHA256:
-+		return SHA256_DIGEST_SIZE + 2;
-+	case TPM_ALG_SHA384:
-+		return SHA384_DIGEST_SIZE + 2;
-+	case TPM_ALG_SHA512:
-+		return SHA512_DIGEST_SIZE + 2;
-+	case TPM_ALG_SM3_256:
-+		return SM3256_DIGEST_SIZE + 2;
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+/**
-+ * tpm2_resolve_name - Resolve TPM object's name from the public area
-+ * @handle:	Persistent, transient or nv handle.
-+ *
-+ * Returns zero on success.
-+ * Returns -EINVAL when handles are not of valid type.
-+ * Returns -EIO if the transmission fails or response is malformed.
-+ */
-+int tpm2_resolve_name(struct tpm_chip *chip, u32 handle, void *name)
-+{
-+	u32 mso = tpm2_handle_mso(handle);
-+	off_t offset = TPM_HEADER_SIZE;
-+	int name_size, name_size_2;
-+	struct tpm_buf buf;
-+	int rc;
-+
-+	if (mso != TPM2_MSO_PERSISTENT && mso != TPM2_MSO_VOLATILE &&
-+	    mso != TPM2_MSO_NVRAM)
-+		return -EINVAL;
-+
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
-+	if (rc)
-+		return rc;
-+
-+	tpm_buf_append_u32(&buf, handle);
-+
-+	rc = tpm_transmit_cmd(chip, &buf, 0, "TPM2_ReadPublic");
-+	if (rc) {
-+		tpm_buf_destroy(&buf);
-+		return tpm_ret_to_err(rc);
-+	}
-+
-+	/* Skip TPMT_PUBLIC: */
-+	offset += tpm_buf_read_u16(&buf, &offset);
-+
-+	/*
-+	 * Ensure space for the length field of TPM2B_NAME and hashAlg field of
-+	 * TPMT_HA (the extra four bytes).
-+	 */
-+	if (offset + 4 > tpm_buf_length(&buf)) {
-+		tpm_buf_destroy(&buf);
-+		return -EIO;
-+	}
-+
-+	name_size = tpm_buf_read_u16(&buf, &offset);
-+	name_size_2 = tpm2_name_size(&buf.data[offset]);
-+
-+	if (name_size != name_size_2) {
-+		tpm_buf_destroy(&buf);
-+		return -EIO;
-+	}
-+
-+	if (offset + name_size > tpm_buf_length(&buf)) {
-+		tpm_buf_destroy(&buf);
-+		return -EIO;
-+	}
-+
-+	memcpy(name, &buf.data[offset], name_size);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(tpm2_resolve_name);
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 82b9d9096fd1..7c85333d47c4 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -140,82 +140,6 @@ struct tpm2_auth {
- 	u8 name[AUTH_MAX_NAMES][2 + SHA512_DIGEST_SIZE];
- };
- 
--#ifdef CONFIG_TCG_TPM2_HMAC
--
--/*
-- * Calculate size of the TPMT_HA payload of TPM2B_NAME.
-- */
--static int tpm2_name_size(const u8 *name)
--{
--	u16 hash_alg = get_unaligned_be16(name);
--
--	switch (hash_alg) {
--	case TPM_ALG_SHA1:
--		return SHA1_DIGEST_SIZE + 2;
--	case TPM_ALG_SHA256:
--		return SHA256_DIGEST_SIZE + 2;
--	case TPM_ALG_SHA384:
--		return SHA384_DIGEST_SIZE + 2;
--	case TPM_ALG_SHA512:
--		return SHA512_DIGEST_SIZE + 2;
--	case TPM_ALG_SM3_256:
--		return SM3256_DIGEST_SIZE + 2;
--	}
--
--	return -EINVAL;
--}
--
--static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
--{
--	struct tpm_header *head = (struct tpm_header *)buf->data;
--	off_t offset = TPM_HEADER_SIZE;
--	u32 tot_len = be32_to_cpu(head->length);
--	int name_size_alg;
--	u32 val;
--
--	/* we're starting after the header so adjust the length */
--	tot_len -= TPM_HEADER_SIZE;
--
--	/* skip public */
--	val = tpm_buf_read_u16(buf, &offset);
--	if (val > tot_len)
--		return -EINVAL;
--	offset += val;
--	/* name */
--
--	val = tpm_buf_read_u16(buf, &offset);
--	name_size_alg = tpm2_name_size(&buf->data[offset]);
--	if (name_size_alg < 0)
--		return name_size_alg;
--
--	if (val != name_size_alg)
--		return -EINVAL;
--
--	memcpy(name, &buf->data[offset], val);
--	/* forget the rest */
--	return 0;
--}
--
--static int tpm2_read_public(struct tpm_chip *chip, u32 handle, char *name)
--{
--	struct tpm_buf buf;
--	int rc;
--
--	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
--	if (rc)
--		return rc;
--
--	tpm_buf_append_u32(&buf, handle);
--	rc = tpm_transmit_cmd(chip, &buf, 0, "read public");
--	if (rc == TPM2_RC_SUCCESS)
--		rc = tpm2_parse_read_public(name, &buf);
--
--	tpm_buf_destroy(&buf);
--
--	return rc;
--}
--#endif /* CONFIG_TCG_TPM2_HMAC */
--
- /**
-  * tpm_buf_append_name() - add a handle area to the buffer
-  * @chip: the TPM chip structure
-@@ -272,7 +196,7 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 	    mso == TPM2_MSO_VOLATILE ||
- 	    mso == TPM2_MSO_NVRAM) {
- 		if (!name) {
--			ret = tpm2_read_public(chip, handle, auth->name[slot]);
-+			ret = tpm2_resolve_name(chip, handle, auth->name[slot]);
- 			if (ret)
- 				return tpm_ret_to_err(ret);
- 		}
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 1a59f0190eb3..727e6c26feeb 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -477,6 +477,8 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
- extern struct tpm_chip *tpm_default_chip(void);
- void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
-+int tpm2_name_size(const u8 *name);
-+int tpm2_resolve_name(struct tpm_chip *chip, u32 handle, void *name);
- 
- static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 handle)
- {
--- 
-2.52.0
+Regards,
+
+Steven
+
+>> concurrent trims, index counting would need to be fixed (hence absolute)
+>> such that index 0 would always refer to the very first entry written
+>> during boot, even if that entry has already been trimmed, with the number
+>> of trimmed entries (and thus starting index of the retained log) exposed
+>> to use space via a pseudo-file.
+> In my draft patch [1] (still need to support trimming N entries instead
+> of the full measurement list), the risk of concurrent trims does not
+> exist because opening of the snapshot interface is exclusive (no one
+> else can request trimming concurrently).
+>
+> If a more elaborated contention of remote attestation agent is
+> required, that could be done at user space level. I'm hoping to keep in
+> the kernel only the minimum code necessary for the remote attestation
+> to work.
+>
+> Roberto
+>
+> [1] https://github.com/robertosassu/linux/commit/b0bd002b6caa9d5d4f4d0db2a041b1fd91f33f8a
+>
+>> With such a trim approach, it should be possible to implement either
+>> general attestation approach: retaining the entire log (copy the log to
+>> user space, then trim the copied entries), or relying on an external
+>> source of trust (quote, determine the log index corresponding to the quote
+>> plus PCRs, trim, then securely store the trim position/starting PCRs for
+>> future cycles).
+>>
+>> -Gregory Lumen
+
 
 
