@@ -1,261 +1,304 @@
-Return-Path: <linux-integrity+bounces-7747-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7748-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB0C8C985B6
-	for <lists+linux-integrity@lfdr.de>; Mon, 01 Dec 2025 17:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08CF7C98616
+	for <lists+linux-integrity@lfdr.de>; Mon, 01 Dec 2025 17:55:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 090BE3A347B
-	for <lists+linux-integrity@lfdr.de>; Mon,  1 Dec 2025 16:50:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B61B23A30FD
+	for <lists+linux-integrity@lfdr.de>; Mon,  1 Dec 2025 16:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A45A5335545;
-	Mon,  1 Dec 2025 16:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF88334C1A;
+	Mon,  1 Dec 2025 16:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sxeHnCxm"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2F532BD01B;
-	Mon,  1 Dec 2025 16:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C5E315D30;
+	Mon,  1 Dec 2025 16:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764607817; cv=none; b=JXivWwEAoUvdauVRFSRj7jWg4h74dCf6X0zmfbCyv3Nnn3OYsVC3xtJx6CQtNGQN/ZH14ES6Uom5VbgDRYpq5PvCDBjFgOcd0sGbQfB+lFRyp1sffy6r6BoUtDae4582kShJ+cvVxScZAhEALrhe+wHplix/09EBwYEdGLwK8cw=
+	t=1764608155; cv=none; b=Zgsn/sO5plqfPXVx9L4tIXJG330CDWvvJ9hba0+you8SNEeOswp2jN3Bk+s7Dh3sqCvou57b2fEcEcFGgCxG7OMTcZsWNrDsAlmMBKcsOK9NcaRC7oCYyFmu0tQnxPcw31vHgkjIcResEKF9gd8O/T1NweLAmZe2pbJMQ/7vsVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764607817; c=relaxed/simple;
-	bh=sUnQwd5f1327MMtU4ESsrKcrwqqV0LUGTUar0K6EHBc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D09rdq8+BdhO205OH4pL+nF7tTJ/+YPoGVWpP4GaZDFI/JazZ6Ch45ic4r05Ej9dfEQYfipatS6DmGm1XO0fX+x0kXhpeKXGRsy3caLG+TGxFQDSkfeWd/QWJZfXgcuvfyUwMWaI6z8+ORHpFDYU4x1AzmzbWV4e6Wor90T3yNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dKqbs1yrmz1HC6d;
-	Tue,  2 Dec 2025 00:48:41 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 7549640567;
-	Tue,  2 Dec 2025 00:50:06 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDH0TUexy1puQwiAA--.23436S2;
-	Mon, 01 Dec 2025 17:50:04 +0100 (CET)
-Message-ID: <dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
-Subject: Re: Are setuid shell scripts safe? (Implied by
- security_bprm_creds_for_exec)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Bernd Edlinger <bernd.edlinger@hotmail.de>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Alexey Dobriyan <adobriyan@gmail.com>, Oleg
- Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, Andy Lutomirski
- <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Christian Brauner
- <brauner@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Michal
- Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>, James Morris
- <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>, Suren
- Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>, Helge
- Deller <deller@gmx.de>, Adrian Reber <areber@redhat.com>, Thomas Gleixner
- <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,  Alexei Starovoitov
- <ast@kernel.org>, "linux-fsdevel@vger.kernel.org"
- <linux-fsdevel@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, 
- linux-mm@kvack.org, linux-security-module@vger.kernel.org, tiozhang
- <tiozhang@didiglobal.com>, Luis Chamberlain <mcgrof@kernel.org>, "Paulo
- Alcantara (SUSE)" <pc@manguebit.com>, Sergey Senozhatsky
- <senozhatsky@chromium.org>, Frederic Weisbecker <frederic@kernel.org>,
- YueHaibing <yuehaibing@huawei.com>, Paul Moore <paul@paul-moore.com>, 
- Aleksa Sarai <cyphar@cyphar.com>, Stefan Roesch <shr@devkernel.io>, Chao Yu
- <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>, Jeff Layton
- <jlayton@kernel.org>, Jan Kara <jack@suse.cz>,  David Hildenbrand
- <david@redhat.com>, Dave Chinner <dchinner@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>, David
- Windsor <dwindsor@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>, Ard
- Biesheuvel <ardb@kernel.org>, "Joel Fernandes (Google)"
- <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Hans Liljestrand <ishkamiel@gmail.com>, Penglei Jiang
- <superman.xpt@gmail.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
- Adrian Ratiu <adrian.ratiu@collabora.com>, Ingo Molnar <mingo@kernel.org>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>, Cyrill Gorcunov
- <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>,
- zohar@linux.ibm.com, linux-integrity@vger.kernel.org,  Ryan Lee
- <ryan.lee@canonical.com>, apparmor <apparmor@lists.ubuntu.com>
-Date: Mon, 01 Dec 2025 17:49:31 +0100
-In-Reply-To: <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
-References: 
-	<AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	 <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	 <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	 <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	 <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	 <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	 <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	 <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	 <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	 <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
-	 <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
-	 <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
-	 <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
-	 <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1764608155; c=relaxed/simple;
+	bh=EUIjqavuIeUzMiAYONWEg7x6sMK2XPW3egS5wTGSHuA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bjpmSYaFUhzFFc8fA8zzx6ZSEKoQHqWnayVWRER3TOYqLEflYKU7hMAjyq6o3InxFn154pw4hIPCq8/20E7NkvUFv/gKkpIlIIa98dHA5G5cDMIIxTl1L88+gXGQUhgbukPnnGXYVqHGA+ZEW2n8Z1kFrOGt4Wp8YwGA3xPSaOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sxeHnCxm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E7FDC4CEF1;
+	Mon,  1 Dec 2025 16:55:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764608155;
+	bh=EUIjqavuIeUzMiAYONWEg7x6sMK2XPW3egS5wTGSHuA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sxeHnCxmrnm586BzJ/MYUZmjS2inD096CbMlpLhPfAfJ3E67Q/rIkdvDWAB05IYRg
+	 qwnR0bZOXXaUocwROnUhFGOUrOP/x+p6DXSvGeF4a0pPsZ19TWtjiOZCnS6NN7kGel
+	 m6DtSf77P830FOQomLHHpDg3oigDQnyiWVcVF4kE63uI7dzlUt7OQLB/ZSuD8xJzaM
+	 h+fnAhIKQrZBtVnf9pF6enT/wmHaoqTBUqPiJEIENzkbhaFNO8vHVweCuMmhSkLVGT
+	 KJF2oHhtgBmtOtjBc5UVyMVm1OHsLPOtF7pDnLk5TzdOuw5GJVaAFzszg+gZ9ec5VE
+	 YOjoW5Utp7qnA==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
+	stable@vger.kernel.org,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm2-sessions: Fix tpm2_read_public range checks
+Date: Mon,  1 Dec 2025 18:55:45 +0200
+Message-ID: <20251201165545.629875-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDH0TUexy1puQwiAA--.23436S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xr1xWrWDZrWkWr47XFWrXwb_yoW7tFWfpF
-	WrKay7Jr1DGF4Iyrn7Gw4xWF4SkFWrJ3y3Jrn5K34F9a98Wr1rKr1S9FWY9FWUWr1rK3W2
-	yw429r93Za4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUVZ2-UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAJBGktg2sEdgAAsR
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2025-12-01 at 10:06 -0600, Eric W. Biederman wrote:
-> Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
->=20
-> > + Mimi, linux-integrity (would be nice if we are in CC when linux-
-> > security-module is in CC).
-> >=20
-> > Apologies for not answering earlier, it seems I don't receive the
-> > emails from the linux-security-module mailing list (thanks Serge for
-> > letting me know!).
-> >=20
-> > I see two main effects of this patch. First, the bprm_check_security
-> > hook implementations will not see bprm->cred populated. That was a
-> > problem before we made this patch:
-> >=20
-> > https://patchew.org/linux/20251008113503.2433343-1-roberto.sassu@huawei=
-cloud.com/
->=20
-> Thanks, that is definitely needed.
->=20
-> Does calling process_measurement(CREDS_CHECK) on only the final file
-> pass review?  Do you know of any cases where that will break things?
+'tpm2_read_public' has some rudimentary range checks but does not
+explicitly check that both fields of TPMT_HA actually fit within the buffer
+size limits.
 
-We intentionally changed the behavior of CREDS_CHECK to be invoked only
-for the final file. We are monitoring for bug reports, if we receive
-complains from people that the patch breaks their expectation we will
-revisit the issue.
+Introduce a new function 'tpm2_resolve_name' to address all the possible
+out-of-range issues, and in addition do handle type validation.
 
-Any LSM implementing bprm_check_security looking for brpm->cred would
-be affected by recalculating the DAC credentials for the final binary.
+Cc: stable@vger.kernel.org # v6.10+
+Fixes: d0a25bb961e6 ("tpm: Add HMAC session name/handle append")
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm2-cmd.c      | 95 ++++++++++++++++++++++++++++++++
+ drivers/char/tpm/tpm2-sessions.c | 78 +-------------------------
+ include/linux/tpm.h              |  2 +
+ 3 files changed, 98 insertions(+), 77 deletions(-)
 
-> As it stands I don't think it should be assumed that any LSM has
-> computed it's final creds until bprm_creds_from_file.  Not just the
-> uid and gid.
-
-Uhm, I can be wrong, but most LSMs calculate their state change in
-bprm_creds_for_exec (git grep bprm_creds_for_exec|grep LSM_HOOK_INIT).
-
-> If the patch you posted for review works that helps sort that mess out.
-
-Well, it works because we changed the expectation :)
-
-> > to work around the problem of not calculating the final DAC credentials
-> > early enough (well, we actually had to change our CREDS_CHECK hook
-> > behavior).
-> >=20
-> > The second, I could not check. If I remember well, unlike the
-> > capability LSM, SELinux/Apparmor/SMACK calculate the final credentials
-> > based on the first file being executed (thus the script, not the
-> > interpreter). Is this patch keeping the same behavior despite preparing
-> > the credentials when the final binary is found?
->=20
-> The patch I posted was.
->=20
-> My brain is still reeling from the realization that our security modules
-> have the implicit assumption that it is safe to calculate their security
-> information from shell scripts.
-
-If I'm interpreting this behavior correctly (please any LSM maintainer
-could comment on it), the intent is just to transition to a different
-security context where a different set of rules could apply (since we
-are executing a script).
-
-Imagine if for every script, the security transition is based on the
-interpreter, it would be hard to differentiate between scripts and
-associate to the respective processes different security labels.
-
-> In the first half of the 90's I remember there was lots of effort to try
-> and make setuid shell scripts and setuid perl scripts work, and the
-> final conclusion was it was a lost cause.
-
-Definitely I lack a lot of context...
-
-> Now I look at security_bprm_creds_for_exec and security_bprm_check which
-> both have the implicit assumption that it is indeed safe to compute the
-> credentials from a shell script.
->=20
-> When passing a file descriptor to execat we have
-> BINPRM_FLAGS_PATH_INACCESSIBLE and use /dev/fd/NNN as the filename
-> which reduces some of the races.
->=20
-> However when just plain executing a shell script we pass the filename of
-> the shell script as a command line argument, and expect the shell to
-> open the filename again.  This has been a time of check to time of use
-> race for decades, and one of the reasons we don't have setuid shell
-> scripts.
-
-Yes, it would be really nice to fix it!
-
-> Yet the IMA implementation (without the above mentioned patch) assumes
-> the final creds will be calculated before security_bprm_check is called,
-> and security_bprm_creds_for_exec busily calculate the final creds.
->=20
-> For some of the security modules I believe anyone can set any label they
-> want on a file and they remain secure (At which point I don't understand
-> the point of having labels on files).  I don't believe that is the case
-> for selinux, or in general.
-
-A simple example for SELinux. Suppose that the parent process has type
-initrc_t, then the SELinux policy configures the following transitions
-based on the label of the first file executed (sesearch -T -s initrc_t
--c process):
-
-type_transition initrc_t NetworkManager_dispatcher_exec_t:process NetworkMa=
-nager_dispatcher_t;
-type_transition initrc_t NetworkManager_exec_t:process NetworkManager_t;
-type_transition initrc_t NetworkManager_initrc_exec_t:process initrc_t;
-type_transition initrc_t NetworkManager_priv_helper_exec_t:process NetworkM=
-anager_priv_helper_t;
-type_transition initrc_t abrt_dump_oops_exec_t:process abrt_dump_oops_t;
-type_transition initrc_t abrt_exec_t:process abrt_t;
-[...]
-
-(there are 747 rules in my system).
-
-If the transition would be based on the interpreter label, it would be
-hard to express with rules.
-
-If the transition does not occur for any reason the parent process
-policy would still apply, but maybe it would not have the necessary
-permissions for the execution of the script.
-
-> So just to remove the TOCTOU race the security_bprm_creds_for_exec
-> and security_bprm_check hooks need to be removed, after moving their
-> code into something like security_bprm_creds_from_file.
->=20
-> Or am I missing something and even with the TOCTOU race are setuid shell
-> scripts somehow safe now?
-
-Take this with a looot of salt, if there is a TOCTOU race, the script
-will be executed with a security context that does not belong to it.
-But the transition already happened. Not sure if it is safe.
-
-I also don't know how the TOCTOU race could be solved, but I also would
-like it to be fixed. I'm available to comment on any proposal!
-
-Roberto
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index e63254135a74..d51272573004 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -11,8 +11,11 @@
+  * used by the kernel internally.
+  */
+ 
++#include "linux/dev_printk.h"
++#include "linux/tpm.h"
+ #include "tpm.h"
+ #include <crypto/hash_info.h>
++#include <linux/unaligned.h>
+ 
+ static bool disable_pcr_integrity;
+ module_param(disable_pcr_integrity, bool, 0444);
+@@ -769,3 +772,95 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
+ 
+ 	return -1;
+ }
++
++/**
++ * tpm2_name_size() - Resolve size of a TPMT_HA instance
++ * @name:	Pointer to TPMT_HA structure extracted from TPM2B_NAME.
++ *
++ * Calculate size of the TPMT_HA payload of TPM2B_NAME. It is used with
++ * transient keys, persistent and NV indexes.
++ *
++ * Returns zero when the hash size was successfully calculated.
++ * Returns -EINVAL when the hash algorithm was not recognized.
++ */
++int tpm2_name_size(const u8 *name)
++{
++	u16 hash_alg = get_unaligned_be16(name);
++
++	switch (hash_alg) {
++	case TPM_ALG_SHA1:
++		return SHA1_DIGEST_SIZE + 2;
++	case TPM_ALG_SHA256:
++		return SHA256_DIGEST_SIZE + 2;
++	case TPM_ALG_SHA384:
++		return SHA384_DIGEST_SIZE + 2;
++	case TPM_ALG_SHA512:
++		return SHA512_DIGEST_SIZE + 2;
++	case TPM_ALG_SM3_256:
++		return SM3256_DIGEST_SIZE + 2;
++	}
++
++	return -EINVAL;
++}
++
++/**
++ * tpm2_resolve_name - Resolve TPM object's name from the public area
++ * @handle:	Persistent, transient or nv handle.
++ *
++ * Returns zero on success.
++ * Returns -EINVAL when handles are not of valid type.
++ * Returns -EIO if the transmission fails or response is malformed.
++ */
++int tpm2_resolve_name(struct tpm_chip *chip, u32 handle, void *name)
++{
++	u32 mso = tpm2_handle_mso(handle);
++	off_t offset = TPM_HEADER_SIZE;
++	int name_size, name_size_2;
++	struct tpm_buf buf;
++	int rc;
++
++	if (mso != TPM2_MSO_PERSISTENT && mso != TPM2_MSO_VOLATILE &&
++	    mso != TPM2_MSO_NVRAM)
++		return -EINVAL;
++
++	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
++	if (rc)
++		return rc;
++
++	tpm_buf_append_u32(&buf, handle);
++
++	rc = tpm_transmit_cmd(chip, &buf, 0, "TPM2_ReadPublic");
++	if (rc) {
++		tpm_buf_destroy(&buf);
++		return tpm_ret_to_err(rc);
++	}
++
++	/* Skip TPMT_PUBLIC: */
++	offset += tpm_buf_read_u16(&buf, &offset);
++
++	/*
++	 * Ensure space for the length field of TPM2B_NAME and hashAlg field of
++	 * TPMT_HA (the extra four bytes).
++	 */
++	if (offset + 4 > tpm_buf_length(&buf)) {
++		tpm_buf_destroy(&buf);
++		return -EIO;
++	}
++
++	name_size = tpm_buf_read_u16(&buf, &offset);
++	name_size_2 = tpm2_name_size(&buf.data[offset]);
++
++	if (name_size != name_size_2) {
++		tpm_buf_destroy(&buf);
++		return -EIO;
++	}
++
++	if (offset + name_size > tpm_buf_length(&buf)) {
++		tpm_buf_destroy(&buf);
++		return -EIO;
++	}
++
++	memcpy(name, &buf.data[offset], name_size);
++	return 0;
++}
++EXPORT_SYMBOL_GPL(tpm2_resolve_name);
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index 82b9d9096fd1..7c85333d47c4 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -140,82 +140,6 @@ struct tpm2_auth {
+ 	u8 name[AUTH_MAX_NAMES][2 + SHA512_DIGEST_SIZE];
+ };
+ 
+-#ifdef CONFIG_TCG_TPM2_HMAC
+-
+-/*
+- * Calculate size of the TPMT_HA payload of TPM2B_NAME.
+- */
+-static int tpm2_name_size(const u8 *name)
+-{
+-	u16 hash_alg = get_unaligned_be16(name);
+-
+-	switch (hash_alg) {
+-	case TPM_ALG_SHA1:
+-		return SHA1_DIGEST_SIZE + 2;
+-	case TPM_ALG_SHA256:
+-		return SHA256_DIGEST_SIZE + 2;
+-	case TPM_ALG_SHA384:
+-		return SHA384_DIGEST_SIZE + 2;
+-	case TPM_ALG_SHA512:
+-		return SHA512_DIGEST_SIZE + 2;
+-	case TPM_ALG_SM3_256:
+-		return SM3256_DIGEST_SIZE + 2;
+-	}
+-
+-	return -EINVAL;
+-}
+-
+-static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
+-{
+-	struct tpm_header *head = (struct tpm_header *)buf->data;
+-	off_t offset = TPM_HEADER_SIZE;
+-	u32 tot_len = be32_to_cpu(head->length);
+-	int name_size_alg;
+-	u32 val;
+-
+-	/* we're starting after the header so adjust the length */
+-	tot_len -= TPM_HEADER_SIZE;
+-
+-	/* skip public */
+-	val = tpm_buf_read_u16(buf, &offset);
+-	if (val > tot_len)
+-		return -EINVAL;
+-	offset += val;
+-	/* name */
+-
+-	val = tpm_buf_read_u16(buf, &offset);
+-	name_size_alg = tpm2_name_size(&buf->data[offset]);
+-	if (name_size_alg < 0)
+-		return name_size_alg;
+-
+-	if (val != name_size_alg)
+-		return -EINVAL;
+-
+-	memcpy(name, &buf->data[offset], val);
+-	/* forget the rest */
+-	return 0;
+-}
+-
+-static int tpm2_read_public(struct tpm_chip *chip, u32 handle, char *name)
+-{
+-	struct tpm_buf buf;
+-	int rc;
+-
+-	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_READ_PUBLIC);
+-	if (rc)
+-		return rc;
+-
+-	tpm_buf_append_u32(&buf, handle);
+-	rc = tpm_transmit_cmd(chip, &buf, 0, "read public");
+-	if (rc == TPM2_RC_SUCCESS)
+-		rc = tpm2_parse_read_public(name, &buf);
+-
+-	tpm_buf_destroy(&buf);
+-
+-	return rc;
+-}
+-#endif /* CONFIG_TCG_TPM2_HMAC */
+-
+ /**
+  * tpm_buf_append_name() - add a handle area to the buffer
+  * @chip: the TPM chip structure
+@@ -272,7 +196,7 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+ 	    mso == TPM2_MSO_VOLATILE ||
+ 	    mso == TPM2_MSO_NVRAM) {
+ 		if (!name) {
+-			ret = tpm2_read_public(chip, handle, auth->name[slot]);
++			ret = tpm2_resolve_name(chip, handle, auth->name[slot]);
+ 			if (ret)
+ 				return tpm_ret_to_err(ret);
+ 		}
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index 1a59f0190eb3..727e6c26feeb 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -477,6 +477,8 @@ extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
+ extern struct tpm_chip *tpm_default_chip(void);
+ void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
++int tpm2_name_size(const u8 *name);
++int tpm2_resolve_name(struct tpm_chip *chip, u32 handle, void *name);
+ 
+ static inline void tpm_buf_append_empty_auth(struct tpm_buf *buf, u32 handle)
+ {
+-- 
+2.52.0
 
 
