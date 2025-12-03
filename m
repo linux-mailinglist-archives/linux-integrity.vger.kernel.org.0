@@ -1,66 +1,49 @@
-Return-Path: <linux-integrity+bounces-7776-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7777-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0C5C9D7F4
-	for <lists+linux-integrity@lfdr.de>; Wed, 03 Dec 2025 02:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A035EC9D89F
+	for <lists+linux-integrity@lfdr.de>; Wed, 03 Dec 2025 02:55:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E01D14E1233
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Dec 2025 01:26:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 408704E4562
+	for <lists+linux-integrity@lfdr.de>; Wed,  3 Dec 2025 01:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61E38215075;
-	Wed,  3 Dec 2025 01:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A62A2343C0;
+	Wed,  3 Dec 2025 01:54:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LWB+pYHZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="plcLk4km"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E51CDDAB;
-	Wed,  3 Dec 2025 01:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33309231A30;
+	Wed,  3 Dec 2025 01:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764725206; cv=none; b=i8/VgCc1dJH3zfZpJSAb7XMsuy0EabFPdPVt0CHE+N/fd1/CccfO/iZcxCkIE/WBwRHDsfSw6hWIxrW5JzEseCwSTdJlLBGKefPacOquwQTKX6XmqiMWspGJf9B3LqiHr1U6H6fGppzxifZsaFMsrA7RLLIwr6Gw+ZiLRZMi3Aw=
+	t=1764726855; cv=none; b=C2/T3uiGTRNsKnyfwB6bO6zv3r/AlPBd+WPkDx4LwFEi+6CVqhDDBW2oWzBgK2tBpfCRJcReEapCXu+9AFoApomTCv9F9dWjn2zvzk6TUjxFTXbH0EjxV9rxPORegZdbeZ1734zFC5B0CsCMooa+K1WNoM2wXim+LeF0r75MNT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764725206; c=relaxed/simple;
-	bh=IWfqX+GVSBnKSNSvUwjtYJ2+zowEEaGeh1RSjPRS7xE=;
+	s=arc-20240116; t=1764726855; c=relaxed/simple;
+	bh=u9i26Ge7fShtrBmgHmP+jVs4HiBM3DAatxWtY04wBQI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xz287DldhzSFQVN5eK1kXMfKC0oONHnWogY5qUqeU+O2ZddNHejMGPLgO8D28xB2yjVT7IkLYXADSr/cLyz4MaMOZ+vH3M7/KyQgGBYLV3r1poRDTA9TXEN1iLGqbUuni734dmaxMnIvcIye/i7r0lyHqyQCTQ13R1F63wdwdLg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LWB+pYHZ; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764725204; x=1796261204;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IWfqX+GVSBnKSNSvUwjtYJ2+zowEEaGeh1RSjPRS7xE=;
-  b=LWB+pYHZV1T3lUunAoHs+kAU1R5CoX+/l+7rfqXMXEN0Zcl9h7ZZsHEN
-   a5rL5F1svLxYSzwMVP12tDXruV+db68ufS933sK/JEgl5Ifsyj0TcIN/i
-   k96RIDrJEm082o2DJxxluJ60vda83KHDG7DpdF19wXo1K8gKLGEpD4P+6
-   6qZz6Tt2gC9RvSspn6b4CY7XKpZasilzoUF9vn7HgyxF1cfVIYjOLKWDa
-   L4OV3Y3tHwaVyqC86Gb7wX7ss1BenBcOeeAAyH97VEnBFH6FGQrpVm8W5
-   zL6gPSyIY5YilG2c3nGJ+i2ts1K4yTJhgc7FSUimBl9ehgMerztNKDe8l
-   Q==;
-X-CSE-ConnectionGUID: oAIGmEx5Tuq8i1aiqwgzVQ==
-X-CSE-MsgGUID: iw0Sokm8QtGgn7EACNsbug==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="70563355"
-X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="70563355"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 17:26:43 -0800
-X-CSE-ConnectionGUID: pzPnCRD2QoOZdABUQgvJww==
-X-CSE-MsgGUID: bUjeT6U+TJ+4XZwQvRLs4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="194637288"
-Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 17:26:40 -0800
-Date: Wed, 3 Dec 2025 09:26:37 +0800
-From: "Lai, Yi" <yi1.lai@linux.intel.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=erD+YchFbKSWDcYX13lNDu3rlRh4DWl3FTfd9eOQYhnrqBlLQ7hrZ0qWu8O5QcpYDHbKsDUj1T1ZCgtB8QB986HfbkpphPjWj48NOYJMnhD7qBwrshTw/LKc0v+Ozkvecnq2wIlJ3Izr/6QaBfrjQ7yxZ2Ow0vL9SXTjp012AK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=plcLk4km; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD65C4CEF1;
+	Wed,  3 Dec 2025 01:54:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764726855;
+	bh=u9i26Ge7fShtrBmgHmP+jVs4HiBM3DAatxWtY04wBQI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=plcLk4kmTT39s6Rdb6KzCqhh0gJzh427uCqeSkaaWdxcwKVZ+NU77g+t2S2sgbjcr
+	 PG0EXksjDH6yGteKqKwidafziheO6SGbZ5eetcvq7AwN4xIdn8PQqmidG9vmCFYmZR
+	 rY4GgfxOdaZEqRWarLMYZoxsB2aA/0aFqPx9+JEkDdj2/1jk0tf4L7dz2KFUwMnxwb
+	 FP9GYCWTOgcRJAyEhomFxrWBfi889dquPVuA+MoehNYlSxLerDTBoLqBS8FvSbrcmM
+	 O120UxVqSsh+adyardn9TwyjWmxgFkXTXSlfZTZlK3xhKhTK4MpqsGlHvPETScdngn
+	 MoSKdTs620XWg==
+Date: Wed, 3 Dec 2025 03:54:10 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: "Lai, Yi" <yi1.lai@linux.intel.com>
 Cc: linux-integrity@vger.kernel.org, ross.philipson@oracle.com,
 	Jonathan McDowell <noodles@earth.li>,
 	Stefano Garzarella <sgarzare@redhat.com>,
@@ -71,7 +54,7 @@ Cc: linux-integrity@vger.kernel.org, ross.philipson@oracle.com,
 	linux-kernel@vger.kernel.org, yi1.lai@intel.com,
 	syzkaller-bugs@googlegroups.com
 Subject: Re: [PATCH v7 01/11] tpm: Cap the number of PCR banks
-Message-ID: <aS+Rze1SqZFkEtwa@ly-workstation>
+Message-ID: <aS-YQjztmfbJCKNd@kernel.org>
 References: <20251127135445.2141241-1-jarkko@kernel.org>
  <20251127135445.2141241-2-jarkko@kernel.org>
  <aS+K5nO2MP7N+kxQ@ly-workstation>
@@ -86,7 +69,7 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <aS-OWjUbhERbh3Za@kernel.org>
 
-On Wed, Dec 03, 2025 at 03:11:54AM +0200, Jarkko Sakkinen wrote:
+On Wed, Dec 03, 2025 at 03:11:59AM +0200, Jarkko Sakkinen wrote:
 > On Wed, Dec 03, 2025 at 08:57:10AM +0800, Lai, Yi wrote:
 > > On Thu, Nov 27, 2025 at 03:54:33PM +0200, Jarkko Sakkinen wrote:
 > > > From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
@@ -272,14 +255,9 @@ On Wed, Dec 03, 2025 at 03:11:54AM +0200, Jarkko Sakkinen wrote:
 > 
 > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=bb731e948843a947b2b7e51552c1387e2c377e03
 > 
-
-Re-test using the latest branch. Issue cannot be reproduced using the
-same binary.
-
-Regards,
-Yi Lai
-
 > Possible to re-test (I can add your tested-by afterwards)?
-> 
-> BR, Jarkko
+
+I mean tested-by AND reported-by.
+
+BR, Jarkko
 
