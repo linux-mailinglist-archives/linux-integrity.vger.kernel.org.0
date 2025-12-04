@@ -1,213 +1,97 @@
-Return-Path: <linux-integrity+bounces-7798-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7799-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09086CA44F4
-	for <lists+linux-integrity@lfdr.de>; Thu, 04 Dec 2025 16:43:38 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD973CA5028
+	for <lists+linux-integrity@lfdr.de>; Thu, 04 Dec 2025 19:57:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E7FD13016FA0
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Dec 2025 15:43:36 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2C89F3022838
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Dec 2025 18:57:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2722DF13A;
-	Thu,  4 Dec 2025 15:43:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A33A334C0A;
+	Thu,  4 Dec 2025 18:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b0Eed214"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGYrVcBu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DD62D94BA
-	for <linux-integrity@vger.kernel.org>; Thu,  4 Dec 2025 15:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6641D63F0;
+	Thu,  4 Dec 2025 18:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764863014; cv=none; b=p12KL9VvaW2xAb2xLkT4mViWGPk8G/RXwOeElVhTMA+NuXYdAsyqNLw/CRVPoc5SL/s+HnlUwNDriL0r+HVgoZUxU5VF1bAuhh8fczc+ucFv7OVORPd940unVbPLbQAnH7/MIodwKFf6ebZet501jMYH3i3AZRV04Fk7hTm4HnQ=
+	t=1764874059; cv=none; b=I1aZluz2DmAL3emODDML8BVpjA1ELr1YErX6JW2QHD+o7b+IdSGPko9IvoTehvi70BCQxLQeNHEFpjhrAAB1S6ZUvcHc22EI8wIUKt5/oJSHNg3qqsOFpOzA/Etr5NCShs9t0diXPoJjPksUwLz4LkXtPv0VDZTN/PWijVGE9t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764863014; c=relaxed/simple;
-	bh=iKUJIm2WGMEBpZ5Nv3OHKAdudbcM2UVOMkylidNxVPA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CBeCoxg9G7IxLKACRzENgGnslFSdCSOZLk1CwEtWiot3BIVHIe+gZpH+E0L4r8m7eQOMmqjnGCrck6n9TfI1ouIF0yx3mlD03gu7L2VDgthc9Ng97D4S0MDQOAuLVRljQtzPaflJjKV23SHG/cFVQFtqdDMFYeUhfUgp+uPbDgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b0Eed214; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3414de5b27eso750946a91.0
-        for <linux-integrity@vger.kernel.org>; Thu, 04 Dec 2025 07:43:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764863011; x=1765467811; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xcULqT1gBZ4JnBLfYhNZO/NSXxFxQuxnawJT72KsaCg=;
-        b=b0Eed214jEfrU4eS3gnOoBcbOwGZ50ScGj+40v7Qa/mpjDyne6IjvFxQe58klC0jG7
-         x7w7kCxEt+e5RnFeH8Xk7kKR5GllsyBpXLwYLqiP3wc3BiYjcBSy9F7I+B2VVwE8hWJg
-         xiz3k/J76iwYa8Hoa5zyTrcGxGhkG0O6FfjmMr+P5q0DmV5zJwfyLB/UwgnvFrAG9Nl3
-         jN20VALypVvlmPZqEojlO4uJXdENjtBNT9fMmezm4mtUuxgRzbRN1r5JhS49ei2veskp
-         f3ge4DuYduvqll9mS/8FT6NeFMQNoG6PHhVevcE5bREYUZ5n9f7SSj4J2gZg5tZytUHM
-         B/wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764863011; x=1765467811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xcULqT1gBZ4JnBLfYhNZO/NSXxFxQuxnawJT72KsaCg=;
-        b=eybA1/qam+afY4yr4aMrI8UGegJjtiCFi15z8HfroPopDCK2iID8BpUVaAdbNA1Hwk
-         QANRSrYtnI+R6JJKB+5oaCFwB20uQZOY2yR780zPtbFkCwVgnpAO4yp5HZjvtlHS0ejg
-         jyV2/umiFv8RpEIl63jNwFgEiGJsgdYek5cDp78Y6+LaRuAA0QMWnHEIVXUntwivT13q
-         t1mk9ojlZZMaoiOGpnLkNkmBEKsoptgsyP0+KZOXlCinXJTEEamUvfVqTI7++cKX7vIS
-         gHg6YfR2v3bhnwOYQFlPRfbUvd8ZWDH2smL+jNx76wUxWpIOT3CJfOcmtvXfmGFK/8U1
-         GH5w==
-X-Forwarded-Encrypted: i=1; AJvYcCVbd83eB8h2NSPh4iLe7sb1F13nKuui5R/jF6+SyT7w31/7/vkvpsMwhtNLKUSDiI8MsKCOWrPGoweuWvzd5Eg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4HJcdv+sllofjHQQkTcqI+lFJ5xI2gxKj7j8gi9xQZyiyxfm5
-	tEsSS/LdWRudPEygJ4OzigA0RiqFYBdbBnOpflSnVUlnIboGauuKNz5eLxZGu1mTCmiP6DXqVrq
-	05gLFjoiwEkaWcxrwtKAwTpv8nVFpwu4=
-X-Gm-Gg: ASbGnct0W7vwtpaYwvQeHKxjcjZ/BYVML8URsb16pI7344125XqBJTMvLkJ7JqMwVi6
-	HhgJ1208oj269FEpDqGAKcdn28SAEqZVriSma7wfH2jeDiA5odG76OI0Oq+WVMLgkbfwJhg+UaB
-	/An3gKthRtm28PFLZxL0KTE1wOdoZV5knjiSX1ShukplBiMNUd9J8ktX8/k+iJsdFeu6rT2L9Qm
-	eYOk3xoK5haT4381BP/ftKEtadtbpPmzjC34kPvLis/04FEXtQ0pAG7GboNILQfSsNhs2sRbN0b
-	uxtq0g==
-X-Google-Smtp-Source: AGHT+IGPP0xbr8ijlvBCGceLouNPETyq6yt+2wUuDhEptf1TXNXkd61Kk0839gQ/19JRkHkqwlnGsXbepfF7hCbJxRQ=
-X-Received: by 2002:a17:90a:c883:b0:33b:d74b:179 with SMTP id
- 98e67ed59e1d1-349126e0e1cmr7801599a91.27.1764863011360; Thu, 04 Dec 2025
- 07:43:31 -0800 (PST)
+	s=arc-20240116; t=1764874059; c=relaxed/simple;
+	bh=aBxY+yeXb15BcB6Xl5bDbKq9uRhz1HRl79Z86J6Ybu4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTeWQ45DasXDi5mH+fWyfQrScOmIQJBlZ2ZS64mBTn/gyklt3ipeV0Nz8biSkTt03Ziy7qsb4eMmlgrMgE43EFCc5UfOsfcq8nd9qcVCyc3gj1SX0/7i1BJm4UpBkH7RfKKMCd94b6V5185szBOk1tznS6wtHmmZ2/tE4fmOPs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGYrVcBu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7199BC116C6;
+	Thu,  4 Dec 2025 18:47:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764874059;
+	bh=aBxY+yeXb15BcB6Xl5bDbKq9uRhz1HRl79Z86J6Ybu4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IGYrVcBuE68nPW1f8ynVRAwgA597ivDkxHiMwvaNGKPBwsWiVxo1jaiEjKVGS2iCW
+	 I68+t3ERUCIAMJdKMzxH9AS8WzmDQkateiJeF/wpFjqL8w5WTrH8KkhSnsyqKGUkmr
+	 9esKVfbQpMj/2NH+RB7PmaPkfjjd8rIlHw5OhELkVQb2yX/ByyP73Srqg3IreRo2IX
+	 546D/K8CseJD+5FvvVSsLe73uUY5e/hu7RmVstFn1Y+XH2JXDeuYqtdlAig2nbtqsv
+	 cv4mLKJiIcQLZgHSVJVJyeYE8Q1D+bhiAbBwe9p7MhcKH/WLCIyRetdcPanJNCAvk7
+	 sgVMWjqcgZiow==
+Date: Thu, 4 Dec 2025 20:47:34 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Jonathan McDowell <noodles@earth.li>
+Cc: linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	open list <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] tpm2-sessions: fix out of range indexing in
+ name_size
+Message-ID: <aTHXRuvbUkCiQQAL@kernel.org>
+References: <20251203221215.536031-1-jarkko@kernel.org>
+ <20251203221215.536031-2-jarkko@kernel.org>
+ <aTGkno0fzQMHXc7X@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <87tsyozqdu.fsf@email.froward.int.ebiederm.org> <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
- <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org> <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
- <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
-In-Reply-To: <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
-From: Stephen Smalley <stephen.smalley.work@gmail.com>
-Date: Thu, 4 Dec 2025 10:43:20 -0500
-X-Gm-Features: AWmQ_bmUfrO0mY15dNq3SP9hR0Gn5EatRKdJVj7voKpq3-tHkT_aD9YVC4fN8UE
-Message-ID: <CAEjxPJ61OHDxmc2fgBp=hq27OoEhkO+Wwbb+rYAf2F9fM7gdLg@mail.gmail.com>
-Subject: Re: Are setuid shell scripts safe? (Implied by security_bprm_creds_for_exec)
-To: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	Bernd Edlinger <bernd.edlinger@hotmail.de>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Alexey Dobriyan <adobriyan@gmail.com>, Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
-	Christian Brauner <brauner@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>, 
-	James Morris <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>, 
-	Adrian Reber <areber@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>, 
-	Alexei Starovoitov <ast@kernel.org>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	tiozhang <tiozhang@didiglobal.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, YueHaibing <yuehaibing@huawei.com>, 
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>, 
-	Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>, 
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Elena Reshetova <elena.reshetova@intel.com>, David Windsor <dwindsor@gmail.com>, 
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Hans Liljestrand <ishkamiel@gmail.com>, Penglei Jiang <superman.xpt@gmail.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Adrian Ratiu <adrian.ratiu@collabora.com>, 
-	Ingo Molnar <mingo@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Cyrill Gorcunov <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>, zohar@linux.ibm.com, 
-	linux-integrity@vger.kernel.org, Ryan Lee <ryan.lee@canonical.com>, 
-	apparmor <apparmor@lists.ubuntu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aTGkno0fzQMHXc7X@earth.li>
 
-On Mon, Dec 1, 2025 at 11:34=E2=80=AFAM Eric W. Biederman <ebiederm@xmissio=
-n.com> wrote:
->
-> Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
->
-> > + Mimi, linux-integrity (would be nice if we are in CC when linux-
-> > security-module is in CC).
-> >
-> > Apologies for not answering earlier, it seems I don't receive the
-> > emails from the linux-security-module mailing list (thanks Serge for
-> > letting me know!).
-> >
-> > I see two main effects of this patch. First, the bprm_check_security
-> > hook implementations will not see bprm->cred populated. That was a
-> > problem before we made this patch:
-> >
-> > https://patchew.org/linux/20251008113503.2433343-1-roberto.sassu@huawei=
-cloud.com/
->
-> Thanks, that is definitely needed.
->
-> Does calling process_measurement(CREDS_CHECK) on only the final file
-> pass review?  Do you know of any cases where that will break things?
->
-> As it stands I don't think it should be assumed that any LSM has
-> computed it's final creds until bprm_creds_from_file.  Not just the
-> uid and gid.
->
-> If the patch you posted for review works that helps sort that mess out.
->
-> > to work around the problem of not calculating the final DAC credentials
-> > early enough (well, we actually had to change our CREDS_CHECK hook
-> > behavior).
-> >
-> > The second, I could not check. If I remember well, unlike the
-> > capability LSM, SELinux/Apparmor/SMACK calculate the final credentials
-> > based on the first file being executed (thus the script, not the
-> > interpreter). Is this patch keeping the same behavior despite preparing
-> > the credentials when the final binary is found?
->
-> The patch I posted was.
->
-> My brain is still reeling from the realization that our security modules
-> have the implicit assumption that it is safe to calculate their security
-> information from shell scripts.
->
-> In the first half of the 90's I remember there was lots of effort to try
-> and make setuid shell scripts and setuid perl scripts work, and the
-> final conclusion was it was a lost cause.
->
-> Now I look at security_bprm_creds_for_exec and security_bprm_check which
-> both have the implicit assumption that it is indeed safe to compute the
-> credentials from a shell script.
->
-> When passing a file descriptor to execat we have
-> BINPRM_FLAGS_PATH_INACCESSIBLE and use /dev/fd/NNN as the filename
-> which reduces some of the races.
->
-> However when just plain executing a shell script we pass the filename of
-> the shell script as a command line argument, and expect the shell to
-> open the filename again.  This has been a time of check to time of use
-> race for decades, and one of the reasons we don't have setuid shell
-> scripts.
->
-> Yet the IMA implementation (without the above mentioned patch) assumes
-> the final creds will be calculated before security_bprm_check is called,
-> and security_bprm_creds_for_exec busily calculate the final creds.
->
-> For some of the security modules I believe anyone can set any label they
-> want on a file and they remain secure (At which point I don't understand
-> the point of having labels on files).  I don't believe that is the case
-> for selinux, or in general.
->
-> So just to remove the TOCTOU race the security_bprm_creds_for_exec
-> and security_bprm_check hooks need to be removed, after moving their
-> code into something like security_bprm_creds_from_file.
->
-> Or am I missing something and even with the TOCTOU race are setuid shell
-> scripts somehow safe now?
+On Thu, Dec 04, 2025 at 03:11:26PM +0000, Jonathan McDowell wrote:
+> On Thu, Dec 04, 2025 at 12:12:11AM +0200, Jarkko Sakkinen wrote:
+> > 'name_size' does not have any range checks, and it just directly indexes
+> > with TPM_ALG_ID, which could lead into memory corruption at worst.
+> > 
+> > Address the issue by only processing known values and returning -EINVAL for
+> > unrecognized values.
+> > 
+> > Make also 'tpm_buf_append_name' and 'tpm_buf_fill_hmac_session' fallible so
+> > that errors are detected before causing any spurious TPM traffic.
+> > 
+> > End also the authorization session on failure in both of the functions, as
+> > the session state would be then by definition corrupted.
+> > 
+> > Cc: stable@vger.kernel.org # v6.10+
+> > Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> 
+> A minor whitespace query below, but:
+> 
+> Reviewed-by: Jonathan McDowell <noodles@meta.com>
 
-setuid shell scripts are not safe. But SELinux (and likely AppArmor
-and others) have long relied on the ability to transition on shell
-scripts to _shed_ permissions. That's a matter of writing your policy
-sensibly.
-Changing it would break existing userspace and policies.
+Thanks. I updated the commit and removed the extra whitespace.
+
+BR, Jarkko
 
