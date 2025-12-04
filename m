@@ -1,180 +1,131 @@
-Return-Path: <linux-integrity+bounces-7792-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7793-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C21CA1CB2
-	for <lists+linux-integrity@lfdr.de>; Wed, 03 Dec 2025 23:14:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79579CA26C2
+	for <lists+linux-integrity@lfdr.de>; Thu, 04 Dec 2025 06:49:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0510230142E2
-	for <lists+linux-integrity@lfdr.de>; Wed,  3 Dec 2025 22:12:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6F94C303895F
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Dec 2025 05:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3402D063C;
-	Wed,  3 Dec 2025 22:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D3A82FD69C;
+	Thu,  4 Dec 2025 05:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BC0MOETy"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="nXmoy3q7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9222C0F70;
-	Wed,  3 Dec 2025 22:12:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEAE33EC;
+	Thu,  4 Dec 2025 05:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764799963; cv=none; b=pPgfYJ+gxhiy8HuhGQUoHmcLg5BnpQGZcIh5c+dk6I+J3b0y1NEVmCjZpZ7zLvlVKhmInD9KWlDXlk6YE8WU4forMgTrgwUBTIrTUdJ05dfAgJehGYxojjVEh7pQzHFVPLOY1kwIu/kt6IRetr8X9BC2XQa15SauJ7ypgpj0/2Y=
+	t=1764827382; cv=none; b=IsvmIOshhgREtyKjQAAVF00719pCsFYy5xZzpeI7cAIxTEQkxI//GfIUVmqo0cePydV6vteue+DqzjiVcHxn4kukIZfp7JzqsT9/arTmlU5JXD1uz9Jiqgh6JBLTVikeZ7EY3Dm70WzAf4jdbAkRVMas2uPipn8NWCRhS6bXpVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764799963; c=relaxed/simple;
-	bh=zrJn8EcwvPlQmApQF2Qhl2tuf7U7YPJfrDOiCzPAJsM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RX93xAw+YczASs+6ce7EkGNH3DIDSyYez2ma91lh93m2Z638XHknlu2IQqXaVWBIFqRW8kw1GAe8UOwsz3BAwkRLt2j2sPdeq1ixHuV3+tKHgmy1JYk5hJYOW41ew/2vs9vnJv/dZ7KA1G2UyiWrGHlVvo0O00AnRW9ZtiaUL68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BC0MOETy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C799C4CEF5;
-	Wed,  3 Dec 2025 22:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764799962;
-	bh=zrJn8EcwvPlQmApQF2Qhl2tuf7U7YPJfrDOiCzPAJsM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BC0MOETyKTn0kR2IyUdVYzR0ftMdgIBYAUF+7duvZWluwwjGk7IUfEM3YFsJBZKan
-	 mC6oCEdG9nj7+PXmcmpwNUqqelF9dP/n4MxykY9oXSr3/3ew4Cj6tZrC5SBTfo/JFR
-	 gTc3QlJjoQzPrgCol2ODPnXLmyFjN0eYGfJUusFlEc1VEQkappCiGrqlVnhz4f4C9i
-	 o//S0izrk5zOutPa1sPVLGkcn1hgU4vIqxaUzcPO0JqLyg29dcb98resEYrSptbDVG
-	 18/9dnd2no13fH0Z5U7YneRHUV6RBznGxg2i2hFGOIfEkePgNp9lNd/q/rS2qJpTXe
-	 kgySjtIv8dmnQ==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Jonathan McDowell <noodles@earth.li>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org (open list),
-	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
-	Jonathan McDowell <noodles@meta.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v3 4/4] tpm2-sessions: Open code tpm_buf_append_hmac_session()
-Date: Thu,  4 Dec 2025 00:12:14 +0200
-Message-ID: <20251203221215.536031-5-jarkko@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251203221215.536031-1-jarkko@kernel.org>
-References: <20251203221215.536031-1-jarkko@kernel.org>
+	s=arc-20240116; t=1764827382; c=relaxed/simple;
+	bh=1/qVzHTq0dl3bm/fJdmBkkGZRpToC5uG2LWdRmGkX5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cQILZj2FaHCHYACJS8T9xmLrWbx0WlmKpkJhnneN01TKcAJ5Ut0AH73/FiK8+iGRsE8YOWY2MbCgQJKT8AkW+kizwfaNLS3lXEeBUPONRoX5CW71LVSsBGSP6DZ1btl18aHFiwvYLyB9jCvOG9d26RY5fKugts6tWe4GB6I3fGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=nXmoy3q7; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=s6+X3uAjfnbMKEn6Xkh/hO+HnZ24JeUWApwybKJc010=; b=nXmoy3q7PEPpF5abxhwxO3qXvd
+	TkOCDMpiiUph/GGfD1WSJSK6FPE7975gCK4ZlbwYerMAlQ+aDVWKI0+zdSP+F0KjPdtQh7MNS982p
+	z3URRnIZyusnvBJZ0tu+Gk9YMZthTHw6do/oReTtyIYkuoIlZyFmFoCJSyIVZsPmb/mEgU5ADU4bK
+	UpeFaQlqNn8cm5F7j27o7aJ9XMA+VckFrpslNClucgYUn+qf2Q0VjoEWhwaITyMRS1yfk5eRiK27k
+	h1+uW0AsswtW89hBcY65p1OQhlSrI4BenMrX6NTWbeIfKYv8oym8o/6VjEDkCnb89R955AmHDd024
+	le4n+XBg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vR2DL-00000008t6s-2eTQ;
+	Thu, 04 Dec 2025 05:49:15 +0000
+Date: Thu, 4 Dec 2025 05:49:15 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
+	Adrian Reber <areber@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	tiozhang <tiozhang@didiglobal.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	YueHaibing <yuehaibing@huawei.com>,
+	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
+	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
+	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
+	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
+	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	David Windsor <dwindsor@gmail.com>,
+	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Hans Liljestrand <ishkamiel@gmail.com>,
+	Penglei Jiang <superman.xpt@gmail.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Adrian Ratiu <adrian.ratiu@collabora.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Cyrill Gorcunov <gorcunov@gmail.com>,
+	Eric Dumazet <edumazet@google.com>, zohar@linux.ibm.com,
+	linux-integrity@vger.kernel.org, Ryan Lee <ryan.lee@canonical.com>,
+	apparmor <apparmor@lists.ubuntu.com>
+Subject: Re: Are setuid shell scripts safe? (Implied by
+ security_bprm_creds_for_exec)
+Message-ID: <20251204054915.GI1712166@ZenIV>
+References: <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
+ <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
+ <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
+ <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
+ <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
+ <dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
+ <87ms42rq3t.fsf@email.froward.int.ebiederm.org>
+ <GV2PPF74270EBEE90CDCD964F69E806EF58E4D9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <GV2PPF74270EBEE90CDCD964F69E806EF58E4D9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+On Wed, Dec 03, 2025 at 02:16:29PM +0100, Bernd Edlinger wrote:
 
-Open code 'tpm_buf_append_hmac_session_opt' to the call site, as it only
-masks a call sequence and does otherwise nothing particularly useful.
+> Hmm, yes, that looks like an issue.
+> 
+> I would have expected the security engine to look at bprm->filenanme
+> especially in the case, when bprm->interp != bprm->filename,
+> and check that it is not a sym-link with write-access for the
+> current user and of course also that the bprm->file is not a regular file
+> which is writable by the current user, if that is the case I would have expected
+> the secuity engine to enforce non-new-privs on a SUID executable somehow.
 
-Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
-Reviewed-by: Jonathan McDowell <noodles@meta.com>
----
- drivers/char/tpm/tpm2-cmd.c               | 14 +++++++++++---
- include/linux/tpm.h                       | 23 -----------------------
- security/keys/trusted-keys/trusted_tpm2.c | 12 ++++++++++--
- 3 files changed, 21 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index ce0a1c6b0596..3a77be7ebf4a 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -282,9 +282,17 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
- 
- 	do {
- 		tpm_buf_reset(&buf, TPM2_ST_SESSIONS, TPM2_CC_GET_RANDOM);
--		tpm_buf_append_hmac_session_opt(chip, &buf, TPM2_SA_ENCRYPT
--						| TPM2_SA_CONTINUE_SESSION,
--						NULL, 0);
-+		if (tpm2_chip_auth(chip)) {
-+			tpm_buf_append_hmac_session(chip, &buf,
-+						    TPM2_SA_ENCRYPT |
-+						    TPM2_SA_CONTINUE_SESSION,
-+						    NULL, 0);
-+		} else  {
-+			offset = buf.handles * 4 + TPM_HEADER_SIZE;
-+			head = (struct tpm_header *)buf.data;
-+			if (tpm_buf_length(&buf) == offset)
-+				head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
-+		}
- 		tpm_buf_append_u16(&buf, num_bytes);
- 		err = tpm_buf_fill_hmac_session(chip, &buf);
- 		if (err) {
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index afa51723296a..202da079d500 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -536,29 +536,6 @@ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
- 				 int passphraselen);
- void tpm_buf_append_auth(struct tpm_chip *chip, struct tpm_buf *buf,
- 			 u8 *passphrase, int passphraselen);
--static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
--						   struct tpm_buf *buf,
--						   u8 attributes,
--						   u8 *passphrase,
--						   int passphraselen)
--{
--	struct tpm_header *head;
--	int offset;
--
--	if (tpm2_chip_auth(chip)) {
--		tpm_buf_append_hmac_session(chip, buf, attributes, passphrase, passphraselen);
--	} else  {
--		offset = buf->handles * 4 + TPM_HEADER_SIZE;
--		head = (struct tpm_header *)buf->data;
--
--		/*
--		 * If the only sessions are optional, the command tag must change to
--		 * TPM2_ST_NO_SESSIONS.
--		 */
--		if (tpm_buf_length(buf) == offset)
--			head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
--	}
--}
- 
- #ifdef CONFIG_TCG_TPM2_HMAC
- 
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 5b205279584b..a7ea4a1c3bed 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -481,8 +481,10 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 			   struct trusted_key_options *options,
- 			   u32 blob_handle)
- {
-+	struct tpm_header *head;
- 	struct tpm_buf buf;
- 	u16 data_len;
-+	int offset;
- 	u8 *data;
- 	int rc;
- 
-@@ -519,8 +521,14 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 		tpm2_buf_append_auth(&buf, options->policyhandle,
- 				     NULL /* nonce */, 0, 0,
- 				     options->blobauth, options->blobauth_len);
--		tpm_buf_append_hmac_session_opt(chip, &buf, TPM2_SA_ENCRYPT,
--						NULL, 0);
-+		if (tpm2_chip_auth(chip)) {
-+			tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT, NULL, 0);
-+		} else  {
-+			offset = buf.handles * 4 + TPM_HEADER_SIZE;
-+			head = (struct tpm_header *)buf.data;
-+			if (tpm_buf_length(&buf) == offset)
-+				head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
-+		}
- 	}
- 
- 	rc = tpm_buf_fill_hmac_session(chip, &buf);
--- 
-2.52.0
-
+Check that _what_ is not a symlink?  And while we are at it, what do write
+permissions to any symlinks have to do with anything whatsoever?
 
