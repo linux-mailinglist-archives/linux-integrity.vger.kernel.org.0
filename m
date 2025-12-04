@@ -1,247 +1,540 @@
-Return-Path: <linux-integrity+bounces-7795-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7796-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59CFDCA3B57
-	for <lists+linux-integrity@lfdr.de>; Thu, 04 Dec 2025 14:05:40 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30DFACA42CB
+	for <lists+linux-integrity@lfdr.de>; Thu, 04 Dec 2025 16:11:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0720D305EC2A
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Dec 2025 13:03:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 22B5E300B93B
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Dec 2025 15:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA1D2342512;
-	Thu,  4 Dec 2025 13:03:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5329E2D23B6;
+	Thu,  4 Dec 2025 15:11:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b="AfTXpEds"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="sFp1wamX"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazolkn19013087.outbound.protection.outlook.com [52.103.51.87])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97034340A47;
-	Thu,  4 Dec 2025 13:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.51.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764853407; cv=fail; b=gXJxEA4JJCwCs21WxFi7lmBKwYgr8BYQT9nBhMx4p+rA3JClKPISBbxVeVOtcn5zh1ty75cHz1yFq8S35LAfCPeXUmvrq1CytZB04VMnJlPX899krF4LoQBINGi0AAJLLDWoY7xB5bEjr8bzlFrauib/TtOAg4qJonpCN+YAsfg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764853407; c=relaxed/simple;
-	bh=rDAzkSAmbBsEqvPkuOabjO4edwuKBq+3JCR7xAgOThM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=AeP4e+/T9xhdfCdjyTzkWVnPJ+do7qOgVhUlRcHpgxqkXE1tgWqp/743ZRFo7449zqzuPxWIgNsq2jAGOv7uLndXAjjCU+wPdHvrVzyrXARHhjdzyX8ae3TSukEEdeX2MCzWzrwFG6jDjsTVx01nzP0K+Hxg7TptTP6qyVmj1kY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de; spf=pass smtp.mailfrom=hotmail.de; dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b=AfTXpEds; arc=fail smtp.client-ip=52.103.51.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aQwcAejHuY8Xa85/4KvTDv5gneYhlzp6wxWXcIX8g1oy3YkL84ieHejIKjb5bjWicSfJBP7bIb4AiMzcKF7UfcrJbI2U+0jOUJxXiqAe7Us1qQvX6GKn4wNn7/6UQR1U+oI14+LWgBpsvXv36nXirhRLn4VMjsYXoL+ZgnrjnRyaRrSoaiYAAlDfEsDjXGjj+JID7k079oFxW6uTv1HhtdyC5lmvqFmrChk+UuJrSv4GjRvpZERbyCSi6okkyQourJGvLmcf/NZGyfJqhdMcQeLA6zroYZROVejCKmMNX5dh3PRpc1el9hIn9UZ7h9LeOdeHUphnnqfYcmbEpJz8Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FfLQ8ERO31JC65yQjD9THg9jlyeHDYx4InrsaHOtEfo=;
- b=fPIcRHMHLU/oakofHymYo7obkSQoL47dcukx5ZFABfTGgMZxooGOvJNuT4f/bTxWdIN51ZA/DCxPW70RBPUi77X7LcipQjffanhdrvMTdAofCIWJ1/GcP2jMEDSZGSydeQa9J4W+An6IrYdwKulp2vro7OkUOgNVS3zAXMsuBkKnfNmeGrkNOICWwikn9PQxQk4Z31X7hCTEQjIjEHCdzGaOJ4a9SstsHpnAY1+/psBLZu9hxBlRwo5InjmMXHB4N29N5cTTwo/dajnJUU5OV5e3InJhb1cqhANzlWsOZZDecovLR7niZcjNU2/IZa2GYKwbwgAnKUq1OY6eZj78rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=HOTMAIL.DE;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FfLQ8ERO31JC65yQjD9THg9jlyeHDYx4InrsaHOtEfo=;
- b=AfTXpEdsSzodZQOGz2YnXmbLZljdb466MPXH6oa+ZI+x2RWbD/r0tFOqsm/TV+uuJRUFSF/dPOjzlqmIMY42vme9prsY6WnL4rsU3Yw2Muh9/5rgXg7T/xbuN8lj8h3qJP6onuBKVtU6/s1Ya94WN2miBZIdAxUrYrY9UlQpx8H3aiy2JaI/VANxi6QJn7bFp5ActHTR/r1yYuzSWTWWtQC9N2FFgo61w9/QZjBXOMdlbeHJsd+MPp6kgqucj3jJmMd7S03k/TfQkHVMTcLtSjnKmLbpPUE8PNshphm42RGc6PPfT0a8SYrfCbcz1aMIxnUXpLag9GD3DNsrCMr4Pw==
-Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:158:401::8d4) by DB5P195MB2377.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:10:488::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Thu, 4 Dec
- 2025 13:03:21 +0000
-Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- ([fe80::dde:411d:b5f2:49]) by GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- ([fe80::dde:411d:b5f2:49%8]) with mapi id 15.20.9366.012; Thu, 4 Dec 2025
- 13:03:20 +0000
-Message-ID:
- <GV2PPF74270EBEE0AAAE2EB22B668EE21A7E4A6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-Date: Thu, 4 Dec 2025 14:03:27 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: Are setuid shell scripts safe? (Implied by
- security_bprm_creds_for_exec)
-Content-Language: en-US
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>,
- Alexey Dobriyan <adobriyan@gmail.com>, Oleg Nesterov <oleg@redhat.com>,
- Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Christian Brauner <brauner@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Michal Hocko <mhocko@suse.com>,
- Serge Hallyn <serge@hallyn.com>, James Morris
- <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>,
- Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>,
- Helge Deller <deller@gmx.de>, Adrian Reber <areber@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
- Alexei Starovoitov <ast@kernel.org>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, tiozhang <tiozhang@didiglobal.com>,
- Luis Chamberlain <mcgrof@kernel.org>,
- "Paulo Alcantara (SUSE)" <pc@manguebit.com>,
- Sergey Senozhatsky <senozhatsky@chromium.org>,
- Frederic Weisbecker <frederic@kernel.org>, YueHaibing
- <yuehaibing@huawei.com>, Paul Moore <paul@paul-moore.com>,
- Aleksa Sarai <cyphar@cyphar.com>, Stefan Roesch <shr@devkernel.io>,
- Chao Yu <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>,
- Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>,
- David Hildenbrand <david@redhat.com>, Dave Chinner <dchinner@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>,
- David Windsor <dwindsor@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>,
- Ard Biesheuvel <ardb@kernel.org>,
- "Joel Fernandes (Google)" <joel@joelfernandes.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Hans Liljestrand <ishkamiel@gmail.com>,
- Penglei Jiang <superman.xpt@gmail.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Adrian Ratiu <adrian.ratiu@collabora.com>, Ingo Molnar <mingo@kernel.org>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Cyrill Gorcunov <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>,
- zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
- Ryan Lee <ryan.lee@canonical.com>, apparmor <apparmor@lists.ubuntu.com>
-References: <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
- <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
- <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
- <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
- <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
- <dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
- <87ms42rq3t.fsf@email.froward.int.ebiederm.org>
- <GV2PPF74270EBEE90CDCD964F69E806EF58E4D9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <20251204054915.GI1712166@ZenIV>
-From: Bernd Edlinger <bernd.edlinger@hotmail.de>
-In-Reply-To: <20251204054915.GI1712166@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0422.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:d1::16) To GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:158:401::8d4)
-X-Microsoft-Original-Message-ID:
- <cfe4ef32-dd26-4777-88dc-4f2f1b2fa6e8@hotmail.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD842E718B;
+	Thu,  4 Dec 2025 15:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764861110; cv=none; b=VyoYWrU/uHtTGZGmvPQe86b5MncYLrP9OboV49pUpamuP7eGZ66/xKGwCOJFQCG3xBLnsqqMZxGldBBa5odcTZ9M5MrTOeS/A0QjqnWYO0P8mWfGewDKVczTGwKgF8VB0g8jBHAiyTo2S0/Yv03g2ZB+Vuda/5ohayGxcONNd1A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764861110; c=relaxed/simple;
+	bh=pC5MQgWXqfKXzUJm17Og5AAeCXPcjkz7XDPwj4iCQGE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=acCrya7JkrAIsovv/3Cs1lyDjcPvEOa09uDW+oAqF7w9n+5O/pb0Zayl5CXZBuxwuVMzSk9mSXtXnc2+Xv99nWqdXqd5152yhtQeew/lghHraKcqMRfNJFZc6rJ0S52bPaqSUqpCwRv8yVnc291GSAD+ZyBlX0XO0NIfV35okHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=sFp1wamX; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=SOlRK6FNfysOiDMwAfC1XAWs6FKI/Ub7aF/BY/itl54=; b=sFp1wamXzx9AEPb3arOjhQFpgV
+	Ll2yKjHnTbf6+kP2HcoRrORiB8/xMHvuoGErtgaSR0Si1qsP+HsnZ7068SrYWEJXkbgNRAtdeDR8l
+	6hLsdVb5eUlCxfQUpj7VvAnTjh+NkzMGfUCN28MakR/w6NlVb8M6ZSBw4I0ro+puiyIog3fkOV90p
+	qLXtfSiWgp+dETXI/KE5qtCsSlDe8z9yX/hMFtqXtzzZ8eHCP1icpU9wfVwrOgFj3vofqlhGxKKk9
+	qwlnqZLkdh8POq9uZAgcUPZZEU82p1fq5RCtx39qPWWBTTQGtSHTFJM04Jg+QgsRQazxWrXorR/KB
+	HfAxMBgg==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1vRAzO-005yoP-1K;
+	Thu, 04 Dec 2025 15:11:26 +0000
+Date: Thu, 4 Dec 2025 15:11:26 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	open list <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] tpm2-sessions: fix out of range indexing in
+ name_size
+Message-ID: <aTGkno0fzQMHXc7X@earth.li>
+References: <20251203221215.536031-1-jarkko@kernel.org>
+ <20251203221215.536031-2-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV2PPF74270EBEE:EE_|DB5P195MB2377:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb352ac1-afa8-42b2-f63c-08de33357fb0
-X-MS-Exchange-SLBlob-MailProps:
-	dx7TrgQSB6cF2LXCYaYySNJkazjXzT0W6dI2EvZNId9LCZCpVWYpywxz0+YXNOfUkrsFpc0ZuSwIV7Z5JRtJSHc+80d/GHB40BPWqGNMRZMLRvfsqcGZZVKhRvOXwlT+hU2ku9waROpqbAFl+ug1RyctFHWMPkTDadNb9tLLU9B6bGJKUygYmut6GvLsBHjIIthjgeCf3GTl1nQVZ/ybX9qAgDUz8IEy7UPTrUG/A/Uoy09vCW+LCOyhp3h5EYxavBswvGPfhxs3ikIp925Z1UVg/FewWXEoqEucjhFxhPdQacvPDP0b7qqenbw+L3qxWfOTAycrjO4cLdkUoYDKCUyzgR9i3QABrDjBc8DuxiMX1yZkr5Wdl75waQFi5KGsnEssPmnMQgKhmhHwJ1AZIUlNNMOv+ZvLD3/60BTzqU3w4whoqcYehT9iXiy+DhuZYdXcI+sxSAmo6hrKh+ye6cR5KpkzYKGQPuHhHql1iefEHBf1Q5Ppm8RK6uTamPXjE17tbnOXKRMconPd8lwDHdlBwJ85rbKHovqjqrODPYhfVUNYAUEhMAQjogdJ9sLH9gEbqIuwN+0WEMwt40IypgMp7ppqPF3pNrqSZcOyXbEPtQMa/qiI9FRTmVNgTaJwwZRwBbfncf7HMtuqcZ1kTyYk5GQK+ztS+hLxaPC+oVhoEor3z6V9jdoZChG+DYBAHZWhT6AvTkmEP0otDXMNaAfiY6By2AF19pCnKeCRUdHPBuUlyUwZTmRKCSifgFHlowuXMSo1HtU=
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|6090799003|51005399006|461199028|8060799015|19110799012|23021999003|12121999013|5072599009|21061999006|10092599007|15080799012|3412199025|440099028|40105399003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YmlvL1FYeGxxaTg4SjdqVkpzbGNaa09jUCs1MWNkUkgxc3BuUlpCSjdRbytl?=
- =?utf-8?B?VXdUUXNBQ1RpcG5LTG4yZHFOTVQwOVZ3cU00bTdkRmdRc2ZXWDFkM0FTTlhq?=
- =?utf-8?B?OWM5TExSVWZqanBTQncyYi9IQUZobEhGOS9TNW1ndHBlVHVPdHFZTEFxME9q?=
- =?utf-8?B?aHFlcXRWM1NhejI5YWJyb00wSnNPeld3bHpuelFVSUpXTGN1YVRWYUxKWDZ4?=
- =?utf-8?B?dll2SElNV1p0QVlBeEw3c0hVeTRFY0szQmdEYnpxcFB1NmFxMEltbm5QQVNa?=
- =?utf-8?B?SGNDVFZXenVyT1BsK2huQml5K1lPTG9ZNGkzUktPOG0zWHdwREJaOCtPSDZB?=
- =?utf-8?B?UUdkVVovZTlwSElyOUNJU0dCMnNYR0VrcmtqNlp4eStyRVJ6OGkwNEc3UG1Y?=
- =?utf-8?B?Z2hvMTJJN0hjcmRNb0hOaTEwbHlocitWbGFXbCt5L3EwMlRLZG5xOVA2VGZ2?=
- =?utf-8?B?RzlrZHEwTDVMMTlIZlZaT3VrNHUyeG1WS1dGNFJNRG8yblI2Q1R2MWdJenJ5?=
- =?utf-8?B?aGZscjdKVDR1cTY4akhNL243bXpHM1ZYenpJbTdVOXdVaVZ2STd3Um9iVkdB?=
- =?utf-8?B?cy9xL3NOWG5pOCtzekJwNXBEcGozcFpDRVFRNE9od0NDK0gzbGhmUGpNY2J3?=
- =?utf-8?B?VGlGM0VKbTRFbUdLaHFMR0JBQWtKREcySHBpekhsUmRqcDBTNDZ6TmQwKzZy?=
- =?utf-8?B?cVZTakw4czFRSEpHWUFhRTRZSWVnRjliZE5FdWRuRGpqeEZkUCtIZDE2V05s?=
- =?utf-8?B?WGV2RWt1K3ljN2FIdkZRck5BL29FS2VjWTRYbTZkZzR3RDl1Z1p4VVZiYnYv?=
- =?utf-8?B?WUpzaHB6Zm0xL0gybmZqb0p6RkhCeE16QVRobEdRbE16eGNZUG5pMFJ3d0ZW?=
- =?utf-8?B?TEJoTnpnYy9rWHlPU0RxRFlEMVJjMm12ci8rbGdOR3BubFI5dEJFazdtcWZ5?=
- =?utf-8?B?OG51dnpkTDFyWnJSYlZ6V0kyWGlxRERNRGRYNDdwcE1kL003MGJUdklrVE1I?=
- =?utf-8?B?eGdMMUhYelNxa3VHdFZYWFkzazF1c3VkbXF1U2RGajlpYVlCV1EyWEZXb1FB?=
- =?utf-8?B?V205NDFSWHczSXM2WWVKUk56cHFkVjhTdVBERy9oVWRHQ0F5YTlMdCsxb3VK?=
- =?utf-8?B?bG1rNE5IWXRRWGdHaUg5Z1VJWmJ4dmtMSEg1UFp0WmNVVWdNRVYydEVsMnRm?=
- =?utf-8?B?UGt6dDA4NGxzUGJVSUhxd0FNVzMwbC8yMTFnb09RbTJYb0VWZGpsaDFYTHlI?=
- =?utf-8?B?dWxick14eS90bEtvdXBqc0pDUCs2RFdRbUJLd1A4MUh5V0RQTWl5M2lVWHc4?=
- =?utf-8?B?NWdGSDJTYmtlSmdsMnBqK0pKNGw1eDg0WFJTR0ZVZ3hJYWdRc0F3Qy94dGpU?=
- =?utf-8?B?ODBuMUtDUW1yeHdMUkJBeDNRd3dYVDAwcUtJQm41M1FqRlZPNE96SjlXTmlL?=
- =?utf-8?B?RGlqUkgwL3I5SSt0Mm5mWE81NWdJbDB2NllRa3dqdnR5QWV0NzcrSmkrWmFu?=
- =?utf-8?B?YXQ3SXo4L2ZDSzJoMDUvVk5mdW1vTTB1allhSmdiQWdpWHhTclI3aStwazB2?=
- =?utf-8?B?ei9ZRnJCVlJrV20rWXZJWnM3VDZPRVFXblR6enZSd3g0QkgwQ0QxaGZYSVVM?=
- =?utf-8?B?ZlpKcDF3eEx4UDBnQ3JRWi9TNUQxYkt2MUZtdzBtWnQ1WTJseXpTTGdLZk1i?=
- =?utf-8?B?TTVmcS9JUEl6cXo4U0JDVy9ZeDc2aVJsUGZQK0tBUXAzdXhaYVpJbFpnOTk4?=
- =?utf-8?Q?kJ/loB1bc/BHbV8Phg=3D?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZWp4SWxKUWFIaTMycWlvVlFJZHV0dFBYUERZbkFBWC8rM05CcFZZL2hxVEsx?=
- =?utf-8?B?SkkvSW5LTmthcS9veTVXS0YzMnlIbnkvNzJjNHQ2OGlkcTV4elFQRmN6UUhz?=
- =?utf-8?B?eisxS1pMQjdTV2RIZFFkUjc0MExBS1A5bGs0K0VFa29mcFlxbDd4ZTE2N3dR?=
- =?utf-8?B?MEs3d1JYQ3FjVVVaVkxoRVR0RGI1U2k4Z3ZpWktHOGxkVTN0eEx0Y1FONi81?=
- =?utf-8?B?bHVaVCtwNEFTQkZ6aEZIWXpoYVBDRm1CZFZpMXVlRy83V0oyNTZsODdkbGJh?=
- =?utf-8?B?clZPME4zN1o1NzhoVTVqekJQTFRUNFNXVEh4bUExRWRjeUlwRXZYMW9nUmMw?=
- =?utf-8?B?MDM5V0hpNWp0SEdIc3lDeldXZnd3YXlnZWJmMDdWelhGdHlQMXl0OHhsRmxl?=
- =?utf-8?B?QXZuZTVNTHo3alI1VWdhVXUveHh0ajRjQXovNkhUc2lVci9nV1lzelZtaWZr?=
- =?utf-8?B?TXlJMmM2cFZUVjVBNWx0U2NxNjUvVXRSYW1jSkloN1Y4a21Ud0xiYW8xYnVR?=
- =?utf-8?B?ZlVJQjlxRys2NllpSlpEOFhrbzJsS0dyZ0hGbWVUVmJRRW9IR01uZ0RVRVdN?=
- =?utf-8?B?b3V6ajlTcnZmd1Z0dVZXaEpwUFhZOVdmMjdxYkhDcDkvS3ZQWUJTTC9GYzUz?=
- =?utf-8?B?Qjl3YWR5OGpZVERyait6QndIK3JMOFBibllkUzlWdmtwaEpzUm56WHI3RGJo?=
- =?utf-8?B?Z3FaTVRJL2tyMnMxVThKUVNsR2tGcnJENDdqSS9yTEtTdStkMnBRKytMSTJ0?=
- =?utf-8?B?eXo1VFNQQ09NNk5aWGhTYnNOU0JiQkkzU2dRdnNhTEY5Zi8vek1tSm1aUmtp?=
- =?utf-8?B?b0Q4ZG4waFNreHFUcitROGlzTUlRU0p2enJKYmtDYm5qbGtjeVRnSFFFRWNs?=
- =?utf-8?B?WUE2K1FqQXlOZCtCeXpsUUNnTGtBVFNLWkxyemFyQTlnN2ViS3doS3ZRSFhv?=
- =?utf-8?B?WVdibTltZ0dtVzFaMWJMU1Fkb0l4cUdpalNQdGRGbUxUcjBZK0ZSTWRnaTZz?=
- =?utf-8?B?TkJTSjNpVSswU2hQZkRVK1c5dFhrQUo5Q0xzNlIzdXloTGNUbWJYM3BzZENh?=
- =?utf-8?B?RmV0dGJXc0lrZVF3SlRzTmlobjI0dkxxbWZnWFhsUG1TVEZzaGZPbDlwTVp2?=
- =?utf-8?B?SVRwbTlzRTFldGxjaHYwdnV3aWRqc0Mxa3d3Rm5EWDVNODBhaGhVYmszYmpx?=
- =?utf-8?B?SkJ1akQ4cERFVWpjYWprTEV1OVg4a3RKckJQNGVtbHlReFo3U1paMWRnZTlo?=
- =?utf-8?B?QXZZS3M4N0hNTmNuZmFXN0tibGhTYXpCamJobHpFMSs0U1BlUDNPODdFWW1B?=
- =?utf-8?B?b0RXa2NkMzM5UkZiSVJ0Tk9aMEJYR1ZkZGxOU083RkxXcWY0T2ZTaGlUTW5l?=
- =?utf-8?B?cFhsSVR3b1ZBbElvaVQ2blJhNFh4eGVISU5NOUxIbUhDbmtFNm9oYXExREJJ?=
- =?utf-8?B?bVZhbURvbUNwcW1JbVpGTVE4MUF5QkhQL3NtQ1Zwc0dEd1RLMExXQzRhcnQ3?=
- =?utf-8?B?bjZLNTZmZ2FOV2hBRVRUZzB3c3Jwb0hjOVVHMzFXSHpMb2kxbGxvNUlRNENP?=
- =?utf-8?B?Yys4VFkza0dOUEYvOTBVU25UdXN1OTBUNjhTSHRmSGg5UndYcmNMK050SFYy?=
- =?utf-8?B?ZmNJcDdSRjhEbVh5RTZUK0lUZSt6SkxLVlJ3dDdmQnlueFZXUENpRm9xelRj?=
- =?utf-8?B?Wjh6Zm41SlE3Yng0L0taeHZqMnhkcE9GVEZFUzUwUGZtb3MvK1JsZE1RNnkv?=
- =?utf-8?Q?uBwkX0DCE7SuSOzYfd1xadnRIr3Cdj5xZ+lLp+B?=
-X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-87dd8.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb352ac1-afa8-42b2-f63c-08de33357fb0
-X-MS-Exchange-CrossTenant-AuthSource: GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2025 13:03:20.5836
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5P195MB2377
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20251203221215.536031-2-jarkko@kernel.org>
 
-On 12/4/25 06:49, Al Viro wrote:
-> On Wed, Dec 03, 2025 at 02:16:29PM +0100, Bernd Edlinger wrote:
-> 
->> Hmm, yes, that looks like an issue.
->>
->> I would have expected the security engine to look at bprm->filenanme
->> especially in the case, when bprm->interp != bprm->filename,
->> and check that it is not a sym-link with write-access for the
->> current user and of course also that the bprm->file is not a regular file
->> which is writable by the current user, if that is the case I would have expected
->> the secuity engine to enforce non-new-privs on a SUID executable somehow.
-> 
-> Check that _what_ is not a symlink?  And while we are at it, what do write
-> permissions to any symlinks have to do with anything whatsoever?
+On Thu, Dec 04, 2025 at 12:12:11AM +0200, Jarkko Sakkinen wrote:
+>'name_size' does not have any range checks, and it just directly indexes
+>with TPM_ALG_ID, which could lead into memory corruption at worst.
+>
+>Address the issue by only processing known values and returning -EINVAL for
+>unrecognized values.
+>
+>Make also 'tpm_buf_append_name' and 'tpm_buf_fill_hmac_session' fallible so
+>that errors are detected before causing any spurious TPM traffic.
+>
+>End also the authorization session on failure in both of the functions, as
+>the session state would be then by definition corrupted.
+>
+>Cc: stable@vger.kernel.org # v6.10+
+>Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
+>Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-When we execve a normal executable, we do open the binary file with deny_write_access
-so this might allow the security engine to inspaect the binary, before it is used.
-However this behavior has changed recently, now it has some exceptions, where even
-this behavior is no longer guaranteed for binary executables, due to
-commit 0357ef03c94ef835bd44a0658b8edb672a9dbf51, but why?  I have no idea...
+A minor whitespace query below, but:
 
-But with shell scripts an attack is possible, where a sym-link is executed,
-and the SUID bit of the target file is used but a race condition might allow
-the attacker to replace the script that is used by the shell:
+Reviewed-by: Jonathan McDowell <noodles@meta.com>
 
-Consider this:
+>v3:
+>- Fix pr_warn() format string in name_size().
+>- Fix !CONFIG_TPM2_HMAC compilation.
+>v2:
+>- Wrote a better short summary.
+>- Addressed remarks in https://lore.kernel.org/linux-integrity/aS8TIeviaippVAha@earth.li/
+>- Use -EIO consistently in tpm2_fill_hmac_session. These are not input value
+>  errors. They could only spun from malformed (kernel) state.
+>- name_size did not have a proper default-case. Reorganize the
+>  fallback into that.
+>---
+> drivers/char/tpm/tpm2-cmd.c               |  23 +++-
+> drivers/char/tpm/tpm2-sessions.c          | 133 +++++++++++++++-------
+> include/linux/tpm.h                       |  13 ++-
+> security/keys/trusted-keys/trusted_tpm2.c |  29 ++++-
+> 4 files changed, 143 insertions(+), 55 deletions(-)
+>
+>diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+>index dd502322f499..be4a9c7f2e1a 100644
+>--- a/drivers/char/tpm/tpm2-cmd.c
+>+++ b/drivers/char/tpm/tpm2-cmd.c
+>@@ -199,7 +199,11 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+> 	}
+>
+> 	if (!disable_pcr_integrity) {
+>-		tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
+>+		rc = tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
+>+		if (rc) {
+>+			tpm_buf_destroy(&buf);
+>+			return rc;
+>+		}
+> 		tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
+> 	} else {
+> 		tpm_buf_append_handle(chip, &buf, pcr_idx);
+>@@ -214,8 +218,14 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+> 			       chip->allocated_banks[i].digest_size);
+> 	}
+>
+>-	if (!disable_pcr_integrity)
+>-		tpm_buf_fill_hmac_session(chip, &buf);
+>+	if (!disable_pcr_integrity) {
+>+		rc = tpm_buf_fill_hmac_session(chip, &buf);
+>+		if (rc) {
+>+			tpm_buf_destroy(&buf);
+>+			return rc;
+>+		}
+>+	}
+>+
+> 	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting extend a PCR value");
+> 	if (!disable_pcr_integrity)
+> 		rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+>@@ -273,7 +283,12 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+> 						| TPM2_SA_CONTINUE_SESSION,
+> 						NULL, 0);
+> 		tpm_buf_append_u16(&buf, num_bytes);
+>-		tpm_buf_fill_hmac_session(chip, &buf);
+>+		err = tpm_buf_fill_hmac_session(chip, &buf);
+>+		if (err) {
+>+			tpm_buf_destroy(&buf);
+>+			return err;
+>+		}
+>+
+> 		err = tpm_transmit_cmd(chip, &buf,
+> 				       offsetof(struct tpm2_get_random_out,
+> 						buffer),
+>diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+>index 6d03c224e6b2..a265e9752a5e 100644
+>--- a/drivers/char/tpm/tpm2-sessions.c
+>+++ b/drivers/char/tpm/tpm2-sessions.c
+>@@ -144,16 +144,23 @@ struct tpm2_auth {
+> /*
+>  * Name Size based on TPM algorithm (assumes no hash bigger than 255)
+>  */
+>-static u8 name_size(const u8 *name)
+>+static int name_size(const u8 *name)
+> {
+>-	static u8 size_map[] = {
+>-		[TPM_ALG_SHA1] = SHA1_DIGEST_SIZE,
+>-		[TPM_ALG_SHA256] = SHA256_DIGEST_SIZE,
+>-		[TPM_ALG_SHA384] = SHA384_DIGEST_SIZE,
+>-		[TPM_ALG_SHA512] = SHA512_DIGEST_SIZE,
+>-	};
+>-	u16 alg = get_unaligned_be16(name);
+>-	return size_map[alg] + 2;
+>+	u16 hash_alg = get_unaligned_be16(name);
+>+
+>+	switch (hash_alg) {
+>+	case TPM_ALG_SHA1:
+>+		return SHA1_DIGEST_SIZE + 2;
+>+	case TPM_ALG_SHA256:
+>+		return SHA256_DIGEST_SIZE + 2;
+>+	case TPM_ALG_SHA384:
+>+		return SHA384_DIGEST_SIZE + 2;
+>+	case TPM_ALG_SHA512:
+>+		return SHA512_DIGEST_SIZE + 2;
+>+	default:
+>+		pr_warn("tpm: unsupported name algorithm: 0x%04x\n", hash_alg);
+>+		return -EINVAL;
+>+	}
+> }
+>
+> static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
+>@@ -161,6 +168,7 @@ static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
+> 	struct tpm_header *head = (struct tpm_header *)buf->data;
+> 	off_t offset = TPM_HEADER_SIZE;
+> 	u32 tot_len = be32_to_cpu(head->length);
+>+	int ret;
+> 	u32 val;
+>
+> 	/* we're starting after the header so adjust the length */
+>@@ -172,9 +180,15 @@ static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
+> 		return -EINVAL;
+> 	offset += val;
+> 	/* name */
+>+
 
-ln -s /usr/bin/legitimate-suid-sctipt.sh
-where legitimate-suid-sctipt.sh starts with "#! /bin/bash -"
+Spurious extra blank line? Or meant to be before the comment?
 
-and the attack works this way:
-./legitmate-suid-script.sh &
-ln -f -s do-what-i-want.sh legitimate-suid-script.sh
+> 	val = tpm_buf_read_u16(buf, &offset);
+>-	if (val != name_size(&buf->data[offset]))
+>+	ret = name_size(&buf->data[offset]);
+>+	if (ret < 0)
+>+		return ret;
+>+
+>+	if (val != ret)
+> 		return -EINVAL;
+>+
+> 	memcpy(name, &buf->data[offset], val);
+> 	/* forget the rest */
+> 	return 0;
+>@@ -221,46 +235,72 @@ static int tpm2_read_public(struct tpm_chip *chip, u32 handle, char *name)
+>  * As with most tpm_buf operations, success is assumed because failure
+>  * will be caused by an incorrect programming model and indicated by a
+>  * kernel message.
+>+ *
+>+ * Ends the authorization session on failure.
+>  */
+>-void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+>-			 u32 handle, u8 *name)
+>+int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+>+			u32 handle, u8 *name)
+> {
+> #ifdef CONFIG_TCG_TPM2_HMAC
+> 	enum tpm2_mso_type mso = tpm2_handle_mso(handle);
+> 	struct tpm2_auth *auth;
+> 	int slot;
+>+	int ret;
+> #endif
+>
+> 	if (!tpm2_chip_auth(chip)) {
+> 		tpm_buf_append_handle(chip, buf, handle);
+>-		return;
+>+		return 0;
+> 	}
+>
+> #ifdef CONFIG_TCG_TPM2_HMAC
+> 	slot = (tpm_buf_length(buf) - TPM_HEADER_SIZE) / 4;
+> 	if (slot >= AUTH_MAX_NAMES) {
+>-		dev_err(&chip->dev, "TPM: too many handles\n");
+>-		return;
+>+		dev_err(&chip->dev, "too many handles\n");
+>+		ret = -EIO;
+>+		goto err;
+> 	}
+> 	auth = chip->auth;
+>-	WARN(auth->session != tpm_buf_length(buf),
+>-	     "name added in wrong place\n");
+>+	if (auth->session != tpm_buf_length(buf)) {
+>+		dev_err(&chip->dev, "session state malformed");
+>+		ret = -EIO;
+>+		goto err;
+>+	}
+> 	tpm_buf_append_u32(buf, handle);
+> 	auth->session += 4;
+>
+> 	if (mso == TPM2_MSO_PERSISTENT ||
+> 	    mso == TPM2_MSO_VOLATILE ||
+> 	    mso == TPM2_MSO_NVRAM) {
+>-		if (!name)
+>-			tpm2_read_public(chip, handle, auth->name[slot]);
+>+		if (!name) {
+>+			ret = tpm2_read_public(chip, handle, auth->name[slot]);
+>+			if (ret)
+>+				goto err;
+>+		}
+> 	} else {
+>-		if (name)
+>-			dev_err(&chip->dev, "TPM: Handle does not require name but one is specified\n");
+>+		if (name) {
+>+			dev_err(&chip->dev, "handle 0x%08x does not use a name\n",
+>+				handle);
+>+			ret = -EIO;
+>+			goto err;
+>+		}
+> 	}
+>
+> 	auth->name_h[slot] = handle;
+>-	if (name)
+>-		memcpy(auth->name[slot], name, name_size(name));
+>+	if (name) {
+>+		ret = name_size(name);
+>+		if (ret < 0)
+>+			goto err;
+>+
+>+		memcpy(auth->name[slot], name, ret);
+>+	}
+>+#endif
+>+	return 0;
+>+
+>+#ifdef CONFIG_TCG_TPM2_HMAC
+>+err:
+>+	tpm2_end_auth_session(chip);
+>+	return tpm_ret_to_err(ret);
+> #endif
+> }
+> EXPORT_SYMBOL_GPL(tpm_buf_append_name);
+>@@ -533,11 +573,9 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
+>  * encryption key and encrypts the first parameter of the command
+>  * buffer with it.
+>  *
+>- * As with most tpm_buf operations, success is assumed because failure
+>- * will be caused by an incorrect programming model and indicated by a
+>- * kernel message.
+>+ * Ends the authorization session on failure.
+>  */
+>-void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+>+int tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+> {
+> 	u32 cc, handles, val;
+> 	struct tpm2_auth *auth = chip->auth;
+>@@ -549,9 +587,12 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+> 	u8 cphash[SHA256_DIGEST_SIZE];
+> 	struct sha256_ctx sctx;
+> 	struct hmac_sha256_ctx hctx;
+>+	int ret;
+>
+>-	if (!auth)
+>-		return;
+>+	if (!auth) {
+>+		ret = -EIO;
+>+		goto err;
+>+	}
+>
+> 	/* save the command code in BE format */
+> 	auth->ordinal = head->ordinal;
+>@@ -560,9 +601,11 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+>
+> 	i = tpm2_find_cc(chip, cc);
+> 	if (i < 0) {
+>-		dev_err(&chip->dev, "Command 0x%x not found in TPM\n", cc);
+>-		return;
+>+		dev_err(&chip->dev, "command 0x%08x not found\n", cc);
+>+		ret = -EIO;
+>+		goto err;
+> 	}
+>+
+> 	attrs = chip->cc_attrs_tbl[i];
+>
+> 	handles = (attrs >> TPM2_CC_ATTR_CHANDLES) & GENMASK(2, 0);
+>@@ -576,9 +619,9 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+> 		u32 handle = tpm_buf_read_u32(buf, &offset_s);
+>
+> 		if (auth->name_h[i] != handle) {
+>-			dev_err(&chip->dev, "TPM: handle %d wrong for name\n",
+>-				  i);
+>-			return;
+>+			dev_err(&chip->dev, "invalid handle 0x%08x\n", handle);
+>+			ret = -EIO;
+>+			goto err;
+> 		}
+> 	}
+> 	/* point offset_s to the start of the sessions */
+>@@ -609,12 +652,14 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+> 		offset_s += len;
+> 	}
+> 	if (offset_s != offset_p) {
+>-		dev_err(&chip->dev, "TPM session length is incorrect\n");
+>-		return;
+>+		dev_err(&chip->dev, "session length is incorrect\n");
+>+		ret = -EIO;
+>+		goto err;
+> 	}
+> 	if (!hmac) {
+>-		dev_err(&chip->dev, "TPM could not find HMAC session\n");
+>-		return;
+>+		dev_err(&chip->dev, "could not find HMAC session\n");
+>+		ret = -EIO;
+>+		goto err;
+> 	}
+>
+> 	/* encrypt before HMAC */
+>@@ -646,8 +691,11 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+> 		if (mso == TPM2_MSO_PERSISTENT ||
+> 		    mso == TPM2_MSO_VOLATILE ||
+> 		    mso == TPM2_MSO_NVRAM) {
+>-			sha256_update(&sctx, auth->name[i],
+>-				      name_size(auth->name[i]));
+>+			ret = name_size(auth->name[i]);
+>+			if (ret < 0)
+>+				goto err;
+>+
+>+			sha256_update(&sctx, auth->name[i], ret);
+> 		} else {
+> 			__be32 h = cpu_to_be32(auth->name_h[i]);
+>
+>@@ -668,6 +716,11 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+> 	hmac_sha256_update(&hctx, auth->tpm_nonce, sizeof(auth->tpm_nonce));
+> 	hmac_sha256_update(&hctx, &auth->attrs, 1);
+> 	hmac_sha256_final(&hctx, hmac);
+>+	return 0;
+>+
+>+err:
+>+	tpm2_end_auth_session(chip);
+>+	return ret;
+> }
+> EXPORT_SYMBOL(tpm_buf_fill_hmac_session);
+>
+>diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+>index 3d8f7d1ce2b8..aa816b144ab3 100644
+>--- a/include/linux/tpm.h
+>+++ b/include/linux/tpm.h
+>@@ -529,8 +529,8 @@ static inline struct tpm2_auth *tpm2_chip_auth(struct tpm_chip *chip)
+> #endif
+> }
+>
+>-void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+>-			 u32 handle, u8 *name);
+>+int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+>+			u32 handle, u8 *name);
+> void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
+> 				 u8 attributes, u8 *passphrase,
+> 				 int passphraselen);
+>@@ -563,7 +563,7 @@ static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
+> #ifdef CONFIG_TCG_TPM2_HMAC
+>
+> int tpm2_start_auth_session(struct tpm_chip *chip);
+>-void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf);
+>+int tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf);
+> int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
+> 				int rc);
+> void tpm2_end_auth_session(struct tpm_chip *chip);
+>@@ -577,10 +577,13 @@ static inline int tpm2_start_auth_session(struct tpm_chip *chip)
+> static inline void tpm2_end_auth_session(struct tpm_chip *chip)
+> {
+> }
+>-static inline void tpm_buf_fill_hmac_session(struct tpm_chip *chip,
+>-					     struct tpm_buf *buf)
+>+
+>+static inline int tpm_buf_fill_hmac_session(struct tpm_chip *chip,
+>+					    struct tpm_buf *buf)
+> {
+>+	return 0;
+> }
+>+
+> static inline int tpm_buf_check_hmac_response(struct tpm_chip *chip,
+> 					      struct tpm_buf *buf,
+> 					      int rc)
+>diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+>index 8bc6efa8accb..5b205279584b 100644
+>--- a/security/keys/trusted-keys/trusted_tpm2.c
+>+++ b/security/keys/trusted-keys/trusted_tpm2.c
+>@@ -268,7 +268,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+> 		goto out_put;
+> 	}
+>
+>-	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
+>+	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
+>+	if (rc)
+>+		goto out;
+>+
+> 	tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_DECRYPT,
+> 				    options->keyauth, TPM_DIGEST_SIZE);
+>
+>@@ -316,7 +319,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+> 		goto out;
+> 	}
+>
+>-	tpm_buf_fill_hmac_session(chip, &buf);
+>+	rc = tpm_buf_fill_hmac_session(chip, &buf);
+>+	if (rc)
+>+		goto out;
+>+
+> 	rc = tpm_transmit_cmd(chip, &buf, 4, "sealing data");
+> 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+> 	if (rc)
+>@@ -427,7 +433,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+> 		return rc;
+> 	}
+>
+>-	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
+>+	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
+>+	if (rc)
+>+		goto out;
+>+
+> 	tpm_buf_append_hmac_session(chip, &buf, 0, options->keyauth,
+> 				    TPM_DIGEST_SIZE);
+>
+>@@ -439,7 +448,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+> 		goto out;
+> 	}
+>
+>-	tpm_buf_fill_hmac_session(chip, &buf);
+>+	rc = tpm_buf_fill_hmac_session(chip, &buf);
+>+	if (rc)
+>+		goto out;
+>+
+> 	rc = tpm_transmit_cmd(chip, &buf, 4, "loading blob");
+> 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+> 	if (!rc)
+>@@ -484,7 +496,9 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+> 		return rc;
+> 	}
+>
+>-	tpm_buf_append_name(chip, &buf, blob_handle, NULL);
+>+	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
+>+	if (rc)
+>+		goto out;
+>
+> 	if (!options->policyhandle) {
+> 		tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT,
+>@@ -509,7 +523,10 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+> 						NULL, 0);
+> 	}
+>
+>-	tpm_buf_fill_hmac_session(chip, &buf);
+>+	rc = tpm_buf_fill_hmac_session(chip, &buf);
+>+	if (rc)
+>+		goto out;
+>+
+> 	rc = tpm_transmit_cmd(chip, &buf, 6, "unsealing");
+> 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+>
+>-- 
+>2.52.0
+>
 
+J.
 
-Bernd.
-
+-- 
+/-\                             | Every program is either trivial or
+|@/  Debian GNU/Linux Developer |    it contains at least one bug.
+\-                              |
 
