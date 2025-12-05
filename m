@@ -1,94 +1,301 @@
-Return-Path: <linux-integrity+bounces-7818-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7819-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4CE8CA62F4
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Dec 2025 06:51:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C069ECA7830
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Dec 2025 13:06:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DF4513010940
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Dec 2025 05:51:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CE2B837A2451
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Dec 2025 09:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14BBA27D77D;
-	Fri,  5 Dec 2025 05:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uvAoTI4q"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B203F316914;
+	Fri,  5 Dec 2025 09:30:59 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EF321507F;
-	Fri,  5 Dec 2025 05:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCEFB3242AD;
+	Fri,  5 Dec 2025 09:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764913893; cv=none; b=KQrIYTK0xJ7lZmli6PHuhItCcGC2YIFf1KZB5eH64Y+auz8ZFPb+meh95+nEtfMUFxRT4nP6MthRzp2KqYEW+aSn7Qm3NKsbzZegzvsiuGZl9Uyv5G+djNKi3yXH4wLYFS9JtRTv+jYeHoYv6qdfs7acIvTBlUO7kvt5XFx3iuo=
+	t=1764927057; cv=none; b=TJ4pb7e2zcQ4TufKmJ4W69TdFq5qxbpXSd2BFCxUEFKZgn4bQjy0GD5G5CvGDFY/44fINX12XNvpAJIkT8nLfx5decqitB0yWXveMpdm3U1TNMtgut/miul6KTkhzlvcPBaWzWLaX5K4Vl29tvgbODmlY5i6R7HHcXdxWmW5TZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764913893; c=relaxed/simple;
-	bh=Uk1c+5TG5UsFfwvFpJ15H51J8/yeC+2Spz316930/QY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iRkboJ/7WcbvKwqH2nMCRRex1m+p5wMooQ1oF5BmOe7GRqYUdcT8gok2qMbicaV9XiDKNyUe9nl2OwjOeZE1Clo3Ik5ToMc3KpIIK8QDmNcw7Oom9P48Of4FXftGwL7rk2uZafZ1Swvi9pygJkh6ZXf0yoj5AgLAOapkvpt2uIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uvAoTI4q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E58CCC4CEF1;
-	Fri,  5 Dec 2025 05:51:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764913892;
-	bh=Uk1c+5TG5UsFfwvFpJ15H51J8/yeC+2Spz316930/QY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=uvAoTI4qTX46IVmEqsKMDLby+FL00fkAIFcLJQ+vdP25zNBJaf0SUMtn2gVu4Tuai
-	 l43HjwSVA+chdMhx4DsXNe5xr0n4sAKtoRD8DhJzN6SlkoCB2UaebkK8XEgEu5jfct
-	 7wNKtJTnCap4noSEs6TEocm50UZeDhYz3NJJCbQofeGb0b5otqHvTtiQ1JVXZzmhsW
-	 Sd4loPL19Vh3RcbcVj/HjuyJ/rt38TbkCbpe+l2oB/pVtrn/uVCJxzYSbeIVchaa0l
-	 HLILDd0KV1aOCUaPYlDdJLPY2AIp1+ugsVCAvSbXtiA8WPM4NepAMFnak7Eru6ObXq
-	 qJg60HDLP9Tgw==
-Date: Fri, 5 Dec 2025 07:51:27 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] TPM DEVICE DRIVER: tpmdd-sessions-next-6.19-rc1
-Message-ID: <aTJy3xx3DEFS5Gr-@kernel.org>
+	s=arc-20240116; t=1764927057; c=relaxed/simple;
+	bh=6uyjNYEVTeFaWWJ3L+TOA35G9vNhsEL1qk+pekSXe9k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=A40nr9iXsuqhxQnJ1jYI6XrjP3lnDhy0p1TT/XBf6LaEzQk4Nb0PXgHJhKp+hTYp9OV4rfZG9HIYwjzpeqsAtBi/YFQcBbcAoIgAWKf6Lmv4vs9VrTINiDF+IOEiVRPYH5YlmExitjBRuQq0gEHzTtH++S1bYWkhOkU4M4tbaYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.196])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dN5fk5Y9Kz1HCDp;
+	Fri,  5 Dec 2025 17:29:02 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 65C3940569;
+	Fri,  5 Dec 2025 17:30:32 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwB3jxAupjJpsy5bAA--.45741S2;
+	Fri, 05 Dec 2025 10:30:31 +0100 (CET)
+Message-ID: <099492ee58996b6f18d73232677757ecadb14cb7.camel@huaweicloud.com>
+Subject: Re: [PATCH 1/1] IMA event log trimming
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: steven chen <chenste@linux.microsoft.com>, 
+	linux-integrity@vger.kernel.org
+Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com,
+ dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com, 
+ linux-security-module@vger.kernel.org, anirudhve@linux.microsoft.com, 
+ gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com, 
+ sushring@linux.microsoft.com
+Date: Fri, 05 Dec 2025 10:30:19 +0100
+In-Reply-To: <20251202232857.8211-2-chenste@linux.microsoft.com>
+References: <20251202232857.8211-1-chenste@linux.microsoft.com>
+	 <20251202232857.8211-2-chenste@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-CM-TRANSID:GxC2BwB3jxAupjJpsy5bAA--.45741S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3JF1xGry3XF1DtFWDWrW3Jrb_yoWxWr47pa
+	yvga4akrZ3JFy2grnav3W7uFZ5u3y0gFn8W34rGa4ayFn0vrnrWr45GryakrWrGryDGr1I
+	qan0grs0ka1DtrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOB
+	MKDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQANBGkxd+4N9wAAsz
 
-The following changes since commit 2061f18ad76ecaddf8ed17df81b8611ea88dbddd:
+On Tue, 2025-12-02 at 15:28 -0800, steven chen wrote:
+> This patch is for trimming N entries of the IMA event logs as well as
+> cleaning the hash table.
+>=20
+> It provides a userspace interface ima_trim_log that can be used to input
+> number N to let kernel to trim N entries of IMA event logs. When read
+> this interface, it returns number of entries trimmed last tim.
 
-  Merge tag 'caps-pr-20251204' of git://git.kernel.org/pub/scm/linux/kernel/git/sergeh/linux (2025-12-04 20:10:28 -0800)
+High-level comments:
+- It does not offer the possibility to keep the hash table
+- There is no coordination between taking a snapshot and the readers of
+  the measurements list (I think it is necessary, since reading is
+  based on *pos, which contains the entries read until a given point;
+  if there is a truncate in the middle of the read, *pos would still
+  refer=C2=A0to the non-truncated list and the next read will skip some
+  measurement entries)
+- While trimming per se is ok, I like more the idea of staging changes
+  and letting the user delete the staged measurements list later
 
-are available in the Git repository at:
+> A mutex ima_trim_list_mutex is provided to allow one trimming request
+> at a time.
+>=20
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+> ---
+>  security/integrity/ima/ima.h       |  2 +
+>  security/integrity/ima/ima_fs.c    | 78 ++++++++++++++++++++++++++++++
+>  security/integrity/ima/ima_queue.c | 42 ++++++++++++++++
+>  3 files changed, 122 insertions(+)
+>=20
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index e3d71d8d56e3..ab0e30ee25ea 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -246,8 +246,10 @@ void ima_post_key_create_or_update(struct key *keyri=
+ng, struct key *key,
+> =20
+>  #ifdef CONFIG_IMA_KEXEC
+>  void ima_measure_kexec_event(const char *event_name);
+> +long ima_purge_event_log(long number_logs);
+>  #else
+>  static inline void ima_measure_kexec_event(const char *event_name) {}
+> +static inline long ima_purge_event_log(long number_logs) { return 0; }
+>  #endif
+> =20
+>  /*
+> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima=
+_fs.c
+> index 87045b09f120..ea93448feedd 100644
+> --- a/security/integrity/ima/ima_fs.c
+> +++ b/security/integrity/ima/ima_fs.c
+> @@ -38,6 +38,11 @@ __setup("ima_canonical_fmt", default_canonical_fmt_set=
+up);
+> =20
+>  static int valid_policy =3D 1;
+> =20
+> +#define IMA_LOG_TRIM_REQ_LENGTH 11
+> +static long trimcount;
+> +/* mutex protects atomicity of trimming measurement list requests */
+> +static DEFINE_MUTEX(ima_trim_list_mutex);
+> +
+>  static ssize_t ima_show_htable_value(char __user *buf, size_t count,
+>  				     loff_t *ppos, atomic_long_t *val)
+>  {
+> @@ -289,6 +294,69 @@ static const struct file_operations ima_ascii_measur=
+ements_ops =3D {
+>  	.release =3D seq_release,
+>  };
+> =20
+> +static int ima_log_trim_open(struct inode *inode, struct file *filp)
+> +{
+> +	if (!capable(CAP_SYS_ADMIN))
+> +		return -EPERM;
+> +	return 0;
+> +}
+> +
+> +static ssize_t ima_log_trim_read(struct file *file, char __user *buf, si=
+ze_t size, loff_t *ppos)
+> +{
+> +	char tmpbuf[IMA_LOG_TRIM_REQ_LENGTH];	/* greater than largest 'long' st=
+ring value */
+> +	ssize_t len;
+> +
+> +	len =3D scnprintf(tmpbuf, sizeof(tmpbuf), "%li\n", trimcount);
+> +	return simple_read_from_buffer(buf, size, ppos, tmpbuf, len);
+> +}
+> +
+> +static ssize_t ima_log_trim_write(struct file *file,
+> +				  const char __user *buf, size_t datalen, loff_t *ppos)
+> +{
+> +	unsigned char req[IMA_LOG_TRIM_REQ_LENGTH];
+> +	long count, n;
+> +	int ret;
+> +
+> +	mutex_lock(&ima_trim_list_mutex);
+> +
+> +	if (*ppos > 0 || datalen > IMA_LOG_TRIM_REQ_LENGTH || datalen < 2) {
+> +		ret =3D -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	n =3D (int)datalen;
+> +
+> +	ret =3D copy_from_user(req, buf, datalen);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	count =3D 0;
+> +	for (int i =3D 0; i < n; ++i) {
+> +		if (req[i] < '0' || req[i] > '9') {
+> +			ret =3D -EINVAL;
+> +			goto out;
+> +		}
+> +		count =3D count * 10 + req[i] - '0';
+> +	}
+> +	ret =3D ima_purge_event_log(count);
+> +
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	trimcount =3D ret;
+> +	ret =3D datalen;
+> +out:
+> +	mutex_unlock(&ima_trim_list_mutex);
+> +	return ret;
+> +}
+> +
+> +static const struct file_operations ima_log_trim_ops =3D {
+> +	.open =3D ima_log_trim_open,
+> +	.read =3D ima_log_trim_read,
+> +	.write =3D ima_log_trim_write,
+> +	.llseek =3D generic_file_llseek,
+> +};
+> +
+>  static ssize_t ima_read_policy(char *path)
+>  {
+>  	void *data =3D NULL;
+> @@ -528,6 +596,16 @@ int __init ima_fs_init(void)
+>  		goto out;
+>  	}
+> =20
+> +	dentry =3D securityfs_create_file("ima_trim_log",
+> +					S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
+> +					ima_dir, NULL, &ima_log_trim_ops);
+> +	if (IS_ERR(dentry)) {
+> +		ret =3D PTR_ERR(dentry);
+> +		goto out;
+> +	}
+> +
+> +	trimcount =3D 0;
+> +
+>  	dentry =3D securityfs_create_file("runtime_measurements_count",
+>  				   S_IRUSR | S_IRGRP, ima_dir, NULL,
+>  				   &ima_measurements_count_ops);
+> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/=
+ima_queue.c
+> index 590637e81ad1..999cd42c517c 100644
+> --- a/security/integrity/ima/ima_queue.c
+> +++ b/security/integrity/ima/ima_queue.c
+> @@ -220,6 +220,48 @@ int ima_add_template_entry(struct ima_template_entry=
+ *entry, int violation,
+>  	return result;
+>  }
+> =20
+> +/* Delete the IMA event logs */
+> +long ima_purge_event_log(long number_logs)
+> +{
+> +	struct ima_queue_entry *qe;
+> +	long cur =3D 0;
+> +
+> +	if (number_logs <=3D 0)
+> +		return number_logs;
+> +
+> +	mutex_lock(&ima_extend_list_mutex);
+> +	rcu_read_lock();
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-sessions-next-6.19-rc1
+Sorry, I'm missing why rcu_read_lock() is needed.
 
-for you to fetch changes up to b7960b90486139022d2d39caad90db252c469bab:
+> +
+> +	/*
+> +	 * Remove this entry from both hash table and the measurement list
+> +	 * When removing from hash table, decrease the length counter
+> +	 * so that the hash table re-sizing logic works correctly
+> +	 */
+> +	list_for_each_entry_rcu(qe, &ima_measurements, later) {
+> +		int i;
+> +
+> +		/* if CONFIG_IMA_DISABLE_HTABLE is set, the hash table is not used */
+> +		if (!IS_ENABLED(CONFIG_IMA_DISABLE_HTABLE))
+> +			hlist_del_rcu(&qe->hnext);
+> +
+> +		for (i =3D 0; i < qe->entry->template_desc->num_fields; i++) {
+> +			kfree(qe->entry->template_data[i].data);
+> +			qe->entry->template_data[i].data =3D NULL;
+> +			qe->entry->template_data[i].len =3D 0;
+> +		}
+> +
+> +		atomic_long_dec(&ima_htable.len);
+> +		list_del_rcu(&qe->later);
 
-  tpm2-sessions: Open code tpm_buf_append_hmac_session() (2025-12-05 06:42:51 +0200)
+Missing kfree() of qe->entry and qe?
 
-----------------------------------------------------------------
-Hi,
+Thanks
 
-This second pull request for 6.19 is targeted for tpm2-sessions updates.
+Roberto
 
-There's two bug fixes and two more cosmetic tweaks for HMAC protected
-sessions. They provide a baseine for further improvements to be
-implemented during the the course of the release cycle.
+> +		++cur;
+> +		if (cur >=3D number_logs)
+> +			break;
+> +	}
+> +
+> +	rcu_read_unlock();
+> +	mutex_unlock(&ima_extend_list_mutex);
+> +	return cur;
+> +}
+> +
+>  int ima_restore_measurement_entry(struct ima_template_entry *entry)
+>  {
+>  	int result =3D 0;
 
-BR, Jarkko
-
-----------------------------------------------------------------
-Jarkko Sakkinen (4):
-      tpm2-sessions: Fix out of range indexing in name_size
-      tpm2-sessions: Fix tpm2_read_public range checks
-      tpm2-sessions: Remove 'attributes' parameter from tpm_buf_append_auth
-      tpm2-sessions: Open code tpm_buf_append_hmac_session()
-
- drivers/char/tpm/tpm2-cmd.c               |  42 +++++--
- drivers/char/tpm/tpm2-sessions.c          | 199 +++++++++++++++++++-----------
- include/linux/tpm.h                       |  38 ++----
- security/keys/trusted-keys/trusted_tpm2.c |  41 ++++--
- 4 files changed, 204 insertions(+), 116 deletions(-)
 
