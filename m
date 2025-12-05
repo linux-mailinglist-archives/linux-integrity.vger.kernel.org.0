@@ -1,131 +1,144 @@
-Return-Path: <linux-integrity+bounces-7825-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7826-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD3DDCA83B4
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Dec 2025 16:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 099C7CA8CE5
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Dec 2025 19:35:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C4DD533F0C4B
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Dec 2025 15:34:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 94434301767A
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Dec 2025 18:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B86C135A95F;
-	Fri,  5 Dec 2025 15:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18BD3346E7F;
+	Fri,  5 Dec 2025 18:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uUwXPJVc"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="FsF+NQ6A"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA0A32827F;
-	Fri,  5 Dec 2025 15:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F1B2D5C95;
+	Fri,  5 Dec 2025 18:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764948024; cv=none; b=XbVPm4Ke01cNL5dJa1JsD1JQ/ITCyFnhGCXWPX7+vj19GkV82azs9xWqxbcpzLN+lQIUC6gIjSORw7A0j4I1fCmpm7wmFC9d8z/Fx9X0hgM671ikN+Wb7Kglfr1OlOPO9PPfPBJxwMKi+k43a9FOSPUnm6VKkGnyryKHhcgB4Rg=
+	t=1764959434; cv=none; b=j9CR54PNL1VldmohD/jxU+TIcp+MAOoXpT+8vVlvz2+nHC/zbdWXlByXAMseYRb9yrTBaR1hEy90EJWU/2ZlczjLi440sqbHY/G9WhP/DcDbMZ8GnefrRqfdVX9a7gHRvyRP4acfLrHBkeKnhtBN7BXM0yQvyFFuWOqKgT6cHTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764948024; c=relaxed/simple;
-	bh=3sMilHnTa3OfMr6J4hL8Qm9CoLASXmf5Ou9zS3NXsBk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PLMaZO/DBk39ZKgyoxr9969MQkpUPNE1B2R6vv/eWGq8++MaI7tsZK4KTMSjKXKlJ6aQ5vVvOfTMG/bae42B4NbRWbE/Djs4SlsLpTAGhBTBOKrwsAwVJmD8efQcODh5wOSjkCGptO4OB4iOH9iMCkHgdcRNqaLmYQ33zrP8H2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uUwXPJVc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DAEC4CEF1;
-	Fri,  5 Dec 2025 15:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764948023;
-	bh=3sMilHnTa3OfMr6J4hL8Qm9CoLASXmf5Ou9zS3NXsBk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uUwXPJVcLpyvbJXARGbCnFecz+XjahfeTUH1Ei91utgKtY/ggovcRmjvoDC7EW5uI
-	 CV7o0IFX5m/qGLrp/4BwNx0zq/4pHbg7ZZBmb3ws0s32AagKTC9Y76eS47V/r+FPxa
-	 Jnrv8vw5Hqb2cDsYH4xn9kXnPKrTUsbTxa5P0txNU49jOwoe0GrME5BS9Yc6Mlj5AZ
-	 q41Hjtjdi8NQakK1UGyAYcHswqvZrNJ6LzQR41h+RIpQvhzpr/nzdTNGIExRrh6BzW
-	 ybVo9L6R6+Ec54p3PPSx9HQBYWwqdYZXcKvOEsQ6aOHi3GsuCth7rvoxfqbve6T5FP
-	 JSQ/PgtwlBtyA==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 4/4] tpm2-sessions: Enforce single authorized handle
-Date: Fri,  5 Dec 2025 17:19:53 +0200
-Message-ID: <20251205151955.298182-5-jarkko@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251205151955.298182-1-jarkko@kernel.org>
-References: <20251205151955.298182-1-jarkko@kernel.org>
+	s=arc-20240116; t=1764959434; c=relaxed/simple;
+	bh=qNrS7jtvLIlLIlCg5NV2B2Ngcoe6eKt8dUyPTCia/Lw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MaKkUjrvEukFmGWynWPRU6bVHkw2kEGtAHCzSKdm7nRGwvYpeohmwAvByVGa8ykPZrRoK0IEBxY30iCCFqybtigmsHLOaYpO2s+40RpfuE453NlwHuVcWMdafW0uzI6veY8HJ4dJGc/Fa4J3YZL2EngNnbXUp9kM3VhI0M+1iN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=FsF+NQ6A; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1764959430;
+	bh=qNrS7jtvLIlLIlCg5NV2B2Ngcoe6eKt8dUyPTCia/Lw=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=FsF+NQ6A0JppO1iIEvRPnRWyL3zk18IX+Vm5ViBLxt+2RumyUn7JR2nqJvFtTblhM
+	 0EgEu+JNhsGyf9Z1JQTooMd+9tBxjvNUMMt8orw5N9j85N+2/iIz2YFw8c0kWFwXhk
+	 hxn/awkI16k2q4wz//7qiPWn+YeNQp45mgp19DCQ=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 5A0501C031F;
+	Fri, 05 Dec 2025 13:30:29 -0500 (EST)
+Message-ID: <34d739c2cf15baf78dff5acb7ae3ddd7ad47f219.camel@HansenPartnership.com>
+Subject: Re: [PATCH 1/1] IMA event log trimming
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, steven chen
+	 <chenste@linux.microsoft.com>, linux-integrity@vger.kernel.org
+Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com,
+ dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com, 
+ linux-security-module@vger.kernel.org, anirudhve@linux.microsoft.com, 
+ gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com, 
+ sushring@linux.microsoft.com
+Date: Fri, 05 Dec 2025 13:30:28 -0500
+In-Reply-To: <099492ee58996b6f18d73232677757ecadb14cb7.camel@huaweicloud.com>
+References: <20251202232857.8211-1-chenste@linux.microsoft.com>
+	 <20251202232857.8211-2-chenste@linux.microsoft.com>
+	 <099492ee58996b6f18d73232677757ecadb14cb7.camel@huaweicloud.com>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Eliminate AUTH_MAX_NAMES and replace array of names with a buffer for
-single TPM name, as this what call sites expect at worst.
+On Fri, 2025-12-05 at 10:30 +0100, Roberto Sassu wrote:
+> On Tue, 2025-12-02 at 15:28 -0800, steven chen wrote:
+> > This patch is for trimming N entries of the IMA event logs as well
+> > as cleaning the hash table.
+> >=20
+> > It provides a userspace interface ima_trim_log that can be used to
+> > input number N to let kernel to trim N entries of IMA event logs.
+> > When read this interface, it returns number of entries trimmed last
+> > tim.
+>=20
+> High-level comments:
+> - It does not offer the possibility to keep the hash table
+> - There is no coordination between taking a snapshot and the readers
+> of
+> =C2=A0 the measurements list (I think it is necessary, since reading is
+> =C2=A0 based on *pos, which contains the entries read until a given point=
+;
+> =C2=A0 if there is a truncate in the middle of the read, *pos would still
+> =C2=A0 refer=C2=A0to the non-truncated list and the next read will skip s=
+ome
+> =C2=A0 measurement entries)
 
-Benefits are obvious i.e., removing dead code is usually a good idea
-:-)
+Rather than designing the interface absent use cases, could we give use
+cases first so we know it fits?  I really only have one: the keylime
+agent, but I believe it's pattern, which would be get TPM quote of
+logging PCRs, certify quote and then trim the log up to the point the
+quote was obtained will be a common pattern (at least I don't think
+anyone would trim the log without quoting it).  If you're trimming
+based on a quote, you know the end hash of all the PCRs and you want to
+trim up to that.  Since the log is fixed, you can work out what the
+index offset is, but it does seem a bit suboptimal to have to compute
+that, which is why I think trimming by end PCR hash is useful.  The
+main point in all of this is, I think, that you don't really get to
+decide which point in the log the TPM will quote: it always quotes it's
+current PCR values, so no-one who cares about log quotes can select the
+number of entries first, they all have to see what PCR values the quote
+returns.
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
- drivers/char/tpm/tpm2-sessions.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+> - While trimming per se is ok, I like more the idea of staging
+> changes and letting the user delete the staged measurements list
+> later
 
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index c8b44b1a6cb6..8bfe2875faf2 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -72,9 +72,6 @@
- #include <crypto/sha2.h>
- #include <crypto/utils.h>
- 
--/* maximum number of names the TPM must remember for authorization */
--#define AUTH_MAX_NAMES	3
--
- #define AES_KEY_BYTES	AES_KEYSIZE_128
- #define AES_KEY_BITS	(AES_KEY_BYTES*8)
- 
-@@ -136,8 +133,8 @@ struct tpm2_auth {
- 	 * handle, but they are part of the session by name, which
- 	 * we must compute and remember
- 	 */
--	u8 name[AUTH_MAX_NAMES][2 + SHA512_DIGEST_SIZE];
--	u16 name_size_tbl[AUTH_MAX_NAMES];
-+	u8 name[2 + SHA512_DIGEST_SIZE];
-+	u16 name_size;
- };
- 
- /**
-@@ -182,7 +179,7 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 
- #ifdef CONFIG_TCG_TPM2_HMAC
- 	slot = (tpm_buf_length(buf) - TPM_HEADER_SIZE) / 4;
--	if (slot >= AUTH_MAX_NAMES) {
-+	if (slot > 0) {
- 		dev_err(&chip->dev, "too many handles\n");
- 		ret = -EIO;
- 		goto err;
-@@ -195,8 +192,8 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 	}
- 	tpm_buf_append_u32(buf, handle);
- 	auth->session += 4;
--	memcpy(auth->name[slot], name, name_size);
--	auth->name_size_tbl[slot] = name_size;
-+	memcpy(auth->name, name, name_size);
-+	auth->name_size = name_size;
- #endif
- 	return 0;
- 
-@@ -573,8 +570,7 @@ int tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
- 	/* ordinal is already BE */
- 	sha256_update(&sctx, (u8 *)&head->ordinal, sizeof(head->ordinal));
- 	/* add the handle names */
--	for (i = 0; i < handles; i++)
--		sha256_update(&sctx, auth->name[i], auth->name_size_tbl[i]);
-+	sha256_update(&sctx, auth->name, auth->name_size);
- 	if (offset_s != tpm_buf_length(buf))
- 		sha256_update(&sctx, &buf->data[offset_s],
- 			      tpm_buf_length(buf) - offset_s);
--- 
-2.52.0
+I'm not averse to this, but keylime won't care ... it gets the quote
+and the log and it will verify the log before it will get the agent to
+issue a trim.  Is there a use case that would actually need this
+behaviour?
+
+I also think having the base PCRs stored in the kernel after the trim
+(in a way that's easily consumed, like a non measured log entry), thus
+allowing verification from the log up to any current quote is useful.=20
+The reason I think it's useful is the attestation token one: I can see
+the keylime verifier giving an I've verified the log up to here and all
+the entries look good token that contains the base PCRs and if there
+are quite a few of these floating around (especially if the log isn't
+always trimmed) I could see the kernel base PCR storage being used to
+ask which is the relevant attestation token I should use to verify the
+rest of the log (or even used to detect nefarious trimming designed to
+hide records).
+
+Regards,
+
+James
 
 
