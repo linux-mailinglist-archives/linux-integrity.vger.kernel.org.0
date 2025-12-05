@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-7812-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7813-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9718BCA5F68
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Dec 2025 04:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90D1ECA5F92
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Dec 2025 04:14:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3E7043082D74
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Dec 2025 03:11:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0688130CFA04
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Dec 2025 03:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB8530216D;
-	Fri,  5 Dec 2025 03:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9856D277CB8;
+	Fri,  5 Dec 2025 03:14:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nfd+b2Ez"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U34gS8Xr"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4573130215D;
-	Fri,  5 Dec 2025 03:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6693C246BD2;
+	Fri,  5 Dec 2025 03:14:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764904279; cv=none; b=G64GT1fvhWSl8Jt9Rc66X+P39Ifetta/iLtGCzIYxG6YtCsyd8mpJXgex2T08UmD9J4sq3fLkJ2k4dX8tSUCcFzijIG/oXy4qKvbrnQ//KPBo4+v3Dk2tDu6I+CRUWRliB56sSo6jbOFfVSLpVXbFUVntC+HOkA2jmpcuIc9sz0=
+	t=1764904446; cv=none; b=pafuh0vx9Xx6Dt00wnw5GFQpXY5SAJdtV+sbLF6AmVdW4t1gse2oFr96O0SmvnhMSh4fsy6wD4FYxfXbeUt+x0lTZm/kNheRHXNskHblLii4MsRT2WV+Ad8dFG1FMiONGsdlXOc+YVPEXEYj2Vnw3EzDsZQI6vq2Y7zVprM03yE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764904279; c=relaxed/simple;
-	bh=RgSkFpA8YQC6yrkNQLHW4Wp25CldIxJO5lpKxQW8hl0=;
+	s=arc-20240116; t=1764904446; c=relaxed/simple;
+	bh=aJhCd3j/dITOCRR2Qt9SgpeP99yK+jhEPhoHNyUjU4Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cW6ZJUujKJCy/0NYTr75l7obnID17mUCDf9V+YlziTvjo5OuWIRuO854zeUSah8/q7Zzzg/T5c86+bMSPcQ8smBoWvkiyW6IDir39VY+l7Yej1nlgSYtjVjFfwS/3Vq4+FEnmlvzqBWd4NztVo3x8LGfWR2mmpn5QJa44NQJkUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nfd+b2Ez; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A4FC4CEFB;
-	Fri,  5 Dec 2025 03:11:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hqOPWp+j62jTKA+PZoH9WGkYaHrXlS8/Po9DN/UdwdYyeIqP+8I9S6Rm+xQytPptAyTOG+9z5oY80bewhLfSX0xzsijV/0z0OcVlvlu9URoXnuY/MLkvabJGKXVJgtlnQpDyTWs3EAaKR+jdQMxtE9m4SGUv4IBH2roCVjhYGZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U34gS8Xr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E163C4CEFB;
+	Fri,  5 Dec 2025 03:14:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764904279;
-	bh=RgSkFpA8YQC6yrkNQLHW4Wp25CldIxJO5lpKxQW8hl0=;
+	s=k20201202; t=1764904446;
+	bh=aJhCd3j/dITOCRR2Qt9SgpeP99yK+jhEPhoHNyUjU4Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nfd+b2EzNuQk7XD/qAwVJ1zK6/vads4JaNmCStHcigymP6gYL/ICoQUopM0jS7bIy
-	 VrID2jhl72whw61rgbYVeZRQ1b3yIMpjR/zsfDFONjnhKoYUyimSEepVXULzSCdjZI
-	 Lfs1N+wEBPjGHKW5iMdDjcJMdpbGBGs+N0wOjmgp0P240KOTvJnLbRXwbp6ip1Loaj
-	 AskfcrUYHrdizbYlzerrm8KWRsnuUaRihcyHx+sWEt5CtYsP6N2y0FXQlpE53jY3cx
-	 ioW6tRRAb8Af30nKejqA1q6ZO8yqyMPhi76JgGiVdtlAObDSvpbPl0LSznqVb48mLV
-	 1uxqAvdGvm0ew==
-Date: Fri, 5 Dec 2025 05:11:14 +0200
+	b=U34gS8XrT3aSTWcKcCx0jYnSRdAbZycM3YMMv6yN5Dhn/q26at2xOsHU6iEWYqasP
+	 O5smc8vCtLoNdK38NgRHt4pxbh0gv8NC9IDboisn78NjOYapYZIitp/I9lEJuplLX/
+	 GPy1ra10tJMf/fSOsv00/XCopsBiIJt44O0IFQb9n6MJbz84SRmXaASJSOcr4aq3mU
+	 30z6HycpYWZCnCEfL8QQ16YnIIgndAPin0+2DeECO1ZYNcMAHEcb9cLGnYAFBSIvUW
+	 Zk/KS0ypi7Q63yE/c8/t7cd/P1fS5YmP5DaCspGvl6pqdAjTe6zQiddr0BID2WFxHy
+	 mSVJjEkM7CIHQ==
+Date: Fri, 5 Dec 2025 05:14:01 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
@@ -53,7 +53,7 @@ Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
 Subject: Re: [PATCH v2 2/2] KEYS: trusted: Store parent's name to the encoded
  keys
-Message-ID: <aTJNUvd0YDm3UjeX@kernel.org>
+Message-ID: <aTJN-TClJ0kNTu-v@kernel.org>
 References: <20251205030205.140842-1-jarkko@kernel.org>
  <20251205030205.140842-3-jarkko@kernel.org>
 Precedence: bulk
@@ -119,6 +119,11 @@ On Fri, Dec 05, 2025 at 05:02:05AM +0200, Jarkko Sakkinen wrote:
 > +	description	[4] EXPLICIT UTF8String OPTIONAL,
 > +	rsaParent	[5] EXPLICIT BOOLEAN OPTIONAL,
 > +	parentName	[6] EXPLICIT OCTET STRING ({tpm2_key_parent_name}),
+
+Another nit. Should probably be instead:
+
+	parentName	[6] EXPLICIT OCTET STRING OPTIONAL ({tpm2_key_parent_name}),
+
 >  	parent		INTEGER ({tpm2_key_parent}),
 >  	pubkey		OCTET STRING ({tpm2_key_pub}),
 >  	privkey		OCTET STRING ({tpm2_key_priv})
@@ -318,10 +323,6 @@ On Fri, Dec 05, 2025 at 05:02:05AM +0200, Jarkko Sakkinen wrote:
 > -
 > -	parent_name_size = rc;
 > -
-
-Relocating this was entirely unintentional. I'll relocate it back to its
-original position in the next revision of this patch set.
-
 >  	rc = tpm2_load_cmd(chip, payload, options, parent_name,
 >  			   parent_name_size, blob, &blob_handle);
 >  	if (rc)
