@@ -1,53 +1,64 @@
-Return-Path: <linux-integrity+bounces-7867-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7868-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CBE1CAF8C8
-	for <lists+linux-integrity@lfdr.de>; Tue, 09 Dec 2025 11:05:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72FA5CAF91B
+	for <lists+linux-integrity@lfdr.de>; Tue, 09 Dec 2025 11:10:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0B1F23000B50
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Dec 2025 10:05:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8208030BF37A
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Dec 2025 10:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C34EC328263;
-	Tue,  9 Dec 2025 10:05:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C37D0328266;
+	Tue,  9 Dec 2025 10:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5rdXR+4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u06yAno5"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96DE7328251;
-	Tue,  9 Dec 2025 10:05:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89E3D2FCBE5;
+	Tue,  9 Dec 2025 10:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765274746; cv=none; b=TaUHICZh0VCusY9knATCUulecw1/7dkxvpCS8NR424nrOt/0gZfFmcq0DMha73PbcY75o89BYih1saNU1LxLJwvI/1xOFSQTFR2U8aGgjryzpsmDqr7DXpgQhzPquPLMLkQA7D2+Pup5yUn9kzL3g+3bjp7l6/SCvCbyomzxgkk=
+	t=1765274751; cv=none; b=ZMdT0UE9HMFlAwJTALkwkX2EAhy49/rFW8D8v/04DY/mXxHH/vPfaYOmIKxldFZ8fMjIwEP93wuOWbbIKmPli5TEc1yfRuTFTlwLJzw8gxfKYn3YLDZJ1jN/XRdZjE0v5jtjHAuKgGly36RtKMrzn9ZoYi1wRqg8cl+H1stpEnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765274746; c=relaxed/simple;
-	bh=oE+dWh7raBljNqzFEEiZq5W8NQaCOIJje7uZwrEM5pk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YEY5z8P5M6zqa7mWsDYBiLmkMNBQDHcTrQ5JhyXzj0/KSWUWDAaRibzwBZiiw7VU/bPMNtwsNoR2wsNqGOkvuCBn1l7HtNuZVl7JdRXcdZY/FvdZgz58NBsCauEDQdZsi4Oq3Jnwp3+ZWwcq0Hyf1EkS3wZafY/11tJjFZtQJaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5rdXR+4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC8FC4CEF5;
-	Tue,  9 Dec 2025 10:05:45 +0000 (UTC)
+	s=arc-20240116; t=1765274751; c=relaxed/simple;
+	bh=YUYqIvNjXnvmL0CNkyW+ra2WzRNZMTP9cgmJvuV1o7E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=p35uvoj1qf4H3F1ufJ9Q5nhiHIAF+FK9ZoNbt+Y2C8gTGof3uzQBhnQMxd+0/HKmkYGK7WIVinOB+Voe2Tgsdv/JhmasVt2HQoZbwxC67rtiASJFZCgZMT29znYBcOWbRvIxBCSTK3uTsEmBX4UWEbIXXgrVaV709ldjZgNZHOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u06yAno5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B63B8C4CEF5;
+	Tue,  9 Dec 2025 10:05:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765274746;
-	bh=oE+dWh7raBljNqzFEEiZq5W8NQaCOIJje7uZwrEM5pk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=L5rdXR+4K5Ngu0TyGcSNPsLBghWR/0TY/PljxUAZZ9RWeye3LJuVXtOSbR2N1NR8b
-	 FvkBGZZoH5oQObJFRL8HSfzjVfimXI197xmRyIX5pf4n3TzTn7YpbMO8ZW3HF/+5cq
-	 vkbRuuHamipl61VHKPR+m6OutXykZOPWf/66Uppv0CfJyUDHqu3rv5NWWcUFbHkaxH
-	 aPvVzIPbkbCma7oXXPSy42VMDXYBDPJ2HvDMCINGAvXa7rcDRqyvhtaL9ZPe1pfzPI
-	 OcHkot7CrM3dWF71KmFiApJWrS1g7DsG6QO6wCLw2cqAV7ym2/s8pM5I3+/mLmVl7+
-	 /GzLLT2EL6cbg==
+	s=k20201202; t=1765274751;
+	bh=YUYqIvNjXnvmL0CNkyW+ra2WzRNZMTP9cgmJvuV1o7E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=u06yAno5ByUPTQh3swMXqJTf1tbyTSJUzlZPa32tC4aZm+GkABCiE243yzyJvfFOa
+	 JP9rbapwsr8wAXmSqWXGG3zpHgzwfbL39AwBDUdjqMNVTJIbvPMAtGrJgTcX2bHHEI
+	 LB1/dbIjUgI8+UIz6+qSKiCkj6XU6GITJ2qKQpF6FHRsx+XExDLEBRouLTIlK82E/i
+	 gYYgP+2/5/PohSvgOxsRI6Is18+JhZ0ybrSBhHrQ+qfRHro+gLLCgQMCtjdb3eE+gK
+	 6C0HPxymu2Jc0cjFhKNPZlZq9gh4JdgxMgJ+MfUypoDfW1uRxFIWeH2QMb2Tl7rJeY
+	 pIKxF/KHO415w==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	Peter Huewe <peterhuewe@gmx.de>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 0/5] Streamline TPM2 HMAC sessions
-Date: Tue,  9 Dec 2025 12:05:23 +0200
-Message-ID: <20251209100529.1700779-1-jarkko@kernel.org>
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	linux-kernel@vger.kernel.org (open list),
+	keyrings@vger.kernel.org (open list:KEYS-TRUSTED),
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
+Subject: [PATCH v2 1/5] KEYS: trusted: Remove dead branch from tpm2_unseal_cmd
+Date: Tue,  9 Dec 2025 12:05:24 +0200
+Message-ID: <20251209100529.1700779-2-jarkko@kernel.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251209100529.1700779-1-jarkko@kernel.org>
+References: <20251209100529.1700779-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -56,33 +67,48 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since we cannot at this point cache names of the keys given limitations
-of the ASN.1 file format, I'll start a fresh patch set. Let's fixup what
-we can right now.
+TPM2_Unseal requires TPM2_ST_SESSIONS, and tpm2_unseal_cmd() always does
+set up either password or HMAC session.
 
-This patch set addresses two major issues in the feature:
+Remove the branch in tpm2_unseal_cmd() conditionally setting
+TPM2_ST_NO_SESSIONS. It is faulty but luckily it is never exercised at
+run-time, and thus does not cause regressions.
 
-1. Dynamic resolution without gain. All kernel sites have at most single
-   handle to authorize. Even if this changes some day this is how it is
-   as of today and we definitely do not want to dictate the future but
-   instead downscale code to the metrics that we have as of today.
-2. Eliminate at least one unnnecessary tpm2_read_public() call.
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ security/keys/trusted-keys/trusted_tpm2.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-Jarkko Sakkinen (5):
-  KEYS: trusted: Remove dead branch from tpm2_unseal_cmd
-  tpm2-sessions: Define TPM2_NAME_MAX_SIZE
-  KEYS: trusted: Re-orchestrate tpm2_read_public() calls
-  tpm2-sessions: Remove AUTH_MAX_NAMES
-  tpm-buf: Remove tpm_buf_append_handle
-
- drivers/char/tpm/tpm-buf.c                |  25 ----
- drivers/char/tpm/tpm-sysfs.c              |   2 +-
- drivers/char/tpm/tpm2-cmd.c               |   9 +-
- drivers/char/tpm/tpm2-sessions.c          | 130 ++++++---------------
- include/linux/tpm.h                       |  49 +++++---
- security/keys/trusted-keys/trusted_tpm2.c | 134 +++++++++++++---------
- 6 files changed, 155 insertions(+), 194 deletions(-)
-
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 9074ae1a5896..27424e1a4a63 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -450,9 +450,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 			   struct trusted_key_options *options,
+ 			   u32 blob_handle)
+ {
+-	struct tpm_header *head;
+ 	u16 data_len;
+-	int offset;
+ 	u8 *data;
+ 	int rc;
+ 
+@@ -488,14 +486,8 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 		tpm_buf_append_u16(buf, options->blobauth_len);
+ 		tpm_buf_append(buf, options->blobauth, options->blobauth_len);
+ 
+-		if (tpm2_chip_auth(chip)) {
++		if (tpm2_chip_auth(chip))
+ 			tpm_buf_append_hmac_session(chip, buf, TPM2_SA_ENCRYPT, NULL, 0);
+-		} else  {
+-			offset = buf->handles * 4 + TPM_HEADER_SIZE;
+-			head = (struct tpm_header *)buf->data;
+-			if (tpm_buf_length(buf) == offset)
+-				head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
+-		}
+ 	}
+ 
+ 	rc = tpm_buf_fill_hmac_session(chip, buf);
 -- 
 2.52.0
 
