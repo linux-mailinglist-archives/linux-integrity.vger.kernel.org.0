@@ -1,221 +1,170 @@
-Return-Path: <linux-integrity+bounces-7874-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7875-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0A53CAFEE2
-	for <lists+linux-integrity@lfdr.de>; Tue, 09 Dec 2025 13:29:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B6BBCB00AE
+	for <lists+linux-integrity@lfdr.de>; Tue, 09 Dec 2025 14:19:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 32E22300E7BB
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Dec 2025 12:29:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F16CD301A1B9
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Dec 2025 13:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F497324B24;
-	Tue,  9 Dec 2025 12:29:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AABB288525;
+	Tue,  9 Dec 2025 13:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FLRSCzPJ";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hbf8qhkj";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="VJlXEdXF";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="7U2McOFD"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="dXyT3H0v";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="XNE1Yg3i";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ah62tPCg";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0T5uCkzN"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A9FF322DD0
-	for <linux-integrity@vger.kernel.org>; Tue,  9 Dec 2025 12:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5508219A7A
+	for <linux-integrity@vger.kernel.org>; Tue,  9 Dec 2025 13:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765283352; cv=none; b=niA5NJO7M5Bc/JaAFvog1MMD1zRSdlhJfEes+kVCyDBtxL/pexDyK/ysRaOuz6yFy1M6BXloMDoT/Byz1RhOrTjPyxfqKMrELCExwd6IMNaMo5Y9i1WSDX5xrFCwOxySMSl4rhpfZCNgwa4NANHyd8hKpxl2TZrvPQ2m9+9Ncw4=
+	t=1765286356; cv=none; b=iOWIqPOtIhxlcpyMWvcx4r0dUayasCBC5ikqN6y8uzwV0CUz8Mb1upqWyCP8tpvF1SUFKRylQs28gO8oSXNcypi8Gio1Wfqm8BcAz6fE6yK9MVB5n85vnZp3meBxQUt/0dG+aH83G0NfDJ0QtraftAkiVdoIUIwSv4U6ZP6j+fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765283352; c=relaxed/simple;
-	bh=1zv96AQDDBhIUB4SFjGPpc0lMwQj0fEVtOdQfSFFiS4=;
+	s=arc-20240116; t=1765286356; c=relaxed/simple;
+	bh=RjXZVDam+Nlxj7dKKXc2K9YczSPRoFq0dS8S5USh89k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R8b93XuGCRh1ikTYFu5XdBRGoYT4y+6OwQ1QVpj0mJt1yYl05fbSefHGh68dE/DQs9fLXLfyH5rdE8GgJqVNqlifK4dlXJvjtDczrXTSC50kfutvlo8243mSOUI0AVmkGS+xY+TDThKt6TaCb6NFRCx52tUcQF+Pl5K7BZe3amU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FLRSCzPJ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hbf8qhkj; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=VJlXEdXF; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=7U2McOFD; arc=none smtp.client-ip=195.135.223.130
+	 Content-Type:Content-Disposition:In-Reply-To; b=YojOJsgxpAo+JESmb7o4W5H/lBaNMa+AZISNCB0IXqEEQjE322H5M1e+GIC/JIUYx3BgNaiEHmZWUYVhXx0mdJVlPpkwOv80kqbhCeEvcYT+wOIgSs6udXy9i06oYNvuR9Jl8RyEMoiSLvY7XIAJ3uth8Ny0Sc8yoddY4pRZcfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=dXyT3H0v; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=XNE1Yg3i; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ah62tPCg; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0T5uCkzN; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id DBDDC3376A;
-	Tue,  9 Dec 2025 12:28:52 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 233515BE30;
+	Tue,  9 Dec 2025 13:19:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1765283333; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1765286345; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ygaHW8o5EWTBSXhXnK7ekdPvbFwd/VSzrB9zkhVTLRQ=;
-	b=FLRSCzPJDhDdvQBy6p9ZobCmyv/OBX5mdkpgv9YpCqbX4VYeXoLguaXTTt/4hB56KyccR3
-	nf6j3BOH3yRK5qh3cMAhUeYflgxmzqZIAAWr7UEx2q9QNXPIkryChFyALpi19LajiUsYK/
-	w54xqTZihwFGArwdrmUESFAEfw7lRhQ=
+	bh=sylz5wWwmP56dJcE/RoAYIM6tFs023Qu1Eal5VNdntg=;
+	b=dXyT3H0vmdbo6oPMOZ/9l8UzulPXt/Mn8MP2RpAS6qsKfuztTfFZNyFlXvseGkYCRg+gRx
+	jeDOvirOjU3dky67yAYHpXvTBdVQ7Fsy7UusWoa4GbFAOGy2NXPaovdluZTotvbEDLLzo/
+	LLsBHfPBuuJA2SJRAZgm7yq4/yCZpw0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1765283333;
+	s=susede2_ed25519; t=1765286345;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ygaHW8o5EWTBSXhXnK7ekdPvbFwd/VSzrB9zkhVTLRQ=;
-	b=hbf8qhkj9AN8CNYDunpaBDH5eRvnqnbwWvSf1aitvsKjxZvZHQuV3PFneX2ZGBk18Krav0
-	lfB9W/ldGjK5+6DA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=VJlXEdXF;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=7U2McOFD
+	bh=sylz5wWwmP56dJcE/RoAYIM6tFs023Qu1Eal5VNdntg=;
+	b=XNE1Yg3iljK6OHnEpvyx5ZxLm2fHdtLeuWxZQP9Gi/frZQ5MVKCDkMPasNdSHzAP22KHan
+	T4jTt61ekzHgOECw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=ah62tPCg;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=0T5uCkzN
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1765283332; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1765286344; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ygaHW8o5EWTBSXhXnK7ekdPvbFwd/VSzrB9zkhVTLRQ=;
-	b=VJlXEdXFL5fd4Sem3MzdBi6M+Hr11U7VtVbf3ME1dk5aSuhjv3O/iSL8Yd/XI8EpEFKwGn
-	qt5OE3BhUWleFUONVE7NBCIrv8ySHriCLSY0zQvS97diMAG7hRy1P55heddbwQqqP5orwx
-	zke8vzmd4c6IaLFBZbk/OIH2tq5XjmE=
+	bh=sylz5wWwmP56dJcE/RoAYIM6tFs023Qu1Eal5VNdntg=;
+	b=ah62tPCglLY8qMDeVJzFizNg/P9TZzGM6ol0+Is+IytsQx94qvNwPjwcQRCNXXHxNmU2Ks
+	vWYdj482IBSSVWuoWpVWPTy7+cP8oobxKSmJx8kb0e30OMDX7vznmgU+pe+Zq1uXejNl67
+	FfRUxt+O5fCKu+Mmglzern/Y4bQCOhs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1765283332;
+	s=susede2_ed25519; t=1765286344;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ygaHW8o5EWTBSXhXnK7ekdPvbFwd/VSzrB9zkhVTLRQ=;
-	b=7U2McOFDYb7YMgNpJuCJtvWZaYZMflyH94JOMxO/WJFjXPjjRW/ONo04eFBGZ6oK+Zhnh3
-	bJ4+1uZfHqHgl3Dw==
+	bh=sylz5wWwmP56dJcE/RoAYIM6tFs023Qu1Eal5VNdntg=;
+	b=0T5uCkzN6qxaN6f3sHRcAM4ktnifCCkiiMkffyPsx2BcFmrEdcg7QYXQFLWObTwvMj4qYG
+	n/xNRGWZVYUwOGCA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CA4F63EA65;
-	Tue,  9 Dec 2025 12:28:52 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 104773EA63;
+	Tue,  9 Dec 2025 13:19:04 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 09RfMQQWOGn0YgAAD6G6ig
-	(envelope-from <jack@suse.cz>); Tue, 09 Dec 2025 12:28:52 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 4850FA08E4; Tue,  9 Dec 2025 13:28:48 +0100 (CET)
-Date: Tue, 9 Dec 2025 13:28:48 +0100
-From: Jan Kara <jack@suse.cz>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, 
-	"Eric W. Biederman" <ebiederm@xmission.com>, Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	Alexey Dobriyan <adobriyan@gmail.com>, Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
-	Christian Brauner <brauner@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>, 
-	James Morris <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>, 
-	Adrian Reber <areber@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Jens Axboe <axboe@kernel.dk>, Alexei Starovoitov <ast@kernel.org>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	tiozhang <tiozhang@didiglobal.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, YueHaibing <yuehaibing@huawei.com>, 
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>, 
-	Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>, 
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Elena Reshetova <elena.reshetova@intel.com>, David Windsor <dwindsor@gmail.com>, 
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Hans Liljestrand <ishkamiel@gmail.com>, Penglei Jiang <superman.xpt@gmail.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Adrian Ratiu <adrian.ratiu@collabora.com>, 
-	Ingo Molnar <mingo@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Cyrill Gorcunov <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>, zohar@linux.ibm.com, 
-	linux-integrity@vger.kernel.org, Ryan Lee <ryan.lee@canonical.com>, 
-	apparmor <apparmor@lists.ubuntu.com>
-Subject: Re: Are setuid shell scripts safe? (Implied by
- security_bprm_creds_for_exec)
-Message-ID: <722m42dxrfxao7y6ul5cb26orxoinsrozwqlf7ts52lpbfzgxs@gm6kakrzlhkz>
-References: <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
- <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
- <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
- <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
- <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
- <dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
- <87ms42rq3t.fsf@email.froward.int.ebiederm.org>
- <GV2PPF74270EBEE90CDCD964F69E806EF58E4D9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <20251204054915.GI1712166@ZenIV>
- <GV2PPF74270EBEE0AAAE2EB22B668EE21A7E4A6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	id 7LkZA8ghOGkdEwAAD6G6ig
+	(envelope-from <chrubis@suse.cz>); Tue, 09 Dec 2025 13:19:04 +0000
+Date: Tue, 9 Dec 2025 14:19:48 +0100
+From: Cyril Hrubis <chrubis@suse.cz>
+To: Li Wang <liwang@redhat.com>
+Cc: Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it,
+	Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+	selinux@vger.kernel.org, Jan Stancek <jstancek@redhat.com>
+Subject: Re: [PATCH v3 1/4] shell: Add tst_sudo.c helper
+Message-ID: <aTgh9CIRfVWniUZD@yuki.lan>
+References: <20251127082638.224110-1-pvorel@suse.cz>
+ <20251127082638.224110-2-pvorel@suse.cz>
+ <CAEemH2cUYekSphFW_uj2w1FzYt3RWXDDnhmQ5TFAyr0T3HFxow@mail.gmail.com>
+ <CAEemH2e6ivP0rzfTBp5LnZ8n-oe7moqfHszgs2QyYVMUTUQ_wQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <GV2PPF74270EBEE0AAAE2EB22B668EE21A7E4A6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-X-Spam-Flag: NO
-X-Spam-Score: -2.51
-X-Rspamd-Queue-Id: DBDDC3376A
-X-Spamd-Result: default: False [-2.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEemH2e6ivP0rzfTBp5LnZ8n-oe7moqfHszgs2QyYVMUTUQ_wQ@mail.gmail.com>
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
 	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
 	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_COUNT_THREE(0.00)[3];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ARC_NA(0.00)[];
-	FREEMAIL_TO(0.00)[hotmail.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,xmission.com,huaweicloud.com,gmail.com,redhat.com,kernel.org,amacapital.net,chromium.org,linux-foundation.org,suse.com,hallyn.com,linux.microsoft.com,infradead.org,google.com,gmx.de,linutronix.de,kernel.dk,vger.kernel.org,kvack.org,didiglobal.com,manguebit.com,huawei.com,paul-moore.com,cyphar.com,devkernel.io,zte.com.cn,suse.cz,intel.com,joelfernandes.org,oracle.com,collabora.com,linux.ibm.com,canonical.com,lists.ubuntu.com];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	FROM_EQ_ENVFROM(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_GT_50(0.00)[61];
-	TAGGED_RCPT(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DWL_DNSWL_BLOCKED(0.00)[suse.cz:dkim];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	SUBJECT_HAS_QUESTION(0.00)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,yuki.lan:mid];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_TRACE(0.00)[suse.cz:+]
 X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
 X-Spam-Level: 
+X-Rspamd-Queue-Id: 233515BE30
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
 
-On Thu 04-12-25 14:03:27, Bernd Edlinger wrote:
-> On 12/4/25 06:49, Al Viro wrote:
-> > On Wed, Dec 03, 2025 at 02:16:29PM +0100, Bernd Edlinger wrote:
-> > 
-> >> Hmm, yes, that looks like an issue.
-> >>
-> >> I would have expected the security engine to look at bprm->filenanme
-> >> especially in the case, when bprm->interp != bprm->filename,
-> >> and check that it is not a sym-link with write-access for the
-> >> current user and of course also that the bprm->file is not a regular file
-> >> which is writable by the current user, if that is the case I would have expected
-> >> the secuity engine to enforce non-new-privs on a SUID executable somehow.
-> > 
-> > Check that _what_ is not a symlink?  And while we are at it, what do write
-> > permissions to any symlinks have to do with anything whatsoever?
+Hi!
+> > I feel that the filename tst_sudo.c is a bit misleading. The helper
+> > doesn’t
+> > replicate sudo behavior (authentication, privilege escalation), it simply
+> > drops from root to a fixed UID/GID before executing a command.
+> >
+> > So readers may expect a “sudo-like” elevation wrapper when, however
+> > it’s a privilege-dropping trampoline.
+> >
+> > What about renaming it to:
+> >   tst_runas.c,
+> >   tst_runas_nobody.c, or
+> >   tst_drop_privs.c?
+> >
 > 
-> When we execve a normal executable, we do open the binary file with
-> deny_write_access so this might allow the security engine to inspaect the
-> binary, before it is used.
+> 
+> Personally, I prefer the tst_runas_nody.c because it reflects the
+> default privilege,
+> but due it supports the more env so contains "su" maybe better:
+>   tst_su_switch.c, tst_su_cmd.c
 
-That would be seriously flawed IMO because there are lot of cases where
-code is executed without deny_write_access() - like shared libraries, code
-loaded by interpreter, and probably more.
+Maybe just tst_runas.c I think that 'runas' in the name is probably the
+best description.
 
-> However this behavior has changed recently,
-> now it has some exceptions, where even this behavior is no longer
-> guaranteed for binary executables, due to commit
-> 0357ef03c94ef835bd44a0658b8edb672a9dbf51, but why?  I have no idea...
-
-Because for hierarchical storage implementation you may need to fill in the
-executable data from remote storage on demand and the deny_write_access
-logic was making this impossible. We even tried to completely remove the
-deny_write_access logic exactly because it has very limited use and
-complicates things (commit 2a010c412853 ("fs: don't block i_writecount
-during exec")) but that had to be reverted because some userspace depends
-on the ETXTBUSY behavior.
-
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Cyril Hrubis
+chrubis@suse.cz
 
