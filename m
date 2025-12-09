@@ -1,216 +1,140 @@
-Return-Path: <linux-integrity+bounces-7865-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7866-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16880CAF35C
-	for <lists+linux-integrity@lfdr.de>; Tue, 09 Dec 2025 08:52:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19F80CAF792
+	for <lists+linux-integrity@lfdr.de>; Tue, 09 Dec 2025 10:38:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2DF8F3007D5D
-	for <lists+linux-integrity@lfdr.de>; Tue,  9 Dec 2025 07:52:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B74FA3028180
+	for <lists+linux-integrity@lfdr.de>; Tue,  9 Dec 2025 09:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E089C29BD8E;
-	Tue,  9 Dec 2025 07:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NgiBsg+P"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC7F0269D18;
+	Tue,  9 Dec 2025 09:37:08 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC4026CE2D;
-	Tue,  9 Dec 2025 07:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482B521FF55;
+	Tue,  9 Dec 2025 09:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765266738; cv=none; b=J0Yk/0TNm0I4jSMqbDApBP0/DEQcJvG0H4kQTvPJepfEqPMv16jl2sAVPeovNtqeQDDPzWWZ8rs96/GpfMyDThEWh5wJ1rqgqrE0wn0kF1A8wgBqtMx+6zw8SDaXZWPd3PfEVfBf9Yxl45miL9w7XHtotpDYvbcKKc/w1W1TLXc=
+	t=1765273028; cv=none; b=V8V7kaEKG6b/UbAYMjty/yXkOWEIR+/rWjyrYJFGjvXlxlM5SxjxYz7za9BsPDF/HX/V1fM5HK597DJppm9vnKAuJ4pRC7SYRw3sSPPoL0XVUsww8UeVqzw2wYRFo73/KIJdZmUxIxkVZmnm8xjN2UKItEnxwdGxHWJ+0nkzjpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765266738; c=relaxed/simple;
-	bh=mlU//aZKqc19dxH+Y9NUHY269xMbOuurh+8QlQ+fj7s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CGpwCVMSb3p14GPSQ9EFgEWm+OrqPS1n1WvZRuc1YS7NVxP+ObxlU0PI5lgRcaP89SJ1mOy/8yZSXGwV2cUMrhq8+XwDeTOPJpkPdMgvl1DlSPa/VqubGfLjddD5jD4cc1w3/wV4XnD3Mqv6/MeVIF7GROCfjUXbNHTO6R2xph4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NgiBsg+P; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0925C4CEF5;
-	Tue,  9 Dec 2025 07:52:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765266738;
-	bh=mlU//aZKqc19dxH+Y9NUHY269xMbOuurh+8QlQ+fj7s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NgiBsg+PdiefiR15bjb9/5EjmZzN07vsP+qbE88c3YnEkPM6vseTTIT4+qZJNL/ti
-	 RS7BF/GgfG/wc4Sxx2+Ewzmk74O+NhYH8F7QHy30xg6ydjvBE52ZDI3SgJoLXMlefb
-	 g90NKFiBELxul31kSH4xZi61R+wBLa5z2npPpp5w7FpWS0rPoDJOdDl2Ukszb324z+
-	 opxmW6UG2jrRy3Ou5FmmUgFQ/hAWZUyOfRwksBKyJPG3IR0QwoP18p27GqeJOfzkcg
-	 +29NNIXATtfCno5qn9z7Fung52wulH5X2NhmxSjJ3m003JweLZQNrCVIBgXe1t3T9G
-	 xNNaAo4pAt85Q==
-Date: Tue, 9 Dec 2025 09:52:14 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
-Subject: Re: [PATCH 4/4] tpm-buf: Remove tpm_buf_append_handle
-Message-ID: <aTfVLqMkP43HWR5T@kernel.org>
-References: <20251209073903.767518-1-jarkko@kernel.org>
- <20251209073903.767518-5-jarkko@kernel.org>
+	s=arc-20240116; t=1765273028; c=relaxed/simple;
+	bh=3ZclGatReBjs4lijHIn4/vP51TImvrks08wmlBe1Jp8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AkK5eX/DXh5Y6VdyoqfgP9h1+/MEz+0GrYm0xRn9hEEE94665oNGIrJSTWUF9G9yzKCJGhoUbwz1+6XO56UMYS5SwhJRIR1xi3Zo4PKrFM1/q81Rf9wGaSiICoIp9nXXMRxKZGAsrI8ov58CaZB2UgSGw6wUQpO6n9MMZ2VsWfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dQYcH3kNrz1HCDb;
+	Tue,  9 Dec 2025 17:35:27 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id E800D40569;
+	Tue,  9 Dec 2025 17:37:01 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwBHXxCz7TdpdkSbAA--.64937S2;
+	Tue, 09 Dec 2025 10:37:01 +0100 (CET)
+Message-ID: <736e21826c6a283d74d592393c392abbff56a409.camel@huaweicloud.com>
+Subject: Re: [PATCH 1/1] IMA event log trimming
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: James Bottomley <James.Bottomley@HansenPartnership.com>, steven chen
+	 <chenste@linux.microsoft.com>, linux-integrity@vger.kernel.org
+Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com,
+ dmitry.kasatkin@gmail.com,  eric.snowberg@oracle.com, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com, 
+ linux-security-module@vger.kernel.org, anirudhve@linux.microsoft.com, 
+ gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com, 
+ sushring@linux.microsoft.com
+Date: Tue, 09 Dec 2025 10:36:48 +0100
+In-Reply-To: <d0c00469a8501483baffaf1158102c0f2c5211e8.camel@HansenPartnership.com>
+References: <20251202232857.8211-1-chenste@linux.microsoft.com>
+	 <20251202232857.8211-2-chenste@linux.microsoft.com>
+	 <099492ee58996b6f18d73232677757ecadb14cb7.camel@huaweicloud.com>
+	 <34d739c2cf15baf78dff5acb7ae3ddd7ad47f219.camel@HansenPartnership.com>
+	 <1ca00e3238e804db9280abf8655364c2662754ca.camel@huaweicloud.com>
+	 <d0c00469a8501483baffaf1158102c0f2c5211e8.camel@HansenPartnership.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251209073903.767518-5-jarkko@kernel.org>
+X-CM-TRANSID:GxC2BwBHXxCz7TdpdkSbAA--.64937S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXw4DuF1fury7JrWxtF1xGrg_yoW5GrWfpF
+	WSg34xCFnrtaySy34kZw18CryF9ws5XFW5Gr1kGr95A3s8GFs29r1jk3yYv397Ar9xJF1a
+	qa1aqFyYka4DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGk2vesNLwAAs8
 
-On Tue, Dec 09, 2025 at 09:39:02AM +0200, Jarkko Sakkinen wrote:
-> Since the number of handles is fixed to a single handle, eliminate all uses
-> of buf->handles and deduce values during compile-time.
-> 
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
->  drivers/char/tpm/tpm-buf.c                | 25 -----------------------
->  drivers/char/tpm/tpm2-cmd.c               |  4 ++--
->  drivers/char/tpm/tpm2-sessions.c          |  4 ++--
->  include/linux/tpm.h                       |  1 -
->  security/keys/trusted-keys/trusted_tpm2.c |  2 +-
->  5 files changed, 5 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-> index 73be8a87b472..752c69b8a4f5 100644
-> --- a/drivers/char/tpm/tpm-buf.c
-> +++ b/drivers/char/tpm/tpm-buf.c
-> @@ -40,7 +40,6 @@ static void __tpm_buf_reset(struct tpm_buf *buf, u16 buf_size, u16 tag, u32 ordi
->  	buf->flags = 0;
->  	buf->length = sizeof(*head);
->  	buf->capacity = buf_size - sizeof(*buf);
-> -	buf->handles = 0;
->  	head->tag = cpu_to_be16(tag);
->  	head->length = cpu_to_be32(sizeof(*head));
->  	head->ordinal = cpu_to_be32(ordinal);
-> @@ -56,7 +55,6 @@ static void __tpm_buf_reset_sized(struct tpm_buf *buf, u16 buf_size)
->  	buf->flags = TPM_BUF_TPM2B;
->  	buf->length = 2;
->  	buf->capacity = buf_size - sizeof(*buf);
-> -	buf->handles = 0;
->  	buf->data[0] = 0;
->  	buf->data[1] = 0;
->  }
-> @@ -177,29 +175,6 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
->  }
->  EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
->  
-> -/**
-> - * tpm_buf_append_handle() - Add a handle
-> - * @buf:	&tpm_buf instance
-> - * @handle:	a TPM object handle
-> - *
-> - * Add a handle to the buffer, and increase the count tracking the number of
-> - * handles in the command buffer. Works only for command buffers.
-> - */
-> -void tpm_buf_append_handle(struct tpm_buf *buf, u32 handle)
-> -{
-> -	if (buf->flags & TPM_BUF_INVALID)
-> -		return;
-> -
-> -	if (buf->flags & TPM_BUF_TPM2B) {
-> -		WARN(1, "tpm-buf: invalid type: TPM2B\n");
-> -		buf->flags |= TPM_BUF_INVALID;
-> -		return;
-> -	}
-> -
-> -	tpm_buf_append_u32(buf, handle);
-> -	buf->handles++;
-> -}
-> -
->  /**
->   * tpm_buf_read() - Read from a TPM buffer
->   * @buf:	&tpm_buf instance
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 5b04e74b6377..d14e249831c7 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -205,7 +205,7 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
->  			return rc;
->  		tpm_buf_append_hmac_session(chip, buf, 0, NULL, 0);
->  	} else {
-> -		tpm_buf_append_handle(buf, pcr_idx);
-> +		tpm_buf_append_u32(buf, pcr_idx);
->  		tpm_buf_append_auth(chip, buf, NULL, 0);
->  	}
->  
-> @@ -281,7 +281,7 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
->  						    TPM2_SA_CONTINUE_SESSION,
->  						    NULL, 0);
->  		} else  {
-> -			offset = buf->handles * 4 + TPM_HEADER_SIZE;
-> +			offset = TPM_HEADER_SIZE + sizeof(u32);
->  			head = (struct tpm_header *)buf->data;
->  			if (tpm_buf_length(buf) == offset)
->  				head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
-> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-> index 62a200ae72d7..dfd1abe673bc 100644
-> --- a/drivers/char/tpm/tpm2-sessions.c
-> +++ b/drivers/char/tpm/tpm2-sessions.c
-> @@ -261,7 +261,7 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
->  	}
->  
->  	if (!tpm2_chip_auth(chip)) {
-> -		tpm_buf_append_handle(buf, handle);
-> +		tpm_buf_append_u32(buf, handle);
->  		return 0;
->  	}
->  
-> @@ -289,7 +289,7 @@ void tpm_buf_append_auth(struct tpm_chip *chip, struct tpm_buf *buf,
->  			 u8 *passphrase, int passphrase_len)
->  {
->  	/* offset tells us where the sessions area begins */
-> -	int offset = buf->handles * 4 + TPM_HEADER_SIZE;
-> +	int offset = TPM_HEADER_SIZE + sizeof(u32);
->  	u32 len = 9 + passphrase_len;
->  
->  	if (tpm_buf_length(buf) != offset) {
-> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> index db716841973f..e20647cc0a0f 100644
-> --- a/include/linux/tpm.h
-> +++ b/include/linux/tpm.h
-> @@ -437,7 +437,6 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
->  u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset);
->  u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset);
->  u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset);
-> -void tpm_buf_append_handle(struct tpm_buf *buf, u32 handle);
->  
->  /*
->   * Check if TPM device is in the firmware upgrade mode.
-> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-> index 7756aa839d81..0a07a18da2ed 100644
-> --- a/security/keys/trusted-keys/trusted_tpm2.c
-> +++ b/security/keys/trusted-keys/trusted_tpm2.c
-> @@ -495,7 +495,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
->  		if (tpm2_chip_auth(chip)) {
->  			tpm_buf_append_hmac_session(chip, buf, TPM2_SA_ENCRYPT, NULL, 0);
->  		} else  {
-> -			offset = buf->handles * 4 + TPM_HEADER_SIZE;
-> +			offset = TPM_HEADER_SIZE + sizeof(u32);
+On Tue, 2025-12-09 at 07:17 +0900, James Bottomley wrote:
+> On Mon, 2025-12-08 at 10:40 +0100, Roberto Sassu wrote:
+> > I have the impression that none the functionality you cited has to be
+> > implemented in the kernel, because the only component one can trust
+> > to verify the integrity of the IMA measurements list is the TPM.
+> > Whether either the kernel or user space retain the measurements is
+> > irrelevant.
+>=20
+> That's correct, I'm not advocating moving quoting into the kernel.  Co-
+> ordinating the trim with where the quote gets you to is phenomenally
+> useful.  While you could theoretically store any mismatch in userspace,
+> having two locations for the log makes it more error prone.
+>=20
+> > I believe that the only role of the kernel is to get rid of the
+> > measurements entries as fast as possible (the kernel would act more
+> > like a buffer).
+>=20
+> I wouldn't say that, I'd say to get rid of measurements that the user
+> has indicated are of no further use.
 
-Maybe it would be sensible to define:
+Different users could have different and conflicting requirements, and
+we would spend time trying to conciliate those. We can avoid that by
+doing it the same for everyone, and the additional cost of handling it
+I believe it is fair.
 
-/*
- * Offset of the authorization area of a TPM command with a single
- * handle.
- */
-#define TPM2_AUTH_OFFSET	(TPM_HEADER_SIZE + sizeof(u32))
+I could accept staging N entries since I already agreed with Gregory
+and Steven, and since it requires only an extra iteration in the linked
+list. The other desired functionality should be implemented in user
+space.
 
-This would overall clarify how this code works.
+> > This was actually the intent of my original proposal in
+> > https://github.com/linux-integrity/linux/issues/1=C2=A0. The idea of
+> > staging (was snapshotting, but Mimi thinks the term is not accurate)
+> > is simply to detach the entire IMA measurement list as fast as
+> > possible. Further read and delete after staging is done without
+> > interfering with new measurements (sure, the detaching of the hash
+> > table is not yet as efficient as I hoped).
+>=20
+> From the application point of view, offloading the log and random
+> points is a bit more work because now the log collector has to be
+> modified to look in multiple locations and we'd also need an agreement
+> of where those locations are and how the log is sequenced in a naming
+> scheme so it's the same for every distribution.  If the application is
+> in charge of trimming the log at a particular point, collection remains
+> the same (it can simply be the existing in-kernel location), so we
+> don't need a cross distro agreement, and the trim can simply be added
+> as an extra function.
 
->  			head = (struct tpm_header *)buf->data;
->  			if (tpm_buf_length(buf) == offset)
->  				head->tag = cpu_to_be16(TPM2_ST_NO_SESSIONS);
-> -- 
-> 2.52.0
-> 
+It could be a single location, the user space program would be
+responsible to present the IMA measurement list as if it was never
+trimmed.
 
-BR, Jarkko
+Roberto
+
 
