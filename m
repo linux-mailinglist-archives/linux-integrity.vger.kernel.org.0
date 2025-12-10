@@ -1,214 +1,154 @@
-Return-Path: <linux-integrity+bounces-7904-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7905-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87131CB3D87
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Dec 2025 20:17:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44109CB451A
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 00:53:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 39D88300AFE2
-	for <lists+linux-integrity@lfdr.de>; Wed, 10 Dec 2025 19:17:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E5F353021FA2
+	for <lists+linux-integrity@lfdr.de>; Wed, 10 Dec 2025 23:53:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1066128505E;
-	Wed, 10 Dec 2025 19:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 729E228725D;
+	Wed, 10 Dec 2025 23:53:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gspVwRHB"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="jXS4/sQm"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B6A33B8D75;
-	Wed, 10 Dec 2025 19:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA96F280335;
+	Wed, 10 Dec 2025 23:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765394246; cv=none; b=MN5mhSuEJ6NeK0HJcm+4Cn6D4Qljc5q7PCuT56u0LFB4EVW4sMbI+4lgHpyiia8nL0MM0usBWkobZoSsuDsc6TMypzsXEGOnCZKIJJdBkLeOQ+aDFVZdv5Mk88eLSvE8lGTT8pKHPjbPWhUQuC2hZ0mJj2xr1GNP6kQssKUogNs=
+	t=1765410804; cv=none; b=H5B990xTnmn+brz4mZHEpPyi3x1VKMrnWBH4kD6c/43lFRieyISZSkaqva5NkKO0GaJsQdxfA/0WVtMGFHggK6ZJTVXmBPaZ/2rpNbdGKa9IRlXF7GHIEbEpTupnCOAE0lR6u2wJu3qMu7AHb5SMMYRScbqwrXXi5t1wvfhps+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765394246; c=relaxed/simple;
-	bh=8aUFNKHpN2z/hD/eNUCnR/ryfTmjWz/bXKszlla1aHQ=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=XAW372H+eBRA9Ck5yy1dvVz8ayWchof1Dt/Uspc3tUzKk77WqtjzqBymmEJnLuAaQhCk5w5BXMYDDQlZOFw10s860KVIOG7QEYBjUmFpqGAXFp2RRV4uBhfN91oQonC+2U2k1AR5eqnq7wV+qzZtQ7vR7qXuT/tIwXWL9fvHkFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gspVwRHB; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BAGDKnT006746;
-	Wed, 10 Dec 2025 19:16:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=UAxq1k
-	egZYMUt8yoyMfS9GxEA2chxFrFLIcbsDy5MFA=; b=gspVwRHBd4NqrEcNWRdIUo
-	5dUx1PtVxrj+dsPnZcKw/8FPk6jFSe+5U5CgWigj255iJJLjSQXDwGdScuhpoGwd
-	W7Z5LvoA2EIKc/vz+t3M7611kz8umh/BOcJsZvkJxyXfhTeUBGHk0lqY3XdfNPMU
-	aCFGH6XcKIHg44Jbt1pvDad1VFll6Ps3K1UnTmAU6jEC7Rc70tB9Jgvs+qYQPnDZ
-	PuyHQb9F/prHm/LYViAXSwjLbX99jySZFJJXLqkIreWnbuMgKy7Ij2U9hpuck4yH
-	jNYCZ/lX5rd6qQs3gxmMkI/CBEUQ1ORIcD5O5i+d+QTtFMv6rclzxV96g8QBegxw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4av9wvuqs2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Dec 2025 19:16:58 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BAJGwUC002671;
-	Wed, 10 Dec 2025 19:16:58 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4av9wvuqru-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Dec 2025 19:16:58 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BAH0Qjq001998;
-	Wed, 10 Dec 2025 19:16:57 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4aw11jj7g0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Dec 2025 19:16:57 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BAJGuSS20906682
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 10 Dec 2025 19:16:56 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 96D4E5806D;
-	Wed, 10 Dec 2025 19:16:56 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4562E5805C;
-	Wed, 10 Dec 2025 19:16:55 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 10 Dec 2025 19:16:55 +0000 (GMT)
-Message-ID: <59d76f4a9cbc2016387f3f053e1689d14f3b43fc.camel@linux.ibm.com>
-Subject: Re: [PATCH 1/1] IMA event log trimming
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        James Bottomley
-	 <James.Bottomley@HansenPartnership.com>,
-        steven chen
-	 <chenste@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc: roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-security-module@vger.kernel.org,
-        anirudhve@linux.microsoft.com, gregorylumen@linux.microsoft.com,
-        nramas@linux.microsoft.com, sushring@linux.microsoft.com
-In-Reply-To: <736e21826c6a283d74d592393c392abbff56a409.camel@huaweicloud.com>
-References: <20251202232857.8211-1-chenste@linux.microsoft.com>
-		 <20251202232857.8211-2-chenste@linux.microsoft.com>
-		 <099492ee58996b6f18d73232677757ecadb14cb7.camel@huaweicloud.com>
-		 <34d739c2cf15baf78dff5acb7ae3ddd7ad47f219.camel@HansenPartnership.com>
-		 <1ca00e3238e804db9280abf8655364c2662754ca.camel@huaweicloud.com>
-		 <d0c00469a8501483baffaf1158102c0f2c5211e8.camel@HansenPartnership.com>
-	 <736e21826c6a283d74d592393c392abbff56a409.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 10 Dec 2025 14:16:54 -0500
+	s=arc-20240116; t=1765410804; c=relaxed/simple;
+	bh=iLf/3pqzRjM2vtmyV+qBQZ5P2ZcxfsLYZ37c66Wv7Pc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EjyzG81cROOvmuGjiCUEZvvKWNOO2Ir5jXViKA2NxdDdohAAE/9gvpZPEqjvBEzBhXV1CSN5h+nrjAP0o4CM9QZKAjtHMsDdVFNwEq7WZr6/Deo9xwkVPotBEFjrp00TnscUc2slycYq5WKPJcVUSySLAp3U9etnJ2vfO1OnReI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=jXS4/sQm; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from chenste-Virtual-Machine.mshome.net (c-67-168-176-124.hsd1.wa.comcast.net [67.168.176.124])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 46FC8211603E;
+	Wed, 10 Dec 2025 15:53:21 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 46FC8211603E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1765410801;
+	bh=PMrSM9sNdXVS3gVjnHz4WlV/DUtREqvT6AWyC31m77c=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jXS4/sQm1ew3vN8t+D8XashX3HicdGHp0E/tyVJe3gnGkr4eaQEGdVnE3khe1FvVW
+	 P20wHQoYyEWgeNhjqVd0tsIcWUtBN/H6GT8XhPFEtHLfA39rWOjJPCqyjuG+H6AsJU
+	 7H8v9P4fFfwzsNID4HNvnWNNxWUthygkddinUoRk=
+From: steven chen <chenste@linux.microsoft.com>
+To: linux-integrity@vger.kernel.org
+Cc: zohar@linux.ibm.com,
+	roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	corbet@lwn.net,
+	serge@hallyn.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	linux-security-module@vger.kernel.org,
+	anirudhve@linux.microsoft.com,
+	chenste@linux.microsoft.com,
+	gregorylumen@linux.microsoft.com,
+	nramas@linux.microsoft.com,
+	sushring@linux.microsoft.com,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v2 0/1] Trim N entries of IMA event logs
+Date: Wed, 10 Dec 2025 15:53:11 -0800
+Message-ID: <20251210235314.3341-1-chenste@linux.microsoft.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vUheZQnV-em3kNl77Jfe_w5sYTXMWOXT
-X-Proofpoint-ORIG-GUID: oIQdssVcx_Axueum6yjpE5HcKjhrdHxu
-X-Authority-Analysis: v=2.4 cv=AdS83nXG c=1 sm=1 tr=0 ts=6939c72a cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=NEAV23lmAAAA:8 a=eSAHqJhRAyoXFonV6roA:9 a=PRpDppDLrCsA:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA2MDAwMCBTYWx0ZWRfX8tquqM8KDsQc
- Ry5HXxIaffFcUaHCNxKGL/aTx8D+hJnudGC2JxY/PpZVBxMPhrFyrXB3NtpvTIDxosBa20MOCN+
- 8pki/ztEc5xIun0FkDvxR+PJBWSLUUex9yOYj3JKjiVPZ1BDr0DOVURAj8IHqjdz4q4jWRAtG0Q
- GaEseMNawmU3CbRpjurp+tyxwksGgkVylVOLaeF1zJsvpb/f7aUDxgb7C3y0n/gZ/Mwl4cO+35G
- 5rpQj2TBv1fHMtf7kX8GpOp3ljL4TyO8NiZE5moTRBRDi/+02rabKxtQ3xQjeoqrvmaAlu+W+Xs
- F1pPRPYWteFlaY7UrOnNBG0ErJIxRmEvxZy5B8A4/D74yeT/9t/DU4iBtn4Jjeq+vRUttjemswV
- YSCkDmsewKddqs5Ka7BhigHtQa7JQg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-10_02,2025-12-09_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 adultscore=0 priorityscore=1501 spamscore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 malwarescore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512060000
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2025-12-09 at 10:36 +0100, Roberto Sassu wrote:
-> On Tue, 2025-12-09 at 07:17 +0900, James Bottomley wrote:
-> > On Mon, 2025-12-08 at 10:40 +0100, Roberto Sassu wrote:
-> > > I have the impression that none the functionality you cited has to be
-> > > implemented in the kernel, because the only component one can trust
-> > > to verify the integrity of the IMA measurements list is the TPM.
-> > > Whether either the kernel or user space retain the measurements is
-> > > irrelevant.
-> >=20
-> > That's correct, I'm not advocating moving quoting into the kernel.  Co-
-> > ordinating the trim with where the quote gets you to is phenomenally
-> > useful.  While you could theoretically store any mismatch in userspace,
-> > having two locations for the log makes it more error prone.
-> >=20
-> > > I believe that the only role of the kernel is to get rid of the
-> > > measurements entries as fast as possible (the kernel would act more
-> > > like a buffer).
-> >=20
-> > I wouldn't say that, I'd say to get rid of measurements that the user
-> > has indicated are of no further use\
+The Integrity Measurement Architecture (IMA) maintains a measurement list
+—a record of system events used for integrity verification. The IMA event
+logs are the entries within this measurement list, each representing a
+specific event or measurement that contributes to the system's integrity
+assessment.
 
-I really hope I'm wrong, but I don't like the sound of "No further use".  T=
-he
-complete IMA measurement needs to be saved somewhere to support multiple
-verifiers.
+This update introduces the ability to trim, or remove, N entries from the
+current measurement list. Trimming involves deleting N entries from the
+list and clearing the corresponding entries from the hash table. This
+action atomically truncates the measurement list, ensuring that no new
+measurements can be added until the operation is complete. Importantly,
+only one writer can initiate this trimming process at a time, maintaining
+consistency and preventing race conditions.
 
->=20
-> Different users could have different and conflicting requirements, and
-> we would spend time trying to conciliate those. We can avoid that by
-> doing it the same for everyone, and the additional cost of handling it
-> I believe it is fair.
->=20
-> I could accept staging N entries since I already agreed with Gregory
-> and Steven, and since it requires only an extra iteration in the linked
-> list. The other desired functionality should be implemented in user
-> space.
->=20
-> > > This was actually the intent of my original proposal in
-> > > https://github.com/linux-integrity/linux/issues/1=C2=A0. The idea of
-> > > staging (was snapshotting, but Mimi thinks the term is not accurate)
-> > > is simply to detach the entire IMA measurement list as fast as
-> > > possible. Further read and delete after staging is done without
-> > > interfering with new measurements (sure, the detaching of the hash
-> > > table is not yet as efficient as I hoped).
-> >=20
-> > From the application point of view, offloading the log and random
-> > points is a bit more work because now the log collector has to be
-> > modified to look in multiple locations and we'd also need an agreement
-> > of where those locations are and how the log is sequenced in a naming
-> > scheme so it's the same for every distribution.  If the application is
-> > in charge of trimming the log at a particular point, collection remains
-> > the same (it can simply be the existing in-kernel location), so we
-> > don't need a cross distro agreement, and the trim can simply be added
-> > as an extra function.
->=20
-> It could be a single location, the user space program would be
-> responsible to present the IMA measurement list as if it was never
-> trimmed.
+A userspace interface, ima_trim_log, has been provided for this purpose.
+By writing a number N to this interface, userspace can request the kernel
+to trim N entries from the IMA event logs. When this interface is read,
+it returns the number of entries trimmed during the last operation. This
+value is not preserved across kexec soft reboots, as it is not considered
+important information.
 
-Even if it is a single, new location or user space program/daemon, it needs=
- to
-be documented.  The user space program/daemon would be responsible for retu=
-rning
-the IMA measurement list.
+To maintain a complete record, userspace is responsible for concatenating
+and storing the logs before initiating trimming. Userspace can then send
+the collected data to remote verifiers for validation. After receiving
+confirmation from the remote verifiers, userspace may instruct the kernel
+to proceed with trimming the IMA event logs accordingly.
 
-Keylime, for example, supports incremental verification[1], meaning initial=
-ly
-the verification would be from the beginning of the IMA measurement list, b=
-ut
-subsequently the verifier could do an incremental verification. For increme=
-ntal
-verification, state information (e.g. number of records verified, pcr value=
-)
-needs to be preserved by the verifier, not the kernel.
+The primary benefit of this solution is the ability to free valuable
+kernel memory by delegating the task of reconstructing the full
+measurement list from log chunks to userspace. Trust is not required in
+userspace for the integrity of the measurement list, as its integrity is
+cryptographically protected by the Trusted Platform Module (TPM).
 
-[1] Keylime commit 7870f45f909f ("ima: Remember the number of lines success=
-fully
-processed and last IMA PCR value(s)")
+Multiple readers are allowed to access the ima_trim_log interface
+concurrently, while only one writer can trigger log trimming at any time.
+During trimming, readers do not see the list and cannot access it while
+deletion is in progress, ensuring atomicity.
 
---=20
-thanks,
+Introduce the new kernel option ima_flush_htable to decide whether or not
+the digests of measurement entries are flushed from the hash table. (from
+reference [2])
 
-Mimi
+The ima_measure_users counter (protected by the ima_measure_lock mutex) has
+been introduced to protect access to the measurement list part. The open
+method of all the measurement interfaces has been extended to allow only
+one writer at a time or, in alternative, multiple readers. The write
+permission is used to delete the measurements, the read permission
+to read them. Write requires also the CAP_SYS_ADMIN capability. (from
+reference [2])
+
+New IMA log trim event is added when trimming finish.
+
+The time required for trimming is minimal, and IMA event logs are briefly
+on hold during this process, preventing read or add operations. This short
+interruption has no impact on the overall functionality of IMA.
+
+V1 of this series is available here[1] for reference.
+
+References:
+-----------
+[1] [PATCH 0/1] Trim N entries of IMA event logs
+https://lore.kernel.org/linux-integrity/20251202232857.8211-1-chenste@linux.microsoft.com/T/#t
+
+[2] [RFC][PATCH] ima: Add support for staging measurements for deletion
+https://lore.kernel.org/linux-integrity/207fd6d7-53c-57bb-36d8-13a0902052d1@linux.microsoft.com/T/#t
+
+Change Log v2:
+ - Incorporated feedback from the Roberto on v1 series.
+ - Adapted code from Roberto's RFC [Reference 2]
+ - Add IMA log trim event log to record trim event
+ - Updated patch descriptions as necessary.
+
+steven chen (1):
+  IMA event log trimming
+
+ .../admin-guide/kernel-parameters.txt         |   4 +
+ security/integrity/ima/ima.h                  |   2 +
+ security/integrity/ima/ima_fs.c               | 175 +++++++++++++++++-
+ security/integrity/ima/ima_queue.c            |  64 +++++++
+ 4 files changed, 241 insertions(+), 4 deletions(-)
+
+-- 
+2.43.0
+
 
