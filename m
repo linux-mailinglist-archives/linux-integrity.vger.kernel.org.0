@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-7925-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7926-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 879BECB724D
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 21:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAEEFCB7253
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 21:22:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D838C301EF85
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 20:22:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D61D1301F27D
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 20:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 382FD277819;
-	Thu, 11 Dec 2025 20:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F1E72C08D1;
+	Thu, 11 Dec 2025 20:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fgsNkldv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jxiem6bI"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E856200110;
-	Thu, 11 Dec 2025 20:22:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15859200110;
+	Thu, 11 Dec 2025 20:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765484532; cv=none; b=TAjwjaMOMe3m7lVmT/CKSES6v3mMuEsbKVhDybOfa7dIQ84SG7tDdfIRq/LjcwfH5nw0EfTJmFbqAKNmN6Zha5ZiDub/usF+CnP74g72kd09QVvCG1d3YBGQBq5sTy9kZdDbJl3pRJ+wBVPOnxuFnHLf+sKUiyAPf6BEpVSkkog=
+	t=1765484558; cv=none; b=WJPzrc97t8Ulw+8sqponES7F+I0ZRd8VFraxaIS46uIlyxWkU088h8ra0I9CF3Xt4FmCH4sVM+TOxNX6kC3IxOqWm8ivcoXs9yr1T/eWgJS7oB3EnuSeppycRA8sOtpwMmR+kqEgUlnJevAEu4WXMkQqZ3OWgzxtrWEWQNqXmDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765484532; c=relaxed/simple;
-	bh=OTUbSafBlMdPjB7WkuRZL30NeFaSui4oJg03ss8lKjw=;
+	s=arc-20240116; t=1765484558; c=relaxed/simple;
+	bh=67YAd1cWfgEDQnJk7N7ii4cbGijDnNqw6ET5G080vvg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bakqF587yU0AmAAGb/HDebJTyM6Ri4m3N0LghQxKlFbRNmOTKbgaVuW0euwqzc+N1vfBvIQzRNadYiiX9ewr/RsjcLctrKidyvKWCGDLlCXlt0tX6RWND1xs8X10+KsIcO5cigDSkxqisGLe9R1LGOUZlUDtGZ/wW6Nar1hKHlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fgsNkldv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22588C4CEF7;
-	Thu, 11 Dec 2025 20:22:10 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lbGdcTriJEZFCiyZMvlftZrIVfUhoUAnRKYdTKvUdihNpz7VSru1rvJqV3g3V0VLke81tMkwmp48RkLt0NRZRn9QUfTkwDbzsJQY8RjDZSmg4prtZl3+V71onWPf1+Nb6kXeuE5rakjTFbHdqA6pmOz5GlykCbVE7hg6F+fNLkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jxiem6bI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A4AC4CEF7;
+	Thu, 11 Dec 2025 20:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765484531;
-	bh=OTUbSafBlMdPjB7WkuRZL30NeFaSui4oJg03ss8lKjw=;
+	s=k20201202; t=1765484557;
+	bh=67YAd1cWfgEDQnJk7N7ii4cbGijDnNqw6ET5G080vvg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fgsNkldvX1Nc4me6puLvnsG1Us3cKfSX5xPEJhmQV5FIgjs94Rb6slOO/yk+yX3PS
-	 9OYwNE7KQUZRqJ94Zm2KSfkfFzFADSCz4Fy/MmRnXw9bzCXtZIGLbkKqjpzWhMCQF3
-	 1GulEMh0X6Gbxk+fyvQ1WN7/iYx31qPn50yaVv0XHji9TQF5U+1OFaeeLqKLPTyV/O
-	 GZKJLLD3rIQIjZ+FS+1283FNu1X35wPlaLWnLW+lKRrtA5liD/N3PhovMwJy4Zm5te
-	 eLpnnXbtiTtFLWyCWp/vZVF8DvmEcufFekkJ0KVd9HlyHMvxHXHRoFiXi+IbGLOcSi
-	 /z8+gUEsUQRhg==
-Date: Thu, 11 Dec 2025 22:22:07 +0200
+	b=Jxiem6bIZ1ZQBKGzXaW9M6IAhnzJcK/902yg+eOQzGDa+IDgWbz1IM+fwFjoayABO
+	 Cba4xXI7gEx2EzEY3gCdDzI3DI/daa5xa2gvjFFiOQveQoBbqeLZzpGZK9a5IwA8uW
+	 FX3NphZEUV6+7hevO1+gJr4r5B9sGhZRQyG3kCEheECQwEHEIrTu3xHimErkF6OWYd
+	 eo/kzgkoF9+PWphqF5nNuXWSli74gPLLGn32SmUSOcGNk/NYByIoRzPSXcIbe/oy+J
+	 2AxUNuMOaIdRnKLamYbkW4+RyA5y9oYBZvQ0Nw5ei+/A5PEH7P6CeejSqqLZ1Ob69U
+	 cJ/AgU4fRIBfw==
+Date: Thu, 11 Dec 2025 22:22:33 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
 Cc: Jens Wiklander <jens.wiklander@linaro.org>,
@@ -48,7 +48,7 @@ Cc: Jens Wiklander <jens.wiklander@linaro.org>,
 	op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1 17/17] tpm/tpm_ftpm_tee: Make use of tee bus methods
-Message-ID: <aTsn7wNwAt3F2aLw@kernel.org>
+Message-ID: <aTsoCR2TpCk7QpU8@kernel.org>
 References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
  <eaf8216e8a6c3dabce5a82be5765d67c66318791.1765472125.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
@@ -155,10 +155,7 @@ On Thu, Dec 11, 2025 at 06:15:11PM +0100, Uwe Kleine-König wrote:
 > 2.47.3
 > 
 
-I checked trusted key patches and ftpm patches. I don't have anything
-against merging them.
-
-So for those four patches:
+And also for this:
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
