@@ -1,224 +1,210 @@
-Return-Path: <linux-integrity+bounces-7930-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7931-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FFBACB73A5
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 22:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A5D13CB743B
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 23:08:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 37DA330198DB
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 21:41:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2609B302C23F
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 22:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5DC9277819;
-	Thu, 11 Dec 2025 21:41:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3079A2957C2;
+	Thu, 11 Dec 2025 22:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WV97gXft"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="bk+tlOQd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790CC221FD0;
-	Thu, 11 Dec 2025 21:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3BD26D4F7;
+	Thu, 11 Dec 2025 22:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765489266; cv=none; b=OINIdGo/XJ3qnUsmnFvLy23ReeizRbGWNO+4Kzo6G99I02r3OD5AadFmgGIefxl3pmhB+xdd0J2g3lOoZadgRDl79+H14LCeX/aN2VafBlgJ11xr05/jZjwv3sh+goPKivVrQEGzLHVBaxOLo28DY3eaz+sil4dwpykSyTOkrPk=
+	t=1765490815; cv=none; b=un4MPIuciWbhwLgXbtnGPpRTvSX+AjgZSdxJZYxYXu2QYmz28G37peoJbHyMFezoQfOjO91RklTPxIM9AmpXLltXTHZKFq4mOEpYFPZ0J/CKQgkS3RqHdkzKlZI/ImS4W36UUoT2zfVJuVvOWSvn2DGaHsKXiQ8bcJ3cdc93+B4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765489266; c=relaxed/simple;
-	bh=xdyhU76It+jZ3iukqyQFChNx7KEzfG79mGKr5B23Al0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MMTf44BhY97JeBSfRc3b4PRfgbUx2Apq9zxqRYui4dfqzHALUjGtMWVvjzv6zYqZ0BkLEjEyFc4qvjYnlrLN1frlv/x71+jUPwYF/SXkqhYgOb4c7VFFDfsNsIjxhafGong2gvW/j7qAlAIH3ELum7Nje1BxGuY3u4QE6FASAX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WV97gXft; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F89C4CEF7;
-	Thu, 11 Dec 2025 21:41:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765489264;
-	bh=xdyhU76It+jZ3iukqyQFChNx7KEzfG79mGKr5B23Al0=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=WV97gXftj/EKSBgJmMP21D5kdE+XxLtTIq17T6HlNT2M4E6NxuOhL00QJsD5PL9eK
-	 hBiAX+keJbEj7M/+wM8TwZNZJSQ/HR0hOuRtVEwXHGrb5HO0qyAdZHX4pAbRgVvSrO
-	 M+vYoE/Li7UxEBUswzG0So7s7i+W9YniDIR8nO+SWzAf1rWJ3ewPIuJuIKzeg9f5ob
-	 FlfVaawkv5g17Gr52MiOYyAXkQYJk18sbyUMzJBs6THP59smggZHUy3Nn3yETHw6PS
-	 EmzNr8/d5WwF9tpT0om3U3gPKIpz/sW9FmN4xuxVTOH8HqvsYSAVvZdxFkBG69BOBr
-	 dEQ2NuaYletAQ==
-Message-ID: <fab68913274be1cb2a629372eafd52205a51b74e.camel@kernel.org>
-Subject: Re: xfs/ima: Regression caching i_version
-From: Jeff Layton <jlayton@kernel.org>
-To: Frederick Lawler <fred@cloudflare.com>
-Cc: Christian Brauner <brauner@kernel.org>, "Darrick J. Wong"	
- <djwong@kernel.org>, Josef Bacik <josef@toxicpanda.com>, Carlos Maiolino	
- <cem@kernel.org>, linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
- Roberto Sassu <roberto.sassu@huawei.com>, kernel-team@cloudflare.com
-Date: Fri, 12 Dec 2025 06:41:00 +0900
-In-Reply-To: <aTszzVJkIqBpYLst@CMGLRV3>
-References: <aTspr4_h9IU4EyrR@CMGLRV3>
-	 <2b193b5ccd696420196ae9059f83dcc8b3f06473.camel@kernel.org>
-	 <aTszzVJkIqBpYLst@CMGLRV3>
-Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
- keydata=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
- QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	s=arc-20240116; t=1765490815; c=relaxed/simple;
+	bh=nUtalkbD6QrDRv0OfEjeVGb+R8K62ZWJbHWqzS8WP6g=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=kT0wC1jAU6SUj8N1of5wsAxwKUtl5IrxrjiquYRwWOT7jrUBY9qD6DDXiycqLT0kNvX3nq/zHObPPAK0Y1YFBPpL8YviY9yOI56Qi8hshUK4L61tI9LHm/LSYhKaXWjMoVWFAYB5uXaw0/HJA6R1BwOp46TYcbTpyfvW1hhy1Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=bk+tlOQd; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.17.64.150] (unknown [131.107.8.22])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 9B0842016010;
+	Thu, 11 Dec 2025 14:06:51 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9B0842016010
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1765490812;
+	bh=0pGrHYxA8ivdEM4MAPDqLcRoJM2t5LZqyRAyL5kQDyY=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=bk+tlOQd1ZU8+0BL4CVcBdPgTyUHO+lgTuZmaonfc67WjPdb8PIJj3ujI73PIXvNG
+	 ZffSPM6N66q9AVVEMxqhK1Xg9LPi5JoPFWgFjV5VZv/XOornDe/1I7IBoqN4sZZOUq
+	 AgmVSXEdOsPRbG39CvdKFgI4FjhV60StgKRwaTiw=
+Message-ID: <877e2fec-febf-4568-9b00-059094d1c23b@linux.microsoft.com>
+Date: Thu, 11 Dec 2025 14:06:50 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH] ima: Add support for staging measurements for
+ deletion
+From: steven chen <chenste@linux.microsoft.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+ zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ steven chen <chenste@linux.microsoft.com>
+References: <20251209101725.3680225-1-roberto.sassu@huaweicloud.com>
+ <9cb4cbab-bcca-4ac8-a7a5-0cf3de67353e@linux.microsoft.com>
+ <d6ef2d61a2c31c0ae46741b6bd78f38bc02e6141.camel@huaweicloud.com>
+ <b701686d-212e-4152-9db9-0c56f21e1fdc@linux.microsoft.com>
+Content-Language: en-US
+In-Reply-To: <b701686d-212e-4152-9db9-0c56f21e1fdc@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2025-12-11 at 15:12 -0600, Frederick Lawler wrote:
-> On Fri, Dec 12, 2025 at 05:55:45AM +0900, Jeff Layton wrote:
-> > On Thu, 2025-12-11 at 14:29 -0600, Frederick Lawler wrote:
-> > > Hi Jeff,
-> > >=20
-> > > While testing 6.18, I think I found a regression with
-> > > commit 1cf7e834a6fb ("xfs: switch to multigrain timestamps") since 6.=
-13
-> > > where IMA is no longer able to properly cache i_version when we overl=
-ay
-> > > tmpfs on top of XFS. Each measurement diff check in function
-> > > process_measurement() reports that the i_version is
-> > > always set to zero for iint->real_inode.version.
-> > >=20
-> > > The function ima_collect_measurement() is looking to extract the vers=
-ion
-> > > from the cookie on next measurement to cache i_version.
-> > >=20
-> > > I'm unclear from the commit description what the right approach here =
-is:
-> > > update in IMA land by checking for time changes, or do
-> > > something else such as adding the cookie back.
-> > >=20
-> > >=20
-> >=20
-> > What we probably want to do is switch to using the ctime to manufacture
-> > a change attribute when STATX_CHANGE_ATTRIBUTE is not set in the statx
-> > reply.
-> >=20
-> > IIRC, IMA doesn't need to persist these values across reboot, so
-> > something like this (completely untested) might work, but it may be
-> > better to lift nfsd4_change_attribute() into a common header and use
-> > the same mechanism for both:
->=20
-> I agree lifting nfsd4_change_attribute(), if anything else, a consistent
-> place to fetch the i_version from. Am I correct in my understanding that
-> the XOR on the times will cancel out and result in just the i_version?
+On 12/11/2025 11:20 AM, steven chen wrote:
+> On 12/11/2025 2:18 AM, Roberto Sassu wrote:
+>> On Wed, 2025-12-10 at 16:03 -0800, steven chen wrote:
+>>> On 12/9/2025 2:17 AM, Roberto Sassu wrote:
+>>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>>
+>>>> Introduce the ability of staging the entire of the IMA measurement 
+>>>> list, or
+>>>> a portion, for deletion. Staging means moving the current content 
+>>>> of the
+>>>> measurement list to a separate location, and allowing users to read 
+>>>> and
+>>>> delete it. This causes the measurement list to be atomically truncated
+>>>> before new measurements can be added. Staging can be done only once 
+>>>> at a
+>>>> time.
+>>>>
+>>>> User space is responsible to concatenate the staged IMA 
+>>>> measurements list
+>>>> portions following the temporal order in which the operations were 
+>>>> done,
+>>>> together with the current measurement list. Then, it can send the 
+>>>> collected
+>>>> data to the remote verifiers.
+>>>>
+>>>> The benefit of this solution is the ability to free precious kernel 
+>>>> memory,
+>>>> in exchange of delegating user space to reconstruct the full 
+>>>> measurement
+>>>> list from the chunks. No trust needs to be given to user space, 
+>>>> since the
+>>>> integrity of the measurement list is protected by the TPM.
+>>>>
+>>>> By default, staging the measurements list for deletion does not 
+>>>> alter the
+>>>> hash table. When staging is done, IMA is still able to detect 
+>>>> collisions on
+>>>> the staged and later deleted measurement entries, by keeping the entry
+>>>> digests (only template data are freed).
+>>>>
+>>>> However, since during the measurements list serialization only the 
+>>>> SHA1
+>>>> digest is passed, and since there are no template data to 
+>>>> recalculate the
+>>>> other digests from, the hash table is currently not populated with 
+>>>> digests
+>>>> from staged/deleted entries after kexec().
+>>>>
+>>>> Introduce the new kernel option ima_flush_htable to decide whether 
+>>>> or not
+>>>> the digests of staged measurement entries are flushed from the hash 
+>>>> table.
+>>>>
+>>>> Then, introduce ascii_runtime_measurements_staged_<algo> and
+>>>> binary_runtime_measurement_staged_<algo> interfaces to stage/delete 
+>>>> the
+>>>> measurements. Use 'echo A > <IMA interface>' and 'echo D > <IMA 
+>>>> interface>'
+>>>> to respectively stage and delete the entire measurements list. Use
+>>>> 'echo N > <IMA interface>', with N between 1 and ULONG_MAX, to 
+>>>> stage the
+>>>> selected portion of the measurements list.
+>>>>
+>>>> The ima_measure_users counter (protected by the ima_measure_lock 
+>>>> mutex) has
+>>>> been introduced to protect access to the measurement list and the 
+>>>> staged
+>>>> part. The open method of all the measurement interfaces has been 
+>>>> extended
+>>>> to allow only one writer at a time or, in alternative, multiple 
+>>>> readers.
+>>>> The write permission is used to stage/delete the measurements, the 
+>>>> read
+>>>> permission to read them. Write requires also the CAP_SYS_ADMIN 
+>>>> capability.
+>>> Hi Roberto,
+>>>
+>>> I released version 2 of trim N entries patch as bellow:
+>>>
+>>> [PATCH v2 0/1] Trim N entries of IMA event logs
+>>> <https://lore.kernel.org/linux-integrity/20251210235314.3341-1-chenste@linux.microsoft.com/T/#t> 
+>>>
+>>>
+>>> I adapted some of your idea and I think trim N has following 
+>>> advantages:
+>>> 1: less measurement list hold time than your current implementation
+>>> 2. operation much simple for user space
+>>> 3. less kernel code change
+>>> 4. no potential issue as Gregory mentioned.
+>> Please have a look at:
+>>
+>> https://marc.info/?l=linux-integrity&m=176545085325473&w=2
+>>
+>> and let me know if I'm missing something.
+>>
+>> Thanks
+>>
+>> Roberto
+>
+> Hi Roberto,
+>
+> what does this staging solution do that's not achieved by trim N 
+> entries solution?
+>
+> You did not address all my comments and your other idea make things 
+> more complex.
 
-No. I was just using the XOR to mix the tv_sec and tv_nsec fields
-together in a way that (hopefully) wouldn't generate collisions. It's
-quite not as robust as what nfsd4_change_attribute() does, but might be
-sane enough for IMA.
+The following are steps for both proposals:
 
-> IMA is calling into inode_eq_iversion() to perform the comparison
-> between the cached value and inode.i_version.
+     the steps for trim N solution:
+         1. User space reads list without lock
+         2. User space decides to trim N entries and send command to kernel
+         3. Kernel will lock the list use the same or less time as 
+staged solution use(we can improve this together)
 
-That just looks at the i_version field directly without going through -
->getattr, so that would need to be switched over as well. Could
-integrity_inode_attrs_changed() use vfs_getattr_nosec() and compare the
-result?
+     the steps for staged N solution:
+         1. User space reads list without lock
+         2. User space stages list with lock
+         3. User space decides to trim N entries and send command to kernel
+         4. Kernel trim staged list (staged list may not empty after trim)
+         5. kexec save the staged list during soft reboot
+         6. kexec restore the staged list during soft reboot
 
+>
+> Also, Trim N solution is simple and will bring following two good points:
+>     easy for future IMA development
+will be easier for future "Kexec Measurement List Passing" project
+> easy for code maintenance
+>
+> Could you also add your comments on the trim N solution?
+>
+> Thanks,
+>
+> Steven
+>
+>>
+>>> Thanks,
+>>>
+>>> Steven 
 
-> >=20
-> > diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/=
-ima_api.c
-> > index c35ea613c9f8..5a71845f579e 100644
-> > --- a/security/integrity/ima/ima_api.c
-> > +++ b/security/integrity/ima/ima_api.c
-> > @@ -272,10 +272,14 @@ int ima_collect_measurement(struct ima_iint_cache=
- *iint, struct file *file,
-> >          * to an initial measurement/appraisal/audit, but was modified =
-to
-> >          * assume the file changed.
-> >          */
-> > -       result =3D vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE=
-_COOKIE,
-> > +       result =3D vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE=
-_COOKIE | STATX_CTIME,
-> >                                    AT_STATX_SYNC_AS_STAT);
-> > -       if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
-> > -               i_version =3D stat.change_cookie;
-> > +       if (!result) {
-> > +               if (stat.result_mask & STATX_CHANGE_COOKIE)
-> > +                       i_version =3D stat.change_cookie;
-> > +               else if (stat.result_mask & STATX_CTIME)
-> > +                       i_version =3D stat.ctime.tv_sec ^ stat.ctime.tv=
-_nsec;
-> > +       }
-> >         hash.hdr.algo =3D algo;
-> >         hash.hdr.length =3D hash_digest_size[algo];
-> > =20
-
---=20
-Jeff Layton <jlayton@kernel.org>
 
