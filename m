@@ -1,193 +1,120 @@
-Return-Path: <linux-integrity+bounces-7919-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7920-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D63AACB6B03
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 18:22:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 805AACB6DF3
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 19:09:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A9A553043F6E
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 17:17:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1BC1E305DCFB
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 18:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1348E3168E5;
-	Thu, 11 Dec 2025 17:16:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75ACF3191C9;
+	Thu, 11 Dec 2025 18:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Xpr28zqx"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="HNjJgJjM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D96C3195F6
-	for <linux-integrity@vger.kernel.org>; Thu, 11 Dec 2025 17:16:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B5A33168E2;
+	Thu, 11 Dec 2025 18:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765473376; cv=none; b=EBQsBT2pwCjoOOME5OeCMB40jqtCtG/MEADpt7aC1W9uk2pT6LTVou80f5V4BfQGEHZOqDvZnNfga+CITF1Iau3UUlbUsqx/HFYNzA388V4bWRidgrY5taVyG19vMYmmFKnYSOyF+ekpmgjxj6pAXxp6OHbwyrhW6XPYlYY0oAw=
+	t=1765476403; cv=none; b=aga2UCkPTl9Wu4vwxX6sjV9sSITbLC9GP1R013J6W4Gu9m2AMBNmRlAVKWTcH+FnkFu60yYX+VZabGAfBr00tQCzYm3RJR75jfhGb/SZA2GRBmoceLeWwiGvW7wNltFGvIHr6EdRJbPvWRvr/exCbne5hvELiOaLn/NkW8JMtNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765473376; c=relaxed/simple;
-	bh=Svc6/wu5PiStY9NpUW3zypfWEAb+rgVj8zt7WVDcjFU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o9s/xhXiSmRBcRC4bzbgI1qswrH1lPRJ3tNMqwdTWyEeqm+1M9NXvhJ03lJaTi/EghOKptGJzwFa5D0tL4aYGG7XJ4GsHL96QO4q5/VoUJiw6pJBICV2/kFlRlWeFTZTw8mkLgKYwB9D0Hjs0Ne8qcmV8Xa6PWdaqvxy7ajcK/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Xpr28zqx; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4775ae77516so4197165e9.1
-        for <linux-integrity@vger.kernel.org>; Thu, 11 Dec 2025 09:16:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1765473373; x=1766078173; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7slVLIofatSoTo54gYSEEiPQgSIuIVsTlq2fZY6I/RA=;
-        b=Xpr28zqxve6mIpnQwcoi4KvFAhs+G4+ezlZEpsKNxI5upYsQZOmtim/tss6U/kflvf
-         8kWYCJo/KFO4rOcYHNt2HWD+m+yVk97F5NWofXH9BdgurW6cbo7bQtdwZyLKNa8hpnol
-         Ges/0jgoiCmt9f4Z4roI/ZZTAK4scZxB/cnE1MWQ66mBqlUV8Hq3m7A02cgQ1vkNZRtY
-         lcA2Hjbg2aYjh1A+mVNdkYCngcYytMqkF1uOMLbZ/RNrY4SU3BPjd9LOuh8OvEcAqHUa
-         enHQIPmLOSXv5CGqWfHEfmohouDt1zueqPP71hLsrb4eXeWjzElW2hVkKnLYVf7yRFwQ
-         cX4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765473373; x=1766078173;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7slVLIofatSoTo54gYSEEiPQgSIuIVsTlq2fZY6I/RA=;
-        b=Z2sWX4JB4BGCyQuw4v8p47tQmwgjOruWmmBOi3Uw9Fz+1EpJHhui+zSEhFO/TeL2Ib
-         N3PQW87TLuLRRreg4dlcCPrXssa9MvtB3oHt/ZC3UQrN99zZ1XoOqXahWZQthfjRPwCd
-         WR4NikMzCV5g8ekIC8gdP3uP2s6UiAGoaD5b6E9YwYq8nV0szaPmyEkTJJFpSNmTbdse
-         wFI+QkXQUtQDJmJ86UegKF2Ck57ZdfkwaU2xAH9gY1mo7z1GMVlxLVbV6F+du9UEORup
-         gvJDqLbhYfQ718SHlCAY6PrTxo90sYy+qBmY8hKs0fqvwOfgFgRm5jLKam20bZmardZd
-         Wqdw==
-X-Forwarded-Encrypted: i=1; AJvYcCXVM60je1Y/V3QeTZxy4N/oBCDQv95atiG6B5suhU/NfY4FubQC8aawVdr8pzsYmqOeRXvwxj0XofgdO6V0xsw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMTYj0qPM+K9P9i5OXlMV+Qd1UgvcG1wLPJEIHChOC8NkO+hXQ
-	0xO77MT/U6DyLjnuqyaI1DgG0Xz+gQ7GL6PIHXUsqmjFeTUOCh4ThdPqyeQ/+lk1jcg=
-X-Gm-Gg: AY/fxX6ss5A3pTbdevx9xivNwVUFE/tYT3nCPCMIp2hC77gJuBaAs9AGc8C9CRazEa7
-	vBkJR/oFeKJY4gr3XJmcW/oKEhAQu1dWWHTJ3G700240suBlFuG3TIxhFLBL/YcC7cKArQ5Vy5t
-	nAtWp90lbIpQg/ZmBiI/oCHLJ5kuIAlHzv+iGPB6V9qwiz+/Y7LfqPFGVbp8fIiz/n/bHwFGROr
-	h5urpTmU6Zd7RWtX3Rl1Aj3vsfl10/qhZD0Fv0NyDA34ArcH19PUzj1sDBPV2disWPKECg2tder
-	o6fX9xmOO/U8o8fW+SOt22Ku4c87d8HIvKvC9DQ2MoeoI2PzUDq1Jvsm6gR2GpamqDDvI+OjmOM
-	sioIbNdBwRiRRv03g5DRngAB/baAOG6FfGjzwp+dXLPHWfSwMtzu85uhZJCgV0V5sW8smK0ZQ0F
-	e6xBKzTdYBd5xFjFbJVayJBGN+k9gGvyuutVU/WRZlxgL33wAkLlA5Q8tglEFVoy0teZy8UC3GQ
-	Ag=
-X-Google-Smtp-Source: AGHT+IGJvbFZQsknQaRH6NGcKkb8LTeqvHIo6DvlNxlXfRNU3KD3pAM+iHJV5Xd8AsZ/8DUR/5v8wQ==
-X-Received: by 2002:a05:6000:2489:b0:429:8bfe:d842 with SMTP id ffacd0b85a97d-42fa39cf06dmr7635910f8f.4.1765473372543;
-        Thu, 11 Dec 2025 09:16:12 -0800 (PST)
-Received: from localhost (p200300f65f006608b66517f2bd017279.dip0.t-ipconnect.de. [2003:f6:5f00:6608:b665:17f2:bd01:7279])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-42fa8b8a941sm6802514f8f.34.2025.12.11.09.16.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Dec 2025 09:16:12 -0800 (PST)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Jens Wiklander <jens.wiklander@linaro.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>,
-	Sumit Garg <sumit.garg@kernel.org>,
-	op-tee@lists.trustedfirmware.org,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 17/17] tpm/tpm_ftpm_tee: Make use of tee bus methods
-Date: Thu, 11 Dec 2025 18:15:11 +0100
-Message-ID:  <eaf8216e8a6c3dabce5a82be5765d67c66318791.1765472125.git.u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
-References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+	s=arc-20240116; t=1765476403; c=relaxed/simple;
+	bh=vZAvDE0K1dN04OJvdTBY+VTqXXrY67CoWqpjW+cYP4g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FnlPtdtPhkaniCRk6n4rBDzO88Ss+Yn40ODV950m0ea5aN3+j32cKfWjJC28SuGWv/U6ydfD9lUA4xVNWdhgHRFbMhwX5N41QZVe3TQowmzbSz9fLglPr7hF9wxGzQ3tHK2sx2acDEViWBIZoMzro69bCz8o34l75cPxzJqNCBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=HNjJgJjM; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.17.64.150] (unknown [131.107.8.22])
+	by linux.microsoft.com (Postfix) with ESMTPSA id F0E76201D7F6;
+	Thu, 11 Dec 2025 10:06:34 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com F0E76201D7F6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1765476395;
+	bh=tsWNf1A53dEvq0P1oHmMCs6r5/gQAKw3tR/g2l0a2bQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HNjJgJjM2xhrIBQ3NaL35qM+q0zLsHYLhSc9t78aYZ/5YuP04ee/Hcyctx8RYEAKY
+	 rLltfAXvhY0tdVEnMI8akF8pG7cJHbkPOTbt8o+cmkM0QlZO59kvNA/+P0zlVRKS+R
+	 DpkGiPkOOSm6YVxKD5QDCW2amVcscgEHWeXnNbT4=
+Message-ID: <d48d2f37-2c38-45ff-b161-6bb68536f840@linux.microsoft.com>
+Date: Thu, 11 Dec 2025 10:06:34 -0800
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2542; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=Svc6/wu5PiStY9NpUW3zypfWEAb+rgVj8zt7WVDcjFU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBpOvxANVuZTA+Vs41/jfUCca0wp0pub3aHXza8N 0dKzZ+eSCOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaTr8QAAKCRCPgPtYfRL+ Tj+NB/9VP2U8NFQ0NoJVMJc3zyFqZ1tv3cfVRRg/zerpzGxs0TU0wiMUcNVrwY/foFivXYxySWi sBBzEr3Nbh81+LLjnzbnBZWMmMlR/LDg1eZEKjt9oRRqblTq9vKa0v2Jw+zGSBVjfHWCWEroVcL Ah0WQompRwLVbSfLGUP50lh/teI82ay9QXe9Jr6R843myqJnsCWcPFMxUOQycE0aHwvXkmyVv5M +Uk45OlbqDsep5AzX+PLGbJu8QgBpdkwDf3qwzB881AWz3UvzneB0Aj7IqtjA3LqayVrwPiatzs uythHyB0xKp+f2PNjUzkiaZYKpKSSugZ3rVhqqVXLMZFQwez
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH] ima: Add support for staging measurements for
+ deletion
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+ Gregory Lumen <gregorylumen@linux.microsoft.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>,
+ steven chen <chenste@linux.microsoft.com>
+References: <20251209101725.3680225-1-roberto.sassu@huaweicloud.com>
+ <207fd6d7-53c-57bb-36d8-13a0902052d1@linux.microsoft.com>
+ <d7418d0afa696b8da67e4f25fd0dc1b9d6fd908f.camel@huaweicloud.com>
+ <2f550d4cd860022e990d1de62049df85a6a86df8.camel@huaweicloud.com>
+ <75d8b82a2e493ca919926310c5f381221555d82d.camel@huaweicloud.com>
+Content-Language: en-US
+From: steven chen <chenste@linux.microsoft.com>
+In-Reply-To: <75d8b82a2e493ca919926310c5f381221555d82d.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The tee bus got dedicated callbacks for probe and remove.
-Make use of these. This fixes a runtime warning about the driver needing
-to be converted to the bus methods.
+On 12/11/2025 7:24 AM, Roberto Sassu wrote:
+> On Thu, 2025-12-11 at 15:50 +0100, Roberto Sassu wrote:
+>> On Thu, 2025-12-11 at 10:56 +0100, Roberto Sassu wrote:
+>>> On Wed, 2025-12-10 at 11:12 -0800, Gregory Lumen wrote:
+>>>> Roberto,
+>>>>
+>>>> The proposed approach appears to be workable. However, if our primary goal
+>>>> here is to enable UM to free kernel memory consumed by the IMA log with an
+>>>> absolute minimum of kernel functionality/change, then I would argue that
+>>>> the proposed Stage-then-delete approach still represents unnecessary
+>>>> complexity when compared to a trim-to-N solution. Specifically:
+>> The benefit of the Stage-then-delete is that you don't need to scan the
+>> IMA measurements list in advance to determine what to trim, you just
+>> trim everything by swapping list head (very fast) and then you can read
+>> and delete the measurements out of the hot path.
+> I forgot: I will also add in my patch the ability to stage and trim in
+> one step, to satisfy your use case.
+>
+> Roberto
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
----
- drivers/char/tpm/tpm_ftpm_tee.c | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
+Hi Roberto,
 
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-index e5fbc70b0eca..20294d1953a3 100644
---- a/drivers/char/tpm/tpm_ftpm_tee.c
-+++ b/drivers/char/tpm/tpm_ftpm_tee.c
-@@ -169,7 +169,7 @@ static int ftpm_tee_match(struct tee_ioctl_version_data *ver, const void *data)
-  * Return:
-  *	On success, 0. On failure, -errno.
-  */
--static int ftpm_tee_probe(struct device *dev)
-+static int ftpm_tee_probe_generic(struct device *dev)
- {
- 	int rc;
- 	struct tpm_chip *chip;
-@@ -251,11 +251,18 @@ static int ftpm_tee_probe(struct device *dev)
- 	return rc;
- }
- 
-+static int ftpm_tee_probe(struct tee_client_device *tcdev)
-+{
-+	struct device *dev = &tcdev->dev;
-+
-+	return ftpm_tee_probe_generic(dev);
-+}
-+
- static int ftpm_plat_tee_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 
--	return ftpm_tee_probe(dev);
-+	return ftpm_tee_probe_generic(dev);
- }
- 
- /**
-@@ -265,7 +272,7 @@ static int ftpm_plat_tee_probe(struct platform_device *pdev)
-  * Return:
-  *	0 always.
-  */
--static int ftpm_tee_remove(struct device *dev)
-+static void ftpm_tee_remove_generic(struct device *dev)
- {
- 	struct ftpm_tee_private *pvt_data = dev_get_drvdata(dev);
- 
-@@ -285,15 +292,20 @@ static int ftpm_tee_remove(struct device *dev)
- 	tee_client_close_context(pvt_data->ctx);
- 
- 	/* memory allocated with devm_kzalloc() is freed automatically */
-+}
- 
--	return 0;
-+static void ftpm_tee_remove(struct tee_client_device *tcdev)
-+{
-+	struct device *dev = &tcdev->dev;
-+
-+	ftpm_tee_remove_generic(dev);
- }
- 
- static void ftpm_plat_tee_remove(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 
--	ftpm_tee_remove(dev);
-+	ftpm_tee_remove_generic(dev);
- }
- 
- /**
-@@ -335,11 +347,11 @@ static const struct tee_client_device_id optee_ftpm_id_table[] = {
- MODULE_DEVICE_TABLE(tee, optee_ftpm_id_table);
- 
- static struct tee_client_driver ftpm_tee_driver = {
-+	.probe		= ftpm_tee_probe,
-+	.remove		= ftpm_tee_remove,
- 	.id_table	= optee_ftpm_id_table,
- 	.driver		= {
- 		.name		= "optee-ftpm",
--		.probe		= ftpm_tee_probe,
--		.remove		= ftpm_tee_remove,
- 	},
- };
- 
--- 
-2.47.3
+The below is what you want in one step. I think anything more than this 
+does not bring any extra value.
+
+I released version 2 of trim N entries patch as bellow:
+
+[PATCH v2 0/1] Trim N entries of IMA event logs
+<https://lore.kernel.org/linux-integrity/20251210235314.3341-1-chenste@linux.microsoft.com/T/#t>
+
+
+Steven
+
+>> [...]
+>>
+>>>> - There exists a potential UM measurement-loss race condition introduced
+>>>> by the staging functionality that would not exist with a trim-to-N
+>>>> approach. (Occurs if a kexec call occurs after a UM agent has staged
+>>>> measurements for deletion, but has not completed copying them to
+>>>> userspace). This could be avoided by persisting staged measurements across
+>>>> kexec calls at the cost of making the proposed change larger.
+>>> The solution is to coordinate the staging with kexec in user space.
+>> To avoid requiring coordination in user space, I will try to see if I
+>> could improve my patch to prepend the staged entries to the current
+>> measurement list, before serializing them for kexec().
+>>
+>> Roberto
+
 
 
