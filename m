@@ -1,185 +1,166 @@
-Return-Path: <linux-integrity+bounces-7924-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7925-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5B0BCB7084
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 20:47:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 879BECB724D
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 21:22:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3A37D300183C
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 19:47:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D838C301EF85
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 20:22:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239E62BDC3F;
-	Thu, 11 Dec 2025 19:47:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 382FD277819;
+	Thu, 11 Dec 2025 20:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="dnWwjBI7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fgsNkldv"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85F07258CD9;
-	Thu, 11 Dec 2025 19:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E856200110;
+	Thu, 11 Dec 2025 20:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765482451; cv=none; b=bKbOtcpI6oiN4Bk+gSKeI3q+4Q2XhwZbw6TZNBIVhyOHzAWsNM8jBbkOg70fUip9AcQKOYng6ghIhla27zz1jK8zc0rZeJB4yxotDIDLtII708QGmNkJTVjrbQZwLMvPC4uNZ9iHoRA1Cc7o5gMv6BapV5uvkVGzfSW7RxS0OfU=
+	t=1765484532; cv=none; b=TAjwjaMOMe3m7lVmT/CKSES6v3mMuEsbKVhDybOfa7dIQ84SG7tDdfIRq/LjcwfH5nw0EfTJmFbqAKNmN6Zha5ZiDub/usF+CnP74g72kd09QVvCG1d3YBGQBq5sTy9kZdDbJl3pRJ+wBVPOnxuFnHLf+sKUiyAPf6BEpVSkkog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765482451; c=relaxed/simple;
-	bh=LoOPCQcUMjoYFouhC/Ilgjou9PIAfIpYQTuSBYhCktE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m86K+Qtj6ythidJDChQn3Vm62t+a6Klh1jm4XDXiIBA6Gjwx3bSG9M8O9+N/biSU38M3qZXa1cdtwe9FXVQT50xK5Ms8s6fQ0SJaj/9q4cU+IULkUwLEApYT2shjRlqqx8U475ryoUn5ucafOQ5WhEBkMucH18FOMSZQ/XqfcbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=dnWwjBI7; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.17.64.150] (unknown [131.107.8.22])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7EE392016010;
-	Thu, 11 Dec 2025 11:47:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7EE392016010
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1765482448;
-	bh=7yPVbpgvZ9W1EUrUdFBO7HKSQiuoVNNeKCzKRzuYK2I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dnWwjBI72KS5eubDv/iGMOePiSsru122Ed8hBChxIHGP67O3vw0UAZ7wucVke93vS
-	 56aJfFUW2WSOYW09hOBYto5OlnnneYlj5KBHET4y8rWA+YA11Fvy/Odaa5qI/wPfhP
-	 Jm9G7Kqi0zWHhaMOGgR3ZKZvTs+QnvXqduYQG5Ew=
-Message-ID: <d736d6cf-4582-4b53-8b23-1a15bd2ec2f4@linux.microsoft.com>
-Date: Thu, 11 Dec 2025 11:47:27 -0800
+	s=arc-20240116; t=1765484532; c=relaxed/simple;
+	bh=OTUbSafBlMdPjB7WkuRZL30NeFaSui4oJg03ss8lKjw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bakqF587yU0AmAAGb/HDebJTyM6Ri4m3N0LghQxKlFbRNmOTKbgaVuW0euwqzc+N1vfBvIQzRNadYiiX9ewr/RsjcLctrKidyvKWCGDLlCXlt0tX6RWND1xs8X10+KsIcO5cigDSkxqisGLe9R1LGOUZlUDtGZ/wW6Nar1hKHlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fgsNkldv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22588C4CEF7;
+	Thu, 11 Dec 2025 20:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765484531;
+	bh=OTUbSafBlMdPjB7WkuRZL30NeFaSui4oJg03ss8lKjw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fgsNkldvX1Nc4me6puLvnsG1Us3cKfSX5xPEJhmQV5FIgjs94Rb6slOO/yk+yX3PS
+	 9OYwNE7KQUZRqJ94Zm2KSfkfFzFADSCz4Fy/MmRnXw9bzCXtZIGLbkKqjpzWhMCQF3
+	 1GulEMh0X6Gbxk+fyvQ1WN7/iYx31qPn50yaVv0XHji9TQF5U+1OFaeeLqKLPTyV/O
+	 GZKJLLD3rIQIjZ+FS+1283FNu1X35wPlaLWnLW+lKRrtA5liD/N3PhovMwJy4Zm5te
+	 eLpnnXbtiTtFLWyCWp/vZVF8DvmEcufFekkJ0KVd9HlyHMvxHXHRoFiXi+IbGLOcSi
+	 /z8+gUEsUQRhg==
+Date: Thu, 11 Dec 2025 22:22:07 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jens Wiklander <jens.wiklander@linaro.org>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 17/17] tpm/tpm_ftpm_tee: Make use of tee bus methods
+Message-ID: <aTsn7wNwAt3F2aLw@kernel.org>
+References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+ <eaf8216e8a6c3dabce5a82be5765d67c66318791.1765472125.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH] ima: Add support for staging measurements for
- deletion
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
- Gregory Lumen <gregorylumen@linux.microsoft.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>,
- steven chen <chenste@linux.microsoft.com>
-References: <20251209101725.3680225-1-roberto.sassu@huaweicloud.com>
- <207fd6d7-53c-57bb-36d8-13a0902052d1@linux.microsoft.com>
- <d7418d0afa696b8da67e4f25fd0dc1b9d6fd908f.camel@huaweicloud.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <d7418d0afa696b8da67e4f25fd0dc1b9d6fd908f.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <eaf8216e8a6c3dabce5a82be5765d67c66318791.1765472125.git.u.kleine-koenig@baylibre.com>
 
-On 12/11/2025 1:56 AM, Roberto Sassu wrote:
-> On Wed, 2025-12-10 at 11:12 -0800, Gregory Lumen wrote:
->> Roberto,
->>
->> The proposed approach appears to be workable. However, if our primary goal
->> here is to enable UM to free kernel memory consumed by the IMA log with an
->> absolute minimum of kernel functionality/change, then I would argue that
->> the proposed Stage-then-delete approach still represents unnecessary
->> complexity when compared to a trim-to-N solution. Specifically:
->>
->> - Any functional benefit offered through the introduction of a staged
->> measurement list could be equally achieved in UM with a trim-to-N solution
->> coupled with the proposed ima_measure_users counter for access locking.
-> Ok, let's quantify the complexity of each solution. Let's assume that
-> the IMA measurements list has M entries and you want to trim at N < M.
->
-> Staging:
->
-> 1st. trim at N
->
-> (kernel)
-> 1. list lock (write side) -> list replace (swap the heads) -> list unlock
-> 2. read M -> file (file contains 0..M)
-> 3. for each 0..M -> delete entry
->
-> (user)
-> 1. for each 0..N in file -> replay PCR
-> 2. trim at N (keep N + 1..M)
->
->
-> 2nd. trim at O
->
-> (kernel)
-> 1. list lock -> list replace (swap the heads) -> list unlock
-> 2. read P -> file (file contains N + 1..P)
-> 3. for each M + 1..P -> delete entry
->
-> (user)
-> 1. for each N + 1..O in file -> replay PCR
-> 2. trim at O (keep O + 1..P)
->
->
->
-> Trimming:
->
-> 1st. trim at N
->
-> (kernel)
-> 1. list lock (read side) -> for each 0..M -> read in file (file now contains 0..M) -> list unlock
->
-> (user)
-> 1. for each 0..N -> replay PCR
-> 2. discard N + 1..M
->
-> (kernel)
->
-> 1. list lock (write side) -> for each 0..N -> trim -> list unlock
->
->
-> 2nd. trim at O
->
-> (kernel)
-> 1. list lock (read side) -> for each N + 1..P -> read in file (file now contains N + 1..P) -> list unlock
->
-> (user)
-> 1. for each N + 1..O -> replay PCR
-> 2. discard O + 1..P
->
-> (kernel)
->
-> 1. list lock (write side) -> for each N + 1..O -> trim -> list unlock
->
->
-> You can try to optimize it a bit by prematurely ending the reading
-> before M and P, and by replaying the PCR on a partial buffer.
->
->
-> But still:
->
-> I just swap list heads in the hot path (still need to do the same for
-> the hash table, postponed to later), and do the free later once there
-> is no contention with new measurements.
->
-> In your case you are taking the lock and walking the list two times,
-> once as a reader and once as a writer, and discarding measurements in
-> user space that you already have.
->
-> I think your solution is more complex.
-This is not the case, please check the released version 2 of trim N 
-entries patch as bellow:
+On Thu, Dec 11, 2025 at 06:15:11PM +0100, Uwe Kleine-K�nig wrote:
+> The tee bus got dedicated callbacks for probe and remove.
+> Make use of these. This fixes a runtime warning about the driver needing
+> to be converted to the bus methods.
+> 
+> Signed-off-by: Uwe Kleine-K�nig <u.kleine-koenig@baylibre.com>
+> ---
+>  drivers/char/tpm/tpm_ftpm_tee.c | 26 +++++++++++++++++++-------
+>  1 file changed, 19 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> index e5fbc70b0eca..20294d1953a3 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -169,7 +169,7 @@ static int ftpm_tee_match(struct tee_ioctl_version_data *ver, const void *data)
+>   * Return:
+>   *	On success, 0. On failure, -errno.
+>   */
+> -static int ftpm_tee_probe(struct device *dev)
+> +static int ftpm_tee_probe_generic(struct device *dev)
+>  {
+>  	int rc;
+>  	struct tpm_chip *chip;
+> @@ -251,11 +251,18 @@ static int ftpm_tee_probe(struct device *dev)
+>  	return rc;
+>  }
+>  
+> +static int ftpm_tee_probe(struct tee_client_device *tcdev)
+> +{
+> +	struct device *dev = &tcdev->dev;
+> +
+> +	return ftpm_tee_probe_generic(dev);
+> +}
+> +
+>  static int ftpm_plat_tee_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  
+> -	return ftpm_tee_probe(dev);
+> +	return ftpm_tee_probe_generic(dev);
+>  }
+>  
+>  /**
+> @@ -265,7 +272,7 @@ static int ftpm_plat_tee_probe(struct platform_device *pdev)
+>   * Return:
+>   *	0 always.
+>   */
+> -static int ftpm_tee_remove(struct device *dev)
+> +static void ftpm_tee_remove_generic(struct device *dev)
+>  {
+>  	struct ftpm_tee_private *pvt_data = dev_get_drvdata(dev);
+>  
+> @@ -285,15 +292,20 @@ static int ftpm_tee_remove(struct device *dev)
+>  	tee_client_close_context(pvt_data->ctx);
+>  
+>  	/* memory allocated with devm_kzalloc() is freed automatically */
+> +}
+>  
+> -	return 0;
+> +static void ftpm_tee_remove(struct tee_client_device *tcdev)
+> +{
+> +	struct device *dev = &tcdev->dev;
+> +
+> +	ftpm_tee_remove_generic(dev);
+>  }
+>  
+>  static void ftpm_plat_tee_remove(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  
+> -	ftpm_tee_remove(dev);
+> +	ftpm_tee_remove_generic(dev);
+>  }
+>  
+>  /**
+> @@ -335,11 +347,11 @@ static const struct tee_client_device_id optee_ftpm_id_table[] = {
+>  MODULE_DEVICE_TABLE(tee, optee_ftpm_id_table);
+>  
+>  static struct tee_client_driver ftpm_tee_driver = {
+> +	.probe		= ftpm_tee_probe,
+> +	.remove		= ftpm_tee_remove,
+>  	.id_table	= optee_ftpm_id_table,
+>  	.driver		= {
+>  		.name		= "optee-ftpm",
+> -		.probe		= ftpm_tee_probe,
+> -		.remove		= ftpm_tee_remove,
+>  	},
+>  };
+>  
+> -- 
+> 2.47.3
+> 
 
-[PATCH v2 0/1] Trim N entries of IMA event logs
-<https://lore.kernel.org/linux-integrity/20251210235314.3341-1-chenste@linux.microsoft.com/T/#t>
+I checked trusted key patches and ftpm patches. I don't have anything
+against merging them.
 
+So for those four patches:
 
-The following are the steps for trim N solution:
-     User space reads list without lock
-     User space decides to trim N entries and send command to kernel
-     Kernel will lock the list use the same or less time as staged 
-solution use
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-All work done.
-
->
->> - There exists a potential UM measurement-loss race condition introduced
->> by the staging functionality that would not exist with a trim-to-N
->> approach. (Occurs if a kexec call occurs after a UM agent has staged
->> measurements for deletion, but has not completed copying them to
->> userspace). This could be avoided by persisting staged measurements across
->> kexec calls at the cost of making the proposed change larger.
-> The solution is to coordinate the staging with kexec in user space.
->
->
-> Roberto
-
-
+BR, Jarkko
 
