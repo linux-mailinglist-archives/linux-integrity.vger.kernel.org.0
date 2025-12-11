@@ -1,96 +1,91 @@
-Return-Path: <linux-integrity+bounces-7917-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7918-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C668ECB6AB7
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 18:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A8DBACB6AC9
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 18:21:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2195F30334ED
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 17:16:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 68A15300E158
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Dec 2025 17:16:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B28319843;
-	Thu, 11 Dec 2025 17:16:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 128BD31A57C;
+	Thu, 11 Dec 2025 17:16:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="IgjWqMd9"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="kV367gP4"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33721315D49
-	for <linux-integrity@vger.kernel.org>; Thu, 11 Dec 2025 17:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665CF31A04E
+	for <linux-integrity@vger.kernel.org>; Thu, 11 Dec 2025 17:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765473375; cv=none; b=jUa/0vhsHouoAjmSOx/8qZDYMDaBudYL/e5fw1qrIIgoTnVGs/ydMu6XIhzT4sOr+90XOP+bt4cldhKixpRXl64lIjlJPlkgE0gmy2VpQjcWLdJ64A4+F3RUxXTSvUeywqpAoM9ZKsmmhgLxNGQ1wXWXWc9hKswczoS/2JWsVy4=
+	t=1765473375; cv=none; b=PnvyjoEXhguy68fK1wWfOzRYM+6o495C6C7KHprzo34EOAjtJsUltOQ1nGcpsmHdub+Q2IXhjZGXrHm/rNDA+Np4AUUNrVsnbi6cf7kmsg8D4iqVcF7GhZZlXAW4z9O0VKd2lXeZu039IAXKexiLmh6mfTK8AXB2Qni4wKlpt5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765473375; c=relaxed/simple;
-	bh=CzasmjigxMDc3RbPNhKzZOfqJrGSXpxinQ87lLaAs6M=;
+	bh=5qNJMJD9NKYLkVk7kOpcgd1zMxW4iDtExg+oTk6DzX8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d0wK5Yth28+Zp0FWp9uHL3qNd8JV5Iqrx203R/vhMSWFNKopuYZxiPT+tXssNkfiL//PtWALDCdYscC1Fe54eB6DCKEhv9a0hY2sNMhaDXKlDjSs1oFjYB98O2xxFCizwUVmlTwfufInY87OeuxKHGruemRxJQjNZeoopMxggAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=IgjWqMd9; arc=none smtp.client-ip=209.85.221.43
+	 MIME-Version:Content-Type; b=g4jG+1Lx9UcWBDNA4hxOKCLi3D6QxY3HVyCTkL8ozrh2wEwhH1qTTTDtnK6zzkrPS6CRURSQ/5N6n+K/ACgl7CRc5HzPtmvQPFV9X8USKvtmocCZ04x6bDM68879uyh7kwcEhHquc2e42zUzgTa8f/HZif8V+3rj6m3PYmIhrlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=kV367gP4; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42e2ba54a6fso146361f8f.3
-        for <linux-integrity@vger.kernel.org>; Thu, 11 Dec 2025 09:16:11 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47775fb6cb4so3493955e9.0
+        for <linux-integrity@vger.kernel.org>; Thu, 11 Dec 2025 09:16:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1765473370; x=1766078170; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1765473371; x=1766078171; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n+SHfa6vAHr55xEpYtx8saNp/3XbgtX4zTiJHIYfZ1k=;
-        b=IgjWqMd9j04SJLnMtl+zQippp7RKIYHp0avf98okpcRZctk9dwkIOVIm/h4F6e9gNG
-         R16rEHDttSX2nlOUb3axfIPs4SuLcNY4LqlwuLMAfkpjnkgJKDR24Lna63MRVnVgDSSC
-         jf7dnvXuHKEVjgw9LKWcfMglWf4gAWzWNNPKaDPXx+Y5/0Mr9F4At1yrO9Bbd1Y2nWTg
-         jarUF9Kxpy/Tys7m/Ep46iyTD2tiErOlkA+vhf1Z1vlU/EtGTY8GHzudzxKNpqxIo6wC
-         /v/R6T0N866RML9olQDqs+ehSlADhbM2VBcSDbTYQmkpmi9a7I1MlpwP6bSwLLS5N/CO
-         RNJw==
+        bh=ZBhu1Uqa8RVHn7QCjomFckovl/MFhjzqjW3Qy6nBbgQ=;
+        b=kV367gP49DVkUnjW/zWuUTaSsJWrDNoHGOwZiqikhZmOAqBT8WJQzw3kGCMpfW4XQI
+         pJiuwlHeoCI//y2GRN058R7rt0R2Gjnnb3FIsAXHMe67qnLDB8bB4oyhrR1KIO9ljHVo
+         Rck3eix67N7xoZG1RpH4xEKrrnuvKWVbpOtSIYAgH7XgIx9Eiryq2q8RIIUCD0ADcDXY
+         yKbBsAjlTEuenxdxzCkatiNMCC8dBra31PYwhjrxLVczWMgAR6gVglKcSJVsZatOG5eu
+         4qjEK6qIBqjzssRK9rtPI5kKNTA35pk13UBloaGDEjN9pVZd2cVi1ifToghOYzBC5+T1
+         JrPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765473370; x=1766078170;
+        d=1e100.net; s=20230601; t=1765473371; x=1766078171;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=n+SHfa6vAHr55xEpYtx8saNp/3XbgtX4zTiJHIYfZ1k=;
-        b=Oh56bTfLY6vWowqimP/dOze1OCQaQiCFzFXgkqrj87WX+Xit5hsyf+urO0yYYBc2Mx
-         SP5IiVr67EII98Ko6RbGHY78hjRpRSyCU6P+InzTnddQvWuddM/hpVhFd8y4ExjJeTUC
-         O7s39/8m6oLyAHTH2xya1fSdei8m7DvtDXm9JTN4ZuV0odgXegOjFRgsVO/UZF4rE7eu
-         Sr7D9qhAHqFpbNES2mMFLTUZuQSeToTtlC5/nzAxHU66xf4baHtSP8s9p+9ZPzuRUgs9
-         9yWC75llCre258p7XTS2pQ4ABEvSWASXkMtMDmGq/DGIAKKZKRyFjpTKnqSzzT9tq5Kk
-         sO3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVoXNMFLZk7u57s/K0donQROK0rP0yPgoaUIwAPj8SEX+anae1EczICTEGyMvm6o8HuaHR4MenQ4yYvILc8UOY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwL5DgBOb3l+aa6mKvDfAXaxu/d6746oIymNsZh6qAp6jKFKTBi
-	v/Q0mwOAGREVLJbUi739E8OvPO9PK66Fjk2UlfgxY9ComBmYb64h+9Nl3NiN6vJanRE=
-X-Gm-Gg: AY/fxX6Sh5R7uJWrvfZst3OZ41nxOTB71oSXp16xTORLJwiEV5qs0sgAeJQimOo+4vW
-	g8qKRi1miEXJpoMQIIWTvuD0sCf0LgD9i4T0vdhL4AVPcpxTGfdFCc+KxFISS9q3IaGUQt6hAKK
-	4uSFNeFJuhCFd0lbq6oK7i5V/jOO1v8unBt+c0X3J6Z43aYkcx2zUJ145HQCnlJyttT7f4gAMfq
-	/Pkm86kN8nc88DeE9LfH3CuKU2EgIM/bQ5rGJymxIPMcIpcmR6miojXdYPMmh9zuDk1XUoixbto
-	vB2Xm9DNsrmrEPjFrgfcU/M/xlRu/hcJXMudIi27DRg7Gn8I7Y/MhHDgKJ0i6QB1B6dS7+OfL//
-	WiI4edtNVspDvb8AMnoDKTbqNMNIn7YUCcz/yhuewS6qFZJ+G1oJW/IqnXhnRYj3f1of+KDPesL
-	lH/o5o0YP6j0wyfR0/qtz9le55Uth097PWAMow+77rj7PyMNOcVti0JBYyizmj+UbfOlj3LCb2X
-	BA=
-X-Google-Smtp-Source: AGHT+IEVlfLgsF/P2fkju8/EGLrakjagEMlQtCpgWX8RHB5vEnT2Q9O+No1JYvdMM/sRnem0fYfvQQ==
-X-Received: by 2002:a05:6000:2012:b0:42b:3978:158e with SMTP id ffacd0b85a97d-42fa3af895fmr6416347f8f.30.1765473370344;
-        Thu, 11 Dec 2025 09:16:10 -0800 (PST)
+        bh=ZBhu1Uqa8RVHn7QCjomFckovl/MFhjzqjW3Qy6nBbgQ=;
+        b=Y3PmgjxjX/dPhQAG90/H2NiOXUAvavbZGQNEtPz8rTXNmz7bjvLYjKdw5IXMxcoSKp
+         Ou0BrGuo17MCqz4vNoBc8uxMqQNXYl9HDv3V+1V/DWuZ1lW7IFSuDrriwj6O9Pnvjk7/
+         7FHOxKZFIKOi6nP89r4PJWdQpRySBniryEksx0oM1xC5OQas4M7W0Yr6QK1McZzkHyGz
+         dLu77Ik/xTsyF8/ipxSHR3/O4ppZRmM2cg4GWGT07Hy+zlqUpPGRkSaIwrzcmK3KtwZo
+         78FGzxvsoPD+StC1Sj+p5/vLEBzZtMn8vxy9GHMMXhxmwWxhh7dOgkEx72dMh7/t8Vp2
+         DTwg==
+X-Forwarded-Encrypted: i=1; AJvYcCXFV6Do9CQ5qExl+ISs1rT8cb5LfqLQsGMmL/IGKd+HrYPmpVLgacRw1TbU20s7iKxYifCSehmvMihytMzijrQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp1D6h+PX0deTwbfvsEjJJF6lU/V3if2NKutpyxtAMKz6z8ADe
+	vd+osWKtQsx5XFNQW+qHlr2OqBQ5SKRXwYNmJWD2Y8P2kHXaB97BINOxfyYmU9jrqci+vkK3+QA
+	u1cpT
+X-Gm-Gg: AY/fxX5BZNCodBeFS/4P/dr03rMcdc6KjZ6I+59+m+TCNhIoOU7njtHX/H8l/beQws/
+	EW4DOwHfDHjOrm/wvMSwDHug32oaCRlX5C277v7e69ExV3QT3tpetIUxZUyWlaVnXXJiJn0B13r
+	XRCK8T2VZvhJ5hUcoK1gnxAJos6/6P6FzzLsjkueS2nUA6rsaQIBusILIdkbBpDKEN+CMUaL5+Z
+	FF2aPfDU0LT4NW1hnIooPwWMm37EOtM8uQix48s0wbwNOF1IVb7H4RmXxDILPh9IrhChovgLiD4
+	swBmlXJ3Wof6iTgDUxW1HQnYGWJeZUaCZ/MGBx2H+5LOX9Wq09pW10f/t7ZcAi+NAacSBe/OjnQ
+	OQ/MhiKsxF6+eR3FW1FZixBnD4iNlNShFYMo6inwc3RDqHfzcsiQh93XzSpQ4/XYV4W6v/X7djo
+	rSVb4km9q94DEEdbWFP61GyCCWls5tjCbhwMnjkkkvu+s51C74kq+TUK4M4M9XMhKgyZL/p+RON
+	W8=
+X-Google-Smtp-Source: AGHT+IGk45+DhZ6tL02Xp6VckzN+X1jTYMhezBcXnBBMkdftVDcvtciBmncNg6/XCy6IPmPPgrbLng==
+X-Received: by 2002:a05:600c:b8a:b0:477:8b2e:aa7d with SMTP id 5b1f17b1804b1-47a83847b05mr75101475e9.30.1765473371412;
+        Thu, 11 Dec 2025 09:16:11 -0800 (PST)
 Received: from localhost (p200300f65f006608b66517f2bd017279.dip0.t-ipconnect.de. [2003:f6:5f00:6608:b665:17f2:bd01:7279])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-42fa8b8a973sm7064875f8f.36.2025.12.11.09.16.09
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-47a89f8b31bsm48120115e9.13.2025.12.11.09.16.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Dec 2025 09:16:09 -0800 (PST)
+        Thu, 11 Dec 2025 09:16:11 -0800 (PST)
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
 To: Jens Wiklander <jens.wiklander@linaro.org>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>,
 	Sumit Garg <sumit.garg@kernel.org>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>
-Cc: op-tee@lists.trustedfirmware.org,
+	op-tee@lists.trustedfirmware.org,
 	linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 15/17] KEYS: trusted: Make use of tee bus methods
-Date: Thu, 11 Dec 2025 18:15:09 +0100
-Message-ID:  <aab4c00b7e89abce7bcd8241c47f3398fb7227f8.1765472125.git.u.kleine-koenig@baylibre.com>
+Subject: [PATCH v1 16/17] tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+Date: Thu, 11 Dec 2025 18:15:10 +0100
+Message-ID:  <812e5c580599b27d4f752ba8cfc35ad5371ab545.1765472125.git.u.kleine-koenig@baylibre.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
 References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
@@ -101,64 +96,50 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1908; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=CzasmjigxMDc3RbPNhKzZOfqJrGSXpxinQ87lLaAs6M=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBpOvw6brlrzvg29fcU3xprVy3jDUvD6QI895K+A 4P0ITtETEGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaTr8OgAKCRCPgPtYfRL+ ToAKCACHrdHSasYStywLZJGRNAkC64NWvFb/BwKzZCoF8C+nTT45O0JbfN5t/ZZlz3WQUTo5Kj7 m5QHbprAIkb7KlG6c9wMZpIvnIBvKwpE7j+PUzZ2X2+UD2nnn20123zaagJYaJHriTJetqmRK/g fl4EgbD/AzpOofrYMbezG60UvGRmRCPd4NvhNQ6GXkzjyAH5oICnrjI/ufaG65GzQSejD8nT5qK UIdLIccaehc7imlrk0QNv17cD5+/y0ZIwdI2uAIuelzdvUdNHWDYI1/zMNQ3t+FkqM+vgaElDdx 8Ft+pQXoK9ErCp8MIxolmLzr+4840mvUoLiV3YhnVRyUrSkT
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1369; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=5qNJMJD9NKYLkVk7kOpcgd1zMxW4iDtExg+oTk6DzX8=; b=owGbwMvMwMXY3/A7olbonx/jabUkhkyrP7ZRP1fMjFA/WaKg5FDBu+/h0r09x78+ZffZdZXTX K8x3rywk9GYhYGRi0FWTJHFvnFNplWVXGTn2n+XYQaxMoFMYeDiFICJ/K5n/x8w65hR5gxFs+/u GzYLL+XpyOWJ+hfn4z9vftb2s2XL1hfeEixpKTt0buWjXDHxXelbk46nXLwyr6poXvT2xtqS9hl T1NyyC3deOH33eYneLyW9bPcF81Yo20hdYTD3mbLAI2qG4Xfn/yvcyzl26umo8Nk1r91sMq2Xsd piJS+/VXiansHLype26+RzmPXOi03Wz6/tW1i+2PjcOlmePwKFhbPYP9isfeKc5agau/VyuUlL/ emWkHg9Ad34ZQZXLqafXHT08r8IrWn8sW0Vmu+mJmmEs096+fBOW7qN5S7GphJeHcPI9zeLGR5s tdyd/pNpd+W7gEgO14dTjq/1jVD3LJzv5hjy+pTq2YcnAA==
 X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 
-The tee bus got dedicated callbacks for probe and remove.
-Make use of these. This fixes a runtime warning about the driver needing
-to be converted to the bus methods.
+tee_client_driver_register() is typed more strongly and cares about
+assigning the driver's bus. Similar for tee_client_driver_unregister().
+
+Make use of these functions.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 ---
- security/keys/trusted-keys/trusted_tee.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/char/tpm/tpm_ftpm_tee.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
-index 3cea9a377955..6e465c8bef5e 100644
---- a/security/keys/trusted-keys/trusted_tee.c
-+++ b/security/keys/trusted-keys/trusted_tee.c
-@@ -202,9 +202,9 @@ static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
- 		return 0;
- }
- 
--static int trusted_key_probe(struct device *dev)
-+static int trusted_key_probe(struct tee_client_device *rng_device)
- {
--	struct tee_client_device *rng_device = to_tee_client_device(dev);
-+	struct device *dev = &rng_device->dev;
- 	int ret;
- 	struct tee_ioctl_open_session_arg sess_arg;
- 
-@@ -244,13 +244,11 @@ static int trusted_key_probe(struct device *dev)
- 	return ret;
- }
- 
--static int trusted_key_remove(struct device *dev)
-+static void trusted_key_remove(struct tee_client_device *dev)
- {
- 	unregister_key_type(&key_type_trusted);
- 	tee_client_close_session(pvt_data.ctx, pvt_data.session_id);
- 	tee_client_close_context(pvt_data.ctx);
--
--	return 0;
- }
- 
- static const struct tee_client_device_id trusted_key_id_table[] = {
-@@ -261,11 +259,11 @@ static const struct tee_client_device_id trusted_key_id_table[] = {
- MODULE_DEVICE_TABLE(tee, trusted_key_id_table);
- 
- static struct tee_client_driver trusted_key_driver = {
-+	.probe		= trusted_key_probe,
-+	.remove		= trusted_key_remove,
- 	.id_table	= trusted_key_id_table,
+diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+index 4e63c30aeaf1..e5fbc70b0eca 100644
+--- a/drivers/char/tpm/tpm_ftpm_tee.c
++++ b/drivers/char/tpm/tpm_ftpm_tee.c
+@@ -338,7 +338,6 @@ static struct tee_client_driver ftpm_tee_driver = {
+ 	.id_table	= optee_ftpm_id_table,
  	.driver		= {
- 		.name		= DRIVER_NAME,
--		.probe		= trusted_key_probe,
--		.remove		= trusted_key_remove,
+ 		.name		= "optee-ftpm",
+-		.bus		= &tee_bus_type,
+ 		.probe		= ftpm_tee_probe,
+ 		.remove		= ftpm_tee_remove,
  	},
- };
+@@ -352,7 +351,7 @@ static int __init ftpm_mod_init(void)
+ 	if (rc)
+ 		return rc;
  
+-	rc = driver_register(&ftpm_tee_driver.driver);
++	rc = tee_client_driver_register(&ftpm_tee_driver);
+ 	if (rc) {
+ 		platform_driver_unregister(&ftpm_tee_plat_driver);
+ 		return rc;
+@@ -364,7 +363,7 @@ static int __init ftpm_mod_init(void)
+ static void __exit ftpm_mod_exit(void)
+ {
+ 	platform_driver_unregister(&ftpm_tee_plat_driver);
+-	driver_unregister(&ftpm_tee_driver.driver);
++	tee_client_driver_unregister(&ftpm_tee_driver);
+ }
+ 
+ module_init(ftpm_mod_init);
 -- 
 2.47.3
 
