@@ -1,64 +1,60 @@
-Return-Path: <linux-integrity+bounces-7962-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7963-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F74CBB369
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 21:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ABC5CBB372
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 21:34:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4857F3004CCB
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 20:34:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C69C2300BECA
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 20:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2542868A9;
-	Sat, 13 Dec 2025 20:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE8D2BD5BF;
+	Sat, 13 Dec 2025 20:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYHddVy3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tOw5vway"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91E23285C89;
-	Sat, 13 Dec 2025 20:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8282BE7CB;
+	Sat, 13 Dec 2025 20:33:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765658018; cv=none; b=Hd38Gos3yxXZDZY4KyMK2yXATvkrVzsMeVayTo6n2aowUkNxLfDS0jBEUDatd0vGZwcJFvkVFPqzWVG9NnTWDKFg94s8/OenBLZlXywvzD8bDHm8ewai+fLYXUnohxFZVBIo1LGPaTwX+WVDqWGQNyPQPFG+pOOYwFxvlpD8xHM=
+	t=1765658022; cv=none; b=ZIZjdaRquGZSYfwng2wwDCHzHOrw5ah+6vFkrxIcwXq+O4G9KKj3ynFY1gs34U3tqeD9NI2wNj6KBEAf4ZuwtTi4H+76/q/r/DYqJ1+Z6qz6NjPJZy01IsLLBrP1dhM/t7RtRgIkY9QHQFfS5jpOVkrlpNgDgfn4YzPS7g1MBfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765658018; c=relaxed/simple;
-	bh=kqsz75FRwe7BwNAXl/0a3oLZCU/8TrrYjPcsTX5SiOo=;
+	s=arc-20240116; t=1765658022; c=relaxed/simple;
+	bh=ose2oB/fvx8BkW6CVHK5os3jHRlOiK5rAT97U08pq4o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=aV2pJokXFUM2wHUUSaTEw+08cAcI5BX4OaNtHb13SWcN3pd3Ygi0QIpBVlDVthQ4eOFFBD5erz2nyQFbGibGbkYKxgOBJCJAzXTATaHniGx6jOgfsijsj7BEWLVxQMd7gDMh1+ZEAckR9dE816EE45cevqFKEjvPGLIMUNp+nSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYHddVy3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEB5AC113D0;
-	Sat, 13 Dec 2025 20:33:36 +0000 (UTC)
+	 MIME-Version; b=lDIVDLbE2GZA9WNR91A5InxLhEoX4aaGz7EEzcuXsgG8tzOt+APMgW98jVPNoC70izNUzse6+Od+GL7dH5FmXkfAOw/XA2232oPOVsnmRbBkyZ/up5qjF3kYycYz9iHFHzqriZ17nSkdX5OqmTIPKr7H85WGrjbt2mtAsfXKR5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tOw5vway; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0957C4CEF7;
+	Sat, 13 Dec 2025 20:33:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765658017;
-	bh=kqsz75FRwe7BwNAXl/0a3oLZCU/8TrrYjPcsTX5SiOo=;
+	s=k20201202; t=1765658022;
+	bh=ose2oB/fvx8BkW6CVHK5os3jHRlOiK5rAT97U08pq4o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gYHddVy3tGGu7XXihxsEnJreG7OsgvOkv8YGlkqjGc9kVi5Dwh4hnnRPezcaV3/fn
-	 qkGIYvI39ZDn96rawXfyxM2ArVp5fIolGYBnwfXiSUAMYgcmb7onED4wboMV5XHC9Z
-	 ZYBf5PTHMfza0yRaE8Rq7zMCJsj9XQM0oZCRbzypVyQWSz6O7bkVDLTgDvgrTyvC6w
-	 tQiI44wxTi7BlakKbBgcS2K+9OF6fD9fA+DfkqQJFh1uPXO00hezXifP6AYrYAMjGK
-	 xfraQsrbWJvZCLncJaeDWFFTJ6xky4Kce/GucfXIvx4qDkDT0zJvtNVzm6xfGtMmSA
-	 hPrXrmcop1NYw==
+	b=tOw5vwayEA6Mn3bsgv6IyTGMaUYl1Fn0R8+njXbfLiVBLnVCvRDn77YV2/UfQCSk+
+	 sh36qYz2Iq3+fi7iATYT4e5bVRWlQGgjB03YKnQ6pTK5tIK3cxnI1M1naJrN5LOCw3
+	 KDTGqbBxDP2wHRhz6O9r3iGRgH7g6UwgnmmRhitYWXCHU6xVk7jneqBN9tIyb5KdvM
+	 Icnq1mLaMKx7VvDLgltDRV6KXsq73ayCQmukPFCQFG3+n62ozvzfEWl9F7fifUSEc0
+	 AlUWGjX/FYgV9Kg5BkuAID+WpUpNhyVusO6PBzpyX66scrfdlGZQE0BzsfIkGXv6TK
+	 ZqBTqFqieLe0Q==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: Ross Philipson <ross.philipson@oracle.com>,
 	Jarkko Sakkinen <jarkko@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
 	Peter Huewe <peterhuewe@gmx.de>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
 	David Howells <dhowells@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
 	James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
 	linux-kernel@vger.kernel.org (open list),
 	keyrings@vger.kernel.org (open list:KEYS/KEYRINGS),
 	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v5 11/12] tpm: Send only one at most TPM2_GetRandom command
-Date: Sat, 13 Dec 2025 22:32:18 +0200
-Message-Id: <20251213203220.317498-12-jarkko@kernel.org>
+Subject: [PATCH v5 12/12] tpm: In tpm_get_random() replace 'retries' with a zero check
+Date: Sat, 13 Dec 2025 22:32:19 +0200
+Message-Id: <20251213203220.317498-13-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20251213203220.317498-1-jarkko@kernel.org>
 References: <20251213203220.317498-1-jarkko@kernel.org>
@@ -70,135 +66,51 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hwrng framework does not have a requirement that the all bytes requested
-need to be provided. By enforcing such a requirement internally, TPM driver
-can cause unpredictability in latency, as a single tpm_get_random() call
-can result multiple TPM commands.
+Check for zero byte read instead of having retries counter in order to make
+wait flag properly enforcing. Progress is still guaranteed given the zero
+check and iterations are capped up to TPM_MAX_RNG_DATA iterations at most
+(as per theoretical limit).
 
-Especially, when TCG_TPM2_HMAC is enabled, extra roundtrips could have
-significant effect to the system latency.
-
-Add a wait-parameter to enforce the old behavior and set it to true only at
-the call sites for TPM 1.2 keys. At the call sites of hwrng, set @wait to
-false.
-
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
-v4:
-- Fixed grammar mistakes.
----
- drivers/char/tpm/tpm-chip.c               |  2 +-
- drivers/char/tpm/tpm-interface.c          | 11 +++++++++--
- include/linux/tpm.h                       |  2 +-
- security/keys/trusted-keys/trusted_tpm1.c |  8 ++++----
- 4 files changed, 15 insertions(+), 8 deletions(-)
+ drivers/char/tpm/tpm-interface.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 082b910ddf0d..8fca4373e2df 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -494,7 +494,7 @@ static int tpm_hwrng_read(struct hwrng *rng, void *data, size_t max, bool wait)
- {
- 	struct tpm_chip *chip = container_of(rng, struct tpm_chip, hwrng);
- 
--	return tpm_get_random(chip, data, max);
-+	return tpm_get_random(chip, data, max, false);
- }
- 
- static bool tpm_is_hwrng_enabled(struct tpm_chip *chip)
 diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index ab52a1cb0a78..5cc2bbabd57a 100644
+index 5cc2bbabd57a..594ad095a90b 100644
 --- a/drivers/char/tpm/tpm-interface.c
 +++ b/drivers/char/tpm/tpm-interface.c
-@@ -604,9 +604,11 @@ static int tpm2_get_random(struct tpm_chip *chip, u8 *out, size_t max)
-  * @chip:	A &tpm_chip instance. Whenset to %NULL, the default chip is used.
-  * @out:	Destination buffer for the acquired random bytes.
-  * @max:	The maximum number of bytes to write to @out.
-+ * @wait:	Set to true when all of the @max bytes need to be acquired.
-  *
-  * Iterates pulling more bytes from TPM up until all of the @max bytes have been
-- * received.
-+ * received, when @wait it sets true. Otherwise, the queries for @max bytes from
-+ * TPM exactly once, and returns the bytes that were received.
-  *
-  * Returns the number of random bytes read on success.
-  * Returns -EINVAL when @out is NULL, or @max is not between zero and
-@@ -614,7 +616,7 @@ static int tpm2_get_random(struct tpm_chip *chip, u8 *out, size_t max)
-  * Returns tpm_transmit_cmd() error codes when the TPM command results an
-  * error.
-  */
--int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
-+int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max, bool wait)
+@@ -620,7 +620,6 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max, bool wait)
  {
  	u32 num_bytes = max;
  	u8 *out_ptr = out;
-@@ -647,6 +649,11 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max)
- 		if (rc < 0)
- 			goto err;
+-	int retries = 5;
+ 	int total = 0;
+ 	int rc;
  
-+		if (!wait) {
-+			total = rc;
-+			break;
-+		}
+@@ -646,8 +645,12 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max, bool wait)
+ 		else
+ 			rc = tpm1_get_random(chip, out_ptr, num_bytes);
+ 
+-		if (rc < 0)
++		if (rc <= 0) {
++			if (!rc)
++				rc = -EIO;
 +
+ 			goto err;
++		}
+ 
+ 		if (!wait) {
+ 			total = rc;
+@@ -657,7 +660,7 @@ int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max, bool wait)
  		out_ptr += rc;
  		total += rc;
  		num_bytes -= rc;
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index e68995df8796..177833d6b965 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -485,7 +485,7 @@ extern int tpm_pcr_read(struct tpm_chip *chip, u32 pcr_idx,
- 			struct tpm_digest *digest);
- extern int tpm_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 			  struct tpm_digest *digests);
--extern int tpm_get_random(struct tpm_chip *chip, u8 *data, size_t max);
-+int tpm_get_random(struct tpm_chip *chip, u8 *out, size_t max, bool wait);
- extern struct tpm_chip *tpm_default_chip(void);
- void tpm2_flush_context(struct tpm_chip *chip, u32 handle);
- int tpm2_find_hash_alg(unsigned int crypto_id);
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index 759c1ecb0435..f36f6a0b533f 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -361,7 +361,7 @@ static int osap(struct tpm_buf *tb, struct osapsess *s,
- 	unsigned char ononce[TPM_NONCE_SIZE];
- 	int ret;
+-	} while (retries-- && total < max);
++	} while (total < max);
  
--	ret = tpm_get_random(chip, ononce, TPM_NONCE_SIZE);
-+	ret = tpm_get_random(chip, ononce, TPM_NONCE_SIZE, true);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -454,7 +454,7 @@ static int tpm_seal(struct tpm_buf *tb, uint16_t keytype,
- 	memcpy(td->xorwork + SHA1_DIGEST_SIZE, sess.enonce, SHA1_DIGEST_SIZE);
- 	sha1(td->xorwork, SHA1_DIGEST_SIZE * 2, td->xorhash);
- 
--	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE);
-+	ret = tpm_get_random(chip, td->nonceodd, TPM_NONCE_SIZE, true);
- 	if (ret < 0)
- 		goto out;
- 
-@@ -565,7 +565,7 @@ static int tpm_unseal(struct tpm_buf *tb,
- 	}
- 
- 	ordinal = htonl(TPM_ORD_UNSEAL);
--	ret = tpm_get_random(chip, nonceodd, TPM_NONCE_SIZE);
-+	ret = tpm_get_random(chip, nonceodd, TPM_NONCE_SIZE, true);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -938,7 +938,7 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
- 
- static int trusted_tpm_get_random(unsigned char *key, size_t key_len)
- {
--	return tpm_get_random(chip, key, key_len);
-+	return tpm_get_random(chip, key, key_len, true);
- }
- 
- static int __init init_digests(void)
+ 	tpm_put_ops(chip);
+ 	return total ? total : -EIO;
 -- 
 2.39.5
 
