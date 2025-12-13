@@ -1,210 +1,174 @@
-Return-Path: <linux-integrity+bounces-7941-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7942-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6435ECBA2C8
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 03:07:07 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B22ACBA511
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 06:26:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5C332308181D
-	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 02:07:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5064730065AA
+	for <lists+linux-integrity@lfdr.de>; Sat, 13 Dec 2025 05:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C283238C23;
-	Sat, 13 Dec 2025 02:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DA5482EB;
+	Sat, 13 Dec 2025 05:26:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="NSEeFOTK"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="a/qTinQ0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFB021B192
-	for <linux-integrity@vger.kernel.org>; Sat, 13 Dec 2025 02:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA2D2C859;
+	Sat, 13 Dec 2025 05:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765591624; cv=none; b=HsVuvy3pMSYXXiULeZYkBLDInobXkkgE7dCKSsOen4Cy2zBgxKJLwnCgN/jf9q0qg/YQS7A7QqbzT1D5hOYusgEyFX3cvfSWJ/hJM6sSr29XxY9nZwVzGU5OQ9UITjbqBoZ1zFmx0EoiKoTMT+4x0Wh3gegpzNGHMpo77ea6vZ8=
+	t=1765603612; cv=none; b=b1IDs8V0fq2BLasR8VcQM7r+XqQ8agJ1PNJRbaMZCggAkeE8vDKvxDdxWhkwRaRTGROAsXZfJVHWNcCgzEMw3HwgocF5mnlqxrGUASm3CdgwYEqufAlDvTJ8gF8EA6sw88eTBkUZUeM6z2saHZbDEA68mLTPTZ749DrrguX9jDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765591624; c=relaxed/simple;
-	bh=o78EE0CBwAKtaBx4p+s0991PHX7BOfT9hDlkZYWgMa4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BJOtdfThCInAgfCNddOmk0cR7yInjZdDoRQZFH3T+6Xom7mIgk7F9C1RCFmMU4k0/NcesBMFMWJzh5Ve6z9xv8L5jsu47mxi1hwCqrZHrEKihnDqTEBDcfi7toan8AdebgB+MPbvcSRUd4WhzOw/cIfRqTfQHHOyq4Ug/5CVyvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=NSEeFOTK; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-34b75fba315so987508a91.3
-        for <linux-integrity@vger.kernel.org>; Fri, 12 Dec 2025 18:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1765591622; x=1766196422; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q6SUXJgzM946cTzA9BUg6hytN3ta/g/U54KdX40MWDQ=;
-        b=NSEeFOTKc2sqnxxtM8QakKTHAChnmvFiX+gE73O0iphll7go4ZLx3tuNaYiYVeWABY
-         vx6aAQYqpWZDGLOF811Pp2JiypDr1+SD5wX63iq7gvMHQeWmdZsQ+G9/HKqijh1m++I2
-         ArAWgfKeZugRvVLHJU75dGhRq4WJX1g2ueIyytZrhyNEilYXX491Qk+GdGISIF2CQw5T
-         h66FZj5whgp7KVSho7REIdI620zUvTY5W1Mh2CLY3xNSG/ns7/KEoC68Wzns8NqV5fdh
-         CvQsyazwpAq7fVHshxTUsKnBvtA7LqWh2pCph83QLuUk3jGuAom4rXgZtUvNe0hqbza+
-         jqeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765591622; x=1766196422;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Q6SUXJgzM946cTzA9BUg6hytN3ta/g/U54KdX40MWDQ=;
-        b=B9qeeshRQqo612M3IfJJXf586JhNHl6yTZbrv2XmVXyVzsVc0ki2zjSFrSFuXPHxc9
-         OkoTMs/C4z3sEmI1DbL+7awMgjCV+nTKKeN10AAH070HWaooQpuzMAWkjrLpMZSiieWf
-         ckKY9flY6LeBBn5em1Hzmg9dzZn6UhU/ccm/jYhgxhj4aZCxZpIjzKwUKU6ml4HjYWMo
-         i7bGxaVFMN+a0dlWjmTD8F50ZtzdRDULev+FVUZYMHKBk7+3w9Qf52Z93SPdev9/mnHZ
-         KFbOJTWTeeuoaawN2YkHHZgJ93jcAf90+0P9dz1KCEPMOT5yrDaJ1KizXdJm/7hOXQar
-         8Fvw==
-X-Forwarded-Encrypted: i=1; AJvYcCW03llNaY8EoJWze8yYZA3LTp7kBrR2THTyV2LTDgEXEsBQM5WGW9JyEm0KCl6YMzI85yy9rcMVhm57zVsgqXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWWn04K1HoszIcfsAPIIIOeCh8utgC53n7jGXP7FQyGZdHHYoL
-	gysfu3p0IoD8+H8zkL+UAF3kds3+a1nt+j71kyPyh17SyuxMllHo0cYs1a0SrWcfKFGbvurDeTi
-	g+R1HaoA/nroYEpD8xXV8mcQ3uuH/V+Er6KOtOgAr
-X-Gm-Gg: AY/fxX5f+fOp385CjyYoX5LsQNXaJf9ysOULW8lt+9xNIfKDG3UjyrnLke7mcpNhiV1
-	QHhxQFkBbkO6PsfHOU3iyacQqsYpp+1LLx//mxtoFd6p+2WO7IxHxRvewjSDy4ZAVnc92ExbJGO
-	OxpWvtgviaWUQaY+rItnZUXG3FCvoqhB47zFC9Em0IqwHz1RO043c6Gu4tEIaSUnHksyFb+8XhC
-	tEcyUOaV7cfoCoOZ4go/lVE6wYuCkmBTXLgF4ghCtS266jmdu7wyPfn321HxlF13Y+NhvY=
-X-Google-Smtp-Source: AGHT+IGnwX71Z86N1z70pd7ITefWX/huSwRq2VYVRFVs/VS6a87brv9E91o16xh3yBqd0EXaLvFoopy9BQrXtAiOIYk=
-X-Received: by 2002:a17:90b:350d:b0:32d:d5f1:fe7f with SMTP id
- 98e67ed59e1d1-34abe40ea73mr3314646a91.15.1765591621526; Fri, 12 Dec 2025
- 18:07:01 -0800 (PST)
+	s=arc-20240116; t=1765603612; c=relaxed/simple;
+	bh=ad9ubtl6eZSDf1+0Us3bKp7S+GKX/wuqpUVLhdqQhWw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vGqSgID5VZVVYiSIGy/AVAPToHJWR3ibMd/iVCsx31DQ4hQk1G/jvqtDfvxnCwcR7AGzdLrJT+oo4CxnSF1P8Q2aJqzHertKvlgYz40Rw2SZnF9dtgghYSCXeiUGsqej4cU3JPH02XK2sO+MOGN4di2dNIcANm0S4zi9ju40eE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=a/qTinQ0; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BD2ubxp030817;
+	Sat, 13 Dec 2025 05:26:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=hC+xmJPIWb8X/HMtQf21luCV8wFrtta7B2S0Hvx4x
+	Ik=; b=a/qTinQ07aEfbHS3WyTECIVV3sh8lMgBTdmjEjoqTZHCMjFfc+RqYhCHh
+	oUlPzD/+ySEVBXm6j2np5pA8/496W0aGEXzwIadpW7lGx5WklrkWbCM8q2B/al1Y
+	EjejuwW4cQWcsbdgbgUKSua2ApLavuSL9XWvVZ+jG4HgYJTLioeqHGTgzfXmitiK
+	R0r1Wy1Rj/JN52K04G0NBACYZ6LzuxDCf3UJS+oCueg3Kui19oocw4gOwJnQTvze
+	YZTHSRQX68UHDgkndr+PZhbux4FuqVoFDEEDDnPO6o5Ce6To8wte+7wyrtjuonoC
+	X2yww9tOGfr/lRV7+PojZa2L9m8Mg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0yt10a72-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Dec 2025 05:26:27 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BD5QR9W031668;
+	Sat, 13 Dec 2025 05:26:27 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0yt10a6y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Dec 2025 05:26:27 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BD5A3X1028099;
+	Sat, 13 Dec 2025 05:26:26 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4avy6yfrw9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 13 Dec 2025 05:26:26 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BD5QM6331326478
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 13 Dec 2025 05:26:22 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4835620043;
+	Sat, 13 Dec 2025 05:26:22 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5155220040;
+	Sat, 13 Dec 2025 05:26:19 +0000 (GMT)
+Received: from li-fc74f8cc-3279-11b2-a85c-ef5828687581.ibm.com.com (unknown [9.124.210.103])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Sat, 13 Dec 2025 05:26:19 +0000 (GMT)
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+To: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, James.Bottomley@HansenPartnership.com,
+        jarkko@kernel.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
+        rnsastry@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, ssrish@linux.ibm.com
+Subject: [PATCH 0/6] Extend "trusted" keys to support a new trust source named the PowerVM Key Wrapping Module (PKWM)
+Date: Sat, 13 Dec 2025 10:56:12 +0530
+Message-ID: <20251213052618.190691-1-ssrish@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251212171932.316676-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20251212171932.316676-1-roberto.sassu@huaweicloud.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 12 Dec 2025 21:06:50 -0500
-X-Gm-Features: AQt7F2pSRiV5S0YmuydrmAf_bv4hOXVpZCzrNYqlNN_g3-DMC6uEP2lNoe8lzrs
-Message-ID: <CAHC9VhRUQxayj=XcdfbfHka-=N+B8cNk7Grg3QWGOTOz3BKfgw@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2] ima: Add support for staging measurements for
- deletion and trimming
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, jmorris@namei.org, serge@hallyn.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com, 
-	nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Lr0wqaDc8ngCyOE6es5bTd-_ETW5MLI7
+X-Proofpoint-ORIG-GUID: FdINwmkDj81hgEySl_98ke3Y3jaR-MGR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAyMyBTYWx0ZWRfXxpzT2CfuAhlf
+ t9+i5GCwynZzCUyeuxgXh9+fiTyC0sot9SJdaGPtBttwUUt5BbZQcrTllU2WX5cd4VOxIu9g0G4
+ GbKK3oSwl2WUu8P3OXfwhP2uUTUltk6cWkTqWrmQZ+Q5nwvBgL6FToJnqmiIe7hat2OKbryr7gs
+ miValsvT1BcZLt+27fT1ZkOOam5m/21jqKYZ8aU4vS14loeeSD6Szi5Iy1MWeKOnb8ntR4djSe4
+ GSz+O/qMtjYJhoyhUoazDJBhtq4hMK0vQEH6xFM9EhDDHlUym1mMeKXkGc2T0QqJYCZas4jfuSR
+ fiJwlesglK34Vy2lOIKVw7CnQPyiDWDRonGJgh9tEV4FUNJXnGdFsMdqgMqHbhYAEsxZONJyJr5
+ EABh8ixgmMljdcPTM/EZVICcd1otcQ==
+X-Authority-Analysis: v=2.4 cv=L/MQguT8 c=1 sm=1 tr=0 ts=693cf903 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=OZ_REq_LgKhKeL2JI8IA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-12_07,2025-12-11_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 malwarescore=0 adultscore=0 priorityscore=1501
+ clxscore=1011 lowpriorityscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130023
 
-On Fri, Dec 12, 2025 at 12:19=E2=80=AFPM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Introduce the ability of staging the entire (or a portion of the) IMA
-> measurement list for deletion. Staging means moving the current content o=
-f
-> the measurement list to a separate location, and allowing users to read a=
-nd
-> delete it. This causes the measurement list to be atomically truncated
-> before new measurements can be added. Staging can be done only once at a
-> time. In the event of kexec(), staging is reverted and staged entries wil=
-l
-> be carried over to the new kernel.
->
-> User space is responsible to concatenate the staged IMA measurements list
-> portions following the temporal order in which the operations were done,
-> together with the current measurement list. Then, it can send the collect=
-ed
-> data to the remote verifiers.
->
-> Also introduce the ability of trimming N measurements entries from the IM=
-A
-> measurements list, provided that user space has already read them. Trimmi=
-ng
-> combines staging and deletion in one operation.
->
-> The benefit of these solutions is the ability to free precious kernel
-> memory, in exchange of delegating user space to reconstruct the full
-> measurement list from the chunks. No trust needs to be given to user spac=
-e,
-> since the integrity of the measurement list is protected by the TPM.
->
-> By default, staging/trimming the measurements list does not alter the has=
-h
-> table. When staging/trimming are done, IMA is still able to detect
-> collisions on the staged and later deleted measurement entries, by keepin=
-g
-> the entry digests (only template data are freed).
->
-> However, since during the measurements list serialization only the SHA1
-> digest is passed, and since there are no template data to recalculate the
-> other digests from, the hash table is currently not populated with digest=
-s
-> from staged/deleted entries after kexec().
->
-> Introduce the new kernel option ima_flush_htable to decide whether or not
-> the digests of staged measurement entries are flushed from the hash table=
-.
->
-> Then, introduce ascii_runtime_measurements_staged_<algo> and
-> binary_runtime_measurement_staged_<algo> interfaces to stage/trim/delete
-> the measurements. Use 'echo A > <IMA interface>' and
-> 'echo D > <IMA interface>' to respectively stage and delete the entire
-> measurements list. Use 'echo N > <IMA interface>', with N between 1 and
-> LONG_MAX, to stage the selected portion of the measurements list, and
-> 'echo -N > <IMA interface>' to trim N measurements entries.
+Power11 has introduced a feature called the PowerVM Key Wrapping Module
+(PKWM), where PowerVM in combination with Power LPAR Platform KeyStore
+(PLPKS) [1] supports a new feature called "Key Wrapping" [2] to protect
+user secrets by wrapping them using a hypervisor generated wrapping key.
+This wrapping key is an AES-GCM-256 symmetric key that is stored as an
+object in the PLPKS. It has policy based protections that prevents it from
+being read out or exposed to the user. This wrapping key can then be used
+by the OS to wrap or unwrap secrets via hypervisor calls.
 
-In an effort to help preserve the sanity of admins, I might suggest
-avoiding commands that start with a dash/'-'.  I'd probably also
-simplify the commands a bit and drop all/'A' since the measurement
-list could change at any time, stick with an explicit number and just
-let the admin go over, e.g. write LONG_MAX, which effectively becomes
-'A'.  I think you could do everything you need with just two commands:
+This patchset intends to add the PKWM, which is a combination of IBM
+PowerVM and PLPKS, as a new trust source for trusted keys. The wrapping key
+does not exist by default and its generation is requested by the kernel at
+the time of PKWM initialization. This key is then persisted by the PKWM and
+is used for wrapping any kernel provided key, and is never exposed to the
+user. The kernel is aware of only the label to this wrapping key.
 
-  <NUM>: stage <NUM> entries
-      D: delete staged entries
+Along with the PKWM implementation, this patchset includes two preparatory
+patches: one fixing the kernel-doc incosistencies in the PLPKS code and
+another reorganizing PLPKS config variables in the sysfs.
 
-I intentionally left out the trim/'T' command, because I'm not sure it
-is really necessary if you are going to implement the phased
-stage/delete process.  Yes, you have to do two operations (stage and
-delete) as opposed to just the trim, but I'd probably take the
-simplicity of just supporting a single approach over the trivial
-necessity of having to do two operations in userspace.
+Nayna Jain (1):
+  docs: trusted-encryped: add PKWM as a new trust source
 
-Staging also has the benefit of having a sane way of handling two
-tasks racing to stage the measurement list.  I could see cases where
-multiple tasks race to trim the list and end up trimming more than was
-intended since they both hit in sequence.
+Srish Srinivasan (5):
+  pseries/plpks: fix kernel-doc comment inconsistencies
+  powerpc/pseries: move the PLPKS config inside its own sysfs directory
+  pseries/plpks: expose PowerVM wrapping features via the sysfs
+  pseries/plpks: add HCALLs for PowerVM Key Wrapping Module
+  keys/trusted_keys: establish PKWM as a trusted source
 
-If you did want to take a trim approach over a stage/delete approach,
-I could see something like this working:
+ .../ABI/testing/sysfs-firmware-plpks          |  58 ++
+ Documentation/ABI/testing/sysfs-secvar        |  65 --
+ .../admin-guide/kernel-parameters.txt         |   1 +
+ Documentation/arch/powerpc/papr_hcalls.rst    |  43 ++
+ .../security/keys/trusted-encrypted.rst       |  50 ++
+ MAINTAINERS                                   |   9 +
+ arch/powerpc/include/asm/hvcall.h             |   4 +-
+ arch/powerpc/include/asm/plpks.h              |  94 +--
+ arch/powerpc/include/asm/secvar.h             |   1 -
+ arch/powerpc/kernel/secvar-sysfs.c            |  21 +-
+ arch/powerpc/platforms/pseries/Makefile       |   2 +-
+ arch/powerpc/platforms/pseries/plpks-secvar.c |  29 -
+ arch/powerpc/platforms/pseries/plpks-sysfs.c  |  96 +++
+ arch/powerpc/platforms/pseries/plpks.c        | 689 +++++++++++++++++-
+ include/keys/trusted-type.h                   |   7 +-
+ include/keys/trusted_pkwm.h                   |  30 +
+ security/keys/trusted-keys/Kconfig            |   8 +
+ security/keys/trusted-keys/Makefile           |   2 +
+ security/keys/trusted-keys/trusted_core.c     |   6 +-
+ security/keys/trusted-keys/trusted_pkwm.c     | 168 +++++
+ 20 files changed, 1182 insertions(+), 201 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-firmware-plpks
+ create mode 100644 arch/powerpc/platforms/pseries/plpks-sysfs.c
+ create mode 100644 include/keys/trusted_pkwm.h
+ create mode 100644 security/keys/trusted-keys/trusted_pkwm.c
 
- 1. process opens the measurement list
- 2. process reads from the measurement list, keeps the fd open
- 3. process does whatever it wants to preserve the list
- 4. process writes <NUM> to the measurement list, kernel trims <NUM> entrie=
-s
- 5. process closes fd
+-- 
+2.47.3
 
-... error handling shouldn't be too bad.  The process only writes
-<NUM> to the fd if it has already finished whatever it needs to do to
-preserve the list outside the kernel, think of it as a "commit"
-operation on a transaction.  If the fd is closed for some reason
-(error, interruption, killed) before the process writes <NUM> to the
-fd then IMA does nothing - no trim takes place.
-
-Multiple process racing can easily be solved when the log is opened;
-only one open(O_RDWR) is allowed at a time, other racing processes
-will get EBUSY.  Yes, one process could block others from trimming by
-holding the fd open for an extended period of time, but I would expect
-that CAP_SYS_ADMIN and root fs perms would be required to open the log
-read/write (not to mention any LSM access rights in place).
-
-I know I mentioned this basic idea to someone at some point, but there
-have been various discussion threads and multiple people over a fairly
-lengthy time that I've lost track of where it was mentioned.  If it
-was already discussed on-list and rejected for a good reason you can
-simply ignore the above approach ... although I still think the
-stage/delete API could be simplified as described :)
-
-[UPDATE: as I'm reading Steven's replies it looks like he has proposed
-something very similar to the above]
-
---=20
-paul-moore.com
 
