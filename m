@@ -1,63 +1,59 @@
-Return-Path: <linux-integrity+bounces-7975-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7976-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8157CBBD23
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Dec 2025 16:42:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 984B0CBC060
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Dec 2025 22:32:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E82F1301C641
-	for <lists+linux-integrity@lfdr.de>; Sun, 14 Dec 2025 15:39:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4FD1E300B82F
+	for <lists+linux-integrity@lfdr.de>; Sun, 14 Dec 2025 21:32:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35F982D3731;
-	Sun, 14 Dec 2025 15:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3739A28727F;
+	Sun, 14 Dec 2025 21:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FbpN8bSR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LnD3XFEB"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057172C158A;
-	Sun, 14 Dec 2025 15:39:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057732772D;
+	Sun, 14 Dec 2025 21:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765726753; cv=none; b=mgH4ksmPkJ2+Nzy4ChRLjDZesK7p6qtpgrxIXHRtj6bbzTl5cTEXGvMfGUhK9NSKi9GEsRMSF0iTktYh8oGK9zIW5uw6skCR+VvnT6O1+12aaxo/130KeTAoNdFQipq2FoXKa1SF4xVsPsWcu4znQofsMMxZBTUEFeSkdboK0Ys=
+	t=1765747963; cv=none; b=kuIJpXmyaMTgmUdtGofx9D5x2tpmkowsVJEQYWWVswoVQkMoUUEQI54pwXd/5WpkAArtCgsQJujmCSJ0sr8QwnLbUTQA+DmEg3OYOrT1+kbjFnZ7IAllpzcgwgtTanEwNDJ/EoeIIiORlAel59e4fEVDg0aZPKs6PKq9AAZBqfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765726753; c=relaxed/simple;
-	bh=gba68+JSLdi+m3uhKMTQ8YBJGES3meTKv4nLqMJcEzQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WXNl5LhQnXNm0hEo/EmICfTvzj/L9YR9TtznpqQ9d0SxL5r7iNys1AOwD0K1K22z4wPgXtWErSN990A3ueB7iTV/qKeFPIsLAkilfg4drWXxw1qKFcqJA3bj2HV9JMA6XtMdqdaKSYnT1Rc/gsOzBi3nclpLqYt77WALsNkbQs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FbpN8bSR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018D8C4CEF1;
-	Sun, 14 Dec 2025 15:39:10 +0000 (UTC)
+	s=arc-20240116; t=1765747963; c=relaxed/simple;
+	bh=OPfV9+beCTEYX6TFJLkhS1HZUvA+/J8PLcpBI9k3iIY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HoiYW/NI5elnMYufCLnUp+Guu7E82+xwH+QZh7tFJY1u5PEs0oFX/rkmYpcd8YXhY+1x1hKkhfcCm9thFA5V7vnI0kbl1DGnNRCdQksZBJSSMIJMtHwzbMxWmSAI4YGnZ2aVmPMm3lUyWKoFU+V79e0D5d5Tin8p+XVUQ9LEGk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LnD3XFEB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D17C4CEF1;
+	Sun, 14 Dec 2025 21:32:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765726751;
-	bh=gba68+JSLdi+m3uhKMTQ8YBJGES3meTKv4nLqMJcEzQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FbpN8bSRDl8TEGbOivzs4+/7HyV/Tt7WhbuCXOq37q4rAs/5OQZ3lYnXFNOOaJ4Hh
-	 gAX+YQVQBAmEy28+zVQcn5FS0DPevIaOQX/RWtsPC+ZkSfnw8pxxnAj6zrfJ7gLc0z
-	 bP03EIeZqt7t3/NBnWUwPjTnEJo5DkroWFKjXqb3lLPE3rjuz6RV3lK1v8CPW1nahL
-	 Y2/fkPuzLIlcSlm7TsERUCNUn+UP/GOmU05fJuCMFiHBLWLFmcuaRxP8vgDVvvKUoD
-	 0luZ4sCDoft1jual71txS4BPX1EJQlIIF/VwPxAApH3U8fryxJ9RSQPsJ2PKNmr/+V
-	 DoQOfM7EGk27A==
+	s=k20201202; t=1765747962;
+	bh=OPfV9+beCTEYX6TFJLkhS1HZUvA+/J8PLcpBI9k3iIY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=LnD3XFEB2YKkr9mncyxI2tTFCVv/lU6TxvxY6UM97TXzCBCNJMak3ooBP28ArI+Jj
+	 BgrmcCVO8UEa0S3kn4UoXhzfL9ino1SpRx16L3VNQ9xgxpEKTfeppNS0rO7f5Kw0zW
+	 gLlZtVSsW/xtb/lM0+nzPDB9KOiwUlaWI4f3XJmxV6S6zUOF52lmFBieawrv4wgxLg
+	 BJjtsuFLR+GjaMyTpkEwWbxFw4r6lYXjg7+KM8WW2NNdoTus4eRxIzW70jHxXpwdq6
+	 N70Akt8EoFofCuOvSC50mEDYHq10mS4IiUX5SJiwgCZAgBFk/dxcsc7D0OVXXIAB28
+	 DbbOBU6/MGFCw==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
-Cc: Ross Philipson <ross.philipson@oracle.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
+Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	David Howells <dhowells@redhat.com>,
 	Paul Moore <paul@paul-moore.com>,
 	James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-kernel@vger.kernel.org (open list),
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
 	keyrings@vger.kernel.org (open list:KEYS/KEYRINGS),
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v6 11/11] tpm-buf: Remove tpm_buf_append_handle
-Date: Sun, 14 Dec 2025 17:38:08 +0200
-Message-Id: <20251214153808.73831-12-jarkko@kernel.org>
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] KEYS: trusted: Use get_random-fallback for TPM
+Date: Sun, 14 Dec 2025 23:32:36 +0200
+Message-Id: <20251214213236.339586-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20251214153808.73831-1-jarkko@kernel.org>
-References: <20251214153808.73831-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,136 +62,47 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since the number of handles is fixed to a single handle, eliminate all uses
-of buf->handles and deduce values during compile-time.
+1. tpm2_get_random() is costly when TCG_TPM2_HMAC is enabled and thus its
+   use should be pooled rather than directly used. This both reduces
+   latency and improves its predictability.
+
+2. Linux is better off overall if every subsystem uses the same source for
+   the random bistream as the de-facto choice, unless *force majeure*
+   reasons point to some other direction.
+
+In the case, of TPM there is no reason for trusted keys to invoke TPM
+directly.
+
+Thus, unset '.get_random', which causes fallback to kernel_get_random().
 
 Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 ---
-v2:
-- Streamline the code change and remove dead code.
----
- drivers/char/tpm/tpm-buf.c       | 26 --------------------------
- drivers/char/tpm/tpm2-cmd.c      |  2 +-
- drivers/char/tpm/tpm2-sessions.c | 14 ++------------
- include/linux/tpm.h              |  2 --
- 4 files changed, 3 insertions(+), 41 deletions(-)
+ security/keys/trusted-keys/trusted_tpm1.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
-index 6134eabe6961..752c69b8a4f5 100644
---- a/drivers/char/tpm/tpm-buf.c
-+++ b/drivers/char/tpm/tpm-buf.c
-@@ -40,7 +40,6 @@ static void __tpm_buf_reset(struct tpm_buf *buf, u16 buf_size, u16 tag, u32 ordi
- 	buf->flags = 0;
- 	buf->length = sizeof(*head);
- 	buf->capacity = buf_size - sizeof(*buf);
--	buf->handles = 0;
- 	head->tag = cpu_to_be16(tag);
- 	head->length = cpu_to_be32(sizeof(*head));
- 	head->ordinal = cpu_to_be32(ordinal);
-@@ -56,7 +55,6 @@ static void __tpm_buf_reset_sized(struct tpm_buf *buf, u16 buf_size)
- 	buf->flags = TPM_BUF_TPM2B;
- 	buf->length = 2;
- 	buf->capacity = buf_size - sizeof(*buf);
--	buf->handles = 0;
- 	buf->data[0] = 0;
- 	buf->data[1] = 0;
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index 636acb66a4f6..33b7739741c3 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -936,11 +936,6 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
+ 	return ret;
  }
-@@ -177,30 +175,6 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value)
- }
- EXPORT_SYMBOL_GPL(tpm_buf_append_u32);
  
--/**
-- * tpm_buf_append_handle() - Add a handle
-- * @chip:	&tpm_chip instance
-- * @buf:	&tpm_buf instance
-- * @handle:	a TPM object handle
-- *
-- * Add a handle to the buffer, and increase the count tracking the number of
-- * handles in the command buffer. Works only for command buffers.
-- */
--void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u32 handle)
+-static int trusted_tpm_get_random(unsigned char *key, size_t key_len)
 -{
--	if (buf->flags & TPM_BUF_INVALID)
--		return;
--
--	if (buf->flags & TPM_BUF_TPM2B) {
--		dev_err(&chip->dev, "Invalid buffer type (TPM2B)\n");
--		buf->flags |= TPM_BUF_INVALID;
--		return;
--	}
--
--	tpm_buf_append_u32(buf, handle);
--	buf->handles++;
+-	return tpm_get_random(chip, key, key_len);
 -}
 -
- /**
-  * tpm_buf_read() - Read from a TPM buffer
-  * @buf:	&tpm_buf instance
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index 27069ebabe9a..f066efb54a2c 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -205,7 +205,7 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
- 			return rc;
- 		tpm_buf_append_hmac_session(chip, buf, 0, NULL, 0);
- 	} else {
--		tpm_buf_append_handle(chip,buf, pcr_idx);
-+		tpm_buf_append_u32(buf, pcr_idx);
- 		tpm_buf_append_auth(chip, buf, NULL, 0);
- 	}
- 
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 8c9a7e7c82d5..f2b8ca893e15 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -261,7 +261,7 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 	}
- 
- 	if (!tpm2_chip_auth(chip)) {
--		tpm_buf_append_handle(chip, buf, handle);
-+		tpm_buf_append_u32(buf, handle);
- 		return 0;
- 	}
- 
-@@ -288,17 +288,7 @@ EXPORT_SYMBOL_GPL(tpm_buf_append_name);
- void tpm_buf_append_auth(struct tpm_chip *chip, struct tpm_buf *buf,
- 			 u8 *passphrase, int passphrase_len)
+ static int __init init_digests(void)
  {
--	/* offset tells us where the sessions area begins */
--	int offset = buf->handles * 4 + TPM_HEADER_SIZE;
--	u32 len = 9 + passphrase_len;
--
--	if (tpm_buf_length(buf) != offset) {
--		/* not the first session so update the existing length */
--		len += get_unaligned_be32(&buf->data[offset]);
--		put_unaligned_be32(len, &buf->data[offset]);
--	} else {
--		tpm_buf_append_u32(buf, len);
--	}
-+	tpm_buf_append_u32(buf, 9 + passphrase_len);
- 	/* auth handle */
- 	tpm_buf_append_u32(buf, TPM2_RS_PW);
- 	/* nonce */
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 24b1d253e7f5..177833d6b965 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -395,7 +395,6 @@ enum tpm_buf_flags {
-  */
- struct tpm_buf {
- 	u8 flags;
--	u8 handles;
- 	u16 length;
- 	u16 capacity;
- 	u8 data[];
-@@ -441,7 +440,6 @@ void tpm_buf_append_u32(struct tpm_buf *buf, const u32 value);
- u8 tpm_buf_read_u8(struct tpm_buf *buf, off_t *offset);
- u16 tpm_buf_read_u16(struct tpm_buf *buf, off_t *offset);
- u32 tpm_buf_read_u32(struct tpm_buf *buf, off_t *offset);
--void tpm_buf_append_handle(struct tpm_chip *chip, struct tpm_buf *buf, u32 handle);
- 
- /*
-  * Check if TPM device is in the firmware upgrade mode.
+ 	int i;
+@@ -992,6 +987,5 @@ struct trusted_key_ops trusted_key_tpm_ops = {
+ 	.init = trusted_tpm_init,
+ 	.seal = trusted_tpm_seal,
+ 	.unseal = trusted_tpm_unseal,
+-	.get_random = trusted_tpm_get_random,
+ 	.exit = trusted_tpm_exit,
+ };
 -- 
 2.39.5
 
