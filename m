@@ -1,256 +1,159 @@
-Return-Path: <linux-integrity+bounces-7988-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7989-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2247FCBDDFE
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 13:50:06 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99253CBE7E3
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 16:06:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 263A830762CB
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 12:42:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0F9363001180
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 15:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751352C11C5;
-	Mon, 15 Dec 2025 12:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C62730FF25;
+	Mon, 15 Dec 2025 14:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UJ85NnV8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B899E257AEC;
-	Mon, 15 Dec 2025 12:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88ADA30FF3A;
+	Mon, 15 Dec 2025 14:02:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765802505; cv=none; b=VZz3PjtBZ7/CcPylOgzOFsjoruzQ6GC4iIKaDUHUEozn42ItfvMp0tHWxIReLb1TnAEcXN++x8GoIX6sV4gdSiMHfiAopulYAiYwQlUbAMEN8ubbcjTjWvOEmJal7QHFE0syRhEDG22hj3UTMH3VPW5YnkozLByu1ZAoYZ+QPZw=
+	t=1765807358; cv=none; b=ROxyCBWLYZeTPXZ9+yOgrJfBbOxOhgLRut6nXXfkHC5aMW3wjXo/A1rQNaSmxziVyJnHGT0SqXVR2bS/wv+uu6HuKK4gA9+5y2txf82z1KH89TzzECaIeP/Xj27q7nOXBvezHUFdr7TU9I63YVtl3WCsdsLe2+9Zegv4Q0MmTBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765802505; c=relaxed/simple;
-	bh=rdE/6cZ/6KdpW7XLUHDsAQWV7nAAUwM2+LrIbpi625Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pp5Otazy+7RZdT1B3lxMZfe8Ypl54vIK++l2s/HHaK6fAs7vXrHJObUrnqafKVcHzzHVGr1b1Aq3Mub15lpGubKlrvT1G3+gdQjc8EOv22NBIVRnywKUKgUfuZFsuckU8nClbs6MTwmWqkJM5u3c2XEN2Dhj2XNT6twznk8WvkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dVKQP5h3Yz1HC9R;
-	Mon, 15 Dec 2025 20:39:57 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 86CC440568;
-	Mon, 15 Dec 2025 20:41:39 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCX0wX4AUBpmMgkAA--.42771S2;
-	Mon, 15 Dec 2025 13:41:39 +0100 (CET)
-Message-ID: <fbe8a62785626e324278892ecfd8a4112cdbac6f.camel@huaweicloud.com>
-Subject: Re: [RFC][PATCH v2] ima: Add support for staging measurements for
- deletion and trimming
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Paul Moore <paul@paul-moore.com>
-Cc: corbet@lwn.net, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, jmorris@namei.org, serge@hallyn.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com, 
-	nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date: Mon, 15 Dec 2025 13:41:26 +0100
-In-Reply-To: <CAHC9VhRUQxayj=XcdfbfHka-=N+B8cNk7Grg3QWGOTOz3BKfgw@mail.gmail.com>
-References: <20251212171932.316676-1-roberto.sassu@huaweicloud.com>
-	 <CAHC9VhRUQxayj=XcdfbfHka-=N+B8cNk7Grg3QWGOTOz3BKfgw@mail.gmail.com>
+	s=arc-20240116; t=1765807358; c=relaxed/simple;
+	bh=CNk3Gny6Eq3dZRKg7BGu1UbnDEcS8g5xr5JBzKALF8g=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=vGctnuB/HgTVUNMYKYrV6sIdkGDNgpUZuMdEgc/s9ErDu4Z+HPU4G4S1FyT+toI9/pMbjnVOY81A9CH9mNZtI1KY+7KaDm11OtUjd5FPFgPd7bEEWuUNcka3dGqfcABUkghsU5iMP1S60YFWjMCWdfYUw3Q5Sau4CcSsfevKkSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UJ85NnV8; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BF74uKe021469;
+	Mon, 15 Dec 2025 14:02:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=BZZ8gU
+	lX9jobhrDx9zOK3xqdapuyPIterguTVyWFnmc=; b=UJ85NnV8BxA6m/NzsC1T/C
+	SB+xvMuD9kbKXibV4JBG1DgRU1YqOEDD6OYT80n4KGZ0z+0/kMtgnz1Tk1IwJxRw
+	vN0PCZBVBvuHybSiWbDXr1wk7zrQl5TbuBInGaV8cTyhTvEAejPbP0ZWUytjh5uu
+	P1ukByJnscn6joymUkGMao1xVkvmEnf06c7snvKR3cPPk9xXp3aJlh50pAARCKuU
+	c3jBcwO5VIQQsr6jy02Bhb1UIEkSfob6a24c3nvw4WoQoQBFrBlehTrhuf0KUpc2
+	plNkQ0TFnNMeycavrvP38yYnVGZfBSTaE5M5sHL6X/qFjJbHDj5xnI2Sj255VBbw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0wjpsw67-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Dec 2025 14:02:12 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BFDvDMK007741;
+	Mon, 15 Dec 2025 14:02:12 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0wjpsw5y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Dec 2025 14:02:12 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BFB1Biu026761;
+	Mon, 15 Dec 2025 14:02:11 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4b1jfs6ygr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 15 Dec 2025 14:02:11 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BFE2A4r29295354
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 15 Dec 2025 14:02:10 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B788858055;
+	Mon, 15 Dec 2025 14:02:10 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D131A58043;
+	Mon, 15 Dec 2025 14:02:09 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.148.132])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 15 Dec 2025 14:02:09 +0000 (GMT)
+Message-ID: <8075a38abe5f7256ae8ce70359f78822f277ccfa.camel@linux.ibm.com>
+Subject: Re: [PATCH V2 1/1] IMA event log trimming
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: steven chen <chenste@linux.microsoft.com>, linux-integrity@vger.kernel.org
+Cc: roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, corbet@lwn.net, serge@hallyn.com,
+        paul@paul-moore.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, anirudhve@linux.microsoft.com,
+        gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com,
+        sushring@linux.microsoft.com, linux-doc@vger.kernel.org
+In-Reply-To: <20251210235314.3341-2-chenste@linux.microsoft.com>
+References: <20251210235314.3341-1-chenste@linux.microsoft.com>
+	 <20251210235314.3341-2-chenste@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+Date: Mon, 15 Dec 2025 09:02:09 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwCX0wX4AUBpmMgkAA--.42771S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3WrW7Gw4UJr45WF13Xr47Arb_yoW3AFyfpa
-	y3W340kr4kJ348twn7Jw4ku3yF9w1kta1UJrn8t343A3W5CFW0kFWak3yYvFZIyr18t3Wj
-	ywnIgrZ8J3Z8ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgADBGk-fpcGmAAAsk
+User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAwMSBTYWx0ZWRfX0yV7Mf5blC3w
+ AaO1LQKAV2UYiiBmHcseJKAGO3F/+6KIyRmoZD2DQ2KJk+q7DUc7eEwKfsgDytucCUFYUvi57Ey
+ d0o29cMG7s9+yWxp59xyVOM4pVwhBR7/Zv6xU+7UQP8tmlIrRIWPjhtaLsz3rtfNHl09K+S/w9D
+ P1nz6lJsBQ8sYX7GPqHx4ayh9rjIEYIW4U6fDKkiL4MdPHKqwdf+sK7f70RZqd4y3cQVgp3Xz0Z
+ 4zgVFYNPZwIIr2U79PAU/1g2tLeldGA4UJROeqAXDG6iBs8b9+O2XcNlRKxTa8hBe8jPn34h/LS
+ l/huY3z1qFJd406XLv5EW7TFFYdrz/7lxWdN5hWCVXReFngE4WXY60Rs9XZtWrGaIekxVKx8j/e
+ JnxqTf5elVfwTsq+hR6q62poVDYfrA==
+X-Proofpoint-GUID: kz-flyVU7aY1Qe3_3Kbcd_XJMYHE1aej
+X-Proofpoint-ORIG-GUID: IvWNjI-eD8XLKzsdRPq7o10CmrEeb0Zp
+X-Authority-Analysis: v=2.4 cv=Kq5AGGWN c=1 sm=1 tr=0 ts=694014e4 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=yMhMjlubAAAA:8 a=qxrvh61xDQAC6cKOOUwA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-15_02,2025-12-15_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 malwarescore=0 impostorscore=0 clxscore=1011 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130001
 
-On Fri, 2025-12-12 at 21:06 -0500, Paul Moore wrote:
-> On Fri, Dec 12, 2025 at 12:19=E2=80=AFPM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > Introduce the ability of staging the entire (or a portion of the) IMA
-> > measurement list for deletion. Staging means moving the current content=
- of
-> > the measurement list to a separate location, and allowing users to read=
- and
-> > delete it. This causes the measurement list to be atomically truncated
-> > before new measurements can be added. Staging can be done only once at =
-a
-> > time. In the event of kexec(), staging is reverted and staged entries w=
-ill
-> > be carried over to the new kernel.
-> >=20
-> > User space is responsible to concatenate the staged IMA measurements li=
-st
-> > portions following the temporal order in which the operations were done=
-,
-> > together with the current measurement list. Then, it can send the colle=
-cted
-> > data to the remote verifiers.
-> >=20
-> > Also introduce the ability of trimming N measurements entries from the =
-IMA
-> > measurements list, provided that user space has already read them. Trim=
-ming
-> > combines staging and deletion in one operation.
-> >=20
-> > The benefit of these solutions is the ability to free precious kernel
-> > memory, in exchange of delegating user space to reconstruct the full
-> > measurement list from the chunks. No trust needs to be given to user sp=
-ace,
-> > since the integrity of the measurement list is protected by the TPM.
-> >=20
-> > By default, staging/trimming the measurements list does not alter the h=
-ash
-> > table. When staging/trimming are done, IMA is still able to detect
-> > collisions on the staged and later deleted measurement entries, by keep=
-ing
-> > the entry digests (only template data are freed).
-> >=20
-> > However, since during the measurements list serialization only the SHA1
-> > digest is passed, and since there are no template data to recalculate t=
-he
-> > other digests from, the hash table is currently not populated with dige=
-sts
-> > from staged/deleted entries after kexec().
-> >=20
-> > Introduce the new kernel option ima_flush_htable to decide whether or n=
-ot
-> > the digests of staged measurement entries are flushed from the hash tab=
-le.
-> >=20
-> > Then, introduce ascii_runtime_measurements_staged_<algo> and
-> > binary_runtime_measurement_staged_<algo> interfaces to stage/trim/delet=
-e
-> > the measurements. Use 'echo A > <IMA interface>' and
-> > 'echo D > <IMA interface>' to respectively stage and delete the entire
-> > measurements list. Use 'echo N > <IMA interface>', with N between 1 and
-> > LONG_MAX, to stage the selected portion of the measurements list, and
-> > 'echo -N > <IMA interface>' to trim N measurements entries.
+Hi Steven,
+
+The main difference between this patch and Roberto's version is the length =
+of
+time needed for locking the measurement list, which prevents new entries fr=
+om
+being appended to the measurement list.  In Roberto's version, the list hea=
+d is
+moved quickly and the lock released.  Measuring the total amount of time ne=
+eded
+to trim the measurement list ignores the benefit of his version. I plan on
+reviewing both this version and his (hopefully today).
+
+There are a number of other things missing from this patch, which I'll enum=
+erate
+when I review it.
+
+On Wed, 2025-12-10 at 15:53 -0800, steven chen wrote:
+> This patch is for trimming N entries of the IMA event logs. It will also
+> cleaning the hash table if ima_flush_htable is set.
+
+Please refer to "Describe your changes in imperative mood" in the "Describe=
+ your
+changes" section of Documentation/process/submitting-patches.rst.
+
 >=20
-> In an effort to help preserve the sanity of admins, I might suggest
-> avoiding commands that start with a dash/'-'.  I'd probably also
-> simplify the commands a bit and drop all/'A' since the measurement
-> list could change at any time, stick with an explicit number and just
-> let the admin go over, e.g. write LONG_MAX, which effectively becomes
-> 'A'.  I think you could do everything you need with just two commands:
+> It provides a userspace interface ima_trim_log that can be used to input
+> number N to let kernel to trim N entries of IMA event logs. When read
+> this interface, it returns number of entries trimmed last time.
 >=20
->   <NUM>: stage <NUM> entries
->       D: delete staged entries
+> Signed-off-by: steven chen <chenste@linux.microsoft.com>
 
-If the goal is that the verifier always receives a TPM quote aligned
-with the measurements, the remote attestation agent in the target
-system has to walk over the measurements to find N.
+--=20
+thanks,
 
-The difference between the approach I was suggesting and Steven's is
-that I calculate N after staging all measurements and store the
-exceeding measurements locally until the next attestation request. If
-the verifier supports it, the exceeding measurements could be stored
-also there.
-
-That means that I don't need to walk in the measurement list to stage,
-because I stage the entire list (with list_replace()). I do a walk
-after detaching, without interfering with the processes adding new
-measurements (hot path).
-
-Steven's approach is to read the measurements list to calculate N and
-stage/trim the measurement based on N. As Steven/Gregory pointed out,
-at this point you could already trim N because you already have the
-measurements list.
-
-However, in this case you have to walk through the measurements list as
-an RCU reader in the hot path, calculate N, and walk through the
-measurements list again as an RCU writer in the hot path to stage/trim
-N. In the next attestation request, you would read the previous
-exceeding measurements again.
-
-One major obstacle of my approach, as Gregory pointed out, was that
-staged measurements were not carried over during kexec(). While I
-thought about coordinating remote attestation requests with kexec() in
-a management engine, there can be cases where this is harder to
-achieve.
-
-I managed to solve that by introducing a third linked list containing
-the measurements to delete, by doing another list replace between
-staged and measurements to delete (when the 'D' command is issued),
-under the hot path lock. That allowed me to take the hot path lock
-during kexec() and prepend the staged measurements before the non-
-staged ones (that reminded me that I should properly inform user space=20
-if kexec() consumed staged measurements before the 'D' command was
-executed, i.e. it lost the race with kexec()).
-
-The approach to keep the stage N approach would be necessary if
-exceeding measurements cannot be stored either locally or at the
-verifier side.
-
-For me it would be fine to keep both approaches, but I still see
-advantages of the stage all approach.
-
-Thanks
-
-Roberto
-
-> I intentionally left out the trim/'T' command, because I'm not sure it
-> is really necessary if you are going to implement the phased
-> stage/delete process.  Yes, you have to do two operations (stage and
-> delete) as opposed to just the trim, but I'd probably take the
-> simplicity of just supporting a single approach over the trivial
-> necessity of having to do two operations in userspace.
->=20
-> Staging also has the benefit of having a sane way of handling two
-> tasks racing to stage the measurement list.  I could see cases where
-> multiple tasks race to trim the list and end up trimming more than was
-> intended since they both hit in sequence.
->=20
-> If you did want to take a trim approach over a stage/delete approach,
-> I could see something like this working:
->=20
->  1. process opens the measurement list
->  2. process reads from the measurement list, keeps the fd open
->  3. process does whatever it wants to preserve the list
->  4. process writes <NUM> to the measurement list, kernel trims <NUM> entr=
-ies
->  5. process closes fd
->=20
-> ... error handling shouldn't be too bad.  The process only writes
-> <NUM> to the fd if it has already finished whatever it needs to do to
-> preserve the list outside the kernel, think of it as a "commit"
-> operation on a transaction.  If the fd is closed for some reason
-> (error, interruption, killed) before the process writes <NUM> to the
-> fd then IMA does nothing - no trim takes place.
->=20
-> Multiple process racing can easily be solved when the log is opened;
-> only one open(O_RDWR) is allowed at a time, other racing processes
-> will get EBUSY.  Yes, one process could block others from trimming by
-> holding the fd open for an extended period of time, but I would expect
-> that CAP_SYS_ADMIN and root fs perms would be required to open the log
-> read/write (not to mention any LSM access rights in place).
->=20
-> I know I mentioned this basic idea to someone at some point, but there
-> have been various discussion threads and multiple people over a fairly
-> lengthy time that I've lost track of where it was mentioned.  If it
-> was already discussed on-list and rejected for a good reason you can
-> simply ignore the above approach ... although I still think the
-> stage/delete API could be simplified as described :)
->=20
-> [UPDATE: as I'm reading Steven's replies it looks like he has proposed
-> something very similar to the above]
->=20
+Mimi
 
 
