@@ -1,208 +1,256 @@
-Return-Path: <linux-integrity+bounces-7987-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7988-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E18EACBD2CA
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 10:32:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2247FCBDDFE
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 13:50:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B1FD8300AB14
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 09:32:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 263A830762CB
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 12:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F38314B73;
-	Mon, 15 Dec 2025 09:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="MlyuHyeG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751352C11C5;
+	Mon, 15 Dec 2025 12:41:45 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB7327E07E
-	for <linux-integrity@vger.kernel.org>; Mon, 15 Dec 2025 09:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B899E257AEC;
+	Mon, 15 Dec 2025 12:41:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765791144; cv=none; b=HlSJN8zBCONxNSnVyli1LJBPzOU0MZTg8G1EFPi8SXAxB0IukeCFor2GREsAy6ERFvVGKr7yk/LNPiHgtQiN8ErBCVuw5HQASGyTLUBGc7YvQjcm5jE1ak9uexvchJ8rvArfN78d+XA3dvbUzUSy85Tuf1NQ9UBlWIKUMQs6QZA=
+	t=1765802505; cv=none; b=VZz3PjtBZ7/CcPylOgzOFsjoruzQ6GC4iIKaDUHUEozn42ItfvMp0tHWxIReLb1TnAEcXN++x8GoIX6sV4gdSiMHfiAopulYAiYwQlUbAMEN8ubbcjTjWvOEmJal7QHFE0syRhEDG22hj3UTMH3VPW5YnkozLByu1ZAoYZ+QPZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765791144; c=relaxed/simple;
-	bh=3u9umm7/VPjetaVInDHrnL/zR8rzXm2g3nThmHm+BUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pOcA5ld3IlY+lW0FK2FDEAzucr0W1jX6obBgtema5Rjg5/6AMq39V+kJ0Lrn9xnH5kslGsVA3dNr4zZjEzNdTfyIq2U/mvmkOhilxMefGTOkziYoYVYvCidbLgva3Bc782vBZ098zB+NZRyWkyx4YP7i4U65H7oDo1qRtediKs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=MlyuHyeG; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b7277324054so545940566b.0
-        for <linux-integrity@vger.kernel.org>; Mon, 15 Dec 2025 01:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1765791140; x=1766395940; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pMgRQp2NAuNDw0Pr8DKsFpJ1DQmsliJUNJj+b1nHdRA=;
-        b=MlyuHyeGNU/hwfhc8TNJZIHkuMZvDLYkHIG0aKz8n4YJGzOpXjNR9ltFG2r3GqnLDm
-         UZh2qsTa72lAtxe0DW8o2maHEGuJfrYFtaF2+qlVDnEVhvA8vwU2gGW6eXd11YSLAGNX
-         TSNdgOJQClkV8kFYPZ0L/Ypi6+kLiCZEKXU7ACAOu8jLElWimU/caMAIM9drAPmK2sHz
-         rW2m0xh6Jt7MCUfJSzm8l+5kQ91OvQDKZJTcHmq0Y0DyDpeQZxsGxr1eEir1C940C4ma
-         h6knkXpR0A4VkeXeeOlLiqfVXVprYK0XBBvBKNbnsnMEWiZTPq+O9abnX77iAt8Ox3u7
-         IcAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765791140; x=1766395940;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pMgRQp2NAuNDw0Pr8DKsFpJ1DQmsliJUNJj+b1nHdRA=;
-        b=RMOJFaUSGwVh0D0AU2a6JP/5f7YIi/td2vbsryKhy+Hkk6WJaqN8guxsupZd5wXsFC
-         quIae9gvthqm0oid/awT5iQnq9Wgk78TYoLKfWTes5YLEjmZaArg6bGV9qymDfcuYVzo
-         V2tbIZP8ROQ9WFeR4/bg3nu5eCJqDTfVs0Rayw4xje+XogopBH+sdQ1/NCPNip5gaLrI
-         NwvwzTvI4Nch6IJtTnrQBWIOYBGir+HwBQ2Wn+VSusX96KKcE9wNSdWDt0DWSbJB2gRr
-         8NufW1LDDmLHjUlvrkCTlMeEauunm8uytitpB/f4+aExAtAZeb3EAE4I6ucAgzyDO0i7
-         DXkg==
-X-Forwarded-Encrypted: i=1; AJvYcCUU6My03L6097dWMdYvEy+YDL/s+DcjuzljgXeAqBHrcexDthUlEMyraZXHznG42epwRSSpv1JVbzCgkjbQ8ZY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6nuMjlVjbbCOqFuD6/Bq9BjQEA3wbNKG6NiBS+Nlo2fH4ts9D
-	UFVfNHUARZE9R+/zVKwT5uqgYIbqyqmOJOVs2Je/L8h+y1M1+ChSR2ygxeTenWBKhfk=
-X-Gm-Gg: AY/fxX6/HfMhLuUt+zHHMYOGd+inSVn0vPwbXISLGdVJI5J2oXfy/Xqe/VRmTCRTMbu
-	fgC6/HaBktZbKwmlUHD1QuN7YXpaHxo8CqQMxYXnd3IilU/TfitXZZZujvkKn2rPKMJs1qvRGo3
-	RZRQGdCYvE5JIAuqir4XtH9D2ELnnS9rpkKcdSB9ZmnMok6/rQ1wb9Lvh+N9po7Tt4MSiKTLoVp
-	OI4RPjKC+IDK+sgFKhQCACMWlc7oHq/Qxpe7Hg0I97vDtCeuXUk1ZXDNiV7LAfv0oSo57xKiGGz
-	pYPuIqwZQkUWHWz5yWQiUdGXt/aEhl/wPm3lZhTcF4nJsfjnU4BggwbSxRnUj6TcB7XSLzc2q4t
-	xzXOQTU5mNjy1/9z7BhyY1vu+JzEKQPfyQdemYgpIts0MAmKH6qWMYLQJ8+O8HGylcTIzxFgZmS
-	yJuk+OXRRd3UpF1NUuB+hKRNNc5kuacvoRb6e13jaPnoB/l7mF3KdBHdvbTwwXYrt039RO1NWMi
-	JY=
-X-Google-Smtp-Source: AGHT+IEaCg0quo15SNx/nGnta9oq72ocRWkg5l3SHsMTaK2wohhdkzDoQR/uDt0uWt8Scz8Vq184Fw==
-X-Received: by 2002:a17:907:1c0b:b0:b7a:1be1:984 with SMTP id a640c23a62f3a-b7d23a912c7mr930197866b.64.1765791140272;
-        Mon, 15 Dec 2025 01:32:20 -0800 (PST)
-Received: from localhost (p200300f65f006608181e6e27368f7e86.dip0.t-ipconnect.de. [2003:f6:5f00:6608:181e:6e27:368f:7e86])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b7cfa56a7f9sm1329836266b.51.2025.12.15.01.32.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 01:32:19 -0800 (PST)
-Date: Mon, 15 Dec 2025 10:32:18 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Sumit Garg <sumit.garg@kernel.org>
-Cc: Jens Wiklander <jens.wiklander@linaro.org>, 
-	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Sumit Garg <sumit.garg@oss.qualcomm.com>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
-	Cristian Marussi <cristian.marussi@arm.com>, arm-scmi@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
- callbacks
-Message-ID: <dhunzydod4d7vj73llpuqemxb5er2ja4emxusr66irwf77jhhb@es4yd2axzl25>
-References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
- <aT--ox375kg2Mzh-@sumit-X1>
+	s=arc-20240116; t=1765802505; c=relaxed/simple;
+	bh=rdE/6cZ/6KdpW7XLUHDsAQWV7nAAUwM2+LrIbpi625Y=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pp5Otazy+7RZdT1B3lxMZfe8Ypl54vIK++l2s/HHaK6fAs7vXrHJObUrnqafKVcHzzHVGr1b1Aq3Mub15lpGubKlrvT1G3+gdQjc8EOv22NBIVRnywKUKgUfuZFsuckU8nClbs6MTwmWqkJM5u3c2XEN2Dhj2XNT6twznk8WvkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.196])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dVKQP5h3Yz1HC9R;
+	Mon, 15 Dec 2025 20:39:57 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 86CC440568;
+	Mon, 15 Dec 2025 20:41:39 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwCX0wX4AUBpmMgkAA--.42771S2;
+	Mon, 15 Dec 2025 13:41:39 +0100 (CET)
+Message-ID: <fbe8a62785626e324278892ecfd8a4112cdbac6f.camel@huaweicloud.com>
+Subject: Re: [RFC][PATCH v2] ima: Add support for staging measurements for
+ deletion and trimming
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: corbet@lwn.net, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, jmorris@namei.org, serge@hallyn.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com, 
+	nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date: Mon, 15 Dec 2025 13:41:26 +0100
+In-Reply-To: <CAHC9VhRUQxayj=XcdfbfHka-=N+B8cNk7Grg3QWGOTOz3BKfgw@mail.gmail.com>
+References: <20251212171932.316676-1-roberto.sassu@huaweicloud.com>
+	 <CAHC9VhRUQxayj=XcdfbfHka-=N+B8cNk7Grg3QWGOTOz3BKfgw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yi4htjinth7u7w6q"
-Content-Disposition: inline
-In-Reply-To: <aT--ox375kg2Mzh-@sumit-X1>
+X-CM-TRANSID:LxC2BwCX0wX4AUBpmMgkAA--.42771S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3WrW7Gw4UJr45WF13Xr47Arb_yoW3AFyfpa
+	y3W340kr4kJ348twn7Jw4ku3yF9w1kta1UJrn8t343A3W5CFW0kFWak3yYvFZIyr18t3Wj
+	ywnIgrZ8J3Z8ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgADBGk-fpcGmAAAsk
 
-
---yi4htjinth7u7w6q
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
- callbacks
-MIME-Version: 1.0
-
-Hello Sumit,
-
-On Mon, Dec 15, 2025 at 04:54:11PM +0900, Sumit Garg wrote:
-> On Thu, Dec 11, 2025 at 06:14:54PM +0100, Uwe Kleine-K=F6nig wrote:
-> > Hello,
+On Fri, 2025-12-12 at 21:06 -0500, Paul Moore wrote:
+> On Fri, Dec 12, 2025 at 12:19=E2=80=AFPM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
 > >=20
-> > the objective of this series is to make tee driver stop using callbacks
-> > in struct device_driver. These were superseded by bus methods in 2006
-> > (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
-> > methods.")) but nobody cared to convert all subsystems accordingly.
+> > Introduce the ability of staging the entire (or a portion of the) IMA
+> > measurement list for deletion. Staging means moving the current content=
+ of
+> > the measurement list to a separate location, and allowing users to read=
+ and
+> > delete it. This causes the measurement list to be atomically truncated
+> > before new measurements can be added. Staging can be done only once at =
+a
+> > time. In the event of kexec(), staging is reverted and staged entries w=
+ill
+> > be carried over to the new kernel.
 > >=20
-> > Here the tee drivers are converted. The first commit is somewhat
-> > unrelated, but simplifies the conversion (and the drivers). It
-> > introduces driver registration helpers that care about setting the bus
-> > and owner. (The latter is missing in all drivers, so by using these
-> > helpers the drivers become more correct.)
+> > User space is responsible to concatenate the staged IMA measurements li=
+st
+> > portions following the temporal order in which the operations were done=
+,
+> > together with the current measurement list. Then, it can send the colle=
+cted
+> > data to the remote verifiers.
 > >=20
-> > The patches #4 - #17 depend on the first two, so if they should be
-> > applied to their respective subsystem trees these must contain the first
-> > two patches first.
->=20
-> Thanks Uwe for your efforts to clean up the boilerplate code for TEE bus
-> drivers.
-
-Thanks for your feedback. I will prepare a v2 and address your comments
-(whitespace issues and wrong callback in the shutdown method).
-
-> > Note that after patch #2 is applied, unconverted drivers provoke a
-> > warning in driver_register(), so it would be good for the user
-> > experience if the whole series goes in during a single merge window.
->=20
-> +1
->=20
-> I suggest the whole series goes via the Jens tree since there shouldn't
-> be any chances for conflict here.
->=20
-> > So
-> > I guess an immutable branch containing the frist three patches that can
-> > be merged into the other subsystem trees would be sensible.
+> > Also introduce the ability of trimming N measurements entries from the =
+IMA
+> > measurements list, provided that user space has already read them. Trim=
+ming
+> > combines staging and deletion in one operation.
 > >=20
-> > After all patches are applied, tee_bus_type can be made private to
-> > drivers/tee as it's not used in other places any more.
+> > The benefit of these solutions is the ability to free precious kernel
+> > memory, in exchange of delegating user space to reconstruct the full
+> > measurement list from the chunks. No trust needs to be given to user sp=
+ace,
+> > since the integrity of the measurement list is protected by the TPM.
 > >=20
+> > By default, staging/trimming the measurements list does not alter the h=
+ash
+> > table. When staging/trimming are done, IMA is still able to detect
+> > collisions on the staged and later deleted measurement entries, by keep=
+ing
+> > the entry digests (only template data are freed).
+> >=20
+> > However, since during the measurements list serialization only the SHA1
+> > digest is passed, and since there are no template data to recalculate t=
+he
+> > other digests from, the hash table is currently not populated with dige=
+sts
+> > from staged/deleted entries after kexec().
+> >=20
+> > Introduce the new kernel option ima_flush_htable to decide whether or n=
+ot
+> > the digests of staged measurement entries are flushed from the hash tab=
+le.
+> >=20
+> > Then, introduce ascii_runtime_measurements_staged_<algo> and
+> > binary_runtime_measurement_staged_<algo> interfaces to stage/trim/delet=
+e
+> > the measurements. Use 'echo A > <IMA interface>' and
+> > 'echo D > <IMA interface>' to respectively stage and delete the entire
+> > measurements list. Use 'echo N > <IMA interface>', with N between 1 and
+> > LONG_MAX, to stage the selected portion of the measurements list, and
+> > 'echo -N > <IMA interface>' to trim N measurements entries.
 >=20
-> Feel free to make the tee_bus_type private as the last patch in the series
-> such that any followup driver follows this clean approach.
+> In an effort to help preserve the sanity of admins, I might suggest
+> avoiding commands that start with a dash/'-'.  I'd probably also
+> simplify the commands a bit and drop all/'A' since the measurement
+> list could change at any time, stick with an explicit number and just
+> let the admin go over, e.g. write LONG_MAX, which effectively becomes
+> 'A'.  I think you could do everything you need with just two commands:
+>=20
+>   <NUM>: stage <NUM> entries
+>       D: delete staged entries
 
-There is a bit more to do for that than I'm willing to invest. With my
-patch series applied `tee_bus_type` is still used in
-drivers/tee/optee/device.c and drivers/tee/tee_core.c. Maybe it's
-sensible to merge these two files into a single one.
+If the goal is that the verifier always receives a TPM quote aligned
+with the measurements, the remote attestation agent in the target
+system has to walk over the measurements to find N.
 
-The things I wonder about additionally are:
+The difference between the approach I was suggesting and Steven's is
+that I calculate N after staging all measurements and store the
+exceeding measurements locally until the next attestation request. If
+the verifier supports it, the exceeding measurements could be stored
+also there.
 
- - if CONFIG_OPTEE=3Dn and CONFIG_TEE=3Dy|m the tee bus is only used for
-   drivers but not devices.
+That means that I don't need to walk in the measurement list to stage,
+because I stage the entire list (with list_replace()). I do a walk
+after detaching, without interfering with the processes adding new
+measurements (hot path).
 
- - optee_register_device() calls device_create_file() on
-   &optee_device->dev after device_register(&optee_device->dev).
-   (Attention half-knowledge!) I think device_create_file() should not
-   be called on an already registered device (or you have to send a
-   uevent afterwards). This should probably use type attribute groups.
-   (Or the need_supplicant attribute should be dropped as it isn't very
-   useful. This would maybe be considered an ABI change however.)
+Steven's approach is to read the measurements list to calculate N and
+stage/trim the measurement based on N. As Steven/Gregory pointed out,
+at this point you could already trim N because you already have the
+measurements list.
 
- - Why does optee_probe() in drivers/tee/optee/smc_abi.c unregister all
-   optee devices in its error path (optee_unregister_devices())?
+However, in this case you have to walk through the measurements list as
+an RCU reader in the hot path, calculate N, and walk through the
+measurements list again as an RCU writer in the hot path to stage/trim
+N. In the next attestation request, you would read the previous
+exceeding measurements again.
 
-Best regards
-Uwe
+One major obstacle of my approach, as Gregory pointed out, was that
+staged measurements were not carried over during kexec(). While I
+thought about coordinating remote attestation requests with kexec() in
+a management engine, there can be cases where this is harder to
+achieve.
 
---yi4htjinth7u7w6q
-Content-Type: application/pgp-signature; name="signature.asc"
+I managed to solve that by introducing a third linked list containing
+the measurements to delete, by doing another list replace between
+staged and measurements to delete (when the 'D' command is issued),
+under the hot path lock. That allowed me to take the hot path lock
+during kexec() and prepend the staged measurements before the non-
+staged ones (that reminded me that I should properly inform user space=20
+if kexec() consumed staged measurements before the 'D' command was
+executed, i.e. it lost the race with kexec()).
 
------BEGIN PGP SIGNATURE-----
+The approach to keep the stage N approach would be necessary if
+exceeding measurements cannot be stored either locally or at the
+verifier side.
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmk/1ZQACgkQj4D7WH0S
-/k5/qQf+NMGu64faecGn5WH+D12Iy/zqcfwRwh4Jv5/z/9n8f9SRKuXtH6kM3hvA
-3qOp/DbN1aDIomzFdgcPUq9OJEeC51ry33uJW7UWHl5lUk4UawAR28vX/1R3nV7t
-tz6suQjR2YkY2a/sAxZTSKZZ/A6RTGDxePvozHzuElCmEYDDbNhZpHsvgsLqs3T+
-Cso9zyEM2is8g673w2FcAnlW3JL/8jKClvZfcm9JEIRlx48uP6uCqbWeRcYS3rrt
-JBUGmWSMNEfYbD3cQbhybixsTPLzfKqkGrbJSyVRkJ2AUAQuRS14sbv7uSGhFw3B
-QWGugzTdTxcSdC0SqkOUZrCXgVUKmA==
-=VNEB
------END PGP SIGNATURE-----
+For me it would be fine to keep both approaches, but I still see
+advantages of the stage all approach.
 
---yi4htjinth7u7w6q--
+Thanks
+
+Roberto
+
+> I intentionally left out the trim/'T' command, because I'm not sure it
+> is really necessary if you are going to implement the phased
+> stage/delete process.  Yes, you have to do two operations (stage and
+> delete) as opposed to just the trim, but I'd probably take the
+> simplicity of just supporting a single approach over the trivial
+> necessity of having to do two operations in userspace.
+>=20
+> Staging also has the benefit of having a sane way of handling two
+> tasks racing to stage the measurement list.  I could see cases where
+> multiple tasks race to trim the list and end up trimming more than was
+> intended since they both hit in sequence.
+>=20
+> If you did want to take a trim approach over a stage/delete approach,
+> I could see something like this working:
+>=20
+>  1. process opens the measurement list
+>  2. process reads from the measurement list, keeps the fd open
+>  3. process does whatever it wants to preserve the list
+>  4. process writes <NUM> to the measurement list, kernel trims <NUM> entr=
+ies
+>  5. process closes fd
+>=20
+> ... error handling shouldn't be too bad.  The process only writes
+> <NUM> to the fd if it has already finished whatever it needs to do to
+> preserve the list outside the kernel, think of it as a "commit"
+> operation on a transaction.  If the fd is closed for some reason
+> (error, interruption, killed) before the process writes <NUM> to the
+> fd then IMA does nothing - no trim takes place.
+>=20
+> Multiple process racing can easily be solved when the log is opened;
+> only one open(O_RDWR) is allowed at a time, other racing processes
+> will get EBUSY.  Yes, one process could block others from trimming by
+> holding the fd open for an extended period of time, but I would expect
+> that CAP_SYS_ADMIN and root fs perms would be required to open the log
+> read/write (not to mention any LSM access rights in place).
+>=20
+> I know I mentioned this basic idea to someone at some point, but there
+> have been various discussion threads and multiple people over a fairly
+> lengthy time that I've lost track of where it was mentioned.  If it
+> was already discussed on-list and rejected for a good reason you can
+> simply ignore the above approach ... although I still think the
+> stage/delete API could be simplified as described :)
+>=20
+> [UPDATE: as I'm reading Steven's replies it looks like he has proposed
+> something very similar to the above]
+>=20
+
 
