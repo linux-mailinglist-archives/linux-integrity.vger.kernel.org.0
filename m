@@ -1,45 +1,45 @@
-Return-Path: <linux-integrity+bounces-7980-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7981-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 496E5CBCCA0
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 08:37:38 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BA1DCBCC97
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 08:37:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F26BB300D48C
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 07:36:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 85C763012767
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 07:36:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7696931355A;
-	Mon, 15 Dec 2025 07:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B794C3148C9;
+	Mon, 15 Dec 2025 07:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKoIYD90"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgHD24/X"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4552E31354E;
-	Mon, 15 Dec 2025 07:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749CA313E3A;
+	Mon, 15 Dec 2025 07:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765784167; cv=none; b=JYcS/8J7OuM7/chrcQvwp3NMtEv/V2kt0rShrFXBm8OTYdE31Us4Bq38G8cRfbNAPg1xt2Pg0+vW+aq7JGjNghJtjgATCNlbkILE1jOK8RCaA6Xu7rWJ9mZFp5yMkuPZ0HLNQL0zbNK6n407EaRfKsRHhzCrthjRMXNuLnw3YjI=
+	t=1765784214; cv=none; b=aOpmXTiLqygcl0t8GOTMX7Op2wX2LiY28XsJxwJtZclAe7r/o9JfwOvfHykWypHp/iKwtUCK/53HAOb3hwI1kpG0OYINXZyq7UmAecGYr6hzrklIO0iRgNAG5ni2u2FFs7D7R6utwFYHMYKvP7NsdyDmudK64I+9cB0JINWwy2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765784167; c=relaxed/simple;
-	bh=SNNUq7KU8x7V29ijpjlfv//eZVaSmLl/pwwin6AI2Pc=;
+	s=arc-20240116; t=1765784214; c=relaxed/simple;
+	bh=2OORDja30gMmDgyUzWDMnzZHy7weS+LKrcxmBaHXsyQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e9FYAVQAd7nmvIbGEaFduRFn8GzB8enKMree6V1mbnFzygQ2LOsPhRxSZGZDbUH7RujTOJqjHIZaojPYckYFADPnJFNqEANSefu30obzQMfyRZ4H1zCxhkPV3ZQpW0ZNtImj1ynT1y7B7l9xDU6TflNZLmsVfHtGcc/pD32jab8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKoIYD90; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF9B0C4CEF5;
-	Mon, 15 Dec 2025 07:36:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oXmiNcATkdNKN97ujXuu2xwEMTGtVTxS3mWi5ZvxIoYHREpeY0Erx0zegXq+i5tuGI95NOckSMfLPCEU9CA/o58PiAdQ0B2P0EhxGHZCRL6+fRB3r7U4JY0i4Nu/RtOb3/yu1Di4Yffqbf3lsOZ/+7+vKjxAJjfwV7QjhZ2eXys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgHD24/X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 857EBC4CEF5;
+	Mon, 15 Dec 2025 07:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765784167;
-	bh=SNNUq7KU8x7V29ijpjlfv//eZVaSmLl/pwwin6AI2Pc=;
+	s=k20201202; t=1765784214;
+	bh=2OORDja30gMmDgyUzWDMnzZHy7weS+LKrcxmBaHXsyQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TKoIYD90uMhvL1iKT6lsyEsfKo1ciIMwa87/Kxr9OUecFwxG7gh9QHOVQiGdWmvRb
-	 VVD/JYfzHq1k7pZ5iDCgzZ+WMxUXYRlXqhsAOSxlOL547VDldypSJD3eBJLxbHVS0V
-	 /I8FhmP8jqpM+6rX2VTe/DG33t8qA/CqMHoNkAZL7c+n/uMpWVlioZ9gLGyZqm5g/5
-	 E8ob/bFFCirmOEx3fE2APOW59zAZ91UxMtUNQ6QK7ACtrlys8omR6RxIxeH/pjsCFa
-	 uYNDcVAe7zMj0LxOCU0CZ5Sj29V6Tbuv/gokKX1TY/76V0XxYKHS8fJaqw8a+3ehr1
-	 AX9q/Af5TPLVg==
-Date: Mon, 15 Dec 2025 16:36:00 +0900
+	b=WgHD24/X7wV/312UORX7oPByYndRHEuIcpls3eBGVVuiAKyuZWDBzXNzHyULu2Uqs
+	 UJnvdrDkliHw1yJiyUEtsufuGp8afT1ayToFgM1So+/ihBws8tgadsKcRgVXsX5EAR
+	 Xrx2037bgdCEmkOGeiv7uqe7VVfUzU3oqbSaVLKMF8hdv3tFxkv4HI/geTeeGOG63X
+	 giudcdejoZ1sNxi6PeOggbNSHRsmrQ+zWdGMMpGQNJrSgl5CdWz3dmFW8KQo7BLAdX
+	 mnuyplfoCOOi4nO0IEyHPamRjTZqUeP2KQhzCTq2AEok96vLhvHFn7G27+Dm8bgA78
+	 OmUZl3pnRLa/A==
+Date: Mon, 15 Dec 2025 16:36:46 +0900
 From: Sumit Garg <sumit.garg@kernel.org>
 To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
 Cc: Jens Wiklander <jens.wiklander@linaro.org>,
@@ -52,11 +52,10 @@ Cc: Jens Wiklander <jens.wiklander@linaro.org>,
 	op-tee@lists.trustedfirmware.org, linux-integrity@vger.kernel.org,
 	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 14/17] KEYS: trusted: Migrate to use tee specific
- driver registration function
-Message-ID: <aT-6YJJRaLq5BcvQ@sumit-X1>
+Subject: Re: [PATCH v1 15/17] KEYS: trusted: Make use of tee bus methods
+Message-ID: <aT-6jibmsCK6BPhP@sumit-X1>
 References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
- <0b3ce259fa26e59ef24a91ca070e2b08feeede82.1765472125.git.u.kleine-koenig@baylibre.com>
+ <aab4c00b7e89abce7bcd8241c47f3398fb7227f8.1765472125.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,18 +65,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0b3ce259fa26e59ef24a91ca070e2b08feeede82.1765472125.git.u.kleine-koenig@baylibre.com>
+In-Reply-To: <aab4c00b7e89abce7bcd8241c47f3398fb7227f8.1765472125.git.u.kleine-koenig@baylibre.com>
 
-On Thu, Dec 11, 2025 at 06:15:08PM +0100, Uwe Kleine-König wrote:
-> The tee subsystem recently got a set of dedicated functions to register
-> (and unregister) a tee driver. Make use of them. These care for setting the
-> driver's bus (so the explicit assignment can be dropped) and the driver
-> owner (which is an improvement this driver benefits from).
+On Thu, Dec 11, 2025 at 06:15:09PM +0100, Uwe Kleine-König wrote:
+> The tee bus got dedicated callbacks for probe and remove.
+> Make use of these. This fixes a runtime warning about the driver needing
+> to be converted to the bus methods.
 > 
 > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
 > ---
->  security/keys/trusted-keys/trusted_tee.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  security/keys/trusted-keys/trusted_tee.c | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 
 Reviewed-by: Sumit Garg <sumit.garg@oss.qualcomm.com>
 
@@ -85,32 +83,50 @@ Reviewed-by: Sumit Garg <sumit.garg@oss.qualcomm.com>
 
 > 
 > diff --git a/security/keys/trusted-keys/trusted_tee.c b/security/keys/trusted-keys/trusted_tee.c
-> index aa3d477de6db..3cea9a377955 100644
+> index 3cea9a377955..6e465c8bef5e 100644
 > --- a/security/keys/trusted-keys/trusted_tee.c
 > +++ b/security/keys/trusted-keys/trusted_tee.c
-> @@ -264,7 +264,6 @@ static struct tee_client_driver trusted_key_driver = {
+> @@ -202,9 +202,9 @@ static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
+>  		return 0;
+>  }
+>  
+> -static int trusted_key_probe(struct device *dev)
+> +static int trusted_key_probe(struct tee_client_device *rng_device)
+>  {
+> -	struct tee_client_device *rng_device = to_tee_client_device(dev);
+> +	struct device *dev = &rng_device->dev;
+>  	int ret;
+>  	struct tee_ioctl_open_session_arg sess_arg;
+>  
+> @@ -244,13 +244,11 @@ static int trusted_key_probe(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int trusted_key_remove(struct device *dev)
+> +static void trusted_key_remove(struct tee_client_device *dev)
+>  {
+>  	unregister_key_type(&key_type_trusted);
+>  	tee_client_close_session(pvt_data.ctx, pvt_data.session_id);
+>  	tee_client_close_context(pvt_data.ctx);
+> -
+> -	return 0;
+>  }
+>  
+>  static const struct tee_client_device_id trusted_key_id_table[] = {
+> @@ -261,11 +259,11 @@ static const struct tee_client_device_id trusted_key_id_table[] = {
+>  MODULE_DEVICE_TABLE(tee, trusted_key_id_table);
+>  
+>  static struct tee_client_driver trusted_key_driver = {
+> +	.probe		= trusted_key_probe,
+> +	.remove		= trusted_key_remove,
 >  	.id_table	= trusted_key_id_table,
 >  	.driver		= {
 >  		.name		= DRIVER_NAME,
-> -		.bus		= &tee_bus_type,
->  		.probe		= trusted_key_probe,
->  		.remove		= trusted_key_remove,
+> -		.probe		= trusted_key_probe,
+> -		.remove		= trusted_key_remove,
 >  	},
-> @@ -272,12 +271,12 @@ static struct tee_client_driver trusted_key_driver = {
+>  };
 >  
->  static int trusted_tee_init(void)
->  {
-> -	return driver_register(&trusted_key_driver.driver);
-> +	return tee_client_driver_register(&trusted_key_driver);
->  }
->  
->  static void trusted_tee_exit(void)
->  {
-> -	driver_unregister(&trusted_key_driver.driver);
-> +	tee_client_driver_unregister(&trusted_key_driver);
->  }
->  
->  struct trusted_key_ops trusted_key_tee_ops = {
 > -- 
 > 2.47.3
 > 
