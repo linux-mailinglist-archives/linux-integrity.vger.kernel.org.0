@@ -1,176 +1,144 @@
-Return-Path: <linux-integrity+bounces-7984-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7985-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 065ADCBCDC7
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 08:54:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07EE1CBCEC4
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 09:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0E7CB301587A
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 07:54:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 002DD303B1AC
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 08:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B59329366;
-	Mon, 15 Dec 2025 07:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F5131B80E;
+	Mon, 15 Dec 2025 07:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UyjrkH6K"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="Uq2bIztd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240C430E82B;
-	Mon, 15 Dec 2025 07:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38199267B07;
+	Mon, 15 Dec 2025 07:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765785267; cv=none; b=FGamO8XXnM/QVtcLsaxVS/YkcrtN941U32wyMRnriYLYGr9fynRmXl8SHXqZ/t0Vb6bFeA8f0gEhKXBjbQyN2SmfUsYmFt5TMHkXtf6DbZHTprnyaDXVuwG+N1K2CFaSEEh62NAMbaYmCYAIKl6S2XjXrKPWynBXRXUCzFW1Rws=
+	t=1765785377; cv=none; b=lGHtC/ZDgRaiXAJ+qwEJoiMQh8zw+4K0YRAIVfQsL8e3AFIBuGnkswxMhyVKHAuM4sgUr31q77ccPoP6+oSp14Khi+y3T67CUPYJlDdsWSlfMBBQJVDkx0WZtEa5sgocfaSn0ALMpQwgDJSiqqZE3bU7LXcPeroTV4SX6G6UauM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765785267; c=relaxed/simple;
-	bh=v/92elu0+HvI8sObJNUPXdOl7LjF+U9jY1BY0X5X81M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rHFcx4Sv+o64YYpvTXIoPB1wqMm7zI9VX8Jlrq/7TRxJ8hxIyV6GQkm5871DWen/IbVvQtXohl3a8nTSh6FapNMSh+WzrqzKDg3Xwjhf42/0NCiGa5J+VWuRVE3nGx0ki2/aSfrCP3PwxJQBgDS2Y3YqGogFDSclbjDa8rRjETc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UyjrkH6K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22802C19421;
-	Mon, 15 Dec 2025 07:54:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765785266;
-	bh=v/92elu0+HvI8sObJNUPXdOl7LjF+U9jY1BY0X5X81M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UyjrkH6KtnThxV3unDn7bby/GiiSiQSPftVpABjisSWU2uFJUOSoLOiJ1XOF8YjOp
-	 I40Nc0tRoSWwyXZw3oFdsyqnAaagma7510sWIAUaNrX4+PjLfSRLD+et/jmtmNvL+p
-	 fd4Yahc3vd/qAeYLCUCQr2QPTBPU15ibXG263IfBgtMJdpwq5a9dE2n/RsAVjJh07f
-	 tBknFVn5nsVHGveX55SVFDgvPqaXIiTsXroBhscCr8hxdkkc2/x2GJwzqKuPDYEuTo
-	 2nEzH829pMn8wb+YSsr4CldmREQ2VzSqT1cZK03HP02QTa8mhN+yfwFBVy6LBXOcO0
-	 DVK3rvhjXpeNg==
-Date: Mon, 15 Dec 2025 16:54:11 +0900
-From: Sumit Garg <sumit.garg@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Jens Wiklander <jens.wiklander@linaro.org>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Sumit Garg <sumit.garg@oss.qualcomm.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	arm-scmi@vger.kernel.org, netdev@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
- callbacks
-Message-ID: <aT--ox375kg2Mzh-@sumit-X1>
-References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+	s=arc-20240116; t=1765785377; c=relaxed/simple;
+	bh=XJ2C48bNGczhzbFYdllCVk+xAw6mDhHvB1AG1DY/ODU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IJoyCMpA6bJMlIYEN35I+Gj8K98ZnvzhN2p4B8kz1M1nd4pEQgiMeZHPbUU4SM7NC1nCjhMTwqkJUh2WMRGvVPm3VPBITG/0pPgTdmc5vqqIA9d66BIcSvQ+v5Jk/9KuuN+ud8BFwY9QEntDYnrqhyDy6QLYPL/tKSwls3o+I0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=Uq2bIztd; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1765785374;
+	bh=XJ2C48bNGczhzbFYdllCVk+xAw6mDhHvB1AG1DY/ODU=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=Uq2bIztd35aZA6bfHrz/o4DDtyJwHA7OONyvUgR1vHNOVusGBfmsubzd12MO76fJa
+	 bvr9+zAXBtUsbe3hxYuHjrIPlCgBqIIKW2Txrw8lgd4qr9n9qzEtKUKbxru7t0p1Ym
+	 ycPttFz4QEwpqL3LV+78HctInLPsKomFO07yMjjk=
+Received: from [172.19.249.232] (unknown [205.220.129.225])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id DFCEB1C0144;
+	Mon, 15 Dec 2025 02:56:04 -0500 (EST)
+Message-ID: <60cf8bd2afbad5e930119d73ccf069e95ee4fd9d.camel@HansenPartnership.com>
+Subject: Re: [PATCH] KEYS: trusted: Use get_random-fallback for TPM
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, David Howells <dhowells@redhat.com>, 
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge
+ E. Hallyn" <serge@hallyn.com>,  Mimi Zohar <zohar@linux.ibm.com>, "open
+ list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>, "open list:SECURITY
+ SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list
+ <linux-kernel@vger.kernel.org>
+Date: Mon, 15 Dec 2025 16:55:58 +0900
+In-Reply-To: <aT-uHgyYw3XhFasi@kernel.org>
+References: <20251214213236.339586-1-jarkko@kernel.org>
+	 <64e3e4e0a92848fd3b02a213c754f096d2026463.camel@HansenPartnership.com>
+	 <aT-uHgyYw3XhFasi@kernel.org>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
 
-On Thu, Dec 11, 2025 at 06:14:54PM +0100, Uwe Kleine-König wrote:
-> Hello,
-> 
-> the objective of this series is to make tee driver stop using callbacks
-> in struct device_driver. These were superseded by bus methods in 2006
-> (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
-> methods.")) but nobody cared to convert all subsystems accordingly.
-> 
-> Here the tee drivers are converted. The first commit is somewhat
-> unrelated, but simplifies the conversion (and the drivers). It
-> introduces driver registration helpers that care about setting the bus
-> and owner. (The latter is missing in all drivers, so by using these
-> helpers the drivers become more correct.)
-> 
-> The patches #4 - #17 depend on the first two, so if they should be
-> applied to their respective subsystem trees these must contain the first
-> two patches first.
+On Mon, 2025-12-15 at 08:43 +0200, Jarkko Sakkinen wrote:
+> On Mon, Dec 15, 2025 at 07:18:41AM +0900, James Bottomley wrote:
+> > On Sun, 2025-12-14 at 23:32 +0200, Jarkko Sakkinen wrote:
+> > > 1. tpm2_get_random() is costly when TCG_TPM2_HMAC is enabled and
+> > > thus its use should be pooled rather than directly used. This
+> > > both reduces latency and improves its predictability.
+> > >=20
+> > > 2. Linux is better off overall if every subsystem uses the same
+> > > source for the random bistream as the de-facto choice, unless
+> > > *force majeure* reasons point to some other direction.
+> > >=20
+> > > In the case, of TPM there is no reason for trusted keys to invoke
+> > > TPM directly.
+> >=20
+> > That assertion isn't correct: you seem to have forgotten we had
+> > this argument six or seven years ago, but even that was a reprise
+> > of an even earlier one.=C2=A0 Lore doesn't go back far enough for the
+> > intermediate one on the tpm list, but the original was cc'd to
+> > lkml:
+> >=20
+> > https://lore.kernel.org/all/1378920168.26698.64.camel@localhost/
+> >=20
+> > The decision then was to use the same random source as the key
+> > protection.=C2=A0 Unfortunately most of the active participants have
+> > moved on from IBM and I don't have their current email addresses,
+> > but the bottom line is there were good reasons to do trusted keys
+> > this way that your assertions above don't overcome.=C2=A0 I'm not sayin=
+g
+> > we shouldn't reconsider the situation, but we need a reasoned
+> > debate rather than simply doing it by fiat.
+>=20
+> The way I see this is that given that kernel is not running inside
+> TPM, FIPS certification of the RNG does not have any measurable
+> value.
+>=20
+> Random data generation should happen as part of object creation
+> process i.e. should be fully self-contained process within the TPM in
+> order for FIPS to matter.
 
-Thanks Uwe for your efforts to clean up the boilerplate code for TEE bus
-drivers.
+In FIPS terms, there's no distinction between keeping the whole
+generation process internal to the TPM and using the FIPS certified rng
+of the TPM to source the contents of a kernel protected key.  Both
+provide equally valid, and FIPS certified data.
 
-> 
-> Note that after patch #2 is applied, unconverted drivers provoke a
-> warning in driver_register(), so it would be good for the user
-> experience if the whole series goes in during a single merge window.
+> In the case of sealed data objects, this not the case.
 
-+1
+FIPS is concerned with origins and provenance, so it most certainly is
+the case even for trusted keys.  However, if the Kernel RNG is fips
+certified (as can happen with certain FIPS modules) it is the case that
+either the Kernel or TPM RNG would satisfy the FIPS requirement.  The
+question for trusted key users is really do they always want the TPM
+FIPS RNG or should we allow mixing with the kernel RNG even in the non-
+FIPS case.
 
-I suggest the whole series goes via the Jens tree since there shouldn't
-be any chances for conflict here.
+Perhaps, rather than getting hung up on FIPS sources and to facilitate
+debating the bedrock requirements, we could turn this around and ask
+what the use case you have for using the in-kernel RNG is?
 
-> So
-> I guess an immutable branch containing the frist three patches that can
-> be merged into the other subsystem trees would be sensible.
-> 
-> After all patches are applied, tee_bus_type can be made private to
-> drivers/tee as it's not used in other places any more.
-> 
+Regards,
 
-Feel free to make the tee_bus_type private as the last patch in the series
-such that any followup driver follows this clean approach.
+James
 
--Sumit
 
-> Best regards
-> Uwe
-> 
-> Uwe Kleine-König (17):
->   tee: Add some helpers to reduce boilerplate for tee client drivers
->   tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
->   tee: Adapt documentation to cover recent additions
->   hwrng: optee - Make use of module_tee_client_driver()
->   hwrng: optee - Make use of tee bus methods
->   rtc: optee: Migrate to use tee specific driver registration function
->   rtc: optee: Make use of tee bus methods
->   efi: stmm: Make use of module_tee_client_driver()
->   efi: stmm: Make use of tee bus methods
->   firmware: arm_scmi: optee: Make use of module_tee_client_driver()
->   firmware: arm_scmi: Make use of tee bus methods
->   firmware: tee_bnxt: Make use of module_tee_client_driver()
->   firmware: tee_bnxt: Make use of tee bus methods
->   KEYS: trusted: Migrate to use tee specific driver registration
->     function
->   KEYS: trusted: Make use of tee bus methods
->   tpm/tpm_ftpm_tee: Make use of tee specific driver registration
->   tpm/tpm_ftpm_tee: Make use of tee bus methods
-> 
->  Documentation/driver-api/tee.rst             | 18 +----
->  drivers/char/hw_random/optee-rng.c           | 26 ++----
->  drivers/char/tpm/tpm_ftpm_tee.c              | 31 +++++---
->  drivers/firmware/arm_scmi/transports/optee.c | 32 +++-----
->  drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 ++-----
->  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++----
->  drivers/rtc/rtc-optee.c                      | 27 ++-----
->  drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++
->  include/linux/tee_drv.h                      | 12 +++
->  security/keys/trusted-keys/trusted_tee.c     | 17 ++--
->  10 files changed, 164 insertions(+), 138 deletions(-)
-> 
-> 
-> base-commit: 7d0a66e4bb9081d75c82ec4957c50034cb0ea449
-> -- 
-> 2.47.3
-> 
+
 
