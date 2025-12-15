@@ -1,159 +1,200 @@
-Return-Path: <linux-integrity+bounces-7989-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7990-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99253CBE7E3
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 16:06:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AB70CBE62F
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 15:50:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0F9363001180
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 15:06:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3AFB33017EF0
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 14:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C62730FF25;
-	Mon, 15 Dec 2025 14:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E698C33D6C6;
+	Mon, 15 Dec 2025 14:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UJ85NnV8"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="0/MwqUlQ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88ADA30FF3A;
-	Mon, 15 Dec 2025 14:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFD62DCC13
+	for <linux-integrity@vger.kernel.org>; Mon, 15 Dec 2025 14:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807358; cv=none; b=ROxyCBWLYZeTPXZ9+yOgrJfBbOxOhgLRut6nXXfkHC5aMW3wjXo/A1rQNaSmxziVyJnHGT0SqXVR2bS/wv+uu6HuKK4gA9+5y2txf82z1KH89TzzECaIeP/Xj27q7nOXBvezHUFdr7TU9I63YVtl3WCsdsLe2+9Zegv4Q0MmTBU=
+	t=1765808261; cv=none; b=gpRBcyGtAZ1ihfZ6K2KM9xuJ0J/MWLmZ4O+pVx5sxUPzcJ2zFPo3gjjGN+ScqpqtWREMukZFeRxQ8ot6AKLsN4Q7+ZSpMSJ8sqTrRnoXviiaELw1iBGBd8MQJXubKAXc/sO7pbiyTizuUFDS+zow49MNV13BBn7yXLGEtxaTCQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807358; c=relaxed/simple;
-	bh=CNk3Gny6Eq3dZRKg7BGu1UbnDEcS8g5xr5JBzKALF8g=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=vGctnuB/HgTVUNMYKYrV6sIdkGDNgpUZuMdEgc/s9ErDu4Z+HPU4G4S1FyT+toI9/pMbjnVOY81A9CH9mNZtI1KY+7KaDm11OtUjd5FPFgPd7bEEWuUNcka3dGqfcABUkghsU5iMP1S60YFWjMCWdfYUw3Q5Sau4CcSsfevKkSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UJ85NnV8; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BF74uKe021469;
-	Mon, 15 Dec 2025 14:02:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=BZZ8gU
-	lX9jobhrDx9zOK3xqdapuyPIterguTVyWFnmc=; b=UJ85NnV8BxA6m/NzsC1T/C
-	SB+xvMuD9kbKXibV4JBG1DgRU1YqOEDD6OYT80n4KGZ0z+0/kMtgnz1Tk1IwJxRw
-	vN0PCZBVBvuHybSiWbDXr1wk7zrQl5TbuBInGaV8cTyhTvEAejPbP0ZWUytjh5uu
-	P1ukByJnscn6joymUkGMao1xVkvmEnf06c7snvKR3cPPk9xXp3aJlh50pAARCKuU
-	c3jBcwO5VIQQsr6jy02Bhb1UIEkSfob6a24c3nvw4WoQoQBFrBlehTrhuf0KUpc2
-	plNkQ0TFnNMeycavrvP38yYnVGZfBSTaE5M5sHL6X/qFjJbHDj5xnI2Sj255VBbw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0wjpsw67-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Dec 2025 14:02:12 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BFDvDMK007741;
-	Mon, 15 Dec 2025 14:02:12 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0wjpsw5y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Dec 2025 14:02:12 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BFB1Biu026761;
-	Mon, 15 Dec 2025 14:02:11 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4b1jfs6ygr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Dec 2025 14:02:11 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BFE2A4r29295354
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 15 Dec 2025 14:02:10 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B788858055;
-	Mon, 15 Dec 2025 14:02:10 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D131A58043;
-	Mon, 15 Dec 2025 14:02:09 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.148.132])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 15 Dec 2025 14:02:09 +0000 (GMT)
-Message-ID: <8075a38abe5f7256ae8ce70359f78822f277ccfa.camel@linux.ibm.com>
-Subject: Re: [PATCH V2 1/1] IMA event log trimming
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: steven chen <chenste@linux.microsoft.com>, linux-integrity@vger.kernel.org
-Cc: roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, corbet@lwn.net, serge@hallyn.com,
-        paul@paul-moore.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, anirudhve@linux.microsoft.com,
-        gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com,
-        sushring@linux.microsoft.com, linux-doc@vger.kernel.org
-In-Reply-To: <20251210235314.3341-2-chenste@linux.microsoft.com>
-References: <20251210235314.3341-1-chenste@linux.microsoft.com>
-	 <20251210235314.3341-2-chenste@linux.microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 15 Dec 2025 09:02:09 -0500
+	s=arc-20240116; t=1765808261; c=relaxed/simple;
+	bh=KVuyHGeUtpLkpGJYZbfb5WtDJicjtg3giXBlS+vhN0U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YWeM7L5b1zj6B2KIHLkUmtmNbt7Wc10TJSN3RZPQzZO4RqHfr8gDUFXFg9JJGKx5ByaIgvEdpu5blW+hEahBPK8aHO95UG5WevbRW/vLxVcP4q8MQg6aGb1o4MuH/0xJi2wL3M1O8nJq//ls2Hvz89XtJxAMcDj7DbKxa0wyPSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=0/MwqUlQ; arc=none smtp.client-ip=209.85.218.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-b7cee045187so693305166b.0
+        for <linux-integrity@vger.kernel.org>; Mon, 15 Dec 2025 06:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1765808255; x=1766413055; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ppOcPFqIwq9P7NGqZqTz1/tjn18c3F+fMKSBb9x2/Cg=;
+        b=0/MwqUlQdu789oy/P41nfqLWb7EnWXY85sbaj1smEzYO15dtuHKqLxDRGab17o4MUA
+         D9TVJCvajbSn5mubZh7M9K5h4OT9pI/1qbh3beoBI1s+cs7/fK/G4sJRfPkfXVwqwBh3
+         SXWcXenTFagxpnUecAa9mbcMVNCQ0U0akf+J4xD5CfLDcNwb1vJBMEz8cd19gt/edXo+
+         6prwzju0rCEY9Jjuz4PQX50jj8chQizO7srmUjvdHU5PwJBwJQDO9vd0BIIvgTsOQttn
+         fOSTaGyo9VctrEKOw8TJvYNlkT8bhVXwWSOKvHyDcKwgwrFzGeqWEX80uILWCX3i0XTf
+         hi4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765808255; x=1766413055;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ppOcPFqIwq9P7NGqZqTz1/tjn18c3F+fMKSBb9x2/Cg=;
+        b=fnRelVp6MxUCHHRXERpf+ITyRMVxin9NkejkiobCZ3djU0/onsHpEQv2d9ZurHG8kV
+         FAPcPfTI/AkEbOcEO0xIJJ4Sjvw8EL2PpzZfkZ74hfmhCgA8xc0brqSjX9xYxttDWLUB
+         8RaUPojK1wqqrH7nIsd/1zYvbNbfg9u4YOAWxLl1jcHbZpqhdGTnBHYri3EJPxSJcOWE
+         uHuxnVlXdxKxSf04SVy76JGh2IZJAiS2uq6wpqYP46QuO/NyA540COW+NtIOT8jCuRB2
+         /m4oZjRHxpDkDA6zZzp8D5gwdn8jpcgMi7YNYb147vVbBgy6300wqAjYod9uwel3vlqK
+         om9w==
+X-Forwarded-Encrypted: i=1; AJvYcCXZSe9Lch2yJsy64epRB8ORgJ4teSdt2FOaHN/V659/+c9qcug6X48k55UvXhmq932jVw6WRBMYykHtSzyIARk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTz8tH9mhoKAJir75PfK7aZYPcR9QmZu+/hiQddWYhUk6RqV8b
+	Q105ChAKHBBfWW16pS2QkjJpphBefuZ5NvO0aGCkAQE9puVoaq43E/FOUPOAu4h+ysw=
+X-Gm-Gg: AY/fxX6pFJFEzy877c1wVwBhUqJ1kfCrtq6LW3DLYiCvw9MN/CDK+ZjBAmlpos4zKl2
+	9ofwe0cLD6NuOhX4RmvtD/8LEm49KfagbBbwdarRlIZzXpfm98b01ZH3SvgyOWV3OdQMV5A9EK/
+	wJtB/E+1awv495EYuuDL3bP3njugL+p7lCZMryh2ICuVjLBb6YR8R2Zsbw76r7YVAxbtlgipSuq
+	FlU3Rc0dEN0GF1SUlfNict5I0uy3+zbX0NwPvNdGVB3JHkY3LtuY1LoeTrHr2xYtoBpUCL3pnOf
+	ph31CFXcudAMTMHXIhTZxM9snEO3Ix5afkxBWDZa9fBBcw3RlAPrlBovJBfmamqi525s0fjReBy
+	6KcDaRfoB2Anty2lTXO9eyqYQDNS4B+QuwvBlq8gf6HA4PNhuGAvpnZ+I54o4OQUHvHLyvCw0j/
+	vADwvw8jDkX0zBvpIRuud7Az/dSewioFXN9Mej5YX64FuGYiGb99Foi7shNQ==
+X-Google-Smtp-Source: AGHT+IF5kWl8asvVZ2gDn2/ukMC7FmJVzWuHgbBPUo4GSSTrWpKfiHxIiV3JEK3vNep6zj7EVQ2rxQ==
+X-Received: by 2002:a17:907:a909:b0:b7c:cc8d:14ef with SMTP id a640c23a62f3a-b7d218d55fdmr1188092466b.32.1765808254923;
+        Mon, 15 Dec 2025 06:17:34 -0800 (PST)
+Received: from localhost (ip-046-005-122-062.um12.pools.vodafone-ip.de. [46.5.122.62])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b7cfa56c152sm1380034166b.56.2025.12.15.06.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Dec 2025 06:17:34 -0800 (PST)
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: Jens Wiklander <jens.wiklander@linaro.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?utf-8?b?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Sumit Garg <sumit.garg@oss.qualcomm.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	=?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	=?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Huewe <peterhuewe@gmx.de>
+Cc: op-tee@lists.trustedfirmware.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	arm-scmi@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: [PATCH v2 00/17] tee: Use bus callbacks instead of driver callbacks
+Date: Mon, 15 Dec 2025 15:16:30 +0100
+Message-ID: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAwMSBTYWx0ZWRfX0yV7Mf5blC3w
- AaO1LQKAV2UYiiBmHcseJKAGO3F/+6KIyRmoZD2DQ2KJk+q7DUc7eEwKfsgDytucCUFYUvi57Ey
- d0o29cMG7s9+yWxp59xyVOM4pVwhBR7/Zv6xU+7UQP8tmlIrRIWPjhtaLsz3rtfNHl09K+S/w9D
- P1nz6lJsBQ8sYX7GPqHx4ayh9rjIEYIW4U6fDKkiL4MdPHKqwdf+sK7f70RZqd4y3cQVgp3Xz0Z
- 4zgVFYNPZwIIr2U79PAU/1g2tLeldGA4UJROeqAXDG6iBs8b9+O2XcNlRKxTa8hBe8jPn34h/LS
- l/huY3z1qFJd406XLv5EW7TFFYdrz/7lxWdN5hWCVXReFngE4WXY60Rs9XZtWrGaIekxVKx8j/e
- JnxqTf5elVfwTsq+hR6q62poVDYfrA==
-X-Proofpoint-GUID: kz-flyVU7aY1Qe3_3Kbcd_XJMYHE1aej
-X-Proofpoint-ORIG-GUID: IvWNjI-eD8XLKzsdRPq7o10CmrEeb0Zp
-X-Authority-Analysis: v=2.4 cv=Kq5AGGWN c=1 sm=1 tr=0 ts=694014e4 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=yMhMjlubAAAA:8 a=qxrvh61xDQAC6cKOOUwA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-15_02,2025-12-15_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 impostorscore=0 clxscore=1011 spamscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130001
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3083; i=u.kleine-koenig@baylibre.com; h=from:subject:message-id; bh=KVuyHGeUtpLkpGJYZbfb5WtDJicjtg3giXBlS+vhN0U=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBpQBhBsL1Z+rYFoGFHUfEy6nbD85QotpwGnuS0G OxYNqNRFI2JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaUAYQQAKCRCPgPtYfRL+ TugUB/9E31O/wKyUkNJNEPUiyayhLen3mT/3afyja8AKlZtLRRSDYD85SklWs8WUYR25f620Tug HCQFCBGP6zvWFDFUJWDts8iS5V7u/2f3fzK4EwWEIO8RjWf//RCGbcOXzrjD+gHhyiO4ntF2NWr 3ospR0B/APcHFEMI3zfkmIaPNlyEhNrddsNRbaHKA+WTWhZm7A/yqOnVYIJ6MLuTrhjHLZZoL5u gBimMOyT/Dmu6TUF9ex7Rhk+vookCt9jpn+vbxsz0ArRtMIo0W8fVdouxPDFA9SMn/bCn6BBJ+B fl85F7WiQwNbfWoeC8/qrjWMCGDfxgyRZi39jRQ+nWgTC5V5
+X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
 
-Hi Steven,
+Hello,
 
-The main difference between this patch and Roberto's version is the length =
-of
-time needed for locking the measurement list, which prevents new entries fr=
-om
-being appended to the measurement list.  In Roberto's version, the list hea=
-d is
-moved quickly and the lock released.  Measuring the total amount of time ne=
-eded
-to trim the measurement list ignores the benefit of his version. I plan on
-reviewing both this version and his (hopefully today).
+the objective of this series is to make tee driver stop using callbacks
+in struct device_driver. These were superseded by bus methods in 2006
+(commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+methods.")) but nobody cared to convert all subsystems accordingly.
 
-There are a number of other things missing from this patch, which I'll enum=
-erate
-when I review it.
+Here the tee drivers are converted. The first commit is somewhat
+unrelated, but simplifies the conversion (and the drivers). It
+introduces driver registration helpers that care about setting the bus
+and owner. (The latter is missing in all drivers, so by using these
+helpers the drivers become more correct.)
 
-On Wed, 2025-12-10 at 15:53 -0800, steven chen wrote:
-> This patch is for trimming N entries of the IMA event logs. It will also
-> cleaning the hash table if ima_flush_htable is set.
+v1 of this series is available at
+https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylibre.com
 
-Please refer to "Describe your changes in imperative mood" in the "Describe=
- your
-changes" section of Documentation/process/submitting-patches.rst.
+Changes since v1:
 
->=20
-> It provides a userspace interface ima_trim_log that can be used to input
-> number N to let kernel to trim N entries of IMA event logs. When read
-> this interface, it returns number of entries trimmed last time.
->=20
-> Signed-off-by: steven chen <chenste@linux.microsoft.com>
+ - rebase to v6.19-rc1 (no conflicts)
+ - add tags received so far
+ - fix whitespace issues pointed out by Sumit Garg
+ - fix shutdown callback to shutdown and not remove
 
---=20
-thanks,
+As already noted in v1's cover letter, this series should go in during a
+single merge window as there are runtime warnings when the series is
+only applied partially. Sumit Garg suggested to apply the whole series
+via Jens Wiklander's tree.
+If this is done the dependencies in this series are honored, in case the
+plan changes: Patches #4 - #17 depend on the first two.
 
-Mimi
+Note this series is only build tested.
+
+Uwe Kleine-König (17):
+  tee: Add some helpers to reduce boilerplate for tee client drivers
+  tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
+  tee: Adapt documentation to cover recent additions
+  hwrng: optee - Make use of module_tee_client_driver()
+  hwrng: optee - Make use of tee bus methods
+  rtc: optee: Migrate to use tee specific driver registration function
+  rtc: optee: Make use of tee bus methods
+  efi: stmm: Make use of module_tee_client_driver()
+  efi: stmm: Make use of tee bus methods
+  firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+  firmware: arm_scmi: Make use of tee bus methods
+  firmware: tee_bnxt: Make use of module_tee_client_driver()
+  firmware: tee_bnxt: Make use of tee bus methods
+  KEYS: trusted: Migrate to use tee specific driver registration
+    function
+  KEYS: trusted: Make use of tee bus methods
+  tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+  tpm/tpm_ftpm_tee: Make use of tee bus methods
+
+ Documentation/driver-api/tee.rst             | 18 +----
+ drivers/char/hw_random/optee-rng.c           | 26 ++----
+ drivers/char/tpm/tpm_ftpm_tee.c              | 31 +++++---
+ drivers/firmware/arm_scmi/transports/optee.c | 32 +++-----
+ drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 ++-----
+ drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++----
+ drivers/rtc/rtc-optee.c                      | 27 ++-----
+ drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++
+ include/linux/tee_drv.h                      | 12 +++
+ security/keys/trusted-keys/trusted_tee.c     | 17 ++--
+ 10 files changed, 164 insertions(+), 138 deletions(-)
+
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+-- 
+2.47.3
 
 
