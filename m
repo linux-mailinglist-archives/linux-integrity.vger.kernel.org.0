@@ -1,63 +1,60 @@
-Return-Path: <linux-integrity+bounces-7998-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-7999-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D313BCBFBE5
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 21:26:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64CB1CBFD14
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 21:47:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BAA9D301AD30
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 20:25:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 331BC304EDA4
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Dec 2025 20:45:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CF22F0C76;
-	Mon, 15 Dec 2025 20:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DCC332EB6;
+	Mon, 15 Dec 2025 20:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTp7RHDd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c/2aHAhs"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07EB549659;
-	Mon, 15 Dec 2025 20:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168C3331A6B;
+	Mon, 15 Dec 2025 20:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765830354; cv=none; b=uRkjWFYfT86NPCocxIssCYYDAmnqgduNB4CLKGMy7r2we3vynvPLwi0NXK3s3A1VQtZgRzWr2fN2seZ+i2e/B5QU4yG/WERWnQx5Lq0ITVYuA5T9gIumRtvZir5FB6hI0/JjYKd4cGSb5sThWWVQl8CverHoYzEhF/GGrnbfj4Q=
+	t=1765830958; cv=none; b=cMkTaZhkbp/XplV96Y6SZaWDcZOuc55hg/LHlTvcM7rBpJJRh0J7WuvnZZGfjY0CHFuiIjDzETs/o5PSYvzQf3iqtnyqPV4NCq1R2vmazAsT0X1Kpv9AlN8Oi3g1Ck3KOtamiUgiTUk65GQACZw0YSOCueAH4POJRzinQGQroFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765830354; c=relaxed/simple;
-	bh=1Zs5iK+zp4mSNpNc63YlbrbF/AZQvpY/4eaBQSOF+J0=;
+	s=arc-20240116; t=1765830958; c=relaxed/simple;
+	bh=dpOu2TYpHv17u6kWo4ouCwBz8hVFUIS+JHvLsT3UZQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a+d3qtj5U04V2Q1tXZuuiRwKe5Kgl4xVWe5e+vjutTfrdxxnHpf90U3Mk62iYpkwxvLtusw/SzYNWkivd/N6AxRL3v25MDxNufHYufiLPwp5ZGpxS6igYaShzwAEnr02iLHrb9L6fue1l9joDfI3BiIuXXPnGrHqy1WRax2an/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTp7RHDd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A69C4CEF5;
-	Mon, 15 Dec 2025 20:25:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Bf4c6yt1ojV9+yUxLZUuK7rwG8MfnDUeqb/pmZh/EvYgiopu68038TxhBoeF07TMi/uIvs5bfHoAOXfTAHK66IyE3srLv7sPKCjL8PhkMPZF9Ulb1wtw10Pcfa9P5tm47VzymLxgp+c+TRbGMAoh+wc5PqLVhKPcc3P5ceCgu6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c/2aHAhs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB66C4CEF5;
+	Mon, 15 Dec 2025 20:35:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765830353;
-	bh=1Zs5iK+zp4mSNpNc63YlbrbF/AZQvpY/4eaBQSOF+J0=;
+	s=k20201202; t=1765830957;
+	bh=dpOu2TYpHv17u6kWo4ouCwBz8hVFUIS+JHvLsT3UZQE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lTp7RHDdErEXKyeZ5jp5jGnlhCMn1VhjAQzkclkM4A4wyyti1aFwf9Dk2RNvVF3rK
-	 I3ZvWoPq6BwSjpY75C803/94gFOoeUhjyCbGOLJ+7Otgewb8NWgQ8VnR3diQLFiWu4
-	 xejMPtnLrC1ZQmlYvstj9QtiHcGnFUyUfZv9980r7aoqbd4GoHJ3HgM/nFL3x/iTGG
-	 k2mxPb8dPjmRfvCOY5ac8szfB2243iAuCGf/tvo9Hlku1i5+w9/L1s/efVIXVm+ZFJ
-	 MjqCeF2T3oU+AYSIZv+N3eA/puEq01AD8V55i6j+u/wfNLFUud9UBeyOIAYN+C02k9
-	 ZZuq7I8YrBrXQ==
-Date: Mon, 15 Dec 2025 22:25:50 +0200
+	b=c/2aHAhsGKHm5DxegvAlRz0n73krzW5d/pF1AIcFRpMdcSDRaVDpFXvxtpOuAMsqW
+	 IxmhoTFwN7Xl/jq6F9q5x8KoWhOlybNWGa6fdzr2JEyywY3UMxKqEIUcTt6zS4/2Zg
+	 G+Oq9ABa94yOf61qraLV5i8IrsP9+PNO7Zf704hbZJtzip8BkGEG/215/3GeNgiAcT
+	 xISrucreksVRDGN8TxuXe3/qzuefwFJXcuez9bsmEMQVDqTkf5nZx+CNkUWVYUf0m4
+	 18VruZqEO9DVEmIlfQon4f7v8IjXfvt/SBGuK192XhHKpcs6p9cMCnJ/8q+JToIMbu
+	 tP+QDglLcL8vQ==
+Date: Mon, 15 Dec 2025 22:35:54 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: James Bottomley <James.Bottomley@hansenpartnership.com>
+To: Eric Biggers <ebiggers@kernel.org>
 Cc: linux-integrity@vger.kernel.org, David Howells <dhowells@redhat.com>,
 	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
 	Mimi Zohar <zohar@linux.ibm.com>,
 	"open list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>,
 	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
+	open list <linux-kernel@vger.kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>
 Subject: Re: [PATCH] KEYS: trusted: Use get_random-fallback for TPM
-Message-ID: <aUBuzsOx0x8EwatB@kernel.org>
+Message-ID: <aUBxKqL5hFibwI3r@kernel.org>
 References: <20251214213236.339586-1-jarkko@kernel.org>
- <64e3e4e0a92848fd3b02a213c754f096d2026463.camel@HansenPartnership.com>
- <aT-uHgyYw3XhFasi@kernel.org>
- <60cf8bd2afbad5e930119d73ccf069e95ee4fd9d.camel@HansenPartnership.com>
- <aT_Lh8l3E2yQJYI7@kernel.org>
- <aUBk2nUpd2V8p9qc@kernel.org>
- <5446f517848338b4ccac8d7bbedf4cc1ed315cb4.camel@HansenPartnership.com>
+ <20251215200939.GA10539@google.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,53 +63,81 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5446f517848338b4ccac8d7bbedf4cc1ed315cb4.camel@HansenPartnership.com>
+In-Reply-To: <20251215200939.GA10539@google.com>
 
-On Mon, Dec 15, 2025 at 09:01:49PM +0100, James Bottomley wrote:
-> On Mon, 2025-12-15 at 21:43 +0200, Jarkko Sakkinen wrote:
-> [...]
-> > I think there is misunderstanding with FIPS.
+On Mon, Dec 15, 2025 at 08:09:39PM +0000, Eric Biggers wrote:
+> On Sun, Dec 14, 2025 at 11:32:36PM +0200, Jarkko Sakkinen wrote:
+> > 1. tpm2_get_random() is costly when TCG_TPM2_HMAC is enabled and thus its
+> >    use should be pooled rather than directly used. This both reduces
+> >    latency and improves its predictability.
 > > 
-> > Having FIPS certificated RNG in TPM matters but it only matters only
-> > in the sense that callers can be FIPS certified as they use that RNG
-> > as a source.
+> > 2. Linux is better off overall if every subsystem uses the same source for
+> >    the random bistream as the de-facto choice, unless *force majeure*
+> >    reasons point to some other direction.
 > > 
-> > Using FIPS certified RNG does not magically make callers be FIPS 
-> > ceritified actors. The data is contaminated in that sense at the
-> > point when kernel acquires it.
+> > In the case, of TPM there is no reason for trusted keys to invoke TPM
+> > directly.
+> > 
+> > Thus, unset '.get_random', which causes fallback to kernel_get_random().
+> > 
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >  security/keys/trusted-keys/trusted_tpm1.c | 6 ------
+> >  1 file changed, 6 deletions(-)
+> > 
+> > diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+> > index 636acb66a4f6..33b7739741c3 100644
+> > --- a/security/keys/trusted-keys/trusted_tpm1.c
+> > +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> > @@ -936,11 +936,6 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
+> >  	return ret;
+> >  }
+> >  
+> > -static int trusted_tpm_get_random(unsigned char *key, size_t key_len)
+> > -{
+> > -	return tpm_get_random(chip, key, key_len);
+> > -}
+> > -
+> >  static int __init init_digests(void)
+> >  {
+> >  	int i;
+> > @@ -992,6 +987,5 @@ struct trusted_key_ops trusted_key_tpm_ops = {
+> >  	.init = trusted_tpm_init,
+> >  	.seal = trusted_tpm_seal,
+> >  	.unseal = trusted_tpm_unseal,
+> > -	.get_random = trusted_tpm_get_random,
+> >  	.exit = trusted_tpm_exit,
+> >  };
 > 
-> I think FIPS certification is a red herring.  The point being made in
-> the original thread is about RNG quality.  The argument essentially
-> being that the quality of the TPM RNG is known at all points in time
-> but the quality of the kernel RNG (particularly at start of day when
-> the entropy pool is new) is less certain.
+> Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+> 
+> Agreed that kernel code should prefer the standard Linux RNG whenever
+> possible.  Note that the standard Linux RNG already incorporates entropy
+> from hardware RNGs, when available.
 
-OK, that's fair point.
+I get also the argument of using TPM RNG here just for the sake of
+matching the creation with fully internally generated TPM objects.
 
-I.e., using TPM2_GetRandom here makes sense, not because of FIPS
-certification per se but because it is guarantees matching entropy to
-other types of keys generated with TPM2_Create (as everything uses the
-same RNG).
+I'm a bit little in-between what to do with this patch.
 
-I can buy this but think it would really make sense to add a comment to
-the source code.
-
-I was thinking something along the lines of:
+I suggested a comment to James. Other alternative would be do this
+change and update this patch with a comment:
 
 /*
- * tpm_get_random() is used here directly instead of relying kernel's
- * RNG in order to match RNGs with objects generated by TPM internally.
+ * tpm_get_random() was used previously here as the RNG in order to match
+ * rng with the objects generated internally inside the TPM. However, since
+ * e.g., FIPS certification requires kernel crypto and rng to be FIPS
+ * certified, formally kernel_get_random() is equally legit source for
+ * the random numbers.
  */
 
-It does not mention FIPS explicitly because I think this is already
-enforcing condition and thus enough. And e.g., applies also when one
-uses an emulator (and thus useful tidbit for that use and purpose).
+It's longish but I think this fully covers the whole issue.
+
+And if there is ever need to return to this, it's a good remainder of
+the design choices.
 
 > 
-> Regards,
-> 
-> James
-> 
+> - Eric
 
 BR, Jarkko
 
