@@ -1,59 +1,61 @@
-Return-Path: <linux-integrity+bounces-8064-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8065-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE945CC1D40
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Dec 2025 10:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 513FBCC1D07
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Dec 2025 10:35:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4137B30943A1
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Dec 2025 09:33:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C4336304067E
+	for <lists+linux-integrity@lfdr.de>; Tue, 16 Dec 2025 09:33:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B6133CEB9;
-	Tue, 16 Dec 2025 09:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6C233D6DC;
+	Tue, 16 Dec 2025 09:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="giLT3QDe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HYWqJEVP"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4949933AD86;
-	Tue, 16 Dec 2025 09:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF5032860A;
+	Tue, 16 Dec 2025 09:22:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765876937; cv=none; b=CIaO9X9KdYdrvU0+r/u5u7IDjrBokhClVZIz0O12OoIjxOBsT23BidqkZ0JqJhBD8lpJ1PDDxQITnCxQ+rRSAUU26Acaj7wRKk+VrBDK5sebqEGbaxwvAPR53mCdPj+mthXIMEtRSXy2PgSvEujXclFYMzqY9mPxkRlHf97678U=
+	t=1765876941; cv=none; b=d5UAf7Hy+dMHEUDQzWfFQZRYo8WJZsRwisENKHcYQ7QdcdgXmO0HNm9nxhtlFjg5Yz+hVOW4ZVdCahXzDmnIngnA3FMZEHcBoLtefzaObbEG2tKfQMha1vv9+PgXn/LPFvkIw3MjS6Jl6W3rxl2c10yq/PIimEEmtJRYsaKSNnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765876937; c=relaxed/simple;
-	bh=hA8zNSxUO04oiGoLyUyUfoyhO2bJOaezJ7Z2BJID+po=;
+	s=arc-20240116; t=1765876941; c=relaxed/simple;
+	bh=9z1wVQJ20sb+PyEwaOgUsDg90w63BGYT0g7MKMfuuMo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SZD5anWneT/dXLg5Rt9umZ9/mS5H4MKx+T1f04ZPGvtXTF/BOR/RWEpPoos2N2k4R6QKoVJxhv9MxMk4FyaCaHJ3ztGeLdKMjZKbeaM7nyvy90r+Vnfitm+h58BjBdloUabP8N6ncRU0BvMSmpxCss61dsJfwUJbDQElgtvTNeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=giLT3QDe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B4CBC4CEF1;
-	Tue, 16 Dec 2025 09:22:16 +0000 (UTC)
+	 MIME-Version; b=iUVeakkXwM3JNo6kMN7hjBSOkOwJdVfaeNdhF1EqwpD1BeiHAS0i1KErqyX11ZEDEErq62NN+bIgqUEEnp3zVrwJHO7Rv55FR8KzW4zogyq39orgJlIazseeOLobxdgyXyO00lKcMqmo6+yMm8D47rx71S0mkpdK3QUpMyViAnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HYWqJEVP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E3D9C113D0;
+	Tue, 16 Dec 2025 09:22:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765876936;
-	bh=hA8zNSxUO04oiGoLyUyUfoyhO2bJOaezJ7Z2BJID+po=;
+	s=k20201202; t=1765876941;
+	bh=9z1wVQJ20sb+PyEwaOgUsDg90w63BGYT0g7MKMfuuMo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=giLT3QDeX7udyxAAT7MR1CgSv+ph/t7YxgsuFS7I/F4VF58KsHcF9x7rNzQvKRrov
-	 1ubNdrpVqfskQbaGGcyx7mVyhENy8FjxpW31ty01glhyA2EjkUe893KGuIJJ7X2tR+
-	 XjTJh4mo63bDJoltUAP/qwuDnYbKYocHK9HppbWel+cx/DAfCqjqGKS82FfVjxHBCA
-	 2/49dAlBD5rkEsPNPi6aap2NXV1xNQS2D6C32nySw2IusOTbZnmaXoixA9qY2NHJoK
-	 HX+aSDp8SZwhKoMGfeGcLg1G7BTGCECk53uLEcQ0cx3P19uqq84soAnIKOdAEn7BQD
-	 Ef76TMQZcc3Vw==
+	b=HYWqJEVP1DX2fDbcsRvN2a3/uV6oC0XF6ItzauKLlhQ+WEz6yNIdy2WmyB7sL+C5a
+	 pdmGJ9Ls80sIv9hw68ujrS5vTmGUPkMfM+LxHsT98t+MHRpnmbeL6NvjshBUX7VTan
+	 A+OyMEAAhLTnVby9Y5qewLFotBgCx9yf4gPP/46u7K1MI1TdChVUNElQa5EOpJKiDK
+	 XTyYCc0tToYbiVv+zjrGwi8k/bJpXmcxb3IJ8VoDoz/kMN4MIOLQOAhA4ZkGbXU9xy
+	 V4E1z7GcfitcL2wIXyv+HO73UISC5NQO/6x+0bmAlhxgG/tfXMz4RaljErkjGSdWqf
+	 TJ76I366ylZTg==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
+Cc: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	Jonathan McDowell <noodles@earth.li>,
 	David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
 	Paul Moore <paul@paul-moore.com>,
 	James Morris <jmorris@namei.org>,
 	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-kernel@vger.kernel.org (open list),
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
 	keyrings@vger.kernel.org (open list:KEYS/KEYRINGS),
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
-Subject: [PATCH v8 05/12] tpm2-sessions: Define TPM2_NAME_MAX_SIZE
-Date: Tue, 16 Dec 2025 11:21:39 +0200
-Message-Id: <20251216092147.2326606-6-jarkko@kernel.org>
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v8 06/12] KEYS: trusted: Open code tpm2_buf_append()
+Date: Tue, 16 Dec 2025 11:21:40 +0200
+Message-Id: <20251216092147.2326606-7-jarkko@kernel.org>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20251216092147.2326606-1-jarkko@kernel.org>
 References: <20251216092147.2326606-1-jarkko@kernel.org>
@@ -65,119 +67,79 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Define TPM2_NAME_MAX_SIZE, which describes the maximum size for hashes
-encoded as TPMT_HA, which the prime identifier used for persistent and
-transient keys in TPM2 protocol.
+From: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
 
-Set its value to 'SHA512_DIGEST_SIZE + 2', as SHA512 has the largest
-digest size of the algorithms in TCG algorithm repository.
+tpm2_buf_append_auth() has a single call site and most of its parameters
+are redundant. Open code it to the call site so that less cross-referencing
+is required while browsing the source code.
 
-In additionl, rename TPM2_NAME_SIZE as TPM2_NULL_NAME_SIZE in order to
-avoid any possible confusion.
-
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>
+Reviewed-by: Jonathan McDowell <noodles@earth.li>
 ---
 v6:
-- Rewrote the commit message.
-v2:
-- Rename TPM2_NAME_SIZE as TPM2_NULL_NAME_SIZE.
+- Trimmed the patch by removing comment update as it is out of scope.
 ---
- drivers/char/tpm/tpm-sysfs.c     |  2 +-
- drivers/char/tpm/tpm2-sessions.c |  2 +-
- include/linux/tpm.h              | 37 +++++++++++++++++++++-----------
- 3 files changed, 27 insertions(+), 14 deletions(-)
+ security/keys/trusted-keys/trusted_tpm2.c | 40 ++++-------------------
+ 1 file changed, 7 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm-sysfs.c b/drivers/char/tpm/tpm-sysfs.c
-index 94231f052ea7..4a6a27ee295d 100644
---- a/drivers/char/tpm/tpm-sysfs.c
-+++ b/drivers/char/tpm/tpm-sysfs.c
-@@ -314,7 +314,7 @@ static ssize_t null_name_show(struct device *dev, struct device_attribute *attr,
- 			      char *buf)
- {
- 	struct tpm_chip *chip = to_tpm_chip(dev);
--	int size = TPM2_NAME_SIZE;
-+	int size = TPM2_NULL_NAME_SIZE;
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index a7ea4a1c3bed..d3a5c5f2b926 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -190,36 +190,6 @@ int tpm2_key_priv(void *context, size_t hdrlen,
+ 	return 0;
+ }
  
- 	bin2hex(buf, chip->null_key_name, size);
- 	size *= 2;
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index 4149379665c4..525b8622d1c3 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -137,7 +137,7 @@ struct tpm2_auth {
- 	 * we must compute and remember
- 	 */
- 	u32 name_h[AUTH_MAX_NAMES];
--	u8 name[AUTH_MAX_NAMES][2 + SHA512_DIGEST_SIZE];
-+	u8 name[AUTH_MAX_NAMES][TPM2_MAX_NAME_SIZE];
- };
- 
- #ifdef CONFIG_TCG_TPM2_HMAC
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 202da079d500..e10f2096eae7 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -27,9 +27,33 @@
- 
- #define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
- 
-+/*
-+ * SHA-512 is, as of today, the largest digest in the TCG algorithm repository.
-+ */
- #define TPM2_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
-+
-+/*
-+ * A TPM name digest i.e., TPMT_HA, is a concatenation of TPM_ALG_ID of the
-+ * name algorithm and hash of TPMT_PUBLIC.
-+ */
-+#define TPM2_MAX_NAME_SIZE	(TPM2_MAX_DIGEST_SIZE + 2)
-+
-+/*
-+ * The maximum number of PCR banks.
-+ */
- #define TPM2_MAX_PCR_BANKS	8
- 
-+/*
-+ * fixed define for the size of a name.  This is actually HASHALG size
-+ * plus 2, so 32 for SHA256
-+ */
-+#define TPM2_NULL_NAME_SIZE	34
-+
-+/*
-+ * The maximum size for an object context
-+ */
-+#define TPM2_MAX_CONTEXT_SIZE	4096
-+
- struct tpm_chip;
- struct trusted_key_payload;
- struct trusted_key_options;
-@@ -139,17 +163,6 @@ struct tpm_chip_seqops {
- /* fixed define for the curve we use which is NIST_P256 */
- #define EC_PT_SZ	32
- 
--/*
-- * fixed define for the size of a name.  This is actually HASHALG size
-- * plus 2, so 32 for SHA256
+-/**
+- * tpm2_buf_append_auth() - append TPMS_AUTH_COMMAND to the buffer.
+- *
+- * @buf: an allocated tpm_buf instance
+- * @session_handle: session handle
+- * @nonce: the session nonce, may be NULL if not used
+- * @nonce_len: the session nonce length, may be 0 if not used
+- * @attributes: the session attributes
+- * @hmac: the session HMAC or password, may be NULL if not used
+- * @hmac_len: the session HMAC or password length, maybe 0 if not used
 - */
--#define TPM2_NAME_SIZE	34
+-static void tpm2_buf_append_auth(struct tpm_buf *buf, u32 session_handle,
+-				 const u8 *nonce, u16 nonce_len,
+-				 u8 attributes,
+-				 const u8 *hmac, u16 hmac_len)
+-{
+-	tpm_buf_append_u32(buf, 9 + nonce_len + hmac_len);
+-	tpm_buf_append_u32(buf, session_handle);
+-	tpm_buf_append_u16(buf, nonce_len);
 -
--/*
-- * The maximum size for an object context
-- */
--#define TPM2_MAX_CONTEXT_SIZE 4096
+-	if (nonce && nonce_len)
+-		tpm_buf_append(buf, nonce, nonce_len);
 -
- struct tpm_chip {
- 	struct device dev;
- 	struct device devs;
-@@ -211,7 +224,7 @@ struct tpm_chip {
- 	/* saved context for NULL seed */
- 	u8 null_key_context[TPM2_MAX_CONTEXT_SIZE];
- 	 /* name of NULL seed */
--	u8 null_key_name[TPM2_NAME_SIZE];
-+	u8 null_key_name[TPM2_NULL_NAME_SIZE];
- 	u8 null_ec_key_x[EC_PT_SZ];
- 	u8 null_ec_key_y[EC_PT_SZ];
- 	struct tpm2_auth *auth;
+-	tpm_buf_append_u8(buf, attributes);
+-	tpm_buf_append_u16(buf, hmac_len);
+-
+-	if (hmac && hmac_len)
+-		tpm_buf_append(buf, hmac, hmac_len);
+-}
+-
+ /**
+  * tpm2_seal_trusted() - seal the payload of a trusted key
+  *
+@@ -518,9 +488,13 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 		 * could repeat our actions with the exfiltrated
+ 		 * password.
+ 		 */
+-		tpm2_buf_append_auth(&buf, options->policyhandle,
+-				     NULL /* nonce */, 0, 0,
+-				     options->blobauth, options->blobauth_len);
++		tpm_buf_append_u32(&buf, 9 + options->blobauth_len);
++		tpm_buf_append_u32(&buf, options->policyhandle);
++		tpm_buf_append_u16(&buf, 0);
++		tpm_buf_append_u8(&buf, 0);
++		tpm_buf_append_u16(&buf, options->blobauth_len);
++		tpm_buf_append(&buf, options->blobauth, options->blobauth_len);
++
+ 		if (tpm2_chip_auth(chip)) {
+ 			tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT, NULL, 0);
+ 		} else  {
 -- 
 2.39.5
 
