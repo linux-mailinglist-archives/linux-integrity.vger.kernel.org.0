@@ -1,518 +1,180 @@
-Return-Path: <linux-integrity+bounces-8084-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8085-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D14ACC6071
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Dec 2025 06:19:23 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E28ECC672C
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Dec 2025 08:56:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BA0C430119D5
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Dec 2025 05:19:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 58C093004854
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Dec 2025 07:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C40015CD74;
-	Wed, 17 Dec 2025 05:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D04B6335BBE;
+	Wed, 17 Dec 2025 07:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SWynUWbP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ELlSPoe4"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EB41400C;
-	Wed, 17 Dec 2025 05:19:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86537313264;
+	Wed, 17 Dec 2025 07:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765948761; cv=none; b=bmreb20FRPoHvSag+BWr/Ih79KumGSx/oVDABOShzcFnO6CGoVjXONxi+Txk5ZYXPj/prvsBcE7TpVJPojpJnKu3p1L/89xql4abnxIMpNzZ9CHNLinc1Dopxcvxaz6bYKI5z3LIQXUl6h6gB7YJpQVplWEcZhFZCxPRfxtAOsw=
+	t=1765958157; cv=none; b=Wr7408CjKwmcJb9V3lDsIgh+isc/oxglNPgVFZEHgE5iSK2NlJ4QdEALWQUtXD3ISyfP3ofnAN2bVgYQAW7rXwrML1+64ybWzbLGQjnFuwmV/GBbXZW4l7FKzhM5Tt6OSM7yEAbYKWRVfFVKS214s+keNPq7ksuQbkhGp97Ybmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765948761; c=relaxed/simple;
-	bh=ZI+0Mubb6bcO1CdRuvRewf59mRKoOHZ0E5AplJaHUt4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VLnG6PpbhmMFxJTtBlvtPKD0E2uR7MCDk2VlMPbiuuKNhZ/gd35Uy/WVEt341eV3GTKEmb5w9vuPjz0Czc9/nrcDaJHxCUaK+N0IsjPXUgF0wRdklECGMMY0ZFVIZuDigxrkPWGOnt+T5kx1vtDsHKQ/WNZ6Ff7mlq4C/pBgbe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SWynUWbP; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BH31JSJ016846;
-	Wed, 17 Dec 2025 05:19:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=IEj/V4
-	BEBtCAXeoeESvEmt1J5auaw4tIt4d3UmFNkMI=; b=SWynUWbPmjhIQyS2P/Qf7d
-	Ms3sbiFkv3bPqtP3Or81kGkkjzdvTaHQ53G2imvUdwq5P2XiOPknmwe7XyNcjrWK
-	MmJUzRJ37Jum8b+PKR9Q68cldT1pNp94J0AAIJKOEItLum/6x7aswCRLgDr9DFo1
-	KMql5bwzmc/xbS2Ci3533Gw2Mmn5EMFxmY3BfZhOEouz06WciEDrLnXaKNv03tPG
-	xoDllBtxeRpD0vlmBRb9xKauyAPBbFNuFeHqHjVEd/C/Z8WRZDQGuFZNf1D7aE7v
-	as/xdQKfX9RHg7xpniJyvCxZC+N3ziPWKW7sqPxh1R/NF0TFfCX2WGjgB31TTc/A
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0wjq2kp7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 05:19:02 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BH5J2xx012630;
-	Wed, 17 Dec 2025 05:19:02 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0wjq2kp5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 05:19:02 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BH3LOYT014406;
-	Wed, 17 Dec 2025 05:19:01 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4b1mpk07nw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 05:19:01 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BH5IxMs59834732
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Dec 2025 05:18:59 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9215E5805C;
-	Wed, 17 Dec 2025 05:18:59 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B2EDF5805B;
-	Wed, 17 Dec 2025 05:18:54 +0000 (GMT)
-Received: from [9.98.107.249] (unknown [9.98.107.249])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 17 Dec 2025 05:18:54 +0000 (GMT)
-Message-ID: <41a3a9ae-6d30-40d2-a74d-3a6a31054d50@linux.ibm.com>
-Date: Wed, 17 Dec 2025 10:48:53 +0530
+	s=arc-20240116; t=1765958157; c=relaxed/simple;
+	bh=Xo9c1qEYiQMSvCEooBFQkEOr2bYPsShQNIttr2X1DG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WPfMXK5DTKOSa1/ubqkw3Ft5S8CalKuzCjpDHdalvaDGTOPIiY2p/khF+VfurDoyQ7uaIYNz03ILYAZNU/WUiSKP3FVbMwyx63BtozfF6gmMOeWQjLrIFHSdHZ23qCFOOOZr+ZPAa+9yaJthxSa0sH+7akvrRkIRAiE2dSwhdK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ELlSPoe4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69B78C4CEF5;
+	Wed, 17 Dec 2025 07:55:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765958157;
+	bh=Xo9c1qEYiQMSvCEooBFQkEOr2bYPsShQNIttr2X1DG8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ELlSPoe46Vp/wKpVK3LLNZx61ZRTeN9a8aiwZ+dBOq6JSgu8lT1rxJ3wY80rxeXhw
+	 OZrPCLpEBFk6TLKFBA5pONUweIEe6/iPED+L08U/dXepE25vl89hRZiQ/FCns7UqdC
+	 coya/6tg0ImJ/cGQDCryPzjE8vQi9Nqu3aUuHEAmYgRVp1m3qEkelGkvr/TPOrnFV9
+	 yhPHmKfYuEbW8BihXNYfIx3rYzf4yaVAhlcte6H35pz0VG5SbKINKXAIGTAmOGvHIK
+	 XqbbXlo5Mxru1Gcnu0BaAUfhCIDC3t50dTRFkXYmmP/w7QngJootP/5QLOgvwTke2k
+	 Z91VDTNTIflIw==
+Date: Wed, 17 Dec 2025 13:25:39 +0530
+From: Sumit Garg <sumit.garg@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Sumit Garg <sumit.garg@oss.qualcomm.com>,
+	Jens Wiklander <jens.wiklander@linaro.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	arm-scmi@vger.kernel.org, netdev@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+Message-ID: <aUJh--HGVeJWIilS@sumit-xelite>
+References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+ <aT--ox375kg2Mzh-@sumit-X1>
+ <dhunzydod4d7vj73llpuqemxb5er2ja4emxusr66irwf77jhhb@es4yd2axzl25>
+ <CAGptzHOOqLhBnAXDURAzkgckUvRr__UuF1S_7MLV0u-ZxYEdyA@mail.gmail.com>
+ <ayebinxqpcnl7hpa35ytrudiy7j75u5bdk3enlirkp5pevppeg@6mx6a5fwymwf>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/6] keys/trusted_keys: establish PKWM as a trusted source
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        James.Bottomley@hansenpartnership.com, zohar@linux.ibm.com,
-        nayna@linux.ibm.com, rnsastry@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20251213052618.190691-1-ssrish@linux.ibm.com>
- <20251213052618.190691-6-ssrish@linux.ibm.com> <aT286Y6UYCth0--4@kernel.org>
-Content-Language: en-US
-From: Srish Srinivasan <ssrish@linux.ibm.com>
-In-Reply-To: <aT286Y6UYCth0--4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAwMSBTYWx0ZWRfX6kIxyAaSBgjf
- /EZSYKBXz0sERSI0tndVlNkFXkR+rbROICzcZdXjqNHAkwJ8CevnbcesCVYQD0K3L9/90BYFGQu
- Eqm15cM1YKaj4S4wi4TboNenOVLCOP7+rgkx0Fvvzv3vzxqzUOd+NbEaTWStOMAvgigDnaiXEc3
- k2u7kaxAB3pC6ZgyUU//FNISY2pf/XF1dG3znQyVzUG7ZfZGV1q7dofLoqFQVObbn39NmstyXJq
- 1q03ar+zimLqxjdoUxrv5qiEL4VjyewJogG9KogY3DmmqtBCl4Yg/uULAxOvXRnFS5qj5rb9gxC
- 27vbuDhocMoYEeT1sEqxzO1GvbDCVedFoUaW7dG9CtPpmgqynsaMcGu1IVpGa+7ox1JFDuBKTlj
- T2fsFfJ7x0v+O+vIQljifN6c8uFjFw==
-X-Proofpoint-GUID: 9uRvE69LlVEO2GodtobJjjz-MqkZGjKk
-X-Proofpoint-ORIG-GUID: pJd6d3HAj7iErOqERM15gWIZ6T-Er2bi
-X-Authority-Analysis: v=2.4 cv=Kq5AGGWN c=1 sm=1 tr=0 ts=69423d46 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8 a=9NsRTiU2Kngsl67-uFcA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-16_03,2025-12-16_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 impostorscore=0 clxscore=1015 spamscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130001
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ayebinxqpcnl7hpa35ytrudiy7j75u5bdk3enlirkp5pevppeg@6mx6a5fwymwf>
 
-Hi Jarkko,
-thank you for taking a look and providing feedback.
-
-On 12/14/25 12:52 AM, Jarkko Sakkinen wrote:
-> On Sat, Dec 13, 2025 at 10:56:17AM +0530, Srish Srinivasan wrote:
->> The wrapping key does not exist by default and is generated by the
->> hypervisor as a part of PKWM initialization. This key is then persisted by
->> the hypervisor and is used to wrap trusted keys. These are variable length
->> symmetric keys, which in the case of PowerVM Key Wrapping Module (PKWM) are
->> generated using the kernel RNG. PKWM can be used as a trust source through
->> the following example keyctl command
->>
->> keyctl add trusted my_trusted_key "new 32" @u
->>
->> Use the wrap_flags command option to set the secure boot requirement for
->> the wrapping request through the following keyctl commands
->>
->> case1: no secure boot requirement. (default)
->> keyctl usage: keyctl add trusted my_trusted_key "new 32" @u
->> 	      OR
->> 	      keyctl add trusted my_trusted_key "new 32 wrap_flags=0x00" @u
->>
->> case2: secure boot required to in either audit or enforce mode. set bit 0
->> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x01" @u
->>
->> case3: secure boot required to be in enforce mode. set bit 1
->> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x02" @u
->>
->> NOTE:
->> -> Setting the secure boot requirement is NOT a must.
->> -> Only either of the secure boot requirement options should be set. Not
->> both.
->> -> All the other bits are requied to be not set.
->> -> Set the kernel parameter trusted.source=pkwm to choose PKWM as the
->> backend for trusted keys implementation.
->> -> CONFIG_PSERIES_PLPKS must be enabled to build PKWM.
->>
->> Add PKWM, which is a combination of IBM PowerVM and Power LPAR Platform
->> KeyStore, as a new trust source for trusted keys.
->>
->> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
->> ---
->>   MAINTAINERS                               |   9 ++
->>   include/keys/trusted-type.h               |   7 +-
->>   include/keys/trusted_pkwm.h               |  30 ++++
->>   security/keys/trusted-keys/Kconfig        |   8 ++
->>   security/keys/trusted-keys/Makefile       |   2 +
->>   security/keys/trusted-keys/trusted_core.c |   6 +-
->>   security/keys/trusted-keys/trusted_pkwm.c | 168 ++++++++++++++++++++++
->>   7 files changed, 228 insertions(+), 2 deletions(-)
->>   create mode 100644 include/keys/trusted_pkwm.h
->>   create mode 100644 security/keys/trusted-keys/trusted_pkwm.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index aff3e162180d..bf78ab78a309 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -13993,6 +13993,15 @@ S:	Supported
->>   F:	include/keys/trusted_dcp.h
->>   F:	security/keys/trusted-keys/trusted_dcp.c
->>   
->> +KEYS-TRUSTED-PLPKS
->> +M:	Srish Srinivasan <ssrish@linux.ibm.com>
->> +M:	Nayna Jain <nayna@linux.ibm.com>
->> +L:	linux-integrity@vger.kernel.org
->> +L:	keyrings@vger.kernel.org
->> +S:	Supported
->> +F:	include/keys/trusted_plpks.h
->> +F:	security/keys/trusted-keys/trusted_pkwm.c
->> +
->>   KEYS-TRUSTED-TEE
->>   M:	Sumit Garg <sumit.garg@kernel.org>
->>   L:	linux-integrity@vger.kernel.org
->> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
->> index 4eb64548a74f..45c6c538df22 100644
->> --- a/include/keys/trusted-type.h
->> +++ b/include/keys/trusted-type.h
->> @@ -19,7 +19,11 @@
->>   
->>   #define MIN_KEY_SIZE			32
->>   #define MAX_KEY_SIZE			128
->> -#define MAX_BLOB_SIZE			512
->> +#if IS_ENABLED(CONFIG_TRUSTED_KEYS_PKWM)
->> +#define MAX_BLOB_SIZE			1152
->> +#else
->> +#define MAX_BLOB_SIZE                   512
->> +#endif
->>   #define MAX_PCRINFO_SIZE		64
->>   #define MAX_DIGEST_SIZE			64
->>   
->> @@ -46,6 +50,7 @@ struct trusted_key_options {
->>   	uint32_t policydigest_len;
->>   	unsigned char policydigest[MAX_DIGEST_SIZE];
->>   	uint32_t policyhandle;
->> +	uint16_t wrap_flags;
->>   };
->>   
->>   struct trusted_key_ops {
->> diff --git a/include/keys/trusted_pkwm.h b/include/keys/trusted_pkwm.h
->> new file mode 100644
->> index 000000000000..736edfc1e1dd
->> --- /dev/null
->> +++ b/include/keys/trusted_pkwm.h
->> @@ -0,0 +1,30 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef __PKWM_TRUSTED_KEY_H
->> +#define __PKWM_TRUSTED_KEY_H
->> +
->> +#include <keys/trusted-type.h>
->> +
->> +extern struct trusted_key_ops pkwm_trusted_key_ops;
->> +
->> +#define PKWM_DEBUG 0
->> +
->> +#if PKWM_DEBUG
->> +static inline void dump_options(struct trusted_key_options *o)
->> +{
->> +	bool sb_audit_or_enforce_bit = o->policyhandle & BIT(0);
->> +	bool sb_enforce_bit = o->policyhandle & BIT(1);
->> +
->> +	if (sb_audit_or_enforce_bit)
->> +		pr_info("secure boot mode: audit or enforce");
->> +	else if (sb_enforce_bit)
->> +		pr_info("secure boot mode: enforce");
->> +	else
->> +		pr_info("secure boot mode: disabled");
->> +}
->> +#else
->> +static inline void dump_options(struct trusted_key_options *o)
->> +{
->> +}
->> +#endif
-> Please use pr_debug() instead of emulating this with 'PKWM_DEBUG'.
-
-
-Sure, I will fix this.
-
-
->> +
->> +#endif
->> diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
->> index 204a68c1429d..9e00482d886a 100644
->> --- a/security/keys/trusted-keys/Kconfig
->> +++ b/security/keys/trusted-keys/Kconfig
->> @@ -46,6 +46,14 @@ config TRUSTED_KEYS_DCP
->>   	help
->>   	  Enable use of NXP's DCP (Data Co-Processor) as trusted key backend.
->>   
->> +config TRUSTED_KEYS_PKWM
->> +	bool "PKWM-based trusted keys"
->> +	depends on PSERIES_PLPKS >= TRUSTED_KEYS
->> +	default y
->> +	select HAVE_TRUSTED_KEYS
->> +	help
->> +	  Enable use of IBM PowerVM Key Wrapping Module (PKWM) as a trusted key backend.
->> +
->>   if !HAVE_TRUSTED_KEYS
->>   	comment "No trust source selected!"
->>   endif
->> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
->> index f0f3b27f688b..5fc053a21dad 100644
->> --- a/security/keys/trusted-keys/Makefile
->> +++ b/security/keys/trusted-keys/Makefile
->> @@ -16,3 +16,5 @@ trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
->>   trusted-$(CONFIG_TRUSTED_KEYS_CAAM) += trusted_caam.o
->>   
->>   trusted-$(CONFIG_TRUSTED_KEYS_DCP) += trusted_dcp.o
->> +
->> +trusted-$(CONFIG_TRUSTED_KEYS_PKWM) += trusted_pkwm.o
->> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
->> index b1680ee53f86..2d328de170e8 100644
->> --- a/security/keys/trusted-keys/trusted_core.c
->> +++ b/security/keys/trusted-keys/trusted_core.c
->> @@ -12,6 +12,7 @@
->>   #include <keys/trusted_caam.h>
->>   #include <keys/trusted_dcp.h>
->>   #include <keys/trusted_tpm.h>
->> +#include <keys/trusted_pkwm.h>
->>   #include <linux/capability.h>
->>   #include <linux/err.h>
->>   #include <linux/init.h>
->> @@ -31,7 +32,7 @@ MODULE_PARM_DESC(rng, "Select trusted key RNG");
->>   
->>   static char *trusted_key_source;
->>   module_param_named(source, trusted_key_source, charp, 0);
->> -MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee, caam or dcp)");
->> +MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee, caam, dcp or pkwm)");
->>   
->>   static const struct trusted_key_source trusted_key_sources[] = {
->>   #if defined(CONFIG_TRUSTED_KEYS_TPM)
->> @@ -46,6 +47,9 @@ static const struct trusted_key_source trusted_key_sources[] = {
->>   #if defined(CONFIG_TRUSTED_KEYS_DCP)
->>   	{ "dcp", &dcp_trusted_key_ops },
->>   #endif
->> +#if defined(CONFIG_TRUSTED_KEYS_PKWM)
->> +	{ "pkwm", &pkwm_trusted_key_ops },
->> +#endif
->>   };
->>   
->>   DEFINE_STATIC_CALL_NULL(trusted_key_seal, *trusted_key_sources[0].ops->seal);
->> diff --git a/security/keys/trusted-keys/trusted_pkwm.c b/security/keys/trusted-keys/trusted_pkwm.c
->> new file mode 100644
->> index 000000000000..7968601dcf42
->> --- /dev/null
->> +++ b/security/keys/trusted-keys/trusted_pkwm.c
->> @@ -0,0 +1,168 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (C) 2025 IBM Corporation, Srish Srinivasan <ssrish@linux.ibm.com>
->> + */
->> +
->> +#include <keys/trusted_pkwm.h>
->> +#include <keys/trusted-type.h>
->> +#include <linux/build_bug.h>
->> +#include <linux/key-type.h>
->> +#include <linux/parser.h>
->> +#include <asm/plpks.h>
->> +
->> +enum {
->> +	Opt_err,
->> +	Opt_wrap_flags,
->> +};
->> +
->> +static const match_table_t key_tokens = {
->> +	{Opt_wrap_flags, "wrap_flags=%s"},
->> +	{Opt_err, NULL}
->> +};
->> +
->> +static int getoptions(char *datablob, struct trusted_key_options **opt)
->> +{
->> +	substring_t args[MAX_OPT_ARGS];
->> +	char *p = datablob;
->> +	int token;
->> +	int res;
->> +	unsigned long wrap_flags;
->> +	unsigned long token_mask = 0;
->> +
->> +	if (!datablob)
->> +		return 0;
->> +
->> +	while ((p = strsep(&datablob, " \t"))) {
->> +		if (*p == '\0' || *p == ' ' || *p == '\t')
->> +			continue;
->> +
->> +		token = match_token(p, key_tokens, args);
->> +		if (test_and_set_bit(token, &token_mask))
->> +			return -EINVAL;
->> +
->> +		switch (token) {
->> +		case Opt_wrap_flags:
->> +			res = kstrtoul(args[0].from, 16, &wrap_flags);
->> +			if (res < 0 || wrap_flags > 2)
->> +				return -EINVAL;
->> +			(*opt)->wrap_flags = wrap_flags;
->> +			break;
->> +		default:
->> +			return -EINVAL;
->> +		}
->> +	}
->> +	return 0;
->> +}
->> +
->> +static struct trusted_key_options *trusted_options_alloc(void)
->> +{
->> +	struct trusted_key_options *options;
->> +
->> +	options = kzalloc(sizeof(*options), GFP_KERNEL);
->> +	return options;
->> +}
->> +
->> +static int trusted_pkwm_seal(struct trusted_key_payload *p, char *datablob)
->> +{
->> +	struct trusted_key_options *options = NULL;
->> +	u8 *input_buf, *output_buf;
->> +	u32 output_len, input_len;
->> +	int rc;
->> +
->> +	options = trusted_options_alloc();
->> +	if (!options)
->> +		return -ENOMEM;
->> +
->> +	rc = getoptions(datablob, &options);
->> +	if (rc < 0)
->> +		goto out;
->> +	dump_options(options);
->> +
->> +	input_len = p->key_len;
->> +	input_buf = kmalloc(ALIGN(input_len, 4096), GFP_KERNEL);
->> +	if (!input_buf) {
->> +		pr_err("Input buffer allocation failed. Returning -ENOMEM.");
->> +		return -ENOMEM;
->> +	}
->> +
->> +	memcpy(input_buf, p->key, p->key_len);
->> +
->> +	rc = plpks_wrap_object(&input_buf, input_len, options->wrap_flags,
->> +			       &output_buf, &output_len);
->> +	if (!rc) {
->> +		memcpy(p->blob, output_buf, output_len);
->> +		p->blob_len = output_len;
->> +		dump_payload(p);
->> +	} else {
->> +		pr_err("Invalid argument");
->> +	}
->> +
->> +	kfree(input_buf);
->> +	kfree(output_buf);
->> +
->> +out:
->> +	kfree_sensitive(options);
->> +	return rc;
->> +}
->> +
->> +static int trusted_pkwm_unseal(struct trusted_key_payload *p, char *datablob)
->> +{
->> +	u8 *input_buf, *output_buf;
->> +	u32 input_len, output_len;
->> +	int rc;
->> +
->> +	input_len = p->blob_len;
->> +	input_buf = kmalloc(ALIGN(input_len, 4096), GFP_KERNEL);
->> +	if (!input_buf)
->> +		return -ENOMEM;
->> +
->> +	memcpy(input_buf, p->blob, p->blob_len);
->> +
->> +	rc = plpks_unwrap_object(&input_buf, input_len, &output_buf,
->> +				 &output_len);
->> +	if (!rc) {
->> +		memcpy(p->key, output_buf, output_len);
->> +		p->key_len = output_len;
->> +		dump_payload(p);
->> +	} else {
->> +		pr_err("Invalid argument");
-> I don't get this error message. What does this mean? pr_err() is used
-> when you have actual malfunction.
-
-
-Yes, the error message lacks clarity here.
-It was meant to communicate that the unwrap operation failed.
-
-I will provide a more meaningful error message with the error code
-as that would be more helpful.
-
-And thanks for pointing this out.
-
->
->> +	}
->> +
->> +	kfree(input_buf);
->> +	kfree(output_buf);
->> +
->> +	return rc;
->> +}
->> +
->> +static int trusted_pkwm_init(void)
->> +{
->> +	int ret;
->> +
->> +	if (!plpks_wrapping_is_supported()) {
->> +		pr_err("H_PKS_WRAP_OBJECT interface not supported\n");
->> +
->> +		return -ENODEV;
->> +	}
->> +
->> +	ret = plpks_gen_wrapping_key();
->> +	if (ret) {
->> +		pr_err("Failed to generate default wrapping key\n");
->> +
->> +		return -EINVAL;
->> +	}
->> +
->> +	return register_key_type(&key_type_trusted);
->> +}
->> +
->> +static void trusted_pkwm_exit(void)
->> +{
->> +	unregister_key_type(&key_type_trusted);
->> +}
->> +
->> +struct trusted_key_ops pkwm_trusted_key_ops = {
->> +	.migratable = 0, /* non-migratable */
->> +	.init = trusted_pkwm_init,
->> +	.seal = trusted_pkwm_seal,
->> +	.unseal = trusted_pkwm_unseal,
->> +	.exit = trusted_pkwm_exit,
->> +};
->> -- 
->> 2.47.3
->>
-> BR, Jarkko
+On Tue, Dec 16, 2025 at 12:08:38PM +0100, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Tue, Dec 16, 2025 at 01:08:38PM +0530, Sumit Garg wrote:
+> > On Mon, Dec 15, 2025 at 3:02 PM Uwe Kleine-König
+> > <u.kleine-koenig@baylibre.com> wrote:
+> > > On Mon, Dec 15, 2025 at 04:54:11PM +0900, Sumit Garg wrote:
+> > > > Feel free to make the tee_bus_type private as the last patch in the series
+> > > > such that any followup driver follows this clean approach.
+> > >
+> > > There is a bit more to do for that than I'm willing to invest. With my
+> > > patch series applied `tee_bus_type` is still used in
+> > > drivers/tee/optee/device.c and drivers/tee/tee_core.c.
+> > 
+> > Oh I see, I guess we need to come with some helpers around device
+> > register/unregister from TEE subsystem as well. Let's plan that for a
+> > followup patch-set, I don't want this patch-set to be bloated more.
+> 
+> Don't consider me in for that. But it sounds like a nice addition.
 >
 
-thanks,
-Srish.
+No worries, the current cleanup is fine for now.
+
+> > > Maybe it's
+> > > sensible to merge these two files into a single one.
+> > 
+> > It's not possible as the design for TEE bus is to have TEE
+> > implementation drivers like OP-TEE, AMD-TEE, TS-TEE, QTEE and so on to
+> > register devices on the bus.
+> 
+> So only OP-TEE uses the bus for devices and the other *-TEE don't. Also
+> sounds like something worth to be fixed.
+
+The TEE bus is common for all the TEE implementation drivers which need
+to support kernel TEE client drivers. I am aware there will be QTEE and
+TS-TEE from past discussion that they will be exposing devices on the
+TEE bus.
+
+> 
+> > > The things I wonder about additionally are:
+> > >
+> > >  - if CONFIG_OPTEE=n and CONFIG_TEE=y|m the tee bus is only used for
+> > >    drivers but not devices.
+> > 
+> > Yeah since the devices are rather added by the TEE implementation driver.
+> > 
+> > >
+> > >  - optee_register_device() calls device_create_file() on
+> > >    &optee_device->dev after device_register(&optee_device->dev).
+> > >    (Attention half-knowledge!) I think device_create_file() should not
+> > >    be called on an already registered device (or you have to send a
+> > >    uevent afterwards). This should probably use type attribute groups.
+> > >    (Or the need_supplicant attribute should be dropped as it isn't very
+> > >    useful. This would maybe be considered an ABI change however.)
+> > 
+> > The reasoning for this attribute should be explained by commit:
+> > 7269cba53d90 ("tee: optee: Fix supplicant based device enumeration").
+> > In summary it's due to a weird dependency for devices we have with the
+> > user-space daemon: tee-supplicant.
+> 
+> From reading that once I don't understand it. (But no need to explain
+> :-)
+> 
+> Still the file should better be added before device_add() is called.
+
+Noted, let me see if I can get to fix this until someone jumps in before
+me.
+
+> 
+> > >  - Why does optee_probe() in drivers/tee/optee/smc_abi.c unregister all
+> > >    optee devices in its error path (optee_unregister_devices())?
+> > 
+> > This is mostly to take care of if any device got registered before the
+> > failure occured. Let me know if you have a better way to address that.
+> 
+> Without understanding the tee stuff, I'd say: Don't bother and only undo
+> the things that probe did before the failure.
+> 
+
+True, but this is special case where if there is any leftover device
+registered from the TEE implementation then it is likely going to cause
+the corresponding kernel client driver crash.
+
+-Sumit
 
