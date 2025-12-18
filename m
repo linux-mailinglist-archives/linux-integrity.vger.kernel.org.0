@@ -1,160 +1,192 @@
-Return-Path: <linux-integrity+bounces-8113-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8114-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91507CCBACD
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 12:47:49 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 879F5CCC1E7
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 14:54:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DE2D4301EBDA
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 11:47:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5C4A930269AE
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 13:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A8432693A;
-	Thu, 18 Dec 2025 11:47:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D148345731;
+	Thu, 18 Dec 2025 13:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tDhRxNAM";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SOyn5zC0";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="jzgUfpO7";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="n88zK61j"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qFohZZY8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAF9325723
-	for <linux-integrity@vger.kernel.org>; Thu, 18 Dec 2025 11:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2C434575E;
+	Thu, 18 Dec 2025 13:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766058467; cv=none; b=WG9bEYUxbJC4AfPLzXpQbzQ69gHvmoUo28zejyo8X1ol/zszUTyu8vt0p+DH7yoi4lIraIW+MI7cxdGgvQoy9897oApS+bOqny8jJY5nTaVk1fGez5+mFt1Mzgg/hTPi0zpwK6pBNgrGrATdfpW1uBSyeCDyRd3XswMZk2PmJg0=
+	t=1766066038; cv=none; b=c97WM2igvTaKMkXayVm5c3HPmWn6POCPYm0d17uqQfXwNTYLak6q0d1ReVgYx+MbEaCi5l/OYbY22rOLK5FXo7FSflOjrQvJEhpMpZG8NOZYdnStMqEGL/UPtcjWmf+YU7TDvUdDoLlZ+WJlHsGkDyZzA8d636I6pvnvw7Ielqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766058467; c=relaxed/simple;
-	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
+	s=arc-20240116; t=1766066038; c=relaxed/simple;
+	bh=Gb408fVHMLonuRAakmkxdDWU8SK3ZsmJh94vFt7tIrA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KdwPwK+kkJmozlKmnqKO7Fl1EKrG5Xy1Z9PfkcXyd13KomcEQCZBbzIVip7T+LOP53QcP358BSVuALqWr0C5g2ssMv2Z4wCiEixj8cNVmmBb0VYiDSBytkE8u8DCtQn7X8tDGWdjfRurnSxYTEa9UCS3/z92ifyEO16preluCZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tDhRxNAM; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SOyn5zC0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=jzgUfpO7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=n88zK61j; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 2B4F35BD9A;
-	Thu, 18 Dec 2025 11:47:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1766058464;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
-	b=tDhRxNAMutZeRSaqtmrfIRLfKLvsXAai3lDXV2pboCNxYfJF5UNnihH5SpfeHk1TidtZ4c
-	JJjct2EKf8TGG0h4/cWCK+ChXh/YkneWIqT+mAmBN7d8QHJsbZ3zi1QAYT1tmACOelX6Ed
-	Q6LwQ9PgDWi+7batTY6i6aDTDX8olKA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1766058464;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
-	b=SOyn5zC0UuFFKiiC6IRTtxO85VIC8nlYYHjHjr38yOFH75PL3HD+X7cNzaIi7MGTlLW5AK
-	vy0KkTdleIqDbDDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1766058463;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
-	b=jzgUfpO7N+LXL3v8jNUv4Hovqogb6PNjQeCtsDvWBBajt2lbkDYuRjPOeAeSKPsgahNAa5
-	fgLeDGKeD1VPHl8zcBvkDBc9JZ9066nstKl02T/t/o9aVNHE6Gat2TNg2kAndglUyWNTCX
-	eXebNAh4U9c18QUgMfFXlK+E0kD6SUw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1766058463;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
-	b=n88zK61jWF2tjVLUCU64eYUivR/bX8Jw1Sp1txM5DD7Kg9gXndamlMWaHvtLs0gusmm/+Y
-	7cpGJdmH1PgqHpBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CC8DD3EA63;
-	Thu, 18 Dec 2025 11:47:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id BB84MN7pQ2k8agAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Thu, 18 Dec 2025 11:47:42 +0000
-Date: Thu, 18 Dec 2025 12:47:33 +0100
-From: Petr Vorel <pvorel@suse.cz>
-To: Cyril Hrubis <chrubis@suse.cz>
-Cc: ltp@lists.linux.it, Mimi Zohar <zohar@linux.ibm.com>,
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-	Jan Stancek <jstancek@redhat.com>, Li Wang <liwang@redhat.com>
-Subject: Re: [PATCH v4 2/4] tst_test.sh: Add TST_USR_{G,U}ID variables
-Message-ID: <20251218114733.GA98183@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20251209185557.20598-1-pvorel@suse.cz>
- <20251209185557.20598-3-pvorel@suse.cz>
- <aULQlhbHltLTbdG4@yuki.lan>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TGVO+XP6VbRdyuLwLPMZoaNKrpo/oZDXsRpcJ1y10oaIsjgdwiHQcscZkD6drQmZ+pNW8AvgeNKRD5oR5zzHGa/C1IUH8Ol6AOCxaYo9iWtQcPXWWjTs5lc13+ADMMXUwR+aaTpaElccSd+TuFnQeP6HxxgMeo4gVJSSvIfqUuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qFohZZY8; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 1EC57C1A5AF;
+	Thu, 18 Dec 2025 13:53:24 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A4BEE606B6;
+	Thu, 18 Dec 2025 13:53:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 66249102F0B2D;
+	Thu, 18 Dec 2025 14:53:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1766066026; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=RhgSGQYStNGcdPoB3dTlM/CB5TE2tva/NS/z3ptd3wM=;
+	b=qFohZZY8adtmwbRo28+tcgXOIuD5T9ZV6GmStiiS0ZAEXQPvVe9Zcnoe53YsCQv7j9c1kT
+	pTrvVf3pcUkunP7HW/oQvdBg/Lk3nsGsCiYCx3SHIHn49cINe+SDypYYTUNdpwsJxK0JVh
+	ocSroqcU2Nk7str55AMgKkPgbWDRxk2+yhvbttnAqOzQlGRqdP2i4+xde+ODjyK3Zpm5be
+	ZSBh2N3dOdtUob6QOjlSHuVExl0oaNjoD8HBgFGaCPqRDPAFBwnRVvZxfM0UXeEISM/0Op
+	YG/ULfUWn7tCLkV8LWmaP9dHfiDTFdsnlQ2sM6hNfJi3OczZvwptkZvMOkvVJQ==
+Date: Thu, 18 Dec 2025 14:53:32 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Jens Wiklander <jens.wiklander@linaro.org>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Sumit Garg <sumit.garg@oss.qualcomm.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	arm-scmi@vger.kernel.org, linux-mips@vger.kernel.org,
+	netdev@vger.kernel.org, linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+Message-ID: <20251218135332f323fa91@mail.local>
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+ <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aULQlhbHltLTbdG4@yuki.lan>
-X-Spam-Flag: NO
-X-Spam-Score: -7.50
-X-Spam-Level: 
-X-Spamd-Result: default: False [-7.50 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	HAS_REPLYTO(0.30)[pvorel@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-0.998];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:replyto];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	REPLYTO_EQ_FROM(0.00)[]
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-> Hi!
-> > Add TST_USR_{G,U}ID variables with the default values from tst_runas.c.
+On 18/12/2025 08:21:27+0100, Jens Wiklander wrote:
+> Hi,
+> 
+> On Mon, Dec 15, 2025 at 3:17 PM Uwe Kleine-König
+> <u.kleine-koenig@baylibre.com> wrote:
+> >
+> > Hello,
+> >
+> > the objective of this series is to make tee driver stop using callbacks
+> > in struct device_driver. These were superseded by bus methods in 2006
+> > (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+> > methods.")) but nobody cared to convert all subsystems accordingly.
+> >
+> > Here the tee drivers are converted. The first commit is somewhat
+> > unrelated, but simplifies the conversion (and the drivers). It
+> > introduces driver registration helpers that care about setting the bus
+> > and owner. (The latter is missing in all drivers, so by using these
+> > helpers the drivers become more correct.)
+> >
+> > v1 of this series is available at
+> > https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylibre.com
+> >
+> > Changes since v1:
+> >
+> >  - rebase to v6.19-rc1 (no conflicts)
+> >  - add tags received so far
+> >  - fix whitespace issues pointed out by Sumit Garg
+> >  - fix shutdown callback to shutdown and not remove
+> >
+> > As already noted in v1's cover letter, this series should go in during a
+> > single merge window as there are runtime warnings when the series is
+> > only applied partially. Sumit Garg suggested to apply the whole series
+> > via Jens Wiklander's tree.
+> > If this is done the dependencies in this series are honored, in case the
+> > plan changes: Patches #4 - #17 depend on the first two.
+> >
+> > Note this series is only build tested.
+> >
+> > Uwe Kleine-König (17):
+> >   tee: Add some helpers to reduce boilerplate for tee client drivers
+> >   tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
+> >   tee: Adapt documentation to cover recent additions
+> >   hwrng: optee - Make use of module_tee_client_driver()
+> >   hwrng: optee - Make use of tee bus methods
+> >   rtc: optee: Migrate to use tee specific driver registration function
+> >   rtc: optee: Make use of tee bus methods
+> >   efi: stmm: Make use of module_tee_client_driver()
+> >   efi: stmm: Make use of tee bus methods
+> >   firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+> >   firmware: arm_scmi: Make use of tee bus methods
+> >   firmware: tee_bnxt: Make use of module_tee_client_driver()
+> >   firmware: tee_bnxt: Make use of tee bus methods
+> >   KEYS: trusted: Migrate to use tee specific driver registration
+> >     function
+> >   KEYS: trusted: Make use of tee bus methods
+> >   tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+> >   tpm/tpm_ftpm_tee: Make use of tee bus methods
+> >
+> >  Documentation/driver-api/tee.rst             | 18 +----
+> >  drivers/char/hw_random/optee-rng.c           | 26 ++----
+> >  drivers/char/tpm/tpm_ftpm_tee.c              | 31 +++++---
+> >  drivers/firmware/arm_scmi/transports/optee.c | 32 +++-----
+> >  drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 ++-----
+> >  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++----
+> >  drivers/rtc/rtc-optee.c                      | 27 ++-----
+> >  drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++
+> >  include/linux/tee_drv.h                      | 12 +++
+> >  security/keys/trusted-keys/trusted_tee.c     | 17 ++--
+> >  10 files changed, 164 insertions(+), 138 deletions(-)
+> >
+> > base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> > --
+> > 2.47.3
+> >
+> 
+> Thank you for the nice cleanup, Uwe.
+> 
+> I've applied patch 1-3 to the branch tee_bus_callback_for_6.20 in my
+> tree at https://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git/
+> 
+> The branch is based on v6.19-rc1, and I'll try to keep it stable for
+> others to depend on, if needed. Let's see if we can agree on taking
+> the remaining patches via that branch.
 
-> > These can be used as a default values for tests which use tst_runas and
-> > need to know UID/GID for other commands.
+6 and 7 can go through your branch.
 
-> > It will be used in LTP IMA tests.
-
-...
-> > +# see testcases/lib/tst_runas.c
-> > +export TST_USR_UID="${LTP_USR_UID:-65534}"
-> > +export TST_USR_GID="${LTP_USR_GID:-65534}"
-
-> Do we need this? We already have the default values in the C code...
-
-I've merged the patch without notice this, therefore just to clarify.
-I hoped I was clear in the commit message, obviously not.
-Yes, just for a record you find the answer in the next patch:
-https://lore.kernel.org/ltp/aULUsVxLIXFM19IV@yuki.lan/
-
-So I hope everything is OK.
-
-Kind regards,
-Petr
-
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
