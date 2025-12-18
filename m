@@ -1,95 +1,160 @@
-Return-Path: <linux-integrity+bounces-8112-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8113-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A0E1CCB6D2
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 11:37:49 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91507CCBACD
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 12:47:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AA0A3303463E
-	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 10:37:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DE2D4301EBDA
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 11:47:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 997DD332ECC;
-	Thu, 18 Dec 2025 10:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A8432693A;
+	Thu, 18 Dec 2025 11:47:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b="p4+21kPF"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="tDhRxNAM";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SOyn5zC0";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="jzgUfpO7";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="n88zK61j"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail.avm.de (mail.avm.de [212.42.244.94])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9582ECD32;
-	Thu, 18 Dec 2025 10:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAF9325723
+	for <linux-integrity@vger.kernel.org>; Thu, 18 Dec 2025 11:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766054266; cv=none; b=LsAWzyfJVaRoxuKpcm6eDoTT38UuK8FhCQXSUKHPc6b5UnsCA6usOO//R2mpuDcH0wlXKfdmtN81f0bwztPyDOHZKH7MV6h8Nq81ayEfVUkWxgpUMToEp2bAd6Dt3HrRuRSiDZQc5NMRXW6PgIGwNmLjQ5wBqDJbAbuftUkpwes=
+	t=1766058467; cv=none; b=WG9bEYUxbJC4AfPLzXpQbzQ69gHvmoUo28zejyo8X1ol/zszUTyu8vt0p+DH7yoi4lIraIW+MI7cxdGgvQoy9897oApS+bOqny8jJY5nTaVk1fGez5+mFt1Mzgg/hTPi0zpwK6pBNgrGrATdfpW1uBSyeCDyRd3XswMZk2PmJg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766054266; c=relaxed/simple;
-	bh=2PjZ4/sT6hVD8xEjfsP28DbcgYX9fkJHJwldgG7gODQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sooxdyApoXRAoj5jXwQ0WD4il29OcaBsNSEqPOQN9Ub1Fox18ys3BiKmsfKsOp6T5wBOjiL0RahAJdzbPGjRXAQynKEmKPuZlzpuryrmJGqa8z3rRJT4JwenZC02sU8escUNZH63Foh4z/OGnbjd06dQmroC/xBGI3z7ohul3vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de; spf=pass smtp.mailfrom=avm.de; dkim=pass (1024-bit key) header.d=avm.de header.i=@avm.de header.b=p4+21kPF; arc=none smtp.client-ip=212.42.244.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=avm.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=avm.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-	t=1766053899; bh=2PjZ4/sT6hVD8xEjfsP28DbcgYX9fkJHJwldgG7gODQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=p4+21kPFK0E3swNe6i4Tn4s1VnYm+CCHyxAErd2xNeRoPcgN890g6WORbZe8JBxSR
-	 rk/llgKgdv9UmNXuPC8IT7dDjRki/gqNf7foDmtOH2FRO0pXsmRmexrcgPTMwc6Z6z
-	 YMkdqWehj2RxObdlNRpFPAA2pM0iVYlTnOCb+JJo=
-Received: from [212.42.244.71] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.54.3)
-	(envelope-from <phahn-oss@avm.de>)
-	id 6943d80b-3a9b-7f0000032729-7f0000019432-1
-	for <multiple-recipients>; Thu, 18 Dec 2025 11:31:39 +0100
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Thu, 18 Dec 2025 11:31:39 +0100 (CET)
-From: Philipp Hahn <phahn-oss@avm.de>
-To: linux-integrity@vger.kernel.org
-Cc: Philipp Hahn <phahn-oss@avm.de>,
-	linux-kernel@vger.kernel.org,
-	Nayna Jain <nayna@linux.ibm.com>,
-	Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH] integrity: Fix spelling mistake TRUSTED_KEYRING
-Date: Thu, 18 Dec 2025 11:31:22 +0100
-Message-ID: <4f736ebcd8a80c2e48c274cec027831d2986f792.1766053742.git.p.hahn@avm.de>
+	s=arc-20240116; t=1766058467; c=relaxed/simple;
+	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KdwPwK+kkJmozlKmnqKO7Fl1EKrG5Xy1Z9PfkcXyd13KomcEQCZBbzIVip7T+LOP53QcP358BSVuALqWr0C5g2ssMv2Z4wCiEixj8cNVmmBb0VYiDSBytkE8u8DCtQn7X8tDGWdjfRurnSxYTEa9UCS3/z92ifyEO16preluCZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=tDhRxNAM; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SOyn5zC0; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=jzgUfpO7; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=n88zK61j; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 2B4F35BD9A;
+	Thu, 18 Dec 2025 11:47:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1766058464;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
+	b=tDhRxNAMutZeRSaqtmrfIRLfKLvsXAai3lDXV2pboCNxYfJF5UNnihH5SpfeHk1TidtZ4c
+	JJjct2EKf8TGG0h4/cWCK+ChXh/YkneWIqT+mAmBN7d8QHJsbZ3zi1QAYT1tmACOelX6Ed
+	Q6LwQ9PgDWi+7batTY6i6aDTDX8olKA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1766058464;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
+	b=SOyn5zC0UuFFKiiC6IRTtxO85VIC8nlYYHjHjr38yOFH75PL3HD+X7cNzaIi7MGTlLW5AK
+	vy0KkTdleIqDbDDQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1766058463;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
+	b=jzgUfpO7N+LXL3v8jNUv4Hovqogb6PNjQeCtsDvWBBajt2lbkDYuRjPOeAeSKPsgahNAa5
+	fgLeDGKeD1VPHl8zcBvkDBc9JZ9066nstKl02T/t/o9aVNHE6Gat2TNg2kAndglUyWNTCX
+	eXebNAh4U9c18QUgMfFXlK+E0kD6SUw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1766058463;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d0xyOedFIrZxm4NSlMzxN0p9ko4/67CevG0jRIMYrMY=;
+	b=n88zK61jWF2tjVLUCU64eYUivR/bX8Jw1Sp1txM5DD7Kg9gXndamlMWaHvtLs0gusmm/+Y
+	7cpGJdmH1PgqHpBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CC8DD3EA63;
+	Thu, 18 Dec 2025 11:47:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id BB84MN7pQ2k8agAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Thu, 18 Dec 2025 11:47:42 +0000
+Date: Thu, 18 Dec 2025 12:47:33 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Cyril Hrubis <chrubis@suse.cz>
+Cc: ltp@lists.linux.it, Mimi Zohar <zohar@linux.ibm.com>,
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+	Jan Stancek <jstancek@redhat.com>, Li Wang <liwang@redhat.com>
+Subject: Re: [PATCH v4 2/4] tst_test.sh: Add TST_USR_{G,U}ID variables
+Message-ID: <20251218114733.GA98183@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20251209185557.20598-1-pvorel@suse.cz>
+ <20251209185557.20598-3-pvorel@suse.cz>
+ <aULQlhbHltLTbdG4@yuki.lan>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Organization: AVM GmbH, Berlin, Germany
-Content-Transfer-Encoding: 8bit
-X-purgate-ID: 149429::1766053899-65F4A7BC-04ECF510/0/0
-X-purgate-type: clean
-X-purgate-size: 962
-X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aULQlhbHltLTbdG4@yuki.lan>
+X-Spam-Flag: NO
+X-Spam-Score: -7.50
+X-Spam-Level: 
+X-Spamd-Result: default: False [-7.50 / 50.00];
+	REPLY(-4.00)[];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-0.998];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:replyto];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
 
-Fix minor spelling mistake "kerne{d -> l}".
+> Hi!
+> > Add TST_USR_{G,U}ID variables with the default values from tst_runas.c.
 
-Cc: Nayna Jain <nayna@linux.ibm.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Fixes: 9dc92c45177ab ("integrity: Define a trusted platform keyring")
-Signed-off-by: Philipp Hahn <phahn-oss@avm.de>
----
- security/integrity/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > These can be used as a default values for tests which use tst_runas and
+> > need to know UID/GID for other commands.
 
-diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
-index 916d4f2bfc441..328ea9f32035a 100644
---- a/security/integrity/Kconfig
-+++ b/security/integrity/Kconfig
-@@ -60,7 +60,7 @@ config INTEGRITY_PLATFORM_KEYRING
- 	help
- 	  Provide a separate, distinct keyring for platform trusted keys, which
- 	  the kernel automatically populates during initialization from values
--	  provided by the platform for verifying the kexec'ed kerned image
-+	  provided by the platform for verifying the kexec'ed kernel image
- 	  and, possibly, the initramfs signature.
- 
- config INTEGRITY_MACHINE_KEYRING
--- 
-2.43.0
+> > It will be used in LTP IMA tests.
+
+...
+> > +# see testcases/lib/tst_runas.c
+> > +export TST_USR_UID="${LTP_USR_UID:-65534}"
+> > +export TST_USR_GID="${LTP_USR_GID:-65534}"
+
+> Do we need this? We already have the default values in the C code...
+
+I've merged the patch without notice this, therefore just to clarify.
+I hoped I was clear in the commit message, obviously not.
+Yes, just for a record you find the answer in the next patch:
+https://lore.kernel.org/ltp/aULUsVxLIXFM19IV@yuki.lan/
+
+So I hope everything is OK.
+
+Kind regards,
+Petr
 
 
