@@ -1,228 +1,197 @@
-Return-Path: <linux-integrity+bounces-8110-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8111-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9F4CC96DC
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Dec 2025 20:41:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1830CCA9FD
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 08:23:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 382D9301D9D5
-	for <lists+linux-integrity@lfdr.de>; Wed, 17 Dec 2025 19:41:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7CC6E300F884
+	for <lists+linux-integrity@lfdr.de>; Thu, 18 Dec 2025 07:21:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F3E2C027A;
-	Wed, 17 Dec 2025 19:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D54330B37;
+	Thu, 18 Dec 2025 07:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JPjzcvlu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hFvxQjnf"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055A2270EC3;
-	Wed, 17 Dec 2025 19:41:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3AF330D42
+	for <linux-integrity@vger.kernel.org>; Thu, 18 Dec 2025 07:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766000488; cv=none; b=P8oW1+YRK+XlTAWC7vXtz+oNmSjZKSiluArs1ZkhDdgx3mGxEONDrGWH/p+Q95pdbMiK+r8UgXBTkYvQBuWTadYUTuqwOjkOpdwfChqTRXTMyD2pVTG/D/nQ2jjejZNQafLyvC6l6TPXrhn4C66egIg2ru93G4MSS3TkqFhlJto=
+	t=1766042505; cv=none; b=Z9IIEBfYi/dQXN8kOilKcd+AzjvHuYwem1iK2ZMZORXLtLkriPXXSuxdIW2ba2UElqj85xpFaHHjOXA2FalgJ7uI0LhdBgoOJzw2ur9OBNoY/47Shvhu7wyBJ2PC4QM1IYhLSyzHjbK2/H3CIspFbku+UPpDLjrUS+HN6Ph7+co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766000488; c=relaxed/simple;
-	bh=+ZypzMriPvRtTLk1UX6FA8/lBlKEUmOB3SVlQMRfSjE=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=YK9veTjkqKXgmyJ6XQgXEbDz5B7/tjQNji5COEbW8GiuNHgpITqc6a9DV6vC+5VUnH1W9Ji51lYN1AQqapm+SfftQbTUdW/wG4+qcDSReToliss/RO1m4C7R4z2z3QRZX3m03PPfsxvy/sRKr5c26EUPCtGV5sR5FuSMvQ2eR1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JPjzcvlu; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BHBKDMo029270;
-	Wed, 17 Dec 2025 19:41:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=lu4Dg1
-	iWw05HEQbbeDiHRsTb1m1n2aqxv/D2YbRLv7M=; b=JPjzcvlu+86zFwNL13iNEE
-	Sdjk7xiIHaE54Uk7mNzore9w016xvtZptZpV4S3NnwGtDccmwHYvsfrn4YmCmXAX
-	vXzL88/ugC67VJ2/6BKFuWYTcrm1BEvC3/L6Kmrg9mH7XwtYSILynWB47yUt3DhE
-	N3RsmxvN5ylWJipIYex+b5aOL95VVPH5d+M1sm3H3ob54OxaO2vukWwYxFkbrbJi
-	kIFFxUN5p8iG/frKbUnHEFzvqxTQWDvvHJUGI2ddyDCaMRcbvm3ydik70+Y+ANbq
-	WxwTFrX586Vbm0dSmHHNHzXeddZvtu19GsvY5AGF42DfPLFipgoWs72WXJ9iYClg
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0ytvf0j9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 19:41:05 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BHJcomP014918;
-	Wed, 17 Dec 2025 19:41:04 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0ytvf0j6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 19:41:04 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BHIJKtK005806;
-	Wed, 17 Dec 2025 19:41:03 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4b1tgp313g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 19:41:03 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BHJf3r024183550
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Dec 2025 19:41:03 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4759A58058;
-	Wed, 17 Dec 2025 19:41:03 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5531E58057;
-	Wed, 17 Dec 2025 19:41:02 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.5.186])
-	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 17 Dec 2025 19:41:02 +0000 (GMT)
-Message-ID: <8ef8a96eacbaa71f359ff800e7417ae565b95e81.camel@linux.ibm.com>
-Subject: Re: [RFC][PATCH v2] ima: Add support for staging measurements for
- deletion and trimming
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com,
-        nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
-In-Reply-To: <41ead1c44a678b597ffd3350cce332a8a5d4ac7c.camel@huaweicloud.com>
-References: <20251212171932.316676-1-roberto.sassu@huaweicloud.com>
-		 <45ca26a5b08f42fb1318cd78a62dda20b9adb84e.camel@linux.ibm.com>
-	 <41ead1c44a678b597ffd3350cce332a8a5d4ac7c.camel@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 17 Dec 2025 14:41:01 -0500
+	s=arc-20240116; t=1766042505; c=relaxed/simple;
+	bh=oRDVeoSH7AN/+1EKf418Edx8/qjw/FEB71Hmt8IhBro=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZJIgjNSkw0GtzsmS9npIIzbqR8oui5jz8TiEx4oxdpltIm0jWJjiAp8qZwDci1J0cH8nKC36Gln1hyvOlsPnKS6gYxZq7hi2esqB0RdpfiJj/Ry3gkgMB0fWHg5nS1VCPW1XnxpVlXEFOS4RgtNLwJ2oNvwDDyh2mlsQ++JAzD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hFvxQjnf; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-6575e760f06so92081eaf.0
+        for <linux-integrity@vger.kernel.org>; Wed, 17 Dec 2025 23:21:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1766042501; x=1766647301; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u95c9TyT1XdaOnIyGBwMeLSiKMNJeuqg+7XxBfANtKE=;
+        b=hFvxQjnfCf2CUAqy40N2AHyq5MIDA0GgC5LKgr2+oJWxzVnQ/H2BlDj/PRT3fjn6YS
+         6uoMn7+YEL0+8O2LkRt30f+/2R5PDahttu121Fq4t7CeI0ECWbcDX44yZNP52rNK3/eA
+         fPojzuLnONspq5CUtSTCNO3/tkNye7HZkr84BB+Y/ocSOeYeJ03l/SmFCJB5qTJptZdQ
+         RbLfAkSfM0ummJWRnc7E8aYHqgmwBJNI/c/pFs/M401mDi2bS0euznuCTV9DcKpXnQ1t
+         H/xEDBrHcjuX6fA2f9gHgqEpAJVqBMy72GfMnDPZoRbg6fOFBpJbmBiSpijWbwGJ9Uu8
+         +Vxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766042501; x=1766647301;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=u95c9TyT1XdaOnIyGBwMeLSiKMNJeuqg+7XxBfANtKE=;
+        b=eceurG8wm0X9qEnmA+DHFU7BJusaH7qbz/v3dZbuymOhHOZMqGSH9h4903WKEfXUIK
+         Ihu4UkEUGRMZYvczG6eW4RhyhV86yFqi/rQKplWY9qtWIprNOVzd/1aXYq9ULfKFlbvb
+         LMLxNrKgdqtUykGdJpnTEtqo55upXDV5u1poN6Me5xDB9d9i0wi0RYeUMNieL30Ags5x
+         bQhp9L6fd+t+QmCiK/WLpF8kQdhllWQNNAj9lCtFQl0+mHmk6tZ1K2HMtynoJqR/VJ05
+         /kQ/74Xzw5+lhLyeKmjqTfSfuQ4vDvkoqPFErA4XBBPV1YJCjKKOyXlEfW71mn2sJS2e
+         uIDA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7ZYqiJZMTfB0I7uiB8ASlDToNyFSQvNTa6lsrMRbyztqoyaNN1dmDvzn5vIDfzh9/oxuRr9LhOrvq8SASQ3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvUoMeutijS1/7YKvu7JaRRswkp/8GVhtvRuPh/oVvKvG4AYvl
+	7CxaX8fSvfucSEoV5F6UWZu9H5PIhc7i1S9xJgExm/pZ6ydq8rZKm+VL5EP6Y9w2XI1vi8r80qc
+	Vh768cusuduolNntyVMtSRXiXx3qInhc8o0KSEqU3Lg==
+X-Gm-Gg: AY/fxX6mqm+FYT9E9imdYoYwwW6GKHc9U504RHu9e7njD+hYHN61wvC1n8aXPH0qOn9
+	TH39wA5EhCHD2vd2DMMQ24YVhwmt8tTN69Z9YObx4lsabFhRQ0AxhP9zJCWKuEFuiXwgNO9OCAI
+	pdeCpEXnSW4JGlBOTByo3zaUm/QYcE3JcJpQJiA+R1nMKnGcbWsf4vfs8RiVPHIlnKXWB78UIAj
+	0LEd0nPtR5mbJzBRM/JU1DT68v0EnDsZlchi/D93WJ+B8JthgBROwB2fDMR9np5uiVjnPdgQ8up
+	iEXYBr8zQ3Y/Rkb3N9qsxfdnKQ==
+X-Google-Smtp-Source: AGHT+IHdzsrnh67Z+uk7sg0iAMocZMySikku48EGz5g7L5MG+hq7iSRlseyY2l5vM8LHePwozU/hD6rMNUuAq73AgFc=
+X-Received: by 2002:a05:6820:828:b0:65c:f41b:7119 with SMTP id
+ 006d021491bc7-65cf41b750emr1784992eaf.5.1766042500598; Wed, 17 Dec 2025
+ 23:21:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.54.3 (3.54.3-2.fc41) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAyMyBTYWx0ZWRfXx22SN0YXGd1y
- i3/COUJHtVrRzFgjzLA5WOqV/hv1Of5bdUqZbOQk/ra+SPrzbs/jLGdbK4Doxcmwwjn8zM4vB+q
- 7t65I+bms27tdTFh5+ffmTuDXi/7CAts1Wpwxcdi57jrVgPM57MVEjFwOBYKFI19y4Rx/tksn+d
- eJ4QOPSLKyETTEhjAkpSDLwONQ4waR6FJo3YckvdVUED3LunRMoxDCkztqd4pA/EaIaBvSIlqJj
- 3it2xT5TDUQ8UIKpGEz6Yng+B2zOF3vOULV+lImdTxLiHppr2GjZC54+3kTzxXsuTTlz0UNC2y3
- 3pH79b1KeFgmwcpg68M3epIKWG9MwRjAU/eIOONZRUk7QfeqlDqJnw42BCSqIDZ6WcMJR1bLkej
- kx9gDVRe9Qnx/l6DB8nifTl20eWMgQ==
-X-Proofpoint-ORIG-GUID: WDL9zEmPZ02Er_BtEUpOJbQIrYWTNoQa
-X-Authority-Analysis: v=2.4 cv=QtRTHFyd c=1 sm=1 tr=0 ts=69430751 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=i0EeH86SAAAA:8 a=f4KxpfNTu-1Vb7Gj6-cA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: A2JYgC1vBlzfih75d51bimKymf17DbjZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-17_03,2025-12-17_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 impostorscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130023
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+In-Reply-To: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Thu, 18 Dec 2025 08:21:27 +0100
+X-Gm-Features: AQt7F2r_j21Nqcv1IzhOT6jk9UPtvnwA1D3etXiTv5WveGJRYXXMC9qqoGF_Yc4
+Message-ID: <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver callbacks
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Sumit Garg <sumit.garg@kernel.org>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Sumit Garg <sumit.garg@oss.qualcomm.com>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, 
+	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, 
+	Cristian Marussi <cristian.marussi@arm.com>, arm-scmi@vger.kernel.org, 
+	linux-mips@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2025-12-17 at 17:01 +0100, Roberto Sassu wrote:
-> On Wed, 2025-12-17 at 10:26 -0500, Mimi Zohar wrote:
-> > Hi Roberto,
-> >=20
-> > Thank you!  Everything is working as designed.
-> >=20
-> > - Only public functions require kernel-doc comments, but other function=
-s would
-> > benefit having a comment.
-> >=20
-> > - As I mentioned in response to Steven's patch, "After trimming the mea=
-surement
-> > list, existing verifiers, which walk the IMA measurement list, will obv=
-iously
-> > fail to match the PCRs.  Breaking existing userspace applications is a =
-problem
-> > and, unfortunately, requires yet another Kconfig option.  It needs to b=
-e at
-> > least mentioned here in the patch description."
->=20
-> Hi Mimi
->=20
-> sure.
->=20
-> > On Fri, 2025-12-12 at 18:19 +0100, Roberto Sassu wrote:
-> > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > >=20
-> > > Introduce the ability of staging the entire (or a portion of the) IMA
-> > > measurement list for deletion. Staging means moving the current conte=
-nt of
-> > > the measurement list to a separate location, and allowing users to re=
-ad and
-> > > delete it. This causes the measurement list to be atomically truncate=
-d
-> > > before new measurements can be added.=C2=A0
-> >=20
-> > This last sentence is the crux of your of your proposal.
-> >  -> "quickly be atomically ... so ..."
->=20
-> Ok.
->=20
-> > I must be missing something.  With the ability of trimming N records, i=
-t's
-> > unclear to me the benefit of staging the measurement list and requiring=
- a
-> > separate deletion. The measurement list can be read before trimming wit=
-hout
-> > loosing any measurements.  Like now, the entire measurement list could =
-be moved
-> > to a staging area. Instead of freeing all of the records, only N record=
-s would
-> > be freed.  Afterwards the remaining staged measurements (N+1) could be =
-restored
-> > to the head of the measurement list.
->=20
-> My hope is to avoid trimming based on N in the kernel, but rather offer
-> the same functionality on a user space service that simply gets all the
-> measurements it can from the kernel (with the stage all approach), and
-> exposes the desired measurements to requesting applications (based on N
-> or based on a PCR value, as Microsoft requested).
+Hi,
 
-Agreed, the measurement list needs to be copied to userspace and saved.  Ho=
-w
-userspace applications will access it needs to be defined and documented.
+On Mon, Dec 15, 2025 at 3:17=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
+>
+> Hello,
+>
+> the objective of this series is to make tee driver stop using callbacks
+> in struct device_driver. These were superseded by bus methods in 2006
+> (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+> methods.")) but nobody cared to convert all subsystems accordingly.
+>
+> Here the tee drivers are converted. The first commit is somewhat
+> unrelated, but simplifies the conversion (and the drivers). It
+> introduces driver registration helpers that care about setting the bus
+> and owner. (The latter is missing in all drivers, so by using these
+> helpers the drivers become more correct.)
+>
+> v1 of this series is available at
+> https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylibre=
+.com
+>
+> Changes since v1:
+>
+>  - rebase to v6.19-rc1 (no conflicts)
+>  - add tags received so far
+>  - fix whitespace issues pointed out by Sumit Garg
+>  - fix shutdown callback to shutdown and not remove
+>
+> As already noted in v1's cover letter, this series should go in during a
+> single merge window as there are runtime warnings when the series is
+> only applied partially. Sumit Garg suggested to apply the whole series
+> via Jens Wiklander's tree.
+> If this is done the dependencies in this series are honored, in case the
+> plan changes: Patches #4 - #17 depend on the first two.
+>
+> Note this series is only build tested.
+>
+> Uwe Kleine-K=C3=B6nig (17):
+>   tee: Add some helpers to reduce boilerplate for tee client drivers
+>   tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
+>   tee: Adapt documentation to cover recent additions
+>   hwrng: optee - Make use of module_tee_client_driver()
+>   hwrng: optee - Make use of tee bus methods
+>   rtc: optee: Migrate to use tee specific driver registration function
+>   rtc: optee: Make use of tee bus methods
+>   efi: stmm: Make use of module_tee_client_driver()
+>   efi: stmm: Make use of tee bus methods
+>   firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+>   firmware: arm_scmi: Make use of tee bus methods
+>   firmware: tee_bnxt: Make use of module_tee_client_driver()
+>   firmware: tee_bnxt: Make use of tee bus methods
+>   KEYS: trusted: Migrate to use tee specific driver registration
+>     function
+>   KEYS: trusted: Make use of tee bus methods
+>   tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+>   tpm/tpm_ftpm_tee: Make use of tee bus methods
+>
+>  Documentation/driver-api/tee.rst             | 18 +----
+>  drivers/char/hw_random/optee-rng.c           | 26 ++----
+>  drivers/char/tpm/tpm_ftpm_tee.c              | 31 +++++---
+>  drivers/firmware/arm_scmi/transports/optee.c | 32 +++-----
+>  drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 ++-----
+>  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++----
+>  drivers/rtc/rtc-optee.c                      | 27 ++-----
+>  drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++
+>  include/linux/tee_drv.h                      | 12 +++
+>  security/keys/trusted-keys/trusted_tee.c     | 17 ++--
+>  10 files changed, 164 insertions(+), 138 deletions(-)
+>
+> base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> --
+> 2.47.3
+>
 
-I thought Microsoft backed away from trimming the measurement list based on=
- a
-PCR value. At least basing it on a PCR value, is not implemented in the ker=
-nel.
+Thank you for the nice cleanup, Uwe.
 
->=20
-> I think it was already mentioned earlier in the discussion. By reading
-> and trimming at two different times, there is a race window where two
-> separate remote attestation agents determine N on the current
-> measurements list and attempt to trim one after another with the same
-> N, but the latter attempts to do it on an already trimmed measurements
-> list. They could take the write lock for the read too to avoid that.
+I've applied patch 1-3 to the branch tee_bus_callback_for_6.20 in my
+tree at https://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.gi=
+t/
 
-Yes, I saw the problem in v1, when the second request wasn't rejected but w=
-as
-synchronized by a mutex.  That should have been fixed in v2 with your locki=
-ng
-changes.
+The branch is based on v6.19-rc1, and I'll try to keep it stable for
+others to depend on, if needed. Let's see if we can agree on taking
+the remaining patches via that branch.
 
->=20
-> The stage all approach is not susceptible to this race window, because
-> it does not require a prior read before the operation.
-
-I'm not convinced of that, as any application with cap sysadmin can initiat=
-e a
-trim or trim & delete.  At least at the moment, there's no way of limiting =
-the
-trim/delete to a given application.  Perhaps it could be limited based on
-SELinux labels.
-
---=20
-thanks,
-
-Mimi
-
-
-
-
-
+Cheers,
+Jens
 
