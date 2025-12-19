@@ -1,268 +1,131 @@
-Return-Path: <linux-integrity+bounces-8124-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8125-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E557DCD1B23
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Dec 2025 20:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DC51CD1DFE
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Dec 2025 21:57:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9341D30249EE
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Dec 2025 19:55:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 77C6A3074CFA
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Dec 2025 20:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E53527462;
-	Fri, 19 Dec 2025 19:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29372E62A8;
+	Fri, 19 Dec 2025 20:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="QQV7v4yV"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="Ax1t+FmC"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75D322256B
-	for <linux-integrity@vger.kernel.org>; Fri, 19 Dec 2025 19:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BDA339B4F;
+	Fri, 19 Dec 2025 20:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766174155; cv=none; b=t0tF2x4ngx3WP697aVdCiGP7TAOPvAxBCmNPG9pPvWWcO+8tPXuoAOFVqWnH4pwU0vXmv/+SOjKmWAUg3WW9nWbDAnErVXRtnzZTgJQ/FcFCBDQgA7DKBZwdEF6/HHgNznWHDcBglyrATIf8fTmStBkOaowBuOIiwH3qKEf1cog=
+	t=1766177692; cv=none; b=J1Lp45IKNr1x8qheJ2TG9Glx9z37bIVcnMH2E1tnhsSnOi624rh6ZrC1QYe3XizCNuniGgzxluChc8m87SZ2jEhXddLlyhlGe9WuwRKTtP3Bfl2MnReucyb/RATAx8UNz2/q5gCRVcDLwXm1qwF/X6Q2l3wVEu4Dp6h9aqEsgM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766174155; c=relaxed/simple;
-	bh=Izr+0B/kidUR6kFgGzijhtufQOYwDySylQrmdDOiNK4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jn+8eR9bmzuO6UmU09VJabM2kJ1pKLN76Jnu2h0Qn8XakrN/Ua5U6CaBYcxnMChi4qVsyVTAj7G6qcTKNj1NtPqu1F/kUW9iEl1v/hzBObq4+jZCD1qkrXHTPvFSxRTgn0/wTN78S0fFcuFwDxj/VWC54r5QHjVuDhmn/Fpjwtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=QQV7v4yV; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-3ec41466a30so1655028fac.0
-        for <linux-integrity@vger.kernel.org>; Fri, 19 Dec 2025 11:55:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1766174151; x=1766778951; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N5F126y8if8LIRdkatntytj2kts1EA3ylByzLwVAd7s=;
-        b=QQV7v4yVGhZrDpD4C/qdVBG0V8kPtG8fkN4DEKnoiTNCd6GMldYkmEmNtGwum2HAuK
-         i1h/9rZn7rnrQhG8sbHQDsKHZEO+L6p3XXm2deTIV4P/QdSfplv8Xa8+YkoL/rVoNhfr
-         XRJp11L16okwZyR5rWkXuvyWBLt0aFcQ9r/QbrOU+ZHmojom557CrdcrBP+Ak8BkyPMc
-         0J9eeKSZUA+l6Ax1hJeon2lHR5BpQhwcx51OOZjyRxYzJdU+LqX/ZXRyZKV0GX2pbrDi
-         VypAw9YKjkUGEFEYGtFpb4i0aty2+qY5sM54OTg3VhSli2wu/J9qh0N0M8MLd9J/BaB1
-         Dw/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766174151; x=1766778951;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N5F126y8if8LIRdkatntytj2kts1EA3ylByzLwVAd7s=;
-        b=PZgkR828/yS/5J2gh7IZTazYh52S2sNis8plDJ3IjlkFqsT5WoabSBPU8LCo/9IxkD
-         7mZBJIYkfAvqLZ2zgPypy4KETA2ZIUARCdIsN9a+cM5xW47xGAumwxnPyi+eu8sRrCPh
-         xm8rGrykUENBhTupTOmxi35mrZpyqRMWd8UYvDFuWZOvoS5IBhGZSsvvEcgf/mnpWxCU
-         SILkzN/dUmCzkOgcfoAmCAW3QbyTHs05T8M9GQKqbNVNyulGTMBqrD19ayHbWwGPwyQ/
-         gZKNRsh+Tx9Uxv3TDivXfNCje7EptoND/Os8Tny6dRQWzKfgNYH0zId/zkfoQq6hN3R1
-         wCAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnQSzfL0T9cjetyXBchRgOfLqGfOWOzh3zwyqsn+tC/etRnPWJ041tTqKCiNFTZplwrChHSAQ4DmWGjBY19ls=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwN+NyPCSL46j3DitQWUyKAeXUOjEtmdPtisTAKlnHSFv5U76i
-	qXW3V5wsJ/4Sf62aIBKk93SrkYHz1LQDxJMo6SHH7JGkTwgiv9+DoxHeTfNmNPXOZpI=
-X-Gm-Gg: AY/fxX6i2U8pOcz5KiSHquMTPq70P1axOIskkWaLCCKawBqGPJ2rcR8At2nlderodJY
-	CM92jl1lMfVRzxHLIC+F2fWs1ubQz1G4OZOUgFXmhDXGe80HWO54nRPDDn2EOgzbBzpnYFLnO8+
-	NbPcncDMABorxUEofnDJZIEHs3y+eI+TpuUNjDrfEgm1HJCtpSwoeDwxjDgNS2Avg17tiRvYpH5
-	IRH6oj7xVTZQ0TYxWm0rIxov8y0gdjYIPiEii3kJPt2zC/UVkck88fJj18rFR9j2S+WseJbrB3r
-	oJu/ip6Hn4NufjsWji5XL3LdrSoGXdR9VWSZFK7TWml5BmwJK6aWTUfe2ZrA3QYFqLkhC87BtfS
-	M3CFxT0KoM47L7y/SDVJA0I3ulh16Py0r3lNZLdK9KO/tLxxecQSfi82MujoPqE0YpUY3/3o=
-X-Google-Smtp-Source: AGHT+IGUJKnpVTtWN1QzetKvQAGqiGpbky9oCmNtRbx1YI2Uk2HdWm3JOrxGMx7ehZyvsljs/LyvvQ==
-X-Received: by 2002:a05:6870:a106:b0:3ec:2fc8:979a with SMTP id 586e51a60fabf-3fda5411600mr2171361fac.19.1766174151433;
-        Fri, 19 Dec 2025 11:55:51 -0800 (PST)
-Received: from 861G6M3.. ([2a09:bac1:76a0:540::f:338])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3fdaab65749sm1965280fac.11.2025.12.19.11.55.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Dec 2025 11:55:50 -0800 (PST)
-From: Chris J Arges <carges@cloudflare.com>
-To: zohar@linux.ibm.com,
-	roberto.sassu@huawei.com
-Cc: kernel-team@cloudflare.com,
-	Chris J Arges <carges@cloudflare.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
-	Kees Cook <kees@kernel.org>,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] ima: Fix stack-out-of-bounds in is_bprm_creds_for_exec()
-Date: Fri, 19 Dec 2025 13:54:41 -0600
-Message-ID: <20251219195456.912190-1-carges@cloudflare.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1766177692; c=relaxed/simple;
+	bh=ct/83C3aVD7w9RmeI8ieN4UYEfKR6L0H4RnQeW9nw9I=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jf5ND/AMcaphudJ+LjyRYOawAb9w+PSQEHZf17IS6Khrtj2Bx2qqNQQgGrQoiO6xkV/DBgQ5mQ8pwe/tHdR+L7DiF+7EJQa9o+0GMR7ibbF5JQhlhnsnf21DYsbBsvfeSweRDjWkl5X5XzvtTvOPwQSQKCjL0BIjgfuV2g0JjMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=Ax1t+FmC; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1766177688;
+	bh=ct/83C3aVD7w9RmeI8ieN4UYEfKR6L0H4RnQeW9nw9I=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=Ax1t+FmCxN5EGfonxbOoUuXCyG/hc6P+qBqlCGhW2FEqkix+m/Vo9TYHRzFoLjxv+
+	 du+pN5NHM1qf+quQrvryF2T+KAPflT6687DwdsT1KqxTnvt4dtEtFlUmFUujQ+p6CZ
+	 xlrk/o1v6ny8Dbu7HIwZsWADD45PRJMsJBgPQo7s=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4300:d341::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 385751C016E;
+	Fri, 19 Dec 2025 15:54:48 -0500 (EST)
+Message-ID: <57e69d4fd5a40899cd779ee04f29f33009c97431.camel@HansenPartnership.com>
+Subject: Re: [PATCH v8 07/12] KEYS: trusted: Remove dead branch from
+ tpm2_unseal_cmd
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
+ Mimi Zohar <zohar@linux.ibm.com>,  "open list:KEYS/KEYRINGS"
+ <keyrings@vger.kernel.org>, "open list:SECURITY SUBSYSTEM"
+ <linux-security-module@vger.kernel.org>, open list
+ <linux-kernel@vger.kernel.org>
+Date: Fri, 19 Dec 2025 15:54:47 -0500
+In-Reply-To: <20251216092147.2326606-8-jarkko@kernel.org>
+References: <20251216092147.2326606-1-jarkko@kernel.org>
+	 <20251216092147.2326606-8-jarkko@kernel.org>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-KASAN reported a stack-out-of-bounds access in ima_appraise_measurement
-from is_bprm_creds_for_exec:
+On Tue, 2025-12-16 at 11:21 +0200, Jarkko Sakkinen wrote:
+> TPM2_Unseal requires TPM2_ST_SESSIONS, and tpm2_unseal_cmd() always
+> does set up either password or HMAC session.
+>=20
+> Remove the branch in tpm2_unseal_cmd() conditionally setting
+> TPM2_ST_NO_SESSIONS. It is faulty but luckily it is never exercised
+> at run-time, and thus does not cause regressions.
 
-BUG: KASAN: stack-out-of-bounds in ima_appraise_measurement+0x12dc/0x16a0
- Read of size 1 at addr ffffc9000160f940 by task sudo/550
-The buggy address belongs to stack of task sudo/550
-and is located at offset 24 in frame:
-  ima_appraise_measurement+0x0/0x16a0
-This frame has 2 objects:
-  [48, 56) 'file'
-  [80, 148) 'hash'
+Shouldn't that also be
 
-This is caused by using container_of on the *file pointer which by the time
-this function is called is actually a stack variable.
+Fixes: b7960b904861 ("tpm2-sessions: Open code tpm_buf_append_hmac_session(=
+)")
 
-In order to fix this pass in a bprm_is_check boolean which can be set
-depending on how process_measurement is called. If the caller has a
-linux_binprm pointer we can determine is_check and set it then. Otherwise
-set it to false.
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> =C2=A0security/keys/trusted-keys/trusted_tpm2.c | 10 +---------
+> =C2=A01 file changed, 1 insertion(+), 9 deletions(-)
+>=20
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c
+> b/security/keys/trusted-keys/trusted_tpm2.c
+> index d3a5c5f2b926..3666e3e48eab 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -451,10 +451,8 @@ static int tpm2_unseal_cmd(struct tpm_chip
+> *chip,
+> =C2=A0			=C2=A0=C2=A0 struct trusted_key_options *options,
+> =C2=A0			=C2=A0=C2=A0 u32 blob_handle)
+> =C2=A0{
+> -	struct tpm_header *head;
+> =C2=A0	struct tpm_buf buf;
+> =C2=A0	u16 data_len;
+> -	int offset;
+> =C2=A0	u8 *data;
+> =C2=A0	int rc;
+> =C2=A0
+> @@ -495,14 +493,8 @@ static int tpm2_unseal_cmd(struct tpm_chip
+> *chip,
+> =C2=A0		tpm_buf_append_u16(&buf, options->blobauth_len);
+> =C2=A0		tpm_buf_append(&buf, options->blobauth, options-
+> >blobauth_len);
+> =C2=A0
+> -		if (tpm2_chip_auth(chip)) {
+> +		if (tpm2_chip_auth(chip))
 
-Fixes: 95b3cdafd7cb7 ("ima: instantiate the bprm_creds_for_exec() hook")
+Since the statement above is that the if is always true, why do you
+still have it here?
 
-Signed-off-by: Chris J Arges <carges@cloudflare.com>
----
- security/integrity/ima/ima.h          |  2 +-
- security/integrity/ima/ima_appraise.c | 15 ++-------------
- security/integrity/ima/ima_main.c     | 18 +++++++++---------
- 3 files changed, 12 insertions(+), 23 deletions(-)
+Regards,
 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index e3d71d8d56e3..5c9f244ed1d6 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -441,7 +441,7 @@ int ima_check_blacklist(struct ima_iint_cache *iint,
- int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
- 			     struct file *file, const unsigned char *filename,
- 			     struct evm_ima_xattr_data *xattr_value,
--			     int xattr_len, const struct modsig *modsig);
-+			     int xattr_len, const struct modsig *modsig, bool bprm_is_check);
- int ima_must_appraise(struct mnt_idmap *idmap, struct inode *inode,
- 		      int mask, enum ima_hooks func);
- void ima_update_xattr(struct ima_iint_cache *iint, struct file *file);
-diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
-index 5149ff4fd50d..ea2079417318 100644
---- a/security/integrity/ima/ima_appraise.c
-+++ b/security/integrity/ima/ima_appraise.c
-@@ -470,17 +470,6 @@ int ima_check_blacklist(struct ima_iint_cache *iint,
- 	return rc;
- }
- 
--static bool is_bprm_creds_for_exec(enum ima_hooks func, struct file *file)
--{
--	struct linux_binprm *bprm;
--
--	if (func == BPRM_CHECK) {
--		bprm = container_of(&file, struct linux_binprm, file);
--		return bprm->is_check;
--	}
--	return false;
--}
--
- /*
-  * ima_appraise_measurement - appraise file measurement
-  *
-@@ -492,7 +481,7 @@ static bool is_bprm_creds_for_exec(enum ima_hooks func, struct file *file)
- int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
- 			     struct file *file, const unsigned char *filename,
- 			     struct evm_ima_xattr_data *xattr_value,
--			     int xattr_len, const struct modsig *modsig)
-+			     int xattr_len, const struct modsig *modsig, bool bprm_is_check)
- {
- 	static const char op[] = "appraise_data";
- 	int audit_msgno = AUDIT_INTEGRITY_DATA;
-@@ -514,7 +503,7 @@ int ima_appraise_measurement(enum ima_hooks func, struct ima_iint_cache *iint,
- 	 * of the script interpreter(userspace). Differentiate kernel and
- 	 * userspace enforced integrity audit messages.
- 	 */
--	if (is_bprm_creds_for_exec(func, file))
-+	if (bprm_is_check)
- 		audit_msgno = AUDIT_INTEGRITY_USERSPACE;
- 
- 	/* If reading the xattr failed and there's no modsig, error out. */
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 5770cf691912..955dbaa42f4a 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -236,7 +236,7 @@ static void ima_file_free(struct file *file)
- static int process_measurement(struct file *file, const struct cred *cred,
- 			       struct lsm_prop *prop, char *buf, loff_t size,
- 			       int mask, enum ima_hooks func,
--			       enum kernel_read_file_id read_id)
-+			       enum kernel_read_file_id read_id, bool bprm_is_check)
- {
- 	struct inode *real_inode, *inode = file_inode(file);
- 	struct ima_iint_cache *iint = NULL;
-@@ -426,7 +426,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
- 			inode_lock(inode);
- 			rc = ima_appraise_measurement(func, iint, file,
- 						      pathname, xattr_value,
--						      xattr_len, modsig);
-+						      xattr_len, modsig, bprm_is_check);
- 			inode_unlock(inode);
- 		}
- 		if (!rc)
-@@ -493,14 +493,14 @@ static int ima_file_mmap(struct file *file, unsigned long reqprot,
- 
- 	if (reqprot & PROT_EXEC) {
- 		ret = process_measurement(file, current_cred(), &prop, NULL,
--					  0, MAY_EXEC, MMAP_CHECK_REQPROT, 0);
-+					  0, MAY_EXEC, MMAP_CHECK_REQPROT, 0, false);
- 		if (ret)
- 			return ret;
- 	}
- 
- 	if (prot & PROT_EXEC)
- 		return process_measurement(file, current_cred(), &prop, NULL,
--					   0, MAY_EXEC, MMAP_CHECK, 0);
-+					   0, MAY_EXEC, MMAP_CHECK, 0, false);
- 
- 	return 0;
- }
-@@ -584,7 +584,7 @@ static int ima_bprm_check(struct linux_binprm *bprm)
- 
- 	security_current_getlsmprop_subj(&prop);
- 	return process_measurement(bprm->file, current_cred(),
--				   &prop, NULL, 0, MAY_EXEC, BPRM_CHECK, 0);
-+				   &prop, NULL, 0, MAY_EXEC, BPRM_CHECK, 0, bprm->is_check);
- }
- 
- /**
-@@ -614,7 +614,7 @@ static int ima_creds_check(struct linux_binprm *bprm, const struct file *file)
- 
- 	security_current_getlsmprop_subj(&prop);
- 	return process_measurement((struct file *)file, bprm->cred, &prop, NULL,
--				   0, MAY_EXEC, CREDS_CHECK, 0);
-+				   0, MAY_EXEC, CREDS_CHECK, 0, bprm->is_check);
- }
- 
- /**
-@@ -662,7 +662,7 @@ static int ima_file_check(struct file *file, int mask)
- 	security_current_getlsmprop_subj(&prop);
- 	return process_measurement(file, current_cred(), &prop, NULL, 0,
- 				   mask & (MAY_READ | MAY_WRITE | MAY_EXEC |
--					   MAY_APPEND), FILE_CHECK, 0);
-+					   MAY_APPEND), FILE_CHECK, 0, false);
- }
- 
- static int __ima_inode_hash(struct inode *inode, struct file *file, char *buf,
-@@ -881,7 +881,7 @@ static int ima_read_file(struct file *file, enum kernel_read_file_id read_id,
- 	func = read_idmap[read_id] ?: FILE_CHECK;
- 	security_current_getlsmprop_subj(&prop);
- 	return process_measurement(file, current_cred(), &prop, NULL, 0,
--				   MAY_READ, func, 0);
-+				   MAY_READ, func, 0, false);
- }
- 
- const int read_idmap[READING_MAX_ID] = {
-@@ -925,7 +925,7 @@ static int ima_post_read_file(struct file *file, char *buf, loff_t size,
- 	func = read_idmap[read_id] ?: FILE_CHECK;
- 	security_current_getlsmprop_subj(&prop);
- 	return process_measurement(file, current_cred(), &prop, buf, size,
--				   MAY_READ, func, read_id);
-+				   MAY_READ, func, read_id, false);
- }
- 
- /**
--- 
-2.43.0
+James
 
 
