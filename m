@@ -1,86 +1,87 @@
-Return-Path: <linux-integrity+bounces-8137-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8138-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25435CDEA79
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Dec 2025 12:36:02 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEBBCCDEADC
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Dec 2025 13:09:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 24868300727A
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Dec 2025 11:36:00 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C4C7F3005F3C
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Dec 2025 12:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95CE9283121;
-	Fri, 26 Dec 2025 11:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2D431CA4C;
+	Fri, 26 Dec 2025 12:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EjDZaKc/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JgXTLw/G"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C920D1D86DC
-	for <linux-integrity@vger.kernel.org>; Fri, 26 Dec 2025 11:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DFD2BD5AF
+	for <linux-integrity@vger.kernel.org>; Fri, 26 Dec 2025 12:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766748958; cv=none; b=R/z+MHBQK4UJL5AOSSvttA04OcvIafUFegkYPU1TNXbD/F7xT+/Cy40N0+pLCZ71nu0DPIg5A8PyUTxscU+BKTxDJkhlBfkw+x9bknof0tULRIv1qEin75VkSPzszJ78D99bgFFnke/6vO4LrU/+UGl/zQNRMUEQ/NmgpQpdrOE=
+	t=1766750978; cv=none; b=NOUCDo+bEPIMDffR1rXg8CsLIkJRFjBY6baE7PjBI4jHw8Xwssy9YH5Em3sfw3pR4AmSNi2YK1mbJWoosGtuNGLOvHD9V3U13zFLRAxvuL+PHsnmv6l0oNo5X5y8EX07LfMFvJbxH3TCi2LxoCwOs0sBvGPAoFwmDBustELxFS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766748958; c=relaxed/simple;
-	bh=h7Q8TIoHb2clEfMFWcY4ckjMLk9OcogwO7V1uIer53w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a+TxocWUaf8ih3FJygXnWMe468Egid1ljrH/1ZoO0B2SuVR+M3WBZXwYTsthE96cuR8mqZe43jmzSRFyMMFQTMi0mM3Dl1HVAqe1/FhApS2I9kJDKG1KoaJ2hNDU3V4NG3hPlFHMFbg47GyXfjXMu5PIWfbyNnMKnf85sq6QLRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EjDZaKc/; arc=none smtp.client-ip=209.85.167.42
+	s=arc-20240116; t=1766750978; c=relaxed/simple;
+	bh=P+0Qx3sZetbkSWiOm2AFC37FSFNQ4o+XGqGdVw99zqc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XesZx/Uue1hBMNiAfKbpoIy9e8ueN7j+8jJcSol8zwDp2vJDWnskrpp5apSjP9UPS80HxyQOCjq1YAiqSCkTUmu3A9QalM44nd85h4wx1xmwRm5yIfWfE4PlOdy/dlaZPOncKnotKw3UqK172ODmZhX9pkd18ybhY/BeR2PxutQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JgXTLw/G; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-594285c6509so7738808e87.0
-        for <linux-integrity@vger.kernel.org>; Fri, 26 Dec 2025 03:35:56 -0800 (PST)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5942bac322dso8000129e87.0
+        for <linux-integrity@vger.kernel.org>; Fri, 26 Dec 2025 04:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766748955; x=1767353755; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766750975; x=1767355775; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vkLDWzVkVGEGy7oqy0wjarG1BP52vTs1apSPyNRbl6w=;
-        b=EjDZaKc/5L1Jxpy9RaGYbXvdbYWD/uBH1UCmCXN2NnHo3O1acR0dczCNlCgObV1INI
-         w72lNlm64/ezFkTgHdahts1aaoZzDLduRvEOIgZq8YVOBlzH82ahkMpQ3HFU2ar0irFA
-         8l/CtyJ95kVno+eLpaCeFUxQAdKdd2YKiqlhJAXMY67Jkkm/LZt8e3DJq0MkTbnlBvLx
-         kDwQIijlTJ4/R9Yt8fTI2vli57RXscKAskaaiLP845pgnyW3xCsoYyF+tQYw7tGv66Bu
-         bTIm1dQsG6fJRblY624XuQrVG7IylnT5iaeT+Kd6exQoaz3p8H0Hq44M3proWsa4irI+
-         95ug==
+        bh=6V2FKk+nq/UWbVzWV/SlXvxgESiQ13Hs+bkW8OxV61k=;
+        b=JgXTLw/GIgJVX9S3HI2fMuGQ3t+B+aeniUCmz0B12f4f3cTLeRaeyzoQbwIXhKNk5f
+         bir5XXwVarjSQmEMlrCCQ/2qMaqkGcR4KLnu/6jP6BhvDTgD5r2THPHE1LxvpbyOnvPj
+         Y9s5S3e5l9TsH4HsC2PSHsX7gfbOvo6faV6Emsv3J3NdMAIoOC4dc+prkS30mu7AeSjf
+         f0cozoeN0f/ogl2n/9teTcqE7GNVelGwDhxHnQOMuhDft62atD0+545vS3b2MlXabL+A
+         fO8DarkE4FsC7byvuSW7mUb7eNOPf9BaCv1HW152AmYdqryhh0RXFigm3VZBkCr1i+6m
+         sQGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766748955; x=1767353755;
+        d=1e100.net; s=20230601; t=1766750975; x=1767355775;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vkLDWzVkVGEGy7oqy0wjarG1BP52vTs1apSPyNRbl6w=;
-        b=isdkt9aVNzjAz5hu+lNqSkaiREjWzBJLcMkrwv/GN0SBvCE4ZjmZx9GSMAlxDv+O0X
-         5i2eKVcfzlMSO/k14862YY4nA/+7Q6iVsiIRoGIXUl/HfSK++0UfrCUIx8XKvvx42QSp
-         xuFwahS9hwW1g6xC9M+WdY66231jx/rzu6ZorW6rK8bNCFAN8OKefVqm78l2SVR3x+I1
-         0I9HWkONGPvu5LqQfJ6fP47yaYrq5mGSzjLppjkerpIGVrBShR6gJfUdj2NXOpTwZ/g8
-         IHXhKvYI2Z85zDAsNoEdekuKDXdO9G7vf/jdsrPFUP+ABUjpC2UiEF8B0dlKXUDWppLn
-         873g==
-X-Forwarded-Encrypted: i=1; AJvYcCV+QpFMeRFOkcj+5vr86Fm8WK+iHT+6xS3KrqD4qCMJzq2VeY3j55Fz2IzuVAaiOhI5DJsSNJS0ekWahMA1Amw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxyor7qbvXRdZmdCaLmIxdIHGkJ4QeL4bmh7fZGvrRWCQnTSOpQ
-	xW2MsAEJAHNs7DteWro6wNJiQcwqoCy9JIpHeT0hNyyDICU/NY82+Tfv
-X-Gm-Gg: AY/fxX7rb1mZq5LQEVDyk0wB/xZEdDUJZb0XF6vs4dt3AlwNxIBYfrloZkugl8qtKXw
-	XjYqv7isLLe18NK+xVzTwbzZ697Bt8FIturJhP1m5aszUWoXpHBIjxaEvpP3ke6gGSS0FH5wjJT
-	LdwedheuBFeZOlUZuplerdYpi73zSVvCirOSSrRkQORTpdOvNJiG7iObQ57JXDhNft6OfEtxSto
-	X0c/mQcxI88kIX4V88j4YfBfPBH2KGUuIetP7+lvky3xAXl3NFnmf5UnjXVz4OjNrO6Qi9bZmBD
-	um62MnRAOHKqzpC87orTEPd5oK5k9aXJUUjo5mwJQ6XTuiAvVl4ivjonSYvfCzflr/YAEVEXs5O
-	c/ZYfzOXKO11I5AGAHziJVNHCbLSX2t67Lr/8org5XjUZZpBsDnlmF8+EnzqgiAt8uv2meUOX9C
-	iUHIYT0vGw3caO2Pd2o0hW9n7AjX0=
-X-Google-Smtp-Source: AGHT+IGV+ti61UNwfvokZHz4Yvl2VzkFLVddac+hzh5LaEa+pP2BzaGRv+B0OAsHXjyNg6Ji6cbFoA==
-X-Received: by 2002:a05:6512:3088:b0:594:2e7b:6f9 with SMTP id 2adb3069b0e04-59a17d3df9dmr9147293e87.27.1766748954754;
-        Fri, 26 Dec 2025 03:35:54 -0800 (PST)
+        bh=6V2FKk+nq/UWbVzWV/SlXvxgESiQ13Hs+bkW8OxV61k=;
+        b=RiGdJFPo6vT7FMvs/28n2jjNoYgo+fmipfX5Mn+Cj3KFolZn0VHyEmXYitlW/Ma52s
+         SFQBc+Y36DqRFCDiZDPt2HG1ijljDYUoPICD8BwLXIzGfF+hfTht9Ha6qbamoq31jw7Y
+         YP75SqAbiT7C2aEKqbcHK19fLXtWe9B3SftRy4ieHX/+LgTBMbrBOxeoJ9xTJLIMk8zp
+         Ua4vIUjzKAlRZfyV4vCLPorrLJLN1XdsJ9VmKmc6pjG0N+xDAyrGjIBMGRdtgZ59oTqO
+         sLA/qv9wtibcJaKzNqltJzaSBuoEo8B3xpww0yidKS6R+3cPCi+XanUNJtMPvHZNrXdR
+         yGtg==
+X-Forwarded-Encrypted: i=1; AJvYcCWUX6/G5JAzSVihFu0mqYlERrWSCfmVwVlaIIJekvmMNraiO7rNYM8Z9j3MStfULM4lsGmYdcTNdxsJHxCtcL4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrpR0XY2W3HsNuSsAI56+Iw3FHSp+RDqQSEy1Z/k/z6q4PEs/C
+	WknSC1wq6treSTVOzw4C1Um23Wg622P1t76RHPpeSuv3DV2JLQwJyzQm
+X-Gm-Gg: AY/fxX4XqhyOGYAc/yWK0BHoCrozw67kOORLozm6qfJbXy4Cg8QwzjBZPPG/Og9NJBA
+	3+l0uqMz00OF+mkx+zUbGBRHGIDVrJucIesjtHOVJ6tuEjk3hoekKYZqz2WHTxt0kNnwAZgmA3h
+	jmME8mUHuCjWO30Y604DwLVxEcFbYP23drZQ5V+ewY1jVvjKdh+rHSB1JXkKNICTTKeR0IDK5qc
+	x2AaPeH+I2yJtylQWWMek/oWNdJ//EIo36KmlveF98RUsa/a5aeMh2nLEKN3H/0DgQrBxG17vfG
+	UwhGu6/iVrdaxTc8vFD+VP3xJTz22R+R8/Z5/6BxIY6FJHVFtQHrvE5PBjxKCnzfLBLdoRQbEZN
+	jwjEFMLG4apW0c1Xgyynabh3+GJSf3u5smm9T4kvzGHbXiXi1fnIij+9frHN0AyMPYyMYn++PK6
+	2b1PUj71c7xHZs0JeNWBhHi0CF/dw=
+X-Google-Smtp-Source: AGHT+IFfEKBr6eBl7ykv4GEdX7LpO80HMpB4K8mx96ZtUwr8pKVo/di8GIolUfkR36Y/Dp8fDlINjg==
+X-Received: by 2002:a05:6512:3f10:b0:594:2e7e:7897 with SMTP id 2adb3069b0e04-59a17d3b3demr7599475e87.29.1766750974420;
+        Fri, 26 Dec 2025 04:09:34 -0800 (PST)
 Received: from localhost.localdomain ([176.33.65.121])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a185d5ff5sm6526298e87.6.2025.12.26.03.35.53
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a18618abbsm6832456e87.50.2025.12.26.04.09.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Dec 2025 03:35:54 -0800 (PST)
+        Fri, 26 Dec 2025 04:09:34 -0800 (PST)
 From: Alper Ak <alperyasinak1@gmail.com>
 To: peterhuewe@gmx.de,
 	jarkko@kernel.org
 Cc: Alper Ak <alperyasinak1@gmail.com>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
-	Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Christophe Ricard <christophe.ricard@gmail.com>,
 	linux-integrity@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: tpm_tis_spi: Initialize ret variable in tpm_tis_spi_transfer_half()
-Date: Fri, 26 Dec 2025 14:35:04 +0300
-Message-ID: <20251226113505.53740-1-alperyasinak1@gmail.com>
+Subject: [PATCH] tpm: st33zp24: Fix missing cleanup on get_burstcount() error
+Date: Fri, 26 Dec 2025 15:09:27 +0300
+Message-ID: <20251226120929.61630-1-alperyasinak1@gmail.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -90,32 +91,35 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When len is 0, the while loop in tpm_tis_spi_transfer_half() is never
-entered and the function returns an uninitialized ret variable.
+get_burstcount() can return -EBUSY on timeout. When this happens,
+st33zp24_send() returns directly without releasing the locality
+acquired earlier.
 
-Initialize ret to 0 to correctly handle this case. This is consistent
-with tpm_tis_spi_transfer_full(), which already initializes ret to 0
-before the loop.
+Use goto out_err to ensure proper cleanup when get_burstcount() fails.
 
-Fixes: a86a42ac2bd6 ("tpm_tis_spi: Add hardware wait polling")
+Fixes: bf38b8710892 ("tpm/tpm_i2c_stm_st33: Split tpm_i2c_tpm_st33 in 2 layers (core + phy)")
 Signed-off-by: Alper Ak <alperyasinak1@gmail.com>
 ---
- drivers/char/tpm/tpm_tis_spi_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/tpm/st33zp24/st33zp24.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm_tis_spi_main.c b/drivers/char/tpm/tpm_tis_spi_main.c
-index 61b42c83ced8..1b6d79662ca1 100644
---- a/drivers/char/tpm/tpm_tis_spi_main.c
-+++ b/drivers/char/tpm/tpm_tis_spi_main.c
-@@ -85,7 +85,7 @@ static int tpm_tis_spi_transfer_half(struct tpm_tis_data *data,	u32 addr,
- 	struct spi_transfer spi_xfer[3];
- 	struct spi_message m;
- 	u8 transfer_len;
--	int ret;
-+	int ret = 0;
+diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
+index 2ed7815e4899..e2b7451ea7cc 100644
+--- a/drivers/char/tpm/st33zp24/st33zp24.c
++++ b/drivers/char/tpm/st33zp24/st33zp24.c
+@@ -328,8 +328,10 @@ static int st33zp24_send(struct tpm_chip *chip, unsigned char *buf,
  
- 	while (len) {
- 		transfer_len = min_t(u16, len, MAX_SPI_FRAMESIZE);
+ 	for (i = 0; i < len - 1;) {
+ 		burstcnt = get_burstcount(chip);
+-		if (burstcnt < 0)
+-			return burstcnt;
++		if (burstcnt < 0) {
++			ret = burstcnt;
++			goto out_err;
++		}
+ 		size = min_t(int, len - i - 1, burstcnt);
+ 		ret = tpm_dev->ops->send(tpm_dev->phy_id, TPM_DATA_FIFO,
+ 					 buf + i, size);
 -- 
 2.43.0
 
