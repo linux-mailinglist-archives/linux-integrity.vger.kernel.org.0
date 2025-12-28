@@ -1,126 +1,138 @@
-Return-Path: <linux-integrity+bounces-8138-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8139-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEBBCCDEADC
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Dec 2025 13:09:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA526CE486E
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Dec 2025 04:16:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C4C7F3005F3C
-	for <lists+linux-integrity@lfdr.de>; Fri, 26 Dec 2025 12:09:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 830333008E9C
+	for <lists+linux-integrity@lfdr.de>; Sun, 28 Dec 2025 03:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2D431CA4C;
-	Fri, 26 Dec 2025 12:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7339F8287E;
+	Sun, 28 Dec 2025 03:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JgXTLw/G"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="csensrfK"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DFD2BD5AF
-	for <linux-integrity@vger.kernel.org>; Fri, 26 Dec 2025 12:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B832C1096F
+	for <linux-integrity@vger.kernel.org>; Sun, 28 Dec 2025 03:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766750978; cv=none; b=NOUCDo+bEPIMDffR1rXg8CsLIkJRFjBY6baE7PjBI4jHw8Xwssy9YH5Em3sfw3pR4AmSNi2YK1mbJWoosGtuNGLOvHD9V3U13zFLRAxvuL+PHsnmv6l0oNo5X5y8EX07LfMFvJbxH3TCi2LxoCwOs0sBvGPAoFwmDBustELxFS4=
+	t=1766891810; cv=none; b=otTwUzBPJudsVA4bjh1s1a0LWJgLPwXoii5dMFMeIM7HZdzPb1nh1O2zMF3oF+v6Ps7zNoiM2Nt+/6NF8JCUzAO/2WN7WZB9I6c3Q271BQ+kAnNmIsFTaGRLzyELJdJUvdaGmFrEh26CMmvpj0pyXtqezv7gCNnIdJjHMQMlN6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766750978; c=relaxed/simple;
-	bh=P+0Qx3sZetbkSWiOm2AFC37FSFNQ4o+XGqGdVw99zqc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XesZx/Uue1hBMNiAfKbpoIy9e8ueN7j+8jJcSol8zwDp2vJDWnskrpp5apSjP9UPS80HxyQOCjq1YAiqSCkTUmu3A9QalM44nd85h4wx1xmwRm5yIfWfE4PlOdy/dlaZPOncKnotKw3UqK172ODmZhX9pkd18ybhY/BeR2PxutQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JgXTLw/G; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5942bac322dso8000129e87.0
-        for <linux-integrity@vger.kernel.org>; Fri, 26 Dec 2025 04:09:36 -0800 (PST)
+	s=arc-20240116; t=1766891810; c=relaxed/simple;
+	bh=D1B/8qGaIULiyrWZIU7ksue6i2ruRWEPGXnLBNYaHYw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pe9NuN5j/qdSS8nr2AxwyvPzZUubgUlymbWnr38Ay/D2uFD8w4DPK0jksOzAzW8OnLWqs0ukIcVbs2pZ6UjA2q/BZWMpt2jFHxVuqm4NvfP4GWz9zJpd8uD8rCB1vwHJKVfoo+glQ+6UTGbWUkPgMIfVTaV/pdcmHyrNn/3WCxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=csensrfK; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-79018a412edso12165517b3.0
+        for <linux-integrity@vger.kernel.org>; Sat, 27 Dec 2025 19:16:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766750975; x=1767355775; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6V2FKk+nq/UWbVzWV/SlXvxgESiQ13Hs+bkW8OxV61k=;
-        b=JgXTLw/GIgJVX9S3HI2fMuGQ3t+B+aeniUCmz0B12f4f3cTLeRaeyzoQbwIXhKNk5f
-         bir5XXwVarjSQmEMlrCCQ/2qMaqkGcR4KLnu/6jP6BhvDTgD5r2THPHE1LxvpbyOnvPj
-         Y9s5S3e5l9TsH4HsC2PSHsX7gfbOvo6faV6Emsv3J3NdMAIoOC4dc+prkS30mu7AeSjf
-         f0cozoeN0f/ogl2n/9teTcqE7GNVelGwDhxHnQOMuhDft62atD0+545vS3b2MlXabL+A
-         fO8DarkE4FsC7byvuSW7mUb7eNOPf9BaCv1HW152AmYdqryhh0RXFigm3VZBkCr1i+6m
-         sQGw==
+        d=cloudflare.com; s=google09082023; t=1766891808; x=1767496608; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dcfnVkad9dNalZK5dHkAImODCCJ6qAXWtwQcj5QBYRw=;
+        b=csensrfKIjE+PjRi4xUdwBQsVW32ewX8MGM3S2PyiaKc/li8w5/QEvXP8mcLJGcm5Q
+         kmJoe3glggjFQbFE57oRyArHuSsp3u9MEIuYBLJefVGfmoWfkhlC76/a8JY3YGYTam17
+         2akpp8b1l6smLC8n3LrtMrH7ssPatv4wAn4ccJ33oagPAIMj38O7Z6d3kmv0WnBAhNGn
+         hOB1i4NQsUftPdBICWTntAe6J4AKUqRMtjUoXy2WE0U8OLKH2t+8Hgh743vUNeSYnBar
+         KlVZTiysmVvD5K2I6Xrbyicl5ehp5L8k+1E3B07i5hLKxlZg9Ze8yRuZVz9c8yEgRi05
+         ZUZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766750975; x=1767355775;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6V2FKk+nq/UWbVzWV/SlXvxgESiQ13Hs+bkW8OxV61k=;
-        b=RiGdJFPo6vT7FMvs/28n2jjNoYgo+fmipfX5Mn+Cj3KFolZn0VHyEmXYitlW/Ma52s
-         SFQBc+Y36DqRFCDiZDPt2HG1ijljDYUoPICD8BwLXIzGfF+hfTht9Ha6qbamoq31jw7Y
-         YP75SqAbiT7C2aEKqbcHK19fLXtWe9B3SftRy4ieHX/+LgTBMbrBOxeoJ9xTJLIMk8zp
-         Ua4vIUjzKAlRZfyV4vCLPorrLJLN1XdsJ9VmKmc6pjG0N+xDAyrGjIBMGRdtgZ59oTqO
-         sLA/qv9wtibcJaKzNqltJzaSBuoEo8B3xpww0yidKS6R+3cPCi+XanUNJtMPvHZNrXdR
-         yGtg==
-X-Forwarded-Encrypted: i=1; AJvYcCWUX6/G5JAzSVihFu0mqYlERrWSCfmVwVlaIIJekvmMNraiO7rNYM8Z9j3MStfULM4lsGmYdcTNdxsJHxCtcL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrpR0XY2W3HsNuSsAI56+Iw3FHSp+RDqQSEy1Z/k/z6q4PEs/C
-	WknSC1wq6treSTVOzw4C1Um23Wg622P1t76RHPpeSuv3DV2JLQwJyzQm
-X-Gm-Gg: AY/fxX4XqhyOGYAc/yWK0BHoCrozw67kOORLozm6qfJbXy4Cg8QwzjBZPPG/Og9NJBA
-	3+l0uqMz00OF+mkx+zUbGBRHGIDVrJucIesjtHOVJ6tuEjk3hoekKYZqz2WHTxt0kNnwAZgmA3h
-	jmME8mUHuCjWO30Y604DwLVxEcFbYP23drZQ5V+ewY1jVvjKdh+rHSB1JXkKNICTTKeR0IDK5qc
-	x2AaPeH+I2yJtylQWWMek/oWNdJ//EIo36KmlveF98RUsa/a5aeMh2nLEKN3H/0DgQrBxG17vfG
-	UwhGu6/iVrdaxTc8vFD+VP3xJTz22R+R8/Z5/6BxIY6FJHVFtQHrvE5PBjxKCnzfLBLdoRQbEZN
-	jwjEFMLG4apW0c1Xgyynabh3+GJSf3u5smm9T4kvzGHbXiXi1fnIij+9frHN0AyMPYyMYn++PK6
-	2b1PUj71c7xHZs0JeNWBhHi0CF/dw=
-X-Google-Smtp-Source: AGHT+IFfEKBr6eBl7ykv4GEdX7LpO80HMpB4K8mx96ZtUwr8pKVo/di8GIolUfkR36Y/Dp8fDlINjg==
-X-Received: by 2002:a05:6512:3f10:b0:594:2e7e:7897 with SMTP id 2adb3069b0e04-59a17d3b3demr7599475e87.29.1766750974420;
-        Fri, 26 Dec 2025 04:09:34 -0800 (PST)
-Received: from localhost.localdomain ([176.33.65.121])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a18618abbsm6832456e87.50.2025.12.26.04.09.32
+        d=1e100.net; s=20230601; t=1766891808; x=1767496608;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dcfnVkad9dNalZK5dHkAImODCCJ6qAXWtwQcj5QBYRw=;
+        b=LmzRLRoMeZRmfqpS+KSkmLAntfBoUU2UyaHuu5Dhb+Cfhdn7AZejul9+vFCSYH8tmf
+         yg81WHW/Xt7CEao5Esvpn9115qR5gB5IOLnXsYGUO7VjC+GqMd9rX3GrBmlnlpDsiyzA
+         IbkJPox/kF48hyT5GI4gErbL1AQeADQD2AX6zW+14wbduURIcqOGquNJe0/JlcaW9tyu
+         ZPxpcofGqd5bHC/wV3kLGrpytGAMxPCfyrwIIFYf87u0KJmPiCsjSa6OKh6wBP0cB++6
+         CN9OzMYNPIK3S/7P6eEMT8chOlool0TbWRHIJCGk3xROU+XJquRyd+2ooiBcGFAwAhMX
+         fe9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV4q81knfFgb6BxMaOQvueEXtswUGnsbH+T4TdD6KcTXbFnqEya72EILXZuATUp7LIyIGqY7l6miDPJj2P46Bo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjZTIeeR1uaY0g6nh3yXG7BsfQ8bFC3+lpfXev2+vwHZCipH2M
+	GcrF8wAK5zzd4dfoR+zrGGQe5upW7aKK2GSi3nkqow2BLpk8NXWSkpdvA4LVFhTmsrc=
+X-Gm-Gg: AY/fxX4fSwgTDdqGlPeXxb9xHhcCKMtfLqxvJ9YyK63gjyCg13UkdY9bcBhT8tcLDIk
+	yawAN+WGsakK6e9Z1plFkOxczvBPF+LNsrQnYmTYBm7iteL3vp1B+6eEv6nBFxuyf0Otf1iIUhx
+	VIBLg8nrpZSi5k/QKx7X5V/oqCf0mU5rc/25knRIdgAXraIlG6h4iaeNnHPlc1yF4cf6DXoTtP0
+	s+yOp01XSAUF3dqGhOeuCnLt/IbVqBUzUXSQb/qWSDIE5syC71bP/YzK3v151+CVNOkNbvRfYje
+	kVlYF0HGYBNwGsMkg3k2LbA2SP1ARBS/nif9Barmz7/mOAsLIbpjQvkUGonkZlfv7Rq9qq3y64S
+	1M5WPFV4Bmf/h1ZspnkmYTviFvw/XJpyS3r4AuGHNWjaAmnGsr+ezwUZtJlDuCUSN4RbD
+X-Google-Smtp-Source: AGHT+IH69knnQP2R2Roi5tRt4UtkALVf5KehNg9TwvQPoK1c5m2Uq1ktnZ6i74jJJapPSNUswT/RaA==
+X-Received: by 2002:a05:690c:48c8:b0:788:20ec:aeda with SMTP id 00721157ae682-78fb40b0a83mr229397877b3.68.1766891807785;
+        Sat, 27 Dec 2025 19:16:47 -0800 (PST)
+Received: from 861G6M3 ([2a09:bac1:76a0:780::5e:1f])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78fb416b32csm102409507b3.0.2025.12.27.19.16.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Dec 2025 04:09:34 -0800 (PST)
-From: Alper Ak <alperyasinak1@gmail.com>
-To: peterhuewe@gmx.de,
-	jarkko@kernel.org
-Cc: Alper Ak <alperyasinak1@gmail.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Christophe Ricard <christophe.ricard@gmail.com>,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: st33zp24: Fix missing cleanup on get_burstcount() error
-Date: Fri, 26 Dec 2025 15:09:27 +0300
-Message-ID: <20251226120929.61630-1-alperyasinak1@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Sat, 27 Dec 2025 19:16:46 -0800 (PST)
+Date: Sat, 27 Dec 2025 21:16:43 -0600
+From: Chris Arges <carges@cloudflare.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: roberto.sassu@huawei.com, kernel-team@cloudflare.com,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Kees Cook <kees@kernel.org>, linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] ima: Fix stack-out-of-bounds in
+ is_bprm_creds_for_exec()
+Message-ID: <aVChG8bjcAqOBEJi@861G6M3>
+References: <20251219195456.912190-1-carges@cloudflare.com>
+ <20251221180128.1026760-1-carges@cloudflare.com>
+ <3aeed1ff9388f09555bf5c6ade03cbe9ce93ff14.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3aeed1ff9388f09555bf5c6ade03cbe9ce93ff14.camel@linux.ibm.com>
 
-get_burstcount() can return -EBUSY on timeout. When this happens,
-st33zp24_send() returns directly without releasing the locality
-acquired earlier.
+On 2025-12-23 16:58:26, Mimi Zohar wrote:
+> Hi Chris,
+> 
+> On Sun, 2025-12-21 at 12:01 -0600, Chris J Arges wrote:
+> > KASAN reported a stack-out-of-bounds access in ima_appraise_measurement
+> > from is_bprm_creds_for_exec:
+> > 
+> > BUG: KASAN: stack-out-of-bounds in ima_appraise_measurement+0x12dc/0x16a0
+> >  Read of size 1 at addr ffffc9000160f940 by task sudo/550
+> > The buggy address belongs to stack of task sudo/550
+> > and is located at offset 24 in frame:
+> >   ima_appraise_measurement+0x0/0x16a0
+> > This frame has 2 objects:
+> >   [48, 56) 'file'
+> >   [80, 148) 'hash'
+> > 
+> > This is caused by using container_of on the *file pointer. This offset
+> > calculation is what triggers the stack-out-of-bounds error.
+> > 
+> > In order to fix this, pass in a bprm_is_check boolean which can be set
+> > depending on how process_measurement is called. If the caller has a
+> > linux_binprm pointer and the function is BPRM_CHECK we can determine
+> > is_check and set it then. Otherwise set it to false.
+> > 
+> > Fixes: 95b3cdafd7cb7 ("ima: instantiate the bprm_creds_for_exec() hook")
+> > 
+> > Signed-off-by: Chris J Arges <carges@cloudflare.com>
+> 
+> Thank you!  I'd appreciate your limiting the line lengths to 80 chars (e.g.
+> scripts/checkpatch.pl --max-line-length=80).
+> 
+> -- 
+> thanks,
+> 
+> Mimi
 
-Use goto out_err to ensure proper cleanup when get_burstcount() fails.
-
-Fixes: bf38b8710892 ("tpm/tpm_i2c_stm_st33: Split tpm_i2c_tpm_st33 in 2 layers (core + phy)")
-Signed-off-by: Alper Ak <alperyasinak1@gmail.com>
----
- drivers/char/tpm/st33zp24/st33zp24.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/st33zp24/st33zp24.c b/drivers/char/tpm/st33zp24/st33zp24.c
-index 2ed7815e4899..e2b7451ea7cc 100644
---- a/drivers/char/tpm/st33zp24/st33zp24.c
-+++ b/drivers/char/tpm/st33zp24/st33zp24.c
-@@ -328,8 +328,10 @@ static int st33zp24_send(struct tpm_chip *chip, unsigned char *buf,
- 
- 	for (i = 0; i < len - 1;) {
- 		burstcnt = get_burstcount(chip);
--		if (burstcnt < 0)
--			return burstcnt;
-+		if (burstcnt < 0) {
-+			ret = burstcnt;
-+			goto out_err;
-+		}
- 		size = min_t(int, len - i - 1, burstcnt);
- 		ret = tpm_dev->ops->send(tpm_dev->phy_id, TPM_DATA_FIFO,
- 					 buf + i, size);
--- 
-2.43.0
-
+Sure thing, I'll make that adjustment and send v3.
+--chris
 
