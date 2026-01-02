@@ -1,90 +1,134 @@
-Return-Path: <linux-integrity+bounces-8147-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8148-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC403CEEC4B
-	for <lists+linux-integrity@lfdr.de>; Fri, 02 Jan 2026 15:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AB8CCEEFA5
+	for <lists+linux-integrity@lfdr.de>; Fri, 02 Jan 2026 17:31:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8EBDF300EE47
-	for <lists+linux-integrity@lfdr.de>; Fri,  2 Jan 2026 14:33:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9004E3003F4A
+	for <lists+linux-integrity@lfdr.de>; Fri,  2 Jan 2026 16:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755FE21773D;
-	Fri,  2 Jan 2026 14:33:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F8F2BFC60;
+	Fri,  2 Jan 2026 16:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="r4VlfkmB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ecQyVXZ2"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA90D2153D4;
-	Fri,  2 Jan 2026 14:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08D1233D85;
+	Fri,  2 Jan 2026 16:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767364414; cv=none; b=Ac4d6i4G1AdpWUmBa1mSC8RQ/qPdiUn09mJO45bE98U0hl7GXcjnZoBv12QZBDqnyW3ECg+t+Qa+902vLytS1e1AoRXkddAv/3pUDzVhjJmFOpUFZByA5eR7H3o3ATpefDn2gKjn6fyT5v2n84YxX2kPBiUx15sDJaLVelH9xig=
+	t=1767371504; cv=none; b=LUG65HMDyh5OWl8zM03whYfEHBp46w5OK7PlCbTBGM8T3bRaVd380TzoqP3IMSNRMNkRIxPOHXXdSYDFxeEF4eAWYjGi7kPQcFeFPVojSaMRjJvdgFgwZc82zNdWuVB2npFnAomXlfnwvztsz5ff0ExQ90y70sWWHefwhAVwFmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767364414; c=relaxed/simple;
-	bh=icFKavWTxpbqVwKSos9/jvpEhvpHdMYn+jSXfuIuwsQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BWOIdKgWWp/s0p2mVwtUz5Exu4LS6FS43WZCcXf16tG8Nvk04UlUCdjFdugrgMlT+tCk+sep14ejGIFscPqZHz0/QpntnY7g9b0RyuY9AQCEySsDDEhAAeqCHgAQOhB8Td2/KPRR65kryqXR1iIiPJwnYc+7EPRa5fcuYpiIKKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=r4VlfkmB; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [192.168.1.91] (108-224-74-107.lightspeed.tukrga.sbcglobal.net [108.224.74.107])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 6752E2124E3C;
-	Fri,  2 Jan 2026 06:33:29 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 6752E2124E3C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1767364410;
-	bh=qbHG+Tw4XciLlS0G2pLKNnfrIdUptEZMMJOjYD90t04=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=r4VlfkmB1uK7MTVEKERU/Obbujsp/t1CFN1mwLByJclFH5Q/CSGRjZlrnf7/ZdbNx
-	 9Iuu8KDJrrSCVc+SUyoxntkHlpbZW5zgIdoYe4sgLix+t0/sD+hLWgZKb8XBr1DlTT
-	 Aplb/AuddLnl9qhO8c2mnDUTDZNOvCejIAjOR5hE=
-Message-ID: <4aaac6b2-54a8-496c-b456-51a2bd9ddf51@linux.microsoft.com>
-Date: Fri, 2 Jan 2026 06:33:28 -0800
+	s=arc-20240116; t=1767371504; c=relaxed/simple;
+	bh=xi1C51kz2snF5LoYlFVMZl0Z1hfaMqv9N2ZkxjaX4Ek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iW3KNuRLcYxnjj9dj4LRHhghFE0Q0fDla4nBzOnQOEdItP5f1sbYQRNnByi5tCQlMfCYn6++DPyZG6D1EC2rKOihy9XMkfFt8fqxcSPSTcU+hnFw0YYtZt2o+qNi+M2MNnhzUpdN83P4PqEGDSIUFQcc+K13ePesBAHNVi8NAfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ecQyVXZ2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6AA1C116B1;
+	Fri,  2 Jan 2026 16:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767371503;
+	bh=xi1C51kz2snF5LoYlFVMZl0Z1hfaMqv9N2ZkxjaX4Ek=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ecQyVXZ2jFb0zP7QJw4hcMbrhC46MVJBqsqnIeeXypf/toWZ9dJ92WtmfUeAolt97
+	 Z/XIhiYX6jOdJlRzYNLkfg8mexeM8QHKhTtUjPBkQL8tE58hP5ak2G+qowVab8ieqx
+	 YNuCT4l9MFIs3eMMMRbRMd+SsrfWXjJFAjVABuJZ8VlLZSa5lL+cu6G9Ol86Ke3I1e
+	 ziU5LHKXiaslfHxknDhjx+sZ8zVyCEa1c7BOuuNNhVBpDOTDmgc1F+YbooxD6bat9z
+	 7Lrw5zBNVazN1soSv7SPMtZtqtrNwSEbE+6+VTbd8mS3OfZkeo87lpK9owUWqgnrhm
+	 ete9TtRDJilqg==
+Date: Fri, 2 Jan 2026 18:31:38 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org, David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	"open list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v8 07/12] KEYS: trusted: Remove dead branch from
+ tpm2_unseal_cmd
+Message-ID: <aVfy6lcJ0F6vzY_I@kernel.org>
+References: <20251216092147.2326606-1-jarkko@kernel.org>
+ <20251216092147.2326606-8-jarkko@kernel.org>
+ <57e69d4fd5a40899cd779ee04f29f33009c97431.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 1/1] IMA event log trimming
-To: Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
-Cc: roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com, corbet@lwn.net, serge@hallyn.com,
- paul@paul-moore.com, jmorris@namei.org,
- linux-security-module@vger.kernel.org, anirudhve@linux.microsoft.com,
- gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com,
- sushring@linux.microsoft.com, linux-doc@vger.kernel.org,
- steven chen <chenste@linux.microsoft.com>
-References: <20251210235314.3341-1-chenste@linux.microsoft.com>
- <20251210235314.3341-2-chenste@linux.microsoft.com>
- <d80958ec-f139-41e9-afa0-a5aca94221de@linux.microsoft.com>
- <c93907cb0f08f9baa320488989aa87e7867ee9da.camel@linux.ibm.com>
- <b9d7bcea-3784-4ad6-b494-374db0c00cc6@linux.microsoft.com>
- <9a26898f46406314be1308e5416c0d51cedf44a4.camel@linux.ibm.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <9a26898f46406314be1308e5416c0d51cedf44a4.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <57e69d4fd5a40899cd779ee04f29f33009c97431.camel@HansenPartnership.com>
 
-On 12/23/2025 2:32 PM, Mimi Zohar wrote:
-> On Tue, 2025-12-16 at 11:59 -0800, steven chen wrote:
->>>>> +{
->>>>> +	struct ima_queue_entry *qe, *qe_tmp;
->>>>> +	LIST_HEAD(ima_measurements_staged);
->>>>> +	unsigned int i;
->>>>> +	long cur = number_logs;
->>> The variable name "number_logs" is confusing.Â  As I mentioned in the patch
->>> description, there is one measurement list with multiple records.Â  There aren't
->>> multiple logs in the kernel (other than the staged list).
->> Will update it to "req_value". Thanks!
-> Please refer to the section titled "Naming" in Documentation/process/coding-
-> style.rst.  Since this is the number of records being deleted, perhaps a better
-> variable name would be "num_records".
->
-Will update. Thanks
+On Fri, Dec 19, 2025 at 03:54:47PM -0500, James Bottomley wrote:
+> On Tue, 2025-12-16 at 11:21 +0200, Jarkko Sakkinen wrote:
+> > TPM2_Unseal requires TPM2_ST_SESSIONS, and tpm2_unseal_cmd() always
+> > does set up either password or HMAC session.
+> > 
+> > Remove the branch in tpm2_unseal_cmd() conditionally setting
+> > TPM2_ST_NO_SESSIONS. It is faulty but luckily it is never exercised
+> > at run-time, and thus does not cause regressions.
+> 
+> Shouldn't that also be
+> 
+> Fixes: b7960b904861 ("tpm2-sessions: Open code tpm_buf_append_hmac_session()")
 
-Steven
+The implementation has pre-existed before that commit so it did
+not really cause it. The call path was just more masked before
+open coding it.
 
+The code is of course exercised in !TCG_TPM2_HMAC case but it 
+by definition does nothing.
+
+> 
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >  security/keys/trusted-keys/trusted_tpm2.c | 10 +---------
+> >  1 file changed, 1 insertion(+), 9 deletions(-)
+> > 
+> > diff --git a/security/keys/trusted-keys/trusted_tpm2.c
+> > b/security/keys/trusted-keys/trusted_tpm2.c
+> > index d3a5c5f2b926..3666e3e48eab 100644
+> > --- a/security/keys/trusted-keys/trusted_tpm2.c
+> > +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> > @@ -451,10 +451,8 @@ static int tpm2_unseal_cmd(struct tpm_chip
+> > *chip,
+> >  			   struct trusted_key_options *options,
+> >  			   u32 blob_handle)
+> >  {
+> > -	struct tpm_header *head;
+> >  	struct tpm_buf buf;
+> >  	u16 data_len;
+> > -	int offset;
+> >  	u8 *data;
+> >  	int rc;
+> >  
+> > @@ -495,14 +493,8 @@ static int tpm2_unseal_cmd(struct tpm_chip
+> > *chip,
+> >  		tpm_buf_append_u16(&buf, options->blobauth_len);
+> >  		tpm_buf_append(&buf, options->blobauth, options-
+> > >blobauth_len);
+> >  
+> > -		if (tpm2_chip_auth(chip)) {
+> > +		if (tpm2_chip_auth(chip))
+> 
+> Since the statement above is that the if is always true, why do you
+> still have it here?
+
+This is still necessary for !TCG_TPM2_HMAC case. The commit is pretty
+much exactly in its described scope.
+
+> 
+> Regards,
+> 
+> James
+> 
+
+BR, Jarkko
 
