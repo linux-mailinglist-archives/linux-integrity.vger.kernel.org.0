@@ -1,122 +1,114 @@
-Return-Path: <linux-integrity+bounces-8172-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8175-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5909ACF66B4
-	for <lists+linux-integrity@lfdr.de>; Tue, 06 Jan 2026 03:08:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 442FCCF6CCF
+	for <lists+linux-integrity@lfdr.de>; Tue, 06 Jan 2026 06:44:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5EC3D30393D9
-	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jan 2026 02:07:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 237F53019B91
+	for <lists+linux-integrity@lfdr.de>; Tue,  6 Jan 2026 05:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EDE53E0B;
-	Tue,  6 Jan 2026 02:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215662EA169;
+	Tue,  6 Jan 2026 05:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="OMM+Fs/x"
+	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="YCBTmcle"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC567226CEB;
-	Tue,  6 Jan 2026 02:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF4D3A1E63;
+	Tue,  6 Jan 2026 05:44:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767665250; cv=none; b=otK3mMMAaCgBCuxNJvy7CowX1p9fr8YOZd9Z5D/r4XRXet7K+4zhbrWTWnfNfZsN9kYhzyFp3JemkasF9G74xiV56XMEFK5Ejvdv5AEodQFvh8jkGkwQoAchtY3s0JsavCzJKvlKx4bOfPl68L3KlIl9saRSjoOaaM6DENyTjD4=
+	t=1767678258; cv=none; b=ZRIPWlxvXq5xt4kL6nknmcEsqAloMVkN7WYxC8rYjPxi9iLsS1Skt38vA9WoF9i2dpWZIslRAstOBHQnNVefPa/DSm7GJGQ0giGz3ONV5iW25ipaSI+92APzNrraTnBa178Esmxm4y4soX+BGqwuxVVDTMQfxsXg++aq//hNNeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767665250; c=relaxed/simple;
-	bh=ReKDJWLsmPxVtRgonAxUuaCrmZxK0By2pg9RbEbNda4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LhwRcWFMZsiUDGZezA9Kq7TqYxcD1SlSN+CPdu1TUA0pYs3OXbgwd1aFxHSvZBREVcF0yXXfrX9lnXaowZyqhKI7hU4NXRWHDiF8lxe57xYX2bmaTOjANLSkqK44/e5Lk+9Ojmfm0z5zAD1/fh8rWPc5+CQ0SXEO9wtDklEUw0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=OMM+Fs/x; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from chenste-Virtual-Machine.mshome.net (unknown [50.168.180.218])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 0046F2126884;
-	Mon,  5 Jan 2026 18:07:26 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0046F2126884
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1767665248;
-	bh=pYpOXis9U8F/JF8jxXEwMopb+uSTVFbJv2L6MNYu6BI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OMM+Fs/xMEqxWQM3FUcCIfJV0hZ6BEODxolxPOJyrx4pzBRwTP7Fr8C9BGrBNuzrO
-	 ScZhHU5e09j6msbINHAHC7QCFg81ooAUh5hTPVk8/3hfDrlIS4qU5z/RaNog2eotVx
-	 ELir47rRl8x/zxyZwwiVGZeUsN6WODgID/FQcMwY=
-From: steven chen <chenste@linux.microsoft.com>
-To: linux-integrity@vger.kernel.org
-Cc: zohar@linux.ibm.com,
-	roberto.sassu@huawei.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	corbet@lwn.net,
-	serge@hallyn.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	linux-security-module@vger.kernel.org,
-	anirudhve@linux.microsoft.com,
-	chenste@linux.microsoft.com,
-	gregorylumen@linux.microsoft.com,
-	nramas@linux.microsoft.com,
-	sushring@linux.microsoft.com,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v3 3/3] ima: add new critical data record to measure log trimming
-Date: Mon,  5 Jan 2026 18:07:12 -0800
-Message-ID: <20260106020713.3994-4-chenste@linux.microsoft.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260106020713.3994-1-chenste@linux.microsoft.com>
-References: <20260106020713.3994-1-chenste@linux.microsoft.com>
+	s=arc-20240116; t=1767678258; c=relaxed/simple;
+	bh=zC+Cn31eJ187+jpwQbmiX49FfleHqGHjrtUyuIePf/4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nlsfoaARJu1c4IEiCe+LF3i3yAoDW7kUlcyEuDp3hLktfiaE5yTuyr0ufpmaqv9O1nC7MCg3pC7TVvyGYg7QD9aJTedFcrH6jJq3fkECLyEDA+yMnIXgOUAYDYS5dmKAjkRxvrgxs0Ov6MFPVS/CvxAnDAcv8T2RJJCWgGb+Lic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=YCBTmcle; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
+	from:content-type:reply-to; bh=fFZdK8UUvenzvPm6N9koDU/fxnR0ekW5TI24xZDY6kc=; 
+	b=YCBTmcleUU2N0rXwpVT4Xw527tlZr0N7PHGhoRYbFxi0V1yz0MspEiuaUgluwOHJi7UgUWJeaCo
+	aI+V2pDwpQLlu76KzkCMgTJfa8l73o4xERcZiC67fI6SQ38NHKqBernGbeIoTm6iaacIGzGhOr5GY
+	a7chkrDVBcwvZvi4K0hkD8kW9kADwG6VB2ySGSO7s2ZMuzQq0jjPbzgahByLEVKD7zpOn7S8o+0U3
+	CubE9wpUlCoN7q0wO2G+XJMN/qiJZ8rSECQv2HK4BVh6Uiw6J4b5giymeUTqeEWc7scenPFiItIlz
+	iOppOn/L0OnchT/HUMcryCLJmTDYf6itFTjw==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1vczEy-00EaCi-33;
+	Tue, 06 Jan 2026 13:04:22 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 06 Jan 2026 13:04:20 +0800
+Date: Tue, 6 Jan 2026 13:04:20 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Jens Wiklander <jens.wiklander@linaro.org>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Sumit Garg <sumit.garg@oss.qualcomm.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	arm-scmi@vger.kernel.org, linux-mips@vger.kernel.org,
+	netdev@vger.kernel.org, linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+Message-ID: <aVyX1GXxdJXv438W@gondor.apana.org.au>
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+ <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
+ <20251218135332f323fa91@mail.local>
+ <CAHUa44GpW5aO26GDyL9RZub9vVYvVcJ7etwO0yXBN_mUi0W4AA@mail.gmail.com>
+ <CAHUa44HqRbCJTXsrTCm0G5iwtkQtq+Si=yOspCjpAn-N2uVSVg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHUa44HqRbCJTXsrTCm0G5iwtkQtq+Si=yOspCjpAn-N2uVSVg@mail.gmail.com>
 
-Add a new critical data record to measure the trimming event when
-ima event records are deleted for this time.
+On Mon, Jan 05, 2026 at 10:16:09AM +0100, Jens Wiklander wrote:
+>
+> Herbert, you seem happy with the following patches
+> - hwrng: optee - Make use of module_tee_client_driver()
+> - hwrng: optee - Make use of tee bus methods
+> OK if I take them via my tree, or would you rather take them yourself?
 
-If all IMA event logs are saved in the userspace, use this type of
-logs to get total numbers of records deleted from beginning.
+Feel free to take them through your tree.
 
-Signed-off-by: steven chen <chenste@linux.microsoft.com>
----
- security/integrity/ima/ima_fs.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 67ff0cfc3d3f..6d3d34d07b2b 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -364,6 +364,22 @@ static const struct file_operations ima_ascii_measurements_ops = {
- 	.release = ima_measurements_release,
- };
- 
-+static void ima_measure_trim_event(const long number_logs)
-+{
-+	char ima_log_trim_event[IMA_LOG_TRIM_EVENT_LEN];
-+	struct timespec64 ts;
-+	u64 time_ns;
-+	int n;
-+
-+	ktime_get_real_ts64(&ts);
-+	time_ns = (u64)ts.tv_sec * 1000000000ULL + ts.tv_nsec;
-+	n = scnprintf(ima_log_trim_event, IMA_LOG_TRIM_EVENT_LEN,
-+		      "time= %llu; number= %lu;", time_ns, number_logs);
-+
-+	ima_measure_critical_data("ima_log_trim", "trim ima event logs",
-+				  ima_log_trim_event, n, false, NULL, 0);
-+}
-+
- static int ima_log_trim_open(struct inode *inode, struct file *file)
- {
- 	bool write = !!(file->f_mode & FMODE_WRITE);
-@@ -407,6 +423,8 @@ static ssize_t ima_log_trim_write(struct file *file,
- 		goto out;
- 
- 	trimcount = ret;
-+	if (trimcount > 0)
-+		ima_measure_trim_event(trimcount);
- 
- 	ret = datalen;
- out:
+Thanks,
 -- 
-2.43.0
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
