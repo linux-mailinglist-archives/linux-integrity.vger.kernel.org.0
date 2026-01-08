@@ -1,372 +1,498 @@
-Return-Path: <linux-integrity+bounces-8197-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8198-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA94ED00198
-	for <lists+linux-integrity@lfdr.de>; Wed, 07 Jan 2026 22:10:19 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCAC7D03E65
+	for <lists+linux-integrity@lfdr.de>; Thu, 08 Jan 2026 16:35:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BAE1F30194C3
-	for <lists+linux-integrity@lfdr.de>; Wed,  7 Jan 2026 21:10:16 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6CEB23060275
+	for <lists+linux-integrity@lfdr.de>; Thu,  8 Jan 2026 15:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D1334AB0B;
-	Wed,  7 Jan 2026 21:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648F23D5DAF;
+	Thu,  8 Jan 2026 12:32:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AkfrLCvh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACFIkApq"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8693E26FA5B;
-	Wed,  7 Jan 2026 21:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEC93A1A37;
+	Thu,  8 Jan 2026 12:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767820215; cv=none; b=p+MOdT1ooyMC3wAuT5zpA/dI2InOG+A0PpHSzLtOcCn+KYzYk2rb6+LT5gdgJOUGANFpH1TfJzq7l5+btQakP7DPIxu3DqOJHAvLLFL428FJ30Z+ET2dZ8jfFbnslBTzZ/VfYxkBV26n9Zp08CNmwtpRd0dZWDnA8demMV1Xprw=
+	t=1767875534; cv=none; b=WRpiOTPVNo3ysFqEqiWaNINVmGIkhrDJWFW7wOaNUcy2D0EXFnOxSMoDgGMemLmihvahns2GuDVNLbVtQpk5b2He3qJA528bkDNGTqaO6n2pujD25Nn2RL4j3iIi7eXO+adOHIPrTkXI1X4WUqokLPsyX1riXcqvsfWdV99M1LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767820215; c=relaxed/simple;
-	bh=LXih7MfEiSXktj0voMkKh/LDAHXHCoz68bnEqx47CFo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IindE7f5kodueLEEMQf1nYhXlKmltHCZkrTebYnWKDuaGT7lyA8Fimf2DOi00fNJ6OzLOTSul6h82cNX3HW5Brr1kK5wMIwkw1RUpROv0iQIm9Qnd9M5MCb3c8T1vh+qU0bE+3fwu8VEvHBKL4oxzY29dRVFrGkJidSIbl5SROw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AkfrLCvh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F067C4CEF1;
-	Wed,  7 Jan 2026 21:10:13 +0000 (UTC)
+	s=arc-20240116; t=1767875534; c=relaxed/simple;
+	bh=NGipQ+ltl3BfmRc8mAslsDCyZowJSv0FHRSZBA/HSw8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZhtmJ5zYUFWtyHDcs5oW3B+Cz/zXH8izc669wzTuDqlKYROKxicPRCrzzLhsnxJHohPFYtS7zPyu5CMkvrpjEjP5B927oeKgs210nCf/AMwFCVyNq5vIwuaJeljfid8Tw8A4S7LPapOYbkh/7y7WVTkleVbb7K8E1WSL+sXAN78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACFIkApq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09712C16AAE;
+	Thu,  8 Jan 2026 12:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767820215;
-	bh=LXih7MfEiSXktj0voMkKh/LDAHXHCoz68bnEqx47CFo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=AkfrLCvhZ9K9TtB1bl3odnMYXTR+DE+al2wkT4QddvWUriTZZnPZsGvJPCvuRvLQY
-	 EhG62iv1sOxpGPYF3LWUop+Z42IUQ6pY/XaUTyTABnJk3ytDGdkbAxzk35XMaHhJaN
-	 wgGRdnQznEGZYkmf1hBzx1J8drLobSiqZwDJtEttU5lDk6EosQoZmqbarX6wYMs+Jv
-	 53kiaVhy+bPysTJbDSe6lCmyHN13UcMKsk5EWABj6W4WU9b6SpeG4zkU8EalzvnLWs
-	 hYAgBuzLA2+eCE5wHat9Pf2dHXhz630c6alDh//ltdZEzSn3PGXVAP4tqpkMcZgREo
-	 jFTzMBv5GttvQ==
-Message-ID: <bd98a7dd123a68c9a6481a451c1cc4e5132740ac.camel@kernel.org>
-Subject: Re: [PATCH RFC] ima: Fallback to a ctime guard without i_version
- updates
-From: Jeff Layton <jlayton@kernel.org>
-To: Frederick Lawler <fred@cloudflare.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>,  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore	
- <paul@paul-moore.com>, James Morris <jmorris@namei.org>, "Serge E. Hallyn"	
- <serge@hallyn.com>, "Darrick J. Wong" <djwong@kernel.org>, Christian
- Brauner	 <brauner@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, kernel-team@cloudflare.com
-Date: Wed, 07 Jan 2026 16:10:12 -0500
-In-Reply-To: <aV66am9A5MmdNPbY@CMGLRV3>
-References: <20251229-xfs-ima-fixup-v1-1-6a717c939f7c@cloudflare.com>
-	 <3ad9ded9b3a269908eee6c79b70dbf432e60ce8d.camel@kernel.org>
-	 <aV07lY6NOkNvUk3Z@CMGLRV3> <aV1jhIS24tE-dL9A@CMGLRV3>
-	 <25b6d1b42ea07b058be4e4f48bb5a7c6b879b3ed.camel@kernel.org>
-	 <aV66am9A5MmdNPbY@CMGLRV3>
-Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
- keydata=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
- QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	s=k20201202; t=1767875531;
+	bh=NGipQ+ltl3BfmRc8mAslsDCyZowJSv0FHRSZBA/HSw8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ACFIkApqhIgoMZ4R9uViaQfOckAGHAiRUoOviPHdQXenaWA5+EvfhQ4Qi6gr+dqcy
+	 tiUoPxkRJwXU9wIThgtu4T0fNaVfq75chZcHFvEiqw2nWw6Q/VEP918rtKkcO+i8Ps
+	 AK7GVqfehHD0ERTvkjXzienxm88mnlgjeNoE3RtY9B4irclqsx2p60B2rNoD6YnakS
+	 ZiqJ/XHhbDSAYmGg/FuihPpCu1tyP51j8IVQCRD3VGmAPHnT+87b0AlmDagd+/NpV6
+	 LZpPFAs7NQGUuB+JMrsYZsLQj/X8aHDmGhHvoN9sU5XzYqt5O8isHzgedJ/PtFKn73
+	 zVFsmpLPMbUrA==
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: stable@vger.kernel.org
+Cc: linux-integrity@vger.kernel.org,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jonathan McDowell <noodles@meta.com>
+Subject: [PATCH] tpm2-sessions: Fix out of range indexing in name_size
+Date: Thu,  8 Jan 2026 14:31:59 +0200
+Message-ID: <20260108123159.1008858-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2026-01-07 at 13:56 -0600, Frederick Lawler wrote:
-> On Tue, Jan 06, 2026 at 02:50:31PM -0500, Jeff Layton wrote:
-> > On Tue, 2026-01-06 at 13:33 -0600, Frederick Lawler wrote:
-> > > On Tue, Jan 06, 2026 at 10:43:01AM -0600, Frederick Lawler wrote:
-> > > > Hi Jeff,
-> > > >=20
-> > > > On Tue, Jan 06, 2026 at 07:01:08AM -0500, Jeff Layton wrote:
-> > > > > On Mon, 2025-12-29 at 11:52 -0600, Frederick Lawler wrote:
-> > > > > > Since commit 1cf7e834a6fb ("xfs: switch to multigrain timestamp=
-s"), IMA
-> > > > > > is no longer able to correctly track inode.i_version due to the=
- struct
-> > > > > > kstat.change_cookie no longer containing an updated i_version.
-> > > > > >=20
-> > > > > > Introduce a fallback mechanism for IMA that instead tracks a
-> > > > > > integrity_ctime_guard() in absence of or outdated i_version
-> > > > > > for stacked file systems.
-> > > > > >=20
-> > > > > > EVM is left alone since it mostly cares about the backing inode=
-.
-> > > > > >=20
-> > > > > > Link: https://lore.kernel.org/all/aTspr4_h9IU4EyrR@CMGLRV3
-> > > > > > Fixes: 1cf7e834a6fb ("xfs: switch to multigrain timestamps")
-> > > > > > Suggested-by: Jeff Layton <jlayton@kernel.org>
-> > > > > > Signed-off-by: Frederick Lawler <fred@cloudflare.com>
-> > > > > > ---
-> > > > > > The motivation behind this was that file systems that use the
-> > > > > > cookie to set the i_version for stacked file systems may still =
-do so.
-> > > > > > Then add in the ctime_guard as a fallback if there's a detected=
- change.
-> > > > > > The assumption is that the ctime will be different if the i_ver=
-sion is
-> > > > > > different anyway for non-stacked file systems.
-> > > > > >=20
-> > > > > > I'm not too pleased with passing in struct file* to
-> > > > > > integrity_inode_attrs_changed() since EVM doesn't currently use
-> > > > > > that for now, but I couldn't come up with another idea to get t=
-he
-> > > > > > stat without coming up with a new stat function to accommodate =
-just
-> > > > > > the file path, fully separate out IMA/EVM checks, or lastly add=
- stacked
-> > > > > > file system support to EVM (which doesn't make much sense to me
-> > > > > > at the moment).
-> > > > > >=20
-> > > > > > I plan on adding in self test infrastructure for the v1, but I =
-would
-> > > > > > like to get some early feedback on the approach first.
-> > > > > > ---
-> > > > > >  include/linux/integrity.h           | 29 +++++++++++++++++++++=
-+++-----
-> > > > > >  security/integrity/evm/evm_crypto.c |  2 +-
-> > > > > >  security/integrity/evm/evm_main.c   |  2 +-
-> > > > > >  security/integrity/ima/ima_api.c    | 21 +++++++++++++++------
-> > > > > >  security/integrity/ima/ima_main.c   | 17 ++++++++++-------
-> > > > > >  5 files changed, 51 insertions(+), 20 deletions(-)
-> > > > > >=20
-> > > > > > diff --git a/include/linux/integrity.h b/include/linux/integrit=
-y.h
-> > > > > > index f5842372359be5341b6870a43b92e695e8fc78af..4964c0f2bbda0ca=
-450d135b9b738bc92256c375a 100644
-> > > > > > --- a/include/linux/integrity.h
-> > > > > > +++ b/include/linux/integrity.h
-> > > > > > @@ -31,19 +31,27 @@ static inline void integrity_load_keys(void=
-)
-> > > > > > =20
-> > > > > >  /* An inode's attributes for detection of changes */
-> > > > > >  struct integrity_inode_attributes {
-> > > > > > +	u64 ctime_guard;
-> > > > > >  	u64 version;		/* track inode changes */
-> > > > > >  	unsigned long ino;
-> > > > > >  	dev_t dev;
-> > > > > >  };
-> > > > > > =20
-> > > > > > +static inline u64 integrity_ctime_guard(struct kstat stat)
-> > > > > > +{
-> > > > > > +	return stat.ctime.tv_sec ^ stat.ctime.tv_nsec;
-> > > > > > +}
-> > > > > > +
-> > > > > >  /*
-> > > > > >   * On stacked filesystems the i_version alone is not enough to=
- detect file data
-> > > > > >   * or metadata change. Additional metadata is required.
-> > > > > >   */
-> > > > > >  static inline void
-> > > > > >  integrity_inode_attrs_store(struct integrity_inode_attributes =
-*attrs,
-> > > > > > -			    u64 i_version, const struct inode *inode)
-> > > > > > +			    u64 i_version, u64 ctime_guard,
-> > > > > > +			    const struct inode *inode)
-> > > > > >  {
-> > > > > > +	attrs->ctime_guard =3D ctime_guard;
-> > > > > >  	attrs->version =3D i_version;
-> > > > > >  	attrs->dev =3D inode->i_sb->s_dev;
-> > > > > >  	attrs->ino =3D inode->i_ino;
-> > > > > > @@ -54,11 +62,22 @@ integrity_inode_attrs_store(struct integrit=
-y_inode_attributes *attrs,
-> > > > > >   */
-> > > > > >  static inline bool
-> > > > > >  integrity_inode_attrs_changed(const struct integrity_inode_att=
-ributes *attrs,
-> > > > > > -			      const struct inode *inode)
-> > > > > > +			      struct file *file, struct inode *inode)
-> > > > > >  {
-> > > > > > -	return (inode->i_sb->s_dev !=3D attrs->dev ||
-> > > > > > -		inode->i_ino !=3D attrs->ino ||
-> > > > > > -		!inode_eq_iversion(inode, attrs->version));
-> > > > > > +	struct kstat stat;
-> > > > > > +
-> > > > > > +	if (inode->i_sb->s_dev !=3D attrs->dev ||
-> > > > > > +	    inode->i_ino !=3D attrs->ino)
-> > > > > > +		return true;
-> > > > > > +
-> > > > > > +	if (inode_eq_iversion(inode, attrs->version))
-> > > > > > +		return false;
-> > > > > > +
-> > > > > > +	if (!file || vfs_getattr_nosec(&file->f_path, &stat, STATX_CT=
-IME,
-> > > > > > +				       AT_STATX_SYNC_AS_STAT))
-> > > > > > +		return true;
-> > > > > > +
-> > > > >=20
-> > > > > This is rather odd. You're sampling the i_version field directly,=
- but
-> > > > > if it's not equal then you go through ->getattr() to get the ctim=
-e.
-> > > > >=20
-> > > > > It's particularly odd since you don't know whether the i_version =
-field
-> > > > > is even implemented on the fs. On filesystems where it isn't, the
-> > > > > i_version field generally stays at 0, so won't this never fall th=
-rough
-> > > > > to do the vfs_getattr_nosec() call on those filesystems?
-> > > > >=20
-> > > >=20
-> > > > You're totally right. I didn't consider FS's caching the value at z=
-ero.
-> > >=20
-> > > Actually, I'm going to amend this. I think I did consider FSs without=
- an
-> > > implementation. Where this is called at, it is often guarded by a
-> > > !IS_I_VERSION() || integrity_inode_attrs_change(). If I'm
-> > > understanding this correctly, the check call doesn't occur unless the=
- inode
-> > > has i_version support.
-> > >=20
-> >=20
-> >=20
-> > It depends on what you mean by i_version support:
-> >=20
-> > That flag just tells the VFS that it needs to bump the i_version field
-> > when updating timestamps. It's not a reliable indicator of whether the
-> > i_version field is suitable for the purpose you want here.
-> >=20
->=20
-> So, it would make sense then to also remove those guards at the callsite
-> then if the intention is to compare against the cookie & ctime regardless=
-?
->=20
+[ Upstream commit 6e9722e9a7bfe1bbad649937c811076acf86e1fd ]
 
-Yes, I'd say so. IS_I_VERSION() is not a reliable indicator of whether
-the filesystem can provide a proper change attribute. For instance,
-cephfs and NFS don't set that flag, but they can (sometimes) provide
-STATX_CHANGE_COOKIE. Going through getattr() is a much more reliable
-method.
+'name_size' does not have any range checks, and it just directly indexes
+with TPM_ALG_ID, which could lead into memory corruption at worst.
 
-> > The problem here and the one that we ultimately fixed with multigrain
-> > timestamps is that XFS in particular will bump i_version on any change
-> > to the log. That includes atime updates due to reads.
-> >=20
-> > XFS still tracks the i_version the way it always has, but we've stopped
-> > getattr() from reporting it because it's not suitable for the purpose
-> > that nfsd (and IMA) need it for.
-> >=20
-> > > It seems to me the suggestion then is to remove the IS_I_VERSION()
-> > > checks guarding the call sites, grab both ctime and cookie from stat,
-> > > and if IS_I_VERSION() use that, otherwise cookie, and compare
-> > > against the cached i_version with one of those values, and then fall
-> > > back to ctime?
-> > >=20
-> >=20
-> > Not exactly.
-> >=20
-> > You want to call getattr() for STATX_CHANGE_COOKIE|STATX_CTIME, and
-> > then check the kstat->result_mask. If STATX_CHANGE_COOKIE is set, then
-> > use that. If it's not then use the ctime.
->=20
-> Ok, I think I understand. To reiterate my understanding, ignore calling
-> into inode_eq_iversion() all together.
->=20
-> 	return other_checks || ((mask & cookie) ? cache->i_version =3D=3D cookie=
-_val :
-> 	compare_ctime())
->=20
+Address the issue by only processing known values and returning -EINVAL for
+unrecognized values.
 
-Yes, that psuedocode looks about right. IS_I_VERSION(),
-inode_eq_iversion(), etc. are really filesystem-internal APIs and not
-something IMA should be relying on as a fstype-agnostic LSM.
+Make also 'tpm_buf_append_name' and 'tpm_buf_fill_hmac_session' fallible so
+that errors are detected before causing any spurious TPM traffic.
 
+End also the authorization session on failure in both of the functions, as
+the session state would be then by definition corrupted.
 
-> >=20
-> > The part I'm not sure about is whether it's actually safe to do this.
-> > vfs_getattr_nosec() can block in some situations. Is it ok to do this
-> > in any context where integrity_inode_attrs_changed() may be called?=C2=
-=A0
-> >=20
-> > ISTR that this was an issue at one point, but maybe isn't now that IMA
-> > is an LSM?
->=20
-> Poking around, callers to integrity_inode_attrs_changed() are currently b=
-ehind
-> mutex_lock(&iinit->mutex) (similar to vfs_getattr_nosec() calls), and cur=
-rently
-> only called from process_measurement().
->=20
-> While I can't say for certain this will always be the case for future use
-> use cases, would it be helpful to include a may_sleep() in
-> integrity_inode_attrs_changed() to drive this point and make a comment?
->=20
+Cc: stable@vger.kernel.org # v6.10+
+Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
+Reviewed-by: Jonathan McDowell <noodles@meta.com>
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+ drivers/char/tpm/tpm2-cmd.c               |  23 +++-
+ drivers/char/tpm/tpm2-sessions.c          | 134 +++++++++++++++-------
+ include/linux/tpm.h                       |  13 ++-
+ security/keys/trusted-keys/trusted_tpm2.c |  29 ++++-
+ 4 files changed, 143 insertions(+), 56 deletions(-)
 
-Those kind of annotations do tend to be useful.
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index dfdcbd009720..74764eae9f10 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -250,7 +250,11 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 	}
+ 
+ 	if (!disable_pcr_integrity) {
+-		tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
++		rc = tpm_buf_append_name(chip, &buf, pcr_idx, NULL);
++		if (rc) {
++			tpm_buf_destroy(&buf);
++			return rc;
++		}
+ 		tpm_buf_append_hmac_session(chip, &buf, 0, NULL, 0);
+ 	} else {
+ 		tpm_buf_append_handle(chip, &buf, pcr_idx);
+@@ -265,8 +269,14 @@ int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
+ 			       chip->allocated_banks[i].digest_size);
+ 	}
+ 
+-	if (!disable_pcr_integrity)
+-		tpm_buf_fill_hmac_session(chip, &buf);
++	if (!disable_pcr_integrity) {
++		rc = tpm_buf_fill_hmac_session(chip, &buf);
++		if (rc) {
++			tpm_buf_destroy(&buf);
++			return rc;
++		}
++	}
++
+ 	rc = tpm_transmit_cmd(chip, &buf, 0, "attempting extend a PCR value");
+ 	if (!disable_pcr_integrity)
+ 		rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+@@ -324,7 +334,12 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+ 						| TPM2_SA_CONTINUE_SESSION,
+ 						NULL, 0);
+ 		tpm_buf_append_u16(&buf, num_bytes);
+-		tpm_buf_fill_hmac_session(chip, &buf);
++		err = tpm_buf_fill_hmac_session(chip, &buf);
++		if (err) {
++			tpm_buf_destroy(&buf);
++			return err;
++		}
++
+ 		err = tpm_transmit_cmd(chip, &buf,
+ 				       offsetof(struct tpm2_get_random_out,
+ 						buffer),
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index cf0b83154044..d020b74ed23c 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -144,16 +144,23 @@ struct tpm2_auth {
+ /*
+  * Name Size based on TPM algorithm (assumes no hash bigger than 255)
+  */
+-static u8 name_size(const u8 *name)
++static int name_size(const u8 *name)
+ {
+-	static u8 size_map[] = {
+-		[TPM_ALG_SHA1] = SHA1_DIGEST_SIZE,
+-		[TPM_ALG_SHA256] = SHA256_DIGEST_SIZE,
+-		[TPM_ALG_SHA384] = SHA384_DIGEST_SIZE,
+-		[TPM_ALG_SHA512] = SHA512_DIGEST_SIZE,
+-	};
+-	u16 alg = get_unaligned_be16(name);
+-	return size_map[alg] + 2;
++	u16 hash_alg = get_unaligned_be16(name);
++
++	switch (hash_alg) {
++	case TPM_ALG_SHA1:
++		return SHA1_DIGEST_SIZE + 2;
++	case TPM_ALG_SHA256:
++		return SHA256_DIGEST_SIZE + 2;
++	case TPM_ALG_SHA384:
++		return SHA384_DIGEST_SIZE + 2;
++	case TPM_ALG_SHA512:
++		return SHA512_DIGEST_SIZE + 2;
++	default:
++		pr_warn("tpm: unsupported name algorithm: 0x%04x\n", hash_alg);
++		return -EINVAL;
++	}
+ }
+ 
+ static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
+@@ -161,6 +168,7 @@ static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
+ 	struct tpm_header *head = (struct tpm_header *)buf->data;
+ 	off_t offset = TPM_HEADER_SIZE;
+ 	u32 tot_len = be32_to_cpu(head->length);
++	int ret;
+ 	u32 val;
+ 
+ 	/* we're starting after the header so adjust the length */
+@@ -173,8 +181,13 @@ static int tpm2_parse_read_public(char *name, struct tpm_buf *buf)
+ 	offset += val;
+ 	/* name */
+ 	val = tpm_buf_read_u16(buf, &offset);
+-	if (val != name_size(&buf->data[offset]))
++	ret = name_size(&buf->data[offset]);
++	if (ret < 0)
++		return ret;
++
++	if (val != ret)
+ 		return -EINVAL;
++
+ 	memcpy(name, &buf->data[offset], val);
+ 	/* forget the rest */
+ 	return 0;
+@@ -221,46 +234,72 @@ static int tpm2_read_public(struct tpm_chip *chip, u32 handle, char *name)
+  * As with most tpm_buf operations, success is assumed because failure
+  * will be caused by an incorrect programming model and indicated by a
+  * kernel message.
++ *
++ * Ends the authorization session on failure.
+  */
+-void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+-			 u32 handle, u8 *name)
++int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
++			u32 handle, u8 *name)
+ {
+ #ifdef CONFIG_TCG_TPM2_HMAC
+ 	enum tpm2_mso_type mso = tpm2_handle_mso(handle);
+ 	struct tpm2_auth *auth;
+ 	int slot;
++	int ret;
+ #endif
+ 
+ 	if (!tpm2_chip_auth(chip)) {
+ 		tpm_buf_append_handle(chip, buf, handle);
+-		return;
++		return 0;
+ 	}
+ 
+ #ifdef CONFIG_TCG_TPM2_HMAC
+ 	slot = (tpm_buf_length(buf) - TPM_HEADER_SIZE) / 4;
+ 	if (slot >= AUTH_MAX_NAMES) {
+-		dev_err(&chip->dev, "TPM: too many handles\n");
+-		return;
++		dev_err(&chip->dev, "too many handles\n");
++		ret = -EIO;
++		goto err;
+ 	}
+ 	auth = chip->auth;
+-	WARN(auth->session != tpm_buf_length(buf),
+-	     "name added in wrong place\n");
++	if (auth->session != tpm_buf_length(buf)) {
++		dev_err(&chip->dev, "session state malformed");
++		ret = -EIO;
++		goto err;
++	}
+ 	tpm_buf_append_u32(buf, handle);
+ 	auth->session += 4;
+ 
+ 	if (mso == TPM2_MSO_PERSISTENT ||
+ 	    mso == TPM2_MSO_VOLATILE ||
+ 	    mso == TPM2_MSO_NVRAM) {
+-		if (!name)
+-			tpm2_read_public(chip, handle, auth->name[slot]);
++		if (!name) {
++			ret = tpm2_read_public(chip, handle, auth->name[slot]);
++			if (ret)
++				goto err;
++		}
+ 	} else {
+-		if (name)
+-			dev_err(&chip->dev, "TPM: Handle does not require name but one is specified\n");
++		if (name) {
++			dev_err(&chip->dev, "handle 0x%08x does not use a name\n",
++				handle);
++			ret = -EIO;
++			goto err;
++		}
+ 	}
+ 
+ 	auth->name_h[slot] = handle;
+-	if (name)
+-		memcpy(auth->name[slot], name, name_size(name));
++	if (name) {
++		ret = name_size(name);
++		if (ret < 0)
++			goto err;
++
++		memcpy(auth->name[slot], name, ret);
++	}
++#endif
++	return 0;
++
++#ifdef CONFIG_TCG_TPM2_HMAC
++err:
++	tpm2_end_auth_session(chip);
++	return tpm_ret_to_err(ret);
+ #endif
+ }
+ EXPORT_SYMBOL_GPL(tpm_buf_append_name);
+@@ -578,11 +617,9 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
+  * encryption key and encrypts the first parameter of the command
+  * buffer with it.
+  *
+- * As with most tpm_buf operations, success is assumed because failure
+- * will be caused by an incorrect programming model and indicated by a
+- * kernel message.
++ * Ends the authorization session on failure.
+  */
+-void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
++int tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+ {
+ 	u32 cc, handles, val;
+ 	struct tpm2_auth *auth = chip->auth;
+@@ -592,10 +629,13 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+ 	u8 *hmac = NULL;
+ 	u32 attrs;
+ 	u8 cphash[SHA256_DIGEST_SIZE];
+-	struct sha256_state sctx;
++	struct sha256_ctx sctx;
++	int ret;
+ 
+-	if (!auth)
+-		return;
++	if (!auth) {
++		ret = -EIO;
++		goto err;
++	}
+ 
+ 	/* save the command code in BE format */
+ 	auth->ordinal = head->ordinal;
+@@ -604,9 +644,11 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+ 
+ 	i = tpm2_find_cc(chip, cc);
+ 	if (i < 0) {
+-		dev_err(&chip->dev, "Command 0x%x not found in TPM\n", cc);
+-		return;
++		dev_err(&chip->dev, "command 0x%08x not found\n", cc);
++		ret = -EIO;
++		goto err;
+ 	}
++
+ 	attrs = chip->cc_attrs_tbl[i];
+ 
+ 	handles = (attrs >> TPM2_CC_ATTR_CHANDLES) & GENMASK(2, 0);
+@@ -620,9 +662,9 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+ 		u32 handle = tpm_buf_read_u32(buf, &offset_s);
+ 
+ 		if (auth->name_h[i] != handle) {
+-			dev_err(&chip->dev, "TPM: handle %d wrong for name\n",
+-				  i);
+-			return;
++			dev_err(&chip->dev, "invalid handle 0x%08x\n", handle);
++			ret = -EIO;
++			goto err;
+ 		}
+ 	}
+ 	/* point offset_s to the start of the sessions */
+@@ -653,12 +695,14 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+ 		offset_s += len;
+ 	}
+ 	if (offset_s != offset_p) {
+-		dev_err(&chip->dev, "TPM session length is incorrect\n");
+-		return;
++		dev_err(&chip->dev, "session length is incorrect\n");
++		ret = -EIO;
++		goto err;
+ 	}
+ 	if (!hmac) {
+-		dev_err(&chip->dev, "TPM could not find HMAC session\n");
+-		return;
++		dev_err(&chip->dev, "could not find HMAC session\n");
++		ret = -EIO;
++		goto err;
+ 	}
+ 
+ 	/* encrypt before HMAC */
+@@ -690,8 +734,11 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+ 		if (mso == TPM2_MSO_PERSISTENT ||
+ 		    mso == TPM2_MSO_VOLATILE ||
+ 		    mso == TPM2_MSO_NVRAM) {
+-			sha256_update(&sctx, auth->name[i],
+-				      name_size(auth->name[i]));
++			ret = name_size(auth->name[i]);
++			if (ret < 0)
++				goto err;
++
++			sha256_update(&sctx, auth->name[i], ret);
+ 		} else {
+ 			__be32 h = cpu_to_be32(auth->name_h[i]);
+ 
+@@ -712,6 +759,11 @@ void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+ 	sha256_update(&sctx, &auth->attrs, 1);
+ 	tpm2_hmac_final(&sctx, auth->session_key, sizeof(auth->session_key)
+ 			+ auth->passphrase_len, hmac);
++	return 0;
++
++err:
++	tpm2_end_auth_session(chip);
++	return ret;
+ }
+ EXPORT_SYMBOL(tpm_buf_fill_hmac_session);
+ 
+diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+index a3d8305e88a5..9472e13f33c2 100644
+--- a/include/linux/tpm.h
++++ b/include/linux/tpm.h
+@@ -521,8 +521,8 @@ static inline struct tpm2_auth *tpm2_chip_auth(struct tpm_chip *chip)
+ #endif
+ }
+ 
+-void tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+-			 u32 handle, u8 *name);
++int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
++			u32 handle, u8 *name);
+ void tpm_buf_append_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf,
+ 				 u8 attributes, u8 *passphrase,
+ 				 int passphraselen);
+@@ -555,7 +555,7 @@ static inline void tpm_buf_append_hmac_session_opt(struct tpm_chip *chip,
+ #ifdef CONFIG_TCG_TPM2_HMAC
+ 
+ int tpm2_start_auth_session(struct tpm_chip *chip);
+-void tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf);
++int tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf);
+ int tpm_buf_check_hmac_response(struct tpm_chip *chip, struct tpm_buf *buf,
+ 				int rc);
+ void tpm2_end_auth_session(struct tpm_chip *chip);
+@@ -569,10 +569,13 @@ static inline int tpm2_start_auth_session(struct tpm_chip *chip)
+ static inline void tpm2_end_auth_session(struct tpm_chip *chip)
+ {
+ }
+-static inline void tpm_buf_fill_hmac_session(struct tpm_chip *chip,
+-					     struct tpm_buf *buf)
++
++static inline int tpm_buf_fill_hmac_session(struct tpm_chip *chip,
++					    struct tpm_buf *buf)
+ {
++	return 0;
+ }
++
+ static inline int tpm_buf_check_hmac_response(struct tpm_chip *chip,
+ 					      struct tpm_buf *buf,
+ 					      int rc)
+diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+index 024be262702f..10d1201a33e4 100644
+--- a/security/keys/trusted-keys/trusted_tpm2.c
++++ b/security/keys/trusted-keys/trusted_tpm2.c
+@@ -283,7 +283,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		goto out_put;
+ 	}
+ 
+-	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
++	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
++	if (rc)
++		goto out;
++
+ 	tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_DECRYPT,
+ 				    options->keyauth, TPM_DIGEST_SIZE);
+ 
+@@ -331,7 +334,10 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+ 		goto out;
+ 	}
+ 
+-	tpm_buf_fill_hmac_session(chip, &buf);
++	rc = tpm_buf_fill_hmac_session(chip, &buf);
++	if (rc)
++		goto out;
++
+ 	rc = tpm_transmit_cmd(chip, &buf, 4, "sealing data");
+ 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+ 	if (rc)
+@@ -444,7 +450,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 		return rc;
+ 	}
+ 
+-	tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
++	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
++	if (rc)
++		goto out;
++
+ 	tpm_buf_append_hmac_session(chip, &buf, 0, options->keyauth,
+ 				    TPM_DIGEST_SIZE);
+ 
+@@ -456,7 +465,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+ 		goto out;
+ 	}
+ 
+-	tpm_buf_fill_hmac_session(chip, &buf);
++	rc = tpm_buf_fill_hmac_session(chip, &buf);
++	if (rc)
++		goto out;
++
+ 	rc = tpm_transmit_cmd(chip, &buf, 4, "loading blob");
+ 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+ 	if (!rc)
+@@ -506,7 +518,9 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 		return rc;
+ 	}
+ 
+-	tpm_buf_append_name(chip, &buf, blob_handle, NULL);
++	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
++	if (rc)
++		goto out;
+ 
+ 	if (!options->policyhandle) {
+ 		tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT,
+@@ -531,7 +545,10 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+ 						NULL, 0);
+ 	}
+ 
+-	tpm_buf_fill_hmac_session(chip, &buf);
++	rc = tpm_buf_fill_hmac_session(chip, &buf);
++	if (rc)
++		goto out;
++
+ 	rc = tpm_transmit_cmd(chip, &buf, 6, "unsealing");
+ 	rc = tpm_buf_check_hmac_response(chip, &buf, rc);
+ 	if (rc > 0)
+-- 
+2.52.0
 
->=20
---=20
-Jeff Layton <jlayton@kernel.org>
 
