@@ -1,56 +1,80 @@
-Return-Path: <linux-integrity+bounces-8205-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8206-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14F0FD04A74
-	for <lists+linux-integrity@lfdr.de>; Thu, 08 Jan 2026 18:03:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C976D07F0A
+	for <lists+linux-integrity@lfdr.de>; Fri, 09 Jan 2026 09:48:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E83213064414
-	for <lists+linux-integrity@lfdr.de>; Thu,  8 Jan 2026 16:47:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8A8A93010980
+	for <lists+linux-integrity@lfdr.de>; Fri,  9 Jan 2026 08:48:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3916A2DB7BF;
-	Thu,  8 Jan 2026 16:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8821A350D4E;
+	Fri,  9 Jan 2026 08:48:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="VI0DVW3M"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PzxRYRoP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381702DA75C;
-	Thu,  8 Jan 2026 16:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767890854; cv=pass; b=ez5tOOnLx6JrAYomov2FNXabVV/bk6yEYBggtd21S47Nrkj7JYIMshCfXcQ9KK1MpqCINxZBYfWxtCQ8pm/+CHZVxPiopKYGFMnf42yZI5s0W06bsqYPfxhNv+yHFgdNuSQJiR5m1+vzZHRzm+et/nWrWyxhpbogseHcDBVPSRk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767890854; c=relaxed/simple;
-	bh=S3k2D/Q5Lqi++kUHj7B/31tkL0MgBzNU01O6nWdKSGQ=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC06F345CC8;
+	Fri,  9 Jan 2026 08:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767948501; cv=none; b=DDW5gyjcoD9umD9/AnbNphowS6qMk6O9wu8g7uDbuiI72icOa1G+rCPbOa9oXRHhunkDXtKq+nn5NS23uKwlczp5GFMZYGxglxHr0YhDgRPJmaP3jARlQMHK0nHTTs2irnoeURy0pyg7gu1FYPbZohrpL7pahgkG/A/5LB3N5Uw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767948501; c=relaxed/simple;
+	bh=9fXD/1CoA7xkW4bXJ0ueVrAvuKBMwYsx/oGnEzfFJ7I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LBWEu68DuTSIj2UJL5bc8nVwC6P4a7U7Qq7czmBiAjI57rtvxS+orXpfPDx+0svP6eq7Tpuyky2/Jv0Uy6qv9evbphxfOaKfNGK1LIG2qQNJFehHnkoS8jcGLMnZlaNVuu16HeJ1BUCn4zMwNrEBIfFV4zLRW1jInXLf1dfyJw4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=VI0DVW3M; arc=pass smtp.client-ip=136.143.188.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1767890794; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=GL94SaYdSVdSzaaCtLiKHho6rAqEsiTDBCdTujMKnffvMXQmEMZddxpVG7tbDTto1C/c/aXWt6XqRat/6289MlEUFcKQVVwHWUjdnOK7x6G+z4vakULYkjyteVHrsCkHMu+CH/GMtXyrO1BFPZy0ZlmbsJIlD8Myn6dsldPX+ko=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1767890794; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=vYW75MrgiZPV+X+9iuY2Xb/OvMEyr70/MJdADot1GL4=; 
-	b=S3YnFmE6BwRnHHsZQKrlTvGG5mZqw5RoJ7BF+mQvab2ByDwehsWxJUGxDMQvCMBbv5XjOfXQEXFXbjqKAFz339wKyZbKdIGHxc1VfJcZqz4SOpZXNsnlLgsKWmad8n0HbrDx0w/XcRM52UMwA3WhoGvIYE0/axJd10iOS6ZYvrY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=apertussolutions.com;
-	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767890794;
-	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=vYW75MrgiZPV+X+9iuY2Xb/OvMEyr70/MJdADot1GL4=;
-	b=VI0DVW3M+GHVPfRPPegYY5cJeRA/S5Va35BLYxMzAwQXO5rTOgrFicESHu8Is1Zc
-	cGXFKgoH5f+FqMsoBYs2xlij/OgB2xygVHPh+skIXDfE33oJxtQ4dkViZhMD/D80l2l
-	p1kRoToHUL+a+AN+B/Frnjxb3Pi0nZXChWmAD2Qk=
-Received: by mx.zohomail.com with SMTPS id 1767890790761241.33861597457576;
-	Thu, 8 Jan 2026 08:46:30 -0800 (PST)
-Message-ID: <9785eaec-fcc0-4b72-8f63-7f894e582f38@apertussolutions.com>
-Date: Thu, 8 Jan 2026 11:46:28 -0500
+	 In-Reply-To:Content-Type; b=DHbAb06hxj2nf+a3nmj5Nrck6SUg0WDugFeOmrLaR6L7nJdUCwO+1D9vWCbUPYyw9bNblX7Gwfs/Q65Wo9rHFmODQQppYOiFHEdfdnXmeoxmzacgfIsXW7OiIO4TBytTXki7Ad99++gTXU7mdYuilZIPXVu8MQaNw9+5xHy0YCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PzxRYRoP; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 608NIF9t005078;
+	Fri, 9 Jan 2026 08:48:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=0mEdi+
+	BCYDRwRTM1WDOhEF6QBDWqstYoh74f4c+yZok=; b=PzxRYRoPtdD3R9dDCk2AbO
+	tZSF6iG2KqhgZpm223CGciINez7pBla/i1Qz2WsYidyL9JDtFI8G6FuVvXDl5BCn
+	DY0qvS4/3+b6xy12nxs6Wotd0yKJ8ZughO/qI2Q6PGza4Z5VhdKSBWWQ7BrFDH3X
+	jyMH9Ju0aaZEnGEaXPm/RfsbFfpHYlHqdoh4h+56EzD4XJAEStjR+wwvN4lVLY2L
+	CJBhVpvzzTeHZKLBd91t/ZHr0yw0esM2Q2XJXdG8ZTK+a3ZRHzBTKswyKtkJ7n7N
+	QiSTPTKx+avTpesAwuaaDgNP7xq3fgkqEcpbtb4XrLZqzs9e2BPCkBEMIlq/WoSQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4berhkh41v-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 Jan 2026 08:48:01 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 6098hbJD021337;
+	Fri, 9 Jan 2026 08:48:00 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4berhkh41q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 Jan 2026 08:48:00 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60973pSk012572;
+	Fri, 9 Jan 2026 08:47:59 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bffnjunws-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 Jan 2026 08:47:59 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6098lvWG39191060
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 9 Jan 2026 08:47:58 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BC1FE58059;
+	Fri,  9 Jan 2026 08:47:57 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 618D358057;
+	Fri,  9 Jan 2026 08:47:53 +0000 (GMT)
+Received: from [9.98.107.249] (unknown [9.98.107.249])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  9 Jan 2026 08:47:53 +0000 (GMT)
+Message-ID: <b5086ef7-6f4c-4e4c-81d2-a6a663ee891e@linux.ibm.com>
+Date: Fri, 9 Jan 2026 14:17:52 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -58,75 +82,162 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 00/28] x86: Secure Launch support for Intel TXT
+Subject: Re: [PATCH v3 5/6] keys/trusted_keys: establish PKWM as a trusted
+ source
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        James.Bottomley@hansenpartnership.com, zohar@linux.ibm.com,
+        nayna@linux.ibm.com, rnsastry@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20260106150527.446525-1-ssrish@linux.ibm.com>
+ <20260106150527.446525-6-ssrish@linux.ibm.com> <aV-w2NbxAPuuXy_U@kernel.org>
 Content-Language: en-US
-To: Dave Hansen <dave.hansen@intel.com>,
- Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux.dev
-Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
- dave.hansen@linux.intel.com, ardb@kernel.org, mjg59@srcf.ucam.org,
- James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, jarkko@kernel.org,
- jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu,
- herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
- ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
- kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com,
- trenchboot-devel@googlegroups.com
-References: <20251215233316.1076248-1-ross.philipson@oracle.com>
- <0cff620d-9be4-487d-8eb1-19375ca58a70@intel.com>
- <91fd7e8e-6c64-458c-9d78-d97482d95705@apertussolutions.com>
- <b22b52b3-804e-4c51-b49c-8705092ae544@intel.com>
-From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
- 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
-In-Reply-To: <b22b52b3-804e-4c51-b49c-8705092ae544@intel.com>
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+In-Reply-To: <aV-w2NbxAPuuXy_U@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=P4s3RyAu c=1 sm=1 tr=0 ts=6960c0c1 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8 a=ahMReMzOZ-clP6jsrXgA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: PMHcOicgPxegf2zG04kVH1q6_Yc3XGoM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA5MDA2MiBTYWx0ZWRfX5t9LgDpm/9I3
+ c2Bxq/Nh+6LnJf0WNOdunckwZ/lvBeszT2cbs+Hm0gzEw0dHLqF3qXBp/7VGx8hUIPPU97LTA0E
+ /aNNZV59fGIH7/dJU4ZQyIUVBGsS5CLn8xdxNKPfx2aY5ernaO22Fu3ExjqVWDzURSoEdeKayk8
+ TcxE2T019smiAsR73lsR49NA0rXQ1W3YRhroIkZ2I4QDfnfxM/km0xDVUbV7rmywzNZ+hDIB6Bo
+ JiQNyuK21uGU8x9Gpq9Qboo+/Ya0uhziz2lADbolMP5W1BYOipQLHrzxQFqVn5epZVsi1qa47nT
+ i8/3Vu1skJyDM63kxQyDNu4IO2XROavgG+uTa4XtJhqRugAU2l/d/wHI/FXe+VTmQz/tyQE48X+
+ KuFPQwqs1qeE+grif1zIjYvDfs9Geg7/RjxssqTvZhIbwUzdT9Qm9cvc0U9byLJT8tD0jy9ju/Z
+ a7omP2w6Rn8EfzKNoHg==
+X-Proofpoint-GUID: qmpndCZCykWAfsfMieyIMC6LtCI8mUlc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-09_02,2026-01-08_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
+ phishscore=0 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601090062
 
-On 1/8/26 11:41, Dave Hansen wrote:
-> On 1/8/26 08:36, Daniel P. Smith wrote:
->> It was simply that it was the tip of torvalds/master at the time the
->> patch series was prepared. As far as we could find, there is not a lot
->> of guidance on commit selection in the patch guide. If there is a
->> generally accepted convention we should follow, we would be glad to
->> follow it.
-> 
-> Barring a specific dependency, pick something that is more likely to
-> have been tested. -rc's are fine. Linus's releases are fine.
-> 
-> Random snapshots in time are not likely to be widely tested and
-> shouldn't be used.
+Hi Jarkko,
+thank you for taking a look.
 
-Will do, thanks.
+On 1/8/26 6:57 PM, Jarkko Sakkinen wrote:
+> On Tue, Jan 06, 2026 at 08:35:26PM +0530, Srish Srinivasan wrote:
+>> The wrapping key does not exist by default and is generated by the
+>> hypervisor as a part of PKWM initialization. This key is then persisted by
+>> the hypervisor and is used to wrap trusted keys. These are variable length
+>> symmetric keys, which in the case of PowerVM Key Wrapping Module (PKWM) are
+>> generated using the kernel RNG. PKWM can be used as a trust source through
+>> the following example keyctl commands:
+>>
+>> keyctl add trusted my_trusted_key "new 32" @u
+>>
+>> Use the wrap_flags command option to set the secure boot requirement for
+>> the wrapping request through the following keyctl commands
+>>
+>> case1: no secure boot requirement. (default)
+>> keyctl usage: keyctl add trusted my_trusted_key "new 32" @u
+>> 	      OR
+>> 	      keyctl add trusted my_trusted_key "new 32 wrap_flags=0x00" @u
+>>
+>> case2: secure boot required to in either audit or enforce mode. set bit 0
+>> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x01" @u
+>>
+>> case3: secure boot required to be in enforce mode. set bit 1
+>> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x02" @u
+>>
+>> NOTE:
+>> -> Setting the secure boot requirement is NOT a must.
+>> -> Only either of the secure boot requirement options should be set. Not
+>> both.
+>> -> All the other bits are required to be not set.
+>> -> Set the kernel parameter trusted.source=pkwm to choose PKWM as the
+>> backend for trusted keys implementation.
+>> -> CONFIG_PSERIES_PLPKS must be enabled to build PKWM.
+>>
+>> Add PKWM, which is a combination of IBM PowerVM and Power LPAR Platform
+>> KeyStore, as a new trust source for trusted keys.
+>>
+>> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
+>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+>> ---
+>>   MAINTAINERS                               |   9 ++
+>>   include/keys/trusted-type.h               |   7 +-
+>>   include/keys/trusted_pkwm.h               |  22 +++
+>>   security/keys/trusted-keys/Kconfig        |   8 ++
+>>   security/keys/trusted-keys/Makefile       |   2 +
+>>   security/keys/trusted-keys/trusted_core.c |   6 +-
+>>   security/keys/trusted-keys/trusted_pkwm.c | 168 ++++++++++++++++++++++
+>>   7 files changed, 220 insertions(+), 2 deletions(-)
+>>   create mode 100644 include/keys/trusted_pkwm.h
+>>   create mode 100644 security/keys/trusted-keys/trusted_pkwm.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index a0dd762f5648..ba51eff21a16 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -14003,6 +14003,15 @@ S:	Supported
+>>   F:	include/keys/trusted_dcp.h
+>>   F:	security/keys/trusted-keys/trusted_dcp.c
+>>   
+>> +KEYS-TRUSTED-PLPKS
+>> +M:	Srish Srinivasan <ssrish@linux.ibm.com>
+>> +M:	Nayna Jain <nayna@linux.ibm.com>
+>> +L:	linux-integrity@vger.kernel.org
+>> +L:	keyrings@vger.kernel.org
+>> +S:	Supported
+>> +F:	include/keys/trusted_plpks.h
+>> +F:	security/keys/trusted-keys/trusted_pkwm.c
+>> +
+>>   KEYS-TRUSTED-TEE
+>>   M:	Sumit Garg <sumit.garg@kernel.org>
+>>   L:	linux-integrity@vger.kernel.org
+>> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+>> index 4eb64548a74f..45c6c538df22 100644
+>> --- a/include/keys/trusted-type.h
+>> +++ b/include/keys/trusted-type.h
+>> @@ -19,7 +19,11 @@
+>>   
+>>   #define MIN_KEY_SIZE			32
+>>   #define MAX_KEY_SIZE			128
+>> -#define MAX_BLOB_SIZE			512
+>> +#if IS_ENABLED(CONFIG_TRUSTED_KEYS_PKWM)
+>> +#define MAX_BLOB_SIZE			1152
+>> +#else
+>> +#define MAX_BLOB_SIZE                   512
+>> +#endif
+>>   #define MAX_PCRINFO_SIZE		64
+>>   #define MAX_DIGEST_SIZE			64
+>>   
+>> @@ -46,6 +50,7 @@ struct trusted_key_options {
+>>   	uint32_t policydigest_len;
+>>   	unsigned char policydigest[MAX_DIGEST_SIZE];
+>>   	uint32_t policyhandle;
+>> +	uint16_t wrap_flags;
+>>   };
+> We should introduce:
+>
+> 	void *private;
+>
+> And hold backend specific fields there.
+>
+> This patch set does not necessarily have to migrate TPM fields to this
+> new framework, only start a better convention before this turns into
+> a chaos.
+
+
+Sure,
+thanks for bringing this up.
+I will make the required changes in my next version.
+
+>
+> BR, Jarkko
+>
+
+thanks,
+Srish.
 
