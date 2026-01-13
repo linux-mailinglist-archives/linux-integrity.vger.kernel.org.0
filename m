@@ -1,134 +1,168 @@
-Return-Path: <linux-integrity+bounces-8230-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8231-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26509D19901
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jan 2026 15:43:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09609D19AF9
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jan 2026 16:01:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1DDFE30240AF
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jan 2026 14:38:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E94843082754
+	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jan 2026 14:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E063C287254;
-	Tue, 13 Jan 2026 14:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA85B2D73AD;
+	Tue, 13 Jan 2026 14:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="YXWYkXPb"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sSx4mOU4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EElHHGGH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF3329D277
-	for <linux-integrity@vger.kernel.org>; Tue, 13 Jan 2026 14:38:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42709284686;
+	Tue, 13 Jan 2026 14:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768315112; cv=none; b=uJoqSFWtvj4sl6ZCF4HklAIdus5/kAxTvv+RdMKiSSzPhyfTYQQJ+OmtpczGvjHCslx5h+dXZgXgzpr7vTGTkGlpfwrFqNTtsSLCxLzcLaneQlOwgcrttxgnzisYAZ4pDZKwUOwI2k43ezfeVhlJ/Tqr80Ebl5a4T4RkafSbNwI=
+	t=1768316201; cv=none; b=o0wgjhKmbdX/h3jJdxLDMvVofaOuMK5KwvkFqNTYatnZhEON0CIjItTyiB4lD3Bk9kKOd8vh+IUbOnHmA+bBjQD5vA+JDoGwzdJ/XwSjBVx5iLM74NQdzOky6PfRwnfseMLcYM14SeCi1U2L4XEg/mE6DeysuL87U7MoHGOn4Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768315112; c=relaxed/simple;
-	bh=bv1yaH5EQk2ChzwUcstriXdO+QCpJWJNyBkYzvqKM3A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uG8DjJqp9FWjZHhFpNuzyYRyR31VYh7a/vfFXnsCxw4vn1jAWIOjkTCMoWuTv9B3etf+ARKLeZlfm86TjicQ3gjupJzBFGtnEL843fGsPP/qjF6p1efbo9LCk6OCVjK0cSWVfStx+KaABB/PabKw4geaJyXnvIOOVi3R972aYuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=YXWYkXPb; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47edd6111b4so5067415e9.1
-        for <linux-integrity@vger.kernel.org>; Tue, 13 Jan 2026 06:38:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1768315109; x=1768919909; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=W74bGBgFK/hOVn7wDmizyI3ZTIrz3Q9IO5DO/QfmZFA=;
-        b=YXWYkXPbKLOC8rbvU58tsDHhQxdJftJ0xYK5ETIsGgBdn1IJPgItsUQiWIV6lT2tZb
-         l1R3c5ORpdInPOig3kr2VbMkupaXCQjMHLxKQYSiX0DLGqRtyY5ojQNSwWFIpE//7PfS
-         D8BltWGa9WmL70Ft7F5K0jws364+cwo1Q5xlWuuPUKWH4PZVS46uFgai2tTZcSZHB2G3
-         wd6W6KpTjNgSZv4zW50DRvmjk9oq0BOIU1epID0MeGy8i+Ma3Bt9NqcmRIH7wEDIS4JU
-         V3QFxoLkc24tC/H8k4NKlWC1U0RxbcjhCF7UE2i8N2fpxqdoymJPHDiLRTyDfR6CpBIs
-         tjyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768315109; x=1768919909;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W74bGBgFK/hOVn7wDmizyI3ZTIrz3Q9IO5DO/QfmZFA=;
-        b=c+or82LDATbain1yNmEU1RhplINtaWJ7i/GUwrp9pYGtVzaEXaGSHvrFOTDy6QW9Kl
-         UdDwULhX6XlfixCqgOua7X3cyRaCK5rVea5iQK8O2gl/XKo54THNV404PMQncfyig+i1
-         Uq7hJff1FIeplCj36j7guuE/7NABcCHGn37ZoEcW2SCglU+z5hctNeSsuqpEzV5/XSSg
-         S4YOR3/Uu/JPJDHR+a1JeV/Yxly+NHxajRsI9Fqby8EPr8YoO5hEAqQOu42QKQfpfatD
-         QjJ9yaHA5i46eonJ7rE41Qbl4ra7WywExoOl8+uU6z6BPzRsjsbDVarn9Ye1CRNLglB+
-         XdKg==
-X-Forwarded-Encrypted: i=1; AJvYcCWBrzXGgg/rMLu9Xca6Jv1FyPzie/jOstZdBtd5WVIVkUuTUvrHSRtpm8zd7cVwyuJFikW8hxJfLCl9x9SGrR0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbUZSO1+Bps3EwC3GKVJcrhNwsxsDj3QwKUZJN2dKNQdGQTUTP
-	T8JD59yuU9C86W6k+fndLW/lhXss+5ltmVDCKq3ANdd0m5y+w2DesKQdKrrxbRgfhtU=
-X-Gm-Gg: AY/fxX7OYKjHqOlH91d3pdK6upsQOxY3hE5A5f/YNWHS6nBDb1ZBficX7k315MM8w2B
-	cuHSLYnRL965E8rjVZAAjFSpQy9bF32cTYACVA+KUBLDeJuYxWvbi3/IiWkWYp/sNtzi8nwdka5
-	9Ye0cOTiEuL9ycUBmmscdUYQ0XSOMZcmhcIoJc4zTuHv0rrJi5wZRuPYgxytqR2kTAQGSCbD36U
-	tMxBgiykUBTkU1YtSWS8SmIECoOi0Sex7EdYhe2T8CRSUKfz85WCqQslPmoyrTY7pJv7D+/6BIq
-	a/O7yFFoACZykwGjArCbu+p3FzQJaOO4krHVv0x0VQjoiYWc0jWki1OhKuaVNzjIoURUWsR1Qeq
-	myKa1PIQ5u0ekKhTHcavJe6l4DkvL6GbZ9ZKmtXXPgd00lAQK4KVTIRczxVtVyHXzcdi88fmLdu
-	1GVhqmtqZC0SimdTUSL7MAynUcHexJEyHDAigUE1hs/mcT3a63lYoHab4HP46ATbo0/8tw9GrOz
-	aQ=
-X-Google-Smtp-Source: AGHT+IFhQFRKLHLPUIv8Ub5JMni/oYRcfzQxDY3eX8L9+76+bBCMjvx/OwK8+nL/LNykEUxdCBt7WA==
-X-Received: by 2002:a05:600c:5285:b0:47e:e20e:bbbe with SMTP id 5b1f17b1804b1-47ee20ebeb1mr980895e9.25.1768315108593;
-        Tue, 13 Jan 2026 06:38:28 -0800 (PST)
-Received: from localhost (p200300f65f20eb04fab5de2138b6a8fa.dip0.t-ipconnect.de. [2003:f6:5f20:eb04:fab5:de21:38b6:a8fa])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-47ee0b3429dsm1883095e9.8.2026.01.13.06.38.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 06:38:28 -0800 (PST)
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Jens Wiklander <jens.wiklander@linaro.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Sumit Garg <sumit.garg@oss.qualcomm.com>,
-	linux-integrity@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] tpm/tpm_ftpm_tee: Fix kdoc after function renames
-Date: Tue, 13 Jan 2026 15:38:15 +0100
-Message-ID: <20260113143816.1600893-2-u.kleine-koenig@baylibre.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1768316201; c=relaxed/simple;
+	bh=NAqsrBRRVQ9IjNII30nTZcG+axDLjmdYDnjuoF9bBio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HV6KWreyR79nz9hSHBqcqHWaQbSfQWstauNtshrJCeATQeFxgDWFsRTR7WbRw5h67t7Q5CJ3yfLkQXGbHQCUnghie4yR31tS3dXYfvRPQl/iLOnxj1AVfkqBlbialY/ys9scasObMUhnq0rTFf8Tt7MA/o2EiLmeSe/FsXFh1JM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sSx4mOU4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EElHHGGH; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 13 Jan 2026 15:56:35 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768316198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
+	b=sSx4mOU4qkDYzkkx/o4BEtWyl3KyxW3euTuarzApOzTpXlaTS++4XY/zozFEdwI+2D4gqc
+	X/2YYXHPhJ39OiUekNo9mxCgbd3mRKVP6iJ5LixKaumKVEOue7aHTdj2/SSw9AIA7xysiw
+	khwRiBeHIgbbxPJE6nsPK4snz9MXXmwk6QsCaNwglaoU9+6Hv1fw7AOuDtH/SrsWBwtrSs
+	Zpm5UWEXMa1w74IQw5HzaMgnRUPa2rwJxDOUlrasiueQFGxKTnhVEfsy49uPFRY/wFDjFK
+	OtlrNM9syil5J8J1N2p2o6zWC7xe4RZ5ft3jv1L7pqgXQLYRRkdUm/6V+g4TPg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768316198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
+	b=EElHHGGH26sj8RjZyTS7MzBbQHDhVABCJGxSUKy3ePFAS2cW41IbJqoE/+HSbaCGe4llt6
+	VlRf7PDMccGp4EBA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
+Message-ID: <20260113145635.YfSTBhVs@linutronix.de>
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1298; i=u.kleine-koenig@baylibre.com; h=from:subject; bh=bv1yaH5EQk2ChzwUcstriXdO+QCpJWJNyBkYzvqKM3A=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBpZljYr7WZONsdn9G0Y6iL4wZiaI7ALi2TEK0DK wZgh3aQZIWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCaWZY2AAKCRCPgPtYfRL+ ThT6CACjkpZ/MxTtgBcltZeCYuWlhTG4FUH2YgIU0L4yZcbjM2xtIHfFmROaysGHGf24INsPX+C Kj2UFbgwTxWxNR61C2mbpLuiZx+Ps73hqWMqTb/PBAK37/nEl8AFd3vlplXC/0vImkk7rKwM+DD IMjajaofH097zOeD3+yrq4QtcP715ar1si4oVWcO9QfCcLusGfIZeV+9x0br7PzhlB0ud6GeGeu OZnc+P8JjVLUfHJHfOUGBwuTw6oV84OYx07qhYkj2281PcIJ2BuXmWjNlAB0AFlDBhQuvZiR2ta 0clYwXtdbKeysv4YeG/OXwDiNCxRk+YQ8jbIVJ1LXPHKv68d
-X-Developer-Key: i=u.kleine-koenig@baylibre.com; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
 
-Recently ftpm_tee_probe() and ftpm_tee_remove() grew a suffix in their
-function name but I failed to adapt the kernel doc when doing so. This
-change aligns the kernel doc to the actual function name (again).
+On 2026-01-13 13:28:59 [+0100], Thomas Wei=C3=9Fschuh wrote:
+> --- /dev/null
+> +++ b/scripts/modules-merkle-tree.c
+> @@ -0,0 +1,467 @@
+=E2=80=A6
+> +static void build_proof(struct mtree *mt, unsigned int n, int fd)
+> +{
+> +	unsigned char cur[EVP_MAX_MD_SIZE];
+> +	unsigned char tmp[EVP_MAX_MD_SIZE];
 
-Fixes: 92fad96aea24 ("tpm/tpm_ftpm_tee: Make use of tee bus methods")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202601132105.9lgSsC4U-lkp@intel.com/
----
- drivers/char/tpm/tpm_ftpm_tee.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This and a few other instances below could be optimized to avoid
+hashing. I probably forgot to let you know.
+-> https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/mtree-hashed-mod=
+s.git/commit/?id=3D10b565c123c731da37befe862de13678b7c54877
 
-diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-index 20294d1953a3..b82490439633 100644
---- a/drivers/char/tpm/tpm_ftpm_tee.c
-+++ b/drivers/char/tpm/tpm_ftpm_tee.c
-@@ -163,7 +163,7 @@ static int ftpm_tee_match(struct tee_ioctl_version_data *ver, const void *data)
- }
- 
- /**
-- * ftpm_tee_probe() - initialize the fTPM
-+ * ftpm_tee_probe_generic() - initialize the fTPM
-  * @dev: the device description.
-  *
-  * Return:
-@@ -266,7 +266,7 @@ static int ftpm_plat_tee_probe(struct platform_device *pdev)
- }
- 
- /**
-- * ftpm_tee_remove() - remove the TPM device
-+ * ftpm_tee_remove_generic() - remove the TPM device
-  * @dev: the device description.
-  *
-  * Return:
+> +	struct file_entry *fe, *fe_sib;
+> +
+> +	fe =3D &fh_list[n];
+> +
+> +	if ((n & 1) =3D=3D 0) {
+> +		/* No pair, hash with itself */
+> +		if (n + 1 =3D=3D num_files)
+> +			fe_sib =3D fe;
+> +		else
+> +			fe_sib =3D &fh_list[n + 1];
+> +	} else {
+> +		fe_sib =3D &fh_list[n - 1];
+> +	}
+> +	/* First comes the node position into the file */
+> +	write_be_int(fd, n);
+> +
+> +	if ((n & 1) =3D=3D 0)
+> +		hash_entry(fe->hash, fe_sib->hash, cur);
+> +	else
+> +		hash_entry(fe_sib->hash, fe->hash, cur);
+> +
+> +	/* Next is the sibling hash, followed by hashes in the tree */
+> +	write_hash(fd, fe_sib->hash);
+> +
+> +	for (unsigned int i =3D 0; i < mt->levels - 1; i++) {
+> +		n >>=3D 1;
+> +		if ((n & 1) =3D=3D 0) {
+> +			void *h;
+> +
+> +			/* No pair, hash with itself */
+> +			if (n + 1 =3D=3D mt->entries[i])
+> +				h =3D cur;
+> +			else
+> +				h =3D mt->l[i][n + 1].hash;
+> +
+> +			hash_entry(cur, h, tmp);
+> +			write_hash(fd, h);
+> +		} else {
+> +			hash_entry(mt->l[i][n - 1].hash, cur, tmp);
+> +			write_hash(fd, mt->l[i][n - 1].hash);
+> +		}
+> +		memcpy(cur, tmp, hash_size);
+> +	}
+> +
+> +	 /* After all that, the end hash should match the root hash */
+> +	if (memcmp(cur, mt->l[mt->levels - 1][0].hash, hash_size))
+> +		errx(1, "hash mismatch");
+> +}
 
-base-commit: 92fad96aea24fc19abe1eae2249402b61de3a3e2
--- 
-2.47.3
-
+Sebastian
 
