@@ -1,154 +1,170 @@
-Return-Path: <linux-integrity+bounces-8234-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8235-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CCFAD1FA34
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 16:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 97B9AD2004F
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 17:01:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1AB5C3009F2E
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 15:12:07 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5F2C4308634D
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 15:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2205C1EF09B;
-	Wed, 14 Jan 2026 15:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01B8399A60;
+	Wed, 14 Jan 2026 15:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OAreXrHY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hLqgfKlE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80DB3168F2
-	for <linux-integrity@vger.kernel.org>; Wed, 14 Jan 2026 15:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF4536C593;
+	Wed, 14 Jan 2026 15:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768403526; cv=none; b=n+rDMcO2UQGIZp0q9OGr2UaaoRxq8vIN2ZGK1d69GIbIp7fk1wNeZ0WfwdW1f1i2lKrcLufYgoi+ICPtG7zk7p90Y6/lR4StC4m3I9fecwvjk9EhB07I3kz7R+Npu/eiFScTBb7cyOInnNCd/Tg9UHG7FDNdq2B/Eq8c0EgeutA=
+	t=1768406148; cv=none; b=rlKWPyucxLn927PzrTDMLGoOyxc/8GJFonNMOehwyEw8OgRoWo6/UayW+0MEDgbIJHPn6FNpW08UVQjGIuKUVou0YD2x7SFE9HkDfHfu8v2/X7rZNQOUz/1YZDuJgZavs3EgqXcuz+PTleGRVYg9d5CrfDDH/UIoAmAjnoSXxWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768403526; c=relaxed/simple;
-	bh=GFhDXxtQOOoEkWKmVZbsCRPZPlZccP8v389vSIUUGps=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=SSUbbaO5yS9JBzrayRdL0DJT6VS7eXzgQ+5HmGedEmAJhvIvUrLbMDGSI0nH0eUdoU5TPawgsIImnUW6r1jZMWnB5adR7Eo9fsJL/pKywn8kLsFeV0RfSR/yMBTRFAC9XFMx/rkLF+zrBF3bZbUpBuaBSBQUnkmMerfognnHFxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OAreXrHY; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60EE1ctU013363;
-	Wed, 14 Jan 2026 15:12:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=VQS6zr
-	w/Rv+8VRfrDR4ZQiwYSwb0FJjDA0oTmHAH6WU=; b=OAreXrHYnls+XNzOn+iule
-	+0V9UeBMb1zz1ADs4xLBBrFl/gNH0g5KvHAcxHUtqtV2MCg0LHs2ucGx6wtIIKxO
-	LFZZWPjVBpbRy1IMAb5mJy1s6a52OtlA4wYpPXoqp6i6cQt1y47bEIGgqRprV1Q5
-	NQqh3O58RKdZ1aFUbd2SLh0phK/LV24KP1A2mxhpPyO/gnj7SyV5VSB4Kw7ydxmE
-	XV6u1ZqCo2bgLGCsLgZ86gTZZFiv01lFMdbxFkfCzy97D82RxINHW7mdXPk9nW0Y
-	mHppkXH5uwGuQmx/v7ffi1/MyegJp1HORKV1LQQ61iDm2lgcYxzbrn59Z0W2Cm5Q
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkedt1kjg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 15:11:59 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60EEVVNV025848;
-	Wed, 14 Jan 2026 15:11:59 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm2kkjqgc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Jan 2026 15:11:59 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60EFBexh27591190
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 14 Jan 2026 15:11:41 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B51985805E;
-	Wed, 14 Jan 2026 15:11:58 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 61A5E58066;
-	Wed, 14 Jan 2026 15:11:58 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.13.234])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 14 Jan 2026 15:11:58 +0000 (GMT)
-Message-ID: <41d432e3b9c16d712080295235ca000a6cb6e07c.camel@linux.ibm.com>
-Subject: Re: [PATCH 2/2] ima_kexec.sh: Document kernel config dependencies
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Petr Vorel <pvorel@suse.cz>, ltp@lists.linux.it
-Cc: linux-integrity@vger.kernel.org
-In-Reply-To: <20260107155737.791588-2-pvorel@suse.cz>
-References: <20260107155737.791588-1-pvorel@suse.cz>
-	 <20260107155737.791588-2-pvorel@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 14 Jan 2026 10:11:58 -0500
+	s=arc-20240116; t=1768406148; c=relaxed/simple;
+	bh=3XHv7ZEnMk+PyC7RV409KSNNeltVgoxSRxarob/cQNI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cDpy6yq7SiH+R4+glwpdwFC0dnm6RmfZuVJGARa/W2D6Nco4jH2gPB3+JSylm+P0ne+nNztlWgTStHuPkemhQ8yzS/Y48AGBoJ0AiJ/s2RnIS5HXc7yiBLEKo4dxRrqqBYqxClZk7c16jNyVxreGQZZs/iWJsNKqmvOCyuNUX+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hLqgfKlE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB976C4CEF7;
+	Wed, 14 Jan 2026 15:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768406148;
+	bh=3XHv7ZEnMk+PyC7RV409KSNNeltVgoxSRxarob/cQNI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hLqgfKlEDbzqIf/8H0X/wrSEG4vMA2wXGr4XWz/oZPCgJjovqqUU53w8oHfnRLdRD
+	 6D8aNoqQ7QLdWMTkgbvWsdmHfFAJ9BPwqtqQXHCmGj6YlTusW5ZvBuBIYx0j4IPiK1
+	 bfGzK635MiFv86/aIZnGvJIVhUiYGftGvtszJp3MNcG4VBmWRYrUTE3ocd10ShYNCZ
+	 JefYPoTJMyw8dF/OvpWx+C+MyY7vcc1gPPJgg/A8MY/94YPtvPJUys9wGCdDoOV34v
+	 lWwDVU+lRU8KiSmDnybPZCt+/djVEFCrMge/CJFXYOMF82eRFqSnXKFUFgEKxlt4mt
+	 qv2c86d4kJcEQ==
+Date: Wed, 14 Jan 2026 17:55:43 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: ross.philipson@oracle.com
+Cc: linux-integrity@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+	Jason Gunthorpe <jgg@ziepe.ca>, David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:KEYS/KEYRINGS" <keyrings@vger.kernel.org>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>
+Subject: Re: [PATCH v6 05/11] tpm2-sessions: Remove AUTH_MAX_NAMES
+Message-ID: <aWe8fwkw3tN9mFO9@kernel.org>
+References: <20251214153808.73831-1-jarkko@kernel.org>
+ <20251214153808.73831-6-jarkko@kernel.org>
+ <b19c064b-9dfe-45d6-b23d-1bfaca6afb02@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDEyMyBTYWx0ZWRfX2Jr+Uv04Tgmz
- minhAVAqdl2On7tAwIyWTeS1Fcp06zgspCZGevN3omzM7+Ty/Y12tINMwGfGHXpdYhZCi3DaQ7P
- DATIa7WV64wNY1/TEATbbcnQ7X91pv6s3jYfx13b1y0E5eMMXGyvSTV4Paid1buZVBC9rTwwpOz
- BDI9xrwbWIB2gTBj6xEXlReGa0uHW7pPoi43NqkSElLFb0VK50Dkyzg0mwuiOChYaOxptsIOVqo
- XRfu51sUdr28QIxAcc0vu8VqdLp9KsFOllxa5bxukglmGGcnSxt2fIZBnFHcXZ1nT2d2DI/Ij5X
- jYnuy7v8Ru3AooyaUE3mjYZB8Mp3SaDIsRUNjiaRFmSoRKBXDW5g8v2wKXTW3KcD5Eyhmsl4CiC
- lgXbfr3lhhinDrVS2slsGqdf3Uiu+vPzcPtGA6XftiKH54EzuW/j/46HmhTiXsrq2J6Mnv9AFWx
- kUcvrTajafKNz1RyclA==
-X-Proofpoint-GUID: GRGK8s7iYE32UZHOb2wVKvattaoOMkFt
-X-Authority-Analysis: v=2.4 cv=WLJyn3sR c=1 sm=1 tr=0 ts=6967b240 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=wlRH1G3uh7w6tWQy2i0A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: GRGK8s7iYE32UZHOb2wVKvattaoOMkFt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-14_04,2026-01-14_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 malwarescore=0 phishscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2512120000
- definitions=main-2601140123
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b19c064b-9dfe-45d6-b23d-1bfaca6afb02@oracle.com>
 
-On Wed, 2026-01-07 at 16:57 +0100, Petr Vorel wrote:
-> CONFIG_HAVE_IMA_KEXEC=3Dy is enough for test, ie. test is working with:
->=20
->     # CONFIG_IMA_KEXEC is not set
->     CONFIG_HAVE_IMA_KEXEC=3Dy
->=20
-> Probably obvious as CONFIG_HAVE_IMA_KEXEC is arch specific and
-> CONFIG_IMA_KEXEC is "TPM PCRs are only reset on a hard reboot."
-> and ima_kexec.c requires CONFIG_HAVE_IMA_KEXEC (only parts are skipped
-> when CONFIG_IMA_KEXEC not set) but better to clarify for users.
->=20
-> Signed-off-by: Petr Vorel <pvorel@suse.cz>
-> ---
->  testcases/kernel/security/integrity/ima/tests/ima_kexec.sh | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh b=
-/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-> index 7688690af2..de595fcdd7 100755
-> --- a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-> +++ b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
-> @@ -6,8 +6,11 @@
->  #
->  # Verify that kexec cmdline is measured correctly.
->  # Test attempts to kexec the existing running kernel image.
-> +#
->  # To kexec a different kernel image export IMA_KEXEC_IMAGE=3D<pathname>.
->  # Test requires example IMA policy loadable with LTP_IMA_LOAD_POLICY=3D1=
-.
-> +#
-> +# Test requires CONFIG_HAVE_IMA_KEXEC=3Dy (CONFIG_IMA_KEXEC is not manda=
-tory).
+On Mon, Jan 12, 2026 at 04:22:24PM -0800, ross.philipson@oracle.com wrote:
+> On 12/14/25 7:38 AM, Jarkko Sakkinen wrote:
+> > In all of the call sites only one session is ever append. Thus, reduce
+> > AUTH_MAX_NAMES, which leads into removing constant completely.
+> > 
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >   drivers/char/tpm/tpm2-sessions.c | 31 +++++++++++--------------------
+> >   1 file changed, 11 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+> > index 3bc3c31cf512..37570dc088cf 100644
+> > --- a/drivers/char/tpm/tpm2-sessions.c
+> > +++ b/drivers/char/tpm/tpm2-sessions.c
+> > @@ -72,9 +72,6 @@
+> >   #include <crypto/sha2.h>
+> >   #include <crypto/utils.h>
+> > -/* maximum number of names the TPM must remember for authorization */
+> > -#define AUTH_MAX_NAMES	3
+> > -
+> >   #define AES_KEY_BYTES	AES_KEYSIZE_128
+> >   #define AES_KEY_BITS	(AES_KEY_BYTES*8)
+> > @@ -136,8 +133,8 @@ struct tpm2_auth {
+> >   	 * handle, but they are part of the session by name, which
+> >   	 * we must compute and remember
+> >   	 */
+> > -	u8 name[AUTH_MAX_NAMES][TPM2_MAX_NAME_SIZE];
+> > -	u16 name_size_tbl[AUTH_MAX_NAMES];
+> > +	u8 name[TPM2_MAX_NAME_SIZE];
+> > +	u16 name_size;
+> >   };
+> >   #ifdef CONFIG_TCG_TPM2_HMAC
+> > @@ -261,11 +258,14 @@ EXPORT_SYMBOL_GPL(tpm2_read_public);
+> >   int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+> >   			u32 handle, u8 *name, u16 name_size)
+> >   {
+> > -#ifdef CONFIG_TCG_TPM2_HMAC
+> 
+> Removing CONFIG_TCG_TPM2_HMAC here causes a warning during compile since the
+> auth variable is only used in the CONFIG_TCG_TPM2_HMAC block below.
 
-Correct.=C2=A0 The test verifies that the kernel image is measured.  It doe=
-s not
-execute the kexec, so there is no need for carrying the IMA measurement lis=
-t
-across kexec (CONFIG_IMA_KEXEC).
+Thanks for the remark, I'll look into this.
 
-> =20
->  TST_NEEDS_CMDS=3D"grep kexec sed"
->  TST_CNT=3D3
+I should have next week bandwidth to look into your patch set too (still
+rebooting from the holidays)
+
+> 
+> Ross
+> 
+> >   	struct tpm2_auth *auth;
+> > -	int slot;
+> >   	int ret;
+> > -#endif
+> > +
+> > +	if (tpm_buf_length(buf) != TPM_HEADER_SIZE) {
+> > +		dev_err(&chip->dev, "too many handles\n");
+> > +		ret = -EIO;
+> > +		goto err;
+> > +	}
+> >   	if (!tpm2_chip_auth(chip)) {
+> >   		tpm_buf_append_handle(chip, buf, handle);
+> > @@ -273,12 +273,6 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+> >   	}
+> >   #ifdef CONFIG_TCG_TPM2_HMAC
+> > -	slot = (tpm_buf_length(buf) - TPM_HEADER_SIZE) / 4;
+> > -	if (slot >= AUTH_MAX_NAMES) {
+> > -		dev_err(&chip->dev, "too many handles\n");
+> > -		ret = -EIO;
+> > -		goto err;
+> > -	}
+> >   	auth = chip->auth;
+> >   	if (auth->session != tpm_buf_length(buf)) {
+> >   		dev_err(&chip->dev, "session state malformed");
+> > @@ -287,16 +281,14 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+> >   	}
+> >   	tpm_buf_append_u32(buf, handle);
+> >   	auth->session += 4;
+> > -	memcpy(auth->name[slot], name, name_size);
+> > -	auth->name_size_tbl[slot] = name_size;
+> > +	memcpy(auth->name, name, name_size);
+> > +	auth->name_size = name_size;
+> >   #endif
+> >   	return 0;
+> > -#ifdef CONFIG_TCG_TPM2_HMAC
+> >   err:
+> >   	tpm2_end_auth_session(chip);
+> >   	return ret;
+> > -#endif
+> >   }
+> >   EXPORT_SYMBOL_GPL(tpm_buf_append_name);
+> > @@ -665,8 +657,7 @@ int tpm_buf_fill_hmac_session(struct tpm_chip *chip, struct tpm_buf *buf)
+> >   	/* ordinal is already BE */
+> >   	sha256_update(&sctx, (u8 *)&head->ordinal, sizeof(head->ordinal));
+> >   	/* add the handle names */
+> > -	for (i = 0; i < handles; i++)
+> > -		sha256_update(&sctx, auth->name[i], auth->name_size_tbl[i]);
+> > +	sha256_update(&sctx, auth->name, auth->name_size);
+> >   	if (offset_s != tpm_buf_length(buf))
+> >   		sha256_update(&sctx, &buf->data[offset_s],
+> >   			      tpm_buf_length(buf) - offset_s);
+> 
+
+BR, Jarkko
 
