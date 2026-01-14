@@ -1,101 +1,181 @@
-Return-Path: <linux-integrity+bounces-8238-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8239-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EFE6D202F7
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 17:23:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 627A7D20492
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 17:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B2B36300908E
-	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 16:21:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1E5353015165
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 16:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2916F3A0E81;
-	Wed, 14 Jan 2026 16:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2E343A1A3A;
+	Wed, 14 Jan 2026 16:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nuoXLnCZ"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="NU6PJ0RQ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="RfXCqNsC";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="NU6PJ0RQ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="RfXCqNsC"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05EF531B108;
-	Wed, 14 Jan 2026 16:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358B43101DA
+	for <linux-integrity@vger.kernel.org>; Wed, 14 Jan 2026 16:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768407707; cv=none; b=OWm0fAWHaFgmlCDW+rTORLuGhWosdmYvgaHrukTKQ3FriWp+Txn810BcYtBTGi0qdJqS+kaBryKyQpc2F0PAorvyUV7pGe/zQAZ8Y2mTa5BY/uK962fvIN5GIzAxc+eBRRB16P9l8pL2KXGYbuoT0aQjdAhPQfpnA7JXgjVH088=
+	t=1768409182; cv=none; b=nxUzi44BhjP0FjXKVHKwdcuLpoCfKpJOweuuRuQRS+7YPNlW9a5df20IXnlK7MfRxbAkSu5vGrODVaGjt/4ZmuOr+uEfKhFH2bNWu7DxKD/mrbK7LxuqDkTW9+hrMaFkreySWq8v/9gpOV49zpPS9YTknLRX2oaGsImf843VOkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768407707; c=relaxed/simple;
-	bh=0uBHXLZlnYYBIVGGFSZ6N7bZ/j0TInBMfIjXlel1Ems=;
+	s=arc-20240116; t=1768409182; c=relaxed/simple;
+	bh=02VkazAv2aWHdh5XQRlAM5LovSsq3qzib4NSEuzY/nw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fhuL/I+LfTmLvM5FcWuLRIMt7yJdxRtitBCXKjlM+piz8Ed6q3Kn+Mr2vU6w49ldn1DhNx6MkFr/9Rgm/jCIoQPots6NMR0NkT1rMz6MgLveZHs6XBfDuPICkG2Nss+nTfTzr7NL02OZ0AGXKCZj1+b8Q23y24DQ4jONtTufwXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nuoXLnCZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A7BFC4CEF7;
-	Wed, 14 Jan 2026 16:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768407706;
-	bh=0uBHXLZlnYYBIVGGFSZ6N7bZ/j0TInBMfIjXlel1Ems=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nuoXLnCZ/RJhkJGVfxYpRojNHy0knql+uJVK/49tgHIGDdfq9vKd5c+fTFkg6iXFw
-	 +7ViOKhS8SbzFCbWAcov4CNvxybi9v0wr4e+t0WrouJe7+wQPNoA0JYH11YVNx7yIV
-	 6b6Efr6r1lC5HvfqY0jjRPuufdlMr/VZb0Z0AQXo6scyMxrzKQtPeCr6U2fEDQUIGH
-	 EkHkalQUg/Bds1DSrp0CPW4Rvog40eicWObrQ7ijqAUb37Txgqi3eWEI5CE3C/Yp33
-	 djwsQocHzBPDa9aq/L0c2eP14k8QBlIhiOlwylsLovr2rZ/vG4FPFs1m89+Q/wQWfO
-	 0kAwpReE0uAeA==
-Date: Wed, 14 Jan 2026 18:21:42 +0200
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Greg KH <greg@kroah.com>
-Cc: stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Jonathan McDowell <noodles@meta.com>
-Subject: Re: [PATCH] tpm2-sessions: Fix out of range indexing in name_size
-Message-ID: <aWfClpKGFgVJ7zQr@kernel.org>
-References: <20260108123159.1008858-1-jarkko@kernel.org>
- <aV-kD5iKi9fwluU0@kernel.org>
- <2026010931-cling-enjoyer-9ce6@gregkh>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s9GtC0/1xe1B5Z4meSBLk6RLolewacKnauwkC78/ML4SALYmp+3XwGineBoNVrpewoI83q+nnW76+eWsPgu7u5BKtUpY0QMxDMnLnOdaD3970wDGfZ26ZFOLkIh0FevaYwU2hlYJd5ygW5iiOyhheYkuKGrSTCHaywK6u0iocqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=NU6PJ0RQ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=RfXCqNsC; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=NU6PJ0RQ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=RfXCqNsC; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 52ADC34776;
+	Wed, 14 Jan 2026 16:46:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1768409179;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4hayO0Og4ICjAYyQZZOg5Q0xwwWpPhddrykOhPmIlc=;
+	b=NU6PJ0RQmBAvRrTVG3MIFV5LW6LawLFlOJqUNrmuWbcJUkO8jhE3Gz2fdWj+nxJnOCLl7e
+	oir1JnY2mSXh8AXD/C0enkGdfDHqy39Lksnkn/XVbqIJ3ZzPODN4OuJxgNELCiDxPZpBPn
+	mu11LT3XvsgP5hsytTv8abXIJMw4uds=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1768409179;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4hayO0Og4ICjAYyQZZOg5Q0xwwWpPhddrykOhPmIlc=;
+	b=RfXCqNsCMV59mCV8nmnUpry7sTk29T6DmyrF2WxV2X2028md/PcHQhq5KNfbLfXbK5QZuJ
+	eTJ2NxGbkrTqZCCA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1768409179;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4hayO0Og4ICjAYyQZZOg5Q0xwwWpPhddrykOhPmIlc=;
+	b=NU6PJ0RQmBAvRrTVG3MIFV5LW6LawLFlOJqUNrmuWbcJUkO8jhE3Gz2fdWj+nxJnOCLl7e
+	oir1JnY2mSXh8AXD/C0enkGdfDHqy39Lksnkn/XVbqIJ3ZzPODN4OuJxgNELCiDxPZpBPn
+	mu11LT3XvsgP5hsytTv8abXIJMw4uds=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1768409179;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E4hayO0Og4ICjAYyQZZOg5Q0xwwWpPhddrykOhPmIlc=;
+	b=RfXCqNsCMV59mCV8nmnUpry7sTk29T6DmyrF2WxV2X2028md/PcHQhq5KNfbLfXbK5QZuJ
+	eTJ2NxGbkrTqZCCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 363ED3EA63;
+	Wed, 14 Jan 2026 16:46:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Nx46DFvIZ2lqWwAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Wed, 14 Jan 2026 16:46:19 +0000
+Date: Wed, 14 Jan 2026 17:46:17 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH 2/2] ima_kexec.sh: Document kernel config dependencies
+Message-ID: <20260114164617.GB426021@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20260107155737.791588-1-pvorel@suse.cz>
+ <20260107155737.791588-2-pvorel@suse.cz>
+ <41d432e3b9c16d712080295235ca000a6cb6e07c.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-2
 Content-Disposition: inline
-In-Reply-To: <2026010931-cling-enjoyer-9ce6@gregkh>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <41d432e3b9c16d712080295235ca000a6cb6e07c.camel@linux.ibm.com>
+X-Spamd-Result: default: False [-7.50 / 50.00];
+	REPLY(-4.00)[];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:replyto,suse.cz:email];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -7.50
+X-Spam-Level: 
 
-On Fri, Jan 09, 2026 at 10:45:51AM +0100, Greg KH wrote:
-> On Thu, Jan 08, 2026 at 02:33:19PM +0200, Jarkko Sakkinen wrote:
-> > On Thu, Jan 08, 2026 at 02:31:59PM +0200, Jarkko Sakkinen wrote:
-> > > [ Upstream commit 6e9722e9a7bfe1bbad649937c811076acf86e1fd ]
-> > > 
-> > > 'name_size' does not have any range checks, and it just directly indexes
-> > > with TPM_ALG_ID, which could lead into memory corruption at worst.
-> > > 
-> > > Address the issue by only processing known values and returning -EINVAL for
-> > > unrecognized values.
-> > > 
-> > > Make also 'tpm_buf_append_name' and 'tpm_buf_fill_hmac_session' fallible so
-> > > that errors are detected before causing any spurious TPM traffic.
-> > > 
-> > > End also the authorization session on failure in both of the functions, as
-> > > the session state would be then by definition corrupted.
-> > > 
-> > > Cc: stable@vger.kernel.org # v6.10+
-> > > Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
-> > > Reviewed-by: Jonathan McDowell <noodles@meta.com>
-> > > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > > ---
-> > 
-> > This is for v6.12.
-> 
-> Does not apply anymore to the latest 6.12.y release, can you rebase and
-> resend?
+Hi Mimi, all,
 
-Sure, I'll fix the issue (reproduced locally) and also run my smoke tests [1]
-before sending anything.
+> On Wed, 2026-01-07 at 16:57 +0100, Petr Vorel wrote:
+> > CONFIG_HAVE_IMA_KEXEC=y is enough for test, ie. test is working with:
 
-> 
-> thanks,
-> 
-> greg k-h
+> >     # CONFIG_IMA_KEXEC is not set
+> >     CONFIG_HAVE_IMA_KEXEC=y
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git
+> > Probably obvious as CONFIG_HAVE_IMA_KEXEC is arch specific and
+> > CONFIG_IMA_KEXEC is "TPM PCRs are only reset on a hard reboot."
+> > and ima_kexec.c requires CONFIG_HAVE_IMA_KEXEC (only parts are skipped
+> > when CONFIG_IMA_KEXEC not set) but better to clarify for users.
 
-BR, Jarkko
+> > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > ---
+> >  testcases/kernel/security/integrity/ima/tests/ima_kexec.sh | 3 +++
+> >  1 file changed, 3 insertions(+)
+
+> > diff --git a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
+> > index 7688690af2..de595fcdd7 100755
+> > --- a/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
+> > +++ b/testcases/kernel/security/integrity/ima/tests/ima_kexec.sh
+> > @@ -6,8 +6,11 @@
+
+> >  # Verify that kexec cmdline is measured correctly.
+> >  # Test attempts to kexec the existing running kernel image.
+> > +#
+> >  # To kexec a different kernel image export IMA_KEXEC_IMAGE=<pathname>.
+> >  # Test requires example IMA policy loadable with LTP_IMA_LOAD_POLICY=1.
+> > +#
+> > +# Test requires CONFIG_HAVE_IMA_KEXEC=y (CONFIG_IMA_KEXEC is not mandatory).
+
+> Correct.  The test verifies that the kernel image is measured.  It does not
+> execute the kexec, so there is no need for carrying the IMA measurement list
+> across kexec (CONFIG_IMA_KEXEC).
+
+Thanks for having a look! I merged with your RBT (as we dicussed).
+
+Kind regards,
+Petr
+
+> >  TST_NEEDS_CMDS="grep kexec sed"
+> >  TST_CNT=3
 
