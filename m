@@ -1,168 +1,142 @@
-Return-Path: <linux-integrity+bounces-8231-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8232-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09609D19AF9
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jan 2026 16:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B2342D1CB61
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 07:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E94843082754
-	for <lists+linux-integrity@lfdr.de>; Tue, 13 Jan 2026 14:56:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7352A3004504
+	for <lists+linux-integrity@lfdr.de>; Wed, 14 Jan 2026 06:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA85B2D73AD;
-	Tue, 13 Jan 2026 14:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A15A436E476;
+	Wed, 14 Jan 2026 06:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sSx4mOU4";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EElHHGGH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NIQRvHzN"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42709284686;
-	Tue, 13 Jan 2026 14:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE2236E48D
+	for <linux-integrity@vger.kernel.org>; Wed, 14 Jan 2026 06:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768316201; cv=none; b=o0wgjhKmbdX/h3jJdxLDMvVofaOuMK5KwvkFqNTYatnZhEON0CIjItTyiB4lD3Bk9kKOd8vh+IUbOnHmA+bBjQD5vA+JDoGwzdJ/XwSjBVx5iLM74NQdzOky6PfRwnfseMLcYM14SeCi1U2L4XEg/mE6DeysuL87U7MoHGOn4Ew=
+	t=1768373255; cv=none; b=sti6nf6mexepw2AO0KSxySbULytAqS/qmLe0S67xWKG+vXjrVRLziWVxVnP4zmu3ZPRQS4IwdgjQ99zo/4qma5CX4+MK6bglIeG+xb5z2Y1Sa3GqQNvVMLqhk/8hARXsq13RGxQ45DrWB4s4zx/sog4pgsem0s1hEY3kAm4Ktlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768316201; c=relaxed/simple;
-	bh=NAqsrBRRVQ9IjNII30nTZcG+axDLjmdYDnjuoF9bBio=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HV6KWreyR79nz9hSHBqcqHWaQbSfQWstauNtshrJCeATQeFxgDWFsRTR7WbRw5h67t7Q5CJ3yfLkQXGbHQCUnghie4yR31tS3dXYfvRPQl/iLOnxj1AVfkqBlbialY/ys9scasObMUhnq0rTFf8Tt7MA/o2EiLmeSe/FsXFh1JM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sSx4mOU4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EElHHGGH; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 13 Jan 2026 15:56:35 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768316198;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
-	b=sSx4mOU4qkDYzkkx/o4BEtWyl3KyxW3euTuarzApOzTpXlaTS++4XY/zozFEdwI+2D4gqc
-	X/2YYXHPhJ39OiUekNo9mxCgbd3mRKVP6iJ5LixKaumKVEOue7aHTdj2/SSw9AIA7xysiw
-	khwRiBeHIgbbxPJE6nsPK4snz9MXXmwk6QsCaNwglaoU9+6Hv1fw7AOuDtH/SrsWBwtrSs
-	Zpm5UWEXMa1w74IQw5HzaMgnRUPa2rwJxDOUlrasiueQFGxKTnhVEfsy49uPFRY/wFDjFK
-	OtlrNM9syil5J8J1N2p2o6zWC7xe4RZ5ft3jv1L7pqgXQLYRRkdUm/6V+g4TPg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768316198;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7sfzPEDYda0fB777q3Y+R5qIxdXTsgJj2IRA+hNFGpw=;
-	b=EElHHGGH26sj8RjZyTS7MzBbQHDhVABCJGxSUKy3ePFAS2cW41IbJqoE/+HSbaCGe4llt6
-	VlRf7PDMccGp4EBA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <20260113145635.YfSTBhVs@linutronix.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+	s=arc-20240116; t=1768373255; c=relaxed/simple;
+	bh=TBHHnGIxzzkwg1wxZOSuUHNdDnSvfZxCBDkqSsYUnCA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IArwlbsJIIWbseSA2SQeYt9ADYHsc/f44K6Etij0fASSdsPgsKgP1E/01wLOZerYVdZ4DDmZVNzIirhAIG0SPmTsj9XwYfZnNwcbCMqJi1trfGrl/Oh0gvckzT3tIQS0xVpO5Y2OM8YkoB70mnoYc+J4xeeoBqznT5CGrzed6UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NIQRvHzN; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-3f0ec55ce57so5802401fac.2
+        for <linux-integrity@vger.kernel.org>; Tue, 13 Jan 2026 22:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768373240; x=1768978040; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d/IFSyOk01QbB7CX35WyvTWiC1BMCRnY3V611GTbMpw=;
+        b=NIQRvHzN1mY4l6Gf1R7exU2hTTuKkpoaPj2xC2iC3OuCjnCwN46yPQjuCIoZLGTonD
+         3nmBBfAqiHvduA9lks3PadIYGSeEghX01TlJ690FOlfToWcnfYkMhT3tOoOJDgzbzZoP
+         aniuFNVm2jwE959ns6XGnnh/UZDujI2NMBf1PoBaF8Y7lx3LekJpAriNDmOhuINjIO5O
+         mg4+kyr5vZuA7GWCk9D1deWl/ntI5H0zGa0z/9utifN76jEPnQO9l6ytaOs1jhgSfcXz
+         lw0x5MXXJFZboMt5V/dymJhYr6/3FsjBPB1mbW1VmAe6NVjfAMzNVonV7P6PzjQIHc5j
+         YVMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768373240; x=1768978040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=d/IFSyOk01QbB7CX35WyvTWiC1BMCRnY3V611GTbMpw=;
+        b=cNgOb7QKz4voc5PPmZVsOBOIyxnkCvIuxojANfhcwzCi1XWGkOcHV7cwAebO62DPc+
+         mqM/3g1xW2Jtzm9tfcw1t1woYsm2UhQFqdCoVeKt83+cVc4ZSXUGihEIUaYAzG6YOKVn
+         WJF1gAEex3Vd90dBxBdhgZtGfXq1MguTXksMB0RzJrh8BPPXOZYoIcZv+oB++WZHHJtt
+         0BqKWpgIrrpytc5fdmVJlxLELzm+EfdkYsEfOxJB4q+KDfnAwy822ma5hJFXWM934otw
+         xG8qxyKJ92cufKYPzE77dS7WRkwCcQ6mBxrEUKyVjNd3ErkkLArmIZoGJaOSSeKIW+4y
+         pkdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqf9abrrd+WyXEeidQdhgY1+qbV99FsTVrm0+/OFb9tIoCRhMmDP4HPyLQ5qCJOxzYNAMqOHb1Nacl6L/SSno=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2VWr/PbDx0rxw2cLrJQTqAB587qsADLubaFhFgQBPz5GWQfp1
+	d0Q+L0q9FVTPoTpsPFSbEWazQphxjgXJv7cASjDg1RVnjOfMREoLVHyl9qUP71yWzXEOUF9DWSp
+	aeYgiy/LNd7QyR+0wRyOT0zp8mi6+gZKWLZkD8gzrAQ==
+X-Gm-Gg: AY/fxX6GmqkNpWmwwX94n44gXYIVVsm+GVEjQUHKagcB3Zh3s7T3033bITdnPdggoZ8
+	1GZo4qOIuAtNZLjEcb4feLvsUtXGY0UjrWVL0rkPGCypzc8Ki/mL+ZlUpokEe5QBnPdeoKjx6fb
+	NWsUVCI118NaLXaoea1xNQOQ8w5Ed2Q5M44euoIkIZsN0B1JqEn7tjXRSGruzixBg8ziSy8qyE3
+	cJJhW76+nhRAfuNhcuKM2q+Wlek/6ZzwDGTTLQsyLeQTvpcv2ykCwsJOa6ZyupD5RsZrEYJw+WW
+	WWKHqWKcnwXfXIHRXqRZVXhYUQ==
+X-Received: by 2002:a05:6820:825:b0:65b:3641:bf79 with SMTP id
+ 006d021491bc7-6610097f882mr1135430eaf.77.1768373240386; Tue, 13 Jan 2026
+ 22:47:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20260113143816.1600893-2-u.kleine-koenig@baylibre.com>
+In-Reply-To: <20260113143816.1600893-2-u.kleine-koenig@baylibre.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Wed, 14 Jan 2026 07:47:09 +0100
+X-Gm-Features: AZwV_QgNNoC11et3GlEoA2VND3sD4l0uCmTBU-5uG3zcrkw3Ed0Q8_zvuMOwhRI
+Message-ID: <CAHUa44G+2PWzOnj6smTR9vES06hrwry-SaSj-FcPJgVccNTSXg@mail.gmail.com>
+Subject: Re: [PATCH] tpm/tpm_ftpm_tee: Fix kdoc after function renames
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Sumit Garg <sumit.garg@oss.qualcomm.com>, linux-integrity@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
 
-On 2026-01-13 13:28:59 [+0100], Thomas Wei=C3=9Fschuh wrote:
-> --- /dev/null
-> +++ b/scripts/modules-merkle-tree.c
-> @@ -0,0 +1,467 @@
-=E2=80=A6
-> +static void build_proof(struct mtree *mt, unsigned int n, int fd)
-> +{
-> +	unsigned char cur[EVP_MAX_MD_SIZE];
-> +	unsigned char tmp[EVP_MAX_MD_SIZE];
+On Tue, Jan 13, 2026 at 3:38=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
+>
+> Recently ftpm_tee_probe() and ftpm_tee_remove() grew a suffix in their
+> function name but I failed to adapt the kernel doc when doing so. This
+> change aligns the kernel doc to the actual function name (again).
+>
+> Fixes: 92fad96aea24 ("tpm/tpm_ftpm_tee: Make use of tee bus methods")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202601132105.9lgSsC4U-lkp@i=
+ntel.com/
+> ---
+>  drivers/char/tpm/tpm_ftpm_tee.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-This and a few other instances below could be optimized to avoid
-hashing. I probably forgot to let you know.
--> https://git.kernel.org/pub/scm/linux/kernel/git/bigeasy/mtree-hashed-mod=
-s.git/commit/?id=3D10b565c123c731da37befe862de13678b7c54877
+Looks good to me. Jarkko, OK, if I also take this patch via my tree?
 
-> +	struct file_entry *fe, *fe_sib;
-> +
-> +	fe =3D &fh_list[n];
-> +
-> +	if ((n & 1) =3D=3D 0) {
-> +		/* No pair, hash with itself */
-> +		if (n + 1 =3D=3D num_files)
-> +			fe_sib =3D fe;
-> +		else
-> +			fe_sib =3D &fh_list[n + 1];
-> +	} else {
-> +		fe_sib =3D &fh_list[n - 1];
-> +	}
-> +	/* First comes the node position into the file */
-> +	write_be_int(fd, n);
-> +
-> +	if ((n & 1) =3D=3D 0)
-> +		hash_entry(fe->hash, fe_sib->hash, cur);
-> +	else
-> +		hash_entry(fe_sib->hash, fe->hash, cur);
-> +
-> +	/* Next is the sibling hash, followed by hashes in the tree */
-> +	write_hash(fd, fe_sib->hash);
-> +
-> +	for (unsigned int i =3D 0; i < mt->levels - 1; i++) {
-> +		n >>=3D 1;
-> +		if ((n & 1) =3D=3D 0) {
-> +			void *h;
-> +
-> +			/* No pair, hash with itself */
-> +			if (n + 1 =3D=3D mt->entries[i])
-> +				h =3D cur;
-> +			else
-> +				h =3D mt->l[i][n + 1].hash;
-> +
-> +			hash_entry(cur, h, tmp);
-> +			write_hash(fd, h);
-> +		} else {
-> +			hash_entry(mt->l[i][n - 1].hash, cur, tmp);
-> +			write_hash(fd, mt->l[i][n - 1].hash);
-> +		}
-> +		memcpy(cur, tmp, hash_size);
-> +	}
-> +
-> +	 /* After all that, the end hash should match the root hash */
-> +	if (memcmp(cur, mt->l[mt->levels - 1][0].hash, hash_size))
-> +		errx(1, "hash mismatch");
-> +}
+Cheers,
+Jens
 
-Sebastian
+>
+> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_=
+tee.c
+> index 20294d1953a3..b82490439633 100644
+> --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> @@ -163,7 +163,7 @@ static int ftpm_tee_match(struct tee_ioctl_version_da=
+ta *ver, const void *data)
+>  }
+>
+>  /**
+> - * ftpm_tee_probe() - initialize the fTPM
+> + * ftpm_tee_probe_generic() - initialize the fTPM
+>   * @dev: the device description.
+>   *
+>   * Return:
+> @@ -266,7 +266,7 @@ static int ftpm_plat_tee_probe(struct platform_device=
+ *pdev)
+>  }
+>
+>  /**
+> - * ftpm_tee_remove() - remove the TPM device
+> + * ftpm_tee_remove_generic() - remove the TPM device
+>   * @dev: the device description.
+>   *
+>   * Return:
+>
+> base-commit: 92fad96aea24fc19abe1eae2249402b61de3a3e2
+> --
+> 2.47.3
+>
 
