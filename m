@@ -1,77 +1,77 @@
-Return-Path: <linux-integrity+bounces-8251-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8250-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E488D23CCB
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 11:05:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71BBCD23CF2
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 11:06:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D4D633021E67
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 10:05:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2630F30869A5
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 10:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757BA35F8CC;
-	Thu, 15 Jan 2026 10:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA41C35EDA5;
+	Thu, 15 Jan 2026 10:05:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DYPewoT+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kYTAEQBU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24247343208;
-	Thu, 15 Jan 2026 10:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6342F13B7AE;
+	Thu, 15 Jan 2026 10:05:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768471543; cv=none; b=tj3LmufsyhGXhgORcgznhosXCU5sS5lvANtV3qv5K2N9Qpo7sQ5B7mY6FbrBLNaRHyX7I+MeqyflZi+HX0bj8KG1etgv+fy3pqwu6oDqTXomB2UZTGW/lp2yYSZyePH5oihl3boqUheECXfza/olV9G/uRwvLVkgy7ik/iObBdk=
+	t=1768471540; cv=none; b=ehDCj7tos4QosuO/tcQK5OZPDDCR0+g9e1ref5b0x5c+ZXXq7OStXmOfuxAULV9/oY9cGKMplt5SoKPkrfstAVb8QPHEAPxw/SvgUSzykDHaEzHwFeRgGsfAALcNDy3K+wDYJ7fvRFTXHdr54vgyskoNJuewvCUq2MJmz3SWg54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768471543; c=relaxed/simple;
-	bh=6G58g9crEgE57aep4YmCSRDvwVu4Es3NNVhZc8cDP7Q=;
+	s=arc-20240116; t=1768471540; c=relaxed/simple;
+	bh=o+HNAoXe5dmj0ZXKdP/IxAcP+iQNOhjsPp/2eXaFA04=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q13aHYJnYxdO8xab129LQlnFtrUh4E+MaQUhDQuAaf43Ay+U/aHZRhQAGuFTt+x0ItTyDIn7s0H2TI+T5wl+WghCWGidthSUs94YR3H7e+6hPa6wuDWxEJw3DwGWN/5ShIVmhodtXG1yvINfhEyn0h8F7FxF9euKd5j9DROJFxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DYPewoT+; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=LSkEOklKy/K1r1DerQMsafBs6H+gyaYQDXadsg3DXuafcfD8vqZoF2P9bMz3sspdsfj08vRZuZyP6x98oRezWOE1V4ey/AHFX+6F2GW6IfxES3WwWL7t4Glqkt20CyOB42GnIomiKl7OnJ9wUftVDVBemq0ezYg573hK6TubOqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kYTAEQBU; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60EKulS4012388;
-	Thu, 15 Jan 2026 10:05:21 GMT
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60F9L1oc026309;
+	Thu, 15 Jan 2026 10:05:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=yc4kRWNOeDA46cfmO
-	ijRYwTfYPM4pX1pzJgtVu4tPVs=; b=DYPewoT+6O1FKArjaPkJQp1FjAolanWi1
-	oiuST1dAwsm3ja/6Z6O0gtBinAlHNVLwykNq7k96MIXklDkwXBr7HCTLYLT0CD2V
-	dElZtSkjflBwDyPRAffCQdxbk4LFC6OsfZd1v7AdsegWGVum3DXSfu1fErc+0XWA
-	Jc3hrchAyR2dHowNE+znrqcevnoHqK25aBgiYhn7CAW1jHf3JfQ7bNIfb0Q4ta9V
-	7PZxwk9amliscmpvXGfY6PerONpJn1mkUF222BrUhp/fPJUU7PEBnOHReRxc39MM
-	4mMX+S9nV/UrhFzgav6KHzEjO+HyM55nU0nLOpefXGv5KypFryTdQ==
+	:mime-version:references:subject:to; s=pp1; bh=E9q9MwLx+QxB8gPZo
+	WTVfIF6m08d+i7ReyBrKfC6Vc8=; b=kYTAEQBUPxNFx8H43mN1u4tQene/B3Ya/
+	VFVSd3mtymJlc2tMM/cAHdITXvH9wWW8vc5nfL9vuG3Jze0yy3/HTdc01PTUYnrt
+	AYBz1w686hFA3XTHue9TmBFLdvVEgyVUTzeSFcqN2yTMwN03bWUgmOCMHRLFjvCj
+	YecZB1V6KCAvvTC8AS7qaFLRSNyL/WvRmog+6Ols//UE7nDhpO1Nt56g6pYArkHP
+	X6a7XXb8Sla1OPXE9Ouz8DpzPK0tAYC3FfB236YiK4Yujqp4yciOvtiCcxiwFmCw
+	oJQu1n+h1RjjPYPrpcR8t7QXEg+zeoBk4+DfmPmTWwpMK+fVA6Vlw==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkedt5f7e-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bpja4jgvq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 10:05:21 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60FA0SLE003167;
-	Thu, 15 Jan 2026 10:05:20 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bkedt5f7c-1
+	Thu, 15 Jan 2026 10:05:24 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60FA5OKd029550;
+	Thu, 15 Jan 2026 10:05:24 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bpja4jgvh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 10:05:20 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60F80olw025866;
-	Thu, 15 Jan 2026 10:05:20 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bm2kkqbct-1
+	Thu, 15 Jan 2026 10:05:24 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60F8aNSR030146;
+	Thu, 15 Jan 2026 10:05:23 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bm3ajy4w6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 15 Jan 2026 10:05:20 +0000
+	Thu, 15 Jan 2026 10:05:23 +0000
 Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60FA5Ge850266488
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60FA5JJR31261138
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Jan 2026 10:05:16 GMT
+	Thu, 15 Jan 2026 10:05:19 GMT
 Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0511C2004F;
+	by IMSVA (Postfix) with ESMTP id 95D672004E;
+	Thu, 15 Jan 2026 10:05:19 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5E43C2004F;
 	Thu, 15 Jan 2026 10:05:16 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B76352005A;
-	Thu, 15 Jan 2026 10:05:12 +0000 (GMT)
 Received: from li-fc74f8cc-3279-11b2-a85c-ef5828687581.ibm.com.com (unknown [9.39.20.65])
 	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 15 Jan 2026 10:05:12 +0000 (GMT)
+	Thu, 15 Jan 2026 10:05:16 +0000 (GMT)
 From: Srish Srinivasan <ssrish@linux.ibm.com>
 To: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
@@ -80,9 +80,9 @@ Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
         jarkko@kernel.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
         rnsastry@linux.ibm.com, linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org, ssrish@linux.ibm.com
-Subject: [PATCH v4 2/6] powerpc/pseries: move the PLPKS config inside its own sysfs directory
-Date: Thu, 15 Jan 2026 15:35:00 +0530
-Message-ID: <20260115100504.488665-3-ssrish@linux.ibm.com>
+Subject: [PATCH v4 3/6] pseries/plpks: expose PowerVM wrapping features via the sysfs
+Date: Thu, 15 Jan 2026 15:35:01 +0530
+Message-ID: <20260115100504.488665-4-ssrish@linux.ibm.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260115100504.488665-1-ssrish@linux.ibm.com>
 References: <20260115100504.488665-1-ssrish@linux.ibm.com>
@@ -94,443 +94,170 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDA2OSBTYWx0ZWRfX4OWAFN/szGeI
- +2gTmB83ulRE5fn+ikkAcEhIGXqgV81YKMqM186se7QCn3fEmgnSuMdo92Ca2yk+191sn4QRPbO
- JIUj24kJ4/8BM/C7T4xe2fKAyk27Dwwemsghc25RUIjcrVsjF44VrZkZjPQ20M4dOGB/swJ4dpg
- z8Q9+vztFfmTlbusRP5DzfUeplz6pGTI34ziLrzXNl5JZAW06XhdVDzmkOb0ioj/M5pHEQU6Gs6
- TmfueG70zDfh4mgS+2H2qu7PH8K0/i23WNJXHvpLGdx1QMRuReShXrt7hLgKVONEtvWsIWkcRvd
- cdmamE1XgO8i20OA4DqASyED3XHlsZhkPzqD9E7lWoUCQQ4bqsavJD67jmxuB58hUcVFWWLCrxj
- /lGc0dX77CzRS9vT7+jCzekdfGVJQX5ahVXsMHwhmmrGPifaX/AZKPKbA5NJXAVEA6vRAlW8dqk
- M/MuvUW03mWx/LF1T2A==
-X-Proofpoint-GUID: L34HcRkofm-QSP5s1nLybeww3ghDDaWe
-X-Authority-Analysis: v=2.4 cv=WLJyn3sR c=1 sm=1 tr=0 ts=6968bbe1 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE1MDA2OSBTYWx0ZWRfXzsGInuXGaqNp
+ vG6Gba+HBgaVn7fcYirKWgZ+aaLZxHO3zBImWxoxH+4DG56AS7qb9MA79vcgDug+4oLHI15XD9m
+ nNCKbNKWPJFQ5RH2QpvzM+sABl+nzR6D2JLl93iS6FJxsb8e4jBsh0r8LGBP0xSu7yZiSOEmLEh
+ cv1V9HsmTsZjbfO3dqbQmZi6Q4fB2tV1YtxRW6v7ki4MSzOxVbjUrjdIQoVaX8ptGCxZ/ED0K7v
+ qYYhNaHGdsGnMhJamhOZx+e9uyvbLCqGbDXBx3qIkLtQTu8iYxeg20oVfkjAYicUxYG8cswMFDK
+ L7LEQsvx/L2jfAmUVZGcU4qBEuKCmqVN+lEcXUVxRigBO1naSMHPMg1O9DbsARG5wzlEB/ki2gs
+ UVjIVzmpq6XqYiFPvLA/RompRX0A787CV2pV6jLaao5yKP3chAtOVLQL1oLzF7verKSO7XTSzoc
+ fHC0xpQKpsbJwb5X3fg==
+X-Proofpoint-ORIG-GUID: DJdQ-6_JF7FB7ujIPcaqkoOnT1WmUzlJ
+X-Proofpoint-GUID: 7__KPtyBQF2dw7reEONCjJG60qGMBn3_
+X-Authority-Analysis: v=2.4 cv=U4afzOru c=1 sm=1 tr=0 ts=6968bbe4 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
  a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=mWGr4ncSMiNchjaCnzgA:9
-X-Proofpoint-ORIG-GUID: NWSmFGAevClK3wgK40NR6qQFYX3Mu2rU
+ a=z7cUUKlKUSfJ7xv5IYMA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-15_03,2026-01-14_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 malwarescore=0 phishscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2512120000
- definitions=main-2601150069
+ spamscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601150069
 
-The /sys/firmware/secvar/config directory represents Power LPAR Platform
-KeyStore (PLPKS) configuration properties such as max_object_size, signed_
-update_algorithms, supported_policies, total_size, used_space, and version.
-These attributes describe the PLPKS, and not the secure boot variables
-(secvars).
+Starting with Power11, PowerVM supports a new feature called "Key Wrapping"
+that protects user secrets by wrapping them using a hypervisor generated
+wrapping key. The status of this feature can be read by the
+H_PKS_GET_CONFIG HCALL.
 
-Create /sys/firmware/plpks directory and move the PLPKS config inside this
-directory. For backwards compatibility, create a soft link from the secvar
-sysfs directory to this config and emit a warning stating that the older
-sysfs path has been deprecated. Separate out the plpks specific
-documentation from secvar.
+Expose the Power LPAR Platform KeyStore (PLPKS) wrapping features config
+via the sysfs file /sys/firmware/plpks/config/wrapping_features.
 
 Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- .../ABI/testing/sysfs-firmware-plpks          | 50 ++++++++++
- Documentation/ABI/testing/sysfs-secvar        | 65 -------------
- arch/powerpc/include/asm/plpks.h              |  5 +
- arch/powerpc/include/asm/secvar.h             |  1 -
- arch/powerpc/kernel/secvar-sysfs.c            | 21 ++---
- arch/powerpc/platforms/pseries/Makefile       |  2 +-
- arch/powerpc/platforms/pseries/plpks-secvar.c | 29 ------
- arch/powerpc/platforms/pseries/plpks-sysfs.c  | 94 +++++++++++++++++++
- 8 files changed, 156 insertions(+), 111 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-firmware-plpks
- create mode 100644 arch/powerpc/platforms/pseries/plpks-sysfs.c
+ .../ABI/testing/sysfs-firmware-plpks          |  8 ++++++++
+ arch/powerpc/include/asm/hvcall.h             |  4 +++-
+ arch/powerpc/include/asm/plpks.h              |  3 +++
+ arch/powerpc/platforms/pseries/plpks-sysfs.c  |  2 ++
+ arch/powerpc/platforms/pseries/plpks.c        | 20 +++++++++++++++++++
+ 5 files changed, 36 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/ABI/testing/sysfs-firmware-plpks b/Documentation/ABI/testing/sysfs-firmware-plpks
-new file mode 100644
-index 000000000000..af0353f34115
---- /dev/null
+index af0353f34115..cba061e4eee2 100644
+--- a/Documentation/ABI/testing/sysfs-firmware-plpks
 +++ b/Documentation/ABI/testing/sysfs-firmware-plpks
-@@ -0,0 +1,50 @@
-+What:		/sys/firmware/plpks/config
-+Date:		February 2023
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	This optional directory contains read-only config attributes as
-+		defined by the PLPKS implementation. All data is in ASCII
-+		format.
+@@ -48,3 +48,11 @@ Description:	Bitmask of flags indicating which algorithms the hypervisor
+ 		supports for signed update of objects, represented as a 16 byte
+ 		hexadecimal ASCII string. Consult the hypervisor documentation
+ 		for what these flags mean.
 +
-+What:		/sys/firmware/plpks/config/version
-+Date:		February 2023
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	Config version as reported by the hypervisor in ASCII decimal
-+		format.
-+
-+What:		/sys/firmware/plpks/config/max_object_size
-+Date:		February 2023
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	Maximum allowed size of	objects in the keystore in bytes,
-+		represented in ASCII decimal format.
-+
-+		This is not necessarily the same as the max size that can be
-+		written to an update file as writes can contain more than
-+		object data, you should use the size of the update file for
-+		that purpose.
-+
-+What:		/sys/firmware/plpks/config/total_size
-+Date:		February 2023
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	Total size of the PLPKS in bytes, represented in ASCII decimal
-+		format.
-+
-+What:		/sys/firmware/plpks/config/used_space
-+Date:		February 2023
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	Current space consumed by the key store, in bytes, represented
-+		in ASCII decimal format.
-+
-+What:		/sys/firmware/plpks/config/supported_policies
-+Date:		February 2023
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	Bitmask of supported policy flags by the hypervisor, represented
-+		as an 8 byte hexadecimal ASCII string. Consult the hypervisor
-+		documentation for what these flags are.
-+
-+What:		/sys/firmware/plpks/config/signed_update_algorithms
-+Date:		February 2023
-+Contact:	Nayna Jain <nayna@linux.ibm.com>
-+Description:	Bitmask of flags indicating which algorithms the hypervisor
-+		supports for signed update of objects, represented as a 16 byte
-+		hexadecimal ASCII string. Consult the hypervisor documentation
-+		for what these flags mean.
-diff --git a/Documentation/ABI/testing/sysfs-secvar b/Documentation/ABI/testing/sysfs-secvar
-index 1016967a730f..c52a5fd15709 100644
---- a/Documentation/ABI/testing/sysfs-secvar
-+++ b/Documentation/ABI/testing/sysfs-secvar
-@@ -63,68 +63,3 @@ Contact:	Nayna Jain <nayna@linux.ibm.com>
- Description:	A write-only file that is used to submit the new value for the
- 		variable. The size of the file represents the maximum size of
- 		the variable data that can be written.
--
--What:		/sys/firmware/secvar/config
--Date:		February 2023
--Contact:	Nayna Jain <nayna@linux.ibm.com>
--Description:	This optional directory contains read-only config attributes as
--		defined by the secure variable implementation.  All data is in
--		ASCII format. The directory is only created if the backing
--		implementation provides variables to populate it, which at
--		present is only PLPKS on the pseries platform.
--
--What:		/sys/firmware/secvar/config/version
--Date:		February 2023
--Contact:	Nayna Jain <nayna@linux.ibm.com>
--Description:	Config version as reported by the hypervisor in ASCII decimal
--		format.
--
--		Currently only provided by PLPKS on the pseries platform.
--
--What:		/sys/firmware/secvar/config/max_object_size
--Date:		February 2023
--Contact:	Nayna Jain <nayna@linux.ibm.com>
--Description:	Maximum allowed size of	objects in the keystore in bytes,
--		represented in ASCII decimal format.
--
--		This is not necessarily the same as the max size that can be
--		written to an update file as writes can contain more than
--		object data, you should use the size of the update file for
--		that purpose.
--
--		Currently only provided by PLPKS on the pseries platform.
--
--What:		/sys/firmware/secvar/config/total_size
--Date:		February 2023
--Contact:	Nayna Jain <nayna@linux.ibm.com>
--Description:	Total size of the PLPKS in bytes, represented in ASCII decimal
--		format.
--
--		Currently only provided by PLPKS on the pseries platform.
--
--What:		/sys/firmware/secvar/config/used_space
--Date:		February 2023
--Contact:	Nayna Jain <nayna@linux.ibm.com>
--Description:	Current space consumed by the key store, in bytes, represented
--		in ASCII decimal format.
--
--		Currently only provided by PLPKS on the pseries platform.
--
--What:		/sys/firmware/secvar/config/supported_policies
--Date:		February 2023
--Contact:	Nayna Jain <nayna@linux.ibm.com>
--Description:	Bitmask of supported policy flags by the hypervisor,
--		represented as an 8 byte hexadecimal ASCII string. Consult the
--		hypervisor documentation for what these flags are.
--
--		Currently only provided by PLPKS on the pseries platform.
--
--What:		/sys/firmware/secvar/config/signed_update_algorithms
--Date:		February 2023
--Contact:	Nayna Jain <nayna@linux.ibm.com>
--Description:	Bitmask of flags indicating which algorithms the hypervisor
--		supports for signed update of objects, represented as a 16 byte
--		hexadecimal ASCII string. Consult the hypervisor documentation
--		for what these flags mean.
--
--		Currently only provided by PLPKS on the pseries platform.
++What:		/sys/firmware/plpks/config/wrapping_features
++Date:		November 2025
++Contact:	Srish Srinivasan <ssrish@linux.ibm.com>
++Description:	Bitmask of the wrapping features indicating the wrapping
++		algorithms that are supported for the H_PKS_WRAP_OBJECT requests
++		, represented as a 8 byte hexadecimal ASCII string. Consult the
++		hypervisor documentation for what these flags mean.
+diff --git a/arch/powerpc/include/asm/hvcall.h b/arch/powerpc/include/asm/hvcall.h
+index 9aef16149d92..dff90a7d7f70 100644
+--- a/arch/powerpc/include/asm/hvcall.h
++++ b/arch/powerpc/include/asm/hvcall.h
+@@ -360,7 +360,9 @@
+ #define H_GUEST_RUN_VCPU	0x480
+ #define H_GUEST_COPY_MEMORY	0x484
+ #define H_GUEST_DELETE		0x488
+-#define MAX_HCALL_OPCODE	H_GUEST_DELETE
++#define H_PKS_WRAP_OBJECT	0x490
++#define H_PKS_UNWRAP_OBJECT	0x494
++#define MAX_HCALL_OPCODE	H_PKS_UNWRAP_OBJECT
+ 
+ /* Scope args for H_SCM_UNBIND_ALL */
+ #define H_UNBIND_SCOPE_ALL (0x1)
 diff --git a/arch/powerpc/include/asm/plpks.h b/arch/powerpc/include/asm/plpks.h
-index f303922bf622..8829a13bfda0 100644
+index 8829a13bfda0..8f034588fdf7 100644
 --- a/arch/powerpc/include/asm/plpks.h
 +++ b/arch/powerpc/include/asm/plpks.h
-@@ -13,6 +13,7 @@
+@@ -23,6 +23,7 @@
+ #define PLPKS_IMMUTABLE		PPC_BIT32(5) // Once written, object cannot be removed
+ #define PLPKS_TRANSIENT		PPC_BIT32(6) // Object does not persist through reboot
+ #define PLPKS_SIGNEDUPDATE	PPC_BIT32(7) // Object can only be modified by signed updates
++#define PLPKS_WRAPPINGKEY	PPC_BIT32(8) // Object contains a wrapping key
+ #define PLPKS_HVPROVISIONED	PPC_BIT32(28) // Hypervisor has provisioned this object
  
- #include <linux/types.h>
- #include <linux/list.h>
-+#include <linux/kobject.h>
+ // Signature algorithm flags from signed_update_algorithms
+@@ -103,6 +104,8 @@ u32 plpks_get_maxlargeobjectsize(void);
  
- // Object policy flags from supported_policies
- #define PLPKS_OSSECBOOTAUDIT	PPC_BIT32(1) // OS secure boot must be audit/enforce
-@@ -107,11 +108,15 @@ u16 plpks_get_passwordlen(void);
- void plpks_early_init_devtree(void);
+ u64 plpks_get_signedupdatealgorithms(void);
  
- int plpks_populate_fdt(void *fdt);
++u64 plpks_get_wrappingfeatures(void);
 +
-+int plpks_config_create_softlink(struct kobject *from);
- #else // CONFIG_PSERIES_PLPKS
- static inline bool plpks_is_available(void) { return false; }
- static inline u16 plpks_get_passwordlen(void) { BUILD_BUG(); }
- static inline void plpks_early_init_devtree(void) { }
- static inline int plpks_populate_fdt(void *fdt) { BUILD_BUG(); }
-+static inline int plpks_config_create_softlink(struct kobject *from)
-+						{ return 0; }
- #endif // CONFIG_PSERIES_PLPKS
+ u16 plpks_get_passwordlen(void);
  
- #endif // _ASM_POWERPC_PLPKS_H
-diff --git a/arch/powerpc/include/asm/secvar.h b/arch/powerpc/include/asm/secvar.h
-index 4828e0ab7e3c..fd5006307f2a 100644
---- a/arch/powerpc/include/asm/secvar.h
-+++ b/arch/powerpc/include/asm/secvar.h
-@@ -20,7 +20,6 @@ struct secvar_operations {
- 	int (*set)(const char *key, u64 key_len, u8 *data, u64 data_size);
- 	ssize_t (*format)(char *buf, size_t bufsize);
- 	int (*max_size)(u64 *max_size);
--	const struct attribute **config_attrs;
+ void plpks_early_init_devtree(void);
+diff --git a/arch/powerpc/platforms/pseries/plpks-sysfs.c b/arch/powerpc/platforms/pseries/plpks-sysfs.c
+index 01d526185783..c2ebcbb41ae3 100644
+--- a/arch/powerpc/platforms/pseries/plpks-sysfs.c
++++ b/arch/powerpc/platforms/pseries/plpks-sysfs.c
+@@ -30,6 +30,7 @@ PLPKS_CONFIG_ATTR(used_space, "%u\n", plpks_get_usedspace);
+ PLPKS_CONFIG_ATTR(supported_policies, "%08x\n", plpks_get_supportedpolicies);
+ PLPKS_CONFIG_ATTR(signed_update_algorithms, "%016llx\n",
+ 		  plpks_get_signedupdatealgorithms);
++PLPKS_CONFIG_ATTR(wrapping_features, "%016llx\n", plpks_get_wrappingfeatures);
  
- 	// NULL-terminated array of fixed variable names
- 	// Only used if get_next() isn't provided
-diff --git a/arch/powerpc/kernel/secvar-sysfs.c b/arch/powerpc/kernel/secvar-sysfs.c
-index ec900bce0257..4111b21962eb 100644
---- a/arch/powerpc/kernel/secvar-sysfs.c
-+++ b/arch/powerpc/kernel/secvar-sysfs.c
-@@ -12,6 +12,7 @@
- #include <linux/string.h>
- #include <linux/of.h>
- #include <asm/secvar.h>
-+#include <asm/plpks.h>
+ static const struct attribute *config_attrs[] = {
+ 	&attr_version.attr,
+@@ -38,6 +39,7 @@ static const struct attribute *config_attrs[] = {
+ 	&attr_used_space.attr,
+ 	&attr_supported_policies.attr,
+ 	&attr_signed_update_algorithms.attr,
++	&attr_wrapping_features.attr,
+ 	NULL,
+ };
  
- #define NAME_MAX_SIZE	   1024
+diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/platforms/pseries/plpks.c
+index 03722fabf9c3..4a08f51537c8 100644
+--- a/arch/powerpc/platforms/pseries/plpks.c
++++ b/arch/powerpc/platforms/pseries/plpks.c
+@@ -38,6 +38,7 @@ static u32 usedspace;
+ static u32 supportedpolicies;
+ static u32 maxlargeobjectsize;
+ static u64 signedupdatealgorithms;
++static u64 wrappingfeatures;
  
-@@ -145,19 +146,6 @@ static __init int update_kobj_size(void)
- 	return 0;
+ struct plpks_auth {
+ 	u8 version;
+@@ -248,6 +249,7 @@ static int _plpks_get_config(void)
+ 		__be32 supportedpolicies;
+ 		__be32 maxlargeobjectsize;
+ 		__be64 signedupdatealgorithms;
++		__be64 wrappingfeatures;
+ 		u8 rsvd1[476];
+ 	} __packed * config;
+ 	size_t size;
+@@ -280,6 +282,7 @@ static int _plpks_get_config(void)
+ 	supportedpolicies = be32_to_cpu(config->supportedpolicies);
+ 	maxlargeobjectsize = be32_to_cpu(config->maxlargeobjectsize);
+ 	signedupdatealgorithms = be64_to_cpu(config->signedupdatealgorithms);
++	wrappingfeatures = be64_to_cpu(config->wrappingfeatures);
+ 
+ 	// Validate that the numbers we get back match the requirements of the spec
+ 	if (maxpwsize < 32) {
+@@ -472,6 +475,23 @@ u64 plpks_get_signedupdatealgorithms(void)
+ 	return signedupdatealgorithms;
  }
  
--static __init int secvar_sysfs_config(struct kobject *kobj)
--{
--	struct attribute_group config_group = {
--		.name = "config",
--		.attrs = (struct attribute **)secvar_ops->config_attrs,
--	};
--
--	if (secvar_ops->config_attrs)
--		return sysfs_create_group(kobj, &config_group);
--
--	return 0;
--}
--
- static __init int add_var(const char *name)
- {
- 	struct kobject *kobj;
-@@ -260,12 +248,15 @@ static __init int secvar_sysfs_init(void)
- 		goto err;
- 	}
- 
--	rc = secvar_sysfs_config(secvar_kobj);
-+	rc = plpks_config_create_softlink(secvar_kobj);
- 	if (rc) {
--		pr_err("Failed to create config directory\n");
-+		pr_err("Failed to create softlink to PLPKS config directory");
- 		goto err;
- 	}
- 
-+	pr_info("/sys/firmware/secvar/config is now deprecated.\n");
-+	pr_info("Will be removed in future versions.\n");
-+
- 	if (secvar_ops->get_next)
- 		rc = secvar_sysfs_load();
- 	else
-diff --git a/arch/powerpc/platforms/pseries/Makefile b/arch/powerpc/platforms/pseries/Makefile
-index 931ebaa474c8..3ced289a675b 100644
---- a/arch/powerpc/platforms/pseries/Makefile
-+++ b/arch/powerpc/platforms/pseries/Makefile
-@@ -30,7 +30,7 @@ obj-$(CONFIG_PAPR_SCM)		+= papr_scm.o
- obj-$(CONFIG_PPC_SPLPAR)	+= vphn.o
- obj-$(CONFIG_PPC_SVM)		+= svm.o
- obj-$(CONFIG_FA_DUMP)		+= rtas-fadump.o
--obj-$(CONFIG_PSERIES_PLPKS)	+= plpks.o
-+obj-$(CONFIG_PSERIES_PLPKS)	+= plpks.o plpks-sysfs.o
- obj-$(CONFIG_PPC_SECURE_BOOT)	+= plpks-secvar.o
- obj-$(CONFIG_PSERIES_PLPKS_SED)	+= plpks_sed_ops.o
- obj-$(CONFIG_SUSPEND)		+= suspend.o
-diff --git a/arch/powerpc/platforms/pseries/plpks-secvar.c b/arch/powerpc/platforms/pseries/plpks-secvar.c
-index f9e9cc40c9d0..a50ff6943d80 100644
---- a/arch/powerpc/platforms/pseries/plpks-secvar.c
-+++ b/arch/powerpc/platforms/pseries/plpks-secvar.c
-@@ -20,33 +20,6 @@
- #include <asm/secvar.h>
- #include <asm/plpks.h>
- 
--// Config attributes for sysfs
--#define PLPKS_CONFIG_ATTR(name, fmt, func)			\
--	static ssize_t name##_show(struct kobject *kobj,	\
--				   struct kobj_attribute *attr,	\
--				   char *buf)			\
--	{							\
--		return sysfs_emit(buf, fmt, func());		\
--	}							\
--	static struct kobj_attribute attr_##name = __ATTR_RO(name)
--
--PLPKS_CONFIG_ATTR(version, "%u\n", plpks_get_version);
--PLPKS_CONFIG_ATTR(max_object_size, "%u\n", plpks_get_maxobjectsize);
--PLPKS_CONFIG_ATTR(total_size, "%u\n", plpks_get_totalsize);
--PLPKS_CONFIG_ATTR(used_space, "%u\n", plpks_get_usedspace);
--PLPKS_CONFIG_ATTR(supported_policies, "%08x\n", plpks_get_supportedpolicies);
--PLPKS_CONFIG_ATTR(signed_update_algorithms, "%016llx\n", plpks_get_signedupdatealgorithms);
--
--static const struct attribute *config_attrs[] = {
--	&attr_version.attr,
--	&attr_max_object_size.attr,
--	&attr_total_size.attr,
--	&attr_used_space.attr,
--	&attr_supported_policies.attr,
--	&attr_signed_update_algorithms.attr,
--	NULL,
--};
--
- static u32 get_policy(const char *name)
- {
- 	if ((strcmp(name, "db") == 0) ||
-@@ -225,7 +198,6 @@ static const struct secvar_operations plpks_secvar_ops_static = {
- 	.set = plpks_set_variable,
- 	.format = plpks_secvar_format,
- 	.max_size = plpks_max_size,
--	.config_attrs = config_attrs,
- 	.var_names = plpks_var_names_static,
- };
- 
-@@ -234,7 +206,6 @@ static const struct secvar_operations plpks_secvar_ops_dynamic = {
- 	.set = plpks_set_variable,
- 	.format = plpks_secvar_format,
- 	.max_size = plpks_max_size,
--	.config_attrs = config_attrs,
- 	.var_names = plpks_var_names_dynamic,
- };
- 
-diff --git a/arch/powerpc/platforms/pseries/plpks-sysfs.c b/arch/powerpc/platforms/pseries/plpks-sysfs.c
-new file mode 100644
-index 000000000000..01d526185783
---- /dev/null
-+++ b/arch/powerpc/platforms/pseries/plpks-sysfs.c
-@@ -0,0 +1,94 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2025 IBM Corporation, Srish Srinivasan <ssrish@linux.ibm.com>
++/**
++ * plpks_get_wrappingfeatures() - Returns a bitmask of the wrapping features
++ * supported by the hypervisor.
 + *
-+ * This code exposes PLPKS config to user via sysfs
++ * Successful execution of the H_PKS_GET_CONFIG HCALL during initialization
++ * reads a bitmask of the wrapping features supported by the hypervisor into the
++ * file local static wrappingfeatures variable. This is valid only when the
++ * PLPKS config structure version >= 3.
++ *
++ * Return:
++ *	bitmask of the wrapping features supported by the hypervisor
 + */
-+
-+#define pr_fmt(fmt) "plpks-sysfs: "fmt
-+
-+#include <linux/init.h>
-+#include <linux/printk.h>
-+#include <linux/types.h>
-+#include <asm/machdep.h>
-+#include <asm/plpks.h>
-+
-+/* config attributes for sysfs */
-+#define PLPKS_CONFIG_ATTR(name, fmt, func)			\
-+	static ssize_t name##_show(struct kobject *kobj,	\
-+				   struct kobj_attribute *attr,	\
-+				   char *buf)			\
-+	{							\
-+		return sysfs_emit(buf, fmt, func());		\
-+	}							\
-+	static struct kobj_attribute attr_##name = __ATTR_RO(name)
-+
-+PLPKS_CONFIG_ATTR(version, "%u\n", plpks_get_version);
-+PLPKS_CONFIG_ATTR(max_object_size, "%u\n", plpks_get_maxobjectsize);
-+PLPKS_CONFIG_ATTR(total_size, "%u\n", plpks_get_totalsize);
-+PLPKS_CONFIG_ATTR(used_space, "%u\n", plpks_get_usedspace);
-+PLPKS_CONFIG_ATTR(supported_policies, "%08x\n", plpks_get_supportedpolicies);
-+PLPKS_CONFIG_ATTR(signed_update_algorithms, "%016llx\n",
-+		  plpks_get_signedupdatealgorithms);
-+
-+static const struct attribute *config_attrs[] = {
-+	&attr_version.attr,
-+	&attr_max_object_size.attr,
-+	&attr_total_size.attr,
-+	&attr_used_space.attr,
-+	&attr_supported_policies.attr,
-+	&attr_signed_update_algorithms.attr,
-+	NULL,
-+};
-+
-+static struct kobject *plpks_kobj, *plpks_config_kobj;
-+
-+int plpks_config_create_softlink(struct kobject *from)
++u64 plpks_get_wrappingfeatures(void)
 +{
-+	if (!plpks_config_kobj)
-+		return -EINVAL;
-+	return sysfs_create_link(from, plpks_config_kobj, "config");
++	return wrappingfeatures;
 +}
 +
-+static __init int plpks_sysfs_config(struct kobject *kobj)
-+{
-+	struct attribute_group config_group = {
-+		.name = NULL,
-+		.attrs = (struct attribute **)config_attrs,
-+	};
-+
-+	return sysfs_create_group(kobj, &config_group);
-+}
-+
-+static __init int plpks_sysfs_init(void)
-+{
-+	int rc;
-+
-+	if (!plpks_is_available())
-+		return -ENODEV;
-+
-+	plpks_kobj = kobject_create_and_add("plpks", firmware_kobj);
-+	if (!plpks_kobj) {
-+		pr_err("Failed to create plpks kobj\n");
-+		return -ENOMEM;
-+	}
-+
-+	plpks_config_kobj = kobject_create_and_add("config", plpks_kobj);
-+	if (!plpks_config_kobj) {
-+		pr_err("Failed to create plpks config kobj\n");
-+		kobject_put(plpks_kobj);
-+		return -ENOMEM;
-+	}
-+
-+	rc = plpks_sysfs_config(plpks_config_kobj);
-+	if (rc) {
-+		pr_err("Failed to create attribute group for plpks config\n");
-+		kobject_put(plpks_config_kobj);
-+		kobject_put(plpks_kobj);
-+		return rc;
-+	}
-+
-+	return 0;
-+}
-+
-+machine_subsys_initcall(pseries, plpks_sysfs_init);
+ /**
+  * plpks_get_passwordlen() - Get the length of the PLPKS password in bytes.
+  *
 -- 
 2.47.3
 
