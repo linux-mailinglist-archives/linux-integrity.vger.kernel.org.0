@@ -1,174 +1,160 @@
-Return-Path: <linux-integrity+bounces-8244-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8245-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22117D21E38
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 01:44:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52249D2305C
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 09:11:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 916603048EF2
-	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 00:43:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8EBC83001FDB
+	for <lists+linux-integrity@lfdr.de>; Thu, 15 Jan 2026 08:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9B61C5D72;
-	Thu, 15 Jan 2026 00:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5CC131355D;
+	Thu, 15 Jan 2026 08:06:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QqT/J0x9";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="X5j1M9cA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PWTZ5V3c"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998441A5B9E
-	for <linux-integrity@vger.kernel.org>; Thu, 15 Jan 2026 00:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E06D32B9BB
+	for <linux-integrity@vger.kernel.org>; Thu, 15 Jan 2026 08:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768437834; cv=none; b=N08QbavRKENEJiHnl5vgGjyrgHW2uTYP9goI1qIP7zwuxxpWWKA6XbIZGCWLvH6qZxmv5hc7Kma6V3Lksyvqa8ArUcPjPzjwPgoGuqUJ8KweIXttHvKPP1bpF5NOhz8D2xL5ZXhj6mQrqOp+8L4ybwqt+nOQ5crPdAbVosvqLVQ=
+	t=1768464409; cv=none; b=H8pEIohUNXUgN+cV8q7RMD8HIPSIwL2RO+z7tB1bJKR9EHSEHJbcI4eQ55a5d0561iQWD91b3Hr4dt+x/43KqIqlA09mMUeArOvT8o+Bk8QbKfj01iODz2bRJsrEkNQBocFgTj3/ocEpCcZMFQGu5zT+xEPoTs7Tu2UJ8w8gWzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768437834; c=relaxed/simple;
-	bh=Y0ATaMAvk9FF6UrWskBp3SZEl/ZHtoXFGSHDeAjM2K8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BPJvWQ5bPjftZU3U1AkZ0qpvFo9Dvj2lomg09Mfg6VkZIqPNaN6DywmFu6fIjYV5setUhBwyNMQIQHSLp6lmwtfXuUOD8NrXfht2iU86yoc7hMHvJ/AWoy4u2fuIfzlpjUjXYDc5JRXzI/pn33GQD6ZT11ShepL9uLT9gvRdtuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QqT/J0x9; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=X5j1M9cA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768437829;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KOS7+j7UGsL6cnyDN4idqz9QGj6+I0W3PRCQ7QsCd/k=;
-	b=QqT/J0x9hTNFba07TFk4kRIpQe11yexv3Q5auvN3bH54u205XgcQtXivMTpMtu3UnMW243
-	6oGCeaFOw53rqtXslJeki20PdBoGsNGfChCnPcgGvZvT0rZGhXMu7W3C/bhyN68qb/IAFM
-	cJbLzuWQrXkVdrewKuBEmlQu2JnyPso=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-475-_lnMH6K9MSq5DSMx6vCcnw-1; Wed, 14 Jan 2026 19:43:48 -0500
-X-MC-Unique: _lnMH6K9MSq5DSMx6vCcnw-1
-X-Mimecast-MFC-AGG-ID: _lnMH6K9MSq5DSMx6vCcnw_1768437827
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-81f3c36dd2cso272649b3a.2
-        for <linux-integrity@vger.kernel.org>; Wed, 14 Jan 2026 16:43:48 -0800 (PST)
+	s=arc-20240116; t=1768464409; c=relaxed/simple;
+	bh=SNm9tw10kSlkSYE8Dzjb7oI08w0c1l6b91zhzyCDjkE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rX9IRyFZIyg8+tSFN5qGRdnll/LY61HQCs8gKLBU1E9QVjftm4IFwOG9KAcY3N1uQhZLbNYsPj+FvgrAQmiKJTr7PyC845KaRQ09vuMX5c3k4gYokzgAEC0m1+iQh5limSpWf7Qtfi5i0iv1MY14/4DyWetiD/Sd3WwexVrZlBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PWTZ5V3c; arc=none smtp.client-ip=209.85.160.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-3f13043e2fdso229341fac.1
+        for <linux-integrity@vger.kernel.org>; Thu, 15 Jan 2026 00:06:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768437827; x=1769042627; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1768464407; x=1769069207; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KOS7+j7UGsL6cnyDN4idqz9QGj6+I0W3PRCQ7QsCd/k=;
-        b=X5j1M9cACyX8CdsEDA1GbtU327T62/OOHL7p4k+yq3vj2W9NP+8g3u/i4TEY+CVEVb
-         Wd7txPF0HuTsXs/k4uPvkAkPnpcw0CPm5zIWNbbVG+uQQGW13t0OU3WDc0Io6WB6Sbr7
-         5uQAvK8x+tH+9xTgZcYtdjAG9pTTi25SzNnQTRW3w6DMDzIMk/XfQ5K3P4aEMeztWDNF
-         wQ/49U1lctaUfhpzUHE8Sq8lLktQVgxyuSc4rk+irW+UoSC7dfKh9LMzcni5ZacpYzIz
-         IAmyQjvyBzUuXcPksIQ159bGsikNBoi/bjZpV5hokBFCYWkU3kryjsvpkLtWT3+3Kif0
-         LITQ==
+        bh=i9YVPvZw/xovO9u+b4eqssLt4dwUALwn+L4LhHPu9Ew=;
+        b=PWTZ5V3cP2YYH3v9Ay7AOKfoY9bRrDV7ZYpgMdMLzqrlgYzhsLX6y8zlmcVPmGjPp2
+         1qoGlz1MoVMJW7lOS50wErSJeblZCtsGeSiq1FHAlveVPtTbCBVF5DRBB+c1KvVj5ioZ
+         q+yWCKpcFU744E/86rbRZQCT1jm0/+We+YdrEqvZeieUACIAd4Smm3R8TysKzHurs1zd
+         FjyVoanJbu7ZakwgVirM+gATaptAq9exf+y6Vz8T43bUDvpoPb/sFVmBj5dHGRRoBSyD
+         qZ5gDYedF/u2tRBvMiddzpK44U9iJ3BueUCf9/q1ntqEcevrxd7YwWlTNFx8KiFij5AD
+         vAMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768437827; x=1769042627;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1768464407; x=1769069207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=KOS7+j7UGsL6cnyDN4idqz9QGj6+I0W3PRCQ7QsCd/k=;
-        b=nfRYDAy24U28/HHmUB2348T93uuw4ri86T0DA8okmu13NiKhtrP0yqlj3KVN4xnlJC
-         Xvw/GL16UdVF7JVJ7lP4yfK2+ogQDsc+ziiv6fNQGDCFLsxambyluXHS68/ssR/i6qmm
-         YE7qaIM/KMO+bbLsmaIsk3BrOOpz+APxVNe4i+Sucapc26W2Bd5np3x8PVlGgQC5QxW3
-         HVP8em/0N/t/1Y6P+Cmf9bVHCnGXrBmeApN/k/gbEUbrl9vHQD0yyLd4KWAUr45dnKf7
-         ohq7eDn+U3hsms2Ek/FU2i9sTWHE7Uq+d1RHeKf0qZcXjAQoJEAOjWSoIAmPPTv//K8b
-         vQFw==
-X-Gm-Message-State: AOJu0YyOsPACkmrfrpyhfkWPurE5YoiWDYegLtCefcWmGaB6l8ulLhpj
-	VR9f20mosVtewPG6mW2Qi1VyQ1DZJMkZCKWOdUbC+LnfIZtH8NnUpyCRavgGvatb+n8vO2zKRwj
-	HibYpspwdSbGYNQJLf0YUbLGfV8TpEXuCD7HyeLDODfF0FrUhso2mfmM+kXGKQNVmkuodCi3qzC
-	hUkBRD+NbZEFo84w4ac7JiUpGSG0VTrIyEtDHbH4Nal/cSBHzkfPs=
-X-Gm-Gg: AY/fxX7bwsJmOPEokfHCcvM8eREJ5ItvyVtmxil+ZNQlnzAi59og28iuNTeYZvc535Z
-	yf2CA7wsPKIgthpNUKfpWPIRSn9hXzjAElZqRtKreZuSxytA2HXFkjmNE3PuKDOpB4rduj8sN/j
-	YfSD+A2CQqQk/+9Ojh7SURIaPZp93taDjUXJh1eR/S8qLo+8q+JMfXLMqirAF3/XwO9zxmwVjR6
-	v0Hw9KxZknO2L4CQT7E/byRDvPguR5pwS0wA1VQgYA/ihQS62EuDM7W2PJgWEwf35Dx0bsUjS26
-	1GUD7CO/5jSJV9thLVwam/Mkjy6ezPAQ6oNVdYeQpDGq4HuK+XFuDb4nt+41N6PC2geR6DK6QLM
-	Z
-X-Received: by 2002:a05:6a00:2990:b0:81f:4bc9:2a1e with SMTP id d2e1a72fcca58-81f81d1002dmr3352992b3a.11.1768437827255;
-        Wed, 14 Jan 2026 16:43:47 -0800 (PST)
-X-Received: by 2002:a05:6a00:2990:b0:81f:4bc9:2a1e with SMTP id d2e1a72fcca58-81f81d1002dmr3352962b3a.11.1768437826604;
-        Wed, 14 Jan 2026 16:43:46 -0800 (PST)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81f8e6afbc6sm666936b3a.67.2026.01.14.16.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 16:43:46 -0800 (PST)
-From: Coiby Xu <coxu@redhat.com>
-To: linux-integrity@vger.kernel.org
-Cc: Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	linux-s390@vger.kernel.org (open list:S390 ARCHITECTURE),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/3] s390: Drop unnecessary CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
-Date: Thu, 15 Jan 2026 08:43:25 +0800
-Message-ID: <20260115004328.194142-4-coxu@redhat.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260115004328.194142-1-coxu@redhat.com>
-References: <20260115004328.194142-1-coxu@redhat.com>
+        bh=i9YVPvZw/xovO9u+b4eqssLt4dwUALwn+L4LhHPu9Ew=;
+        b=JdT7aiSm42xXg4Z8GkgLXuBXJy9DDOcTdizM6ntPAkcY08X48Ur0HhWylr5nyJPIW/
+         9rBf2f0y371iUqOdPVn7ZgjEnaLK1tEg47JkbH/f2zgMIiiFXNhQvpoteJNlmi4tdR5z
+         wwze7WFo4kkreosq5XvBQ+VCMGyylVcj88QLcp+LR6OSCz9KzMu7sB3IW9nejCX0edP2
+         ArLgRnl85ftGLoRy+UBArpFMy1Ythr8JlRzLg/+7+wpAgEESENmEaeRtvF4XCFxMaGU0
+         wevd9jF+9c/596AwYZO1zzV2B1+TPIUiWG5Lonk7bwCEpZ9Ws3/friwHncH+sJ5BCa+A
+         exzw==
+X-Forwarded-Encrypted: i=1; AJvYcCX8tjwZ8DbVih8aiY6SG6lrVY5b1miiv00MUXP+jBY61SdOtu0jqmc5Q37ilataFHeYMCc69mGswl9M1J8dles=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGMrtZJA73kR+oam3iHyo3d9RGh5SWVlebcVWeL8/qWo1UTZ51
+	zVXw8oIToeylOy7G/WLg7FKWNHksEzs+yw2Z2W/S50eqj5PvblQf4RdO8iMYG9zYvE4yEp+BjH4
+	dVKB5fWOge4LrPwA4I+fq5Iay2VQjY8Pi3ryC+AvY1A==
+X-Gm-Gg: AY/fxX7zc765ubiuazigI4wuzI7woR6/jIwayeTCuxfF88mt5i5PQqUTJOfNE/KuxkT
+	1JXlq51DxzpAeVKEPVqeRQ6CL6w62jpno33+kQckdeNLX8CKTjUEVUfAA6pY8g3BP3EAqXZowHN
+	HJEU9Tgsgt0jIyQxsQIi5u8Jqyamm0Lz6yUPEFtz95lR8/Fnr2nihz1ticNdXUMQtNFyeE0dl7T
+	7GRQ1luFlKhWeLJPSA1X4pKaSfwWld90Yo+ws8oSR5OShfLoDGIHiRldlZ+jcgZkQC2EdeASxoG
+	n35u+zEjns24wh9ekUd8UW7PqQ==
+X-Received: by 2002:a05:6820:1c97:b0:659:9a49:90b5 with SMTP id
+ 006d021491bc7-66102db55b3mr3137993eaf.52.1768464407156; Thu, 15 Jan 2026
+ 00:06:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260113143816.1600893-2-u.kleine-koenig@baylibre.com>
+ <CAHUa44G+2PWzOnj6smTR9vES06hrwry-SaSj-FcPJgVccNTSXg@mail.gmail.com> <aWe9EzWskkSB0Sv-@kernel.org>
+In-Reply-To: <aWe9EzWskkSB0Sv-@kernel.org>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Thu, 15 Jan 2026 09:06:35 +0100
+X-Gm-Features: AZwV_QgHKNmW8L6ATB_GnL8-Ngslu0I0TONumS62816xCi5y4tweJwAPReV9JIY
+Message-ID: <CAHUa44Fjdskx_5+=gugCwfqBOnF8+Hs2=enauLOExafxo5K3=w@mail.gmail.com>
+Subject: Re: [PATCH] tpm/tpm_ftpm_tee: Fix kdoc after function renames
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Sumit Garg <sumit.garg@oss.qualcomm.com>, linux-integrity@vger.kernel.org, 
+	kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Commit b5ca117365d9 ("ima: prevent kexec_load syscall based on runtime
-secureboot flag") and commit 268a78404973 ("s390/kexec_file: Disable
-kexec_load when IPLed secure") disabled the kexec_load syscall based
-on the secureboot mode. Commit 9e2b4be377f0 ("ima: add a new CONFIG
-for loading arch-specific policies") needed to detect the secure boot
-mode, not to load an IMA architecture specific policy. Since there is
-the new CONFIG_INTEGRITY_SECURE_BOOT, drop
-CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT for s390.
+On Wed, Jan 14, 2026 at 4:58=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
+ wrote:
+>
+> On Wed, Jan 14, 2026 at 07:47:09AM +0100, Jens Wiklander wrote:
+> > On Tue, Jan 13, 2026 at 3:38=E2=80=AFPM Uwe Kleine-K=C3=B6nig
+> > <u.kleine-koenig@baylibre.com> wrote:
+> > >
+> > > Recently ftpm_tee_probe() and ftpm_tee_remove() grew a suffix in thei=
+r
+> > > function name but I failed to adapt the kernel doc when doing so. Thi=
+s
+> > > change aligns the kernel doc to the actual function name (again).
+> > >
+> > > Fixes: 92fad96aea24 ("tpm/tpm_ftpm_tee: Make use of tee bus methods")
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes: https://lore.kernel.org/oe-kbuild-all/202601132105.9lgSsC4U-l=
+kp@intel.com/
+> > > ---
+> > >  drivers/char/tpm/tpm_ftpm_tee.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > Looks good to me. Jarkko, OK, if I also take this patch via my tree?
+>
+> Works for me that way too with my r-by tag.
 
-Signed-off-by: Coiby Xu <coxu@redhat.com>
----
- arch/s390/Kconfig           | 1 -
- arch/s390/kernel/Makefile   | 1 -
- arch/s390/kernel/ima_arch.c | 8 --------
- 3 files changed, 10 deletions(-)
- delete mode 100644 arch/s390/kernel/ima_arch.c
+Thanks, it's there now.
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index db0383b19493..1095536c84a3 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -77,7 +77,6 @@ config S390
- 	#
- 	# Note: keep this list sorted alphabetically
- 	#
--	imply IMA_SECURE_AND_OR_TRUSTED_BOOT
- 	imply INTEGRITY_SECURE_BOOT
- 	select ALTERNATE_USER_ADDRESS_SPACE
- 	select ARCH_32BIT_USTAT_F_TINODE
-diff --git a/arch/s390/kernel/Makefile b/arch/s390/kernel/Makefile
-index ee976a27e677..00a74dd15d16 100644
---- a/arch/s390/kernel/Makefile
-+++ b/arch/s390/kernel/Makefile
-@@ -71,7 +71,6 @@ obj-$(CONFIG_STACKPROTECTOR)	+= stackprotector.o
- obj-$(CONFIG_KEXEC_FILE)	+= machine_kexec_file.o kexec_image.o
- obj-$(CONFIG_KEXEC_FILE)	+= kexec_elf.o
- obj-$(CONFIG_CERT_STORE)	+= cert_store.o
--obj-$(CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT)	+= ima_arch.o
- obj-$(CONFIG_INTEGRITY_SECURE_BOOT)	+= integrity_sb_arch.o
- 
- obj-$(CONFIG_PERF_EVENTS)	+= perf_event.o
-diff --git a/arch/s390/kernel/ima_arch.c b/arch/s390/kernel/ima_arch.c
-deleted file mode 100644
-index 6ccbe34ce408..000000000000
---- a/arch/s390/kernel/ima_arch.c
-+++ /dev/null
-@@ -1,8 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <linux/ima.h>
--
--const char * const *arch_get_ima_policy(void)
--{
--	return NULL;
--}
--- 
-2.52.0
+Cheers,
+Jens
 
+>
+> >
+> > Cheers,
+> > Jens
+> >
+> > >
+> > > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_f=
+tpm_tee.c
+> > > index 20294d1953a3..b82490439633 100644
+> > > --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> > > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> > > @@ -163,7 +163,7 @@ static int ftpm_tee_match(struct tee_ioctl_versio=
+n_data *ver, const void *data)
+> > >  }
+> > >
+> > >  /**
+> > > - * ftpm_tee_probe() - initialize the fTPM
+> > > + * ftpm_tee_probe_generic() - initialize the fTPM
+> > >   * @dev: the device description.
+> > >   *
+> > >   * Return:
+> > > @@ -266,7 +266,7 @@ static int ftpm_plat_tee_probe(struct platform_de=
+vice *pdev)
+> > >  }
+> > >
+> > >  /**
+> > > - * ftpm_tee_remove() - remove the TPM device
+> > > + * ftpm_tee_remove_generic() - remove the TPM device
+> > >   * @dev: the device description.
+> > >   *
+> > >   * Return:
+> > >
+> > > base-commit: 92fad96aea24fc19abe1eae2249402b61de3a3e2
+> > > --
+> > > 2.47.3
+> > >
+>
+> BR, Jarkko
 
