@@ -1,58 +1,65 @@
-Return-Path: <linux-integrity+bounces-8276-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8277-lists+linux-integrity=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-integrity@lfdr.de
 Delivered-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 196D1D3BB9E
-	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jan 2026 00:14:49 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84B9BD3BBF7
+	for <lists+linux-integrity@lfdr.de>; Tue, 20 Jan 2026 00:40:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2B7D5300502D
-	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jan 2026 23:14:46 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 650BE30299C6
+	for <lists+linux-integrity@lfdr.de>; Mon, 19 Jan 2026 23:40:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8002E241665;
-	Mon, 19 Jan 2026 23:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD112F616E;
+	Mon, 19 Jan 2026 23:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RYye7BJ5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="us2gH29H"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598106FC3;
-	Mon, 19 Jan 2026 23:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2386A2E7635;
+	Mon, 19 Jan 2026 23:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768864483; cv=none; b=UP0XO8bFYNxt5ELBGVH/NeSkyoBFRqkjFmhU2q33jSGmC4IqE6KksjG0a0XbhZBqvdbem822EKQBawUxTTLixBgAqM4Gl7EGHFG2OJK9zbiOgqhGYrHNssPpJGW41XgnjTothwjQLdTUIB2JTWOndR2c18oRkRqbpe19uPU6u5s=
+	t=1768866049; cv=none; b=bsxQSEp5ajL7BpnyODuQjQj2YmoVVqFEWx1AEy4LQd4O4++Ael1j9HnqN3qTjWqpZ+n0DJlAOd74KdYC/cRxI3or8X4u/1Yiu6dl3LhysopS+XRYXdvE2VFD71daFSfhHSMUEaRcC1e6xkneCOy6/XuYayPEcINmJVDD5XzaFZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768864483; c=relaxed/simple;
-	bh=B0RnHYgliM3UDg4G4RKMHcZtze9PbAuj8QZ7UfX+upA=;
+	s=arc-20240116; t=1768866049; c=relaxed/simple;
+	bh=6NrPxPz4E43NAmZEFY9zOtn6zSC2DZZMKATrJDNpKPE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KwYxrhcFxIEhtCBzmG0NgAFYw+2nJJo5hqef+Ysf3AjsZmme2jB4JYzAXsPVRb0mnrVulJGISo1jmXKsjfYbuLM6QiF42lCgaQB+PdnqY/dvLk0zC3ty09wSXKSeg31fCwkn2UD2Zru8t8FvMgE7t4KrkLTwtg5Kfz+0Iv8pLnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RYye7BJ5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93BBCC116C6;
-	Mon, 19 Jan 2026 23:14:42 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=eKDggkLg4eRkZuF2/uKeJ8MopjaOkPuiJCdoNId0lOH+EcrCekjEm4KhYDI5InvNRwPbSwGl3502YG5gVaGUYzvvXW13LuXGQn+643u4HztIlXqFmGn6Ft2V34RAVO9aFDzm2eQU4X09cLLg78aGYaVMa+cTcMbmM2+fRrTeRGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=us2gH29H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE5DDC116C6;
+	Mon, 19 Jan 2026 23:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768864483;
-	bh=B0RnHYgliM3UDg4G4RKMHcZtze9PbAuj8QZ7UfX+upA=;
+	s=k20201202; t=1768866048;
+	bh=6NrPxPz4E43NAmZEFY9zOtn6zSC2DZZMKATrJDNpKPE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RYye7BJ55Wc0+ly+G5fSi0/TRrqWy7YzKziAEUBdWv8aHmBC32+c62cddwjrjdGtV
-	 m52o2VcZx2a3PoZeFvR6q7Rg8l0no1/QT7kM/v36GODhyOjzj/da3HqMLSmB6GMRA8
-	 iFDSsP8lZYG/1uAENEPlzwgnbTmNLR3xYw/orIZVwvBT3HA581iTg8+YPXYnj/aPp8
-	 fv2XbbtQy9ceAR9iTPjN4WjZm5M+7uzLoY1Pz4RmtxEPkQQPK3HTrb3iY8aoZSp1he
-	 YIkGHiZSYvZnMYQJrZb/5KE8YCkUDGmYv0a065bcEsByNnSWrWpio9iBlTZ8QoDQwA
-	 bUGzVbpq7+0Rg==
-Date: Tue, 20 Jan 2026 01:14:38 +0200
+	b=us2gH29HvhoYcy8KLPl2/6iA9PWWRNEui+lLOpEboa9n5QgaiUTjPwADcxIJMlUvn
+	 dAoy1PT3pDDksm/95GxauR6NgekSwirir/BqRTJ5qkukU8rfvUHbImJhmuEU1YVTuk
+	 FLt46jEaDEKf3ZfXpo2V9xLkcBoBYaVbiSciLENDky3HoBrWDSwYL1OZuhRtyVe5Ra
+	 64RvfTo2P33LRMD6ccVWtz466TJMk1WTOCSw6R74++X7c0uQ4OCieDNF/U6+fN+iR7
+	 Llthdf1KpfnGisvODUZCj7neulEz2awu5O3ReQTikVIzG0aqbxYe3WJjDQzYy9joCA
+	 EVZp1dDagPmnQ==
+Date: Tue, 20 Jan 2026 01:40:43 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Srish Srinivasan <ssrish@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-	mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-	James.Bottomley@hansenpartnership.com, zohar@linux.ibm.com,
-	nayna@linux.ibm.com, rnsastry@linux.ibm.com,
-	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 5/6] keys/trusted_keys: establish PKWM as a trusted
- source
-Message-ID: <aW663paEk9Cd8eUn@kernel.org>
-References: <20260115100504.488665-1-ssrish@linux.ibm.com>
- <20260115100504.488665-6-ssrish@linux.ibm.com>
+To: Ross Philipson <ross.philipson@oracle.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+	linux-efi@vger.kernel.org, iommu@lists.linux.dev,
+	dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+	bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+	ardb@kernel.org, mjg59@srcf.ucam.org,
+	James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de,
+	jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu,
+	herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
+	ebiederm@xmission.com, dwmw2@infradead.org,
+	baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
+	andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v15 01/28] tpm: Initial step to reorganize TPM public
+ headers
+Message-ID: <aW7A-4xJSzln1HtH@kernel.org>
+References: <20251215233316.1076248-1-ross.philipson@oracle.com>
+ <20251215233316.1076248-2-ross.philipson@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -61,408 +68,310 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260115100504.488665-6-ssrish@linux.ibm.com>
+In-Reply-To: <20251215233316.1076248-2-ross.philipson@oracle.com>
 
-On Thu, Jan 15, 2026 at 03:35:03PM +0530, Srish Srinivasan wrote:
-> The wrapping key does not exist by default and is generated by the
-> hypervisor as a part of PKWM initialization. This key is then persisted by
-> the hypervisor and is used to wrap trusted keys. These are variable length
-> symmetric keys, which in the case of PowerVM Key Wrapping Module (PKWM) are
-> generated using the kernel RNG. PKWM can be used as a trust source through
-> the following example keyctl commands:
+On Mon, Dec 15, 2025 at 03:32:49PM -0800, Ross Philipson wrote:
+> Replace the existing public header tpm_command.h with the first two
+> new public headers tpm1.h and tpm_common.h. In addition, related
+> definitions in tpm1_cmd.c were moved to the new tpm1.h.
 > 
-> keyctl add trusted my_trusted_key "new 32" @u
-> 
-> Use the wrap_flags command option to set the secure boot requirement for
-> the wrapping request through the following keyctl commands
-> 
-> case1: no secure boot requirement. (default)
-> keyctl usage: keyctl add trusted my_trusted_key "new 32" @u
-> 	      OR
-> 	      keyctl add trusted my_trusted_key "new 32 wrap_flags=0x00" @u
-> 
-> case2: secure boot required to in either audit or enforce mode. set bit 0
-> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x01" @u
-> 
-> case3: secure boot required to be in enforce mode. set bit 1
-> keyctl usage: keyctl add trusted my_trusted_key "new 32 wrap_flags=0x02" @u
-> 
-> NOTE:
-> -> Setting the secure boot requirement is NOT a must.
-> -> Only either of the secure boot requirement options should be set. Not
-> both.
-> -> All the other bits are required to be not set.
-> -> Set the kernel parameter trusted.source=pkwm to choose PKWM as the
-> backend for trusted keys implementation.
-> -> CONFIG_PSERIES_PLPKS must be enabled to build PKWM.
-> 
-> Add PKWM, which is a combination of IBM PowerVM and Power LPAR Platform
-> KeyStore, as a new trust source for trusted keys.
-> 
-> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 > ---
->  This version introduces a private pointer for backend specific fields and
->  related changes specific to the PKWM backend, but defers migrating the TPM
->  fields to this new framework. That will be done independently of this
->  patch series.
->  MAINTAINERS                               |   9 +
->  include/keys/trusted-type.h               |   7 +-
->  include/keys/trusted_pkwm.h               |  33 ++++
->  security/keys/trusted-keys/Kconfig        |   8 +
->  security/keys/trusted-keys/Makefile       |   2 +
->  security/keys/trusted-keys/trusted_core.c |   6 +-
->  security/keys/trusted-keys/trusted_pkwm.c | 190 ++++++++++++++++++++++
->  7 files changed, 253 insertions(+), 2 deletions(-)
->  create mode 100644 include/keys/trusted_pkwm.h
->  create mode 100644 security/keys/trusted-keys/trusted_pkwm.c
+>  drivers/char/tpm/tpm-buf.c                |  3 +-
+>  drivers/char/tpm/tpm1-cmd.c               | 13 +-----
+>  include/keys/trusted_tpm.h                |  1 -
+>  include/linux/tpm.h                       |  3 ++
+>  include/linux/tpm1.h                      | 55 +++++++++++++++++++++++
+>  include/linux/tpm_command.h               | 30 -------------
+
+Removing tpm_command.h causes unnecessary noise.
+
+It would be better to retain tpm_command.h, and simply supplement
+it with TPM2 constants.
+
+Also, what is the reason to not have both TPM1 and TPM2 in tpm.h?
+
+To put the question in other words: is there something in tpm.h that
+would be incompatible with early boot code?
+
+I'd rather tweak that than have more files...
+
+>  include/linux/tpm_common.h                | 22 +++++++++
+>  security/keys/trusted-keys/trusted_tpm1.c |  1 -
+>  security/keys/trusted-keys/trusted_tpm2.c |  1 -
+>  9 files changed, 82 insertions(+), 47 deletions(-)
+>  create mode 100644 include/linux/tpm1.h
+>  delete mode 100644 include/linux/tpm_command.h
+>  create mode 100644 include/linux/tpm_common.h
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cf755238c429..c98f1811f836 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14008,6 +14008,15 @@ S:	Supported
->  F:	include/keys/trusted_dcp.h
->  F:	security/keys/trusted-keys/trusted_dcp.c
+> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+> index 1cb649938c01..dae23e6de269 100644
+> --- a/drivers/char/tpm/tpm-buf.c
+> +++ b/drivers/char/tpm/tpm-buf.c
+> @@ -3,7 +3,6 @@
+>   * Handling of TPM command and other buffers.
+>   */
 >  
-> +KEYS-TRUSTED-PLPKS
-> +M:	Srish Srinivasan <ssrish@linux.ibm.com>
-> +M:	Nayna Jain <nayna@linux.ibm.com>
-> +L:	linux-integrity@vger.kernel.org
-> +L:	keyrings@vger.kernel.org
-> +S:	Supported
-> +F:	include/keys/trusted_pkwm.h
-> +F:	security/keys/trusted-keys/trusted_pkwm.c
+> -#include <linux/tpm_command.h>
+>  #include <linux/module.h>
+>  #include <linux/tpm.h>
+>  
+> @@ -296,7 +295,7 @@ void tpm1_buf_append_extend(struct tpm_buf *buf, u32 pcr_idx, const u8 *hash)
+>  	if (buf->flags & TPM_BUF_INVALID)
+>  		return;
+>  
+> -	if (!tpm1_buf_is_command(buf, TPM_ORD_EXTEND)) {
+> +	if (!tpm1_buf_is_command(buf, TPM_ORD_PCR_EXTEND)) {
+>  		WARN(1, "tpm_buf: invalid TPM_Extend command\n");
+>  		buf->flags |= TPM_BUF_INVALID;
+>  		return;
+> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> index bc156d7d59f2..f29827b454d2 100644
+> --- a/drivers/char/tpm/tpm1-cmd.c
+> +++ b/drivers/char/tpm/tpm1-cmd.c
+> @@ -18,12 +18,9 @@
+>  #include <linux/mutex.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/freezer.h>
+> -#include <linux/tpm_command.h>
+>  #include <linux/tpm_eventlog.h>
+>  #include "tpm.h"
+>  
+> -#define TPM_MAX_ORDINAL 243
+> -
+>  /*
+>   * Array with one entry per ordinal defining the maximum amount
+>   * of time the chip could take to return the result.  The ordinal
+> @@ -308,9 +305,6 @@ unsigned long tpm1_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
+>  		return duration;
+>  }
+>  
+> -#define TPM_ORD_STARTUP 153
+> -#define TPM_ST_CLEAR 1
+> -
+>  /**
+>   * tpm1_startup() - turn on the TPM
+>   * @chip: TPM chip to use
+> @@ -478,7 +472,6 @@ int tpm1_pcr_extend(struct tpm_chip *chip, u32 pcr_idx, const u8 *hash,
+>  	return rc;
+>  }
+>  
+> -#define TPM_ORD_GET_CAP 101
+>  ssize_t tpm1_getcap(struct tpm_chip *chip, u32 subcap_id, cap_t *cap,
+>  		    const char *desc, size_t min_cap_length)
+>  {
+> @@ -574,7 +567,6 @@ int tpm1_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+>  	return rc;
+>  }
+>  
+> -#define TPM_ORD_PCRREAD 21
+>  int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
+>  {
+>  	int rc;
+> @@ -584,7 +576,7 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
+>  		return -ENOMEM;
+>  
+>  	tpm_buf_init(buf, TPM_BUFSIZE);
+> -	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCRREAD);
+> +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCR_READ);
+>  	tpm_buf_append_u32(buf, pcr_idx);
+>  
+>  	rc = tpm_transmit_cmd(chip, buf, TPM_DIGEST_SIZE,
+> @@ -599,7 +591,6 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
+>  	return rc;
+>  }
+>  
+> -#define TPM_ORD_CONTINUE_SELFTEST 83
+>  /**
+>   * tpm1_continue_selftest() - run TPM's selftest
+>   * @chip: TPM chip to use
+> @@ -716,8 +707,6 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+>  	return rc;
+>  }
+>  
+> -#define TPM_ORD_SAVESTATE 152
+> -
+>  /**
+>   * tpm1_pm_suspend() - pm suspend handler
+>   * @chip: TPM chip to use.
+> diff --git a/include/keys/trusted_tpm.h b/include/keys/trusted_tpm.h
+> index 0fadc6a4f166..3a0fa3bc8454 100644
+> --- a/include/keys/trusted_tpm.h
+> +++ b/include/keys/trusted_tpm.h
+> @@ -3,7 +3,6 @@
+>  #define __TRUSTED_TPM_H
+>  
+>  #include <keys/trusted-type.h>
+> -#include <linux/tpm_command.h>
+>  
+>  extern struct trusted_key_ops trusted_key_tpm_ops;
+>  
+> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+> index 8da49e8769d5..ef81e0b59657 100644
+> --- a/include/linux/tpm.h
+> +++ b/include/linux/tpm.h
+> @@ -25,6 +25,9 @@
+>  #include <crypto/hash_info.h>
+>  #include <crypto/aes.h>
+>  
+> +#include "tpm_common.h"
+> +#include "tpm1.h"
 > +
->  KEYS-TRUSTED-TEE
->  M:	Sumit Garg <sumit.garg@kernel.org>
->  L:	linux-integrity@vger.kernel.org
-> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-> index 4eb64548a74f..03527162613f 100644
-> --- a/include/keys/trusted-type.h
-> +++ b/include/keys/trusted-type.h
-> @@ -19,7 +19,11 @@
->  
->  #define MIN_KEY_SIZE			32
->  #define MAX_KEY_SIZE			128
-> -#define MAX_BLOB_SIZE			512
-> +#if IS_ENABLED(CONFIG_TRUSTED_KEYS_PKWM)
-> +#define MAX_BLOB_SIZE			1152
-> +#else
-> +#define MAX_BLOB_SIZE                   512
-> +#endif
->  #define MAX_PCRINFO_SIZE		64
->  #define MAX_DIGEST_SIZE			64
->  
-> @@ -46,6 +50,7 @@ struct trusted_key_options {
->  	uint32_t policydigest_len;
->  	unsigned char policydigest[MAX_DIGEST_SIZE];
->  	uint32_t policyhandle;
-> +	void *private;
->  };
-
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
->  
->  struct trusted_key_ops {
-> diff --git a/include/keys/trusted_pkwm.h b/include/keys/trusted_pkwm.h
+>  #define TPM_DIGEST_SIZE		20	/* Max TPM v1.2 PCR size */
+>  #define TPM_HEADER_SIZE		10
+>  #define TPM_BUFSIZE		4096
+> diff --git a/include/linux/tpm1.h b/include/linux/tpm1.h
 > new file mode 100644
-> index 000000000000..4035b9776394
+> index 000000000000..54c6c211eb9e
 > --- /dev/null
-> +++ b/include/keys/trusted_pkwm.h
-> @@ -0,0 +1,33 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __PKWM_TRUSTED_KEY_H
-> +#define __PKWM_TRUSTED_KEY_H
-> +
-> +#include <keys/trusted-type.h>
-> +#include <linux/bitops.h>
-> +#include <linux/printk.h>
-> +
-> +extern struct trusted_key_ops pkwm_trusted_key_ops;
-> +
-> +struct trusted_pkwm_options {
-> +	u16 wrap_flags;
-> +};
-> +
-> +static inline void dump_options(struct trusted_key_options *o)
-> +{
-> +	const struct trusted_pkwm_options *pkwm;
-> +	bool sb_audit_or_enforce_bit;
-> +	bool sb_enforce_bit;
-> +
-> +	pkwm = o->private;
-> +	sb_audit_or_enforce_bit = pkwm->wrap_flags & BIT(0);
-> +	sb_enforce_bit = pkwm->wrap_flags & BIT(1);
-> +
-> +	if (sb_audit_or_enforce_bit)
-> +		pr_debug("secure boot mode required: audit or enforce");
-> +	else if (sb_enforce_bit)
-> +		pr_debug("secure boot mode required: enforce");
-> +	else
-> +		pr_debug("secure boot mode required: disabled");
-> +}
-> +
-> +#endif
-> diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
-> index 204a68c1429d..9e00482d886a 100644
-> --- a/security/keys/trusted-keys/Kconfig
-> +++ b/security/keys/trusted-keys/Kconfig
-> @@ -46,6 +46,14 @@ config TRUSTED_KEYS_DCP
->  	help
->  	  Enable use of NXP's DCP (Data Co-Processor) as trusted key backend.
->  
-> +config TRUSTED_KEYS_PKWM
-> +	bool "PKWM-based trusted keys"
-> +	depends on PSERIES_PLPKS >= TRUSTED_KEYS
-> +	default y
-> +	select HAVE_TRUSTED_KEYS
-> +	help
-> +	  Enable use of IBM PowerVM Key Wrapping Module (PKWM) as a trusted key backend.
-> +
->  if !HAVE_TRUSTED_KEYS
->  	comment "No trust source selected!"
->  endif
-> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-keys/Makefile
-> index f0f3b27f688b..5fc053a21dad 100644
-> --- a/security/keys/trusted-keys/Makefile
-> +++ b/security/keys/trusted-keys/Makefile
-> @@ -16,3 +16,5 @@ trusted-$(CONFIG_TRUSTED_KEYS_TEE) += trusted_tee.o
->  trusted-$(CONFIG_TRUSTED_KEYS_CAAM) += trusted_caam.o
->  
->  trusted-$(CONFIG_TRUSTED_KEYS_DCP) += trusted_dcp.o
-> +
-> +trusted-$(CONFIG_TRUSTED_KEYS_PKWM) += trusted_pkwm.o
-> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-> index b1680ee53f86..2d328de170e8 100644
-> --- a/security/keys/trusted-keys/trusted_core.c
-> +++ b/security/keys/trusted-keys/trusted_core.c
-> @@ -12,6 +12,7 @@
->  #include <keys/trusted_caam.h>
->  #include <keys/trusted_dcp.h>
->  #include <keys/trusted_tpm.h>
-> +#include <keys/trusted_pkwm.h>
->  #include <linux/capability.h>
->  #include <linux/err.h>
->  #include <linux/init.h>
-> @@ -31,7 +32,7 @@ MODULE_PARM_DESC(rng, "Select trusted key RNG");
->  
->  static char *trusted_key_source;
->  module_param_named(source, trusted_key_source, charp, 0);
-> -MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee, caam or dcp)");
-> +MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee, caam, dcp or pkwm)");
->  
->  static const struct trusted_key_source trusted_key_sources[] = {
->  #if defined(CONFIG_TRUSTED_KEYS_TPM)
-> @@ -46,6 +47,9 @@ static const struct trusted_key_source trusted_key_sources[] = {
->  #if defined(CONFIG_TRUSTED_KEYS_DCP)
->  	{ "dcp", &dcp_trusted_key_ops },
->  #endif
-> +#if defined(CONFIG_TRUSTED_KEYS_PKWM)
-> +	{ "pkwm", &pkwm_trusted_key_ops },
-> +#endif
->  };
->  
->  DEFINE_STATIC_CALL_NULL(trusted_key_seal, *trusted_key_sources[0].ops->seal);
-> diff --git a/security/keys/trusted-keys/trusted_pkwm.c b/security/keys/trusted-keys/trusted_pkwm.c
-> new file mode 100644
-> index 000000000000..4f391b77a907
-> --- /dev/null
-> +++ b/security/keys/trusted-keys/trusted_pkwm.c
-> @@ -0,0 +1,190 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +++ b/include/linux/tpm1.h
+> @@ -0,0 +1,55 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
 > +/*
-> + * Copyright (C) 2025 IBM Corporation, Srish Srinivasan <ssrish@linux.ibm.com>
+> + * Copyright (C) 2004,2007,2008 IBM Corporation
+> + *
+> + * Authors:
+> + * Leendert van Doorn <leendert@watson.ibm.com>
+> + * Dave Safford <safford@watson.ibm.com>
+> + * Reiner Sailer <sailer@watson.ibm.com>
+> + * Kylene Hall <kjhall@us.ibm.com>
+> + * Debora Velarde <dvelarde@us.ibm.com>
+> + *
+> + * Maintained by: <tpmdd_devel@lists.sourceforge.net>
+> + *
+> + * Device driver for TCG/TCPA TPM (trusted platform module).
+> + * Specifications at www.trustedcomputinggroup.org
+> + */
+> +#ifndef __LINUX_TPM1_H__
+> +#define __LINUX_TPM1_H__
+> +
+> +/*
+> + * TPM 1.2 Main Specification
+> + * https://trustedcomputinggroup.org/resource/tpm-main-specification/
 > + */
 > +
-> +#include <keys/trusted_pkwm.h>
-> +#include <keys/trusted-type.h>
-> +#include <linux/build_bug.h>
-> +#include <linux/key-type.h>
-> +#include <linux/parser.h>
-> +#include <asm/plpks.h>
-> +
-> +enum {
-> +	Opt_err,
-> +	Opt_wrap_flags,
+> +/* Command TAGS */
+> +enum tpm_command_tags {
+> +	TPM_TAG_RQU_COMMAND		= 193,
+> +	TPM_TAG_RQU_AUTH1_COMMAND	= 194,
+> +	TPM_TAG_RQU_AUTH2_COMMAND	= 195,
+> +	TPM_TAG_RSP_COMMAND		= 196,
+> +	TPM_TAG_RSP_AUTH1_COMMAND	= 197,
+> +	TPM_TAG_RSP_AUTH2_COMMAND	= 198,
 > +};
 > +
-> +static const match_table_t key_tokens = {
-> +	{Opt_wrap_flags, "wrap_flags=%s"},
-> +	{Opt_err, NULL}
+> +/* Command Ordinals */
+> +enum tpm_command_ordinals {
+> +	TPM_ORD_CONTINUE_SELFTEST	= 83,
+> +	TPM_ORD_GET_CAP			= 101,
+> +	TPM_ORD_GET_RANDOM		= 70,
+> +	TPM_ORD_PCR_EXTEND		= 20,
+> +	TPM_ORD_PCR_READ		= 21,
+> +	TPM_ORD_OSAP			= 11,
+> +	TPM_ORD_OIAP			= 10,
+> +	TPM_ORD_SAVESTATE		= 152,
+> +	TPM_ORD_SEAL			= 23,
+> +	TPM_ORD_STARTUP			= 153,
+> +	TPM_ORD_UNSEAL			= 24,
 > +};
 > +
-> +static int getoptions(char *datablob, struct trusted_key_options *opt)
-> +{
-> +	substring_t args[MAX_OPT_ARGS];
-> +	char *p = datablob;
-> +	int token;
-> +	int res;
-> +	u16 wrap_flags;
-> +	unsigned long token_mask = 0;
-> +	struct trusted_pkwm_options *pkwm;
+> +/* Other constants */
+> +#define SRKHANDLE                       0x40000000
+> +#define TPM_NONCE_SIZE                  20
+> +#define TPM_ST_CLEAR			1
 > +
-> +	if (!datablob)
-> +		return 0;
+> +#endif
+> diff --git a/include/linux/tpm_command.h b/include/linux/tpm_command.h
+> deleted file mode 100644
+> index 02038972a05f..000000000000
+> --- a/include/linux/tpm_command.h
+> +++ /dev/null
+> @@ -1,30 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -#ifndef __LINUX_TPM_COMMAND_H__
+> -#define __LINUX_TPM_COMMAND_H__
+> -
+> -/*
+> - * TPM Command constants from specifications at
+> - * http://www.trustedcomputinggroup.org
+> - */
+> -
+> -/* Command TAGS */
+> -#define TPM_TAG_RQU_COMMAND             193
+> -#define TPM_TAG_RQU_AUTH1_COMMAND       194
+> -#define TPM_TAG_RQU_AUTH2_COMMAND       195
+> -#define TPM_TAG_RSP_COMMAND             196
+> -#define TPM_TAG_RSP_AUTH1_COMMAND       197
+> -#define TPM_TAG_RSP_AUTH2_COMMAND       198
+> -
+> -/* Command Ordinals */
+> -#define TPM_ORD_OIAP                    10
+> -#define TPM_ORD_OSAP                    11
+> -#define TPM_ORD_EXTEND			20
+> -#define TPM_ORD_SEAL                    23
+> -#define TPM_ORD_UNSEAL                  24
+> -#define TPM_ORD_GET_RANDOM              70
+> -
+> -/* Other constants */
+> -#define SRKHANDLE                       0x40000000
+> -#define TPM_NONCE_SIZE                  20
+> -
+> -#endif
+> diff --git a/include/linux/tpm_common.h b/include/linux/tpm_common.h
+> new file mode 100644
+> index 000000000000..b8be669913dd
+> --- /dev/null
+> +++ b/include/linux/tpm_common.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2004,2007,2008 IBM Corporation
+> + *
+> + * Authors:
+> + * Leendert van Doorn <leendert@watson.ibm.com>
+> + * Dave Safford <safford@watson.ibm.com>
+> + * Reiner Sailer <sailer@watson.ibm.com>
+> + * Kylene Hall <kjhall@us.ibm.com>
+> + * Debora Velarde <dvelarde@us.ibm.com>
+> + *
+> + * Maintained by: <tpmdd_devel@lists.sourceforge.net>
+> + *
+> + * Device driver for TCG/TCPA TPM (trusted platform module).
+> + * Specifications at www.trustedcomputinggroup.org
+> + */
+> +#ifndef __LINUX_TPM_COMMON_H__
+> +#define __LINUX_TPM_COMMON_H__
 > +
-> +	pkwm = opt->private;
+> +#define TPM_MAX_ORDINAL 243
 > +
-> +	while ((p = strsep(&datablob, " \t"))) {
-> +		if (*p == '\0' || *p == ' ' || *p == '\t')
-> +			continue;
-> +
-> +		token = match_token(p, key_tokens, args);
-> +		if (test_and_set_bit(token, &token_mask))
-> +			return -EINVAL;
-> +
-> +		switch (token) {
-> +		case Opt_wrap_flags:
-> +			res = kstrtou16(args[0].from, 16, &wrap_flags);
-> +			if (res < 0 || wrap_flags > 2)
-> +				return -EINVAL;
-> +			pkwm->wrap_flags = wrap_flags;
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
-> +static struct trusted_key_options *trusted_options_alloc(void)
-> +{
-> +	struct trusted_key_options *options;
-> +	struct trusted_pkwm_options *pkwm;
-> +
-> +	options = kzalloc(sizeof(*options), GFP_KERNEL);
-> +
-> +	if (options) {
-> +		pkwm = kzalloc(sizeof(*pkwm), GFP_KERNEL);
-> +
-> +		if (!pkwm) {
-> +			kfree_sensitive(options);
-> +			options = NULL;
-> +		} else {
-> +			options->private = pkwm;
-> +		}
-> +	}
-> +
-> +	return options;
-> +}
-> +
-> +static int trusted_pkwm_seal(struct trusted_key_payload *p, char *datablob)
-> +{
-> +	struct trusted_key_options *options = NULL;
-> +	struct trusted_pkwm_options *pkwm = NULL;
-> +	u8 *input_buf, *output_buf;
-> +	u32 output_len, input_len;
-> +	int rc;
-> +
-> +	options = trusted_options_alloc();
-> +
-> +	if (!options)
-> +		return -ENOMEM;
-> +
-> +	rc = getoptions(datablob, options);
-> +	if (rc < 0)
-> +		goto out;
-> +	dump_options(options);
-> +
-> +	input_len = p->key_len;
-> +	input_buf = kmalloc(ALIGN(input_len, 4096), GFP_KERNEL);
-> +	if (!input_buf) {
-> +		pr_err("Input buffer allocation failed. Returning -ENOMEM.");
-> +		rc = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	memcpy(input_buf, p->key, p->key_len);
-> +
-> +	pkwm = options->private;
-> +
-> +	rc = plpks_wrap_object(&input_buf, input_len, pkwm->wrap_flags,
-> +			       &output_buf, &output_len);
-> +	if (!rc) {
-> +		memcpy(p->blob, output_buf, output_len);
-> +		p->blob_len = output_len;
-> +		dump_payload(p);
-> +	} else {
-> +		pr_err("Wrapping of payload key failed: %d\n", rc);
-> +	}
-> +
-> +	kfree(input_buf);
-> +	kfree(output_buf);
-> +
-> +out:
-> +	kfree_sensitive(options->private);
-> +	kfree_sensitive(options);
-> +	return rc;
-> +}
-> +
-> +static int trusted_pkwm_unseal(struct trusted_key_payload *p, char *datablob)
-> +{
-> +	u8 *input_buf, *output_buf;
-> +	u32 input_len, output_len;
-> +	int rc;
-> +
-> +	input_len = p->blob_len;
-> +	input_buf = kmalloc(ALIGN(input_len, 4096), GFP_KERNEL);
-> +	if (!input_buf) {
-> +		pr_err("Input buffer allocation failed. Returning -ENOMEM.");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	memcpy(input_buf, p->blob, p->blob_len);
-> +
-> +	rc = plpks_unwrap_object(&input_buf, input_len, &output_buf,
-> +				 &output_len);
-> +	if (!rc) {
-> +		memcpy(p->key, output_buf, output_len);
-> +		p->key_len = output_len;
-> +		dump_payload(p);
-> +	} else {
-> +		pr_err("Unwrapping of payload failed: %d\n", rc);
-> +	}
-> +
-> +	kfree(input_buf);
-> +	kfree(output_buf);
-> +
-> +	return rc;
-> +}
-> +
-> +static int trusted_pkwm_init(void)
-> +{
-> +	int ret;
-> +
-> +	if (!plpks_wrapping_is_supported()) {
-> +		pr_err("H_PKS_WRAP_OBJECT interface not supported\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = plpks_gen_wrapping_key();
-> +	if (ret) {
-> +		pr_err("Failed to generate default wrapping key\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return register_key_type(&key_type_trusted);
-> +}
-> +
-> +static void trusted_pkwm_exit(void)
-> +{
-> +	unregister_key_type(&key_type_trusted);
-> +}
-> +
-> +struct trusted_key_ops pkwm_trusted_key_ops = {
-> +	.migratable = 0, /* non-migratable */
-> +	.init = trusted_pkwm_init,
-> +	.seal = trusted_pkwm_seal,
-> +	.unseal = trusted_pkwm_unseal,
-> +	.exit = trusted_pkwm_exit,
-> +};
+> +#endif
+> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+> index 6e6a9fb48e63..3717a06a5212 100644
+> --- a/security/keys/trusted-keys/trusted_tpm1.c
+> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> @@ -17,7 +17,6 @@
+>  #include <keys/trusted-type.h>
+>  #include <linux/key-type.h>
+>  #include <linux/tpm.h>
+> -#include <linux/tpm_command.h>
+>  
+>  #include <keys/trusted_tpm.h>
+>  
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 0a99bd051a25..e6000c71eeb6 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -9,7 +9,6 @@
+>  #include <linux/string.h>
+>  #include <linux/err.h>
+>  #include <linux/tpm.h>
+> -#include <linux/tpm_command.h>
+>  
+>  #include <keys/trusted-type.h>
+>  #include <keys/trusted_tpm.h>
 > -- 
-> 2.47.3
+> 2.43.7
 > 
 
 BR, Jarkko
