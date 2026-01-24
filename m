@@ -1,212 +1,186 @@
-Return-Path: <linux-integrity+bounces-8302-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8303-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8DYSK30QdGnF1wAAu9opvQ
-	(envelope-from <linux-integrity+bounces-8302-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jan 2026 01:21:17 +0100
+	id eAVpFPyYdGlJ7wAAu9opvQ
+	(envelope-from <linux-integrity+bounces-8303-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jan 2026 11:03:40 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FA657BA7B
-	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jan 2026 01:21:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF4057D2D7
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jan 2026 11:03:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 02E46301FA50
-	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jan 2026 00:21:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F13363013710
+	for <lists+linux-integrity@lfdr.de>; Sat, 24 Jan 2026 10:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C626D1A9F85;
-	Sat, 24 Jan 2026 00:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70EC01DF97C;
+	Sat, 24 Jan 2026 10:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gPqAskv8";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="cywcp0Nf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Alu5FVsI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCCE4A35
-	for <linux-integrity@vger.kernel.org>; Sat, 24 Jan 2026 00:20:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E39883F;
+	Sat, 24 Jan 2026 10:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769214060; cv=none; b=LnOBGNspZOVf6pI0mGT/G5aO2zPI/zUJAzNnT3S1dw+33isXmpkddnEv9YwS4APbSnsCyKvARuOqsDfeh1Li/fAsFfPud18PbP4y6iGmX0enjrVvaAi12xsO70dUsu+Aj9L9WxP8UoLfCKJhDm6qBWJ1j4VIFnYtQOn1rGwo0/I=
+	t=1769249014; cv=none; b=um79o3FcjKewH1aoUD1wCYh/hEmc93djKjosTz3ThioDnE9ThqHWuo+FTWHMLlB695sLJVyYmblhcbkNxGGRaQTme43PUAYl9PDnnLl0gu2y/oNAGbydrOeA8NmUmSVvr5MgbrlG5Y8Gj3yFRaNn9jY6D/JwwQWoy4AYO6FFpAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769214060; c=relaxed/simple;
-	bh=j2cnf66j7Tyeo03Ht3nxIfKsvE0nQ1mv6D7kqhjkBJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VIQOXC22fE47Z7lDvoNKeCOcP1ivrEckHhFNgq/nIqJaG7CuXBUPI2Ns5cYX4Bg9PTcsjfg3/HZI0X1bYb5QNaZjdezW8zN+0zRG9eKY9Y4QYxqGC6a3Owxh0aiXPyHL59DbpZT9b4X2h8H30dU4v2Tb74v0684cFW066M1ewe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gPqAskv8; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=cywcp0Nf; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769214056;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xhgLPiYR6xEsxXnQ/SeaMjXXghHvMuOe7YsndhfrobA=;
-	b=gPqAskv8/iuAIelkAE02Mn5AzPTZq+2afA8ZwLjZq6cnB+hM2uk9a5HD1oPkITCfuYbXHx
-	+rKoOhUta5LfNYV+2z8Yy3XT9ueZYtv3n+bT9J9aGBcAaf6Ew1rZaPWdz+E0FLTZKK8Q/b
-	2+LbOmXOchBuzQEPEdQ8Dlt75VTeVJw=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-524-POYZCsJAPjCgejw3hPtQSQ-1; Fri, 23 Jan 2026 19:20:55 -0500
-X-MC-Unique: POYZCsJAPjCgejw3hPtQSQ-1
-X-Mimecast-MFC-AGG-ID: POYZCsJAPjCgejw3hPtQSQ_1769214054
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2a090819ed1so17296955ad.2
-        for <linux-integrity@vger.kernel.org>; Fri, 23 Jan 2026 16:20:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769214054; x=1769818854; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xhgLPiYR6xEsxXnQ/SeaMjXXghHvMuOe7YsndhfrobA=;
-        b=cywcp0NfT4qTxGKtlk4pEqV6LpdD2LHnGGFpE3nSVwX6aejnZN0oJvvH7X6ppckev0
-         NmqEYd5Khy+qEN6tU3NtowvlifS9f5TYdQSBjOcsQCcGVc+RmvKDumIaEQEhJWwINLex
-         hhqAjZWSHn2PTSZq4GxgEPdbo8qOPEufVWkNR+R+QKN3IAaysiZ/wfeRpsWD12D/pC6n
-         V1+30S6cbMs94/493Z85O0QCOG2NdQRTmD8cGu5QS44aZeHChCfDkXOGWnPFH4fo19mb
-         xdBm0R0HwUmQUWcLNVMGErySfUJtRKE2LcPVRXO1kGLdRVehd/EA0YoR5sOOoRjQmZca
-         8AXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769214054; x=1769818854;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xhgLPiYR6xEsxXnQ/SeaMjXXghHvMuOe7YsndhfrobA=;
-        b=Inc+/hhs3PDYMjKh3gKomkgYbJtkzO4MQP9WJLscqfSNivJ7s2lBNbSVXOT4HeX/oO
-         M7fGUG1DbqAVk5nxfCj2ZNB3GyKWDG6tXJRe0RK8d5wf6hzMBKPL3EF/++7QTw0S6RLk
-         NQqfgC/xu/i2tno4NdP3RF0SBLmrA7yuQYw1id/EMh3BRPVEC2knd8aWTVtSTpm8d+QZ
-         G1RYK3TNg4TiAKBcounO7fnedcamL2Vz5vEz7xSrDWILjJHc7nYYkQzwCGc9svX9/9kf
-         zw9vKrqBd2DpNFWsLJDIbHRJxkbXtlr5ceA9ld914eq4uv3/sEum0VWIgRI0d1y/avmc
-         zwRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnHXUavMVHPWLV/CbH5G7Gq+ASOn5Wvk8c4mh8izUKyi3Yq9hrnK50uabQ8gRvIdMhiqAn0Ez0Bho3F6HLPPo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwE3sz/4Iz7daK5wGmaRk0xWDLXzxSAKcwvTbRV0GTiNUwZ4SzS
-	MconPYx7IZd+7BR6zfA8/BCPUzi/vIxRPpAUCpR83zoYfIqH1LLAmYWTOpR3L4XQOE5A3HwqJI8
-	Qy7OzHxuB7ErynXYM3DRgpoG68MzXtCB242SHgFeW3nsjYyNaXUOvxkrWXzLpyMYnldFs9w==
-X-Gm-Gg: AZuq6aIlkDbhJUECmPjGcBmUhKOgr3vTP8hXZYPDkwbf3V7oLyTLsG8rH5PWnSNLZVS
-	Va+iYCT8W8Yjh//Pu9b8yufGVosh5u8IGs5sOtrXURQ8CyKQK3uXOwEHsFs3hXPZh2gmjVl5RK6
-	scfoLs/ra6ZuVXoqnSC/yE8UyLlWtg++eiRa0G2oH2l6b+6bvcRCaHY32IgZUCfmTwzcAeT8YYN
-	iX3moUgMnUTAGljU/sLf3bRIkz5tPkLZtFxqA81RnezFuhUHBmmcfHP8qZxUuRxkYlXncYdN8u7
-	rBzTlGAW9MzWjY6YDQ0IEi+RmW6gdNnmBi1WLEe3Wk5utaLQoqHT/awAftMXO6es5aouivzr1rK
-	T
-X-Received: by 2002:a17:902:e54d:b0:2a7:682b:50ac with SMTP id d9443c01a7336-2a7fe625118mr44257455ad.28.1769214054351;
-        Fri, 23 Jan 2026 16:20:54 -0800 (PST)
-X-Received: by 2002:a17:902:e54d:b0:2a7:682b:50ac with SMTP id d9443c01a7336-2a7fe625118mr44257045ad.28.1769214053812;
-        Fri, 23 Jan 2026 16:20:53 -0800 (PST)
-Received: from localhost ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a802faf6f9sm29695045ad.71.2026.01.23.16.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jan 2026 16:20:53 -0800 (PST)
-Date: Sat, 24 Jan 2026 08:18:46 +0800
-From: Coiby Xu <coxu@redhat.com>
-To: Ard Biesheuvel <ardb@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>
-Cc: Dave Hansen <dave.hansen@intel.com>, linux-integrity@vger.kernel.org, 
-	Heiko Carstens <hca@linux.ibm.com>, Roberto Sassu <roberto.sassu@huaweicloud.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, 
-	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, 
-	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" <linuxppc-dev@lists.ozlabs.org>, "open list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>, 
-	"open list:EXTENSIBLE FIRMWARE INTERFACE (EFI)" <linux-efi@vger.kernel.org>, 
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, "open list:KEYS/KEYRINGS_INTEGRITY" <keyrings@vger.kernel.org>
-Subject: Re: [PATCH 1/3] integrity: Make arch_ima_get_secureboot
- integrity-wide
-Message-ID: <aXQN-ZNhT5olbf6X@Rk>
-References: <20260115004328.194142-2-coxu@redhat.com>
- <CAMj1kXFXNo1-pMbo-VZrjQ3TYe1tufebrLr_avL12A0nHMSGnA@mail.gmail.com>
- <8bfa859ed3a4f1cf0db0ab64d8c1c3b24684582a.camel@linux.ibm.com>
- <CAMj1kXHsJNZoUEnbD1y=v4Ftuv9d2c08VckRV7ru4k4P83vZbQ@mail.gmail.com>
- <97b69bc79a5d9246f7a399510908c7b95b2e95e7.camel@linux.ibm.com>
- <CAMj1kXGx4ebaK87W7k0SNUNQnO9+=z1nmYxXC7retmp3OqRRFg@mail.gmail.com>
- <ac5e5e45c12e9b0bda19807e60b06057d74be0b3.camel@linux.ibm.com>
- <aW2i3yacr5TvWU-m@Rk>
- <1a0b6e5601a673a81f8823de0815f92b7afbeb60.camel@linux.ibm.com>
- <CAMj1kXFBMSEdRL8FotASbQO3dcfNG0bpp9Vnm5JPn-yjyDr=GA@mail.gmail.com>
+	s=arc-20240116; t=1769249014; c=relaxed/simple;
+	bh=7HjDQFsrIZZ2O+jImAdR17W4tRJbmz1pkyFCEQRRsMk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tlgyl97tsqxKKyuvt1/Kse/E+MWVAL2VJW9OuQ7/1YYyiw0VpRRCahACzBO0Lv+Ngkr2CAbjC7Yj+EzpHHuy5sE5ha/bbqAKThljzWF8JSBsKte2ct8n82zRSq/sgCLVjIz8oq5XOOB7D4GmuBMJmigiOIuroucBsfjkUD0trhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Alu5FVsI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547E6C116D0;
+	Sat, 24 Jan 2026 10:03:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769249013;
+	bh=7HjDQFsrIZZ2O+jImAdR17W4tRJbmz1pkyFCEQRRsMk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Alu5FVsI2zbhiRtD7RJkfmJSHGHQgYngFB/7n2nLVto/ZSDMawxTA2QkO1vyAZUmS
+	 CwRDUC8Clu+dWE8EcJSNMJfjPzSU0OipPIepMk7lyKZ5/CUcGhe6+Tnast6xPQXZeT
+	 I/hWWGmsXGglhRMK0KBk2t474zRIdpkecJG1q9FyXujjaQ0xYhS1m64eVUXS2IjJL9
+	 07n7V73N2GTPIiSHpzgBOezKOsJrykZnNS9xxVSe5BuZ5eUcpZW3DXMD6L+y+x916P
+	 FJO7OOI51oS+TxxDdxl3LXA8HTWs1Xx/JGzkxplCSG3Pho1WbPmjWuL+2kr2hq+psn
+	 31JN6oWp9jqUg==
+Message-ID: <6182e996-f5fb-41fb-a100-a6baca5be540@kernel.org>
+Date: Sat, 24 Jan 2026 11:03:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFBMSEdRL8FotASbQO3dcfNG0bpp9Vnm5JPn-yjyDr=GA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/6] pseries/plpks: add HCALLs for PowerVM Key Wrapping
+ Module
+To: Nayna Jain <nayna@linux.ibm.com>, Srish Srinivasan
+ <ssrish@linux.ibm.com>, linux-integrity@vger.kernel.org,
+ keyrings@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+ James.Bottomley@HansenPartnership.com, jarkko@kernel.org,
+ zohar@linux.ibm.com, rnsastry@linux.ibm.com, linux-kernel@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+References: <20260115100504.488665-1-ssrish@linux.ibm.com>
+ <20260115100504.488665-5-ssrish@linux.ibm.com>
+ <5b29327e-9175-416f-b34b-da4f6ac03a96@linux.ibm.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <5b29327e-9175-416f-b34b-da4f6ac03a96@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[36];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8302-lists,linux-integrity=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[intel.com,vger.kernel.org,linux.ibm.com,huaweicloud.com,arm.com,kernel.org,ellerman.id.au,gmail.com,linutronix.de,redhat.com,alien8.de,linux.intel.com,zytor.com,huawei.com,oracle.com,paul-moore.com,namei.org,hallyn.com,lists.infradead.org,lists.ozlabs.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8303-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[linux.ibm.com,ellerman.id.au,gmail.com,HansenPartnership.com,kernel.org,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[coxu@redhat.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chleroy@kernel.org,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.997];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0FA657BA7B
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: AF4057D2D7
 X-Rspamd-Action: no action
 
-On Wed, Jan 21, 2026 at 05:25:39PM +0100, Ard Biesheuvel wrote:
->On Wed, 21 Jan 2026 at 16:41, Mimi Zohar <zohar@linux.ibm.com> wrote:
+
+
+Le 15/01/2026 à 21:45, Nayna Jain a écrit :
+> 
+> On 1/15/26 5:05 AM, Srish Srinivasan wrote:
+>> The hypervisor generated wrapping key is an AES-GCM-256 symmetric key 
+>> which
+>> is stored in a non-volatile, secure, and encrypted storage called the 
+>> Power
+>> LPAR Platform KeyStore. It has policy based protections that prevent it
+>> from being read out or exposed to the user.
 >>
->> On Mon, 2026-01-19 at 12:04 +0800, Coiby Xu wrote:
+>> Implement H_PKS_GEN_KEY, H_PKS_WRAP_OBJECT, and H_PKS_UNWRAP_OBJECT 
+>> HCALLs
+>> to enable using the PowerVM Key Wrapping Module (PKWM) as a new trust
+>> source for trusted keys. Disallow H_PKS_READ_OBJECT, H_PKS_SIGNED_UPDATE,
+>> and H_PKS_WRITE_OBJECT for objects with the 'wrapping key' policy set.
+>> Capture the availability status for the H_PKS_WRAP_OBJECT interface.
+> 
+> Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
 >>
->> > diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
->> > index 976e75f9b9ba..5dce572192d6 100644
->> > --- a/security/integrity/ima/Kconfig
->> > +++ b/security/integrity/ima/Kconfig
->> > @@ -311,6 +311,7 @@ config IMA_QUEUE_EARLY_BOOT_KEYS
->> >   config IMA_SECURE_AND_OR_TRUSTED_BOOT
->> >          bool
->> >          depends on IMA_ARCH_POLICY
->> > +       depends on INTEGRITY_SECURE_BOOT
->> >
->> >
->> > Another idea is make a tree-wide arch_get_secureboot i.e. to move
->> > current arch_ima_get_secureboot code to arch-specific secure boot
->> > implementation. By this way, there will no need for a new Kconfig option
->> > INTEGRITY_SECURE_BOOT. But I'm not sure if there is any unforeseen
->> > concern.
->>
->> Originally basing IMA policy on the secure boot mode was an exception.  As long
->> as making it public isn't an issue any longer, this sounds to me.  Ard, Dave, do
->> you have any issues with replacing arch_ima_get_secureboot() with
->> arch_get_secureboot()?
->
->I don't see an issue with that. If there is a legitimate need to
->determine this even if IMA is not enabled, then this makes sense.
+>> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
+>> ---
+>>   Documentation/arch/powerpc/papr_hcalls.rst |  43 +++
+>>   arch/powerpc/include/asm/plpks.h           |  10 +
+>>   arch/powerpc/platforms/pseries/plpks.c     | 342 ++++++++++++++++++++-
+>>   3 files changed, 393 insertions(+), 2 deletions(-)
 
-Thanks for the confirmation! Here's the updated patch
-https://github.com/coiby/linux/commit/c222c1d08d90ef1ec85ef81ece90afc9efde7937.patch
+[...]
 
-If there is no objection, I'll send v2.
+>> diff --git a/arch/powerpc/platforms/pseries/plpks.c b/arch/powerpc/ 
+>> platforms/pseries/plpks.c
+>> index 4a08f51537c8..b97b7750f6a8 100644
+>> --- a/arch/powerpc/platforms/pseries/plpks.c
+>> +++ b/arch/powerpc/platforms/pseries/plpks.c
+>> @@ -9,6 +9,32 @@
+>>   #define pr_fmt(fmt) "plpks: " fmt
+>> +#define PLPKS_WRAPKEY_COMPONENT    "PLPKSWR"
+>> +#define PLPKS_WRAPKEY_NAME    "default-wrapping-key"
+>> +
+>> +/*
+>> + * To 4K align the {input, output} buffers to the {UN}WRAP H_CALLs
+>> + */
+>> +#define PLPKS_WRAPPING_BUF_ALIGN    4096
+>> +
+>> +/*
+>> + * To ensure the output buffer's length is at least 1024 bytes greater
+>> + * than the input buffer's length during the WRAP H_CALL
+>> + */
+>> +#define PLPKS_WRAPPING_BUF_DIFF    1024
+>> +
+>> +#define PLPKS_WRAP_INTERFACE_BIT    3
+>> +#define PLPKS_WRAPPING_KEY_LENGTH    32
+>> +
+>> +#define WRAPFLAG_BE_BIT_SET(be_bit) \
+>> +    BIT_ULL(63 - (be_bit))
+>> +
+>> +#define WRAPFLAG_BE_GENMASK(be_bit_hi, be_bit_lo) \
+>> +    GENMASK_ULL(63 - (be_bit_hi), 63 - (be_bit_lo))
+>> +
+>> +#define WRAPFLAG_BE_FIELD_PREP(be_bit_hi, be_bit_lo, val) \
+>> +    FIELD_PREP(WRAPFLAG_BE_GENMASK(be_bit_hi, be_bit_lo), (val))
 
--- 
-Best regards,
-Coiby
+I get following build failure:
 
+   CC      arch/powerpc/platforms/pseries/plpks.o
+arch/powerpc/platforms/pseries/plpks.c: In function 'plpks_wrap_object':
+arch/powerpc/platforms/pseries/plpks.c:36:9: error: implicit declaration 
+of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+    36 |         FIELD_PREP(WRAPFLAG_BE_GENMASK(be_bit_hi, be_bit_lo), 
+(val))
+       |         ^~~~~~~~~~
+arch/powerpc/platforms/pseries/plpks.c:1049:25: note: in expansion of 
+macro 'WRAPFLAG_BE_FIELD_PREP'
+  1049 |         objwrapflags |= WRAPFLAG_BE_FIELD_PREP(60, 63, 0x1);
+       |                         ^~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+
+>> +
+>>   #include <linux/delay.h>
+>>   #include <linux/errno.h>
+>>   #include <linux/io.h>
 
