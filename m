@@ -1,363 +1,399 @@
-Return-Path: <linux-integrity+bounces-8345-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8344-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gI7ZJlDdeGnytgEAu9opvQ
-	(envelope-from <linux-integrity+bounces-8345-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 16:44:16 +0100
+	id 2BTkEI/deGnbtgEAu9opvQ
+	(envelope-from <linux-integrity+bounces-8344-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 16:45:19 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD29496F7D
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 16:44:15 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2342796FEB
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 16:45:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 597F1307C82C
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 15:24:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 53442304A7BF
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 15:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DB9235EDA9;
-	Tue, 27 Jan 2026 15:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9F89366818;
+	Tue, 27 Jan 2026 15:20:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PS49/Xt+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB72135E551;
-	Tue, 27 Jan 2026 15:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD3536655D
+	for <linux-integrity@vger.kernel.org>; Tue, 27 Jan 2026 15:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769527236; cv=none; b=CKnb9avjTEA7PTrgo+4fvy1/4Xo2Daps+OGV2/UIqL3YC2l9m3OMoynXByfXL7WHM0ZXgwxgs0lRL7fvc06/dAFyTykWRkeMTsSd7vzHKtfmHu4ooCKe7mhDimB5hgVg5Jd9dxT9ofsRbcUESS6uT/53TiZfbi6ZGSFYQwyWH+Q=
+	t=1769527223; cv=none; b=BIhaE+VT4wHXPceauIyLs3uZ9h9RyqTDx9Vk08178E2Ut7Gr2bzqTaXlSWpPuGp1lJS+o2nF+QOFvYTDUlRV9yPjUgwVfkRIuaasSu4UZ9FxYqLmsrRWdTJO8dW+nHuvYA/guszGcN8xNpGSuO69gPnee9ZE6xmEnRp0yRRv43s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769527236; c=relaxed/simple;
-	bh=x0hN7zQ9Zs02aVEg9YG8jMoi91aaZ2mycD/rPIDWVn4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mAvNQNvmZ6IJXngqUhwexwjHKo29VTp8K6JVSoxak6B8BBsaeYobD1H8xlrCy4rUImv01VusNVQlp+tQ7jlHsb7lXDgnrzzj2ZOkmrdI2MYwiHxOB72i2tSbw1nM5a2HG9Su1k8q1cxXROf5VYG80rPifM+cvQ1P94UcgFsTJTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4f0ptn6FxQz1HC5G;
-	Tue, 27 Jan 2026 23:17:53 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 74A8B40567;
-	Tue, 27 Jan 2026 23:20:28 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCX0wWv13hpF5e8Ag--.25847S2;
-	Tue, 27 Jan 2026 16:20:27 +0100 (CET)
-Message-ID: <701de3f87f0f6bde97872dd0c5bf150bfc1f2713.camel@huaweicloud.com>
-Subject: Re: [PATCH v4] ima_fs: Avoid creating measurement lists for
- unsupported hash algos
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: dima@arista.com, Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu
- <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>,  "Serge E. Hallyn" <serge@hallyn.com>,
- Silvia Sisinni <silvia.sisinni@polito.it>, Enrico Bravi
- <enrico.bravi@polito.it>
-Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, Dmitry Safonov
-	 <0x7f454c46@gmail.com>
-Date: Tue, 27 Jan 2026 16:20:12 +0100
-In-Reply-To: <20260127-ima-oob-v4-1-bf0cd7f9b4d4@arista.com>
-References: <20260127-ima-oob-v4-1-bf0cd7f9b4d4@arista.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1769527223; c=relaxed/simple;
+	bh=ablOwMKQd22Q+KZBq9y4BMZVnNaLiD0FFqi08v9XFCk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PJELlHwPi29plor0963F4bNm9q8cFu6hmBm8i5ZgldRsHhUgPSM1jXkArkrSziRvu75G5UtGsgJwQapuNzUUsr0NtBve5EwqBCclivWSP/apF0pRjf9ZJuN3azrahwgu27UOTg1pCW1f7o1MITrxgj6TPjBigVxgFfWn5Ydrp3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PS49/Xt+; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47ee0291921so50078945e9.3
+        for <linux-integrity@vger.kernel.org>; Tue, 27 Jan 2026 07:20:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1769527219; x=1770132019; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TpVju2z52ieKZ9g+UW8bQZ3qR3Ja1fAXqmPTBm/6Msg=;
+        b=PS49/Xt+XBkvPmyiu7HuoN/+FQbWne3GuGTRt8FAgjemU+g0VSDoY5YDNkCt6aPhh8
+         +YUL+8WHWYyYN+Bfzf6Pb0YJ/eJTEXSMMLpfDcGqiMJjA5X18sig1ycBF1++bPuhOW0j
+         +06gCjnCrxJDM2e5OOUp/H47tgjuQ4ybDtjc7grIkF0qtmGWnhXBmUc88b/8E4BowpFq
+         sDFKtZ0UGspdRgOnkYrDNKpiBX6UZA9bVhZgKyXsU9wLNmWgEr7+FzeQJYFFU4gqwTr5
+         QbDKPSeDpC4WeQHTkReLy7m2xU4YFUCmweL0PWjLUqMn3CMaftJBwZwhsAGRenzh51WC
+         biVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769527219; x=1770132019;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TpVju2z52ieKZ9g+UW8bQZ3qR3Ja1fAXqmPTBm/6Msg=;
+        b=B2BWHBpupsnaQG4DjLwWhSW4lof6mREkytcGlAhj+1T2RT01D6vPVi+ORmI6xMISrz
+         xbbP7sb3LYMmlijxaWeD67EN+JJgwRPYyliLSP+LpL8j/nXqZvLJThmwwNhbYLe0sNHT
+         fqcVKMNgtpVsq/J68duQ75XNZ4KF/jRWy4Cgz+zrgKXOCGZz6JyzEeOK4pTh2e0Qftub
+         KZ99fTWIbMEaZKyhlkCCLHYkqJeQ6F8A+T11rKZ22RkbM46bq1jbOAalUTG7J4Ca0XaT
+         cSRSzJ2F8AMvX629NQlqq7p2LRXTbOXhExI1r3Ogsmajn65T8OhUKIc9m+kk1T5uqx7X
+         ZOuw==
+X-Forwarded-Encrypted: i=1; AJvYcCXZVEiHU/fzTkAi+cHi+gAF1h2hW4PtoKviX4HtxfAe2t3iG0pxJkOv4pZHnIXvEqgRF2fsnU2QE9H6Ffdzgxg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIXmk59ACcLZFtFE2GtBB10KpDTJ73XvJejN4PN4mGUybAJ0Wk
+	n1xgGyDOhPQj5eHpW6+LhMykvjUeZWVpfuIPFINGaz/FUPf0//oaHBg0Z2dAQlXSmnI=
+X-Gm-Gg: AZuq6aL/43hrkacc8uY8OZNdIOZUxEV+tcxZs+gHylTyazg3Hv2H2BkBu9TX2uHTUlO
+	CldB2ImN05USznVt6NqYoKOVABT6Q2GWJNNzeVXpWoFPl5+SPfOcys1ADkcB6qahDOcTD5rWjRF
+	rCQO/VpJ0AHJP4i1dI9tRmUKKTpofvh9dcN1t8ypJUqQNANeg2/W6th1ZE6RIzK3d5TS/iQJtfJ
+	voTSXh9ao1MrN5SJHg1LAfLmO/8zZ+rF6KJ1P77Hh94hPcw2FI1Rfo9TOwckl4mbVVl/ilXPLkm
+	9f5ADUWUDBnW2Bwh7EAxNvQe9usqtQme/nIvJgyQpJyoX09LXvpsc+dmFyI1T1BTrAsSeMo9los
+	s+Q1PDInVqbggyIRk0xAh3GyxtGgoSWQn8QxS7BU+wLBjrM6e3EDSeQo4X2TBPmwsr8ojHmoBDS
+	lwsdw32kHqaru5hLYJbJ0TV49JOUtkXzUEDl/MpRie
+X-Received: by 2002:a05:600c:5553:b0:480:1c53:2085 with SMTP id 5b1f17b1804b1-4806a313f35mr20307595e9.19.1769527219144;
+        Tue, 27 Jan 2026 07:20:19 -0800 (PST)
+Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066c034dfsm67200105e9.10.2026.01.27.07.20.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jan 2026 07:20:18 -0800 (PST)
+Message-ID: <52cbbccf-d5b6-4a33-b16a-4a09fe5e64d3@suse.com>
+Date: Tue, 27 Jan 2026 16:20:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwCX0wWv13hpF5e8Ag--.25847S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtFyDKw1kKr4xuFW8KFyDJrb_yoWfJry7pa
-	93WFyfCr4kJrW7trn7C3ZxCF4fZ3yFy3WUWrn5Jw18AFn8Wr1qkrnYkr1FkrWqgryrAFyI
-	qa1UXr43tr15taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBGl4LxwXmgAAsv
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 08/17] module: Deduplicate signature extraction
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
+ <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>,
+ Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
+ <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>,
+ Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+ Xiu Jianfeng <xiujianfeng@huawei.com>,
+ =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+ Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
+ kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
+ =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+ linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-8-0b932db9b56b@weissschuh.net>
+Content-Language: en-US
+From: Petr Pavlu <petr.pavlu@suse.com>
+In-Reply-To: <20260113-module-hashes-v4-8-0b932db9b56b@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8345-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[huaweicloud.com];
-	FREEMAIL_TO(0.00)[arista.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,polito.it];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,arndb.de,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
+	TAGGED_FROM(0.00)[bounces-8344-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[suse.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[petr.pavlu@suse.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arista.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,huawei.com:email,polito.it:email]
-X-Rspamd-Queue-Id: DD29496F7D
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:email,suse.com:mid,suse.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2342796FEB
 X-Rspamd-Action: no action
 
-On Tue, 2026-01-27 at 15:03 +0000, Dmitry Safonov via B4 Relay wrote:
-> From: Dmitry Safonov <dima@arista.com>
->=20
-> ima_init_crypto() skips initializing ima_algo_array[i] if the algorithm
-> from ima_tpm_chip->allocated_banks[i].crypto_id is not supported.
-> It seems avoid adding the unsupported algorithm to ima_algo_array will
-> break all the logic that relies on indexing by NR_BANKS(ima_tpm_chip).
-
-The patch looks good, although I didn't try yet myself.
-
-I would make the commit message slightly better, with a more fluid
-explanation.
-
-ima_tpm_chip->allocated_banks[i].crypto_id is initialized to
-HASH_ALGO__LAST if the TPM algorithm is not supported. However there
-are places relying on the algorithm to be valid because it is accessed
-by hash_algo_name[].
-
-Thus solve the problem by creating a file name that does not depend on
-the crypto algorithm to be initialized, ...
-
-Also print the template entry digest as populated by IMA.
-
-Something along these lines.
-
-Also, I have a preference for lower case instead of capital case for
-the file name, given the other names.
-
-Could you also avoid the >, otherwise the mailer thinks it is a reply?
-
-Thanks
-
-Roberto
-
-> On 6.12.40 I observe the following read out-of-bounds in hash_algo_name:
->=20
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > BUG: KASAN: global-out-of-bounds in create_securityfs_measurement_lists=
-+0x396/0x440
-> > Read of size 8 at addr ffffffff83e18138 by task swapper/0/1
-> >=20
-> > CPU: 4 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.40 #3
-> > Call Trace:
-> >  <TASK>
-> >  dump_stack_lvl+0x61/0x90
-> >  print_report+0xc4/0x580
-> >  ? kasan_addr_to_slab+0x26/0x80
-> >  ? create_securityfs_measurement_lists+0x396/0x440
-> >  kasan_report+0xc2/0x100
-> >  ? create_securityfs_measurement_lists+0x396/0x440
-> >  create_securityfs_measurement_lists+0x396/0x440
-> >  ima_fs_init+0xa3/0x300
-> >  ima_init+0x7d/0xd0
-> >  init_ima+0x28/0x100
-> >  do_one_initcall+0xa6/0x3e0
-> >  kernel_init_freeable+0x455/0x740
-> >  kernel_init+0x24/0x1d0
-> >  ret_from_fork+0x38/0x80
-> >  ret_from_fork_asm+0x11/0x20
-> >  </TASK>
-> >=20
-> > The buggy address belongs to the variable:
-> >  hash_algo_name+0xb8/0x420
-> >=20
-> > The buggy address belongs to the physical page:
-> > page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x10=
-7ce18
-> > flags: 0x8000000000002000(reserved|zone=3D2)
-> > raw: 8000000000002000 ffffea0041f38608 ffffea0041f38608 000000000000000=
-0
-> > raw: 0000000000000000 0000000000000000 00000001ffffffff 000000000000000=
-0
-> > page dumped because: kasan: bad access detected
-> >=20
-> > Memory state around the buggy address:
-> >  ffffffff83e18000: 00 01 f9 f9 f9 f9 f9 f9 00 01 f9 f9 f9 f9 f9 f9
-> >  ffffffff83e18080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > > ffffffff83e18100: 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 00 05 f9 f9
-> >                                         ^
-> >  ffffffff83e18180: f9 f9 f9 f9 00 00 00 00 00 00 00 04 f9 f9 f9 f9
-> >  ffffffff83e18200: 00 00 00 00 00 00 00 00 04 f9 f9 f9 f9 f9 f9 f9
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->=20
-> Seems like the TPM chip supports sha3_256, which isn't yet in
-> tpm_algorithms:
-> > tpm tpm0: TPM with unsupported bank algorithm 0x0027
->=20
-> Use TPM_ALG_<ID> as a postfix for file names for unsupported hashing algo=
-rithms.
->=20
-> This is how it looks on the test machine I have:
-> > # ls -1 /sys/kernel/security/ima/
-> > ascii_runtime_measurements
-> > ascii_runtime_measurements_TPM_ALG_27
-> > ascii_runtime_measurements_sha1
-> > ascii_runtime_measurements_sha256
-> > binary_runtime_measurements
-> > binary_runtime_measurements_TPM_ALG_27
-> > binary_runtime_measurements_sha1
-> > binary_runtime_measurements_sha256
-> > policy
-> > runtime_measurements_count
-> > violations
->=20
-> Fixes: 9fa8e7625008 ("ima: add crypto agility support for template-hash a=
-lgorithm")
-> Signed-off-by: Dmitry Safonov <dima@arista.com>
-> Cc: Enrico Bravi <enrico.bravi@polito.it>
-> Cc: Silvia Sisinni <silvia.sisinni@polito.it>
-> Cc: Roberto Sassu <roberto.sassu@huawei.com>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
+On 1/13/26 1:28 PM, Thomas Weißschuh wrote:
+> The logic to extract the signature bits from a module file are
+> duplicated between the module core and IMA modsig appraisal.
+> 
+> Unify the implementation.
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 > ---
-> Changes in v4:
-> - Use ima_tpm_chip->allocated_banks[algo_idx].digest_size instead of hash=
-_digest_size[algo]
->   (Roberto Sassu)
-> - Link to v3: https://lore.kernel.org/r/20260127-ima-oob-v3-1-1dd09f4c2a6=
-a@arista.com
-> Testing note: I test it on v6.12.40 kernel backport, which slightly diffe=
-rs as
-> lookup_template_data_hash_algo() was yet present.
->=20
-> Changes in v3:
-> - Now fix the spelling *for real* (sorry, messed it up in v2)
-> - Link to v2: https://lore.kernel.org/r/20260127-ima-oob-v2-1-f38a18c850c=
-f@arista.com
->=20
-> Changes in v2:
-> - Instead of skipping unknown algorithms, add files under their TPM_ALG_I=
-D (Roberto Sassu)
-> - Fix spelling (Roberto Sassu)
-> - Copy @stable on the fix
-> - Link to v1: https://lore.kernel.org/r/20260127-ima-oob-v1-1-2d42f3418e5=
-7@arista.com
-> ---
->  security/integrity/ima/ima_fs.c | 34 ++++++++++++++++++----------------
->  1 file changed, 18 insertions(+), 16 deletions(-)
->=20
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima=
-_fs.c
-> index 012a58959ff0..9a00a0547619 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -132,16 +132,12 @@ int ima_measurements_show(struct seq_file *m, void =
-*v)
->  	char *template_name;
->  	u32 pcr, namelen, template_data_len; /* temporary fields */
->  	bool is_ima_template =3D false;
-> -	enum hash_algo algo;
->  	int i, algo_idx;
-> =20
->  	algo_idx =3D ima_sha1_idx;
-> -	algo =3D HASH_ALGO_SHA1;
-> =20
-> -	if (m->file !=3D NULL) {
-> +	if (m->file !=3D NULL)
->  		algo_idx =3D (unsigned long)file_inode(m->file)->i_private;
-> -		algo =3D ima_algo_array[algo_idx].algo;
-> -	}
-> =20
->  	/* get entry */
->  	e =3D qe->entry;
-> @@ -160,7 +156,8 @@ int ima_measurements_show(struct seq_file *m, void *v=
-)
->  	ima_putc(m, &pcr, sizeof(e->pcr));
-> =20
->  	/* 2nd: template digest */
-> -	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
-> +	ima_putc(m, e->digests[algo_idx].digest,
-> +		 ima_tpm_chip->allocated_banks[algo_idx].digest_size);
-> =20
->  	/* 3rd: template name size */
->  	namelen =3D !ima_canonical_fmt ? strlen(template_name) :
-> @@ -229,16 +226,12 @@ static int ima_ascii_measurements_show(struct seq_f=
-ile *m, void *v)
->  	struct ima_queue_entry *qe =3D v;
->  	struct ima_template_entry *e;
->  	char *template_name;
-> -	enum hash_algo algo;
->  	int i, algo_idx;
-> =20
->  	algo_idx =3D ima_sha1_idx;
-> -	algo =3D HASH_ALGO_SHA1;
-> =20
-> -	if (m->file !=3D NULL) {
-> +	if (m->file !=3D NULL)
->  		algo_idx =3D (unsigned long)file_inode(m->file)->i_private;
-> -		algo =3D ima_algo_array[algo_idx].algo;
-> -	}
-> =20
->  	/* get entry */
->  	e =3D qe->entry;
-> @@ -252,7 +245,8 @@ static int ima_ascii_measurements_show(struct seq_fil=
-e *m, void *v)
->  	seq_printf(m, "%2d ", e->pcr);
-> =20
->  	/* 2nd: template hash */
-> -	ima_print_digest(m, e->digests[algo_idx].digest, hash_digest_size[algo]=
-);
-> +	ima_print_digest(m, e->digests[algo_idx].digest,
-> +			 ima_tpm_chip->allocated_banks[algo_idx].digest_size);
-> =20
->  	/* 3th:  template name */
->  	seq_printf(m, " %s", template_name);
-> @@ -404,16 +398,24 @@ static int __init create_securityfs_measurement_lis=
-ts(void)
->  		char file_name[NAME_MAX + 1];
->  		struct dentry *dentry;
-> =20
-> -		sprintf(file_name, "ascii_runtime_measurements_%s",
-> -			hash_algo_name[algo]);
-> +		if (algo =3D=3D HASH_ALGO__LAST)
-> +			sprintf(file_name, "ascii_runtime_measurements_TPM_ALG_%x",
-> +				ima_tpm_chip->allocated_banks[i].alg_id);
-> +		else
-> +			sprintf(file_name, "ascii_runtime_measurements_%s",
-> +				hash_algo_name[algo]);
->  		dentry =3D securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
->  						ima_dir, (void *)(uintptr_t)i,
->  						&ima_ascii_measurements_ops);
->  		if (IS_ERR(dentry))
->  			return PTR_ERR(dentry);
-> =20
-> -		sprintf(file_name, "binary_runtime_measurements_%s",
-> -			hash_algo_name[algo]);
-> +		if (algo =3D=3D HASH_ALGO__LAST)
-> +			sprintf(file_name, "binary_runtime_measurements_TPM_ALG_%x",
-> +				ima_tpm_chip->allocated_banks[i].alg_id);
-> +		else
-> +			sprintf(file_name, "binary_runtime_measurements_%s",
-> +				hash_algo_name[algo]);
->  		dentry =3D securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
->  						ima_dir, (void *)(uintptr_t)i,
->  						&ima_measurements_ops);
->=20
-> ---
-> base-commit: 63804fed149a6750ffd28610c5c1c98cce6bd377
-> change-id: 20260127-ima-oob-9fa83a634d7b
->=20
-> Best regards,
+>  include/linux/module_signature.h    |  4 +--
+>  kernel/module/signing.c             | 52 +++++++------------------------------
+>  kernel/module_signature.c           | 41 +++++++++++++++++++++++++++--
+>  security/integrity/ima/ima_modsig.c | 24 ++++-------------
+>  4 files changed, 56 insertions(+), 65 deletions(-)
+> 
+> diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
+> index 7eb4b00381ac..186a55effa30 100644
+> --- a/include/linux/module_signature.h
+> +++ b/include/linux/module_signature.h
+> @@ -40,7 +40,7 @@ struct module_signature {
+>  	__be32	sig_len;	/* Length of signature data */
+>  };
+>  
+> -int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> -		  const char *name);
+> +int mod_split_sig(const void *buf, size_t *buf_len, bool mangled,
+> +		  size_t *sig_len, const u8 **sig, const char *name);
+>  
+>  #endif /* _LINUX_MODULE_SIGNATURE_H */
+> diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+> index fe3f51ac6199..6d64c0d18d0a 100644
+> --- a/kernel/module/signing.c
+> +++ b/kernel/module/signing.c
+> @@ -37,54 +37,22 @@ void set_module_sig_enforced(void)
+>  	sig_enforce = true;
+>  }
+>  
+> -/*
+> - * Verify the signature on a module.
+> - */
+> -static int mod_verify_sig(const void *mod, struct load_info *info)
+> -{
+> -	struct module_signature ms;
+> -	size_t sig_len, modlen = info->len;
+> -	int ret;
+> -
+> -	pr_devel("==>%s(,%zu)\n", __func__, modlen);
+> -
+> -	if (modlen <= sizeof(ms))
+> -		return -EBADMSG;
+> -
+> -	memcpy(&ms, mod + (modlen - sizeof(ms)), sizeof(ms));
+> -
+> -	ret = mod_check_sig(&ms, modlen, "module");
+> -	if (ret)
+> -		return ret;
+> -
+> -	sig_len = be32_to_cpu(ms.sig_len);
+> -	modlen -= sig_len + sizeof(ms);
+> -	info->len = modlen;
+> -
+> -	return verify_pkcs7_signature(mod, modlen, mod + modlen, sig_len,
+> -				      VERIFY_USE_SECONDARY_KEYRING,
+> -				      VERIFYING_MODULE_SIGNATURE,
+> -				      NULL, NULL);
+> -}
+> -
+>  int module_sig_check(struct load_info *info, int flags)
+>  {
+> -	int err = -ENODATA;
+> -	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> +	int err;
+>  	const char *reason;
+>  	const void *mod = info->hdr;
+> +	size_t sig_len;
+> +	const u8 *sig;
+>  	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
+>  				       MODULE_INIT_IGNORE_VERMAGIC);
+> -	/*
+> -	 * Do not allow mangled modules as a module with version information
+> -	 * removed is no longer the module that was signed.
+> -	 */
+> -	if (!mangled_module &&
+> -	    info->len > markerlen &&
+> -	    memcmp(mod + info->len - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> -		/* We truncate the module to discard the signature */
+> -		info->len -= markerlen;
+> -		err = mod_verify_sig(mod, info);
+> +
+> +	err = mod_split_sig(info->hdr, &info->len, mangled_module, &sig_len, &sig, "module");
+> +	if (!err) {
+> +		err = verify_pkcs7_signature(mod, info->len, sig, sig_len,
+> +					     VERIFY_USE_SECONDARY_KEYRING,
+> +					     VERIFYING_MODULE_SIGNATURE,
+> +					     NULL, NULL);
+>  		if (!err) {
+>  			info->sig_ok = true;
+>  			return 0;
 
+The patch looks to modify the behavior when mangled_module is true.
+
+Previously, module_sig_check() didn't attempt to extract the signature
+in such a case and treated the module as unsigned. The err remained set
+to -ENODATA and the function subsequently consulted module_sig_check()
+and security_locked_down() to determine an appropriate result.
+
+Newly, module_sig_check() calls mod_split_sig(), which skips the
+extraction of the marker ("~Module signature appended~\n") from the end
+of the module and instead attempts to read it as an actual
+module_signature. The value is then passed to mod_check_sig() which
+should return -EBADMSG. The error is propagated to module_sig_check()
+and treated as fatal, without consulting module_sig_check() and
+security_locked_down().
+
+I think the mangled_module flag should not be passed to mod_split_sig()
+and it should be handled solely by module_sig_check().
+
+> diff --git a/kernel/module_signature.c b/kernel/module_signature.c
+> index 00132d12487c..b2384a73524c 100644
+> --- a/kernel/module_signature.c
+> +++ b/kernel/module_signature.c
+> @@ -8,6 +8,7 @@
+>  
+>  #include <linux/errno.h>
+>  #include <linux/printk.h>
+> +#include <linux/string.h>
+>  #include <linux/module_signature.h>
+>  #include <asm/byteorder.h>
+>  
+> @@ -18,8 +19,8 @@
+>   * @file_len:	Size of the file to which @ms is appended.
+>   * @name:	What is being checked. Used for error messages.
+>   */
+> -int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> -		  const char *name)
+> +static int mod_check_sig(const struct module_signature *ms, size_t file_len,
+> +			 const char *name)
+>  {
+>  	if (be32_to_cpu(ms->sig_len) >= file_len - sizeof(*ms))
+>  		return -EBADMSG;
+> @@ -44,3 +45,39 @@ int mod_check_sig(const struct module_signature *ms, size_t file_len,
+>  
+>  	return 0;
+>  }
+> +
+> +int mod_split_sig(const void *buf, size_t *buf_len, bool mangled,
+> +		  size_t *sig_len, const u8 **sig, const char *name)
+> +{
+> +	const unsigned long markerlen = sizeof(MODULE_SIG_STRING) - 1;
+> +	struct module_signature ms;
+> +	size_t modlen = *buf_len;
+> +	int ret;
+> +
+> +	/*
+> +	 * Do not allow mangled modules as a module with version information
+> +	 * removed is no longer the module that was signed.
+> +	 */
+> +	if (!mangled &&
+> +	    *buf_len > markerlen &&
+> +	    memcmp(buf + modlen - markerlen, MODULE_SIG_STRING, markerlen) == 0) {
+> +		/* We truncate the module to discard the signature */
+> +		modlen -= markerlen;
+> +	}
+> +
+> +	if (modlen <= sizeof(ms))
+> +		return -EBADMSG;
+> +
+> +	memcpy(&ms, buf + (modlen - sizeof(ms)), sizeof(ms));
+> +
+> +	ret = mod_check_sig(&ms, modlen, name);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*sig_len = be32_to_cpu(ms.sig_len);
+> +	modlen -= *sig_len + sizeof(ms);
+> +	*buf_len = modlen;
+> +	*sig = buf + modlen;
+> +
+> +	return 0;
+> +}
+> diff --git a/security/integrity/ima/ima_modsig.c b/security/integrity/ima/ima_modsig.c
+> index 3265d744d5ce..a57342d39b07 100644
+> --- a/security/integrity/ima/ima_modsig.c
+> +++ b/security/integrity/ima/ima_modsig.c
+> @@ -40,44 +40,30 @@ struct modsig {
+>  int ima_read_modsig(enum ima_hooks func, const void *buf, loff_t buf_len,
+>  		    struct modsig **modsig)
+>  {
+> -	const size_t marker_len = strlen(MODULE_SIG_STRING);
+> -	const struct module_signature *sig;
+> +	size_t buf_len_sz = buf_len;
+>  	struct modsig *hdr;
+>  	size_t sig_len;
+> -	const void *p;
+> +	const u8 *sig;
+>  	int rc;
+>  
+> -	if (buf_len <= marker_len + sizeof(*sig))
+> -		return -ENOENT;
+> -
+> -	p = buf + buf_len - marker_len;
+> -	if (memcmp(p, MODULE_SIG_STRING, marker_len))
+> -		return -ENOENT;
+> -
+> -	buf_len -= marker_len;
+> -	sig = (const struct module_signature *)(p - sizeof(*sig));
+> -
+> -	rc = mod_check_sig(sig, buf_len, func_tokens[func]);
+> +	rc = mod_split_sig(buf, &buf_len_sz, true, &sig_len, &sig, func_tokens[func]);
+
+Passing mangled=true to mod_split_sig() seems incorrect here. It causes
+that the function doesn't properly extract the signature marker at the
+end of the module, no?
+
+>  	if (rc)
+>  		return rc;
+>  
+> -	sig_len = be32_to_cpu(sig->sig_len);
+> -	buf_len -= sig_len + sizeof(*sig);
+> -
+>  	/* Allocate sig_len additional bytes to hold the raw PKCS#7 data. */
+>  	hdr = kzalloc(struct_size(hdr, raw_pkcs7, sig_len), GFP_KERNEL);
+>  	if (!hdr)
+>  		return -ENOMEM;
+>  
+>  	hdr->raw_pkcs7_len = sig_len;
+> -	hdr->pkcs7_msg = pkcs7_parse_message(buf + buf_len, sig_len);
+> +	hdr->pkcs7_msg = pkcs7_parse_message(sig, sig_len);
+>  	if (IS_ERR(hdr->pkcs7_msg)) {
+>  		rc = PTR_ERR(hdr->pkcs7_msg);
+>  		kfree(hdr);
+>  		return rc;
+>  	}
+>  
+> -	memcpy(hdr->raw_pkcs7, buf + buf_len, sig_len);
+> +	memcpy(hdr->raw_pkcs7, sig, sig_len);
+>  
+>  	/* We don't know the hash algorithm yet. */
+>  	hdr->hash_algo = HASH_ALGO__LAST;
+> 
+
+-- 
+Thanks,
+Petr
 
