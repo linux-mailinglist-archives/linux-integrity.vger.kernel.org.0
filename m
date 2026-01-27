@@ -1,54 +1,54 @@
-Return-Path: <linux-integrity+bounces-8331-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8332-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OGGfEjfKeGmNtQEAu9opvQ
-	(envelope-from <linux-integrity+bounces-8331-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 15:22:47 +0100
+	id GBeYGjrLeGnBtQEAu9opvQ
+	(envelope-from <linux-integrity+bounces-8332-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 15:27:06 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB14958F7
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 15:22:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 084A5959D8
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 15:27:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 781213060D27
-	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 14:18:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A40B6304C97D
+	for <lists+linux-integrity@lfdr.de>; Tue, 27 Jan 2026 14:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 003652BE641;
-	Tue, 27 Jan 2026 14:18:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88BB5354AF7;
+	Tue, 27 Jan 2026 14:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cCoO05KW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TFrn+HAl"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D062B29CB52;
-	Tue, 27 Jan 2026 14:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58868345740;
+	Tue, 27 Jan 2026 14:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769523523; cv=none; b=hRTBcTt9Sn8ww1aAFBhkfUS3J1gRjcIRhRwslcQhXlzOOmoOCWp51B91DTLPNBjFZ+ubsEQeREJxLITitnPEqdc4ZZ7zJkGN6C620MqdgmungaIxG2DQxjtwkyZ/hTOSxRF8WWW2z5JgeryMR4IGnS404AFdBnINFMgDHoJBrHo=
+	t=1769523679; cv=none; b=ocn7qutGVVsHAMD+bam5wlRbpne118TWQcujGWC+YxXwzRJBSJzvOO+nl/qQfwjsXRsLUzkwge4lU2D2IB9VwO89AmfTWcNjySMI8u190yJ61hdu/O6tmRz5oioNyBEoT3QPpfB4vIpkhf1/R1K6wxLULgkXND9WuEh7m6bxETo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769523523; c=relaxed/simple;
-	bh=7F+DuBXgqrT8V7DZYt5hv7YfSndw1OccpW3faDSstLI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NN/uHFcMr/4wu/SXk35i3m5q3VyRLL9Oby0r8ym+8bGS9j6Jg32nXw24nXMG64i3b4xfugcAowP0qnKhNPhoQuUNiyidLA/K0iKEd2hCnQ65WwwaENKOg3gxavq+pB1cZn5+fPRZyxOcshQCnR4lgJ6P3mMFUGfX1Sa4UWufGfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cCoO05KW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AF729C116C6;
-	Tue, 27 Jan 2026 14:18:43 +0000 (UTC)
+	s=arc-20240116; t=1769523679; c=relaxed/simple;
+	bh=dDpxkPdnRm1fkMewEhZzGAC/bAqiHsPjefxiu7vJRls=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RGhFDiNOnu0Bx48Yhm1sFbxFCpEotV0edtZDl0Ck9eiOntBroIGgMy4g3hmClPTj1XPwdwab4+71mvsroQE8uf82Cr6wzPeL2lbRaS5qLqejFFOysbC0xfdPJuCI7G2Zvf75RZQCmWxsSOXPMc7pnw7QcwDeDEXb06txTJvrYy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TFrn+HAl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E934AC116C6;
+	Tue, 27 Jan 2026 14:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769523523;
-	bh=7F+DuBXgqrT8V7DZYt5hv7YfSndw1OccpW3faDSstLI=;
+	s=k20201202; t=1769523679;
+	bh=dDpxkPdnRm1fkMewEhZzGAC/bAqiHsPjefxiu7vJRls=;
 	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=cCoO05KW0GyDw8VD4ULQ19cydsNPmy0iuhVEfZUbFqcyHAHsOjlhidlX8hvLO+2yW
-	 xa+COWoj7ZB6NlK7VrSPa7Z4hPAwlPSZ5fxaQAyOeEhcBMk5AVn55jNx7fS0NkAY9w
-	 wN/qsMWunwQiivVczHsPwNrjx1M6y+tuN52y2Co5DAqQAaTUqtsL1nCjelXFA/kFw0
-	 9ShgLK+VtIBTQq9E1z2LWbCe3ptrWuCGv4KewHBwZbkvdMqVM1+YmremuBYRhX47Ef
-	 nUleni6zSTzFQswU8CcV8ml3oHhVsvx9XHjinXmjF+w0pJJNWuKo5p/ScLfjQXVELv
-	 SMd6ktwPb+gng==
+	b=TFrn+HAlIp2db7NFiGmR7TDo57S1yDmRZrdXPvJ4F7BTQsA6rO6jKtdGftVwBZKvs
+	 9iKuDFzgDNqe/FEq0PgA0uCNixurAfhMkhpdfv+AZMcyHXSlWSqf2It3Cz02JP4bCE
+	 tKFluM1U9bc9DWgPsuKSI269yQYH4bpbTPNsLQA4CeI15SwQSDo3Ck6v/RjCluwMdh
+	 1aSvLoiqI2OonKNXeGc+53VDbzJePLyxg3OHrQU1t/2MD1NUBeqZ5zZwvX3moIez6E
+	 BeTs033gcF19PbwjcxBZXcvuwlVWdd4MuRM4OzJS15c4RrH1xLy3+Teg3Sj/IyGBpx
+	 zjEUxkKzkSyFg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C437D2F037;
-	Tue, 27 Jan 2026 14:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D981CD2F02C;
+	Tue, 27 Jan 2026 14:21:18 +0000 (UTC)
 From: Dmitry Safonov via B4 Relay <devnull+dima.arista.com@kernel.org>
-Date: Tue, 27 Jan 2026 14:18:28 +0000
-Subject: [PATCH v2] ima_fs: Avoid creating measurement lists for
+Date: Tue, 27 Jan 2026 14:21:13 +0000
+Subject: [PATCH v3] ima_fs: Avoid creating measurement lists for
  unsupported hash algos
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -58,11 +58,11 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260127-ima-oob-v2-1-f38a18c850cf@arista.com>
-X-B4-Tracking: v=1; b=H4sIADPJeGkC/2WNMQ6DMAxFr4I81xUJFGin3qNicMAUDxDkoKgV4
- u4NrB2f9P77GwRW4QCPbAPlKEH8nMBeMuhGmt+M0icGm9sqN7ZGmQi9d3gfqCmoKsq+dpDsRXm
- Qz1l6tYkdBUanNHfjsZ8orKyHOEpYvX7Px2gO/T8eDRq0fWmHojQN3+onaZrRtfMTtPu+/wDh+
- OWjuAAAAA==
+Message-Id: <20260127-ima-oob-v3-1-1dd09f4c2a6a@arista.com>
+X-B4-Tracking: v=1; b=H4sIANjJeGkC/3WNyw7CIBBFf6VhLaZAH+jK/zAuBjpYFi3N0BBN0
+ 38XujPG5UnuOXdjEcljZNdqY4TJRx/mDOpUMTvC/ETuh8xM1rKrhey5n4CHYPjFgVbQqWboDcv
+ rhdD511G6PzIbiMgNwWzH4k8QV6QyHH1cA72PxyTK/DeeBBdcDo10qhEa2/4GlDU42zCxUk/yj
+ yiz6JQGoa1ua+u+xH3fP3jSKJ/xAAAA
 X-Change-ID: 20260127-ima-oob-9fa83a634d7b
 To: Mimi Zohar <zohar@linux.ibm.com>, 
  Roberto Sassu <roberto.sassu@huawei.com>, 
@@ -75,11 +75,11 @@ Cc: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
  linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
  Dmitry Safonov <0x7f454c46@gmail.com>, Dmitry Safonov <dima@arista.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769523522; l=5995;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769523678; l=6162;
  i=dima@arista.com; s=20250521; h=from:subject:message-id;
- bh=ioQ0EdzWsdpfxVjATXSELCB4MMNH/LYwAsBPTDyyGPs=;
- b=dAXkvPTNBGVwDXnCdQxTg8IdAnpL305I+CaRbmgOZvx/DGly4StwaALRji1PqJrNK7dRdxThB
- tFlyQ+vfTWcC7ZtiF4wOlLPwMus+0MZxIVY6WHVKBXcMH5BtshEgKUL
+ bh=0sOqVBGUzXxUF/x1KV8ei9ehoXPsbfmVILKXs/dm3qI=;
+ b=6Oe938tXgYfn5XA2flg3KJkYx5yIM2R+mkTsJ47I2H5OejG+aib56b2bSZNDkV6g+8pE1ijK7
+ 77K8hfut1hcB8eIsnm3BBdO8BN3G10R3WEH38P/nPNu2UC4/bce6lTk
 X-Developer-Key: i=dima@arista.com; a=ed25519;
  pk=/z94x2T59rICwjRqYvDsBe0MkpbkkdYrSW2J1G2gIcU=
 X-Endpoint-Received: by B4 Relay for dima@arista.com/20250521 with
@@ -92,12 +92,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8331-lists,linux-integrity=lfdr.de,dima.arista.com];
+	TAGGED_FROM(0.00)[bounces-8332-lists,linux-integrity=lfdr.de,dima.arista.com];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,polito.it];
 	MIME_TRACE(0.00)[0:+];
@@ -112,17 +112,17 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-integrity@vger.kernel.org];
 	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arista.com:replyto,arista.com:email,arista.com:mid,polito.it:email,huawei.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 9DB14958F7
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,arista.com:replyto,arista.com:email,arista.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,polito.it:email]
+X-Rspamd-Queue-Id: 084A5959D8
 X-Rspamd-Action: no action
 
 From: Dmitry Safonov <dima@arista.com>
 
-ima_init_crypto() skips initializing ima_algo_array[i] if the alogorithm
+ima_init_crypto() skips initializing ima_algo_array[i] if the algorithm
 from ima_tpm_chip->allocated_banks[i].crypto_id is not supported.
 It seems avoid adding the unsupported algorithm to ima_algo_array will
 break all the logic that relies on indexing by NR_BANKS(ima_tpm_chip).
@@ -201,6 +201,10 @@ Cc: Silvia Sisinni <silvia.sisinni@polito.it>
 Cc: Roberto Sassu <roberto.sassu@huawei.com>
 Cc: Mimi Zohar <zohar@linux.ibm.com>
 ---
+Changes in v3:
+- Now fix the spelling *for real* (sorry, messed it up in v2)
+- Link to v2: https://lore.kernel.org/r/20260127-ima-oob-v2-1-f38a18c850cf@arista.com
+
 Changes in v2:
 - Instead of skipping unknown algorithms, add files under their TPM_ALG_ID (Roberto Sassu)
 - Fix spelling (Roberto Sassu)
