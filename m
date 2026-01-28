@@ -1,166 +1,212 @@
-Return-Path: <linux-integrity+bounces-8349-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8350-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OJ6FJnPeeWnI0QEAu9opvQ
-	(envelope-from <linux-integrity+bounces-8349-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jan 2026 11:01:23 +0100
+	id YEbTEicHemlE1gEAu9opvQ
+	(envelope-from <linux-integrity+bounces-8350-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jan 2026 13:55:03 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C5D69F287
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jan 2026 11:01:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4726AA1A4A
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jan 2026 13:55:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E506830A4C95
-	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jan 2026 09:56:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF74030078D8
+	for <lists+linux-integrity@lfdr.de>; Wed, 28 Jan 2026 12:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719DF34EF13;
-	Wed, 28 Jan 2026 09:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412A02D7DF1;
+	Wed, 28 Jan 2026 12:52:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0TXBfhz9";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5mRIb1Wq"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="EOsdeEPl";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="7jKJZT3f";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="EOsdeEPl";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="7jKJZT3f"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406C034E741;
-	Wed, 28 Jan 2026 09:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDC21DE2AD
+	for <linux-integrity@vger.kernel.org>; Wed, 28 Jan 2026 12:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769594163; cv=none; b=NF0wJTZMTpFRAQsFlqm27Xps3KZ4QgkZtamdYaLs39qje5F9wjCnUTdoNr2Vv4uVnep7wr0yLZObWJ++gZNK+bhL43VqbmhX4mu/nklljqIaxgvvJjhREsVL8TCHW8+4IjuhctGwa+/XQuOoEV/dE3h4E/JXlAc2C3C6hyjUEzU=
+	t=1769604723; cv=none; b=nok8z9bST3OjdOTLAYWWMP7ZMXNs3Bbob/G1mJOO7fMzliUS8LDDPXBWoo3F6vTiGXPGntcWXIrC3/cwzFVL5ya6uOb7fo2gkzyOUwWzQIXRrAXwVVhhN0kll341v2yjQ2ZNBQyK9pkxcM31uEmQPCM0So2udacZTDDSGF2FvIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769594163; c=relaxed/simple;
-	bh=mg4KK6kRphfn0fp0eq2b27K11ZtfAbz9mfXPYOWdMJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GxEE/KBW6kNvFeBsTe0L3WrcklH1mGDV/EQ0AAupQ5rjmpDwXAJ/cPhUyvmM64vPIGQeEomgeCozeymsZhFshz8hzwzRRGN5yQasMJ4rlsxVguTneDN3MqjkZqLPe1mrDMfx/OtFvUITzeo2ovZbNPDm7ubF05IDnHoWiCApjK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0TXBfhz9; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5mRIb1Wq; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769594160;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	s=arc-20240116; t=1769604723; c=relaxed/simple;
+	bh=d9w1dBCTZLPhjKfsmJFdpLeLjpyy4giCFfnyiQqr4Nk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cizgjwXqVfaoGXhHSSGS8Si0/kMnmwFzyZ7yF9TBpy4emxCYS/K8FqIOYoXZmwUHmvQRc2LT1iNC7XCx6IggxR/+PZDtBMsHsEJsCECdWRHVG51xRAAVqNOPIO4W07sN13xonn6uNgCmkCrLW8jHNAOdpuwLcNmlSmuvejmNyrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=EOsdeEPl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=7jKJZT3f; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=EOsdeEPl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=7jKJZT3f; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BE00333C28;
+	Wed, 28 Jan 2026 12:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769604719;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fUN1HTRsfp/pT32vkRCQTzRlDbGshc9all+/znGUtLY=;
-	b=0TXBfhz9zrNGuPKGssPHl+AurLb7FeANVOozo6sJyW1CW2dMdAL6lEmpcar7l2+ZKC4J10
-	xGilhusFxZrbptaY5y/jdW5NQtj95taZAasr0++PEfHErJUQkprsYhEMYMxKXWqOEGyqZO
-	ZoUDvOm5kOffAT4YdfeSuAsGfPgkCnVxEDT/v8cZmiW3Y/qK+1CMQXTFdG/fKX2Mc9a+gz
-	L6jlBPMbzKHiJXOeTbgLRvAQpTvu7xYNC6+kEf3oOb44zK0aoGNKvfi3Sw3P5B3m9A5xNo
-	h+wVtSx5gugXKrtW/xKMoEP4K8Fu4A1bZvKLVK2ynPY4UGa8EczBaWoTC1YRDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769594160;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
+	bh=JNinW1eTZdSGTcg2ulm+U7vrlwRCjYgowggCsg2pWkw=;
+	b=EOsdeEPlhUWTsuuFjE4cCKY9Tph9U3v2ikrIpGee2E8odroNjqQuAQF0t9obeev28KuZ4j
+	BvUQ2fNra9kGOvJlUQuJVtrtuQ6Sw0SoBd/Q/VCQaNyNahskOX5I6cvRquAF8rE0Y/Yrv7
+	aDTc0y6gA0ot4DRPyeXrG79Zo6D0E3A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769604719;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fUN1HTRsfp/pT32vkRCQTzRlDbGshc9all+/znGUtLY=;
-	b=5mRIb1WqdtF/x+E2+5oEtz0uK6dcEQT41+86vGH+HUV6hIjrFhDD3b6F7t6bXOvxSfQryC
-	LKTzprTpCHoLMhDg==
-To: linux-kernel@vger.kernel.org
-Cc: "Thomas Gleixner" <tglx@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-integrity@vger.kernel.org
-Subject: [PATCH v2 09/20] char: tpm: cr50: Remove IRQF_ONESHOT
-Date: Wed, 28 Jan 2026 10:55:29 +0100
-Message-ID: <20260128095540.863589-10-bigeasy@linutronix.de>
-In-Reply-To: <20260128095540.863589-1-bigeasy@linutronix.de>
-References: <20260128095540.863589-1-bigeasy@linutronix.de>
+	bh=JNinW1eTZdSGTcg2ulm+U7vrlwRCjYgowggCsg2pWkw=;
+	b=7jKJZT3f+H2iQvdauGeIX/1f4x5yO70/NUk1qfAtQcpiq5cMQjEYX4JNghOA/n6kYm5xih
+	07I8es518UqNq7Bw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=EOsdeEPl;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=7jKJZT3f
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1769604719;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JNinW1eTZdSGTcg2ulm+U7vrlwRCjYgowggCsg2pWkw=;
+	b=EOsdeEPlhUWTsuuFjE4cCKY9Tph9U3v2ikrIpGee2E8odroNjqQuAQF0t9obeev28KuZ4j
+	BvUQ2fNra9kGOvJlUQuJVtrtuQ6Sw0SoBd/Q/VCQaNyNahskOX5I6cvRquAF8rE0Y/Yrv7
+	aDTc0y6gA0ot4DRPyeXrG79Zo6D0E3A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1769604719;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JNinW1eTZdSGTcg2ulm+U7vrlwRCjYgowggCsg2pWkw=;
+	b=7jKJZT3f+H2iQvdauGeIX/1f4x5yO70/NUk1qfAtQcpiq5cMQjEYX4JNghOA/n6kYm5xih
+	07I8es518UqNq7Bw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6C1363EA61;
+	Wed, 28 Jan 2026 12:51:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id cboBF28GemlcHgAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Wed, 28 Jan 2026 12:51:59 +0000
+Date: Wed, 28 Jan 2026 13:51:57 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: ltp@lists.linux.it, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH] ima_setup.sh: Fix check of signed policy requirement
+Message-ID: <20260128125157.GA35959@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20260121083343.127613-1-pvorel@suse.cz>
+ <20260127131755.GA146899@pevik>
+ <447d5d46a8ac3ed8a8283d87bd555459a2679495.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <447d5d46a8ac3ed8a8283d87bd555459a2679495.camel@linux.ibm.com>
+X-Spam-Score: -3.71
+X-Spam-Level: 
+X-Spam-Flag: NO
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,linutronix.de,gmx.de,ziepe.ca,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-8349-lists,linux-integrity=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RSPAMD_URIBL_FAIL(0.00)[ziepe.ca:query timed out,gmx.de:query timed out];
-	RCVD_COUNT_THREE(0.00)[3];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	RSPAMD_EMAILBL_FAIL(0.00)[bigeasy.linutronix.de:query timed out];
+	TAGGED_FROM(0.00)[bounces-8350-lists,linux-integrity=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.cz:replyto,suse.cz:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	DMARC_NA(0.00)[suse.cz];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.994];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gmx.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linutronix.de:email,linutronix.de:dkim,linutronix.de:mid]
-X-Rspamd-Queue-Id: 3C5D69F287
+	HAS_REPLYTO(0.00)[pvorel@suse.cz];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pvorel@suse.cz,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Rspamd-Queue-Id: 4726AA1A4A
 X-Rspamd-Action: no action
 
-Passing IRQF_ONESHOT ensures that the interrupt source is masked until
-the secondary (threaded) handler is done. If only a primary handler is
-used then the flag makes no sense because the interrupt can not fire
-(again) while its handler is running.
-The flag also disallows force-threading of the primary handler and the
-irq-core will warn about this.
+Hi Mimi,
 
-Remove IRQF_ONESHOT from irqflags.
+> Hi Petr,
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org
----
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 3 +--
- drivers/char/tpm/tpm_tis_spi_cr50.c | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+> On Tue, 2026-01-27 at 14:17 +0100, Petr Vorel wrote:
+> > Hi Mimi, all,
 
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis=
-_i2c_cr50.c
-index fc6891a0b6936..b48cacacc0664 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -749,8 +749,7 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
-=20
- 	if (client->irq > 0) {
- 		rc =3D devm_request_irq(dev, client->irq, tpm_cr50_i2c_int_handler,
--				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
--				      IRQF_NO_AUTOEN,
-+				      IRQF_TRIGGER_FALLING | IRQF_NO_AUTOEN,
- 				      dev->driver->name, chip);
- 		if (rc < 0) {
- 			dev_err(dev, "Failed to probe IRQ %d\n", client->irq);
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis=
-_spi_cr50.c
-index f4937280e9406..32920b4cecfb4 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -287,7 +287,7 @@ int cr50_spi_probe(struct spi_device *spi)
- 	if (spi->irq > 0) {
- 		ret =3D devm_request_irq(&spi->dev, spi->irq,
- 				       cr50_spi_irq_handler,
--				       IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-+				       IRQF_TRIGGER_RISING,
- 				       "cr50_spi", cr50_phy);
- 		if (ret < 0) {
- 			if (ret =3D=3D -EPROBE_DEFER)
---=20
-2.51.0
+> > > Kernel code in arch_get_ima_policy() depends also on
+> > > CONFIG_IMA_ARCH_POLICY added in v5.0:
+> > > d958083a8f640 ("x86/ima: define arch_get_ima_policy() for x86")
 
+> > > Fixes: c38b528783 ("ima_{conditionals, policy}: Handle policy required to be signed")
+> > > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > > Signed-off-by: Petr Vorel <pvorel@suse.cz>
+> > > ---
+> > > Hi Mimi, all,
+
+> > > FYI I'd like to merge it this week to get it into LTP release.
+
+> > > Kind regards,
+> > > Petr
+
+> > I dared to merge this to get it into upcoming LTP release (this/next week).
+
+> I'm so sorry for the delay.
+
+> Only if CONFIG_IMA_ARCH_POLICY IS configured, should check_need_signed_policy be
+> set to true and the test skipped.  However, I'm seeing:
+
+> tst_kconfig.c:531: TINFO: Constraint 'CONFIG_IMA_ARCH_POLICY' not satisfied!
+> tst_kconfig.c:477: TINFO: Variables:
+> tst_kconfig.c:495: TINFO:  CONFIG_IMA_ARCH_POLICY=n
+> ima_conditionals 1 TCONF: Aborting due to unsuitable kernel config, see above!
+
+> Instead it's requiring CONFIG_IMA_ARCH_POLICY to be enabled.
+
+Thanks for the report. I'm sorry, I should have used tst_check_kconfigs binary
+directly, I'll send a fix shortly.
+
+Kind regards,
+Petr
+
+> Mimi
+
+
+> > >  testcases/kernel/security/integrity/ima/tests/ima_setup.sh | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+> > > diff --git a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> > > index 1bce78d425..df0b8d1532 100644
+> > > --- a/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> > > +++ b/testcases/kernel/security/integrity/ima/tests/ima_setup.sh
+> > > @@ -466,10 +466,11 @@ require_evmctl()
+> > >  }
+
+> > >  # 56dc986a6b20b ("ima: require signed IMA policy when UEFI secure boot is enabled") # v6.5-rc4
+> > > +# d958083a8f640 ("x86/ima: define arch_get_ima_policy() for x86") # v5.0
+> > >  check_need_signed_policy()
+> > >  {
+> > >  	tst_secureboot_enabled && tst_kvcmp -ge '6.5' && tst_require_kconfigs \
+> > > -		'CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY'
+> > > +		'CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY,CONFIG_IMA_ARCH_POLICY'
+> > >  }
+
+> > >  # loop device is needed to use only for tmpfs
 
