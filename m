@@ -1,203 +1,207 @@
-Return-Path: <linux-integrity+bounces-8359-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8360-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ILATCMVze2mMEgIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8359-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 15:50:45 +0100
+	id oB/3B4iIe2mlFQIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8360-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 17:19:20 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75642B12A4
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 15:50:44 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F4DDB20D6
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 17:19:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 844BB308C233
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 14:44:37 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 890223002F50
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 16:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42FC30F94E;
-	Thu, 29 Jan 2026 14:44:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b/IlH4hS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFD9C33F389;
+	Thu, 29 Jan 2026 16:19:13 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC487305E2E
-	for <linux-integrity@vger.kernel.org>; Thu, 29 Jan 2026 14:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E92133E35F;
+	Thu, 29 Jan 2026 16:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769697876; cv=none; b=URNx75a0ADpfER3cA+0YrKOHi43lg6MPZtKlS+xP9mYa/MLsHehVe6tbPLC8lIZqohJDXvshHMefYJnsiw1pHDbqYUhIzKXieH5L0dVK6N/CWdPkOOJ/Lkqdjo3fkEMROq1gP//oHlcDBBzxxMbPxRiyNats6rInQZ5A/QByzaY=
+	t=1769703553; cv=none; b=YqXWUjsq6gvgOEkKWS9zinTKdeKys2FGIzKx1O1jqbcp2IADA8NJLVP1THCY4w6/l3t2lCKRVP30ACMP/EY/qlnwoLDd/WFkQpbRmF8F9zMkfEln2/5CHmeJ9e41g/49sXPHDlKlMzV+vohH1rbY3r1a+LyoyVl8ur9O64s+TU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769697876; c=relaxed/simple;
-	bh=0cfpgEZxAtHlg92XqcFn2b1AgT2Rux9sr9odOOPM6rc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=omc941qAI1NAVEy7qwScYrjwlrTomtN85CAD4qT4wtwg7v3yNoD6HUO7kkEpx61ZfxgsdAjBPi6oqcnYd93/+6fS2LFAhQ89E4RaxB2/cM6HPx+1/RjA3kigbCSPHeFN3zMjbCs2YKapGd4YarRDu7rG5jUUJQfkAGA+6LGGUSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=b/IlH4hS; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47ee937ecf2so8924155e9.0
-        for <linux-integrity@vger.kernel.org>; Thu, 29 Jan 2026 06:44:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1769697873; x=1770302673; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aP9REXm6r045bgV7SMsbpSrPiKfypwCy9eB8rfdPdvU=;
-        b=b/IlH4hSx+B+6rP5XO+ZCDrdqIqZNwRvFmk3IzNbmVeUc+S3/VL/Q5SYN5ja/Dqh6j
-         COyyMc4qNfR93w8mVZzfHB7aPkwrvmsmYNZuatgAFU7PZ2Syv7MPZbndco7ydj7+30D2
-         vz0NOGBbj8GqWuNQ2UvQHk5mPn2LY46vylYlbMpdeXXyplDvYLNjggXVxcnfYaanAvTr
-         H/yw+UBIWwHlvJKPzSyIWnhBaaXYm7/MQznVaP1yJsh7ut1ecphrx6aHukIyBbKQW1ix
-         2ppFJr3Rk2uWM22v+p/ag9GslNOlj7dExRrweweudR+1g0BnHFHKuA30BEcjkLT1ZrSu
-         YSZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769697873; x=1770302673;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aP9REXm6r045bgV7SMsbpSrPiKfypwCy9eB8rfdPdvU=;
-        b=ZcwK8pgzPwVd9NtLZqVYBSYKgqj0jx7PHFpgGRkTJZypbJhoOFr0q93CsFK8lF+yMU
-         idP8VoozGHWNnBRWU7jL20uQYf/i/mAw0NyZ9MT/psKoQxb2zsMEedWz6i3rB/42JU0j
-         DWkQpTeFrx5gH5hZAvWqd/ThZeO9KH6IuZ3WrKq3K8WhqbdtHJ/Z44aR1wqRoRlmDeoq
-         /emYxyNHPnd5IJ959virIqnT1EzZRrB9b2F7ec8EXKjv280GQY5L25+akiGwLNHThJkR
-         IW1Je67La8s5COwx/sxODdvQxz5AxCVnfXNLS6nh6FaL+UtVuez6xXJaqVcnfujtHx2y
-         bnug==
-X-Forwarded-Encrypted: i=1; AJvYcCWNLGoTBc2khwb+vut24ayP7mG/gC+yf7QdkCRZV2Qxqhjd7rLChp63HwdXp7HM8yT/q+mN2oGG1Y0tZw+e+8k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFJyDHGfyaKNIS+QBMcTUG00RuNaTceYmDuEZbEWCggfQsFFd/
-	5DI0TpvK8X51NEaUfwQ821O4wYCoCJFmF4I4W5zyav/u2exzJnvKWYA9+uZulwFbm28=
-X-Gm-Gg: AZuq6aLKfGI7u4PiM2IV8RQs6IgjitSzczSo0Vx4m576dP1IXP7audDye4uAZb4QnWQ
-	oViiA1SCYqDRFnLohRzNN9ZVbQa7VviVla0XGgmlAPQyK4WQjOJl4shX5dnI8lmSJT/icLlzjuQ
-	tMgc/Tm7vXKaCrsHP36C4psEd0Qwi210L8Y0Pf2yjTYLeEtaFnOt8fPnFB7O62FvdTIi5VemjC7
-	OOvDg2KZ/a/0UqdcPrK82ANcaLEleJ0FvOKHR6uAGkkwOyq1unm0rwbfuuKfxc9nxpQ1t//FD4B
-	vCy8wqo+zi1UyV6KuLwwsFLgKktoLNfyUFfQU2loGhmBxB6c2IGUEl6dNQdGqlXa0iycbSDEufv
-	mNI9C3x71wNc+iR7t7aU0xTct5alfJYDWUzh0kfSwtqYVIzZgUa+Bt22dgh232W/Yewg9GPa83t
-	PbD8xBWy7oNHI2YIAxJwZASZgOyLAS2w==
-X-Received: by 2002:a05:600c:c8d:b0:46e:59bd:f7e2 with SMTP id 5b1f17b1804b1-480828ad89emr46795915e9.11.1769697873050;
-        Thu, 29 Jan 2026 06:44:33 -0800 (PST)
-Received: from [10.0.1.22] (109-81-1-107.rct.o2.cz. [109.81.1.107])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4806cddffc0sm166871115e9.5.2026.01.29.06.44.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jan 2026 06:44:32 -0800 (PST)
-Message-ID: <fd19f9d3-b01c-4cc8-9fd5-642350e7b36b@suse.com>
-Date: Thu, 29 Jan 2026 15:44:31 +0100
+	s=arc-20240116; t=1769703553; c=relaxed/simple;
+	bh=B3UA3hNrFo9BU/nOejIsF2QM+GSGPXVwTM8pl0g0+nE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EceyCtNg3CCBxn9krHe3d9EHtczzVJFVyQrzRYxw1aKJ2QzzMfSZ3G0a5jK5UePl+rXmrrpJXp40LnZaLq+ga1JxDQmIea3IryaS9Oonv7OS6UNqQp2KXR1X2nTjToSx3Q7ktDXRrt1LrQzTSAbvpEtDKiucyMzEorME+sD+tBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.196])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f245b6R62ztfjS;
+	Fri, 30 Jan 2026 00:16:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 513834009B;
+	Fri, 30 Jan 2026 00:19:07 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwBHhAZyiHtpQVzcAg--.46756S2;
+	Thu, 29 Jan 2026 17:19:06 +0100 (CET)
+Message-ID: <facea3621fc240ebb05dedb0127d8a514970d40d.camel@huaweicloud.com>
+Subject: Re: [PATCH v9 01/11] KEYS: trusted: Use get_random-fallback for TPM
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: Eric Biggers <ebiggers@kernel.org>, James Bottomley
+ <James.Bottomley@HansenPartnership.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>,  "Serge E. Hallyn" <serge@hallyn.com>,
+ "open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,  "open list:SECURITY
+ SUBSYSTEM" <linux-security-module@vger.kernel.org>, open list
+ <linux-kernel@vger.kernel.org>
+Date: Thu, 29 Jan 2026 17:18:55 +0100
+In-Reply-To: <20260125192526.782202-2-jarkko@kernel.org>
+References: <20260125192526.782202-1-jarkko@kernel.org>
+	 <20260125192526.782202-2-jarkko@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 13/17] module: Report signature type to users
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Luis Chamberlain <mcgrof@kernel.org>, Sami Tolvanen
- <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>,
- Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
- <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Nicolas Schier <nsc@kernel.org>,
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>,
- =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
- Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>,
- kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>,
- =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-13-0b932db9b56b@weissschuh.net>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260113-module-hashes-v4-13-0b932db9b56b@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwBHhAZyiHtpQVzcAg--.46756S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZry3Kw43Ww48ZF4xZw4xWFg_yoW5Cr15pF
+	W8KF12qws7trZ7J3s3Ca1IkF1a934rKrW3Gr4rK34qgFsxJF1xJry0vFW5Ka4jyrWqgF1a
+	qFWxXFyjga4DAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBGl60h0SsgAAsy
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,arndb.de,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
-	TAGGED_FROM(0.00)[bounces-8359-lists,linux-integrity=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[40];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[suse.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[petr.pavlu@suse.com,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:email,suse.com:mid,suse.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 75642B12A4
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8360-lists,linux-integrity=lfdr.de];
+	DMARC_NA(0.00)[huaweicloud.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huaweicloud.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2F4DDB20D6
 X-Rspamd-Action: no action
 
-On 1/13/26 1:28 PM, Thomas Weißschuh wrote:
-> The upcoming CONFIG_MODULE_HASHES will introduce a signature type.
-> This needs to be handled by callers differently than PKCS7 signatures.
-> 
-> Report the signature type to the caller and let them verify it.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+On Sun, 2026-01-25 at 21:25 +0200, Jarkko Sakkinen wrote:
+> 1. tpm2_get_random() is costly when TCG_TPM2_HMAC is enabled and thus its
+>    use should be pooled rather than directly used. This both reduces
+>    latency and improves its predictability.
+>=20
+> 2. Linux is better off overall if every subsystem uses the same source fo=
+r
+>    generating the random numbers required.
+>=20
+> Thus, unset '.get_random', which causes fallback to kernel_get_random().
+>=20
+> One might argue that TPM RNG should be used for the generated trusted key=
+s,
+> so that they have matching entropy with the TPM internally generated
+> objects.
+>=20
+> This argument does have some weight into it but as far cryptography goes,
+> FIPS certification sets the exact bar, not which exact FIPS certified RNG
+> will be used. Thus, the rational choice is obviously to pick the lowest
+> latency path, which is kernel RNG.
+>=20
+> Finally, there is an actual defence in depth benefit when using kernel RN=
+G
+> as it helps to mitigate TPM firmware bugs concerning RNG implementation,
+> given the obfuscation by the other entropy sources.
+>=20
+> Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > ---
-> [...]
-> diff --git a/kernel/module/main.c b/kernel/module/main.c
-> index d65bc300a78c..2a28a0ece809 100644
-> --- a/kernel/module/main.c
-> +++ b/kernel/module/main.c
-> @@ -3348,19 +3348,24 @@ static int module_integrity_check(struct load_info *info, int flags)
+> v7:
+> - A new patch. Simplifies follow up patches.
+> ---
+>  security/keys/trusted-keys/trusted_tpm1.c | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/tr=
+usted-keys/trusted_tpm1.c
+> index 636acb66a4f6..7ce7e31bcdfb 100644
+> --- a/security/keys/trusted-keys/trusted_tpm1.c
+> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+> @@ -6,6 +6,16 @@
+>   * See Documentation/security/keys/trusted-encrypted.rst
+>   */
+> =20
+> +/**
+> + * DOC: Random Number Generation
+> + *
+> + * tpm_get_random() was previously used here as the RNG in order to have=
+ equal
+> + * entropy with the objects fully inside the TPM. However, as far as goe=
+s,
+> + * kernel RNG is equally fine, as long as long as it is FIPS certified. =
+Also,
+> + * using kernel RNG has the benefit of mitigating bugs in the TPM firmwa=
+re
+> + * associated with the RNG.
+> + */
+
+If we switch to the kernel RNG that is better, and the TPM one is
+flawed, I guess we are going to have big problems anyway, since the TPM
+random number generator is used by the TPM itself internally.
+
+I think it makes sense to leave as it is.
+
+Thanks
+
+Roberto
+
+> +
+>  #include <crypto/hash_info.h>
+>  #include <crypto/sha1.h>
+>  #include <crypto/utils.h>
+> @@ -936,11 +946,6 @@ static int trusted_tpm_unseal(struct trusted_key_pay=
+load *p, char *datablob)
+>  	return ret;
+>  }
+> =20
+> -static int trusted_tpm_get_random(unsigned char *key, size_t key_len)
+> -{
+> -	return tpm_get_random(chip, key, key_len);
+> -}
+> -
+>  static int __init init_digests(void)
 >  {
->  	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
->  				       MODULE_INIT_IGNORE_VERMAGIC);
-> +	enum pkey_id_type sig_type;
->  	size_t sig_len;
->  	const u8 *sig;
->  	int err = 0;
->  
->  	if (IS_ENABLED(CONFIG_MODULE_SIG_POLICY)) {
->  		err = mod_split_sig(info->hdr, &info->len, mangled_module,
-> -				    &sig_len, &sig, "module");
-> +				    &sig_type, &sig_len, &sig, "module");
->  		if (err)
->  			return err;
->  	}
->  
-> -	if (IS_ENABLED(CONFIG_MODULE_SIG))
-> +	if (IS_ENABLED(CONFIG_MODULE_SIG) && sig_type == PKEY_ID_PKCS7) {
->  		err = module_sig_check(info, sig, sig_len);
-> +	} else {
-> +		pr_err("module: not signed with expected PKCS#7 message\n");
-> +		err = -ENOPKG;
-> +	}
+>  	int i;
+> @@ -992,6 +997,5 @@ struct trusted_key_ops trusted_key_tpm_ops =3D {
+>  	.init =3D trusted_tpm_init,
+>  	.seal =3D trusted_tpm_seal,
+>  	.unseal =3D trusted_tpm_unseal,
+> -	.get_random =3D trusted_tpm_get_random,
+>  	.exit =3D trusted_tpm_exit,
+>  };
 
-The new else branch means that if the user chooses not to configure any
-module integrity policy, they will no longer be able to load any
-modules. I think this entire if-else part should be moved under the
-IS_ENABLED(CONFIG_MODULE_SIG_POLICY) block above, as I'm mentioning on
-patch #12.
-
--- 
-Thanks,
-Petr
 
