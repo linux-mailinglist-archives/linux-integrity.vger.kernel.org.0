@@ -1,269 +1,436 @@
-Return-Path: <linux-integrity+bounces-8364-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8365-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mKdPFh+Ve2nOGAIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8364-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 18:13:03 +0100
+	id 2A6XHeihe2nOGAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8365-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 19:07:36 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01C28B2AFB
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 18:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D55D6B360A
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 19:07:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9DA1C30297AD
-	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 17:11:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD48830097E5
+	for <lists+linux-integrity@lfdr.de>; Thu, 29 Jan 2026 18:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB11033E379;
-	Thu, 29 Jan 2026 17:11:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E599296BC1;
+	Thu, 29 Jan 2026 18:07:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="dvF+cXhk";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="GxA+g1cd"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Ktb97qg8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A59C2777FE;
-	Thu, 29 Jan 2026 17:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769706674; cv=fail; b=Axj/ZjlN0VhNS3f1/zz74jELpOHEOJEHm1NB9bSMwdTF3hDc4u8L78kJLynOFsB8cLDFONiM+RHBhniZ3WulbiIIDt+m7GxhJklZu+9us3zWTg5WwUGVJmCo3GFHXOmqYzT/rXHsNZRwLTy4YaP3gf4Hb9KX9z6OqvT/BCE/bOI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769706674; c=relaxed/simple;
-	bh=vNvd2otFDKTLY/7yn6/9/LlfPxzOIIzApoXg2L11Zw0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=KmVhZwReOJ/D0eRH7wGQSKmu6TNRcZem8wx3JZAjJa48uycqX08q2RbjvjMUW+Hym0g30H1pbyD61jRFgv/3poJde6IduVnubRd4yegDreBjd+OQ/gRG67i7zYUaqljUdjjmey2KoEoj86ZOK10XB+HURKsvsWbFIzSVCSviVdk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=dvF+cXhk; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=GxA+g1cd; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60TDgLOI367903;
-	Thu, 29 Jan 2026 17:09:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=vNvd2otFDKTLY/7yn6
-	/9/LlfPxzOIIzApoXg2L11Zw0=; b=dvF+cXhkV4seURp56P7QDdv0Lo8qbibJH9
-	l1NddR/SSURyABRNwBjOLpP7OHzbgaJvLE+L/kVkQVU8vdkqMoETnMcxHtvznPJS
-	9zduZgzwWb/fA1fBXPDtpC/EjORWrzsYtX0Dm1DMlaEPyHTMShw2vw6BNBKkaZe0
-	o7iRFlxHa5M+gYkfM09S8gCQ2okUuFTf+XqvwxXovMXUIq3SX+prlAS6zxZAo7jw
-	vVhD9TGYlbogT2nuaci+f4SYTPQ4QLrJKdPDkY+h9GHggItqMsoGgBwcOYoIdM40
-	ccw/nguv44ZEVHi2gNFaxA5QHcFBM8HftE1V3vVkDP9cTUR2Qd1Q==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4by378kqgy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 29 Jan 2026 17:09:57 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60TG2Fp0035453;
-	Thu, 29 Jan 2026 17:09:56 GMT
-Received: from sj2pr03cu001.outbound.protection.outlook.com (mail-westusazon11012045.outbound.protection.outlook.com [52.101.43.45])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4bvmhcjvyc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 29 Jan 2026 17:09:56 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FzSw2a372gcuamwitjuC+E+xwEPfUdzZCRghHOkPiSunxShAjKDvRACHB5cBr/pntGt7OTH1b8/Homen6MAZdTbC3fukvAhOQHYW8Ipw5+F3kdtvycqJamrHqP/dRcATNF+wcW5hjskiV3oGfCHrZMLr3z6IhmLcsVpMMBkbh14VIbpL4EmpXxqboEqfKXEhL2fm4ZXYpWOBxfzSqioT0HJJFwLQWrOTwsnCnOSC6FZUVMQRc4aE6mLf0RxPBOodkdAyF7bxA3wW0ecnqdSi7kRp5sEtRf/z601l9olkoufuwVJwT0/4tUy+VE5aeIrDJ8IrKoecJoLNSVhoY3HSYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vNvd2otFDKTLY/7yn6/9/LlfPxzOIIzApoXg2L11Zw0=;
- b=kjq1+/vs1fhOdEbyM53CleZOaZnEhtkkr9juw9j6PeYfvQODrkt0Urf1nEe/fpmal7LHl6jfyVpaKlmCDbWsXjUzFlVBoaqM9Rd/4m6NDb0knmwCm3L2akQJicYR6ygObJkq1BO6BYae6/XwOy+qwbIURhXjEotGWhKnyBVAhFaud+1AkvfR5ezSe/aco8Y5BmBwU8/Uqq0mprtIaCpBIrWTfMdxwAjt6/oNhjcRHNj6em9Ukv59Th096e3rrwSshiKv8HPCujpA3f+4lpIjZHScBwKMEIo3KUDUkHI1hVJO5JT3B9OB4As8PoJMxdWg9UZ4q8AghT9+ysJXF+/eGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24DBA2D73B5
+	for <linux-integrity@vger.kernel.org>; Thu, 29 Jan 2026 18:07:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769710045; cv=none; b=UaCIkKFZ3hqyZVpgeesuMShVsvrUIuzobjBdMS056pPmYTM+8VnOzo03BloJXvKRo1YWed6es2xzdWkPkc8CdtEggvFohER7TtLLuroXnVElIRu809rrYJd0f7csPkf737qlNT59JDMDLKOgcj+JTtMiZcQtNGEL9c6BpnHlEMw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769710045; c=relaxed/simple;
+	bh=UfcjX6PD57Tddf2CUuA6OuV0cBIaE9mIGquDAr/FgWU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aWAr/XtNiRwyfAeZIxJ1edL8OYMbzRmrgxksSKnJMkIl/dZFTrikN342pm34OMBHu+A5GrQBwO+3b31wTqHei14yzOavTjyRS9yVgD51OFAAHY0m6HKafJSRR4MP8chZUiramwBSbN/M13+812bb2x+U7Iu9b3BG7SZIwLe7CJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Ktb97qg8; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6630b08ad60so432096eaf.2
+        for <linux-integrity@vger.kernel.org>; Thu, 29 Jan 2026 10:07:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vNvd2otFDKTLY/7yn6/9/LlfPxzOIIzApoXg2L11Zw0=;
- b=GxA+g1cd1DD88jTYeADx/qwJVS1BHGOoSRqklKgTJs/cuuHJ0KnxR0R86xN05Esx82Rgo+M9YcvNWk1YwtRVtLuvAyagavAYGuucXGmJCH7ZKJ5LJXk60e52Fb7cNriXdh57EAIdUkOmI7AR1Bl5Tsyz2tvl586QXTv+xmtYKzc=
-Received: from BL4PR10MB8229.namprd10.prod.outlook.com (2603:10b6:208:4e6::14)
- by IA1PR10MB6832.namprd10.prod.outlook.com (2603:10b6:208:424::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.8; Thu, 29 Jan
- 2026 17:09:54 +0000
-Received: from BL4PR10MB8229.namprd10.prod.outlook.com
- ([fe80::552b:16d2:af:c582]) by BL4PR10MB8229.namprd10.prod.outlook.com
- ([fe80::552b:16d2:af:c582%6]) with mapi id 15.20.9520.005; Thu, 29 Jan 2026
- 17:09:53 +0000
-Date: Thu, 29 Jan 2026 17:09:51 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Paul Moore <paul@paul-moore.com>, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
-        john.johansen@canonical.com, zohar@linux.ibm.com,
-        roberto.sassu@huawei.com, wufan@kernel.org, mic@digikod.net,
-        gnoack@google.com, kees@kernel.org, mortonm@chromium.org,
-        casey@schaufler-ca.com, penguin-kernel@i-love.sakura.ne.jp,
-        nicolas.bouchinet@oss.cyber.gouv.fr, xiujianfeng@huawei.com,
-        linux-mm <linux-mm@kvack.org>, David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 10/11] lsm: consolidate all of the LSM framework
- initcalls
-Message-ID: <01cb28cb-56b7-4862-bf27-07e4bf17115e@lucifer.local>
-References: <20251017202456.484010-36-paul@paul-moore.com>
- <20251017204815.505363-12-paul@paul-moore.com>
- <20251017204815.505363-21-paul@paul-moore.com>
- <0146e385-935b-4f66-9e6d-51bb47ae4bdc@lucifer.local>
- <14638978-b133-457a-ae9c-31ba54e3964c@lucifer.local>
- <74286aca-a565-489f-ad2c-886c650ea2bc@suse.cz>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74286aca-a565-489f-ad2c-886c650ea2bc@suse.cz>
-X-ClientProxiedBy: LO2P265CA0483.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:13a::8) To BL4PR10MB8229.namprd10.prod.outlook.com
- (2603:10b6:208:4e6::14)
+        d=cloudflare.com; s=google09082023; t=1769710043; x=1770314843; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UXMLINgWhmW9f3bh1muLdbRbRzKXOeJnFod4/xART8E=;
+        b=Ktb97qg8EF057Uk2lifhB8ASItSdu5T9n1nfSpW0SAH6klpIDRAplds6a/mbK0J/to
+         BjRWB+IlGx9tgcJi0eHOAQt4DBI+sOcLLNyAHR88x6LE90GKzzAAG2Pw1RnzEJlh9oBu
+         pss2XjixJR5kkhDJhfs3/g50uehaquM80W4ucW+Iv5p5tJ1b0pwyPYyqUi2u7AcS5PsA
+         Ntzf5Oeqey5f798iC/3o+vA1cF9uBde1Xvcl1VjNHtHu7T/ohzcBQZhdBy/K7Q2XQgl/
+         PAd7et3Hyz7eE8Q3QcOFhEHkmODt3qEdS6fiTiqnvE7RPQ4iHDw0CNwNt+Ef0xHv9aGh
+         gXeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769710043; x=1770314843;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UXMLINgWhmW9f3bh1muLdbRbRzKXOeJnFod4/xART8E=;
+        b=UR712G4fqeSlOZ3yFB+8CG/e5dHpOfRv3eEdkRBbXmqmALsnpZAJGQemGD4xvVvXey
+         oUSi/CGWM1ENVGuHnLOlq1Lib56reNkf1nQpVq/97vOymsY6NikwWcn2YKg4d9FTovge
+         RC2Hf8YxOrytmu3P3185FRBngCZH+4k9HoXduCs7cUmTI4Z3c35EQaAOAX2v88V8/kQ9
+         G2exqYwcu24AjbElmaWev/K2tUkhMaj3URBV013A1D9KHynnuKT067YuxYAXnSeVouqh
+         gLXnqYLLOOE1Bi8WeGJo+wax/0UO9VaLggMzKXa/RQ5ODmXP1sG6XIas5ENV2w2VUlKA
+         kd7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXm3hc26osiA0996z1ez52PJquqriehc62EqrHN/V2SkWaqAASAf/DDrG1J8PpEmyKrm6D76wU8ZZvUAPQbXlY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+Ub4DmClSjNYurlCkS1x3XWsXmrdxVUwf6Nhzz4PSu8a3Muan
+	DQUbMxhzeroR3zLLhawqeeJGMtcQXCxjMK+dfn2IgXPZiXsNkLYRccshBSXc72YlB4s=
+X-Gm-Gg: AZuq6aItAfxuaVvxu9USJavEeKho4D0ccpKXJPuAGxqC5jh4udVsNUTP7jcQ5f5dq/7
+	ye/QTZx18R45OHSF19fdy8VrIP9qN8qB99bwjI+SXyu57fpqsYVsZylWVuYeqYCNQQPP05OSWfs
+	yXCbG4gn874fm5dk4R+9RFI2x2p3+7/8FsgEfOqsCykrCaRQcwsImmJoOz7MWd7JNBH14bVyANT
+	UwbP6b8mnC8Uh+TzxqXYDl6S5ZIZd6BZJqSCIu+WA/vnnWpoIrUF51fBh4tw75x4+QzYgMJcerc
+	Bj974SZuyKtRYmsB/qnA6/9latJLDSxs+0Au6Q2A0qS54sF8Yq942a6P4EomRMPQBqoa0hmuMDy
+	3CKllD8BSsf+Yiu3+TZs+12tWz4sRQUCMYHRADIGBnFHkdO94l4UFtT02sCac/cMDTG8jHQU=
+X-Received: by 2002:a05:6820:2228:b0:662:ede9:b9af with SMTP id 006d021491bc7-6630f35805amr205086eaf.51.1769710042887;
+        Thu, 29 Jan 2026 10:07:22 -0800 (PST)
+Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:7a])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-662f9963799sm3448584eaf.7.2026.01.29.10.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jan 2026 10:07:22 -0800 (PST)
+From: Frederick Lawler <fred@cloudflare.com>
+Date: Thu, 29 Jan 2026 12:07:16 -0600
+Subject: [PATCH v4] ima: Fallback to ctime check for FS without
+ kstat.change_cookie
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL4PR10MB8229:EE_|IA1PR10MB6832:EE_
-X-MS-Office365-Filtering-Correlation-Id: 181e9813-eb47-4b80-4b06-08de5f593831
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ZOgU4K263IjcEu85RxPd1QeqDlyGBhoRZARA/Zhk048pHf1z5vlsb4d4cctg?=
- =?us-ascii?Q?1P6u/Br6KxyItIU4py+nGPxb+N0hpyFKUeksbBPO1nqnjHoux+xge2iNPyAK?=
- =?us-ascii?Q?Tec4UAoh57TvjMMaumvgBYrm5py66af5Kg4nRqHXfYd7z491FJD0cW1F3COJ?=
- =?us-ascii?Q?W8Vb61Eki6bW4Dkjvm+juZSHl3/yoFvWR2CTRojXN5ZJH0UkyednaouHrmJm?=
- =?us-ascii?Q?2iwlxWqSChFqYnnSCAbIRZTHSdYnZeX2mJigUK+C0JtMFk862tH8t3QySVOK?=
- =?us-ascii?Q?uFz07Pe493cLTGuyTkzOoVe8Wj/kf7Pz8Os+wee4pqRZR65mhxi4mJM7WSJz?=
- =?us-ascii?Q?PCcy+ADQyRhrnGNjmHjmTDuJbz332O77eAfJFDVKAKVk8o/DnxRK8B/EWoDS?=
- =?us-ascii?Q?Q3Ve13mN1AJ7WLfTW+htJqmV/vf33K9najXIz2l/K88RBv5mRXVEZUmLEOW6?=
- =?us-ascii?Q?T5T2w57QsPEfn7p7uqqBqyOXRFwz5OnT5gZsmkG4p9VwtNStjXuUhvTOD2tg?=
- =?us-ascii?Q?vbCiB0ldasOQxGU9gPJqNSC6u0z4VCPOa5d2Y1MwWIfBRxasX3zROXOWnLs2?=
- =?us-ascii?Q?S4ZyQXaLrmackSEmqCwqiCAA739TIOZgKwVq8oSFDz3CNCDRuITJT0nFpW+x?=
- =?us-ascii?Q?b9mm6K0KYCCCQL9E7RNq5QDD5mAYagvzhOw9inhjaxZJ70ZE+eMBHCERNR6b?=
- =?us-ascii?Q?4uhTB/bSM5SfUseM4G4u1QtyGN2CI7t65l7l74MFl8RS0Tp6kS2KuGbLclx9?=
- =?us-ascii?Q?oDMbUbFgWkbEy9Yje3fceVmXm4tu8UC586Kq1iAe6zya+A7P8HAGfuuNEwtf?=
- =?us-ascii?Q?1PSvUYKnuv3LoTDY7jGFMRf+Bh8upDZsmObrPZ8F4iMnzxCLkTHgJ1D118Kr?=
- =?us-ascii?Q?i8xikVI2c2d4MmYYAVC+M1fi7yaJh04dy+hLTSnQbXb+up2m39myAL80aVtm?=
- =?us-ascii?Q?9IwfgayxYyqLHGrA8Q1KFQ6q5/r9DUbaMRxRaeN1xED47cVSWGclM1oxwiea?=
- =?us-ascii?Q?wruqDJVOJTGyscuKUp8isQ5q3x8OFYj1dbq0d/dz/WcTFYVvYgHAm3RSyp0/?=
- =?us-ascii?Q?uPs+SRpshoGUmYvw8xJq+ogYDUlQOKAuwjLcvHOwpCD+J2y5tB4/82ajS2zE?=
- =?us-ascii?Q?DZV7ElLzPzaGxL3aKBSZEntr0V/54q2uW8Oq7IVcDSUFYSREBziBiLodsGHf?=
- =?us-ascii?Q?wI8furVmSIQoj6dcUUG+lqpCJR2Fbc5V0e0uAdBsq7JAag7P6CsaDSvyzug5?=
- =?us-ascii?Q?6lLKwMjC7jOXUsIqCmmDf3DpQoyPij6z2QVXIrt2Cr/7RSPm47ZFu9ryCMlo?=
- =?us-ascii?Q?nsh0GRFX8tQfqOQQnWs+cteQFU1WPUVlFQkxhXRjITxrLLe9HgBelzmStz9N?=
- =?us-ascii?Q?7VnbGk5R80lSvH0T3rR0+D6/nY7PLQIRCRCCwEK1YR2aJ/c4tiAHTNdhX6ZX?=
- =?us-ascii?Q?iOVkY+n1iNz0Cth7P0bcJic9qTtdnjNjGbRk7/KmPmKGD6GkbDw5zzEBvpIf?=
- =?us-ascii?Q?WlyYPqi1WcoCoA9gRR+caTRAfek/bplZOfW6ARXgansvg9JOi99p/3L/MR7m?=
- =?us-ascii?Q?RZ1sdgOio/bX5Bez3+Q=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL4PR10MB8229.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?LEaz1qFrtVNUt2fmeAWbOTolDL7qqxe6F7lXAcFh4VtjG4kYo/ZYB7XmWvd3?=
- =?us-ascii?Q?eMHVrIFO/YuAudPyepfmuvfu/g6NZnMz7KdJUIpb2mik0hpaMBorEPKMENe4?=
- =?us-ascii?Q?pcBF3NLG5N3eOf2gDjiO5nXahIDm4SL3cVUaW0pbzstZvKzRpYP8zZzuhl8c?=
- =?us-ascii?Q?5ssi9aPSwUJAF2ffGBD18ESUnrVBghoyHZ4064tpyAEEvgn7fCDkf/fD1OrC?=
- =?us-ascii?Q?nW746DWnApIJAV3arjNv6nv9Rv5r2YgMyFHkRfpt2GHNupb+VhDFuvyqv3GT?=
- =?us-ascii?Q?gFwUNVWN54vjA9j96apv+jn7M7GBrbGFWNvCRxuiVtftYm/33ONgxqfz6nL7?=
- =?us-ascii?Q?2jIw9D7hrfmSFUmFQe2R6BfclAsl/vSgLeofBg6d3mgRGkMcKwUjeq7pPCsS?=
- =?us-ascii?Q?8Hxl+krvBCD9WWLIJhpLdOnJ3puQ98UNLHn5T4Vl/x7FBak9zC+LFYAriWLf?=
- =?us-ascii?Q?PiwjPjoLmSW+u2QateWLLccGmtTEYe0Ah03DLyjqGbat7w+dPmrjqYy2MIp4?=
- =?us-ascii?Q?8yUQ/KFwV3XR6JP3sT9ilKbpEr59gjLjEW/RlYitGhv5s7EgzLUs4AtKwutA?=
- =?us-ascii?Q?2h8CC3rmM7goiJ4CqCFryEWVo9/FGbu1gKZvARKajwPVdhAeZgmIcj3CssLJ?=
- =?us-ascii?Q?+XYEYSLTCNz3rpiGSjVfS7/Yp+nqvxQrGXA5u3UTWNjKayks9jenXpYc/ASU?=
- =?us-ascii?Q?O+8mJcjLxUBxGiLt3R9FBs2paGYh8fNaphhNut9Nigy6EyDGwgx0y16yVwXt?=
- =?us-ascii?Q?OoKv7V50LFtP/P/V2vszZvE1C/CStl1OSpesjVNU1e1qaj/BZNUemUX2AYZE?=
- =?us-ascii?Q?lu/pn4FFc/wSg9WHrAn0JgGrXKFyUQ2dOG7CxaCkrNJfd49okKY6tJxsgDO9?=
- =?us-ascii?Q?9IlAVHr95BPiU8FhNias4rPgtOouwPhDoqf/VDdC0ETQnT2zdARWb8bziAZL?=
- =?us-ascii?Q?3da98vDdPvtiR0hTf1edlZAz9KQjtE8xsZFbdgfP5PBcH3UQ50pzVKhRvaMr?=
- =?us-ascii?Q?M4H2cuTB9663jy+QjUXSodSB+CE3lqikeUG8MnM0KqFulMuWPpJVauybH3Qz?=
- =?us-ascii?Q?X6oZMLz8kf/IyXiLCLsAJNSI/hpOAK+t9F0HQC/DNEyWY4FmfpkiFb9nnL7i?=
- =?us-ascii?Q?TtTqF/SzfJ6QH0tdHBDAsw27snpDFTWGwDieS+8BuKFtpRxTg22MUu6cOo/p?=
- =?us-ascii?Q?/VPJZSS8xiCi07WQ6Kxqb9A3nNhPt3NUB5tGESkMhtGZ+LbUgVY6phDRdJvT?=
- =?us-ascii?Q?bMLP3BKo6N0LpJucqIbnGQ0/z9lhnsKyLhVQdbinKSc2Tt85Ykfsx2cg6C00?=
- =?us-ascii?Q?EnMsIqpUJv/Eb3k+xGOxifaOWG2ZuPJbJLLZa1KHt2CEsfw8Q9vCttlAkSHb?=
- =?us-ascii?Q?PiidyFUzxYBvaRpz0bDIAo61+NYeNMV7OCH9xrcZnldk5JAo+F8XrcNUvwm4?=
- =?us-ascii?Q?tJpWzeuRkZ7yOjMTiGRduQ5FrUK21p9glbWRrSFlweAUOY9ly0ZM7JR3TH3d?=
- =?us-ascii?Q?NrnPYyaN8Objt2UGM7HBCIY782LYiWzWaNEs5oQJw/UhAeN+Xo/2qJ7iErze?=
- =?us-ascii?Q?UFnC2K1f/pkF9e328ipbSqUWDJdnAzIz7Lgw3OgIqmVd1mviY6V0GEIK+h4N?=
- =?us-ascii?Q?aa3zTk9thMs2B4P6Jg4G/cYKDQ+DQzisKfBf/lOPj/BHwOGtySDs+YsIyVPP?=
- =?us-ascii?Q?fiL0dzD9J66vinKoVxzRWgoWPcBJGdJOiYSwuFEEo+es205T2Ew45ILobbvZ?=
- =?us-ascii?Q?bfVQXSVUeHHXt7me7FIeZT4VNo+9QLs=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	ykeEoVS7iRN140svLvo8pbguZKsKJtmQDwIcGBOao/GlJ3xiF6tQjEF2iTvbiOgeoFkIvrLBzGICa+JXI9S5AkhB5+oO4bIINm9luuL/DXD4WOJynTdWoZeoHksfZspEWNb4nldbPECVpDA1gEppYXYOG63ZcvyCx1tNtxUXiPgzwCdsbeIbh7o3VBOliAOuTf0nRXLi8s/JeCK4dy1Nlh2J5IK+H7LnXZ6jgDQQxJUkcpDAQaJXsbrKA3+awBChrFEtZgYczyLopptsshbWQZRLERw2PvWs1toPNPzk6/Us46Lw8oh20SWoRQaLLs0j79bXXHonSNpsz8Y7bxPvKwfGpESmgBp4Ow4WI7UY6xjIdIvdLGRZFSPP5CfJ45hWOYSc+3YEuPFtfjjoTTQK6gYytCkiWqNVgenfRgolhP8svTUBdyooQ/NhT2xXMdPRLwuGtzRjlSnTkcicAFws4cjoyth+WihTCNiHpssA+rwqohaaP77TJ6k9RS91x4nm9mZJMrl6w5JOmsPtnmoMAc8VB8anD3XeLRqmww9AVKfiWmY7Gdt71YaUu9+zStzgGhiTQoqlifznYqnsVb8MSh8riFcc9uira0EmOZ24usc=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 181e9813-eb47-4b80-4b06-08de5f593831
-X-MS-Exchange-CrossTenant-AuthSource: BL4PR10MB8229.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 17:09:53.3492
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NgYJpQq3AT35yYDDI5aAbI21w0rn5nV29f9LwGD2HkgufDbSZGFHHxTJlpvD2ia8pDBxGmZTnYvCkHir/gMUhHMhjp5ESgg0u3dJXnWtXOI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6832
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-29_02,2026-01-29_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 mlxlogscore=836
- adultscore=0 malwarescore=0 spamscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
- definitions=main-2601290120
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI5MDEyMCBTYWx0ZWRfX9kFyYxfFzVyO
- tWIMv4rGWK3C/FHf4kIGZm+Cnc5R6+bv0ZWX43bj8VxAwl7QcxmNUxXO6mmVrN1+qkfby0xBjvf
- cyxoIdtkp+ou2ngvm+EigEZRprbbrMFnmdqvWJxT1OHWRuG58uBlAI4rlyFRNrcJCRfbFE1Sarq
- 5UDrQ0b1d2F5JRAgiCV3PzEOwACBLfY4dmfyjduD7xgT3Wr8fv5ZynvOjUL4fRmUH9zDd7mnrsg
- gwBnZV7So+jQNoghItXmQpLbykEXh/f9nzrgtlT0A6TazSuilfxhrCVAm56cvor6JnEQ+BJzEhW
- 5mxGIK5tx3BVvwUdV7U/Xg+tof+JanwU0cWXRwFFlfJ1qN0ErENSqe07db4Qb6wM1d4xQP9Qoi+
- vRgVe4Kcnprdwl3MTXpTQxZX/BrNSVBtQQDWnHDfPPvwLTguuRPe9P/9X1w84Qwiord0D515ffA
- 5/xw/NIv7x4logNH68g==
-X-Authority-Analysis: v=2.4 cv=a/o9NESF c=1 sm=1 tr=0 ts=697b9465 b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=V0E6NdkUipxGV5Rk1rMA:9 a=CjuIK1q_8ugA:10 a=ZXulRonScM0A:10
-X-Proofpoint-GUID: Z4sQsCU8_iPTf7cPBgN_36_ObTYB7Cyq
-X-Proofpoint-ORIG-GUID: Z4sQsCU8_iPTf7cPBgN_36_ObTYB7Cyq
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260129-xfs-ima-fixup-v4-1-6bb89df7b6a3@cloudflare.com>
+X-B4-Tracking: v=1; b=H4sIANOhe2kC/23OwW7CMAwG4FdBOS9TbEOactrEZccduE0cTJqMS
+ EBRAhUI9d0xnSZN7Y629X/+76qEnEJRy9ld5dClktqjDPOXmfI7Pn4HnRqZFRpcAALqayw6HVj
+ HdL2cdE1QOcMWPXolmVMOchi8L/X5vl59qI2sd6mc23wbvnQwHH9ArEdgBxq05QoqX1MdK//m9
+ +2liXvO4dW3h+cTiVoDky5D1DVAW2sMEOA4+mzS4e93IdCMCRQiEmHgxm3NnP4l6C8xaUFCoCF
+ asGN2ZCdE3/cP2QBsSHcBAAA=
+X-Change-ID: 20251212-xfs-ima-fixup-931780a62c2c
+To: Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ "Darrick J. Wong" <djwong@kernel.org>, 
+ Christian Brauner <brauner@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+ Jeff Layton <jlayton@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, kernel-team@cloudflare.com, 
+ Frederick Lawler <fred@cloudflare.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10871; i=fred@cloudflare.com;
+ h=from:subject:message-id; bh=UfcjX6PD57Tddf2CUuA6OuV0cBIaE9mIGquDAr/FgWU=;
+ b=kA0DAAoBqyW0dgOS020ByyZiAGl7odmiEWU8dyRlugLK6KV/lkEm+RG89yHbBIgdF985X44f3
+ 4kCMwQAAQoAHRYhBMs0GoxWa7U8e+M57asltHYDktNtBQJpe6HZAAoJEKsltHYDktNtUJMQAN6Y
+ 7AarUh/aEQV1tIzJUoze3F/mf6ZepBpNIHt16FTw3QU0GXrqWfikNaa5dH1bc+dKlHgEyg06dwa
+ tVL+EYhbfRrTeF0juKECv4TuX+0zHc3bbm0d+of6qYXTr6o4iW/T69l34Hvfd6MAYx7L6ufqVo1
+ +IP8VsAqbRkLxSm99WgC/B5iF7iOvYwwpZDg4apJxrxu55Z9dldViMFXpIg3UQKLTAwx+9dPUOt
+ v0Y/GO31El7H1Xn/7Eys5biHP9NFiXFKZeHO+mV69Yy881AG/D9SFSdjcQfsoFPWLr4eiD6i2pF
+ /AlVuAhOCc9IhpZ9+T40MLasVsXTpKJnYJh4rHfogYKiHUFSVTGJUxskSzMyu3NJCAisGBoUaUT
+ 0CnhHmRxxqY7wdD31PksXtar8YSdifHUu63gUUo2nKRNjzP6CCxIgAcWlS2dg5GZoyjv5TvYoyw
+ 95NPSmXbNHiSISDLFvgpZfk4utifFgpU3BojZN2fuar2D/k+U+K1HkZKfayEjl453QLygGhJKc4
+ APZ/XTQPAIJlFzFwV+zVYwxebLrR4zU8mQ8kN2xnIvWebZEUb3EXXMjBA5TaNOK1Mprbga8PAXp
+ V+AJQfHpep/Ld6jWqSeYmkqxpTgLYHz0hcG9x3TfFT/40g2Gwtx2TeabiSLQJw3pFw0UCEIOLkw
+ +pBgj
+X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
+ fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25,oracle.onmicrosoft.com:s=selector2-oracle-onmicrosoft-com];
+X-Spamd-Result: default: False [-7.66 / 15.00];
+	WHITELIST_DMARC(-7.00)[cloudflare.com:D:+];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[cloudflare.com,reject];
+	R_DKIM_ALLOW(-0.20)[cloudflare.com:s=google09082023];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8364-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.onmicrosoft.com:dkim,oracle.com:dkim];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-8365-lists,linux-integrity=lfdr.de];
+	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,kernel.org,toxicpanda.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[24];
-	DKIM_TRACE(0.00)[oracle.com:+,oracle.onmicrosoft.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lorenzo.stoakes@oracle.com,linux-integrity@vger.kernel.org];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[cloudflare.com:+];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	NEURAL_HAM(-0.00)[-1.000];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 01C28B2AFB
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fred@cloudflare.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D55D6B360A
 X-Rspamd-Action: no action
 
-On Thu, Jan 29, 2026 at 06:02:00PM +0100, Vlastimil Babka wrote:
-> Agreed, the mmap_min_addr should stay visible and applied unconditionally.
-> AFAICS the only relation to SECURITY/LSM is whether CONFIG_LSM_MMAP_MIN_ADDR
-> is used as an additional lower limit to both CONFIG_DEFAULT_MMAP_MIN_ADDR
-> and the sysctl-written value?
+Commit 1cf7e834a6fb ("xfs: switch to multigrain timestamps")
+introduced a means to track change detection for an inode
+via ctime updates, opposed to setting kstat.change_cookie to
+an i_version when calling into xfs_vn_getattr().
 
-Thanks, yeah we should probably actually move the non-LSM-relevant stuff
-out to mm to be honest.
+This introduced a regression for IMA such that an action
+performed on a LOWER inode on a stacked file systems always
+requires a re-evaluation if the LOWER file system does not
+leverage kstat.change_cookie to track inode i_version or lacks
+i_version support all together.
 
-But that's future work, for an -rc8 hotfix we need to make the init of this
-particular module not dependent on normal LSM initialisation, as horrid as
-that is...
+In the case of stacking XFS on XFS, an action on either the LOWER or UPPER
+will require re-evaluation. Stacking TMPFS on XFS for instance, once the
+inode is UPPER is mutated, IMA resumes normal behavior because TMPFS
+leverages generic_fillattr() to update the change cookie.
 
-Cheers, Lorenzo
+This is because IMA caches kstat.change_cookie to compare against an
+inode's i_version directly in integrity_inode_attrs_changed(), and thus
+could be out of date depending on how file systems set
+kstat.change_cookie.
+
+To address this, require integrity_inode_attrs_changed() to query
+vfs_getattr_nosec() to compare the cached version against
+kstat.change_cookie directly. This ensures that when updates occur,
+we're accessing the same changed inode version on changes, and fallback
+to compare against kstat.ctime when STATX_CHANGE_COOKIE is missing from
+result mask.
+
+Lastly, because EVM still relies on querying and caching a inode's
+i_version directly, the integrity_inode_attrs_changed() falls back to the
+original inode.i_version != cached comparison.
+
+Link: https://lore.kernel.org/all/aTspr4_h9IU4EyrR@CMGLRV3
+Fixes: 1cf7e834a6fb ("xfs: switch to multigrain timestamps")
+Suggested-by: Jeff Layton <jlayton@kernel.org>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Frederick Lawler <fred@cloudflare.com>
+---
+We uncovered a case in kernels >= 6.13 where XFS is no longer updating
+struct kstat.change_cookie on i_op getattr() access calls. Instead, XFS is
+using multigrain ctime (as well as other file systems) for
+change detection in commit 1cf7e834a6fb ("xfs: switch to
+multigrain timestamps").
+
+Because file systems may implement i_version as they see fit, IMA
+caching may be behind as well as file systems that don't support/export
+i_version. Thus we're proposing to compare against the kstat.change_cookie
+directly to the cached version, and fall back to a ctime guard when
+that's not updated.
+
+EVM is largely left alone since there's no trivial way to query a file
+directly in the LSM call paths to obtain kstat.change_cookie &
+kstat.ctime to cache. Thus retains accessing i_version directly.
+
+Regression tests will be added to the Linux Test Project instead of
+selftest to help catch future file system changes that may impact
+future evaluation of IMA.
+
+I'd like this to be backported to at least 6.18 if possible.
+
+Below is a simplified test that demonstrates the issue:
+
+_fragment.config_
+CONFIG_XFS_FS=y
+CONFIG_OVERLAY_FS=y
+CONFIG_IMA=y
+CONFIG_IMA_WRITE_POLICY=y
+CONFIG_IMA_READ_POLICY=y
+
+_./test.sh_
+
+IMA_POLICY="/sys/kernel/security/ima/policy"
+TEST_BIN="/bin/date"
+MNT_BASE="/tmp/ima_test_root"
+
+mkdir -p "$MNT_BASE"
+mount -t tmpfs tmpfs "$MNT_BASE"
+mkdir -p "$MNT_BASE"/{xfs_disk,upper,work,ovl}
+
+dd if=/dev/zero of="$MNT_BASE/xfs.img" bs=1M count=300
+mkfs.xfs -q "$MNT_BASE/xfs.img"
+mount "$MNT_BASE/xfs.img" "$MNT_BASE/xfs_disk"
+cp "$TEST_BIN" "$MNT_BASE/xfs_disk/test_prog"
+
+mount -t overlay overlay -o \
+"lowerdir=$MNT_BASE/xfs_disk,upperdir=$MNT_BASE/upper,workdir=$MNT_BASE/work" \
+"$MNT_BASE/ovl"
+
+echo "audit func=BPRM_CHECK uid=$(id -u nobody)" > "$IMA_POLICY"
+
+target_prog="$MNT_BASE/ovl/test_prog"
+setpriv --reuid nobody "$target_prog"
+setpriv --reuid nobody "$target_prog"
+setpriv --reuid nobody "$target_prog"
+
+audit_count=$(dmesg | grep -c "file=\"$target_prog\"")
+
+if [[ "$audit_count" -eq 1 ]]; then
+        echo "PASS: Found exactly 1 audit event."
+else
+        echo "FAIL: Expected 1 audit event, but found $audit_count."
+        exit 1
+fi
+---
+Changes in v4:
+- No functional changes.
+- Add Reviewed-by & Fixes tags.
+- Link to v3: https://lore.kernel.org/r/20260122-xfs-ima-fixup-v3-1-20335a8aa836@cloudflare.com
+
+Changes in v3:
+- Prefer timespec64_to_ns() to leverage attr.version. [Roberto]
+- s/TPMFS/TMPFS/ in description.
+- Link to v2: https://lore.kernel.org/r/20260120-xfs-ima-fixup-v2-1-f332ead8b043@cloudflare.com
+
+Changes in v2:
+- Updated commit description + message to clarify the problem.
+- compare struct timespec64 to avoid collision possibility [Roberto].
+- Don't check inode_attr_changed() in ima_check_last_writer()
+- Link to v1: https://lore.kernel.org/r/20260112-xfs-ima-fixup-v1-1-8d13b6001312@cloudflare.com
+
+Changes since RFC:
+- Remove calls to I_IS_VERSION()
+- Function documentation/comments
+- Abide IMA/EVM change detection fallback invariants
+- Combined ctime guard into version for attributes struct
+- Link to RFC: https://lore.kernel.org/r/20251229-xfs-ima-fixup-v1-1-6a717c939f7c@cloudflare.com
+---
+ include/linux/integrity.h         | 35 +++++++++++++++++++++++++++++++----
+ security/integrity/evm/evm_main.c |  5 ++---
+ security/integrity/ima/ima_api.c  | 11 ++++++++---
+ security/integrity/ima/ima_main.c | 17 ++++++++++-------
+ 4 files changed, 51 insertions(+), 17 deletions(-)
+
+diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+index f5842372359be5341b6870a43b92e695e8fc78af..034f0a1ed48ca8c19c764e302bbfc555dad92cde 100644
+--- a/include/linux/integrity.h
++++ b/include/linux/integrity.h
+@@ -9,6 +9,8 @@
+ 
+ #include <linux/fs.h>
+ #include <linux/iversion.h>
++#include <linux/kernel.h>
++#include <linux/time64.h>
+ 
+ enum integrity_status {
+ 	INTEGRITY_PASS = 0,
+@@ -51,14 +53,39 @@ integrity_inode_attrs_store(struct integrity_inode_attributes *attrs,
+ 
+ /*
+  * On stacked filesystems detect whether the inode or its content has changed.
++ *
++ * Must be called in process context.
+  */
+ static inline bool
+ integrity_inode_attrs_changed(const struct integrity_inode_attributes *attrs,
+-			      const struct inode *inode)
++			      struct file *file, struct inode *inode)
+ {
+-	return (inode->i_sb->s_dev != attrs->dev ||
+-		inode->i_ino != attrs->ino ||
+-		!inode_eq_iversion(inode, attrs->version));
++	struct kstat stat;
++
++	might_sleep();
++
++	if (inode->i_sb->s_dev != attrs->dev || inode->i_ino != attrs->ino)
++		return true;
++
++	/*
++	 * EVM currently relies on backing inode i_version. While IS_I_VERSION
++	 * is not a good indicator of i_version support, this still retains
++	 * the logic such that a re-evaluation should still occur for EVM, and
++	 * only for IMA if vfs_getattr_nosec() fails.
++	 */
++	if (!file || vfs_getattr_nosec(&file->f_path, &stat,
++				       STATX_CHANGE_COOKIE | STATX_CTIME,
++				       AT_STATX_SYNC_AS_STAT))
++		return !IS_I_VERSION(inode) ||
++			!inode_eq_iversion(inode, attrs->version);
++
++	if (stat.result_mask & STATX_CHANGE_COOKIE)
++		return stat.change_cookie != attrs->version;
++
++	if (stat.result_mask & STATX_CTIME)
++		return timespec64_to_ns(&stat.ctime) != (s64)attrs->version;
++
++	return true;
+ }
+ 
+ 
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 73d500a375cb37a54f295b0e1e93fd6e5d9ecddc..6a4e0e246005246d5700b1db590c1759242b9cb6 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -752,9 +752,8 @@ bool evm_metadata_changed(struct inode *inode, struct inode *metadata_inode)
+ 	bool ret = false;
+ 
+ 	if (iint) {
+-		ret = (!IS_I_VERSION(metadata_inode) ||
+-		       integrity_inode_attrs_changed(&iint->metadata_inode,
+-						     metadata_inode));
++		ret = integrity_inode_attrs_changed(&iint->metadata_inode,
++						    NULL, metadata_inode);
+ 		if (ret)
+ 			iint->evm_status = INTEGRITY_UNKNOWN;
+ 	}
+diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+index c35ea613c9f8d404ba4886e3b736c3bab29d1668..e47d6281febc15a0ac1bd2ea1d28fea4d0cd5c58 100644
+--- a/security/integrity/ima/ima_api.c
++++ b/security/integrity/ima/ima_api.c
+@@ -272,10 +272,15 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
+ 	 * to an initial measurement/appraisal/audit, but was modified to
+ 	 * assume the file changed.
+ 	 */
+-	result = vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
++	result = vfs_getattr_nosec(&file->f_path, &stat,
++				   STATX_CHANGE_COOKIE | STATX_CTIME,
+ 				   AT_STATX_SYNC_AS_STAT);
+-	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
+-		i_version = stat.change_cookie;
++	if (!result) {
++		if (stat.result_mask & STATX_CHANGE_COOKIE)
++			i_version = stat.change_cookie;
++		else if (stat.result_mask & STATX_CTIME)
++			i_version = timespec64_to_ns(&stat.ctime);
++	}
+ 	hash.hdr.algo = algo;
+ 	hash.hdr.length = hash_digest_size[algo];
+ 
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 5770cf691912aa912fc65280c59f5baac35dd725..8ac42b03740eb93bf23b15cb9039af6cd32aa999 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -28,6 +28,7 @@
+ #include <linux/iversion.h>
+ #include <linux/evm.h>
+ #include <linux/crash_dump.h>
++#include <linux/time64.h>
+ 
+ #include "ima.h"
+ 
+@@ -199,10 +200,13 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
+ 					    &iint->atomic_flags);
+ 		if ((iint->flags & IMA_NEW_FILE) ||
+ 		    vfs_getattr_nosec(&file->f_path, &stat,
+-				      STATX_CHANGE_COOKIE,
+-				      AT_STATX_SYNC_AS_STAT) ||
+-		    !(stat.result_mask & STATX_CHANGE_COOKIE) ||
+-		    stat.change_cookie != iint->real_inode.version) {
++			    STATX_CHANGE_COOKIE | STATX_CTIME,
++			    AT_STATX_SYNC_AS_STAT) ||
++		    ((stat.result_mask & STATX_CHANGE_COOKIE) ?
++		      stat.change_cookie != iint->real_inode.version :
++		      (!(stat.result_mask & STATX_CTIME) ||
++			timespec64_to_ns(&stat.ctime) !=
++			(s64)iint->real_inode.version))) {
+ 			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
+ 			iint->measured_pcrs = 0;
+ 			if (update)
+@@ -328,9 +332,8 @@ static int process_measurement(struct file *file, const struct cred *cred,
+ 	real_inode = d_real_inode(file_dentry(file));
+ 	if (real_inode != inode &&
+ 	    (action & IMA_DO_MASK) && (iint->flags & IMA_DONE_MASK)) {
+-		if (!IS_I_VERSION(real_inode) ||
+-		    integrity_inode_attrs_changed(&iint->real_inode,
+-						  real_inode)) {
++		if (integrity_inode_attrs_changed(&iint->real_inode,
++						  file, real_inode)) {
+ 			iint->flags &= ~IMA_DONE_MASK;
+ 			iint->measured_pcrs = 0;
+ 		}
+
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251212-xfs-ima-fixup-931780a62c2c
+
+Best regards,
+-- 
+Frederick Lawler <fred@cloudflare.com>
+
 
