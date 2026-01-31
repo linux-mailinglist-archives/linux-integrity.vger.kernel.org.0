@@ -1,218 +1,350 @@
-Return-Path: <linux-integrity+bounces-8382-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8383-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aE1rGwqxfWnoTAIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8382-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 08:36:42 +0100
+	id stQ0Lx9Jfml1WwIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8383-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 19:25:35 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14228C1185
-	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 08:36:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18732C37F9
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 19:25:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E95E1300AC2F
-	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 07:36:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EB32230097FC
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 18:25:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE8A033438F;
-	Sat, 31 Jan 2026 07:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FD9322B9F;
+	Sat, 31 Jan 2026 18:25:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxUD/sd8"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="SMP3ApnO"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9100F311967
-	for <linux-integrity@vger.kernel.org>; Sat, 31 Jan 2026 07:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532B03EBF39
+	for <linux-integrity@vger.kernel.org>; Sat, 31 Jan 2026 18:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769844999; cv=none; b=rOxPZ+oIhyCjhQ/8OCdfUyEBvSPGA+2qfTYfoQ55imn09nNkDcStNF5ogY5niMlUoDST1pQVyJG6iL6bQBkx8R6sF3Xh/pD51o8Zs7YaZZaGRKW3krcuMic8bFacdnqR18DO6v87IL/9uitrAPfYBxvznJQni0LbJSEy2iGeMzU=
+	t=1769883930; cv=none; b=S5o55PSb3xQle/ytq1c5lSEtTLTQ8/hBikY3PkAQZopoHJL4zScIyg4OiZ1d4ltwVhEsp43CvVuGIip84De7DlsCgM3lW/PZgV94g3kSgecC3pWLyl7Gi9bJE7GCx8m+JoOd6P6nD1AhTPlaqt5+4vTK8MtFaihSRVlv3Fi916g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769844999; c=relaxed/simple;
-	bh=nY7lzQOVExn4AJ6nTUtW8NcMqjv6w/dyQWietm+R40w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z5kj68If0S7myroPmhqUI8/y0tMjU9GgwPYgzFIhUylJIYV9Nvkm1NiQFEgYapVpD3152HOrMCc8/FJ4asMO+npjgH6XwJvYskc6qda5W9C+fPfmydkCW3fspRAOmM3/AZUKAvMQ4iUzpKHt/1mWx2tH1uVXPxxUW/qZpwZkPjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxUD/sd8; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso28362295e9.0
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Jan 2026 23:36:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769844996; x=1770449796; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
-        b=fxUD/sd8b3wQtQ+1lw6r6s407RaqfpNZfgGyYQigk6ugXox9dM52OaDnYiwwSqTzEl
-         jEGEvibHs+f7Nqnaq7YuFS/JiIXWagxLk3hEhwz0ojyd/vHsiFtDQtX2FIKM4/RVsAzz
-         F9HuybNgpagi9qIePKl/lGazzR8F4CR0P39bGKtsdeiqz1Z8AFU/nO9vMJgWj6OH/Cj9
-         OyXk8Ln5zM7eieL5kmwj4GykrH3XxYSC/fe1Sh3xnK5tSExP682QdF4rTbYwfBxi6EqC
-         7Wy1jeugDsSMWF22gL3pZV85LiwP9vGES3tElukotgVzSbOCKcBDDnCy2Glk5svSwHEE
-         SZXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769844996; x=1770449796;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
-        b=JLbHU/95DAy5MMC5Uh2pI4ObfBU8BbxxLYxXC6UFEhlzdA2VTaQIqjL2o70z1QgG09
-         WwyORgqgQytKMTmpQ9HzRJa8uJQDCApXalcMsbJNDFpfTtqzxeJuVMAAHkeGWoaEiqec
-         t8/0AxXZsykJq8P/GyjXwq0iWhyYXhcNl8TTO0Uc3gTOag37UU4vJb6tbTOMVmQ+d3RZ
-         37m//5UTAcd08bvmd90zdXdmoWfPSJs7DtXc+kcO7xT6ZPAPlZ9w+EIUEBWJHDjd9wEm
-         y8/3wwKcoiny/UBR6dLCtyLTd5JZtamF6IyFRR/kbcN5b7OLbIkMvo0yP6dXfPOXAXht
-         GTCw==
-X-Forwarded-Encrypted: i=1; AJvYcCUtKmYaFWTtQR9/5/TJOc5DYH16xs3do9dky/02wr3x0L/K9Kir98xVJei6Y/uDJBllhdq4ClgarNJ3OxdVPyM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0bnV7QYCVDEOwtsL/uhn6QIGZ1ILLjIHGKJSc/R0aX/D+mcao
-	XE5+oEN062jkUDlRqA0iYcU92uXNmBU6cJIIhVqvRbfhxPtorLnFv/QO
-X-Gm-Gg: AZuq6aIUlzqnV17TQGZ1XQkMT44sMKJbbeeJVJTMnhuMjuL/JGE2MVWvLt4mg183gT2
-	aYRxnAeaA63KpjKD1ULl8s9B9aXJevjb6Rz0Qepa/iBp3v7H+SjnJ2zmx+xb/lKu5gtwOy5qHBf
-	o47kZ4zhsSbFItJ+VmxZ1rfohnAkAWjZ9pZoJo1oQ27e/ZmtUJUk8VutgkEctEzMuy7aQOXPhlT
-	WiGYUXfQrCJDXFWDVAqfQ/PFNo8TOGTlVPCyh0JEL4b5mJjq5JZWBjOMZF9IOh440b+8ttB2ep8
-	8mE/RtKYsXotAxDuf/vikxjuji4WGKEs8S81z4Amcympi3FeAYp4Seel+X8r0bbQKanFcArsyEe
-	FaTnzY7vH8yI6KwqgIVT9wwxAiEhAL0qeRGU0PotLLez16DYnMFE1EhMpKAex4ciD6niSvtPO9d
-	SM
-X-Received: by 2002:a05:600c:1e89:b0:47a:9560:5944 with SMTP id 5b1f17b1804b1-482db4ac0f4mr57301605e9.34.1769844995600;
-        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
-Received: from legion.lan ([2a02:a58:9200:ea00::700])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4806cd8fadfsm248952145e9.0.2026.01.30.23.36.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
-From: =?UTF-8?q?Mihai-Drosi=20C=C3=A2ju?= <mcaju95@gmail.com>
-To: linux@weissschuh.net
-Cc: arnd@arndb.de,
-	arnout@bzzt.net,
-	atomlin@atomlin.com,
-	bigeasy@linutronix.de,
-	chleroy@kernel.org,
-	christian@heusel.eu,
-	corbet@lwn.net,
-	coxu@redhat.com,
-	da.gomez@kernel.org,
-	da.gomez@samsung.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	f.gruenbichler@proxmox.com,
-	jmorris@namei.org,
-	kpcyrd@archlinux.org,
-	linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	lkp@intel.com,
-	maddy@linux.ibm.com,
-	mattia@mapreri.org,
-	mcaju95@gmail.com,
-	mcgrof@kernel.org,
-	mpe@ellerman.id.au,
-	nathan@kernel.org,
-	naveen@kernel.org,
-	nicolas.bouchinet@oss.cyber.gouv.fr,
-	nicolas.schier@linux.dev,
-	npiggin@gmail.com,
-	nsc@kernel.org,
-	paul@paul-moore.com,
-	petr.pavlu@suse.com,
-	roberto.sassu@huawei.com,
-	samitolvanen@google.com,
-	serge@hallyn.com,
-	xiujianfeng@huawei.com,
-	zohar@linux.ibm.com
-Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
-Date: Sat, 31 Jan 2026 09:36:36 +0200
-Message-ID: <20260131073636.65494-1-mcaju95@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+	s=arc-20240116; t=1769883930; c=relaxed/simple;
+	bh=QwQwpCaTYYo7goXQ5iqS/jJz3iMfJpEZ9tI+tyRyxKw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P/8IeGW/gxLAfYAtqcEhJ5UjYYD7fuJD/RJY3b2iqYBl9+WIgAPDbs5TU7jLdR2f+AR9YmSwdvhgryPdgbWj4WxLZDxHFvwB8r90MrT6cz5yTxMWd6IdEDFnTBzTR3yAq3/ZpNtiEWDqHA9Ks7UkQXdnaoxWmURVCfWVCucpXbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=SMP3ApnO; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60VAuxFf1201432
+	for <linux-integrity@vger.kernel.org>; Sat, 31 Jan 2026 10:25:28 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=LVinyxA7r0hBV7ehjn
+	wPVpN9/NAHUZwKZWKoXceTfxg=; b=SMP3ApnOPntGF3mDm4Go1T3/UyfdSzc98x
+	uq0RrbWZH2XGQETb4H7H10wkQBAFQdD0aq76XW4vIW+Qd5c2KukH244rgpjRCrTo
+	ZiRCLjrz2GEAsvOLF9pglp5sv3OQHLMmmXOOu8wHQbO+Q1Qup9qdwF25nbHQL4XH
+	nFQa5Yf2HHje8ptbsjeArCeNG47/BOyuB1E3y54Q/CDdvUA+or1inBJtla79K1Cn
+	GPTzslRYLFHXW+JqwgARKYH1VVJYOFIYQ2RreqXOiZrVsGjwdta7vnIZYIunQPA2
+	vE0uvNnzyiuxhG5f4ijGC4zEqnAQ/piZ+qqW+hJ6yguTcI/6iU6g==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4c1ge92dfu-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-integrity@vger.kernel.org>; Sat, 31 Jan 2026 10:25:27 -0800 (PST)
+Received: from twshared26871.17.frc2.facebook.com (2620:10d:c0a8:1b::8e35) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.35; Sat, 31 Jan 2026 18:25:26 +0000
+Received: by devbig010.atn3.facebook.com (Postfix, from userid 224791)
+	id 2687074A873; Sat, 31 Jan 2026 10:22:36 -0800 (PST)
+From: Daniel Hodges <hodgesd@meta.com>
+To: <zohar@linux.ibm.com>, <roberto.sassu@huawei.com>
+CC: <dmitry.kasatkin@gmail.com>, <eric.snowberg@oracle.com>,
+        <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <linux-integrity@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Daniel Hodges <hodgesd@meta.com>
+Subject: [PATCH] evm: check return values of crypto_shash functions
+Date: Sat, 31 Jan 2026 10:22:33 -0800
+Message-ID: <20260131182233.2365157-1-hodgesd@meta.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 0LpPVBjZFIeFeVDVskYZYL5v8E6Nl-Va
+X-Proofpoint-ORIG-GUID: 0LpPVBjZFIeFeVDVskYZYL5v8E6Nl-Va
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTMxMDE1NiBTYWx0ZWRfX53EynFOJTQoI
+ 2wwWPyQht5QkhO1TNPjdUcnHXDSZNOBmZL1md9aCQ80tAUmTGgMRbG+7iZORKrGDEdHLVgxH/T7
+ +MC++6DbfSjVNpLwPNr3JC4QpLAgTRNMjD7loxPIABHhoL10Riu5c1Qe5GQHzjUNiLjrdXaI/uG
+ AZaw9kncCPlsERJAN3MhOEQtPS77k2m2f5GkXBEPRD/zpOUzuTYg5OI6PRgo5/kYESIqLD+hjnE
+ Z6M5Jp9mZXx7im4uEFOyXOcTzTYb3nGXklN/wiUWmWepdO3a3vtK1y0KQy2QGq2W2Mjc2katNz/
+ LCIkbnx/0ifRhRGHjxM3DucmoA232YseJU8vJzREvUe1SF7wnQdiUblm1zB7QhIOjyS4T8n9oYo
+ 5sguNuwriKSBcZhtof7QoymHDPsRCq1b1IG1v+sk1hSQs9O1iF+Y56kQbzFtPItli34AO6CgiNa
+ EnFMRNIsC69B37kv70g==
+X-Authority-Analysis: v=2.4 cv=B8i0EetM c=1 sm=1 tr=0 ts=697e4917 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VabnemYjAAAA:8
+ a=PphV3nvnGzEUW2V__sIA:9 a=gKebqoRLp9LExxC7YDUY:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-31_03,2026-01-30_04,2025-10-01_01
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[meta.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	R_DKIM_ALLOW(-0.20)[meta.com:s=s2048-2025-q2];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-8383-lists,linux-integrity=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[43];
-	FREEMAIL_CC(0.00)[arndb.de,bzzt.net,atomlin.com,linutronix.de,kernel.org,heusel.eu,lwn.net,redhat.com,samsung.com,gmail.com,oracle.com,proxmox.com,namei.org,archlinux.org,vger.kernel.org,lists.ozlabs.org,intel.com,linux.ibm.com,mapreri.org,ellerman.id.au,oss.cyber.gouv.fr,linux.dev,paul-moore.com,suse.com,huawei.com,google.com,hallyn.com];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8382-lists,linux-integrity=lfdr.de];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,meta.com];
+	DKIM_TRACE(0.00)[meta.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mcaju95@gmail.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[hodgesd@meta.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 14228C1185
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 18732C37F9
 X-Rspamd-Action: no action
 
-> The current signature-based module integrity checking has some drawbacks
-in combination with reproducible builds. Either the module signing key
-is generated at build time, which makes the build unreproducible, or a
-static signing key is used, which precludes rebuilds by third parties
-and makes the whole build and packaging process much more complicated.
+The crypto_shash_update() and crypto_shash_final() functions can fail
+and return error codes, but their return values were being ignored in
+several places in evm_crypto.c:
 
-I think there is a middle ground where the module signing key is generated
-using a key derivation function that has as an input a deterministic value
-on the build host, such as /etc/machine-id . The problem with this approach
-is that only hosts knowing the value will be able to reproduce the build.
+  - hmac_add_misc(): ignores returns from crypto_shash_update() and
+    crypto_shash_final()
+  - evm_calc_hmac_or_hash(): ignores returns from crypto_shash_update()
+  - evm_init_hmac(): ignores returns from crypto_shash_update()
 
-Maybe this is a solution to NixOS secret management? Introduce minimal
-impurity as a cryptographic seed and derive the rest of the secrets using
-something like Argon2(seed, key_uuid).
+If these hash operations fail silently, the resulting HMAC could be
+invalid or incomplete. This could potentially allow integrity
+verification to pass with incorrect HMACs, weakening EVM's security
+guarantees.
 
-There might be another approach to code integrity rather than step-by-step
-reproducibility. One may exploit the very cryptographic primitives that make
-reproducibility hard to ensure that reproducibility is most  likely valid.
+Fix this by:
+  - Changing hmac_add_misc() from void to int return type
+  - Checking and propagating error codes from all crypto_shash calls
+  - Updating all callers to check the return values
 
-For example, the module signing issue, the build host publishes four artifacts:
-* The source-code
-* The compiled and signed binary
-* The build environment
-* Its public key
+Fixes: 66dbc325afce ("evm: re-release")
+Signed-off-by: Daniel Hodges <hodgesd@meta.com>
+---
+ security/integrity/evm/evm_crypto.c | 45 +++++++++++++++++++----------
+ 1 file changed, 30 insertions(+), 15 deletions(-)
 
-Now, we don't need to sign with the private key to know that building the source
-code using the specific build environment and signing the result with the private
-key will result in the claimed binary. We can just compile and verify with the
-public key.
+diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm=
+/evm_crypto.c
+index a5e730ffda57..286f23a1a26b 100644
+--- a/security/integrity/evm/evm_crypto.c
++++ b/security/integrity/evm/evm_crypto.c
+@@ -132,58 +132,65 @@ static struct shash_desc *init_desc(char type, uint=
+8_t hash_algo)
+ 	}
+ 	return desc;
+ }
+=20
+ /* Protect against 'cutting & pasting' security.evm xattr, include inode
+  * specific info.
+  *
+  * (Additional directory/file metadata needs to be added for more comple=
+te
+  * protection.)
+  */
+-static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
+-			  char type, char *digest)
++static int hmac_add_misc(struct shash_desc *desc, struct inode *inode,
++			 char type, char *digest)
+ {
+ 	struct h_misc {
+ 		unsigned long ino;
+ 		__u32 generation;
+ 		uid_t uid;
+ 		gid_t gid;
+ 		umode_t mode;
+ 	} hmac_misc;
++	int ret;
+=20
+ 	memset(&hmac_misc, 0, sizeof(hmac_misc));
+ 	/* Don't include the inode or generation number in portable
+ 	 * signatures
+ 	 */
+ 	if (type !=3D EVM_XATTR_PORTABLE_DIGSIG) {
+ 		hmac_misc.ino =3D inode->i_ino;
+ 		hmac_misc.generation =3D inode->i_generation;
+ 	}
+ 	/* The hmac uid and gid must be encoded in the initial user
+ 	 * namespace (not the filesystems user namespace) as encoding
+ 	 * them in the filesystems user namespace allows an attack
+ 	 * where first they are written in an unprivileged fuse mount
+ 	 * of a filesystem and then the system is tricked to mount the
+ 	 * filesystem for real on next boot and trust it because
+ 	 * everything is signed.
+ 	 */
+ 	hmac_misc.uid =3D from_kuid(&init_user_ns, inode->i_uid);
+ 	hmac_misc.gid =3D from_kgid(&init_user_ns, inode->i_gid);
+ 	hmac_misc.mode =3D inode->i_mode;
+-	crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_misc));
++	ret =3D crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_m=
+isc));
++	if (ret)
++		return ret;
+ 	if ((evm_hmac_attrs & EVM_ATTR_FSUUID) &&
+-	    type !=3D EVM_XATTR_PORTABLE_DIGSIG)
+-		crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
+-	crypto_shash_final(desc, digest);
++	    type !=3D EVM_XATTR_PORTABLE_DIGSIG) {
++		ret =3D crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZ=
+E);
++		if (ret)
++			return ret;
++	}
++	ret =3D crypto_shash_final(desc, digest);
+=20
+ 	pr_debug("hmac_misc: (%zu) [%*phN]\n", sizeof(struct h_misc),
+ 		 (int)sizeof(struct h_misc), &hmac_misc);
++	return ret;
+ }
+=20
+ /*
+  * Dump large security xattr values as a continuous ascii hexadecimal st=
+ring.
+  * (pr_debug is limited to 64 bytes.)
+  */
+ static void dump_security_xattr_l(const char *prefix, const void *src,
+ 				  size_t count)
+ {
+ #if defined(DEBUG) || defined(CONFIG_DYNAMIC_DEBUG)
+@@ -253,23 +260,24 @@ static int evm_calc_hmac_or_hash(struct dentry *den=
+try,
+=20
+ 		/*
+ 		 * Skip non-enabled xattrs for locally calculated
+ 		 * signatures/HMACs.
+ 		 */
+ 		if (type !=3D EVM_XATTR_PORTABLE_DIGSIG && !xattr->enabled)
+ 			continue;
+=20
+ 		if ((req_xattr_name && req_xattr_value)
+ 		    && !strcmp(xattr->name, req_xattr_name)) {
+-			error =3D 0;
+-			crypto_shash_update(desc, (const u8 *)req_xattr_value,
+-					     req_xattr_value_len);
++			error =3D crypto_shash_update(desc, (const u8 *)req_xattr_value,
++						    req_xattr_value_len);
++			if (error)
++				goto out;
+ 			if (is_ima)
+ 				ima_present =3D true;
+=20
+ 			dump_security_xattr(req_xattr_name,
+ 					    req_xattr_value,
+ 					    req_xattr_value_len);
+ 			continue;
+ 		}
+ 		size =3D vfs_getxattr_alloc(&nop_mnt_idmap, dentry, xattr->name,
+ 					  &xattr_value, xattr_size, GFP_NOFS);
+@@ -279,29 +287,32 @@ static int evm_calc_hmac_or_hash(struct dentry *den=
+try,
+ 		}
+ 		if (size < 0)
+ 			continue;
+=20
+ 		user_space_size =3D vfs_getxattr(&nop_mnt_idmap, dentry,
+ 					       xattr->name, NULL, 0);
+ 		if (user_space_size !=3D size)
+ 			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
+ 				 dentry->d_name.name, xattr->name, size,
+ 				 user_space_size);
+-		error =3D 0;
+ 		xattr_size =3D size;
+-		crypto_shash_update(desc, (const u8 *)xattr_value, xattr_size);
++		error =3D crypto_shash_update(desc, (const u8 *)xattr_value, xattr_siz=
+e);
++		if (error)
++			goto out;
+ 		if (is_ima)
+ 			ima_present =3D true;
+=20
+ 		dump_security_xattr(xattr->name, xattr_value, xattr_size);
+ 	}
+-	hmac_add_misc(desc, inode, type, data->digest);
++	error =3D hmac_add_misc(desc, inode, type, data->digest);
++	if (error)
++		goto out;
+=20
+ 	if (inode !=3D d_backing_inode(dentry) && iint) {
+ 		if (IS_I_VERSION(inode))
+ 			i_version =3D inode_query_iversion(inode);
+ 		integrity_inode_attrs_store(&iint->metadata_inode, i_version,
+ 					    inode);
+ 	}
+=20
+ 	/* Portable EVM signatures must include an IMA hash */
+ 	if (type =3D=3D EVM_XATTR_PORTABLE_DIGSIG && !ima_present)
+@@ -394,37 +405,41 @@ int evm_update_evmxattr(struct dentry *dentry, cons=
+t char *xattr_name,
+ 		rc =3D __vfs_removexattr(&nop_mnt_idmap, dentry, XATTR_NAME_EVM);
+ 	}
+ 	return rc;
+ }
+=20
+ int evm_init_hmac(struct inode *inode, const struct xattr *xattrs,
+ 		  char *hmac_val)
+ {
+ 	struct shash_desc *desc;
+ 	const struct xattr *xattr;
++	int ret;
+=20
+ 	desc =3D init_desc(EVM_XATTR_HMAC, HASH_ALGO_SHA1);
+ 	if (IS_ERR(desc)) {
+ 		pr_info("init_desc failed\n");
+ 		return PTR_ERR(desc);
+ 	}
+=20
+ 	for (xattr =3D xattrs; xattr->name; xattr++) {
+ 		if (!evm_protected_xattr(xattr->name))
+ 			continue;
+=20
+-		crypto_shash_update(desc, xattr->value, xattr->value_len);
++		ret =3D crypto_shash_update(desc, xattr->value, xattr->value_len);
++		if (ret)
++			goto out;
+ 	}
+=20
+-	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
++	ret =3D hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
++out:
+ 	kfree(desc);
+-	return 0;
++	return ret;
+ }
+=20
+ /*
+  * Get the key from the TPM for the SHA1-HMAC
+  */
+ int evm_init_key(void)
+ {
+ 	struct key *evm_key;
+ 	struct encrypted_key_payload *ekp;
+ 	int rc;
+--=20
+2.47.3
 
-So a traditional workflow would be:
-compiled_module + module_signature == module
-
-In this case we build the module, sign it with whatever key, distribute the
-builds and the private key to whoever wants to reproduce the build. Or we build
-locally and the key stays with the end-user.
-
-While the cryptographic approach would be:
-verify(compiled_code, module.signature) is True
-
-In this case we distribute the builds, source code and the public key. While
-everyone can ensure that the compiled code is the result of the build
-environment and source code. The signature is verified using cryptographic
-means.
-
-As long as no one cracks RSA or an algorithm of our choosing/has an absurd
-amount of luck, the cryptographic approach would be just as good as the traditional
-approach at ensuring that a program has stopped with a certain output.
 
