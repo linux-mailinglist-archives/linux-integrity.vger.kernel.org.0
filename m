@@ -1,254 +1,218 @@
-Return-Path: <linux-integrity+bounces-8381-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8382-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eCcPKRI0fWntQgIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8381-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Jan 2026 23:43:30 +0100
+	id aE1rGwqxfWnoTAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8382-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 08:36:42 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FBF6BF344
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Jan 2026 23:43:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14228C1185
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 08:36:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 01DED306D861
-	for <lists+linux-integrity@lfdr.de>; Fri, 30 Jan 2026 22:40:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E95E1300AC2F
+	for <lists+linux-integrity@lfdr.de>; Sat, 31 Jan 2026 07:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF8BF38A9D8;
-	Fri, 30 Jan 2026 22:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE8A033438F;
+	Sat, 31 Jan 2026 07:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="c2K5XRYE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxUD/sd8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE4E38A9D5
-	for <linux-integrity@vger.kernel.org>; Fri, 30 Jan 2026 22:40:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9100F311967
+	for <linux-integrity@vger.kernel.org>; Sat, 31 Jan 2026 07:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769812805; cv=none; b=SZ5rOVkdnQmO77564BrpJFQTZAGagPpPbiMILNHPN3lvY+RipoH/FL/K2h7Hpxp2oI/6JzwlF6MpQydGR16BuxO9nj8P5zqtggyRuIe1mwJ7lY6lp8vJsBC+mqXr0umu0HCYxRjbwwyEVgZvQYkL/GizZdWuSuIEIUzhHhr3Z98=
+	t=1769844999; cv=none; b=rOxPZ+oIhyCjhQ/8OCdfUyEBvSPGA+2qfTYfoQ55imn09nNkDcStNF5ogY5niMlUoDST1pQVyJG6iL6bQBkx8R6sF3Xh/pD51o8Zs7YaZZaGRKW3krcuMic8bFacdnqR18DO6v87IL/9uitrAPfYBxvznJQni0LbJSEy2iGeMzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769812805; c=relaxed/simple;
-	bh=T8hGXOolp0MlCuJ57QwSaSxARrwYXxeLvTHI4xeBR5g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sLpH6mE4T6StMLKAMScvjoFfa1lsNQmiJ4tAXzAaw/DGJGkHjtu89Xnl36axey3hVl/fTrD9ay5RV56Utbyt7m0YabZ8llwEMXMsMQHaUu1U9+pi825JAzmmxs+MDhvNWtTBgkO1rG9Th3khzU8q3OgfjBbJ+ysrHaMpnlwkeuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=c2K5XRYE; arc=none smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-45f126d4794so1637238b6e.1
-        for <linux-integrity@vger.kernel.org>; Fri, 30 Jan 2026 14:40:03 -0800 (PST)
+	s=arc-20240116; t=1769844999; c=relaxed/simple;
+	bh=nY7lzQOVExn4AJ6nTUtW8NcMqjv6w/dyQWietm+R40w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Z5kj68If0S7myroPmhqUI8/y0tMjU9GgwPYgzFIhUylJIYV9Nvkm1NiQFEgYapVpD3152HOrMCc8/FJ4asMO+npjgH6XwJvYskc6qda5W9C+fPfmydkCW3fspRAOmM3/AZUKAvMQ4iUzpKHt/1mWx2tH1uVXPxxUW/qZpwZkPjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxUD/sd8; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso28362295e9.0
+        for <linux-integrity@vger.kernel.org>; Fri, 30 Jan 2026 23:36:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1769812803; x=1770417603; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+pB22RqagYfWUxCP3mEi/hOUp+RDnbPOdedWJTMM5zA=;
-        b=c2K5XRYEtFKWBih7qS+E20oZ58uIZMWf3xYe5Gm2CCvp+jred4nl0vKUoK7/awXWbf
-         h7spSb8m8+PTxFf2LPgu33GS88AZJi5W4bDosH4vOfkgHkLhSYZY/hX3GEEW3Ty+refT
-         96SQFajmWTK2hE0gYZ60egV9yeuGZ4Fic5S4K1duiWXEKeCnMokRYiT2y4NsMnwNJHh9
-         gRglk2/JKZ/DSat9FVQa+7wBxDAjfutdKan+d34eIREj5m+nJr780xUHfWHZwwQPkf32
-         0DMh0UEwiO9Fqntf04DOYFSc6FEXojtx1jrkswCrG53zcnHVr3wCTZuRoBNguqQhkwLJ
-         N0WA==
+        d=gmail.com; s=20230601; t=1769844996; x=1770449796; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
+        b=fxUD/sd8b3wQtQ+1lw6r6s407RaqfpNZfgGyYQigk6ugXox9dM52OaDnYiwwSqTzEl
+         jEGEvibHs+f7Nqnaq7YuFS/JiIXWagxLk3hEhwz0ojyd/vHsiFtDQtX2FIKM4/RVsAzz
+         F9HuybNgpagi9qIePKl/lGazzR8F4CR0P39bGKtsdeiqz1Z8AFU/nO9vMJgWj6OH/Cj9
+         OyXk8Ln5zM7eieL5kmwj4GykrH3XxYSC/fe1Sh3xnK5tSExP682QdF4rTbYwfBxi6EqC
+         7Wy1jeugDsSMWF22gL3pZV85LiwP9vGES3tElukotgVzSbOCKcBDDnCy2Glk5svSwHEE
+         SZXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769812803; x=1770417603;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+pB22RqagYfWUxCP3mEi/hOUp+RDnbPOdedWJTMM5zA=;
-        b=FIfLAdBwte5EguuRBQ8hA0YSE515k7eZJP5Zw56NWtjMjqEkG1hqPjxTcTdCRUStDH
-         9U9QZMlnZa4iVbiMCN0j7Hwajr0zUfREiTM6pKCC+lYpqoxKQkvJcRBplB9wS9KoD8iF
-         T07er2Yd0sEVVmshDrIguwR4QZYybiedVwBBI8qb8i3nfKMF+bpB1JKMUNUEvAmP9aiv
-         ctGH/9b07hopHWFbpWkLhRg43zNUF0lbqSqXPknefYDbtGQFjZR8sjkiqKY3cWBYkFM9
-         p5CmyE60vrumm7rVmZ7gusVY1KeMv30fOfX1wUH6fWaNmGkwRLXp5/bO8mLfmfPN/b8L
-         Q5iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVC8EH5y1h196+0pCR6khrN0O4f7s0UGnNK8KHIrOhLuZgRGLmGF/NXBuRxtmd7CR0EzuodQimdCELg2badDBs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx360kMS7wMyYKU+96rwxTN7AsKU9VMVuAJpbGaDtBV0rPITn6V
-	0dNNFz/Mn5b8giQsoY2c22wjVGtp7aBYN9Zv4LSf8qMusR/RZuRoBMCyqkvKMHCixLQ=
-X-Gm-Gg: AZuq6aKOg8yUlgbj50mhJGEm06WcoumgciGNLQlAXrUe9MAQQgwLhnKciuVZQFkGGLC
-	/h2OSpYOowD7HW09lIByCDhURhWLb92mQXkoq/mb+00MXsLc6TIEvDyKt0dFN+AI8Nu3u2YTExA
-	OOOmDeWYaGnTt/iPLaX8xHsEIq+c5cp+shnBT/cRG+x6QOPLEGRvksUz58eQM0fiHBvB1Sr3Zn1
-	0WK6ItS+uxotG4ki09xm7E97+kpIc506BZo+FuEJ1OrQQ1Ey0UsvNAaqaDI6K3oHRtkeFaUOwAF
-	6yYtCj1sFws07RlqQhBpmsrUc7pBc0y16d/omS1MFqfUz/pDfBuzbrDprMxVVdOV/hOLJ1/3P2G
-	PT7tU6vR9vTofiEml0lemda3kij+7SQUVn9/kQzuOzEfK4Kg3HqrWsi7bKrAwzqOBHEPycs0=
-X-Received: by 2002:a05:6808:a604:10b0:45f:3592:407 with SMTP id 5614622812f47-45f35920ba8mr1660637b6e.50.1769812802725;
-        Fri, 30 Jan 2026 14:40:02 -0800 (PST)
-Received: from [127.0.1.1] ([2a09:bac5:947d:4e6::7d:80])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-45f08f20e38sm5400250b6e.10.2026.01.30.14.40.01
+        d=1e100.net; s=20230601; t=1769844996; x=1770449796;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5n1UjayTk0hO0b45clVXSkBxo9hRuWG9N3/vJ5awb1g=;
+        b=JLbHU/95DAy5MMC5Uh2pI4ObfBU8BbxxLYxXC6UFEhlzdA2VTaQIqjL2o70z1QgG09
+         WwyORgqgQytKMTmpQ9HzRJa8uJQDCApXalcMsbJNDFpfTtqzxeJuVMAAHkeGWoaEiqec
+         t8/0AxXZsykJq8P/GyjXwq0iWhyYXhcNl8TTO0Uc3gTOag37UU4vJb6tbTOMVmQ+d3RZ
+         37m//5UTAcd08bvmd90zdXdmoWfPSJs7DtXc+kcO7xT6ZPAPlZ9w+EIUEBWJHDjd9wEm
+         y8/3wwKcoiny/UBR6dLCtyLTd5JZtamF6IyFRR/kbcN5b7OLbIkMvo0yP6dXfPOXAXht
+         GTCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUtKmYaFWTtQR9/5/TJOc5DYH16xs3do9dky/02wr3x0L/K9Kir98xVJei6Y/uDJBllhdq4ClgarNJ3OxdVPyM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0bnV7QYCVDEOwtsL/uhn6QIGZ1ILLjIHGKJSc/R0aX/D+mcao
+	XE5+oEN062jkUDlRqA0iYcU92uXNmBU6cJIIhVqvRbfhxPtorLnFv/QO
+X-Gm-Gg: AZuq6aIUlzqnV17TQGZ1XQkMT44sMKJbbeeJVJTMnhuMjuL/JGE2MVWvLt4mg183gT2
+	aYRxnAeaA63KpjKD1ULl8s9B9aXJevjb6Rz0Qepa/iBp3v7H+SjnJ2zmx+xb/lKu5gtwOy5qHBf
+	o47kZ4zhsSbFItJ+VmxZ1rfohnAkAWjZ9pZoJo1oQ27e/ZmtUJUk8VutgkEctEzMuy7aQOXPhlT
+	WiGYUXfQrCJDXFWDVAqfQ/PFNo8TOGTlVPCyh0JEL4b5mJjq5JZWBjOMZF9IOh440b+8ttB2ep8
+	8mE/RtKYsXotAxDuf/vikxjuji4WGKEs8S81z4Amcympi3FeAYp4Seel+X8r0bbQKanFcArsyEe
+	FaTnzY7vH8yI6KwqgIVT9wwxAiEhAL0qeRGU0PotLLez16DYnMFE1EhMpKAex4ciD6niSvtPO9d
+	SM
+X-Received: by 2002:a05:600c:1e89:b0:47a:9560:5944 with SMTP id 5b1f17b1804b1-482db4ac0f4mr57301605e9.34.1769844995600;
+        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
+Received: from legion.lan ([2a02:a58:9200:ea00::700])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4806cd8fadfsm248952145e9.0.2026.01.30.23.36.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 14:40:02 -0800 (PST)
-From: Frederick Lawler <fred@cloudflare.com>
-Date: Fri, 30 Jan 2026 16:39:56 -0600
-Subject: [PATCH v5 3/3] ima: Use kstat.ctime as a fallback change detection
- for stacked fs
+        Fri, 30 Jan 2026 23:36:35 -0800 (PST)
+From: =?UTF-8?q?Mihai-Drosi=20C=C3=A2ju?= <mcaju95@gmail.com>
+To: linux@weissschuh.net
+Cc: arnd@arndb.de,
+	arnout@bzzt.net,
+	atomlin@atomlin.com,
+	bigeasy@linutronix.de,
+	chleroy@kernel.org,
+	christian@heusel.eu,
+	corbet@lwn.net,
+	coxu@redhat.com,
+	da.gomez@kernel.org,
+	da.gomez@samsung.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	f.gruenbichler@proxmox.com,
+	jmorris@namei.org,
+	kpcyrd@archlinux.org,
+	linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	lkp@intel.com,
+	maddy@linux.ibm.com,
+	mattia@mapreri.org,
+	mcaju95@gmail.com,
+	mcgrof@kernel.org,
+	mpe@ellerman.id.au,
+	nathan@kernel.org,
+	naveen@kernel.org,
+	nicolas.bouchinet@oss.cyber.gouv.fr,
+	nicolas.schier@linux.dev,
+	npiggin@gmail.com,
+	nsc@kernel.org,
+	paul@paul-moore.com,
+	petr.pavlu@suse.com,
+	roberto.sassu@huawei.com,
+	samitolvanen@google.com,
+	serge@hallyn.com,
+	xiujianfeng@huawei.com,
+	zohar@linux.ibm.com
+Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
+Date: Sat, 31 Jan 2026 09:36:36 +0200
+Message-ID: <20260131073636.65494-1-mcaju95@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260130-xfs-ima-fixup-v5-3-57e84ea91712@cloudflare.com>
-References: <20260130-xfs-ima-fixup-v5-0-57e84ea91712@cloudflare.com>
-In-Reply-To: <20260130-xfs-ima-fixup-v5-0-57e84ea91712@cloudflare.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- "Darrick J. Wong" <djwong@kernel.org>, 
- Christian Brauner <brauner@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
- Jeff Layton <jlayton@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
- linux-security-module@vger.kernel.org, kernel-team@cloudflare.com, 
- Frederick Lawler <fred@cloudflare.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4229; i=fred@cloudflare.com;
- h=from:subject:message-id; bh=T8hGXOolp0MlCuJ57QwSaSxARrwYXxeLvTHI4xeBR5g=;
- b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpfTM90njNeLmeSYJx0vJMg7Uxm7oWturIoalSA
- EGSx8/4zk+JAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCaX0zPQAKCRCrJbR2A5LT
- bTZ0D/4/sr85rwcj53ELmM18BnzS4sRSHO68A3Uu/OswNtfrYNsDL401x9OP9H83vNTcwc+DO/k
- fAcuXEaNki3PfyKYixVeCBUI36y5m9/wtYKfoj9t0jArWQsWDZFhYI8FfDdfEznfNggZktwSVTx
- 9ZlaL0S3yRC1WYhLRswZ+ow8yBjm3R6UEy6SnZrikM4dVw9AwXLCCAzdgC3bEsbYBjm19Yt2mIg
- vVHx271R2Rx5MKPF8/yUBp3pSuEa2EsYJHLB/pzVzarq84a3g2ozS3jzaeiYrS6CwzDloQZ8WwK
- osRDYBmVfkIzc3QsnbZeCclpfKX8RvGKUOpgPTArJ8roFDWGggOHawXlcU+tEAvs6pPkNH0Dbmg
- z4g0itAiDBmmgRiV14azZkX0TquPyKYwHzIiL/PlhjkIwMbewACOfwlkWY+FE93xF0cvWUgKU1w
- SjxYWK8RReLh0gH7uoSVcD6KdYAx/GG2BJElHBgW5AlTiPnK3Kkxl7fGIFINzpUCAQB1weNYR7Z
- /kUhPVhGcRA9KtL2biMmTLwc14ORtpGMibMg2Lz8O+3Iu500TyhO5zMFIfjT+CHvHhW5K5VgSTc
- ar3yVpOAjLAQjHW3bfMJlaBFFeKH1Tw2h7L+aTWAPk47z6NcQggMbHW8adMXVkuxi5dw29grqhd
- L3ZPpCHRhrmAg3g==
-X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
- fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-7.66 / 15.00];
-	WHITELIST_DMARC(-7.00)[cloudflare.com:D:+];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[cloudflare.com,reject];
-	R_DKIM_ALLOW(-0.20)[cloudflare.com:s=google09082023];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8381-lists,linux-integrity=lfdr.de];
-	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,kernel.org,toxicpanda.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[cloudflare.com:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_TWELVE(0.00)[43];
+	FREEMAIL_CC(0.00)[arndb.de,bzzt.net,atomlin.com,linutronix.de,kernel.org,heusel.eu,lwn.net,redhat.com,samsung.com,gmail.com,oracle.com,proxmox.com,namei.org,archlinux.org,vger.kernel.org,lists.ozlabs.org,intel.com,linux.ibm.com,mapreri.org,ellerman.id.au,oss.cyber.gouv.fr,linux.dev,paul-moore.com,suse.com,huawei.com,google.com,hallyn.com];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8382-lists,linux-integrity=lfdr.de];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[fred@cloudflare.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[mcaju95@gmail.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TO_DN_NONE(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,cloudflare.com:email,cloudflare.com:dkim,cloudflare.com:mid]
-X-Rspamd-Queue-Id: 4FBF6BF344
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 14228C1185
 X-Rspamd-Action: no action
 
-IMA performs unnecessary measurements on files in stacked file systems
-that do not set kstat.change_cookie to an inode's i_version.
+> The current signature-based module integrity checking has some drawbacks
+in combination with reproducible builds. Either the module signing key
+is generated at build time, which makes the build unreproducible, or a
+static signing key is used, which precludes rebuilds by third parties
+and makes the whole build and packaging process much more complicated.
 
-For example: TMPFS (upper) is stacked onto XFS (lower).
-Actions files result in re-measurement because commit 1cf7e834a6fb
-("xfs: switch to multigrain timestamps") introduced multigrain
-timestamps into XFS which changed the kstat.change_cookie semantics
-to no longer supply an i_version to compare against in
-integrity_inode_attributes_changed(). Once the inode is in TMPFS,
-the change detection behavior operates as normal because TMPFS updates
-kstat.change_cookie to the i_version.
+I think there is a middle ground where the module signing key is generated
+using a key derivation function that has as an input a deterministic value
+on the build host, such as /etc/machine-id . The problem with this approach
+is that only hosts knowing the value will be able to reproduce the build.
 
-Instead, fall back onto a ctime comparison. This also gives file systems
-that do not support i_version an opportunity avoid the same behavior,
-as they're more likely to have ctime support.
+Maybe this is a solution to NixOS secret management? Introduce minimal
+impurity as a cryptographic seed and derive the rest of the secrets using
+something like Argon2(seed, key_uuid).
 
-timespec64_to_ns() is chosen to avoid adding extra storage to
-integrity_inode_attributes by leveraging the existing version field.
+There might be another approach to code integrity rather than step-by-step
+reproducibility. One may exploit the very cryptographic primitives that make
+reproducibility hard to ensure that reproducibility is most  likely valid.
 
-Link: https://lore.kernel.org/all/aTspr4_h9IU4EyrR@CMGLRV3
-Fixes: 1cf7e834a6fb ("xfs: switch to multigrain timestamps")
-Suggested-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Frederick Lawler <fred@cloudflare.com>
----
- include/linux/integrity.h         |  6 +++++-
- security/integrity/ima/ima_api.c  | 11 ++++++++---
- security/integrity/ima/ima_main.c |  2 +-
- 3 files changed, 14 insertions(+), 5 deletions(-)
+For example, the module signing issue, the build host publishes four artifacts:
+* The source-code
+* The compiled and signed binary
+* The build environment
+* Its public key
 
-diff --git a/include/linux/integrity.h b/include/linux/integrity.h
-index 382c783f0fa3ae4a938cdf9559291ba1903a378e..ec2c94907f417c4a71ecce29ac79edac9bc2c6f8 100644
---- a/include/linux/integrity.h
-+++ b/include/linux/integrity.h
-@@ -10,6 +10,7 @@
- #include <linux/fs.h>
- #include <linux/iversion.h>
- #include <linux/kernel.h>
-+#include <linux/time64.h>
- 
- enum integrity_status {
- 	INTEGRITY_PASS = 0,
-@@ -58,6 +59,9 @@ integrity_inode_attrs_stat_changed
- 	if (stat->result_mask & STATX_CHANGE_COOKIE)
- 		return stat->change_cookie != attrs->version;
- 
-+	if (stat->result_mask & STATX_CTIME)
-+		return timespec64_to_ns(&stat->ctime) != (s64)attrs->version;
-+
- 	return true;
- }
- 
-@@ -84,7 +88,7 @@ integrity_inode_attrs_changed(const struct integrity_inode_attributes *attrs,
- 	 * only for IMA if vfs_getattr_nosec() fails.
- 	 */
- 	if (!file || vfs_getattr_nosec(&file->f_path, &stat,
--				       STATX_CHANGE_COOKIE,
-+				       STATX_CHANGE_COOKIE | STATX_CTIME,
- 				       AT_STATX_SYNC_AS_STAT))
- 		return !IS_I_VERSION(inode) ||
- 		       !inode_eq_iversion(inode, attrs->version);
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index c35ea613c9f8d404ba4886e3b736c3bab29d1668..e47d6281febc15a0ac1bd2ea1d28fea4d0cd5c58 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -272,10 +272,15 @@ int ima_collect_measurement(struct ima_iint_cache *iint, struct file *file,
- 	 * to an initial measurement/appraisal/audit, but was modified to
- 	 * assume the file changed.
- 	 */
--	result = vfs_getattr_nosec(&file->f_path, &stat, STATX_CHANGE_COOKIE,
-+	result = vfs_getattr_nosec(&file->f_path, &stat,
-+				   STATX_CHANGE_COOKIE | STATX_CTIME,
- 				   AT_STATX_SYNC_AS_STAT);
--	if (!result && (stat.result_mask & STATX_CHANGE_COOKIE))
--		i_version = stat.change_cookie;
-+	if (!result) {
-+		if (stat.result_mask & STATX_CHANGE_COOKIE)
-+			i_version = stat.change_cookie;
-+		else if (stat.result_mask & STATX_CTIME)
-+			i_version = timespec64_to_ns(&stat.ctime);
-+	}
- 	hash.hdr.algo = algo;
- 	hash.hdr.length = hash_digest_size[algo];
- 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 8cb17c9d446caaa5a98f5ec8f027c17ba7babca8..776db158b0bd8a0d053729ac0cc15af8b6020a98 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -199,7 +199,7 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
- 					    &iint->atomic_flags);
- 		if ((iint->flags & IMA_NEW_FILE) ||
- 		    vfs_getattr_nosec(&file->f_path, &stat,
--				      STATX_CHANGE_COOKIE,
-+				      STATX_CHANGE_COOKIE | STATX_CTIME,
- 				      AT_STATX_SYNC_AS_STAT) ||
- 		    integrity_inode_attrs_stat_changed(&iint->real_inode,
- 						       &stat)) {
+Now, we don't need to sign with the private key to know that building the source
+code using the specific build environment and signing the result with the private
+key will result in the claimed binary. We can just compile and verify with the
+public key.
 
--- 
-2.43.0
+So a traditional workflow would be:
+compiled_module + module_signature == module
 
+In this case we build the module, sign it with whatever key, distribute the
+builds and the private key to whoever wants to reproduce the build. Or we build
+locally and the key stays with the end-user.
+
+While the cryptographic approach would be:
+verify(compiled_code, module.signature) is True
+
+In this case we distribute the builds, source code and the public key. While
+everyone can ensure that the compiled code is the result of the build
+environment and source code. The signature is verified using cryptographic
+means.
+
+As long as no one cracks RSA or an algorithm of our choosing/has an absurd
+amount of luck, the cryptographic approach would be just as good as the traditional
+approach at ensuring that a program has stopped with a certain output.
 
