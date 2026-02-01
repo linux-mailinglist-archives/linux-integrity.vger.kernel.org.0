@@ -1,466 +1,157 @@
-Return-Path: <linux-integrity+bounces-8395-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8394-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mNy7Bvh9f2kksAIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8395-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 17:23:20 +0100
+	id KDYQI8Z9f2klsAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8394-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 17:22:30 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA3B3C6777
-	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 17:23:19 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4984BC6746
+	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 17:22:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2BE1B30010CF
-	for <lists+linux-integrity@lfdr.de>; Sun,  1 Feb 2026 16:23:19 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D60F030062F1
+	for <lists+linux-integrity@lfdr.de>; Sun,  1 Feb 2026 16:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E73DF2652A2;
-	Sun,  1 Feb 2026 16:23:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06A46264FBD;
+	Sun,  1 Feb 2026 16:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="Ce+vgQS/"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="bEfjssX6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5156826059D;
-	Sun,  1 Feb 2026 16:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769962997; cv=pass; b=M0sGJ9vHX03ws9p1DMn0Qs0e2Bh2ea+oJTB7MbxY7lyikwb4lYDWDik+DdWBtBMpzyG2ogQer4FTkhBRhz4rr6XLoJ5mNeL37BQUNtkyq9kQYumZSICf2JnADi7ZvxVAp24e9LjNeifFsoGgVX/va3Tbj05e+EgagaA766NUd50=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769962997; c=relaxed/simple;
-	bh=ErHir8E6peTEh9PADchdu5I2uZYHUcP1yeDk8wc/3wo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ur+xSkflEUQy6g3/cYiEOp3pVaDafMD71jmuielAAWdhWyPSDBatb4Fll0MwbYr9mq7HbSIp0umXI5ciqjWRf9g0zX7hCvX2xAYg1mG7kU5p8/6x31GulZZoOflfyUN+N/1epB1Zelx3eZCuwkRihpLmRgvEiQTORBdiFpDisFE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=Ce+vgQS/; arc=pass smtp.client-ip=136.143.188.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1769962879; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=TUvuasnnuz8Xwk98aNxGIfOkPQ0Uj4rQ0HC/goEb8eE1erb0BOlLw9yGFlAwWxNB8q+aEhmtfaX0Y7GwfwvrL0MTkMuxyBKJqiEuW2xCdBYBfOf1QNqeOGkqoNHgmMB9CJRagruc83/zsAoiAbRAKVweeJfiSD0NLuEv+y8YTjU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1769962879; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=VapzI1F6yw0yUCxLqTJecpbQJtSA9WbrwBtOj9yBKtg=; 
-	b=bw5653zpJQRthfGG29qVHyHqiIDV6rb4E3BRFF5VZHYAw5+zMU8nn4UYQFBh5wNkM+2DrPDxVKaa+NMmpEHvQgu6MQzIiMrlZpD8FwsR/RJxiAFG7qMJLWMG6rARCqsae49a1I2ejoJ2dgXtUhpiVYmFR3Qtv5b5CcB3ljVSHWw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=apertussolutions.com;
-	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1769962879;
-	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=VapzI1F6yw0yUCxLqTJecpbQJtSA9WbrwBtOj9yBKtg=;
-	b=Ce+vgQS/pqODwVSLXz399DYj287RZ3fsr4uPptG5RHZjjKftAhHu9tikm03blbL5
-	i9mt6WtvqOy4S/nmYYCGTVfZLCfbjyh2eZf434qmc4OMnVQeqPT+mvt/7IbQQlcmrF1
-	p0Jd/YbP9ZsySmXQDbZs1DOVfarsZguNUtOaq33c=
-Received: by mx.zohomail.com with SMTPS id 1769962876697645.7710770733478;
-	Sun, 1 Feb 2026 08:21:16 -0800 (PST)
-Message-ID: <3625f326-1f14-4061-b43e-c7143f97c006@apertussolutions.com>
-Date: Sun, 1 Feb 2026 11:21:12 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC511261B8F;
+	Sun,  1 Feb 2026 16:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769962944; cv=none; b=WtrGi4yPv3bQaqLAL0d6U4yNWI+8xuiOgc/FeFhUABp/qVLVj5cxi31JtmhRwcxsy7j342RRCnLnin0UdnKTNAZUdXm5tpye82XTK+DbfCdHG5v8mMvu3PM4mtckwPxfIQlpk8eBjJV7aEGgg3SAfBri0TExBc/3kG8ngbTAzvo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769962944; c=relaxed/simple;
+	bh=xlStmTRMhWVPt3fGtyXwEEDK5QLc9ZLigiHpsUvTOrc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QLHvyBQsrAQffTN7zZEXGg+NczdAqElK85oRg10p691IeqYUVqETZWC6gKQPCV0difis/p77bupvKeiE5n4V9jn4RARDzx3QFR6K4EIxgyqID9R6GHf/PBgzsUmN7gCYfgBEwCFe1189hNJk8jE0V98u12+Td13MKoYIzUv6JjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=bEfjssX6; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1769962934;
+	bh=xlStmTRMhWVPt3fGtyXwEEDK5QLc9ZLigiHpsUvTOrc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bEfjssX6nVvGGJYCjRv1Hgum2HvUXJPGA7CgYPlDg4pNFEnfuqh6BJNVd4xzoEnb/
+	 ZMmAJGEOHpCghTNwc5ybR5xqiScFWUgOJvwITdq0n0q7Kv6pPqNjU99FoLxmpQ1ILY
+	 /UCNvFIurX5sZ1rKb2ccqszu5PRz2lLOVB+DzJaQ=
+Date: Sun, 1 Feb 2026 17:22:12 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Mihai-Drosi =?utf-8?B?Q8OianU=?= <mcaju95@gmail.com>
+Cc: arnd@arndb.de, arnout@bzzt.net, atomlin@atomlin.com, 
+	bigeasy@linutronix.de, chleroy@kernel.org, christian@heusel.eu, corbet@lwn.net, 
+	coxu@redhat.com, da.gomez@kernel.org, da.gomez@samsung.com, 
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, f.gruenbichler@proxmox.com, 
+	jmorris@namei.org, kpcyrd@archlinux.org, linux-arch@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-integrity@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, lkp@intel.com, 
+	maddy@linux.ibm.com, mattia@mapreri.org, mcgrof@kernel.org, mpe@ellerman.id.au, 
+	nathan@kernel.org, naveen@kernel.org, nicolas.bouchinet@oss.cyber.gouv.fr, 
+	nicolas.schier@linux.dev, npiggin@gmail.com, nsc@kernel.org, paul@paul-moore.com, 
+	petr.pavlu@suse.com, roberto.sassu@huawei.com, samitolvanen@google.com, 
+	serge@hallyn.com, xiujianfeng@huawei.com, zohar@linux.ibm.com
+Subject: Re: [PATCH v4 00/17] module: Introduce hash-based integrity checking
+Message-ID: <1ff0f085-fe89-48b4-bae3-559777a56a0d@t-8ch.de>
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260131073636.65494-1-mcaju95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 01/28] tpm: Initial step to reorganize TPM public
- headers
-Content-Language: en-US
-To: Jarkko Sakkinen <jarkko@kernel.org>,
- Ross Philipson <ross.philipson@oracle.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux.dev, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
- ardb@kernel.org, mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
- peterhuewe@gmx.de, jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu,
- herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
- ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
- kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com,
- trenchboot-devel@googlegroups.com
-References: <20251215233316.1076248-1-ross.philipson@oracle.com>
- <20251215233316.1076248-2-ross.philipson@oracle.com>
- <aW7A-4xJSzln1HtH@kernel.org> <aW7D2ZQZmoXF0L2p@kernel.org>
-From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
- xsJuBFYrueARCACPWL3r2bCSI6TrkIE/aRzj4ksFYPzLkJbWLZGBRlv7HQLvs6i/K4y/b4fs
- JDq5eL4e9BdfdnZm/b+K+Gweyc0Px2poDWwKVTFFRgxKWq9R7McwNnvuZ4nyXJBVn7PTEn/Z
- G7D08iZg94ZsnUdeXfgYdJrqmdiWA6iX9u84ARHUtb0K4r5WpLUMcQ8PVmnv1vVrs/3Wy/Rb
- foxebZNWxgUiSx+d02e3Ad0aEIur1SYXXv71mqKwyi/40CBSHq2jk9eF6zmEhaoFi5+MMMgX
- X0i+fcBkvmT0N88W4yCtHhHQds+RDbTPLGm8NBVJb7R5zbJmuQX7ADBVuNYIU8hx3dF3AQCm
- 601w0oZJ0jGOV1vXQgHqZYJGHg5wuImhzhZJCRESIwf+PJxik7TJOgBicko1hUVOxJBZxoe0
- x+/SO6tn+s8wKlR1Yxy8gYN9ZRqV2I83JsWZbBXMG1kLzV0SAfk/wq0PAppA1VzrQ3JqXg7T
- MZ3tFgxvxkYqUP11tO2vrgys+InkZAfjBVMjqXWHokyQPpihUaW0a8mr40w9Qui6DoJj7+Gg
- DtDWDZ7Zcn2hoyrypuht88rUuh1JuGYD434Q6qwQjUDlY+4lgrUxKdMD8R7JJWt38MNlTWvy
- rMVscvZUNc7gxcmnFUn41NPSKqzp4DDRbmf37Iz/fL7i01y7IGFTXaYaF3nEACyIUTr/xxi+
- MD1FVtEtJncZNkRn7WBcVFGKMAf+NEeaeQdGYQ6mGgk++i/vJZxkrC/a9ZXme7BhWRP485U5
- sXpFoGjdpMn4VlC7TFk2qsnJi3yF0pXCKVRy1ukEls8o+4PF2JiKrtkCrWCimB6jxGPIG3lk
- 3SuKVS/din3RHz+7Sr1lXWFcGYDENmPd/jTwr1A1FiHrSj+u21hnJEHi8eTa9029F1KRfocp
- ig+k0zUEKmFPDabpanI323O5Tahsy7hwf2WOQwTDLvQ+eqQu40wbb6NocmCNFjtRhNZWGKJS
- b5GrGDGu/No5U6w73adighEuNcCSNBsLyUe48CE0uTO7eAL6Vd+2k28ezi6XY4Y0mgASJslb
- NwW54LzSSM0uRGFuaWVsIFAuIFNtaXRoIDxkcHNtaXRoQGFwZXJ0dXNzb2x1dGlvbnMuY29t
- PsJ6BBMRCAAiBQJWK7ngAhsjBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRBTc6WbYpR8
- KrQ9AP94+xjtFfJ8gj5c7PVx06Zv9rcmFUqQspZ5wSEkvxOuQQEAg6qEsPYegI7iByLVzNEg
- 7B7fUG7pqWIfMqFwFghYhQzOwU0EViu54BAIAL6MXXNlrJ5tRUf+KMBtVz1LJQZRt/uxWrCb
- T06nZjnbp2UcceuYNbISOVHGXTzu38r55YzpkEA8eURQf+5hjtvlrOiHxvpD+Z6WcpV6rrMB
- kcAKWiZTQihW2HoGgVB3gwG9dCh+n0X5OzliAMiGK2a5iqnIZi3o0SeW6aME94bSkTkuj6/7
- OmH9KAzK8UnlhfkoMg3tXW8L6/5CGn2VyrjbB/rcrbIR4mCQ+yCUlocuOjFCJhBd10AG1IcX
- OXUa/ux+/OAV9S5mkr5Fh3kQxYCTcTRt8RY7+of9RGBk10txi94dXiU2SjPbassvagvu/hEi
- twNHms8rpkSJIeeq0/cAAwUH/jV3tXpaYubwcL2tkk5ggL9Do+/Yo2WPzXmbp8vDiJPCvSJW
- rz2NrYkd/RoX+42DGqjfu8Y04F9XehN1zZAFmCDUqBMa4tEJ7kOT1FKJTqzNVcgeKNBGcT7q
- 27+wsqbAerM4A0X/F/ctjYcKwNtXck1Bmd/T8kiw2IgyeOC+cjyTOSwKJr2gCwZXGi5g+2V8
- NhJ8n72ISPnOh5KCMoAJXmCF+SYaJ6hIIFARmnuessCIGw4ylCRIU/TiXK94soilx5aCqb1z
- ke943EIUts9CmFAHt8cNPYOPRd20pPu4VFNBuT4fv9Ys0iv0XGCEP+sos7/pgJ3gV3pCOric
- p15jV4PCYQQYEQgACQUCViu54AIbDAAKCRBTc6WbYpR8Khu7AP9NJrBUn94C/3PeNbtQlEGZ
- NV46Mx5HF0P27lH3sFpNrwD/dVdZ5PCnHQYBZ287ZxVfVr4Zuxjo5yJbRjT93Hl0vMY=
-In-Reply-To: <aW7D2ZQZmoXF0L2p@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260131073636.65494-1-mcaju95@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_DKIM_ALLOW(-0.20)[apertussolutions.com:s=zoho];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[apertussolutions.com];
+	TAGGED_FROM(0.00)[bounces-8394-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8395-lists,linux-integrity=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[31];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,lists.infradead.org,lists.linux.dev,linutronix.de,redhat.com,alien8.de,zytor.com,linux.intel.com,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,amacapital.net,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,xmission.com,infradead.org,oracle.com,citrix.com,googlegroups.com];
+	FREEMAIL_CC(0.00)[arndb.de,bzzt.net,atomlin.com,linutronix.de,kernel.org,heusel.eu,lwn.net,redhat.com,samsung.com,gmail.com,oracle.com,proxmox.com,namei.org,archlinux.org,vger.kernel.org,lists.ozlabs.org,intel.com,linux.ibm.com,mapreri.org,ellerman.id.au,oss.cyber.gouv.fr,linux.dev,paul-moore.com,suse.com,huawei.com,google.com,hallyn.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[42];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dpsmith@apertussolutions.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[apertussolutions.com:+];
+	FROM_NEQ_ENVFROM(0.00)[linux@weissschuh.net,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[weissschuh.net:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,apertussolutions.com:email,apertussolutions.com:dkim,apertussolutions.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,trustedcomputinggroup.org:url]
-X-Rspamd-Queue-Id: BA3B3C6777
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 4984BC6746
 X-Rspamd-Action: no action
 
-On 1/19/26 18:52, Jarkko Sakkinen wrote:
-> On Tue, Jan 20, 2026 at 01:40:49AM +0200, Jarkko Sakkinen wrote:
->> On Mon, Dec 15, 2025 at 03:32:49PM -0800, Ross Philipson wrote:
->>> Replace the existing public header tpm_command.h with the first two
->>> new public headers tpm1.h and tpm_common.h. In addition, related
->>> definitions in tpm1_cmd.c were moved to the new tpm1.h.
->>>
->>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
->>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
->>> ---
->>>   drivers/char/tpm/tpm-buf.c                |  3 +-
->>>   drivers/char/tpm/tpm1-cmd.c               | 13 +-----
->>>   include/keys/trusted_tpm.h                |  1 -
->>>   include/linux/tpm.h                       |  3 ++
->>>   include/linux/tpm1.h                      | 55 +++++++++++++++++++++++
->>>   include/linux/tpm_command.h               | 30 -------------
->>
->> Removing tpm_command.h causes unnecessary noise.
->>
->> It would be better to retain tpm_command.h, and simply supplement
->> it with TPM2 constants.
->>
->> Also, what is the reason to not have both TPM1 and TPM2 in tpm.h?
->>
->> To put the question in other words: is there something in tpm.h that
->> would be incompatible with early boot code?
->>
->> I'd rather tweak that than have more files...
+Hi Mihai-Drosi,
 
-Ack.
+thanks for taking an interest into these patches!
 
->>>   include/linux/tpm_common.h                | 22 +++++++++
->>>   security/keys/trusted-keys/trusted_tpm1.c |  1 -
->>>   security/keys/trusted-keys/trusted_tpm2.c |  1 -
->>>   9 files changed, 82 insertions(+), 47 deletions(-)
->>>   create mode 100644 include/linux/tpm1.h
->>>   delete mode 100644 include/linux/tpm_command.h
->>>   create mode 100644 include/linux/tpm_common.h
->>>
->>> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
->>> index 1cb649938c01..dae23e6de269 100644
->>> --- a/drivers/char/tpm/tpm-buf.c
->>> +++ b/drivers/char/tpm/tpm-buf.c
->>> @@ -3,7 +3,6 @@
->>>    * Handling of TPM command and other buffers.
->>>    */
->>>   
->>> -#include <linux/tpm_command.h>
->>>   #include <linux/module.h>
->>>   #include <linux/tpm.h>
->>>   
->>> @@ -296,7 +295,7 @@ void tpm1_buf_append_extend(struct tpm_buf *buf, u32 pcr_idx, const u8 *hash)
->>>   	if (buf->flags & TPM_BUF_INVALID)
->>>   		return;
->>>   
->>> -	if (!tpm1_buf_is_command(buf, TPM_ORD_EXTEND)) {
->>> +	if (!tpm1_buf_is_command(buf, TPM_ORD_PCR_EXTEND)) {
->>>   		WARN(1, "tpm_buf: invalid TPM_Extend command\n");
->>>   		buf->flags |= TPM_BUF_INVALID;
->>>   		return;
->>> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
->>> index bc156d7d59f2..f29827b454d2 100644
->>> --- a/drivers/char/tpm/tpm1-cmd.c
->>> +++ b/drivers/char/tpm/tpm1-cmd.c
->>> @@ -18,12 +18,9 @@
->>>   #include <linux/mutex.h>
->>>   #include <linux/spinlock.h>
->>>   #include <linux/freezer.h>
->>> -#include <linux/tpm_command.h>
->>>   #include <linux/tpm_eventlog.h>
->>>   #include "tpm.h"
->>>   
->>> -#define TPM_MAX_ORDINAL 243
->>> -
->>>   /*
->>>    * Array with one entry per ordinal defining the maximum amount
->>>    * of time the chip could take to return the result.  The ordinal
->>> @@ -308,9 +305,6 @@ unsigned long tpm1_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
->>>   		return duration;
->>>   }
->>>   
->>> -#define TPM_ORD_STARTUP 153
->>> -#define TPM_ST_CLEAR 1
->>> -
->>>   /**
->>>    * tpm1_startup() - turn on the TPM
->>>    * @chip: TPM chip to use
->>> @@ -478,7 +472,6 @@ int tpm1_pcr_extend(struct tpm_chip *chip, u32 pcr_idx, const u8 *hash,
->>>   	return rc;
->>>   }
->>>   
->>> -#define TPM_ORD_GET_CAP 101
->>>   ssize_t tpm1_getcap(struct tpm_chip *chip, u32 subcap_id, cap_t *cap,
->>>   		    const char *desc, size_t min_cap_length)
->>>   {
->>> @@ -574,7 +567,6 @@ int tpm1_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
->>>   	return rc;
->>>   }
->>>   
->>> -#define TPM_ORD_PCRREAD 21
->>>   int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
->>>   {
->>>   	int rc;
->>> @@ -584,7 +576,7 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
->>>   		return -ENOMEM;
->>>   
->>>   	tpm_buf_init(buf, TPM_BUFSIZE);
->>> -	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCRREAD);
->>> +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCR_READ);
->>>   	tpm_buf_append_u32(buf, pcr_idx);
->>>   
->>>   	rc = tpm_transmit_cmd(chip, buf, TPM_DIGEST_SIZE,
->>> @@ -599,7 +591,6 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
->>>   	return rc;
->>>   }
->>>   
->>> -#define TPM_ORD_CONTINUE_SELFTEST 83
->>>   /**
->>>    * tpm1_continue_selftest() - run TPM's selftest
->>>    * @chip: TPM chip to use
->>> @@ -716,8 +707,6 @@ int tpm1_auto_startup(struct tpm_chip *chip)
->>>   	return rc;
->>>   }
->>>   
->>> -#define TPM_ORD_SAVESTATE 152
->>> -
->>>   /**
->>>    * tpm1_pm_suspend() - pm suspend handler
->>>    * @chip: TPM chip to use.
->>> diff --git a/include/keys/trusted_tpm.h b/include/keys/trusted_tpm.h
->>> index 0fadc6a4f166..3a0fa3bc8454 100644
->>> --- a/include/keys/trusted_tpm.h
->>> +++ b/include/keys/trusted_tpm.h
->>> @@ -3,7 +3,6 @@
->>>   #define __TRUSTED_TPM_H
->>>   
->>>   #include <keys/trusted-type.h>
->>> -#include <linux/tpm_command.h>
->>>   
->>>   extern struct trusted_key_ops trusted_key_tpm_ops;
->>>   
->>> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
->>> index 8da49e8769d5..ef81e0b59657 100644
->>> --- a/include/linux/tpm.h
->>> +++ b/include/linux/tpm.h
->>> @@ -25,6 +25,9 @@
->>>   #include <crypto/hash_info.h>
->>>   #include <crypto/aes.h>
->>>   
->>> +#include "tpm_common.h"
->>> +#include "tpm1.h"
->>> +
->>>   #define TPM_DIGEST_SIZE		20	/* Max TPM v1.2 PCR size */
->>>   #define TPM_HEADER_SIZE		10
->>>   #define TPM_BUFSIZE		4096
->>> diff --git a/include/linux/tpm1.h b/include/linux/tpm1.h
->>> new file mode 100644
->>> index 000000000000..54c6c211eb9e
->>> --- /dev/null
->>> +++ b/include/linux/tpm1.h
->>> @@ -0,0 +1,55 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-only */
->>> +/*
->>> + * Copyright (C) 2004,2007,2008 IBM Corporation
->>> + *
->>> + * Authors:
->>> + * Leendert van Doorn <leendert@watson.ibm.com>
->>> + * Dave Safford <safford@watson.ibm.com>
->>> + * Reiner Sailer <sailer@watson.ibm.com>
->>> + * Kylene Hall <kjhall@us.ibm.com>
->>> + * Debora Velarde <dvelarde@us.ibm.com>
->>> + *
->>> + * Maintained by: <tpmdd_devel@lists.sourceforge.net>
->>> + *
->>> + * Device driver for TCG/TCPA TPM (trusted platform module).
->>> + * Specifications at www.trustedcomputinggroup.org
->>> + */
->>> +#ifndef __LINUX_TPM1_H__
->>> +#define __LINUX_TPM1_H__
->>> +
->>> +/*
->>> + * TPM 1.2 Main Specification
->>> + * https://trustedcomputinggroup.org/resource/tpm-main-specification/
->>> + */
->>> +
->>> +/* Command TAGS */
->>> +enum tpm_command_tags {
->>> +	TPM_TAG_RQU_COMMAND		= 193,
->>> +	TPM_TAG_RQU_AUTH1_COMMAND	= 194,
->>> +	TPM_TAG_RQU_AUTH2_COMMAND	= 195,
->>> +	TPM_TAG_RSP_COMMAND		= 196,
->>> +	TPM_TAG_RSP_AUTH1_COMMAND	= 197,
->>> +	TPM_TAG_RSP_AUTH2_COMMAND	= 198,
->>> +};
->>> +
->>> +/* Command Ordinals */
->>> +enum tpm_command_ordinals {
->>> +	TPM_ORD_CONTINUE_SELFTEST	= 83,
->>> +	TPM_ORD_GET_CAP			= 101,
->>> +	TPM_ORD_GET_RANDOM		= 70,
->>> +	TPM_ORD_PCR_EXTEND		= 20,
->>> +	TPM_ORD_PCR_READ		= 21,
->>> +	TPM_ORD_OSAP			= 11,
->>> +	TPM_ORD_OIAP			= 10,
->>> +	TPM_ORD_SAVESTATE		= 152,
->>> +	TPM_ORD_SEAL			= 23,
->>> +	TPM_ORD_STARTUP			= 153,
->>> +	TPM_ORD_UNSEAL			= 24,
->>> +};
->>> +
->>> +/* Other constants */
->>> +#define SRKHANDLE                       0x40000000
->>> +#define TPM_NONCE_SIZE                  20
->>> +#define TPM_ST_CLEAR			1
->>> +
->>> +#endif
->>> diff --git a/include/linux/tpm_command.h b/include/linux/tpm_command.h
->>> deleted file mode 100644
->>> index 02038972a05f..000000000000
->>> --- a/include/linux/tpm_command.h
->>> +++ /dev/null
->>> @@ -1,30 +0,0 @@
->>> -/* SPDX-License-Identifier: GPL-2.0 */
->>> -#ifndef __LINUX_TPM_COMMAND_H__
->>> -#define __LINUX_TPM_COMMAND_H__
->>> -
->>> -/*
->>> - * TPM Command constants from specifications at
->>> - * http://www.trustedcomputinggroup.org
->>> - */
->>> -
->>> -/* Command TAGS */
->>> -#define TPM_TAG_RQU_COMMAND             193
->>> -#define TPM_TAG_RQU_AUTH1_COMMAND       194
->>> -#define TPM_TAG_RQU_AUTH2_COMMAND       195
->>> -#define TPM_TAG_RSP_COMMAND             196
->>> -#define TPM_TAG_RSP_AUTH1_COMMAND       197
->>> -#define TPM_TAG_RSP_AUTH2_COMMAND       198
->>> -
->>> -/* Command Ordinals */
->>> -#define TPM_ORD_OIAP                    10
->>> -#define TPM_ORD_OSAP                    11
->>> -#define TPM_ORD_EXTEND			20
->>> -#define TPM_ORD_SEAL                    23
->>> -#define TPM_ORD_UNSEAL                  24
->>> -#define TPM_ORD_GET_RANDOM              70
->>> -
->>> -/* Other constants */
->>> -#define SRKHANDLE                       0x40000000
->>> -#define TPM_NONCE_SIZE                  20
->>> -
->>> -#endif
->>> diff --git a/include/linux/tpm_common.h b/include/linux/tpm_common.h
->>> new file mode 100644
->>> index 000000000000..b8be669913dd
->>> --- /dev/null
->>> +++ b/include/linux/tpm_common.h
->>> @@ -0,0 +1,22 @@
->>> +/* SPDX-License-Identifier: GPL-2.0-only */
->>> +/*
->>> + * Copyright (C) 2004,2007,2008 IBM Corporation
->>> + *
->>> + * Authors:
->>> + * Leendert van Doorn <leendert@watson.ibm.com>
->>> + * Dave Safford <safford@watson.ibm.com>
->>> + * Reiner Sailer <sailer@watson.ibm.com>
->>> + * Kylene Hall <kjhall@us.ibm.com>
->>> + * Debora Velarde <dvelarde@us.ibm.com>
->>> + *
->>> + * Maintained by: <tpmdd_devel@lists.sourceforge.net>
->>> + *
->>> + * Device driver for TCG/TCPA TPM (trusted platform module).
->>> + * Specifications at www.trustedcomputinggroup.org
->>> + */
->>> +#ifndef __LINUX_TPM_COMMON_H__
->>> +#define __LINUX_TPM_COMMON_H__
->>> +
->>> +#define TPM_MAX_ORDINAL 243
->>> +
->>> +#endif
+On 2026-01-31 09:36:36+0200, Mihai-Drosi Câju wrote:
+> > The current signature-based module integrity checking has some drawbacks
+> > in combination with reproducible builds. Either the module signing key
+> > is generated at build time, which makes the build unreproducible, or a
+> > static signing key is used, which precludes rebuilds by third parties
+> > and makes the whole build and packaging process much more complicated.
 > 
-> By retaining tpm_command.h, this file neither won't be necessary.
-> 
->>> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
->>> index 6e6a9fb48e63..3717a06a5212 100644
->>> --- a/security/keys/trusted-keys/trusted_tpm1.c
->>> +++ b/security/keys/trusted-keys/trusted_tpm1.c
->>> @@ -17,7 +17,6 @@
->>>   #include <keys/trusted-type.h>
->>>   #include <linux/key-type.h>
->>>   #include <linux/tpm.h>
->>> -#include <linux/tpm_command.h>
->>>   
->>>   #include <keys/trusted_tpm.h>
->>>   
->>> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
->>> index 0a99bd051a25..e6000c71eeb6 100644
->>> --- a/security/keys/trusted-keys/trusted_tpm2.c
->>> +++ b/security/keys/trusted-keys/trusted_tpm2.c
->>> @@ -9,7 +9,6 @@
->>>   #include <linux/string.h>
->>>   #include <linux/err.h>
->>>   #include <linux/tpm.h>
->>> -#include <linux/tpm_command.h>
->>>   
->>>   #include <keys/trusted-type.h>
->>>   #include <keys/trusted_tpm.h>
->>> -- 
->>> 2.43.7
->>>
-> 
-> BR, Jarkko
+> I think there is a middle ground where the module signing key is generated
+> using a key derivation function that has as an input a deterministic value
+> on the build host, such as /etc/machine-id . The problem with this approach
+> is that only hosts knowing the value will be able to reproduce the build.
 
-V/r,
-DPS
+The goal is to make the distro kernel packages rebuildable by the
+general public. Any involvement of secret values will break this goal.
+
+> Maybe this is a solution to NixOS secret management? Introduce minimal
+> impurity as a cryptographic seed and derive the rest of the secrets using
+> something like Argon2(seed, key_uuid).
+
+I am not familiar with NixOS and its secret management.
+This patchset serves a wider audience.
+
+> There might be another approach to code integrity rather than step-by-step
+> reproducibility. One may exploit the very cryptographic primitives that make
+> reproducibility hard to ensure that reproducibility is most  likely valid.
+> 
+> For example, the module signing issue, the build host publishes four artifacts:
+> * The source-code
+> * The compiled and signed binary
+> * The build environment
+> * Its public key
+> 
+> Now, we don't need to sign with the private key to know that building the source
+> code using the specific build environment and signing the result with the private
+> key will result in the claimed binary. We can just compile and verify with the
+> public key.
+
+This could work if the goal is only to verify the reproducibility of a
+single, signed-en-bloc artifact. But we also need to handle vmlinux which
+contains the corresponding public key. It would need different handling.
+We can add some special logic to strip that public key before
+comparision. But then vmlinux might be compressed or wrapped in some
+other format. Another whole collection of special logic.
+
+(...)
+
+
+Thomas
 
