@@ -1,85 +1,61 @@
-Return-Path: <linux-integrity+bounces-8392-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8393-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gFqJGWNvf2nNqQIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8392-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 16:21:07 +0100
+	id uJurHqZ9f2khsAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8393-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 17:21:58 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFF17C6510
-	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 16:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA48C671E
+	for <lists+linux-integrity@lfdr.de>; Sun, 01 Feb 2026 17:21:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6E956300CC28
-	for <lists+linux-integrity@lfdr.de>; Sun,  1 Feb 2026 15:19:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8051C30056F8
+	for <lists+linux-integrity@lfdr.de>; Sun,  1 Feb 2026 16:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 639211DF25F;
-	Sun,  1 Feb 2026 15:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0E126738D;
+	Sun,  1 Feb 2026 16:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tTH3UqgT"
+	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="oTiSt5ZJ"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from sender4-of-o50.zoho.com (sender4-of-o50.zoho.com [136.143.188.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFB535898;
-	Sun,  1 Feb 2026 15:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769959169; cv=none; b=mjKGi7TluxqvUwP59ylgcefLUrIUY/UF5rMpkoVXHJScAeQufNwF96iCjqF6cZVQk5t46b7wR1Bet3HfnA4ALAvXWSUdyHxobeAG5XAS6jI8OjwmllfczmewXBXnrVMNbArrOFEE/Yw34ggrA26X47mYs1iT/B5/ERH/CB1njv0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769959169; c=relaxed/simple;
-	bh=RijTn+Bmi+VoN6SDft34c4MHkDL3DCxxopFo5K3Z2CU=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258AC263F34;
+	Sun,  1 Feb 2026 16:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769962914; cv=pass; b=ipRKgExmgPnBdIUDEAjY6UMY/m+FOFBbihkGd4dV+SFLJPzf8/pXJdEvWpItX4Gk8OyDt8LtQvag1lOXWhkFTrAQIqCqC5JCRR6OHWt7M/MrkYfu/x1StV5uyDkrf9a6DPHkTa2YtpqTpFEOQknVXKYLF0iwl3Fa0DYFE8tdhJs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769962914; c=relaxed/simple;
+	bh=wEqhhueRECF0KNX3O0Rb3OOvsLw2IhuQzlhLGOexWiU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YPdWA3MDD2RLwkPEXduje1BUVbWB9967hz7GjoQfCWSpO26/cUHcdoQGSYNCg4g3Hvf/EExf7Fqf1JvKLlLZn8YCAesGzyHZiWOYJYSYV+R2vGZi1bNUu2/TrzOr7cFi4PNCtMbeVTeYbg+YIoJpxtlkmYQu02qOWwDz6P5DfzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tTH3UqgT; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 6119smxb032511;
-	Sun, 1 Feb 2026 15:19:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=fC4JBE
-	apiy1PkXawkT01QKPuA+i/WW6/kWw92rp+mAQ=; b=tTH3UqgTMsXsq3CAi6qomO
-	tcilgRfncLgpvxuaA41qu6ZaGQBTRVX/JmmgQ88Haxi5Pocm/01Lf92ojaoZIYMv
-	RzkRJvin17VbxX5ksWCPZmxTr8yrI2vtSk50IpVFO/wSgvIuyXzIvHRXqW3qmE8e
-	HJC8+5ZebZ46e04M2ZEVj6NEPlhsaliXi1AwYZhFrD604kiLaPm+8H1GNcP/Es+n
-	C+y3XtikvmBLTWJ2TpeBlI+A2Y6sMK1DxxLYbEkczBHueiWTAdJxhrB5n5HaiZqy
-	9B5uuW/DwmgG1StsnNKr094BU3oF+f/1t/V/cGoBpRl+oNZaX1Aw+Qu5yLHXnwEA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c175mm31d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 01 Feb 2026 15:19:10 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 611FJ9Gc027930;
-	Sun, 1 Feb 2026 15:19:09 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c175mm31b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 01 Feb 2026 15:19:09 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6119eBNT005996;
-	Sun, 1 Feb 2026 15:19:08 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c1x9j1k5j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 01 Feb 2026 15:19:08 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 611FJ7hY56426782
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 1 Feb 2026 15:19:07 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0075758055;
-	Sun,  1 Feb 2026 15:19:07 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 987095804B;
-	Sun,  1 Feb 2026 15:19:02 +0000 (GMT)
-Received: from [9.39.20.75] (unknown [9.39.20.75])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Sun,  1 Feb 2026 15:19:02 +0000 (GMT)
-Message-ID: <19427059-aa89-44f6-af0f-19fa183aba32@linux.ibm.com>
-Date: Sun, 1 Feb 2026 20:49:00 +0530
+	 In-Reply-To:Content-Type; b=kmfhfG5oAPrbe90xmMpeFUH5Oeb8A/5wGZ+QMngxS6HO9N6jaENZhquIiHxXLhGDhLUN3E12cCSz2VbLG10jZT2ICF3+ktKodYsE78b4t578uTVYtQflGQQiZ4zkSx5yQTxnBJCittwI3KxRVjfRY3c9jm6PcUQF66brsbv6uDU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=oTiSt5ZJ; arc=pass smtp.client-ip=136.143.188.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
+ARC-Seal: i=1; a=rsa-sha256; t=1769962827; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=eLrQVuj3RsXJTTpG5owHrnqFfaHxy6E8IRRb5+CwFA3Bzfi+mJmyXXqc5phB2v4xpkbjb7zHkYRBbS/RVZH2ks0toqesjWOmYyWNH9LBecfI8Wn3v3N4uzI67ntOYXPRdcR8r+Ga5IckWnHefS6oBQXkeMZW3d0YzBLK77sD9lE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1769962827; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=YIYCK59jh50spm8tJeld6eak6XiX3KK4FkOhjNCm+ws=; 
+	b=bgIKAzESOhr623ZcPoiwK6IVCJRgVcxDo/joqJFPIWM0tFh8XkZV0pz2F8lGL6Tn3X/cX3M8AdWWJRTXfqNHMzSjYLIuPlK3CsEKeFjsndEgdsuJKPUIPKjBIdgO5b0GYCGfAwh3LgRwVt0oOtMVBpTs/RaxS6WLlDKDgBuB7iU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=apertussolutions.com;
+	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+	dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1769962827;
+	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=YIYCK59jh50spm8tJeld6eak6XiX3KK4FkOhjNCm+ws=;
+	b=oTiSt5ZJZIrN5X1fyRVpbvtQMlOSvHav0NhcbHW+q/3VDkax3N3xHblVzK2zAHPK
+	BOpedbVBfCP7+j/MYLuMGdeF81TvsQg5EWue6+dA1HaKT1/KGm1dVSMIOnN3/GaX3Mq
+	I6j6uM5TqURWbXbpA/Yc+M2FHXM9J5c5BsxDvZxs=
+Received: by mx.zohomail.com with SMTPS id 1769962824390979.9307132328469;
+	Sun, 1 Feb 2026 08:20:24 -0800 (PST)
+Message-ID: <b94815dc-fc4d-4073-bfd6-31ab99a6b85b@apertussolutions.com>
+Date: Sun, 1 Feb 2026 11:20:20 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -87,185 +63,408 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/6] Extend "trusted" keys to support a new trust
- source named the PowerVM Key Wrapping Module (PKWM)
-To: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, James.Bottomley@HansenPartnership.com,
-        jarkko@kernel.org, zohar@linux.ibm.com, nayna@linux.ibm.com,
-        rnsastry@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-References: <20260201135930.898721-1-ssrish@linux.ibm.com>
+Subject: Re: [PATCH v15 01/28] tpm: Initial step to reorganize TPM public
+ headers
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+ Ross Philipson <ross.philipson@oracle.com>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, iommu@lists.linux.dev, tglx@linutronix.de,
+ mingo@redhat.com, bp@alien8.de, hpa@zytor.com, dave.hansen@linux.intel.com,
+ ardb@kernel.org, mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
+ peterhuewe@gmx.de, jgg@ziepe.ca, luto@amacapital.net, nivedita@alum.mit.edu,
+ herbert@gondor.apana.org.au, davem@davemloft.net, corbet@lwn.net,
+ ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
+ kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com,
+ trenchboot-devel@googlegroups.com
+References: <20251215233316.1076248-1-ross.philipson@oracle.com>
+ <20251215233316.1076248-2-ross.philipson@oracle.com>
+ <aW7A-4xJSzln1HtH@kernel.org>
 Content-Language: en-US
-From: Srish Srinivasan <ssrish@linux.ibm.com>
-In-Reply-To: <20260201135930.898721-1-ssrish@linux.ibm.com>
+From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
+ 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
+In-Reply-To: <aW7A-4xJSzln1HtH@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fZP1mfwCu8JsOGoZFMTRSZNTf-fJLkiK
-X-Authority-Analysis: v=2.4 cv=VcX6/Vp9 c=1 sm=1 tr=0 ts=697f6eee cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=QyXUC8HyAAAA:8 a=VwQbUJbxAAAA:8 a=7O0lCG0yHcpZzvEBGfYA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: XFFXzxzahiN6srMW5N7pZtxszOUQMN7m
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAxMDEyOSBTYWx0ZWRfX6QiZBpYsGyN+
- 0zCePtMRroHcxse6FvdeX8KAOWI/nMxM9y5UFFteFSkajFqbjYp4H4FksgLGOx8WJitvXL2kjSY
- XWPH+bwuek6kE+/OjXdYLKl6uoAusmvTtthubtEFDQA7EqX/3tzX1blTqo6Mdj1v1oJfbxg4No3
- j2dMHeRDxJ0uUYVdcx/eTg9c/Z0Kh/PH4Lmz+EggD+85yl/OVOzA4nL2pjzjgadXxTW0Hsb/RM7
- Z/Q7f/nE5FWxpLPNxjKPEpSzbogWVCIC29SDBBE8peCocBEoCAU8Ui4hbxYeZD5v+YTccfQIf9K
- kBC8MHYADEjtgs40jnqknz/MuL/QzdqptMMe7Y7Pd/kpCMGz4WynuXRJ+MzejmYY+T6SiQc6vm3
- ojuhsiFAwo0J8wMtVtTljuTUEQ9ZT8dAx7s4+5ZMLfeSyKhrYm4kVH2rPJK8JQjiV6tsuE9adt3
- oVKs+4GPfaiFdrtIBBQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-01_05,2026-01-30_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2602010129
+X-ZohoMailClient: External
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[apertussolutions.com:s=zoho];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linux.ibm.com,ellerman.id.au,gmail.com,csgroup.eu,HansenPartnership.com,kernel.org,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-8392-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TO_DN_NONE(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ssrish@linux.ibm.com,linux-integrity@vger.kernel.org];
+	DMARC_NA(0.00)[apertussolutions.com];
+	TAGGED_FROM(0.00)[bounces-8393-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,lists.infradead.org,lists.linux.dev,linutronix.de,redhat.com,alien8.de,zytor.com,linux.intel.com,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,amacapital.net,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,xmission.com,infradead.org,oracle.com,citrix.com,googlegroups.com];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_TWELVE(0.00)[13];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dpsmith@apertussolutions.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[apertussolutions.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: BFF17C6510
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 1AA48C671E
 X-Rspamd-Action: no action
 
-Please ignore this series (v6).
+On 1/19/26 18:40, Jarkko Sakkinen wrote:
+> On Mon, Dec 15, 2025 at 03:32:49PM -0800, Ross Philipson wrote:
+>> Replace the existing public header tpm_command.h with the first two
+>> new public headers tpm1.h and tpm_common.h. In addition, related
+>> definitions in tpm1_cmd.c were moved to the new tpm1.h.
+>>
+>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
+>> ---
+>>   drivers/char/tpm/tpm-buf.c                |  3 +-
+>>   drivers/char/tpm/tpm1-cmd.c               | 13 +-----
+>>   include/keys/trusted_tpm.h                |  1 -
+>>   include/linux/tpm.h                       |  3 ++
+>>   include/linux/tpm1.h                      | 55 +++++++++++++++++++++++
+>>   include/linux/tpm_command.h               | 30 -------------
+> 
+> Removing tpm_command.h causes unnecessary noise.
+> 
+> It would be better to retain tpm_command.h, and simply supplement
+> it with TPM2 constants.
+> 
+> Also, what is the reason to not have both TPM1 and TPM2 in tpm.h?
+> 
+> To put the question in other words: is there something in tpm.h that
+> would be incompatible with early boot code?
+> 
+> I'd rather tweak that than have more files...
 
-thanks,
-Srish.
+Every #include in tpm.h will break in the early boot code. I don't see 
+any way to avoid having one header that is the device driver header that 
+integrates with mainline features and at least one header that holds the 
+general TPM definitions.
 
-On 2/1/26 7:29 PM, Srish Srinivasan wrote:
-> Power11 has introduced a feature called the PowerVM Key Wrapping Module
-> (PKWM), where PowerVM in combination with Power LPAR Platform KeyStore
-> (PLPKS) [1] supports a new feature called "Key Wrapping" [2] to protect
-> user secrets by wrapping them using a hypervisor generated wrapping key.
-> This wrapping key is an AES-GCM-256 symmetric key that is stored as an
-> object in the PLPKS. It has policy based protections that prevents it from
-> being read out or exposed to the user. This wrapping key can then be used
-> by the OS to wrap or unwrap secrets via hypervisor calls.
->
-> This patchset intends to add the PKWM, which is a combination of IBM
-> PowerVM and PLPKS, as a new trust source for trusted keys. The wrapping key
-> does not exist by default and its generation is requested by the kernel at
-> the time of PKWM initialization. This key is then persisted by the PKWM and
-> is used for wrapping any kernel provided key, and is never exposed to the
-> user. The kernel is aware of only the label to this wrapping key.
->
-> Along with the PKWM implementation, this patchset includes two preparatory
-> patches: one fixing the kernel-doc inconsistencies in the PLPKS code and
-> another reorganizing PLPKS config variables in the sysfs.
->
-> Changelog:
->
-> v6:
->
-> * Patch 1 to Patch 3:
->    - Add Nayna's Tested-by tag
-> * Patch 4
->    - Fix build error reported by kernel test robot <lkp@intel.com>
->    - Add Nayna's Tested-by tag
-> * Patch 5
->    - Add Nayna's Tested-by tag
->
-> v5:
->
-> * Patch 1 to Patch 3:
->    - Add Nayna's Reviewed-by tag
-> * Patch 4:
->    - Fix build error identified by chleroy@kernel.org
->    - Add Nayna's Reviewed-by tag
-> * Patch 5:
->    - Add Reviewed-by tags from Nayna and Jarkko
->
-> v4:
->
-> * Patch 5:
->    - Add a per-backend private data pointer in trusted_key_options
->      to store a pointer to the backend-specific options structure
->    - Minor clean-up
->
-> v3:
->
-> * Patch 2:
->    - Add Mimi's Reviewed-by tag
-> * Patch 4:
->    - Minor tweaks to some print statements
->    - Fix typos
-> * Patch 5:
->    - Fix typos
->    - Add Mimi's Reviewed-by tag
-> * Patch 6:
->    - Add Mimi's Reviewed-by tag
->
-> v2:
->
-> * Patch 2:
->    - Fix build warning detected by the kernel test bot
-> * Patch 5:
->    - Use pr_debug inside dump_options
->    - Replace policyhande with wrap_flags inside dump_options
->    - Provide meaningful error messages with error codes
->
-> Nayna Jain (1):
->    docs: trusted-encryped: add PKWM as a new trust source
->
-> Srish Srinivasan (5):
->    pseries/plpks: fix kernel-doc comment inconsistencies
->    powerpc/pseries: move the PLPKS config inside its own sysfs directory
->    pseries/plpks: expose PowerVM wrapping features via the sysfs
->    pseries/plpks: add HCALLs for PowerVM Key Wrapping Module
->    keys/trusted_keys: establish PKWM as a trusted source
->
->   .../ABI/testing/sysfs-firmware-plpks          |  58 ++
->   Documentation/ABI/testing/sysfs-secvar        |  65 --
->   .../admin-guide/kernel-parameters.txt         |   1 +
->   Documentation/arch/powerpc/papr_hcalls.rst    |  43 ++
->   .../security/keys/trusted-encrypted.rst       |  50 ++
->   MAINTAINERS                                   |   9 +
->   arch/powerpc/include/asm/hvcall.h             |   4 +-
->   arch/powerpc/include/asm/plpks.h              |  95 +--
->   arch/powerpc/include/asm/secvar.h             |   1 -
->   arch/powerpc/kernel/secvar-sysfs.c            |  21 +-
->   arch/powerpc/platforms/pseries/Makefile       |   2 +-
->   arch/powerpc/platforms/pseries/plpks-secvar.c |  29 -
->   arch/powerpc/platforms/pseries/plpks-sysfs.c  |  96 +++
->   arch/powerpc/platforms/pseries/plpks.c        | 688 +++++++++++++++++-
->   include/keys/trusted-type.h                   |   7 +-
->   include/keys/trusted_pkwm.h                   |  33 +
->   security/keys/trusted-keys/Kconfig            |   8 +
->   security/keys/trusted-keys/Makefile           |   2 +
->   security/keys/trusted-keys/trusted_core.c     |   6 +-
->   security/keys/trusted-keys/trusted_pkwm.c     | 190 +++++
->   20 files changed, 1207 insertions(+), 201 deletions(-)
->   create mode 100644 Documentation/ABI/testing/sysfs-firmware-plpks
->   create mode 100644 arch/powerpc/platforms/pseries/plpks-sysfs.c
->   create mode 100644 include/keys/trusted_pkwm.h
->   create mode 100644 security/keys/trusted-keys/trusted_pkwm.c
->
+We will move everything that was broken out into tpm_command.h, making 
+it the header with the general definitions. I would raise the question 
+of whether tpm_command.h would be the best name of the file after 
+definition reloactions
+
+>>   include/linux/tpm_common.h                | 22 +++++++++
+>>   security/keys/trusted-keys/trusted_tpm1.c |  1 -
+>>   security/keys/trusted-keys/trusted_tpm2.c |  1 -
+>>   9 files changed, 82 insertions(+), 47 deletions(-)
+>>   create mode 100644 include/linux/tpm1.h
+>>   delete mode 100644 include/linux/tpm_command.h
+>>   create mode 100644 include/linux/tpm_common.h
+>>
+>> diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+>> index 1cb649938c01..dae23e6de269 100644
+>> --- a/drivers/char/tpm/tpm-buf.c
+>> +++ b/drivers/char/tpm/tpm-buf.c
+>> @@ -3,7 +3,6 @@
+>>    * Handling of TPM command and other buffers.
+>>    */
+>>   
+>> -#include <linux/tpm_command.h>
+>>   #include <linux/module.h>
+>>   #include <linux/tpm.h>
+>>   
+>> @@ -296,7 +295,7 @@ void tpm1_buf_append_extend(struct tpm_buf *buf, u32 pcr_idx, const u8 *hash)
+>>   	if (buf->flags & TPM_BUF_INVALID)
+>>   		return;
+>>   
+>> -	if (!tpm1_buf_is_command(buf, TPM_ORD_EXTEND)) {
+>> +	if (!tpm1_buf_is_command(buf, TPM_ORD_PCR_EXTEND)) {
+>>   		WARN(1, "tpm_buf: invalid TPM_Extend command\n");
+>>   		buf->flags |= TPM_BUF_INVALID;
+>>   		return;
+>> diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+>> index bc156d7d59f2..f29827b454d2 100644
+>> --- a/drivers/char/tpm/tpm1-cmd.c
+>> +++ b/drivers/char/tpm/tpm1-cmd.c
+>> @@ -18,12 +18,9 @@
+>>   #include <linux/mutex.h>
+>>   #include <linux/spinlock.h>
+>>   #include <linux/freezer.h>
+>> -#include <linux/tpm_command.h>
+>>   #include <linux/tpm_eventlog.h>
+>>   #include "tpm.h"
+>>   
+>> -#define TPM_MAX_ORDINAL 243
+>> -
+>>   /*
+>>    * Array with one entry per ordinal defining the maximum amount
+>>    * of time the chip could take to return the result.  The ordinal
+>> @@ -308,9 +305,6 @@ unsigned long tpm1_calc_ordinal_duration(struct tpm_chip *chip, u32 ordinal)
+>>   		return duration;
+>>   }
+>>   
+>> -#define TPM_ORD_STARTUP 153
+>> -#define TPM_ST_CLEAR 1
+>> -
+>>   /**
+>>    * tpm1_startup() - turn on the TPM
+>>    * @chip: TPM chip to use
+>> @@ -478,7 +472,6 @@ int tpm1_pcr_extend(struct tpm_chip *chip, u32 pcr_idx, const u8 *hash,
+>>   	return rc;
+>>   }
+>>   
+>> -#define TPM_ORD_GET_CAP 101
+>>   ssize_t tpm1_getcap(struct tpm_chip *chip, u32 subcap_id, cap_t *cap,
+>>   		    const char *desc, size_t min_cap_length)
+>>   {
+>> @@ -574,7 +567,6 @@ int tpm1_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+>>   	return rc;
+>>   }
+>>   
+>> -#define TPM_ORD_PCRREAD 21
+>>   int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
+>>   {
+>>   	int rc;
+>> @@ -584,7 +576,7 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
+>>   		return -ENOMEM;
+>>   
+>>   	tpm_buf_init(buf, TPM_BUFSIZE);
+>> -	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCRREAD);
+>> +	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCR_READ);
+>>   	tpm_buf_append_u32(buf, pcr_idx);
+>>   
+>>   	rc = tpm_transmit_cmd(chip, buf, TPM_DIGEST_SIZE,
+>> @@ -599,7 +591,6 @@ int tpm1_pcr_read(struct tpm_chip *chip, u32 pcr_idx, u8 *res_buf)
+>>   	return rc;
+>>   }
+>>   
+>> -#define TPM_ORD_CONTINUE_SELFTEST 83
+>>   /**
+>>    * tpm1_continue_selftest() - run TPM's selftest
+>>    * @chip: TPM chip to use
+>> @@ -716,8 +707,6 @@ int tpm1_auto_startup(struct tpm_chip *chip)
+>>   	return rc;
+>>   }
+>>   
+>> -#define TPM_ORD_SAVESTATE 152
+>> -
+>>   /**
+>>    * tpm1_pm_suspend() - pm suspend handler
+>>    * @chip: TPM chip to use.
+>> diff --git a/include/keys/trusted_tpm.h b/include/keys/trusted_tpm.h
+>> index 0fadc6a4f166..3a0fa3bc8454 100644
+>> --- a/include/keys/trusted_tpm.h
+>> +++ b/include/keys/trusted_tpm.h
+>> @@ -3,7 +3,6 @@
+>>   #define __TRUSTED_TPM_H
+>>   
+>>   #include <keys/trusted-type.h>
+>> -#include <linux/tpm_command.h>
+>>   
+>>   extern struct trusted_key_ops trusted_key_tpm_ops;
+>>   
+>> diff --git a/include/linux/tpm.h b/include/linux/tpm.h
+>> index 8da49e8769d5..ef81e0b59657 100644
+>> --- a/include/linux/tpm.h
+>> +++ b/include/linux/tpm.h
+>> @@ -25,6 +25,9 @@
+>>   #include <crypto/hash_info.h>
+>>   #include <crypto/aes.h>
+>>   
+>> +#include "tpm_common.h"
+>> +#include "tpm1.h"
+>> +
+>>   #define TPM_DIGEST_SIZE		20	/* Max TPM v1.2 PCR size */
+>>   #define TPM_HEADER_SIZE		10
+>>   #define TPM_BUFSIZE		4096
+>> diff --git a/include/linux/tpm1.h b/include/linux/tpm1.h
+>> new file mode 100644
+>> index 000000000000..54c6c211eb9e
+>> --- /dev/null
+>> +++ b/include/linux/tpm1.h
+>> @@ -0,0 +1,55 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (C) 2004,2007,2008 IBM Corporation
+>> + *
+>> + * Authors:
+>> + * Leendert van Doorn <leendert@watson.ibm.com>
+>> + * Dave Safford <safford@watson.ibm.com>
+>> + * Reiner Sailer <sailer@watson.ibm.com>
+>> + * Kylene Hall <kjhall@us.ibm.com>
+>> + * Debora Velarde <dvelarde@us.ibm.com>
+>> + *
+>> + * Maintained by: <tpmdd_devel@lists.sourceforge.net>
+>> + *
+>> + * Device driver for TCG/TCPA TPM (trusted platform module).
+>> + * Specifications at www.trustedcomputinggroup.org
+>> + */
+>> +#ifndef __LINUX_TPM1_H__
+>> +#define __LINUX_TPM1_H__
+>> +
+>> +/*
+>> + * TPM 1.2 Main Specification
+>> + * https://trustedcomputinggroup.org/resource/tpm-main-specification/
+>> + */
+>> +
+>> +/* Command TAGS */
+>> +enum tpm_command_tags {
+>> +	TPM_TAG_RQU_COMMAND		= 193,
+>> +	TPM_TAG_RQU_AUTH1_COMMAND	= 194,
+>> +	TPM_TAG_RQU_AUTH2_COMMAND	= 195,
+>> +	TPM_TAG_RSP_COMMAND		= 196,
+>> +	TPM_TAG_RSP_AUTH1_COMMAND	= 197,
+>> +	TPM_TAG_RSP_AUTH2_COMMAND	= 198,
+>> +};
+>> +
+>> +/* Command Ordinals */
+>> +enum tpm_command_ordinals {
+>> +	TPM_ORD_CONTINUE_SELFTEST	= 83,
+>> +	TPM_ORD_GET_CAP			= 101,
+>> +	TPM_ORD_GET_RANDOM		= 70,
+>> +	TPM_ORD_PCR_EXTEND		= 20,
+>> +	TPM_ORD_PCR_READ		= 21,
+>> +	TPM_ORD_OSAP			= 11,
+>> +	TPM_ORD_OIAP			= 10,
+>> +	TPM_ORD_SAVESTATE		= 152,
+>> +	TPM_ORD_SEAL			= 23,
+>> +	TPM_ORD_STARTUP			= 153,
+>> +	TPM_ORD_UNSEAL			= 24,
+>> +};
+>> +
+>> +/* Other constants */to address your concern over diff churn
+>> +#define SRKHANDLE                       0x40000000
+>> +#define TPM_NONCE_SIZE                  20
+>> +#define TPM_ST_CLEAR			1
+>> +
+>> +#endif
+>> diff --git a/include/linux/tpm_command.h b/include/linux/tpm_command.h
+>> deleted file mode 100644
+>> index 02038972a05f..000000000000
+>> --- a/include/linux/tpm_command.h
+>> +++ /dev/null
+>> @@ -1,30 +0,0 @@
+>> -/* SPDX-License-Identifier: GPL-2.0 */
+>> -#ifndef __LINUX_TPM_COMMAND_H__
+>> -#define __LINUX_TPM_COMMAND_H__
+>> -
+>> -/*
+>> - * TPM Command constants from specifications at
+>> - * http://www.trustedcomputinggroup.org
+>> - */
+>> -
+>> -/* Command TAGS */
+>> -#define TPM_TAG_RQU_COMMAND             193
+>> -#define TPM_TAG_RQU_AUTH1_COMMAND       194
+>> -#define TPM_TAG_RQU_AUTH2_COMMAND       195
+>> -#define TPM_TAG_RSP_COMMAND             196
+>> -#define TPM_TAG_RSP_AUTH1_COMMAND       197
+>> -#define TPM_TAG_RSP_AUTH2_COMMAND       198
+>> -
+>> -/* Command Ordinals */
+>> -#define TPM_ORD_OIAP                    10
+>> -#define TPM_ORD_OSAP                    11
+>> -#define TPM_ORD_EXTEND			20
+>> -#define TPM_ORD_SEAL                    23
+>> -#define TPM_ORD_UNSEAL                  24
+>> -#define TPM_ORD_GET_RANDOM              70
+>> -
+>> -/* Other constants */
+>> -#define SRKHANDLE                       0x40000000
+>> -#define TPM_NONCE_SIZE                  20
+>> -
+>> -#endif
+>> diff --git a/include/linux/tpm_common.h b/include/linux/tpm_common.h
+>> new file mode 100644
+>> index 000000000000..b8be669913dd
+>> --- /dev/null
+>> +++ b/include/linux/tpm_common.h
+>> @@ -0,0 +1,22 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (C) 2004,2007,2008 IBM Corporation
+>> + *
+>> + * Authors:
+>> + * Leendert van Doorn <leendert@watson.ibm.com>
+>> + * Dave Safford <safford@watson.ibm.com>
+>> + * Reiner Sailer <sailer@watson.ibm.com>
+>> + * Kylene Hall <kjhall@us.ibm.com>
+>> + * Debora Velarde <dvelarde@us.ibm.com>
+>> + *
+>> + * Maintained by: <tpmdd_devel@lists.sourceforge.net>
+>> + *
+>> + * Device driver for TCG/TCPA TPM (trusted platform module).
+>> + * Specifications at www.trustedcomputinggroup.org
+>> + */
+>> +#ifndef __LINUX_TPM_COMMON_H__
+>> +#define __LINUX_TPM_COMMON_H__
+>> +
+>> +#define TPM_MAX_ORDINAL 243
+>> +
+>> +#endif
+>> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+>> index 6e6a9fb48e63..3717a06a5212 100644
+>> --- a/security/keys/trusted-keys/trusted_tpm1.c
+>> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+>> @@ -17,7 +17,6 @@
+>>   #include <keys/trusted-type.h>
+>>   #include <linux/key-type.h>
+>>   #include <linux/tpm.h>
+>> -#include <linux/tpm_command.h>
+>>   
+>>   #include <keys/trusted_tpm.h>
+>>   
+>> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+>> index 0a99bd051a25..e6000c71eeb6 100644
+>> --- a/security/keys/trusted-keys/trusted_tpm2.c
+>> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+>> @@ -9,7 +9,6 @@
+>>   #include <linux/string.h>
+>>   #include <linux/err.h>
+>>   #include <linux/tpm.h>
+>> -#include <linux/tpm_command.h>
+>>   
+>>   #include <keys/trusted-type.h>
+>>   #include <keys/trusted_tpm.h>
+>> -- 
+>> 2.43.7
+>>
+> 
+> BR, Jarkko
+
+V/r,
+DPS
+
 
