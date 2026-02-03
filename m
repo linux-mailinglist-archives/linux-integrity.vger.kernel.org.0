@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-8424-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8425-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2Lj+FWfvgWlAMwMAu9opvQ
-	(envelope-from <linux-integrity+bounces-8424-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 03 Feb 2026 13:51:51 +0100
+	id WGBgN0jwgWlAMwMAu9opvQ
+	(envelope-from <linux-integrity+bounces-8425-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 03 Feb 2026 13:55:36 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9943D95FC
-	for <lists+linux-integrity@lfdr.de>; Tue, 03 Feb 2026 13:51:50 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CACCBD96E5
+	for <lists+linux-integrity@lfdr.de>; Tue, 03 Feb 2026 13:55:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A57631044E9
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Feb 2026 12:44:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AB52A3033AD0
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Feb 2026 12:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC86534029C;
-	Tue,  3 Feb 2026 12:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6FF9346FA6;
+	Tue,  3 Feb 2026 12:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="SMXk7Zio"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="h3fezYnN"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733A7284B2F;
-	Tue,  3 Feb 2026 12:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAE320B7ED;
+	Tue,  3 Feb 2026 12:55:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770122648; cv=none; b=FLqIo48Jw9DVJ60JHshhYjskeBh0J0es2soX1uqA+6EvmD2sNBZ7xj8uQWpLICnQ46+1SbxE4g2+fXjl9z4Gz36Syit5xr4L0zw7ZNFbnMfIzcVAA4zyzsaGmreWzKu30eJkoUlZ476taCerMc7SAz1e91Jq1iauBSw1gF+6z6M=
+	t=1770123309; cv=none; b=UJof4Hb6xKcflEtCB2xlZj/nykfeOswEjLhlj1Ub2xSXWEciqUWY8rQMPzNvdzkJONtU1E9r/uZJA2qwdgM6d2QbqLNXgZb4Wlzsdk1DcliCQwT4269qAc+LFudiVhaDIZ6ZxL86TseD0EFLgi8GFGqg+XNXI0/4S0n4OOQAprY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770122648; c=relaxed/simple;
-	bh=4xMbDkPtYFnbhn8oi8ogQM7HDBoaOGhwFfB7e0t3td4=;
+	s=arc-20240116; t=1770123309; c=relaxed/simple;
+	bh=8c+Pqi8S29ccrlKn7/Q5mxLVtC9FrsWFxplmCU6dgEw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cd0b3lnXsbqS7SDpcrPZJMJiNuYgagTxtUhqe8PQ+4MwSovKrJ98d2NMGogFi4qoN2/C3tgC9SyEbv7gAkZZGcyqGJyzsgAQ0p9WJGqClZaj6ApWMeak+p2mp4oI5OFbKsIB8ComIydjkYunb0/pL/NZfnjQjq8fZOuDnwaRuI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=SMXk7Zio; arc=none smtp.client-ip=159.69.126.157
+	 Content-Type:Content-Disposition:In-Reply-To; b=CpuA3pychI9eMgfdJZvL9cDSMCQS4xcy+4Jd6bLpX5efsh37OY+odz13nUkDLLP+3/9ffY5oVcV72GAfQvts3nSjYW1CYpIUnQLcvx4gJQB6moagnw+GZjoyWLZNvmSu9EMcJRPznLGKG+H0cC2nUMIu7ugE5INFeLzNizw0ZA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=h3fezYnN; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1770122645;
-	bh=4xMbDkPtYFnbhn8oi8ogQM7HDBoaOGhwFfB7e0t3td4=;
+	s=mail; t=1770123305;
+	bh=8c+Pqi8S29ccrlKn7/Q5mxLVtC9FrsWFxplmCU6dgEw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SMXk7Ziop93PtXgUUPvFJrwX+tZphLJn717cY967EJ+dn5c3ytK5Jd3akdSlt7smz
-	 LjQYDD5nu7+lEc/AI7bKfPM9nyLwM7tXiMSSwvKs2nPopR1BLCJ2Cgd771dfO3qck8
-	 4K58p7AUrndd8U19BhXdA2hDQ2k+wJyqNngf+7xI=
-Date: Tue, 3 Feb 2026 13:44:05 +0100
+	b=h3fezYnNYnXEKvq604yd2NerVugru+NdBANWM+DWnwaWb5ItwAC0VUZhIl5YUjCms
+	 ygiVLrxrPvbovp2BJqy+bNMcWSa/VW1lTBYim8VFtMaE6qk2X2Xo1Ey0C4zQ14Aokc
+	 Wog6ncF8YdRMXZU8PXR10lrOsiZ6bohkkWQdQQIY=
+Date: Tue, 3 Feb 2026 13:55:05 +0100
 From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 To: Petr Pavlu <petr.pavlu@suse.com>
 Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
@@ -63,11 +63,11 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
 	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 13/17] module: Report signature type to users
-Message-ID: <8d399298-88a6-4c89-a0ed-fed0268b6493@t-8ch.de>
+Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
+Message-ID: <28cf8d51-7530-41d5-a47b-cad5ecabd269@t-8ch.de>
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-13-0b932db9b56b@weissschuh.net>
- <fd19f9d3-b01c-4cc8-9fd5-642350e7b36b@suse.com>
+ <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+ <db1ed045-d7b6-49dc-b111-9fea7c30f8ab@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -77,19 +77,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fd19f9d3-b01c-4cc8-9fd5-642350e7b36b@suse.com>
+In-Reply-To: <db1ed045-d7b6-49dc-b111-9fea7c30f8ab@suse.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8424-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8425-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
@@ -102,57 +102,100 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[linux@weissschuh.net,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[weissschuh.net:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[t-8ch.de:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,weissschuh.net:email,weissschuh.net:dkim]
-X-Rspamd-Queue-Id: D9943D95FC
+	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:dkim,gnu.org:url,t-8ch.de:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CACCBD96E5
 X-Rspamd-Action: no action
 
-On 2026-01-29 15:44:31+0100, Petr Pavlu wrote:
+On 2026-01-30 18:06:20+0100, Petr Pavlu wrote:
 > On 1/13/26 1:28 PM, Thomas Weißschuh wrote:
-> > The upcoming CONFIG_MODULE_HASHES will introduce a signature type.
-> > This needs to be handled by callers differently than PKCS7 signatures.
-> > 
-> > Report the signature type to the caller and let them verify it.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> > [...]
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index d65bc300a78c..2a28a0ece809 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3348,19 +3348,24 @@ static int module_integrity_check(struct load_info *info, int flags)
-> >  {
-> >  	bool mangled_module = flags & (MODULE_INIT_IGNORE_MODVERSIONS |
-> >  				       MODULE_INIT_IGNORE_VERMAGIC);
-> > +	enum pkey_id_type sig_type;
-> >  	size_t sig_len;
-> >  	const u8 *sig;
-> >  	int err = 0;
-> >  
-> >  	if (IS_ENABLED(CONFIG_MODULE_SIG_POLICY)) {
-> >  		err = mod_split_sig(info->hdr, &info->len, mangled_module,
-> > -				    &sig_len, &sig, "module");
-> > +				    &sig_type, &sig_len, &sig, "module");
-> >  		if (err)
-> >  			return err;
-> >  	}
-> >  
-> > -	if (IS_ENABLED(CONFIG_MODULE_SIG))
-> > +	if (IS_ENABLED(CONFIG_MODULE_SIG) && sig_type == PKEY_ID_PKCS7) {
-> >  		err = module_sig_check(info, sig, sig_len);
-> > +	} else {
-> > +		pr_err("module: not signed with expected PKCS#7 message\n");
-> > +		err = -ENOPKG;
-> > +	}
+> > Normally the .ko module files depend on a fully built vmlinux to be
+> > available for modpost validation and BTF generation. With
+> > CONFIG_MODULE_HASHES, vmlinux now depends on the modules
+> > to build a merkle tree. This introduces a dependency cycle which is
+> > impossible to satisfy. Work around this by building the modules during
+> > link-vmlinux.sh, after vmlinux is complete enough for modpost and BTF
+> > but before the final module hashes are
 > 
-> The new else branch means that if the user chooses not to configure any
-> module integrity policy, they will no longer be able to load any
-> modules. I think this entire if-else part should be moved under the
-> IS_ENABLED(CONFIG_MODULE_SIG_POLICY) block above, as I'm mentioning on
-> patch #12.
+> I wonder if this dependency cycle could be resolved by utilizing the
+> split into vmlinux.unstripped and vmlinux that occurred last year.
+> 
+> The idea is to create the following ordering: vmlinux.unstripped ->
+> modules -> vmlinux, and to patch in .module_hashes only when building
+> the final vmlinux.
+> 
+> This would require the following:
+> * Split scripts/Makefile.vmlinux into two Makefiles, one that builds the
+>   current vmlinux.unstripped and the second one that builds the final
+>   vmlinux from it.
+> * Modify the top Makefile to recognize vmlinux.unstripped and update the
+>   BTF generation rule 'modules: vmlinux' to
+>   'modules: vmlinux.unstripped'.
+> * Add the 'vmlinux: modules' ordering in the top Makefile for
+>   CONFIG_MODULE_HASHES=y.
+> * Remove the patching of vmlinux.unstripped in scripts/link-vmlinux.sh
+>   and instead move it into scripts/Makefile.vmlinux when running objcopy
+>   to produce the final vmlinux.
+> 
+> I think this approach has two main advantages:
+> * CONFIG_MODULE_HASHES can be made orthogonal to
+>   CONFIG_DEBUG_INFO_BTF_MODULES.
+> * All dependencies are expressed at the Makefile level instead of having
+>   scripts/link-vmlinux.sh invoke 'make -f Makefile modules'.
+> 
+> Below is a rough prototype that applies on top of this series. It is a
+> bit verbose due to the splitting of part of scripts/Makefile.vmlinux
+> into scripts/Makefile.vmlinux_unstripped.
 
-Ack.
+That looks like a feasible alternative. Before adopting it, I'd like to
+hear the preference of the kbuild folks.
+
+> diff --git a/Makefile b/Makefile
+> index 841772a5a260..19a3beb82fa7 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1259,7 +1259,7 @@ vmlinux_o: vmlinux.a $(KBUILD_VMLINUX_LIBS)
+>  vmlinux.o modules.builtin.modinfo modules.builtin: vmlinux_o
+>  	@:
+>  
+> -PHONY += vmlinux
+> +PHONY += vmlinux.unstripped vmlinux
+>  # LDFLAGS_vmlinux in the top Makefile defines linker flags for the top vmlinux,
+>  # not for decompressors. LDFLAGS_vmlinux in arch/*/boot/compressed/Makefile is
+>  # unrelated; the decompressors just happen to have the same base name,
+> @@ -1270,9 +1270,11 @@ PHONY += vmlinux
+>  #   https://savannah.gnu.org/bugs/?61463
+>  # For Make > 4.4, the following simple code will work:
+>  #  vmlinux: private export LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
+> -vmlinux: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
+> -vmlinux: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
+> -vmlinux: vmlinux.o $(KBUILD_LDS) modpost
+> +vmlinux.unstripped: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
+> +vmlinux.unstripped: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
+> +vmlinux.unstripped: vmlinux.o $(KBUILD_LDS) modpost
+> +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_unstripped
+> +vmlinux: vmlinux.unstripped
+>  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux
+
+Maybe we could keep them together in a single Makefile,
+and instead have different targets in it.
+
+(...)
+
+> @@ -98,70 +44,15 @@ remove-symbols := -w --strip-unneeded-symbol='__mod_device_table__*'
+>  # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
+>  # it is necessary to remove the PT_LOAD flag from the segment.
+>  quiet_cmd_strip_relocs = OBJCOPY $@
+> -      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
+> -                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
+> +      cmd_script_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
+> +                          $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
+> +                                     $(remove-symbols) \
+> +                                     $(patch-module-hashes) $@
+
+cmd_script_relocs -> cmd_strip_relocs
+
+(...)
 
