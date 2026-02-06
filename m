@@ -1,50 +1,50 @@
-Return-Path: <linux-integrity+bounces-8461-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8462-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MFZUICKmhWljEgQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8461-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:28:18 +0100
+	id AO8CO0qmhWljEgQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8462-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:28:58 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C505FB7CE
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:28:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98E31FB7F6
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:28:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EAFFC3034E3A
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 08:27:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 841BC3043BEC
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 08:27:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5583349AEE;
-	Fri,  6 Feb 2026 08:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9A03491C9;
+	Fri,  6 Feb 2026 08:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HoCgSWJA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vp2PC2gA"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2A3346AD6;
-	Fri,  6 Feb 2026 08:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EAA34888A;
+	Fri,  6 Feb 2026 08:27:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770366444; cv=none; b=b3IddjGSg9g+EsxhUYNxT6aEDKvpjMOpK5H/PXd4YwcEv5sMxQC87bnfJeD+0pYwT/d341TkBUAYQIRxgdaGIw3OQG8vjW6LbvXy3oY113nBIVPmCXsb5vcQ8yT6MarfL1D2+Fvc3ATLgeJjijuZPfujExS25l19sczfmfZURlY=
+	t=1770366447; cv=none; b=sW6TQgqpgRlxVEGI8dCZE8vVTZX7o4mBa0Y+unR2X4RetDjMrERAKvZnP6xfc+hmgSTsis6wSYOAKALP+D4YgnD8y72M+Z8SZ+/czMEHby8Icab3Rv8I8PozhuphdHjSEdGWusLW9cAqpF3+Wuh3bg+I3wLCQsh2QJut9d9OFmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770366444; c=relaxed/simple;
-	bh=hFLsbylF6p6A9KUqjQvFLetTNZX+wdgm8GS3pPMp/0Y=;
+	s=arc-20240116; t=1770366447; c=relaxed/simple;
+	bh=8tR/JyMCLrNy8ADtwT4oi7g4gZt3KEWkMvJ5vdKP8xw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TKRMnE4HSfPOru+hNemAbdmkMTFgqb1hxPndx+I5BDQJ5PaNDhfdbefMzPCy7DMjaPHqjBWOSkjoRyWrl2IczxzSdTzhIBU7Fg2OkYUUCbTRcSDtRyvIDmvGV8My1P274H3T2aH6wPKURZ/rDtHB459+fCGvFxpZ07D9aUHfgnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HoCgSWJA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A422FC116C6;
-	Fri,  6 Feb 2026 08:27:23 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=soTh9efDPxfcCqXlSqPJOgH2a6k9g4XLKytOVHpBjM5vViMvLL2fryhj5K0xVBIT0JXpVfbIXUHwqWJU8RqgYPA1aEuAwpk5IvVCo9UTlJIc+StkEX6slFdz6UbxJ4cFyhho/xQ9fCg9ygg/5NLkSDlxPOdULIE/OrZNR0EJaqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vp2PC2gA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A683C116C6;
+	Fri,  6 Feb 2026 08:27:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770366444;
-	bh=hFLsbylF6p6A9KUqjQvFLetTNZX+wdgm8GS3pPMp/0Y=;
+	s=k20201202; t=1770366447;
+	bh=8tR/JyMCLrNy8ADtwT4oi7g4gZt3KEWkMvJ5vdKP8xw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HoCgSWJAYnZUO2RoEREhCOmqxkrfsTnico+svE9PZ4e5ZgE6qDRHJUIMkD0SPNv81
-	 sbXDlzaI+E8QDKgXtzNCY5OXB0XjscNWGPd+vslG87ViPT76tsk5tlO/JhYq/TNBjC
-	 LrPVTibxAI15pjfkrloKkB2vOCkhT6M1PoO0iPW5ZIBTOpSSjX7CIblB4NEreb33Fl
-	 F+tFDdZ0O1gA72VaCCrqdlwsKNHVCSxfyZawTZol/9Tvpf/gvQccBwzySk6moMNALo
-	 0cosaWjVJOsjV6oIszz2lukfUjdK/nl+/Kem+5ZwQi29WdJvmt8lt4yM1gMZNHeLOw
-	 H27972wgdI63g==
-Date: Fri, 6 Feb 2026 09:25:30 +0100
+	b=Vp2PC2gA3+pZ8ESxBUwBD4+RlaTlMiWTbYGCtU9uYm1Ny183qPkkM87EeA+70T8t5
+	 uzV1MMT7Q4DQgDpm+2PGiSpvjiaRX74PAbfM7uyoDwXe/rTpGM+QBUrLgiopB4ETsv
+	 OzREwf4AkrZVM4U5Fwepst4YUp4B7s/N9yoWtTC4FkxZ4d+t2EASYBqh5qWYBhyCYA
+	 MqgxuIdsfeNUKg4BKG5poj069tVGi16kfDgOxNwtZo3vQdM2dJkzA18wCblJTwE3eD
+	 9zlsMHbbo+uZN88155eS2nRq2Cc3wjAwD6+dE9uNqkh4pjZEXYLAPQykM4P7Sgealq
+	 gaRO1u7Z225vA==
+Date: Fri, 6 Feb 2026 09:25:37 +0100
 From: Nicolas Schier <nsc@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -77,9 +77,8 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 03/17] ima: efi: Drop unnecessary check for
- CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
-Message-ID: <aYWlevYAZ7Rt24Oo@levanger>
+Subject: Re: [PATCH v4 04/17] module: Make mod_verify_sig() static
+Message-ID: <aYWlgdnHjhVbAlTh@levanger>
 Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
 	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
 	Nathan Chancellor <nathan@kernel.org>,
@@ -113,7 +112,7 @@ Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-3-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-4-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -123,8 +122,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260113-module-hashes-v4-3-0b932db9b56b@weissschuh.net>
-X-TUID: awWjl2+9zWWD
+In-Reply-To: <20260113-module-hashes-v4-4-0b932db9b56b@weissschuh.net>
+X-TUID: h6XwNhzsR91M
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -132,11 +131,11 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8461-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8462-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -151,23 +150,21 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[nsc@kernel.org,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,weissschuh.net:email]
-X-Rspamd-Queue-Id: 2C505FB7CE
+X-Rspamd-Queue-Id: 98E31FB7F6
 X-Rspamd-Action: no action
 
-On Tue, Jan 13, 2026 at 01:28:47PM +0100, Thomas Weiﬂschuh wrote:
-> When configuration settings are disabled the guarded functions are
-> defined as empty stubs, so the check is unnecessary.
-> The specific configuration option for set_module_sig_enforced() is
-> about to change and removing the checks avoids some later churn.
+On Tue, Jan 13, 2026 at 01:28:48PM +0100, Thomas Weiﬂschuh wrote:
+> It is not used outside of signing.c.
 > 
 > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > ---
->  security/integrity/ima/ima_efi.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  kernel/module/internal.h | 1 -
+>  kernel/module/signing.c  | 2 +-
+>  2 files changed, 1 insertion(+), 2 deletions(-)
 > 
 
 Reviewed-by: Nicolas Schier <nsc@kernel.org>
