@@ -1,50 +1,50 @@
-Return-Path: <linux-integrity+bounces-8462-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8463-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AO8CO0qmhWljEgQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8462-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:28:58 +0100
+	id sHbbNLCmhWljEgQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8463-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:30:40 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98E31FB7F6
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:28:58 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CCF6FB83C
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:30:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 841BC3043BEC
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 08:27:29 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4102E30041F5
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 08:30:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C9A03491C9;
-	Fri,  6 Feb 2026 08:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5239F29A9FA;
+	Fri,  6 Feb 2026 08:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vp2PC2gA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KbZxmDrr"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EAA34888A;
-	Fri,  6 Feb 2026 08:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D31A3B28D;
+	Fri,  6 Feb 2026 08:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770366447; cv=none; b=sW6TQgqpgRlxVEGI8dCZE8vVTZX7o4mBa0Y+unR2X4RetDjMrERAKvZnP6xfc+hmgSTsis6wSYOAKALP+D4YgnD8y72M+Z8SZ+/czMEHby8Icab3Rv8I8PozhuphdHjSEdGWusLW9cAqpF3+Wuh3bg+I3wLCQsh2QJut9d9OFmI=
+	t=1770366637; cv=none; b=b69sChzFO5/CiHNsDJHnldcA4FdoNEkMJgmIVqjzK1NtuLqzD4thqwP8veyGCYs86V2bQ3oF8oQ9z9XdV4Sp6Lr02Bywtxdh3av2PQp2G7X/ehMr6MPPJ08KC/X5HMZwnypGr4nQRldGGpE7FLLUj3KvB5Fi7s2tupmiSV0bj/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770366447; c=relaxed/simple;
-	bh=8tR/JyMCLrNy8ADtwT4oi7g4gZt3KEWkMvJ5vdKP8xw=;
+	s=arc-20240116; t=1770366637; c=relaxed/simple;
+	bh=CyWrZOJATVNS9+Rj5D0Boe5KDdvWmaNR5FdjGU15MAE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=soTh9efDPxfcCqXlSqPJOgH2a6k9g4XLKytOVHpBjM5vViMvLL2fryhj5K0xVBIT0JXpVfbIXUHwqWJU8RqgYPA1aEuAwpk5IvVCo9UTlJIc+StkEX6slFdz6UbxJ4cFyhho/xQ9fCg9ygg/5NLkSDlxPOdULIE/OrZNR0EJaqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vp2PC2gA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A683C116C6;
-	Fri,  6 Feb 2026 08:27:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VIn9wtxXT7PWmn0ZO9AkK+HEQNTY2Iv8ST0bdTLYTvboL+LQzyk5u1OBPjl+LAAezYPtRWLROdxYteKn3t2bScp2y7gyAq+F+o6BS79pzpPu3k14SwR77rWMRc5gvLB4GmMCTkmKZ/NvSF4+TdUss6wtjWGsalVIrtbwABsdKTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KbZxmDrr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487F2C116C6;
+	Fri,  6 Feb 2026 08:30:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770366447;
-	bh=8tR/JyMCLrNy8ADtwT4oi7g4gZt3KEWkMvJ5vdKP8xw=;
+	s=k20201202; t=1770366636;
+	bh=CyWrZOJATVNS9+Rj5D0Boe5KDdvWmaNR5FdjGU15MAE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Vp2PC2gA3+pZ8ESxBUwBD4+RlaTlMiWTbYGCtU9uYm1Ny183qPkkM87EeA+70T8t5
-	 uzV1MMT7Q4DQgDpm+2PGiSpvjiaRX74PAbfM7uyoDwXe/rTpGM+QBUrLgiopB4ETsv
-	 OzREwf4AkrZVM4U5Fwepst4YUp4B7s/N9yoWtTC4FkxZ4d+t2EASYBqh5qWYBhyCYA
-	 MqgxuIdsfeNUKg4BKG5poj069tVGi16kfDgOxNwtZo3vQdM2dJkzA18wCblJTwE3eD
-	 9zlsMHbbo+uZN88155eS2nRq2Cc3wjAwD6+dE9uNqkh4pjZEXYLAPQykM4P7Sgealq
-	 gaRO1u7Z225vA==
-Date: Fri, 6 Feb 2026 09:25:37 +0100
+	b=KbZxmDrrcakJ1Zbg86za3Nn9bxpJJasJZ16hyHVIpnfS1mGRcJ3jNdVJC+Jj19++i
+	 PnqWZFYx52twIezwwpk0X6QS6xzo4JcNBncQACzeVxjyHXngXPgP3tIbbteQ/24IT9
+	 hiiwZu6Dywo+w3kpTYZNBhw5+WZLY5UX7R/ohVMYzH1KHFl62weRoMxRPY3pR5QjVO
+	 d5VSXMwhPOYk1nZJeUxwaJDqXNznFEJjahtBzWO4YYlcyvgUVDHJmKKgafFuD0pdIN
+	 vbno5/RvKlSCcd79Gf4Z2Kqme2oRkRu8CzIQ5fv1QDygN6tvY3nONmqGvGHrUztUps
+	 EmR0AXYyecAlg==
+Date: Fri, 6 Feb 2026 09:30:08 +0100
 From: Nicolas Schier <nsc@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -77,8 +77,8 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 04/17] module: Make mod_verify_sig() static
-Message-ID: <aYWlgdnHjhVbAlTh@levanger>
+Subject: Re: [PATCH v4 05/17] module: Switch load_info::len to size_t
+Message-ID: <aYWmkEzjvo9RrzI9@levanger>
 Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
 	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
 	Nathan Chancellor <nathan@kernel.org>,
@@ -112,7 +112,7 @@ Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-4-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -122,8 +122,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260113-module-hashes-v4-4-0b932db9b56b@weissschuh.net>
-X-TUID: h6XwNhzsR91M
+In-Reply-To: <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net>
+X-TUID: cnlOAPnJljc+
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -131,11 +131,11 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8462-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8463-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -150,25 +150,27 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[nsc@kernel.org,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,weissschuh.net:email]
-X-Rspamd-Queue-Id: 98E31FB7F6
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3CCF6FB83C
 X-Rspamd-Action: no action
 
-On Tue, Jan 13, 2026 at 01:28:48PM +0100, Thomas Weiﬂschuh wrote:
-> It is not used outside of signing.c.
+On Tue, Jan 13, 2026 at 01:28:49PM +0100, Thomas Weiﬂschuh wrote:
+> Switching the types will make some later changes cleaner.
+> size_t is also the semantically correct type for this field.
 > 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  kernel/module/internal.h | 1 -
->  kernel/module/signing.c  | 2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
-> 
+> As both 'size_t' and 'unsigned int' are always the same size, this
+> should be risk-free.
 
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
+include/uapi/asm-generic/posix_types.h states:
+| * Most 32 bit architectures use "unsigned int" size_t,
+| * and all 64 bit architectures use "unsigned long" size_t.
 
--- 
+Is that statement wrong?  Or did I mix up the context?
+
+
+Kind regards,
 Nicolas
 
