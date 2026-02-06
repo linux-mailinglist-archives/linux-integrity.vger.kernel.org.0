@@ -1,133 +1,131 @@
-Return-Path: <linux-integrity+bounces-8468-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8469-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GBBhEtKxhWkRFAQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8468-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 10:18:10 +0100
+	id SE+CDonJhWnAGAQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8469-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 11:59:21 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A53BCFBEC7
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 10:18:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F920FCEB8
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 11:59:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F3A203020E99
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 09:18:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 91A6C302D5E2
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 10:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DE1335C1AE;
-	Fri,  6 Feb 2026 09:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F6A309EE7;
+	Fri,  6 Feb 2026 10:54:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="P8I512GQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="iQ3ytPIU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD88359716;
-	Fri,  6 Feb 2026 09:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CFE2E8B98
+	for <linux-integrity@vger.kernel.org>; Fri,  6 Feb 2026 10:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770369485; cv=none; b=ZbfPtNabXW0FcuVLoXAHTIjsVD4GmhgoTcAAgU9dhvzBrI7JO9U8I8+riBoQ1Bu2NgRJCsqNSfE3moRE0M/vRuJkbcasdIe9pFlMXx3TOZLIDZqIIGk5tNTvmNBbpfam7QqmbgXF9Osqoo54vRY8UC5MfGOj2uJz+KuvzZWedZI=
+	t=1770375284; cv=none; b=DiClUh07eMCcI04m6R9V6BWHJQaf83InRo9vc6Y7mu9ryA+IZjVfeApKe7CC/4yqTKVdrlo5A7Mwy8HVsnxPsnLuZcO2jj8mv/ZKPSZ5h2M4dcs0kj9US+SqGcgkw3X+3a8dMALzfms7Bad6QF3nNN8b0B+lp3lq1sYS1/TjZRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770369485; c=relaxed/simple;
-	bh=3lh+T18IbYxtb3gtqLTD6cEKkxOYPIXP9FgcFXhcwNo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XDkWAQxycB2vcqKjZGGLsSXJihGxSXn+CCdsA49BETk6I95JWB/cTVB9xGj0AZA4ksd3O+Wq3t0dLf/aDwpxkA0Bp5T6rVmdvqLRZewb0A01pHk1sMCVOOif4wYs79RcXQY6rjRa7lNMHvyifuiF+0Cc1G3OZLE5xDlvT2JfMoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=P8I512GQ; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1770369482;
-	bh=3lh+T18IbYxtb3gtqLTD6cEKkxOYPIXP9FgcFXhcwNo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P8I512GQdTuSnyyG/lrd0tY92NCxg6hbOdKWE5uC9rEk0Af5xUuBzfxkYiQYnDT74
-	 tZLXGVTtusLO1jNFYwYOYKJdJtCfChhFdJR7MQR+p9C9W/0oAljzpiG/Pc1bKJ4KRG
-	 +L7bhP0R6enz+BHXvbGpLSUPi81SWL48atg2FHZc=
-Date: Fri, 6 Feb 2026 10:18:02 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez <da.gomez@kernel.org>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Nicolas Schier <nsc@kernel.org>, 
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
-	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, 
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
-	Christian Heusel <christian@heusel.eu>, =?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 05/17] module: Switch load_info::len to size_t
-Message-ID: <08d258a3-1710-4d2f-815d-3d16a3dc928b@t-8ch.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net>
- <ffdafd21-fe7a-44a2-86ec-0e0c2ad4238c@kernel.org>
+	s=arc-20240116; t=1770375284; c=relaxed/simple;
+	bh=iDpOC0WOdRHHvccpJ5ULtKPLc8+bgp8EaSxPYyMDkTI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=R70we3uLiAWSVZfNmWAdxP9KiYd6f7hOaJqLCJ3dXaJmTCP/KfWF63i7/Q/vfhRoxF3L+BWDzsWrogvkjn/hoWEPlDXpwqZFHeWPAOnsKqBnziOA2T4ne+rW8OuwBzBQj/IJx5JUcAlGhDdIvlPPnnbEGKj8S7z2NiuxW2FLL28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=iQ3ytPIU; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:
+	Reply-To:Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date
+	:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:
+	References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:
+	List-Owner:List-Archive; bh=n6fUSwaQeunYCV5FL9M5sFL4UYtx4XlxFndoriSXmVM=; b=i
+	Q3ytPIUTkjpsKZO0KPoEliYN9vhM8BPwXUUDaIFDpKhzmJI2MQk9nXuNOYZpaGnp53Xi/2bPeOuF4
+	wy99krjAE6wOp1rOgHmXDBW+d1qtyXIntoWcfuY4KwPHago997RTxL2Nx/kCU0YGztCWhGADnMTHK
+	zz6yMmlnuOoutrWLYZm5xpbWBKJBtSFiTW78Hsx0TwG9aEaysT2vHTr5oNkImrHs0XyL8pbVv9ZGN
+	3sFGBxQPrTmbwrcGwF8BheCBCoL67+2RMOxT4sVJF+7l2mymIvw904c8CC2WPXHV0T5/TGyvJpn4t
+	hOPIplDOhmoR2zy54tr/dmoB/7ePgG3MA==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1voJDe-00Cw8d-0j;
+	Fri, 06 Feb 2026 10:37:46 +0000
+Date: Fri, 6 Feb 2026 10:37:46 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: linux-integrity@vger.kernel.org, Romain Naour <romain.naour@smile.fr>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Subject: IMA vs TPM (SPI) boot order problems
+Message-ID: <aYXEepLhUouN5f99@earth.li>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ffdafd21-fe7a-44a2-86ec-0e0c2ad4238c@kernel.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
+	R_DKIM_REJECT(1.00)[earth.li:s=the];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8468-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-8469-lists,linux-integrity=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[earth.li];
+	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[earth.li:-];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[40];
-	FREEMAIL_CC(0.00)[kernel.org,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linux@weissschuh.net,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[weissschuh.net:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[noodles@earth.li,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.986];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A53BCFBEC7
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3F920FCEB8
 X-Rspamd-Action: no action
 
-On 2026-02-06 10:09:12+0100, Christophe Leroy (CS GROUP) wrote:
-> 
-> 
-> Le 13/01/2026 à 13:28, Thomas Weißschuh a écrit :
-> > Switching the types will make some later changes cleaner.
-> > size_t is also the semantically correct type for this field.
-> > 
-> > As both 'size_t' and 'unsigned int' are always the same size, this
-> > should be risk-free.
+I'm seeing an issue with a SPI attached TPM, where it's not coming up 
+early enough for IMA to decide there's a TPM available that it can 
+measure into. The TPM is definitely present, and by the time we get to 
+userspace it's working fine.
 
-> Are you sure ?
+This is sort of resurrecting a post from 2024 by Romain, though that 
+concerned an i2c TPM:
 
-As mentioned before by David [0], this should have been 'unsigned long'
-instead of 'unsigned int'. Which is also what the diff shows.
+https://lore.kernel.org/all/9b98d912-ba78-402c-a5c8-154bef8794f7@smile.fr/
 
-> Some architectures have size_t as 'unsigned int', some have 'unsigned long',
-> some have 'unsigned long long'
+There doesn't seem to have actually been a fixed applied, so I tried the 
+late_initcall_sync suggestion, but that didn't change things:
 
-(...)
+[    0.000000] ACPI: TPM2 0x0000004044BCA998 00004C (v04 ALASKA A M I    00000001 AMI  00000000)
+[    0.000000] GICv3: 960 SPIs implemented
+[    0.000000] GICv3: 320 Extended SPIs implemented
+[    0.000447] LSM: initializing lsm=capability,bpf,ima
+[    0.394832] Trying to unpack rootfs image as initramfs...
+[    0.681134] tegra-qspi NVDA1513:00: Adding to iommu group 1
+[    0.681241] tegra-qspi NVDA1513:00: device reset failed
+[    0.686925] tpm_tis_spi spi-PRP0001:01: 2.0 TPM (device-id 0x1B, rev-id 22)
+[    0.894451] ima: No TPM chip found, activating TPM-bypass!
+[    0.894462] ima: Allocated hash algorithm: sha256
+[    0.894471] ima: No architecture policies found
 
-[0] https://lore.kernel.org/lkml/2919071.1770365933@warthog.procyon.org.uk/
+This seems to show SPI + the TPM coming up before IMA, but still not in 
+a way that makes IMA happy.
+
+Romain, did you solve your issue in some other manner?
+
+J.
+
+-- 
+If I want to hear the pitter patter of little feet, I'll put shoes on
+my cats.
 
