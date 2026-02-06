@@ -1,262 +1,147 @@
-Return-Path: <linux-integrity+bounces-8473-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8474-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yDggOVIhhmm/JwQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8473-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 18:13:54 +0100
+	id 0DVWIcxEhmn5LQQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8474-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 20:45:16 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DA9A100CC9
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 18:13:54 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F2AD102E30
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 20:45:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C7407302A05F
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 17:12:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 60F00300DCDB
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 19:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13BA1393DCB;
-	Fri,  6 Feb 2026 17:12:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1629A30E0D9;
+	Fri,  6 Feb 2026 19:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMP7LNGl"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="d+yR6eE8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36C035F8DF;
-	Fri,  6 Feb 2026 17:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E50C335079
+	for <linux-integrity@vger.kernel.org>; Fri,  6 Feb 2026 19:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770397968; cv=none; b=rqX1gp9EKBSFpJT+Q8YnqEI7upsQWL/xV3lw+0eqRqEheN2x5oSOm84fT5r0nzA4h/sPFEA5Zjyz0CYDEP9IdZmgEwuzMF6byHKb14jRrd2MovxfWlEf8IrdZLE8Lpr1kEHOxtM5PBdxbKaAeScAgi2L0brCIhkC/tqSuzrDRt0=
+	t=1770407113; cv=none; b=rp2nK6MnrlSA9rIppZAJY4BlKgvNGnBbKPcgdhZJKI1R5ZNjLI7lJH3dyv9U0jedZgxPWh+YkVrQeGlPbb5y5AeKj2IJQtxwP/BlPZjuJ76V+gBQnzO2gosRxkCyIQmVeThpeKtWW+DTcJ7LLG8NGMtmquHoce987lUG1B9iC2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770397968; c=relaxed/simple;
-	bh=f51fr0RwPbgcilaL5p8ILUT8dwBt1G9K1Ep4iTQCoSs=;
+	s=arc-20240116; t=1770407113; c=relaxed/simple;
+	bh=iOQJDJ2wi5Q0xI88Xk+AswOr7WepFuB/4ql8iPeeIck=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gZnwNZpV6BcTpmiOsE+Sl9Rlmbeg/Sw/M5BnDs3w+bfkQnY73KMo5IgJfBzf3b3/LnCnisNRYNsk81K+kZqi+wgP2qXDFyBTGtSCnL+9uKVJn569Ytd7X3I7aqjEohcrVX41FtCcxOInjhbaE0mvl6u5o3nJtLynawksESZb3kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMP7LNGl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DF7C116C6;
-	Fri,  6 Feb 2026 17:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770397967;
-	bh=f51fr0RwPbgcilaL5p8ILUT8dwBt1G9K1Ep4iTQCoSs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CMP7LNGlV4Z5pl65Rd7unzogYBQIDSiH0zCtfTSI/EDUAvkpSMrd4HnjKZU17g/CD
-	 BZXra/le1xACKpyF9UI9qrbi98RA1m2+XnuqbCNSbZXoiR7HHqcDRQ4sqLwoGcWIFt
-	 Q0gGqwzFR96kUU/DPD+4x32K3EsCiCXwubYEJFJR671ERQ2Ep2XKeGvPhGyLcWKjSv
-	 fw7+ENfiFAwGhG3sv9DyBKyBpOyMbc9ayAtcqhr+o75aqwj4Q4grNrv/gDBhW/g8Cd
-	 JbLHFv4Zl7PQ8Ml8t4YQFXh/glEDKdROiw6yzoC0OnYLcSsCEqQjmFDxwsLqcxA46k
-	 0vV8F35qk4E1A==
-Date: Fri, 6 Feb 2026 18:12:37 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Petr Pavlu <petr.pavlu@suse.com>, Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <aYYhBe9hZsIW8LXP@levanger>
-Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Daniel Gomez <da.gomez@samsung.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
-	Arnout Engelen <arnout@bzzt.net>,
-	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
-	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
- <db1ed045-d7b6-49dc-b111-9fea7c30f8ab@suse.com>
- <28cf8d51-7530-41d5-a47b-cad5ecabd269@t-8ch.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qaMmpC706be6GGCbq2KxsyXTwZFEHBsGw5Ij6FwDuM8lFd/++uuiDSjshA4qyeDwRsA4ud+mXop9IDLbIdMlRG3tCVaLMcjJgQGc8l1IzN/dhnKP6lZ44vQGZdtaqrE95gWfQUBCiZ7s/z8W0Bn805GXTSj74Ye2imDWROVeAUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=d+yR6eE8; arc=none smtp.client-ip=93.93.131.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
+	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=NgSebhCxpmLqJ7zEr/xAa1mDZLTBdOeakCAt5gVFewU=; b=d+yR6eE88t023KpWaRA+TIsNFQ
+	XvvXljBtWB/zknknUKGgnLFK+YRx0a176ZlnEagjdgFTjlQJVjfPPoIdOzJB1J2yR56361y0Iz9Bp
+	PmHXreWabPZSybL3BfqdmuqnTyjeCK/QoNzYTKKEfN3MYvgERh5Hu9m099xcsolRehay+pJNgoQbx
+	XfgVMfdaWRj+mfcNwhNXMQCoKfUcnqF7DT5Gt/nSV+B0fY4Z0n4oA/Bc5sLT1r0RQ8zfvS0Njstds
+	yZuNcM8bd3iUuXr4CAlkucftlCxUkOFj+WIPCYR3Roirw+cEZ8B5hd/bmF3yfWltQ6Ycvx1+v1pbg
+	TmAgSR7A==;
+Received: from noodles by the.earth.li with local (Exim 4.96)
+	(envelope-from <noodles@earth.li>)
+	id 1voRlO-00DGrQ-0g;
+	Fri, 06 Feb 2026 19:45:10 +0000
+Date: Fri, 6 Feb 2026 19:45:10 +0000
+From: Jonathan McDowell <noodles@earth.li>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, Romain Naour <romain.naour@smile.fr>
+Subject: Re: IMA vs TPM (SPI) boot order problems
+Message-ID: <aYZExjwPPLOLoWGk@earth.li>
+References: <aYXEepLhUouN5f99@earth.li>
+ <f8b3451a6ef619dd2934bc839618fabc9408967c.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <28cf8d51-7530-41d5-a47b-cad5ecabd269@t-8ch.de>
+In-Reply-To: <f8b3451a6ef619dd2934bc839618fabc9408967c.camel@linux.ibm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_REJECT(1.00)[earth.li:s=the];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8473-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8474-lists,linux-integrity=lfdr.de];
+	DMARC_NA(0.00)[earth.li];
+	DKIM_TRACE(0.00)[earth.li:-];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[39];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[suse.com,kernel.org,arndb.de,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nsc@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,gnu.org:url]
-X-Rspamd-Queue-Id: 8DA9A100CC9
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[noodles@earth.li,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.985];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 6F2AD102E30
 X-Rspamd-Action: no action
 
-On Tue, Feb 03, 2026 at 01:55:05PM +0100, Thomas Weißschuh wrote:
-> On 2026-01-30 18:06:20+0100, Petr Pavlu wrote:
-> > On 1/13/26 1:28 PM, Thomas Weißschuh wrote:
-> > > Normally the .ko module files depend on a fully built vmlinux to be
-> > > available for modpost validation and BTF generation. With
-> > > CONFIG_MODULE_HASHES, vmlinux now depends on the modules
-> > > to build a merkle tree. This introduces a dependency cycle which is
-> > > impossible to satisfy. Work around this by building the modules during
-> > > link-vmlinux.sh, after vmlinux is complete enough for modpost and BTF
-> > > but before the final module hashes are
-> > 
-> > I wonder if this dependency cycle could be resolved by utilizing the
-> > split into vmlinux.unstripped and vmlinux that occurred last year.
-> > 
-> > The idea is to create the following ordering: vmlinux.unstripped ->
-> > modules -> vmlinux, and to patch in .module_hashes only when building
-> > the final vmlinux.
-> > 
-> > This would require the following:
-> > * Split scripts/Makefile.vmlinux into two Makefiles, one that builds the
-> >   current vmlinux.unstripped and the second one that builds the final
-> >   vmlinux from it.
-> > * Modify the top Makefile to recognize vmlinux.unstripped and update the
-> >   BTF generation rule 'modules: vmlinux' to
-> >   'modules: vmlinux.unstripped'.
-> > * Add the 'vmlinux: modules' ordering in the top Makefile for
-> >   CONFIG_MODULE_HASHES=y.
-> > * Remove the patching of vmlinux.unstripped in scripts/link-vmlinux.sh
-> >   and instead move it into scripts/Makefile.vmlinux when running objcopy
-> >   to produce the final vmlinux.
-> > 
-> > I think this approach has two main advantages:
-> > * CONFIG_MODULE_HASHES can be made orthogonal to
-> >   CONFIG_DEBUG_INFO_BTF_MODULES.
-> > * All dependencies are expressed at the Makefile level instead of having
-> >   scripts/link-vmlinux.sh invoke 'make -f Makefile modules'.
-> > 
-> > Below is a rough prototype that applies on top of this series. It is a
-> > bit verbose due to the splitting of part of scripts/Makefile.vmlinux
-> > into scripts/Makefile.vmlinux_unstripped.
-> 
-> That looks like a feasible alternative. Before adopting it, I'd like to
-> hear the preference of the kbuild folks.
+On Fri, Feb 06, 2026 at 10:36:36AM -0500, Mimi Zohar wrote:
+>On Fri, 2026-02-06 at 10:37 +0000, Jonathan McDowell wrote:
+>> I'm seeing an issue with a SPI attached TPM, where it's not coming up
+>> early enough for IMA to decide there's a TPM available that it can
+>> measure into. The TPM is definitely present, and by the time we get to
+>> userspace it's working fine.
+>>
+>> This is sort of resurrecting a post from 2024 by Romain, though that
+>> concerned an i2c TPM:
+>>
+>> https://lore.kernel.org/all/9b98d912-ba78-402c-a5c8-154bef8794f7@smile.fr/
+>>
+>> There doesn't seem to have actually been a fixed applied, so I tried the
+>> late_initcall_sync suggestion, but that didn't change things:
+>>
+>> [    0.000000] ACPI: TPM2 0x0000004044BCA998 00004C (v04 ALASKA A M I    00000001 AMI  00000000)
+>> [    0.000000] GICv3: 960 SPIs implemented
+>> [    0.000000] GICv3: 320 Extended SPIs implemented
+>> [    0.000447] LSM: initializing lsm=capability,bpf,ima
+>> [    0.394832] Trying to unpack rootfs image as initramfs...
+>> [    0.681134] tegra-qspi NVDA1513:00: Adding to iommu group 1
+>> [    0.681241] tegra-qspi NVDA1513:00: device reset failed
+>> [    0.686925] tpm_tis_spi spi-PRP0001:01: 2.0 TPM (device-id 0x1B, rev-id 22)
+>> [    0.894451] ima: No TPM chip found, activating TPM-bypass!
+>> [    0.894462] ima: Allocated hash algorithm: sha256
+>> [    0.894471] ima: No architecture policies found
+>>
+>> This seems to show SPI + the TPM coming up before IMA, but still not in
+>> a way that makes IMA happy.
+>
+>Here's an example with really well written patch descriptions, that was
+>upstreamed:
+>
+>746d9e9f62a6 ("tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when it's built-in")
+>0e0546eabcd6 ("firmware: arm_ffa: Change initcall level of ffa_init() to
+>rootfs_initcall")
 
-After the first run-through, the proposed alternative sounds good.
-Unfortunately, I ran out of time for this week.  I can give a more
-founded reply in a few days.
-
-Kind regards,
-Nicolas
+Thanks Mimi, really useful pointers. I think the TPM/SPI chain is a 
+little bit more tricky (I guess I can just fix the path that works for 
+me, rather than *any* SPI bus driver), but I'll investigate.
 
 
-
-> > diff --git a/Makefile b/Makefile
-> > index 841772a5a260..19a3beb82fa7 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1259,7 +1259,7 @@ vmlinux_o: vmlinux.a $(KBUILD_VMLINUX_LIBS)
-> >  vmlinux.o modules.builtin.modinfo modules.builtin: vmlinux_o
-> >  	@:
-> >  
-> > -PHONY += vmlinux
-> > +PHONY += vmlinux.unstripped vmlinux
-> >  # LDFLAGS_vmlinux in the top Makefile defines linker flags for the top vmlinux,
-> >  # not for decompressors. LDFLAGS_vmlinux in arch/*/boot/compressed/Makefile is
-> >  # unrelated; the decompressors just happen to have the same base name,
-> > @@ -1270,9 +1270,11 @@ PHONY += vmlinux
-> >  #   https://savannah.gnu.org/bugs/?61463
-> >  # For Make > 4.4, the following simple code will work:
-> >  #  vmlinux: private export LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> > -vmlinux: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> > -vmlinux: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
-> > -vmlinux: vmlinux.o $(KBUILD_LDS) modpost
-> > +vmlinux.unstripped: private _LDFLAGS_vmlinux := $(LDFLAGS_vmlinux)
-> > +vmlinux.unstripped: export LDFLAGS_vmlinux = $(_LDFLAGS_vmlinux)
-> > +vmlinux.unstripped: vmlinux.o $(KBUILD_LDS) modpost
-> > +	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux_unstripped
-> > +vmlinux: vmlinux.unstripped
-> >  	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.vmlinux
-> 
-> Maybe we could keep them together in a single Makefile,
-> and instead have different targets in it.
-> 
-> (...)
-> 
-> > @@ -98,70 +44,15 @@ remove-symbols := -w --strip-unneeded-symbol='__mod_device_table__*'
-> >  # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
-> >  # it is necessary to remove the PT_LOAD flag from the segment.
-> >  quiet_cmd_strip_relocs = OBJCOPY $@
-> > -      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
-> > -                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
-> > +      cmd_script_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
-> > +                          $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) \
-> > +                                     $(remove-symbols) \
-> > +                                     $(patch-module-hashes) $@
-> 
-> cmd_script_relocs -> cmd_strip_relocs
-> 
-> (...)
+J.
 
 -- 
-Nicolas
+Shall I call the United Nations?
+This .sig brought to you by the letter W and the number 30
+Product of the Republic of HuggieTag
 
