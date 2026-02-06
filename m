@@ -1,258 +1,159 @@
-Return-Path: <linux-integrity+bounces-8458-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8459-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +J0TCzFVhWmnAAQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8458-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 03:42:57 +0100
+	id aE5zKyukhWmSEQQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8459-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:19:55 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98190F9675
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 03:42:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29346FB65C
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 09:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3474D300DF45
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 02:42:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0E802303930A
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 08:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97CE427E1D7;
-	Fri,  6 Feb 2026 02:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04D58348463;
+	Fri,  6 Feb 2026 08:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="AVa+xyAZ";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="rAWjGykW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JsT++EXP"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D7726B777;
-	Fri,  6 Feb 2026 02:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BB23358C7
+	for <linux-integrity@vger.kernel.org>; Fri,  6 Feb 2026 08:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770345774; cv=none; b=CN6zWiqDg7tTiD2aVbGz9J6qEHgacKNESsVl/47RclRmnDwuWrlFEZweyPHVDwWFoBLFfjo+57JP37xfmDmJuDggqh36mBaUHsnKON+6yv2O91w2vUaso9PNm4LDEvJ9Hzx82hwEL4q9XC/WK6RW4nv3TTRzOxAIgBM2OJDohRk=
+	t=1770365959; cv=none; b=beYZgVhiGywpzOZAm1wVJy1aLAXevbuGX40iE+e1RZAv46LyrlockEsoSPJidV16sOo2+gfITGXjslP3sVC5sqSLDTCZN381v9AEIrAfgd532K+Pv7JqsMYX6lmdoaKrfhrYjf+q73//iWlInPhyQXazk01Dt3qR/iuTz7pTtIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770345774; c=relaxed/simple;
-	bh=EjqcTqvJgyfifjv1G9eHM9eyrpQWYCxokryihyoaUpo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XExHVydi+PgopaHIvPqUZEZJV4jyOpcLUWJbW3xCRm66CqGpuYBdZWLyV4iDiYb8rPf421BLMcpHO05Un8Ki0Ln4iyYpkXMvNi22/tcUeVdOkosQ1eJMPCJtnrb+WdDctQUMSE/itz6612V+sM8fFTLCQzzpREVH8amOyJdWqmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=AVa+xyAZ; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=rAWjGykW; arc=none smtp.client-ip=135.148.138.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
-DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1770345760; bh=zk/+zbGyL20Elhq5fy6FzET
-	paBH9kdAS3LdzpVqUqqY=; b=AVa+xyAZJcZeuNsVzvoW+Hy5e3065hX9zSu2+h8jp8N+19QSo/
-	JyrnjLZUrosbDzvUt5a777ts6CKQ0SnQoM952cyrma5DlWxsnt1+j9K9MqxQ7l4f02e5pVTRoDp
-	RJZXo0ftyalqouVpjlf07e5mC2+jqevVPS9hO1GNELBhPZ59AHeKR1zkIu6KwUZutsO7YaL1S8A
-	v6lBFf8yULUlp52/iXCd8yqB/muE4DUMDpNQF96IDEsmx8TtsT/boQA1ClM3qP4GFlhMQYYGk7V
-	mAkTzKYMBsKm/5XfnHdrOdMe6KAlE7QXzAwnU5p1Pvcx6n7rj9iXp7VqBrmFjHt3W8w==;
-DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1770345760; bh=zk/+zbGyL20Elhq5fy6FzET
-	paBH9kdAS3LdzpVqUqqY=; b=rAWjGykWNlU9SttuqYBaoGIGqYDCSP9KtHogIEicxRjP7+0GA9
-	T3JFPvW1MioeRDIepN15AlNlQxWc4tyyzRCQ==;
-From: Daniel Hodges <git@danielhodges.dev>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: zohar@linux.ibm.com,
-	roberto.sassu@huawei.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel Hodges <git@danielhodges.dev>
-Subject: [PATCH v2 v2] evm: check return values of crypto_shash functions
-Date: Thu,  5 Feb 2026 21:42:40 -0500
-Message-ID: <20260206024240.19059-1-git@danielhodges.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <aYNprpzxppKE0Gf2@fb.com>
-References: <aYNprpzxppKE0Gf2@fb.com>
+	s=arc-20240116; t=1770365959; c=relaxed/simple;
+	bh=bCriBhlazS/0HXIrSjYBexp6X65YIc7sYJB9i7mUNXQ=;
+	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
+	 Content-Type:Date:Message-ID; b=rnTAOf3kITxZr/Vxn/7d3iB2nPamTgqbVM+7XstG4L4OAIqloLdZQubiVvH3XITLicp3H/nyd8Sbz4fpBknywTnrqGHLffjzTlahySS0HNEA+gj2+8YXtU4oEBrV7ja4wZW4gdHY7YBU2YXPbrE867zyPy9jqTXTdaoNd5XkV3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JsT++EXP; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770365958;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bCriBhlazS/0HXIrSjYBexp6X65YIc7sYJB9i7mUNXQ=;
+	b=JsT++EXPU2VrOW4VemMXTcMdSxVJeIjXjSK/uQRHXozUAVDZEQ1dUY3HPXVOzADpFYKh6i
+	o1ft6DgXWlH2j6EsQzHm2tXkpiTnPksxwcEacyX+7moL3bPGsEq8RwSoIO5wXOtJ1hkC48
+	dXDA2iHGhzRxexmEJWQkqdUhSyYxE0A=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-516--zY-X-rwO-qBHh21bdBLDA-1; Fri,
+ 06 Feb 2026 03:19:15 -0500
+X-MC-Unique: -zY-X-rwO-qBHh21bdBLDA-1
+X-Mimecast-MFC-AGG-ID: -zY-X-rwO-qBHh21bdBLDA_1770365951
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ABCD01956095;
+	Fri,  6 Feb 2026 08:19:08 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.44.33.164])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id C245A3000707;
+	Fri,  6 Feb 2026 08:18:54 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+	Kingdom.
+	Registered in England and Wales under Company Registration No. 3798903
+From: David Howells <dhowells@redhat.com>
+In-Reply-To: <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net>
+References: <20260113-module-hashes-v4-5-0b932db9b56b@weissschuh.net> <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+To: =?us-ascii?Q?=3D=3Futf-8=3Fq=3FThomas=5FWei=3DC3=3D9Fschuh=3F=3D?= <linux@weissschuh.net>
+Cc: dhowells@redhat.com, Nathan Chancellor <nathan@kernel.org>,
+    Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+    Petr Pavlu <petr.pavlu@suse.com>,
+    Sami Tolvanen <samitolvanen@google.com>,
+    Daniel Gomez <da.gomez@samsung.com>,
+    Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+    "Serge E.
+ Hallyn" <serge@hallyn.com>,
+    Jonathan Corbet <corbet@lwn.net>,
+    Madhavan Srinivasan <maddy@linux.ibm.com>,
+    Michael Ellerman <mpe@ellerman.id.au>,
+    Nicholas Piggin <npiggin@gmail.com>,
+    Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+    Roberto Sassu <roberto.sassu@huawei.com>,
+    Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+    Eric Snowberg <eric.snowberg@oracle.com>,
+    Nicolas Schier <nicolas.schier@linux.dev>,
+    Daniel Gomez <da.gomez@kernel.org>,
+    Aaron Tomlin <atomlin@atomlin.com>,
+    "Christophe
+ Leroy (CS GROUP)" <chleroy@kernel.org>,
+    Nicolas Schier <nsc@kernel.org>,
+    Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+    Xiu Jianfeng <xiujianfeng@huawei.com>,
+    Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
+    Arnout Engelen <arnout@bzzt.net>,
+    Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+    Christian Heusel <christian@heusel.eu>,
+    =?utf-8?Q?C=C3=A2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+    Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+    linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+    linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+    linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+    linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 05/17] module: Switch load_info::len to size_t
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 06 Feb 2026 08:18:53 +0000
+Message-ID: <2919071.1770365933@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	TO_EXCESS_QP(1.20)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[danielhodges.dev,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[danielhodges.dev:s=202510r,danielhodges.dev:s=202510e];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	RCVD_COUNT_THREE(0.00)[3];
+	TAGGED_FROM(0.00)[bounces-8459-lists,linux-integrity=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[42];
+	FREEMAIL_CC(0.00)[redhat.com,kernel.org,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8458-lists,linux-integrity=lfdr.de];
-	FREEMAIL_CC(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,danielhodges.dev];
-	DKIM_TRACE(0.00)[danielhodges.dev:+];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[git@danielhodges.dev,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dhowells@redhat.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 98190F9675
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,warthog.procyon.org.uk:mid]
+X-Rspamd-Queue-Id: 29346FB65C
 X-Rspamd-Action: no action
 
-The crypto_shash_update() and crypto_shash_final() functions can fail
-and return error codes, but their return values were not being checked
-in several places in security/integrity/evm/evm_crypto.c:
+Thomas Wei=C3=9Fschuh <linux@weissschuh.net> wrote:
 
-- hmac_add_misc() ignored returns from crypto_shash_update() and
-  crypto_shash_final()
-- evm_calc_hmac_or_hash() ignored returns from crypto_shash_update()
-- evm_init_hmac() ignored returns from crypto_shash_update()
+> As both 'size_t' and 'unsigned int' are always the same size, this
+> should be risk-free.
 
-If these hash operations fail silently, the resulting HMAC could be
-invalid or incomplete, which could weaken the integrity verification
-security that EVM provides.
+Did you mean 'unsigned long'?
 
-This patch converts hmac_add_misc() from void to int return type and
-adds proper error checking and propagation for all crypto_shash_*
-function calls. All callers are updated to handle the new return values.
-Additionally, error messages are logged when cryptographic operations
-fail to provide visibility into the failure rather than silently
-returning error codes.
-
-Fixes: 66dbc325afce ("evm: re-release")
-Signed-off-by: Daniel Hodges <git@danielhodges.dev>
----
- security/integrity/evm/evm_crypto.c | 55 ++++++++++++++++++++++-------
- 1 file changed, 42 insertions(+), 13 deletions(-)
-
-diff --git a/security/integrity/evm/evm_crypto.c b/security/integrity/evm/evm_crypto.c
-index a5e730ffda57..402eb1ca64ce 100644
---- a/security/integrity/evm/evm_crypto.c
-+++ b/security/integrity/evm/evm_crypto.c
-@@ -139,7 +139,7 @@ static struct shash_desc *init_desc(char type, uint8_t hash_algo)
-  * (Additional directory/file metadata needs to be added for more complete
-  * protection.)
-  */
--static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
-+static int hmac_add_misc(struct shash_desc *desc, struct inode *inode,
- 			  char type, char *digest)
- {
- 	struct h_misc {
-@@ -149,6 +149,7 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
- 		gid_t gid;
- 		umode_t mode;
- 	} hmac_misc;
-+	int error;
- 
- 	memset(&hmac_misc, 0, sizeof(hmac_misc));
- 	/* Don't include the inode or generation number in portable
-@@ -169,14 +170,28 @@ static void hmac_add_misc(struct shash_desc *desc, struct inode *inode,
- 	hmac_misc.uid = from_kuid(&init_user_ns, inode->i_uid);
- 	hmac_misc.gid = from_kgid(&init_user_ns, inode->i_gid);
- 	hmac_misc.mode = inode->i_mode;
--	crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_misc));
-+	error = crypto_shash_update(desc, (const u8 *)&hmac_misc, sizeof(hmac_misc));
-+	if (error) {
-+		pr_err("crypto_shash_update() failed: %d\n", error);
-+		return error;
-+	}
- 	if ((evm_hmac_attrs & EVM_ATTR_FSUUID) &&
--	    type != EVM_XATTR_PORTABLE_DIGSIG)
--		crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
--	crypto_shash_final(desc, digest);
-+	    type != EVM_XATTR_PORTABLE_DIGSIG) {
-+		error = crypto_shash_update(desc, (u8 *)&inode->i_sb->s_uuid, UUID_SIZE);
-+		if (error) {
-+			pr_err("crypto_shash_update() failed: %d\n", error);
-+			return error;
-+		}
-+	}
-+	error = crypto_shash_final(desc, digest);
-+	if (error) {
-+		pr_err("crypto_shash_final() failed: %d\n", error);
-+		return error;
-+	}
- 
- 	pr_debug("hmac_misc: (%zu) [%*phN]\n", sizeof(struct h_misc),
- 		 (int)sizeof(struct h_misc), &hmac_misc);
-+	return 0;
- }
- 
- /*
-@@ -260,9 +275,12 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
- 
- 		if ((req_xattr_name && req_xattr_value)
- 		    && !strcmp(xattr->name, req_xattr_name)) {
--			error = 0;
--			crypto_shash_update(desc, (const u8 *)req_xattr_value,
-+			error = crypto_shash_update(desc, (const u8 *)req_xattr_value,
- 					     req_xattr_value_len);
-+			if (error) {
-+				pr_err("crypto_shash_update() failed: %d\n", error);
-+				goto out;
-+			}
- 			if (is_ima)
- 				ima_present = true;
- 
-@@ -286,15 +304,20 @@ static int evm_calc_hmac_or_hash(struct dentry *dentry,
- 			pr_debug("file %s: xattr %s size mismatch (kernel: %d, user: %d)\n",
- 				 dentry->d_name.name, xattr->name, size,
- 				 user_space_size);
--		error = 0;
- 		xattr_size = size;
--		crypto_shash_update(desc, (const u8 *)xattr_value, xattr_size);
-+		error = crypto_shash_update(desc, (const u8 *)xattr_value, xattr_size);
-+		if (error) {
-+			pr_err("crypto_shash_update() failed: %d\n", error);
-+			goto out;
-+		}
- 		if (is_ima)
- 			ima_present = true;
- 
- 		dump_security_xattr(xattr->name, xattr_value, xattr_size);
- 	}
--	hmac_add_misc(desc, inode, type, data->digest);
-+	error = hmac_add_misc(desc, inode, type, data->digest);
-+	if (error)
-+		goto out;
- 
- 	if (inode != d_backing_inode(dentry) && iint) {
- 		if (IS_I_VERSION(inode))
-@@ -401,6 +424,7 @@ int evm_init_hmac(struct inode *inode, const struct xattr *xattrs,
- {
- 	struct shash_desc *desc;
- 	const struct xattr *xattr;
-+	int error;
- 
- 	desc = init_desc(EVM_XATTR_HMAC, HASH_ALGO_SHA1);
- 	if (IS_ERR(desc)) {
-@@ -412,12 +436,17 @@ int evm_init_hmac(struct inode *inode, const struct xattr *xattrs,
- 		if (!evm_protected_xattr(xattr->name))
- 			continue;
- 
--		crypto_shash_update(desc, xattr->value, xattr->value_len);
-+		error = crypto_shash_update(desc, xattr->value, xattr->value_len);
-+		if (error) {
-+			pr_err("crypto_shash_update() failed: %d\n", error);
-+			goto out;
-+		}
- 	}
- 
--	hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
-+	error = hmac_add_misc(desc, inode, EVM_XATTR_HMAC, hmac_val);
-+out:
- 	kfree(desc);
--	return 0;
-+	return error;
- }
- 
- /*
--- 
-2.52.0
+David
 
 
