@@ -1,147 +1,244 @@
-Return-Path: <linux-integrity+bounces-8474-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8475-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0DVWIcxEhmn5LQQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8474-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 20:45:16 +0100
+	id II65EOhJhmmdLgQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8475-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 21:07:04 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F2AD102E30
-	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 20:45:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAEAD103078
+	for <lists+linux-integrity@lfdr.de>; Fri, 06 Feb 2026 21:07:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 60F00300DCDB
-	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 19:45:14 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AACD73033223
+	for <lists+linux-integrity@lfdr.de>; Fri,  6 Feb 2026 20:07:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1629A30E0D9;
-	Fri,  6 Feb 2026 19:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D982FFF80;
+	Fri,  6 Feb 2026 20:07:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="d+yR6eE8"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="T60VaSKU"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from the.earth.li (the.earth.li [93.93.131.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E50C335079
-	for <linux-integrity@vger.kernel.org>; Fri,  6 Feb 2026 19:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B9DF26ED59
+	for <linux-integrity@vger.kernel.org>; Fri,  6 Feb 2026 20:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770407113; cv=none; b=rp2nK6MnrlSA9rIppZAJY4BlKgvNGnBbKPcgdhZJKI1R5ZNjLI7lJH3dyv9U0jedZgxPWh+YkVrQeGlPbb5y5AeKj2IJQtxwP/BlPZjuJ76V+gBQnzO2gosRxkCyIQmVeThpeKtWW+DTcJ7LLG8NGMtmquHoce987lUG1B9iC2Q=
+	t=1770408421; cv=none; b=LWihaVvP1bpGJ2/ZJCfeb3OwVMfCXQpmgGe8AN3AgQXqC3K0EXPyKAZIuqjb/ZQuMaUwqjYkEtxYm/Dk6dfAazt1iJEIspTeXT51bch9IumGR3nQAsNybAJkPgTZJvbwEQqbrg0Q+y0N0BrffqdEKgL4arcqNI1glLVWLwqbHbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770407113; c=relaxed/simple;
-	bh=iOQJDJ2wi5Q0xI88Xk+AswOr7WepFuB/4ql8iPeeIck=;
+	s=arc-20240116; t=1770408421; c=relaxed/simple;
+	bh=J9VSf4GFSRnCeM/zRTTO3OcekKEgf2VSDADW3OuMymE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qaMmpC706be6GGCbq2KxsyXTwZFEHBsGw5Ij6FwDuM8lFd/++uuiDSjshA4qyeDwRsA4ud+mXop9IDLbIdMlRG3tCVaLMcjJgQGc8l1IzN/dhnKP6lZ44vQGZdtaqrE95gWfQUBCiZ7s/z8W0Bn805GXTSj74Ye2imDWROVeAUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=d+yR6eE8; arc=none smtp.client-ip=93.93.131.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
-	s=the; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:
-	Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=NgSebhCxpmLqJ7zEr/xAa1mDZLTBdOeakCAt5gVFewU=; b=d+yR6eE88t023KpWaRA+TIsNFQ
-	XvvXljBtWB/zknknUKGgnLFK+YRx0a176ZlnEagjdgFTjlQJVjfPPoIdOzJB1J2yR56361y0Iz9Bp
-	PmHXreWabPZSybL3BfqdmuqnTyjeCK/QoNzYTKKEfN3MYvgERh5Hu9m099xcsolRehay+pJNgoQbx
-	XfgVMfdaWRj+mfcNwhNXMQCoKfUcnqF7DT5Gt/nSV+B0fY4Z0n4oA/Bc5sLT1r0RQ8zfvS0Njstds
-	yZuNcM8bd3iUuXr4CAlkucftlCxUkOFj+WIPCYR3Roirw+cEZ8B5hd/bmF3yfWltQ6Ycvx1+v1pbg
-	TmAgSR7A==;
-Received: from noodles by the.earth.li with local (Exim 4.96)
-	(envelope-from <noodles@earth.li>)
-	id 1voRlO-00DGrQ-0g;
-	Fri, 06 Feb 2026 19:45:10 +0000
-Date: Fri, 6 Feb 2026 19:45:10 +0000
-From: Jonathan McDowell <noodles@earth.li>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OoSRZbPz9MwuxS8EWA8tBHwK/h/9BAodE8fOzLfRz8NO81HiC77z2qQ/l8c2pE1Apieq8kPx9avMty0Zha4Wg6jt5aDOeKoBZS1k3OK5O3yqHWCqRbx6uEiGUYvHtUUOZft9jq9yyPhDeTNDUjzF6jlpgQTorIVMiANudnDjdI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=T60VaSKU; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7d18d02af68so1720776a34.2
+        for <linux-integrity@vger.kernel.org>; Fri, 06 Feb 2026 12:07:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1770408420; x=1771013220; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u3wE/nOGLvc3QkX9UGDprKILAWky/nGcYsK1Fu7jX+4=;
+        b=T60VaSKUIsAO9mkrJBLF5+7rAumRBGzDL/ZOfvAFJzzAnw7DWHKRCmiScn+gxyBlUA
+         nyJWvwW+PrD4scXR7zmwXOT4f0daQMnxXtMqmG3gqaVVp9tYJ23xDjat13C8ia48qeQe
+         M4/B/2eSeiahhOVjKMjvDtQuu4jIhhYBB3H7wvBOs3YuS0hyRkP3jecTk9Cro0m8LCeG
+         2vhM20XT7MtzFxTz/g3B3EfY3JZ1NC71LgwaYVo/KhfOh9+ZfUPPRFCqRHrZ1VFwV5Cw
+         C7sy4FuFd4YwIkAq5o2cPrBAuudVNsR3BiTyo+SwovRIVd8qf8LaslTt6rKhqeyCxCzk
+         yf3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770408420; x=1771013220;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u3wE/nOGLvc3QkX9UGDprKILAWky/nGcYsK1Fu7jX+4=;
+        b=SbFFCUGIfvB1DqC8pGEp6k11HAlO+AGO2b4NqXk4wHuMFoT8Ahn2RamSmvHJWZqfqj
+         pRA4I1HDrrtjb6mJ9du+My9PafYq4jlmLEbc38JGsMXjOORKE35s7yUoNcGvIrI7qwsE
+         jV5VktD7ZKvoMemp1IcS69b/IG7eBi4+J4fAQxR+QGsvYYL8vesePygU6PSfpAs+COub
+         yufwD4CYcLKMvJ2uIG00j5VPv3HvF6MFYPsl590JL4+37tXaJbjl3JnCy0Lbg8CdNipt
+         Fj8iYEQa16Tj23F50B53WDT24hKLUIBstei9kGiZgyj2EUdzUKnKKMWyA6KthqEBjcb7
+         iHiw==
+X-Forwarded-Encrypted: i=1; AJvYcCW0ySntyq2mLHgJCaplyc0gBmv4Kir7Q4nZzYjTlo0DdJw9eZGn9rtdpnxCffaV3L+I25TJBq5sZhQn7r9+Kek=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq20yH4or7dX6C8jXdRVcfgx3TIAgktkS85TkrxlY/IMr6DQBU
+	FDakE4TLHSytvROaxkU0EZfW0hs8QSF+8ssaCICmf8UPOD0KUkwg2L63FN+BrTfLdwQ=
+X-Gm-Gg: AZuq6aJZjAhmzOw+pFcT7qPXg0ItO+cBEwKZQ0/uUKueif+HGdbJ22K+r2ZeKwnPfB1
+	v9g9N7M3bg4HaDECDqCbOivnDyz+ydBXr/9ofTQ7JRLUVnOGla18lURzvNnr7x3YYzBD0nMVNuX
+	LulUxthxMjaas88TIacAQ+dTUIjmE0ZWbQrbXVch8AINxTR9r+J6GHvNSCTzm0x8abW95bOx+Dp
+	bk0Xexzjq7rgVbXR4cuzOHMEgReW+6FYlZ8QNY17xZzz13B0pBjdtT5hSi0cekDpb9VmlWcyZHN
+	yO4un85Qe9ksKorGKN8imJPMnrQa2LIcxYkxJtl8tZMsatB+/+hIIytXvjD0KewN9PmNoB4khXL
+	w/6+GS0DsEP81OGTyAIp8zuaSxf9c43AP/nBb75qpIBRotVp7asixqDMYh4UDP5Tjjg==
+X-Received: by 2002:a05:6830:6f47:b0:7c7:6043:dd87 with SMTP id 46e09a7af769-7d4643ebfb8mr2045525a34.6.1770408420345;
+        Fri, 06 Feb 2026 12:07:00 -0800 (PST)
+Received: from CMGLRV3 ([2a09:bac5:947d:4e6::7d:6a])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d46470da04sm2246603a34.7.2026.02.06.12.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 12:06:59 -0800 (PST)
+Date: Fri, 6 Feb 2026 14:06:57 -0600
+From: Frederick Lawler <fred@cloudflare.com>
 To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-integrity@vger.kernel.org, Romain Naour <romain.naour@smile.fr>
-Subject: Re: IMA vs TPM (SPI) boot order problems
-Message-ID: <aYZExjwPPLOLoWGk@earth.li>
-References: <aYXEepLhUouN5f99@earth.li>
- <f8b3451a6ef619dd2934bc839618fabc9408967c.camel@linux.ibm.com>
+Cc: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org, kernel-team@cloudflare.com
+Subject: Re: [PATCH v5 3/3] ima: Use kstat.ctime as a fallback change
+ detection for stacked fs
+Message-ID: <aYZJ4Y33oRRk5Drs@CMGLRV3>
+References: <20260130-xfs-ima-fixup-v5-0-57e84ea91712@cloudflare.com>
+ <20260130-xfs-ima-fixup-v5-3-57e84ea91712@cloudflare.com>
+ <c449523aef301a6b199e06d4c3fbf7587d1218c5.camel@huaweicloud.com>
+ <aYO4fj0Uw0aUWXOX@CMGLRV3>
+ <6f82d5dc6b499ecd03c985d6de20de94fea04cfe.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f8b3451a6ef619dd2934bc839618fabc9408967c.camel@linux.ibm.com>
+In-Reply-To: <6f82d5dc6b499ecd03c985d6de20de94fea04cfe.camel@linux.ibm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.46 / 15.00];
+X-Spamd-Result: default: False [-7.16 / 15.00];
+	WHITELIST_DMARC(-7.00)[cloudflare.com:D:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_REJECT(1.00)[earth.li:s=the];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[cloudflare.com,reject];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[cloudflare.com:s=google09082023];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8474-lists,linux-integrity=lfdr.de];
-	DMARC_NA(0.00)[earth.li];
-	DKIM_TRACE(0.00)[earth.li:-];
-	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[noodles@earth.li,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.985];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8475-lists,linux-integrity=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 6F2AD102E30
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[huaweicloud.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,kernel.org,toxicpanda.com,vger.kernel.org,cloudflare.com];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[fred@cloudflare.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[cloudflare.com:+];
+	NEURAL_HAM(-0.00)[-0.998];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[cloudflare.com:dkim,localhost:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: AAEAD103078
 X-Rspamd-Action: no action
 
-On Fri, Feb 06, 2026 at 10:36:36AM -0500, Mimi Zohar wrote:
->On Fri, 2026-02-06 at 10:37 +0000, Jonathan McDowell wrote:
->> I'm seeing an issue with a SPI attached TPM, where it's not coming up
->> early enough for IMA to decide there's a TPM available that it can
->> measure into. The TPM is definitely present, and by the time we get to
->> userspace it's working fine.
->>
->> This is sort of resurrecting a post from 2024 by Romain, though that
->> concerned an i2c TPM:
->>
->> https://lore.kernel.org/all/9b98d912-ba78-402c-a5c8-154bef8794f7@smile.fr/
->>
->> There doesn't seem to have actually been a fixed applied, so I tried the
->> late_initcall_sync suggestion, but that didn't change things:
->>
->> [    0.000000] ACPI: TPM2 0x0000004044BCA998 00004C (v04 ALASKA A M I    00000001 AMI  00000000)
->> [    0.000000] GICv3: 960 SPIs implemented
->> [    0.000000] GICv3: 320 Extended SPIs implemented
->> [    0.000447] LSM: initializing lsm=capability,bpf,ima
->> [    0.394832] Trying to unpack rootfs image as initramfs...
->> [    0.681134] tegra-qspi NVDA1513:00: Adding to iommu group 1
->> [    0.681241] tegra-qspi NVDA1513:00: device reset failed
->> [    0.686925] tpm_tis_spi spi-PRP0001:01: 2.0 TPM (device-id 0x1B, rev-id 22)
->> [    0.894451] ima: No TPM chip found, activating TPM-bypass!
->> [    0.894462] ima: Allocated hash algorithm: sha256
->> [    0.894471] ima: No architecture policies found
->>
->> This seems to show SPI + the TPM coming up before IMA, but still not in
->> a way that makes IMA happy.
->
->Here's an example with really well written patch descriptions, that was
->upstreamed:
->
->746d9e9f62a6 ("tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when it's built-in")
->0e0546eabcd6 ("firmware: arm_ffa: Change initcall level of ffa_init() to
->rootfs_initcall")
+On Wed, Feb 04, 2026 at 11:26:27PM -0500, Mimi Zohar wrote:
+> On Wed, 2026-02-04 at 15:22 -0600, Frederick Lawler wrote:
+> > That said, I think Mimi pointed out in an email [2] where multi-grain
+> > file systems are impacted regardless of stacked fs or not due to the last
+> > writer check.
+> > 
+> > I don't recall coming across that in my tests, but perhaps I did that
+> > specific test wrong? To be sure, I created the C program, and on the VM,
+> > created a XFS disk, mounted it on loopback, ran the rdwr program on
+> > "somefile" multiple times, and only got 1 audit log for it, until I
+> > mutated it with touch, and only got 2 hits: original + after mutation
+> > after running the program multiple times. 
+> > 
+> > I'm not sure what's going on there, so I'll look into that a bit more,
+> > but so far the impact is stacked file systems & multigrain ctime AFAIK.
+> 
+> Make sure you're testing without your patch set applied or at least the last
+> patch.
+> 
 
-Thanks Mimi, really useful pointers. I think the TPM/SPI chain is a 
-little bit more tricky (I guess I can just fix the path that works for 
-me, rather than *any* SPI bus driver), but I'll investigate.
+I'm still not sure what went wrong with my test suite, but spinning up a
+VM similar to Mimi's, I was able to reproduce the last writer issue. I
+used patch 1 as a baseline because that's noop from base 6.19, and used
+that function as a convenient trace point.
 
+And, then running the attached example test for stacked FS works as
+expected on both patches 1 (multiple log messages) & 3 (just one log
+message).
 
-J.
+I left out the dump_stack() in integrity_inode_attrs_stat_change()
+for readability in these results. For Mimi's test, we just see
+calls into ima_check_last_writer(), and for the attached sample
+in 0/0, we get the calls straight from process_measurement() for
+stacked fs. Running Mimi's and then attached in that order, I get
+double the logs because the FILE_CHECK is hitting the last writer,
+and we get the process_measurement() for the binary run.
 
--- 
-Shall I call the United Nations?
-This .sig brought to you by the letter W and the number 30
-Product of the Republic of HuggieTag
+Based on all of this, I can drop the stacked FS wording in the patch
+descriptions, and keep it all focused that the change_cookie semantics
+have been changed for multigrain file systems.
+
+Results:
+
+PATCH 1/3
+
+[root@localhost ~]# ./mimi.sh
+filename: /usr/bin/date-20260206140427
+filename: /usr/bin/date-20260206140427
+filename: /usr/bin/date-20260206140427
+FAIL: Expected 1 audit event, but found 3.
+
+[   26.033572] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=0 change_cookie=0
+[   26.034372] ima: fred: ima_check_last_writer: must measure file: "/usr/bin/date-20260206140427"
+[   26.037453] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=0 change_cookie=0
+[   26.038425] ima: fred: ima_check_last_writer: must measure file: "/usr/bin/date-20260206140427"
+[   26.039821] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=0 change_cookie=0
+[   26.041383] ima: fred: ima_check_last_writer: must measure file: "/usr/bin/date-20260206140427"
+
+[root@localhost fred-tests]# ./simple-fedora.sh
+314572800 bytes (315 MB, 300 MiB) copied, 0.132908 s, 2.4 GB/s
+Fri Feb  6 14:56:18 EST 2026
+Fri Feb  6 14:56:18 EST 2026
+Fri Feb  6 14:56:18 EST 2026
+Fri Feb  6 14:56:18 EST 2026
+FAIL: Expected 1 audit event, but found 4.
+
+Note: Does not have dmesg output because this patch didn't put the trace
+function into integrity_inode_attrs_changed().
+
+PATCH 3/3
+[root@localhost ~]# ./mimi.sh
+filename: /usr/bin/date-20260206140141
+filename: /usr/bin/date-20260206140141
+filename: /usr/bin/date-20260206140141
+PASS: Found exactly 1 audit event.
+
+[   17.191235] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=1770404501462431821 change_cookie=0
+[   17.192213] fred: integrity_inode_attrs_stat_changed result_mask=128 (ctime) version=1770404501462431821 ctime=1770404501462431821
+[   17.196325] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=1770404501462431821 change_cookie=0
+[   17.197380] fred: integrity_inode_attrs_stat_changed result_mask=128 (ctime) version=1770404501462431821 ctime=1770404501462431821
+[   17.199750] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=1770404501462431821 change_cookie=0
+[   17.200682] fred: integrity_inode_attrs_stat_changed result_mask=128 (ctime) version=1770404501462431821 ctime=1770404501462431821
+
+[root@localhost fred-tests]# ./simple-fedora.sh
+Fri Feb  6 14:53:30 EST 2026
+Fri Feb  6 14:53:30 EST 2026
+Fri Feb  6 14:53:30 EST 2026
+Fri Feb  6 14:53:30 EST 2026
+PASS: Found exactly 1 audit event.
+
+[   23.315358] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=1770407920086616962 change_cookie=0
+[   23.328978] fred: integrity_inode_attrs_stat_changed result_mask=128 (ctime) version=1770407920086616962 ctime=1770407920086616962
+[   23.332122] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=1770407920086616962 change_cookie=0
+[   23.347162] fred: integrity_inode_attrs_stat_changed result_mask=128 (ctime) version=1770407920086616962 ctime=1770407920086616962
+[   23.352931] fred: integrity_inode_attrs_stat_changed result_mask=0 (change cookie) version=1770407920086616962 change_cookie=0
+[   23.368026] fred: integrity_inode_attrs_stat_changed result_mask=128 (ctime) version=1770407920086616962 ctime=1770407920086616962
+
+Note that the in stacked FS case, process_measurement() skipped the check
+for attrs changed, and skipped to measuring. Subsequent calls into
+process_measurement() hits the integrity_inode_attrs_stat_changed().
+
 
