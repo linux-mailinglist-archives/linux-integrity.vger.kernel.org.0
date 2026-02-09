@@ -1,84 +1,85 @@
-Return-Path: <linux-integrity+bounces-8481-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8480-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6BTuBfpPimmbJQAAu9opvQ
-	(envelope-from <linux-integrity+bounces-8481-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 09 Feb 2026 22:22:02 +0100
+	id cB+qG/dPimmbJQAAu9opvQ
+	(envelope-from <linux-integrity+bounces-8480-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 09 Feb 2026 22:21:59 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33967114BC1
-	for <lists+linux-integrity@lfdr.de>; Mon, 09 Feb 2026 22:22:01 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EC22114BB9
+	for <lists+linux-integrity@lfdr.de>; Mon, 09 Feb 2026 22:21:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 131AC3007A65
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Feb 2026 21:21:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D0D0F3006D4D
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Feb 2026 21:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A4930F921;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DAE230C60D;
 	Mon,  9 Feb 2026 21:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="M0rQgl3H"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UjWsGNw3"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40BB830E836
-	for <linux-integrity@vger.kernel.org>; Mon,  9 Feb 2026 21:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D2F2EA173
+	for <linux-integrity@vger.kernel.org>; Mon,  9 Feb 2026 21:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770672115; cv=none; b=i+2Nuogm69i54tljmbQUvPBMCrb+MV2qQmZQsfh2Rumd3hOGhw5n81kkMN9EgSkLwtdIkAfESsx8Q4H/yTPuju+z6Y4DpHC1wjGFIBizKgQPY2JA1KjoXqNp++M34+ipLKuWWyQPXl+IZ+WqXsHw8QNFAeowg0a7IMuIEWen5I0=
+	t=1770672115; cv=none; b=hJ72AIX6dlvqmi5VVKlRgjaI6sqf97rR9MRkU3zgQchVN4Dsyt1RnL14RvjoZyIKiO2sEjRhs6bN3kvo3PnJ74HCq+r0FtamdnFBYLitkrWhVb6N7RKjbPUhmWL8YQMXQ/xwchPMIDVh6L+OjzVWuJY4xa5FQYOzM3t2sSQu+V0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770672115; c=relaxed/simple;
-	bh=qM+AUMPPSOsO/xFhj9Od+YUAH9S8lYo+uEY1V7e0Ehs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nbUdPOpwMhFQYghZVST2JpBPOKUBR0LOx1007+fBbFRZ8qYYm4AULSDFgv/LNyUPvHQqylGmxsbrrnAG+Fzig+uhBKkUacY44KlEdUWQYEurnA0rBeBNfshongrKsqxjAArYtqSlPbrFAp4ya0l/nqvbGC7XkOzWEQ8RWt4DYSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=M0rQgl3H; arc=none smtp.client-ip=209.85.161.53
+	bh=E44D0I52YoGh+U5fwPkQ5hEITkBV+sZorQSKCWfktmc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=R57amnqquyensQdlFEuZJaZ5RHomq/S4Ixizv9lUCX5LlkjAgnA+X68s/3iQM4eE7NnTV/J/YzB9IHLelT+s+1R+P5XqbRwH8P5VcIk+sNQLlZZTzgKX4ozuQnhEAV/8bt2eh4Kv2dk8maaQF/Pkv5e0KGW90OV0rfWAbuRrISU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=UjWsGNw3; arc=none smtp.client-ip=209.85.161.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-66ee7b9af94so690184eaf.0
-        for <linux-integrity@vger.kernel.org>; Mon, 09 Feb 2026 13:21:53 -0800 (PST)
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-662fe3ff6f6so2571062eaf.0
+        for <linux-integrity@vger.kernel.org>; Mon, 09 Feb 2026 13:21:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1770672112; x=1771276912; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bf/ok2KALFW8VblL1bFh6P+HrccoXJ2oopKC4NTt0RY=;
-        b=M0rQgl3HhyvQ4gLR55NLX75GsoHZe3qrRWK1uke2iR9s2NNpG2YUndH1vbNEVfCk6b
-         9ZGSBgxpbCiuW2VaeJ1vxVN0W44PyFwB/j+UHzME3NvPn1iRIEAuQ7lXpnST1iw5M+rL
-         NK9U67RQbiI+PEuahnwZRcTdBMzUDp/ua68z6H2Ji8ozigNWPULP1kC2M/vnoKgPHt0Z
-         MuZRGLr+GVyQ9dDh0pf0y7AS5R49txhQtx7fVR1Daqa2cQABEG8UcsiodWI95aqs9UWy
-         gxg3aqShWjgm5g3h0F++93qgb2la4ZcwF8ph98Y38VGhCAdnKzpOGGhKIfdeM8sHqs3C
-         m7+g==
+        d=cloudflare.com; s=google09082023; t=1770672113; x=1771276913; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B8RijGQOfqPIwUgELzLaWOi9LUBjEfJ1NBk4LJfVwV0=;
+        b=UjWsGNw3GBANp1Ibh+JJia1OeYMnwWi09DWePej20aQMtbCT1fXT/G24nTO6bGhMmL
+         SwIJ6FnnfZ4gofxXO0Xd+VWhVCl71k753SK+tXn6CJCqBdciNTdsP8zHaZCoK9XcBE6B
+         RXQkqkxqXWNycwtMRR5rkMvfaBb2cZXJhej9zxrOzsn5O98IpiL44p4HVs0yHSp7UBXE
+         5dQ7rF51s3JaL9ZWDJ/WfSZ7LJ1zGoIfvTm/WtnEt+zMixPEzcKgRQd6kfn9R52XvMnn
+         GJi0Fm6RP+TfOCK6hwxUgrtVOHTzlytSVIRORoUdjQxqfQ/4OEaaykkckgbTO6JhTO6o
+         6bEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770672112; x=1771276912;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bf/ok2KALFW8VblL1bFh6P+HrccoXJ2oopKC4NTt0RY=;
-        b=YRjFD+XfBrKcVQVajrX3LH6zslRpg/WN5IkCU7lnTZVZJZLNdPBcRh94UpSmq/LcWG
-         21VZDkqe9QKOqe78xoAsYriuvAa/hc2yDE4T6s5Nlk398TQ/v7DzNlAkdlcbhDAMxTCd
-         tUA9Da5CDcSQJeIMpvl6RRiWUmnVfJGaJdqwTjTpTS3lay3i8lvM8PmNAz7W8Ua6+vsT
-         4P0IsgxjGmtJhbAh7IM8oIV+6GPJ3jFnD3NqiWiQ3c//dWXLxqNhrkD7AMvvf2PDoyLN
-         6S0gU2UjXGwEDsGD0dkvw9fq2hSS4Za+s8B481BxrTPJjrFLZZX6TkC2tCUjPdSn44r6
-         se/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUhdMlh5fRI3HbHtGsNGDoB7/BisrZi3996nhE9Sle8Wdp0fEvjckER9w3mXSE3azQc8UHLGL3ip3nHxccd6+o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOLYg7jmSZRHIZsLjIzLLBeOLfob3+OMFMxB83qNd/yxD+3wO2
-	zTbe04BowCVSFltG5EeELfg1TDA2BinQsiTln9L5Di64b6hRKQRhk3xntXlBXqzigxk=
-X-Gm-Gg: AZuq6aLVAVdJM2wpkg/iy/j6xqbQYzJWzXYEPg6/YWi439jcmx8ks6RZHu3njyH+cEX
-	MHOfRBjIwQvd6oorwCNcYghAUk5vFW6aKbCTm/HVyKQYhP6D1nPohcH0ea59F3HFdHZPEolmnLg
-	ajUM3VDg75f22ArOlvEpqPVkyQttJ2ZAk+UtBaUAHFlEobFf+peaQ8GBQMajBc0OPzgDESCS2VZ
-	Vc/Nq19GNTAzDHLv+c8yzDZNUG+D8cWnoUCWEHv3AOZjwB/opDXRkToQvsbsoHQWwn4EhhYDCOH
-	eeh3wUjB0J7RencBeU3nid6s9h6yFYykBqFxKxZ0kZwcpsecxqzpbAQKArtpr+2SquGQTG4MoUS
-	C1RVgdnluFGYK/Lutf2asMJNiRSec/7VgN4O12LSXazXkfsdTliOJzEu9jPzpEC+0x3k7kuJZ6A
+        d=1e100.net; s=20230601; t=1770672113; x=1771276913;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=B8RijGQOfqPIwUgELzLaWOi9LUBjEfJ1NBk4LJfVwV0=;
+        b=K806e7L0ilem6A1caFLWScjUmf5PrBs/W53Y36LeoTJXNuBlSyHFmkJFPdw+S9gFCo
+         n8lPvXGq/xyZtKjMvgMSNTF5vlrF1M98E0ipQavPccZsmTueINKdOHIs5vgvFl0sxEbN
+         uahDTn5rvwHXxIRzuCq0hKeXhPINYa4dCkrc0bK1oKaQSwaAEZ0DDLaeAwdvYQlNXJXv
+         q/vFazfxOK2pGiOOwsb7nw81zn/r/K2CAw9jcHcpQo1EbNv9sr85e76ipTw660n50ZYU
+         FiiBL9s/Qisfxymk02GR+oZ3C+JS32Qay20gIsY1bZO0nArxN3ZT5WSnUIXt8ZemLzWW
+         EORw==
+X-Forwarded-Encrypted: i=1; AJvYcCVnHim0NaskkYGB3l0VhW640KXckGeccJLx9QkGQ6jmxm0iewy81azv0nS7jZDTqVCP/FhXhmZzVHKph/TfxYk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4lFP8zb9wPAtixB080um6wJU+dm2FDhegf4cDYz0lVa+80cGk
+	Gl2e9Pr/Nqo1asujM2Zfutvc630ZEXpWOQt46LiXAhf3bpGXwqhFV6qVxGtjQjE348c=
+X-Gm-Gg: AZuq6aJaMu2dQ8WzMDVd//RsD/2aI8itTd4yZ0DROCYmuPucHIQ1LKTogyvSOzqWCwS
+	OwyeDxAIDQxrm4uIU5/R/Ic4ISGnVg3Ka2AGzLqT5iXsE0Wck7TxATu2T/xzAjY2zM63Ah7Wm0+
+	XlKJlYPzIp50QFgkjOH67NDElThQbkGKadkN044BqUa5Lo6+qsFCBKz7TJC+nTtn7uOH733zRiM
+	zxTlGtJndfBCU1xj3GL9hNTcbG2njUV/wxcFSq6m5KmV7CiTmLDm0sk5nzr327e2D4wPxpFu3B6
+	44xn+49YS1KiW69GiOHEYKcyWqgjeSivHcTeJ7HNM++nhn1u7pMSqn+2/GEvorGAOJUTGV0tEmL
+	rM+FMqOOAbRH1g8aS04Y10Tg4m0X87eh4o+Q2M+nxCnqxJZQxTFN3yHvrWh6C3wDO4Ld03dqW6g
 	==
-X-Received: by 2002:a05:6820:2293:b0:662:fc95:1f8b with SMTP id 006d021491bc7-66d0a47957dmr4593250eaf.29.1770672111997;
-        Mon, 09 Feb 2026 13:21:51 -0800 (PST)
+X-Received: by 2002:a05:6820:602:b0:664:685e:76b3 with SMTP id 006d021491bc7-66d0d205325mr5909878eaf.73.1770672113246;
+        Mon, 09 Feb 2026 13:21:53 -0800 (PST)
 Received: from [127.0.1.1] ([2a09:bac5:947d:1b37::2b6:46])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-66d390b935asm6591730eaf.5.2026.02.09.13.21.50
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-66d390b935asm6591730eaf.5.2026.02.09.13.21.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 13:21:51 -0800 (PST)
+        Mon, 09 Feb 2026 13:21:53 -0800 (PST)
 From: Frederick Lawler <fred@cloudflare.com>
-Subject: [PATCH v6 0/3] ima: Detect changes to files via kstat changes
- rather than i_version
-Date: Mon, 09 Feb 2026 15:21:47 -0600
-Message-Id: <20260209-xfs-ima-fixup-v6-0-72f576f90e67@cloudflare.com>
+Date: Mon, 09 Feb 2026 15:21:48 -0600
+Subject: [PATCH v6 1/3] ima: Unify vfs_getattr_nosec() stat comparisons
+ under helper function
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -87,12 +88,9 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOtPimkC/22QvW7DMAyEXyXQXBUiaesnU4suHTt0KzrQstQIS
- OLAbowUgd+9sosChu2RJO67491FF9oUOrHf3UUb+tSl5pwH/bAT/sDnryBTnWeBCktAQHmLnUw
- nljHdrhfpCIxVrNGjF1lzaUM+TLwP8fb8/vIqPvP6kLrvpv2ZXHqYjn9AdAtgDxKkZgPGO3LR+
- Cd/bK51PHIbHn1zGk2yVCtYZZmktgaqtFJAgEvpmKTHf/eMQLVEYEZEIgxc20oVtImgOWKVgjI
- CFVHJltmS3kQUc8Sqg2LsoKqsq6OpNG+nKGcIWj1SSiVLE2wR2IHZ6GIYhl/lU1q7/QEAAA==
-X-Change-ID: 20251212-xfs-ima-fixup-931780a62c2c
+Message-Id: <20260209-xfs-ima-fixup-v6-1-72f576f90e67@cloudflare.com>
+References: <20260209-xfs-ima-fixup-v6-0-72f576f90e67@cloudflare.com>
+In-Reply-To: <20260209-xfs-ima-fixup-v6-0-72f576f90e67@cloudflare.com>
 To: Mimi Zohar <zohar@linux.ibm.com>, 
  Roberto Sassu <roberto.sassu@huawei.com>, 
  Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
@@ -105,20 +103,20 @@ Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
  linux-security-module@vger.kernel.org, kernel-team@cloudflare.com, 
  Frederick Lawler <fred@cloudflare.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4605; i=fred@cloudflare.com;
- h=from:subject:message-id; bh=qM+AUMPPSOsO/xFhj9Od+YUAH9S8lYo+uEY1V7e0Ehs=;
- b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpik/tEhamzz+u1nbpst2YvQ+dPU1OGY1iJmMYg
- jNblVKV/t2JAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCaYpP7QAKCRCrJbR2A5LT
- beDyD/4r+Xpu/c71CZ+P8NnaoZ0SlBXsD7XohtI+RtA078plY8dE8W4WeoNFdvFb1wxg6/iC8iJ
- 0hCm8f2h7PJrSEHB37OC5qtCmyJqwlUCDiCVnl4qYj4Qlt/vn2DP8exzr8pnJ2dEcI/rH7qRGIa
- fil52RbDaQpytIZ5pHcYuSIbitg7tX4Cvwb8IB6zV5tlse/JR3lz0unlQlKFjXW6QpR0Bk0D24/
- shpK4PNQYn+/EU2330we7bV9CNoGoSZvt7DiPxL04vv//iGWyOw261dT9yZhf3va8E4Tgq2GQc6
- RZR1BRqE9kq8VwsaNjv27IntU/7fxG+sqM0vWmC9TZzBnR4UFi0meuO9AggUKT1BqPy9KNgEjWf
- FvW61sy/xaOmU0aCCxjF9xNsLKYVQr6tshVpoT2/jWTDFNLJJ3cZdO04lwX4Dh64ChrpRc3aO1V
- R2Ki322wfm8YmSR2qd21gy5vN/GXcnBMLcZhUVeromxuZswLun6qfEqjbo1olBfRluKgsiyb3Ll
- f1VqoAU0wXw1MnbKDx6vbtfaI/MnBjbcF7hCavCy7ona4cjIUMX6I4nwxZlaA6Px9pJvfQsMtDO
- 2L507pjOvrYi4yqd6TkPburqrVQxK8dIw/dh0gI9XHz5bRejZhFw3wmF5JFrqDeK6yE5Ss4k3s1
- Y9qd0ZOrkNFGPZw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1964; i=fred@cloudflare.com;
+ h=from:subject:message-id; bh=E44D0I52YoGh+U5fwPkQ5hEITkBV+sZorQSKCWfktmc=;
+ b=owEBbQKS/ZANAwAKAasltHYDktNtAcsmYgBpik/tn6socxTvLoAVUKBxgks8JYngsmEQKClzr
+ 9PM/m9505aJAjMEAAEKAB0WIQTLNBqMVmu1PHvjOe2rJbR2A5LTbQUCaYpP7QAKCRCrJbR2A5LT
+ bWf/EACRQr5bwV3DkSeYkjepPfCow9f0Jr7heeQz7lqiKJFOsMCSFCDBhJYOA23nT2Ea77SUlPe
+ m/Uwiv9MG4ys0RaFvnPwtTDrVX4CUwWZrq1qaCadNlL8gfnJrHOHiwRFMkJjE5Ac332XRK0lcIX
+ W7cuICWBzOZE5PI8KIwiijeL9ZAUDcGMYNu5FkRK9MkLSU5hyOr9vDqTi6o18TR2J+/FO+uCAss
+ ZpKWlVck4xy821WwrgLUfCMZfYWkRd+Y2H//r7GA3Ve2/Ya25h34L9RKxNaJbmrjluV+sGhQHrT
+ ELDCW2TA1MMLooG8qd07MN0LoajUHEO9amvBMOX3pdbl7okt457Ogc2GdKquP31STJFmhlJI4mz
+ WulxzkC9LhFbzrCdVs2ZiJEufNxPODo1aZOs4MBqE/CT4O0m4lpCxFIGUe2cMEDCAQWXSr/bP4X
+ oRIIMdOvZXk4jaAWUuYv0r9cZhQjYryDRFNop1Yxk7rne23EOLA0CLm0gWHQU6FxxiPJx908WIH
+ cbH28KD9pwJ2zmsR+IT9KZUayWzkVlxTOPWRG8v0LLYSaVjoCKdN5WOAMWs2WNfOFWZvN7XR9Vd
+ Dc8UZiu0RoEkK88tfAenmAtq78oIW4WDIt2XUPLV41BIG+H/ejmvtjckxEN54W8W3ugoKLlA3he
+ PfKIr1+nk/S8j5g==
 X-Developer-Key: i=fred@cloudflare.com; a=openpgp;
  fpr=CB341A8C566BB53C7BE339EDAB25B4760392D36D
 X-Rspamd-Server: lfdr
@@ -128,18 +126,18 @@ X-Spamd-Result: default: False [-7.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[cloudflare.com,reject];
 	R_DKIM_ALLOW(-0.20)[cloudflare.com:s=google09082023];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8481-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8480-lists,linux-integrity=lfdr.de];
 	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,kernel.org,toxicpanda.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -149,134 +147,61 @@ X-Spamd-Result: default: False [-7.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[cloudflare.com:mid,cloudflare.com:dkim,cloudflare.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 33967114BC1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,cloudflare.com:mid,cloudflare.com:dkim,cloudflare.com:email]
+X-Rspamd-Queue-Id: 8EC22114BB9
 X-Rspamd-Action: no action
 
-We uncovered a case in kernels >= 6.13 where XFS is no longer updating
-struct kstat.change_cookie on i_op getattr() access calls. Instead, XFS is
-using multigrain ctime (as well as other file systems) for
-change detection in commit 1cf7e834a6fb ("xfs: switch to
-multigrain timestamps").
+The logic for comparing kstat.change_cookie against IMA version is
+hard to read. Abstract comparison logic into a new function
+integrity_inode_attrs_stat_changed().
 
-Because file systems may implement i_version as they see fit, IMA
-unnecessarily measures files.
-
-We're proposing to compare against the kstat.change_cookie
-directly to the cached version, and fall back to a ctime comparison,
-if STATX_CHANGE_COOKIE is not supplied by vfs_getattr_nosec()'s result
-mask.
-
-EVM is largely left alone since there's no trivial way to query a file
-directly in the LSM call paths to obtain kstat.change_cookie &
-kstat.ctime to cache. Thus retains accessing i_version directly.
-
-Regression tests will be added to the Linux Test Project instead of
-selftest to help catch future file system changes that may impact
-future evaluation of IMA.
-
-I'd like this to be backported to at least 6.18 if possible.
-
-Patches 1 & 2 are preparation patches. Ideally patch 2 is squashed into
-3, though not strictly necessary.
-
-Below is a simplified test that demonstrates the issue such that
-there are multiple unnecessary measurements occurring for actions on
-a file in a stacked TMPFS on XFS, prior to the file moved over to TMPFS:
-
-_fragment.config_
-CONFIG_XFS_FS=y
-CONFIG_OVERLAY_FS=y
-CONFIG_IMA=y
-CONFIG_IMA_WRITE_POLICY=y
-CONFIG_IMA_READ_POLICY=y
-
-_./test.sh_
-
-IMA_POLICY="/sys/kernel/security/ima/policy"
-TEST_BIN="/bin/date"
-MNT_BASE="/tmp/ima_test_root"
-
-mkdir -p "$MNT_BASE"
-mount -t tmpfs tmpfs "$MNT_BASE"
-mkdir -p "$MNT_BASE"/{xfs_disk,upper,work,ovl}
-
-dd if=/dev/zero of="$MNT_BASE/xfs.img" bs=1M count=300
-mkfs.xfs -q "$MNT_BASE/xfs.img"
-mount "$MNT_BASE/xfs.img" "$MNT_BASE/xfs_disk"
-cp "$TEST_BIN" "$MNT_BASE/xfs_disk/test_prog"
-
-mount -t overlay overlay -o \
-"lowerdir=$MNT_BASE/xfs_disk,upperdir=$MNT_BASE/upper,workdir=$MNT_BASE/work" \
-"$MNT_BASE/ovl"
-
-echo "audit func=BPRM_CHECK uid=$(id -u nobody)" > "$IMA_POLICY"
-
-target_prog="$MNT_BASE/ovl/test_prog"
-setpriv --reuid nobody "$target_prog"
-setpriv --reuid nobody "$target_prog"
-setpriv --reuid nobody "$target_prog"
-
-audit_count=$(dmesg | grep -c "file=\"$target_prog\"")
-
-if [[ "$audit_count" -eq 1 ]]; then
-        echo "PASS: Found exactly 1 audit event."
-else
-        echo "FAIL: Expected 1 audit event, but found $audit_count."
-        exit 1
-fi
+No functional change intended.
 
 Signed-off-by: Frederick Lawler <fred@cloudflare.com>
 ---
-Changes in v6:
-- Patch 1: No changes
-- All other patches including cover letter have descriptions updated.
-- Link to v5: https://lore.kernel.org/r/20260130-xfs-ima-fixup-v5-0-57e84ea91712@cloudflare.com
+ include/linux/integrity.h         | 11 +++++++++++
+ security/integrity/ima/ima_main.c |  4 ++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-Changes in v5:
-- Split into patch series. [Mimi]
-- Link to v4: https://lore.kernel.org/r/20260129-xfs-ima-fixup-v4-1-6bb89df7b6a3@cloudflare.com
+diff --git a/include/linux/integrity.h b/include/linux/integrity.h
+index f5842372359be5341b6870a43b92e695e8fc78af..beb9ab19fa6257e79266b58bcb5f55b0c5445828 100644
+--- a/include/linux/integrity.h
++++ b/include/linux/integrity.h
+@@ -49,6 +49,17 @@ integrity_inode_attrs_store(struct integrity_inode_attributes *attrs,
+ 	attrs->ino = inode->i_ino;
+ }
+ 
++/* Compares stat attributes for change detection. */
++static inline bool
++integrity_inode_attrs_stat_changed
++(const struct integrity_inode_attributes *attrs, const struct kstat *stat)
++{
++	if (stat->result_mask & STATX_CHANGE_COOKIE)
++		return stat->change_cookie != attrs->version;
++
++	return true;
++}
++
+ /*
+  * On stacked filesystems detect whether the inode or its content has changed.
+  */
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 5770cf691912aa912fc65280c59f5baac35dd725..6570ad10887b9ea1172c78274cf62482350e87ff 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -201,8 +201,8 @@ static void ima_check_last_writer(struct ima_iint_cache *iint,
+ 		    vfs_getattr_nosec(&file->f_path, &stat,
+ 				      STATX_CHANGE_COOKIE,
+ 				      AT_STATX_SYNC_AS_STAT) ||
+-		    !(stat.result_mask & STATX_CHANGE_COOKIE) ||
+-		    stat.change_cookie != iint->real_inode.version) {
++		    integrity_inode_attrs_stat_changed(&iint->real_inode,
++						       &stat)) {
+ 			iint->flags &= ~(IMA_DONE_MASK | IMA_NEW_FILE);
+ 			iint->measured_pcrs = 0;
+ 			if (update)
 
-Changes in v4:
-- No functional changes.
-- Add Reviewed-by & Fixes tags.
-- Link to v3: https://lore.kernel.org/r/20260122-xfs-ima-fixup-v3-1-20335a8aa836@cloudflare.com
-
-Changes in v3:
-- Prefer timespec64_to_ns() to leverage attr.version. [Roberto]
-- s/TPMFS/TMPFS/ in description.
-- Link to v2: https://lore.kernel.org/r/20260120-xfs-ima-fixup-v2-1-f332ead8b043@cloudflare.com
-
-Changes in v2:
-- Updated commit description + message to clarify the problem.
-- compare struct timespec64 to avoid collision possibility [Roberto].
-- Don't check inode_attr_changed() in ima_check_last_writer()
-- Link to v1: https://lore.kernel.org/r/20260112-xfs-ima-fixup-v1-1-8d13b6001312@cloudflare.com
-
-Changes since RFC:
-- Remove calls to I_IS_VERSION()
-- Function documentation/comments
-- Abide IMA/EVM change detection fallback invariants
-- Combined ctime guard into version for attributes struct
-- Link to RFC: https://lore.kernel.org/r/20251229-xfs-ima-fixup-v1-1-6a717c939f7c@cloudflare.com
-
----
-Frederick Lawler (3):
-      ima: Unify vfs_getattr_nosec() stat comparisons under helper function
-      ima: Make integrity_inode_attrs_changed() call into VFS
-      ima: Use kstat.ctime as a fallback for change detection
-
- include/linux/integrity.h         | 43 +++++++++++++++++++++++++++++++++++----
- security/integrity/evm/evm_main.c |  5 ++---
- security/integrity/ima/ima_api.c  | 11 +++++++---
- security/integrity/ima/ima_main.c | 11 +++++-----
- 4 files changed, 54 insertions(+), 16 deletions(-)
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20251212-xfs-ima-fixup-931780a62c2c
-
-Best regards,
 -- 
-Frederick Lawler <fred@cloudflare.com>
+2.43.0
 
 
