@@ -1,306 +1,224 @@
-Return-Path: <linux-integrity+bounces-8488-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8489-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2Av7ApUojWmEzgAAu9opvQ
-	(envelope-from <linux-integrity+bounces-8488-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 02:10:45 +0100
+	id zVcFETotjWkEzwAAu9opvQ
+	(envelope-from <linux-integrity+bounces-8489-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 02:30:34 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D22C128CE9
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 02:10:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A598A128F90
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 02:30:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A9B723038FDE
-	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 01:10:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 69F8B300E5DF
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 01:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA8B1EB9FA;
-	Thu, 12 Feb 2026 01:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8071A704B;
+	Thu, 12 Feb 2026 01:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r9qokTK/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AstQJRbp";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="rW3cyGYT"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B923D1E7C23;
-	Thu, 12 Feb 2026 01:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017991A275
+	for <linux-integrity@vger.kernel.org>; Thu, 12 Feb 2026 01:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770858609; cv=none; b=I2guvpBVl+7sIuXZOKWQoPwC0OWT++9JmNqGIiRRMR3vwiYJqBwutTPMXyuEokeVo00hxkjwfSZRWRl07JvGBH7R7/lybENIhVwcn1zqXw9t1I88TrborP57SFWORKWbNJ4+IMHLEcdHWuMR3w1m3yxhOJycAp6Nwcdry0lQGXY=
+	t=1770859830; cv=none; b=Aga8svc+wWzPFHqgEdJ+57pQ33/ZuWnH22FDwyo7p6XcyF5jbX+DjR4TYNkRhpf9i07inNJpl8G98ti2VAKZ3oEGWdcZZFd6agEUHo5UGVYZWDGAAEj1LHypdvJW3PAbk7EAd5PH4M3OHU3zkE4cqwyPj3Ai3tZ8prVkKTs9pek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770858609; c=relaxed/simple;
-	bh=2BUTkqvGtxM61N9vkMccq26T/Mth1/H/gYa0x+OTFfc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fgo3hUzYoh3CanhWlxQpYN+1aVooyKCaUDo686uLucDFdxHnWd1KJ7vUre3m+UL803kqVwFiqChaqQwFiA2w0U/lqvRbEjcBYLNZiE3jh66ky7LVALSoVFs26rxAECJ7v0W4WqzQajz8aN2qang3QvftYLyKp7tuWRUwp5jXPJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r9qokTK/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6C0C16AAE;
-	Thu, 12 Feb 2026 01:10:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770858609;
-	bh=2BUTkqvGtxM61N9vkMccq26T/Mth1/H/gYa0x+OTFfc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=r9qokTK/jitWKBPIpcQUjPZGTCuyN477yxFKyjqUe+Lr+IiBOp2PXNkSz0sVJtGoY
-	 JAXDsVAWw6OHCZl+ZDl0VjP/zZjdY2P/zFlMQ98IehwnQkZBEAcsF4h1O9pIfHMYvR
-	 IveOR7HyUvr+6HDsPu4k9yQi52L/H5OUoB8AH/WpILCQPvpx4ZaqTyo6mRm/nd9QjG
-	 8kQXNogQwp9xOCMDrn1DgqvoD07BLbkuSmag7o4x/Cju+MI9VtZk8wC8hk3GHpFD08
-	 UU8/7+Y4QeQXkEsUA0vwqRVxsKB0Je2hdR1b9xX0rAeswN8i81eDvqc66GGxrNphiC
-	 ZlVkQVc1zGz7Q==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	peterhuewe@gmx.de,
-	clrkwllms@kernel.org,
-	rostedt@goodmis.org,
-	dlan@kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.19-5.15] char: tpm: cr50: Remove IRQF_ONESHOT
-Date: Wed, 11 Feb 2026 20:09:30 -0500
-Message-ID: <20260212010955.3480391-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260212010955.3480391-1-sashal@kernel.org>
-References: <20260212010955.3480391-1-sashal@kernel.org>
+	s=arc-20240116; t=1770859830; c=relaxed/simple;
+	bh=KgiA3wWySdtu27emmfFx9TmT091bq+yUVCdDCtZD06E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pmxZbKn4OUdog88qXtKiWKj+6+IDcKwMZnG8f50nmPn9WjfanjSil2H+R3jdeXRBcfVzMPfB+Su/+z4lnQKuFMghx7Lt6pWROQjSNE6GUumHdGVvP3UksHUphIfUHBbcO30ug2gV2B29BGmNwda8WQtUbDjcq8sA6c3HQ8sxx+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AstQJRbp; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=rW3cyGYT; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770859828;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bY4z6uuO6pRuPz5GN5A8CgMrwxk/puAYj4i3AjMGr9s=;
+	b=AstQJRbpgZMBDfedPSvIG3Xnm5M2B//WLIDQk+TQjtOT3E6HivpB5auxwSEoGzSe4NadKB
+	4VX0yKUdUPfE+Bo5cB8Zvun30ncCADH3u1Nmka9q4M8pdlDxKVaJGgVOJpoBiAOn5fAxAe
+	d9b0KsQkGsIPO7slZKuV4rPPHflHXtk=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-691-ofm3FmlfNsGP5slx0h_Rnw-1; Wed, 11 Feb 2026 20:30:26 -0500
+X-MC-Unique: ofm3FmlfNsGP5slx0h_Rnw-1
+X-Mimecast-MFC-AGG-ID: ofm3FmlfNsGP5slx0h_Rnw_1770859826
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2aad5fec176so51835915ad.2
+        for <linux-integrity@vger.kernel.org>; Wed, 11 Feb 2026 17:30:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770859826; x=1771464626; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bY4z6uuO6pRuPz5GN5A8CgMrwxk/puAYj4i3AjMGr9s=;
+        b=rW3cyGYT80WHyfuMp1w5TJpBjPoWv61mDG4ZtpmQeZl2acJA5jaI/fsrzopYwdluq6
+         eceo7h06g/zyKxIR3gnA3FmHV14L92jOoHBPE19+OqwlLBuN1uwEXM4QaDz0+yzTaLU/
+         PbDeycOK7fHUH0q5tPT+CFWkjMQWUPUfQhaVof4qWIiPF8QpGPt1Fj/3mvlW4XZNfVuS
+         1RTou6toE4yMxBi30ggY0JpJhP45wqzfYZMxlfcG3noTczxcrpwCjeDDiR4PKBKZc5Bi
+         2S7KsXxXt3YJ92nXBhb10aHZkbUOV+zgWu+PLZnr4h0a0QrJZeXeGxEKGad7AETFmnV2
+         jQXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770859826; x=1771464626;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bY4z6uuO6pRuPz5GN5A8CgMrwxk/puAYj4i3AjMGr9s=;
+        b=etbSCltsJ1LPMLR6AgB1IJhuFRhENN8QwCBdV39yoGgdowzWThWCGzZYTHcv/5SYFy
+         tZxpGHBGpmhfWKtiOtebuwpss/dZ8nNmfAkhBLw0zRiprs4zJESovW93nS8UxmI4iD7m
+         n9ihMpn7vKSmRw5pdg/UvEygL2FBxRpnAHjlFRyoFKva8bs65Mj6pqUaDUhyG3vxiEb6
+         HVMTxNsXohTqMZOjLRdsoQPWbhKZf9jnhs6fo73wjnFneLQ6frVPnFovfQyThiW2lT1+
+         WjwvZotrIJ6P+ZPnEhuDMNVzTYECXVjrBhY+GpChh+0gK2ObdUVtGJzy/MZQFlQlou/p
+         +wiA==
+X-Gm-Message-State: AOJu0YyueIMmCmpuqzh760lWiBnFQc7iA8G7g+m4RwBTBygvgzGTVm0/
+	k6kaZLxqZUHVvgjFu7eYTbU48xYvACz6DM55mBVPFRGsy2Y5NQ5Zo+pDPDVif8JAHRRfu6Ri1GX
+	1n8mc0bfj4KGDWRc1rdvY5oCm3vTuw4p8mPW8zR9FovE17xmziqrB1GK0gTty08iD8d27zA==
+X-Gm-Gg: AZuq6aIe3lk20gWVhkDpLgQuBEs1YmUO+UMtm8xSfW45M+HaMKWBBoi7GWubN+tgY3t
+	htDItMeYshBrJJRIq2KDMjG7VBPmzkmtuEgqOAqL28V1UDLRAQTjNCs2R5oEVG5yRw/3KuyagIX
+	Q5hVXWUbusviOV5WG8DUN4zgD8P22NaYbWtsBrp+feF3NUWkfGpjaClv8TQMvhoOmbSs6977/Kd
+	kgWEyB5CHfolppY+eXY8qxjXPAlZUtQuBZ4H/ejfd1dFGWkUGUalw2/IsaHGqicv4L0eFJmaSa2
+	ymYvj7bxzgqkwDPZ2rM7QC5Fh9GbzdbqnvfN143kUiY1gY/ZCYtN9QplRpR82hVgcgoK2XrCx5N
+	IdjhdIloM63e3
+X-Received: by 2002:a05:6a20:e20d:b0:38d:fc34:c88d with SMTP id adf61e73a8af0-3944887601cmr937855637.55.1770859825458;
+        Wed, 11 Feb 2026 17:30:25 -0800 (PST)
+X-Received: by 2002:a05:6a20:e20d:b0:38d:fc34:c88d with SMTP id adf61e73a8af0-3944887601cmr937804637.55.1770859824883;
+        Wed, 11 Feb 2026 17:30:24 -0800 (PST)
+Received: from localhost ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6e197f7e0bsm3248413a12.27.2026.02.11.17.30.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Feb 2026 17:30:24 -0800 (PST)
+Date: Thu, 12 Feb 2026 09:28:43 +0800
+From: Coiby Xu <coxu@redhat.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>, 
+	Alexander Egorenkov <egorenar@linux.ibm.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Dave Hansen <dave.hansen@intel.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, 
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>, 
+	"open list:LINUX FOR POWERPC (32-BIT AND 64-BIT)" <linuxppc-dev@lists.ozlabs.org>, "open list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>, 
+	"open list:EXTENSIBLE FIRMWARE INTERFACE (EFI)" <linux-efi@vger.kernel.org>, 
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>, "open list:KEYS/KEYRINGS_INTEGRITY" <keyrings@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] integrity: Make arch_ima_get_secureboot
+ integrity-wide
+Message-ID: <aY0rZp9ROwfjPgD8@Rk>
+References: <20260203041434.872784-1-coxu@redhat.com>
+ <20260203041434.872784-2-coxu@redhat.com>
+ <66f9d13875e81a965984e2a661e992a3fe43c516.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.19
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <66f9d13875e81a965984e2a661e992a3fe43c516.camel@linux.ibm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[linutronix.de,kernel.org,gmx.de,goodmis.org,vger.kernel.org,lists.linux.dev,lists.infradead.org];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-8488-lists,linux-integrity=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[14];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-8489-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[33];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linux.ibm.com,kernel.org,intel.com,huawei.com,ellerman.id.au,gmail.com,redhat.com,alien8.de,linux.intel.com,zytor.com,oracle.com,paul-moore.com,namei.org,hallyn.com,lists.ozlabs.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[coxu@redhat.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[redhat.com:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[msgid.link:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linutronix.de:email]
-X-Rspamd-Queue-Id: 7D22C128CE9
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,huawei.com:email]
+X-Rspamd-Queue-Id: A598A128F90
 X-Rspamd-Action: no action
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+On Mon, Feb 09, 2026 at 03:43:08PM -0500, Mimi Zohar wrote:
+>On Tue, 2026-02-03 at 12:14 +0800, Coiby Xu wrote:
+>> EVM and other LSMs need the ability to query the secure boot status of
+>> the system, without directly calling the IMA arch_ima_get_secureboot
+>> function. Refactor the secure boot status check into a general function
+>> named arch_get_secureboot.
+>>
+>> Reported-and-suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+>> Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
+>> Signed-off-by: Coiby Xu <coxu@redhat.com>
+>
+>Thanks, Coiby.  Other than unnecessarily splitting a line, the patch set looks
+>good.  As soon as the open window closes, I'll queue these patches for linux-
+>next.
 
-[ Upstream commit 1affd29ffbd50125a5492c6be1dbb1f04be18d4f ]
+Hi Mimi, thanks for reviewing the patch set! Would you like me to send a
+new version with the line splitting issue fixed?
 
-Passing IRQF_ONESHOT ensures that the interrupt source is masked until
-the secondary (threaded) handler is done. If only a primary handler is
-used then the flag makes no sense because the interrupt can not fire
-(again) while its handler is running.
+>
+>> diff --git a/security/integrity/ima/ima_efi.c b/security/integrity/ima/ima_efi.c
+>> index 138029bfcce1..27521d665d33 100644
+>> --- a/security/integrity/ima/ima_efi.c
+>> +++ b/security/integrity/ima/ima_efi.c
+[...]
+>>  {
+>> -	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) && arch_ima_get_secureboot()) {
+>> +	if (IS_ENABLED(CONFIG_IMA_ARCH_POLICY) &&
+>> +	    arch_get_secureboot()) {
+>
+>No need to split the line here or below.
+>
+>
+>>  		if (IS_ENABLED(CONFIG_MODULE_SIG))
+>>  			set_module_sig_enforced();
+>>  		if (IS_ENABLED(CONFIG_KEXEC_SIG))
+>> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+>> index 5770cf691912..6d093ac82a45 100644
+>> --- a/security/integrity/ima/ima_main.c
+>> +++ b/security/integrity/ima/ima_main.c
+>> @@ -949,8 +949,8 @@ static int ima_load_data(enum kernel_load_data_id id, bool contents)
+>>
+>>  	switch (id) {
+>>  	case LOADING_KEXEC_IMAGE:
+>> -		if (IS_ENABLED(CONFIG_KEXEC_SIG)
+>> -		    && arch_ima_get_secureboot()) {
+>> +		if (IS_ENABLED(CONFIG_KEXEC_SIG) &&
+>> +		    arch_get_secureboot()) {
+>
+>===>
+>
+>Mimi
+>
+>>  			pr_err("impossible to appraise a kernel image without a file descriptor; try using kexec_file_load syscall.\n");
+>>  			return -EACCES;
+>>  		}
+>
 
-The flag also prevents force-threading of the primary handler and the
-irq-core will warn about this.
-
-Remove IRQF_ONESHOT from irqflags.
-
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@kernel.org>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Link: https://patch.msgid.link/20260128095540.863589-10-bigeasy@linutronix.de
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-LLM Generated explanations, may be completely bogus:
-
-Now I have a complete understanding. Let me write up the comprehensive
-analysis.
-
----
-
-## Comprehensive Analysis
-
-### 1. Commit Message Analysis
-
-The commit subject is "char: tpm: cr50: Remove IRQF_ONESHOT" and the
-message explains three points:
-1. `IRQF_ONESHOT` is for masking the interrupt source until the
-   **threaded** (secondary) handler completes
-2. These drivers only have primary handlers, so the flag is meaningless
-3. The flag **prevents force-threading** of the primary handler, and the
-   irq-core will warn about this
-
-The commit is authored by **Sebastian Andrzej Siewior** (bigeasy), the
-PREEMPT_RT maintainer, and signed off by **Thomas Gleixner**, the IRQ
-subsystem maintainer and co-maintainer of the Linux kernel. It was
-reviewed by **Jarkko Sakkinen**, the TPM subsystem maintainer.
-
-### 2. Code Change Analysis
-
-The change is minimal and surgical:
-- **`tpm_tis_i2c_cr50.c`**: Removes `IRQF_ONESHOT` from the flags in
-  `devm_request_irq()`, keeping `IRQF_TRIGGER_FALLING | IRQF_NO_AUTOEN`
-- **`tpm_tis_spi_cr50.c`**: Removes `IRQF_ONESHOT` from the flags in
-  `devm_request_irq()`, keeping `IRQF_TRIGGER_RISING`
-
-Both interrupt handlers (`tpm_cr50_i2c_int_handler` at line 74 and
-`cr50_spi_irq_handler` at line 65) are trivially simple - they just call
-`complete()` and return `IRQ_HANDLED`. There is no thread_fn.
-`devm_request_irq()` is a wrapper that calls
-`devm_request_threaded_irq()` with `thread_fn = NULL`.
-
-### 3. The Real Bug
-
-The companion commit **`aef30c8d569c`** ("genirq: Warn about using
-IRQF_ONESHOT without a threaded handler") was merged on 2026-01-12 and
-adds a `WARN_ON_ONCE()` in `__setup_irq()`:
-
-```c
-WARN_ON_ONCE(new->flags & IRQF_ONESHOT && !new->thread_fn);
-```
-
-This means that **without this cr50 fix**, every time the cr50 TPM
-driver probes on a system with the updated IRQ core, it will emit a
-`WARN_ON_ONCE` kernel warning at boot. This is a real runtime issue that
-would affect all Chromebook and other systems using cr50/ti50 TPM chips.
-
-More importantly, the core technical issue is that `IRQF_ONESHOT`
-prevents force-threading of the primary handler. From
-`irq_setup_forced_threading()` in `kernel/irq/manage.c`:
-
-```c
-if (new->flags & (IRQF_NO_THREAD | IRQF_PERCPU | IRQF_ONESHOT))
-    return 0;  // Skip force-threading!
-```
-
-On **PREEMPT_RT kernels** (where `force_irqthreads()` returns `true`),
-this means the cr50 interrupt handler runs in hardirq context instead of
-being force-threaded. While the handler itself (`complete()`) is safe in
-hardirq context, this defeats the PREEMPT_RT design goal of having all
-interrupt handlers run in thread context. On non-RT systems with
-`threadirqs` boot parameter, the same issue occurs.
-
-### 4. Classification
-
-This is a **bug fix** that addresses:
-1. **A spurious kernel warning** triggered by the new `WARN_ON_ONCE`
-   check added in `aef30c8d569c`
-2. **Incorrect IRQ flags** - `IRQF_ONESHOT` has never been semantically
-   correct for these drivers since they only use primary handlers
-3. **PREEMPT_RT compatibility** - the flag prevents force-threading,
-   which can be problematic
-
-The fix is not a feature addition - it removes an incorrect flag that
-was always wrong.
-
-### 5. Scope and Risk Assessment
-
-- **Lines changed**: 2 files, 2 lines total (removing `IRQF_ONESHOT`
-  from two flag constants)
-- **Risk**: Extremely low. `IRQF_ONESHOT` had no functional effect on
-  these drivers since they use only primary handlers. The interrupt
-  cannot fire while its primary handler is already running (hardware
-  guarantee), so removing the flag changes nothing about interrupt
-  masking behavior.
-- **Subsystem**: TPM drivers, well-understood, mature code
-- **Testing**: Reviewed by TPM maintainer (Jarkko Sakkinen), authored by
-  PREEMPT_RT maintainer, signed off by IRQ core maintainer
-
-### 6. User Impact
-
-- **Who is affected**: All users with cr50/ti50 TPM chips (primarily
-  Chromebooks and Google-based embedded devices)
-- **Severity without fix**: Kernel `WARN_ON_ONCE` at boot if the
-  `aef30c8d569c` warning commit is also backported; PREEMPT_RT
-  degradation
-- **Severity of regression risk**: Essentially zero - the flag had no
-  functional purpose
-
-### 7. Dependencies
-
-This commit is **self-contained**. It does not require any other patches
-to apply cleanly. However, the motivating warning comes from
-`aef30c8d569c` - if that commit is backported to stable, this fix
-becomes essential to avoid warnings. Even without the warning commit,
-this fix is correct and beneficial (enables proper force-threading on RT
-systems).
-
-The i2c-spacemit driver already got a similar fix (`e351836a54e3`) with
-`Cc: stable@vger.kernel.org` tag, establishing precedent that these
-IRQF_ONESHOT removal patches are considered stable material.
-
-### 8. Stability Indicators
-
-- Author: Sebastian Andrzej Siewior (PREEMPT_RT maintainer) - domain
-  expert
-- Signed-off-by: Thomas Gleixner (IRQ subsystem maintainer) - domain
-  expert
-- Reviewed-by: Jarkko Sakkinen (TPM maintainer) - domain expert
-- Part of a systematic cleanup pattern with prior art (i2c-exynos5,
-  i2c-hix5hd2, i2c-spacemit, drm/msm)
-
-### Conclusion
-
-This is a small, surgical, obviously correct bug fix. The `IRQF_ONESHOT`
-flag was always semantically wrong for these primary-only handlers. The
-fix removes a flag that had no functional benefit but actively prevented
-force-threading on PREEMPT_RT systems and will trigger a `WARN_ON_ONCE`
-with the companion IRQ core warning check. The risk is near-zero, the
-change is trivial (2 lines across 2 files), it was reviewed by all three
-relevant subsystem maintainers, and there is clear precedent for
-identical fixes being marked as stable material (the i2c-spacemit fix
-had `Cc: stable@vger.kernel.org`).
-
-**YES**
-
- drivers/char/tpm/tpm_tis_i2c_cr50.c | 3 +--
- drivers/char/tpm/tpm_tis_spi_cr50.c | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-index fc6891a0b6936..b48cacacc0664 100644
---- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
-@@ -749,8 +749,7 @@ static int tpm_cr50_i2c_probe(struct i2c_client *client)
- 
- 	if (client->irq > 0) {
- 		rc = devm_request_irq(dev, client->irq, tpm_cr50_i2c_int_handler,
--				      IRQF_TRIGGER_FALLING | IRQF_ONESHOT |
--				      IRQF_NO_AUTOEN,
-+				      IRQF_TRIGGER_FALLING | IRQF_NO_AUTOEN,
- 				      dev->driver->name, chip);
- 		if (rc < 0) {
- 			dev_err(dev, "Failed to probe IRQ %d\n", client->irq);
-diff --git a/drivers/char/tpm/tpm_tis_spi_cr50.c b/drivers/char/tpm/tpm_tis_spi_cr50.c
-index f4937280e9406..32920b4cecfb4 100644
---- a/drivers/char/tpm/tpm_tis_spi_cr50.c
-+++ b/drivers/char/tpm/tpm_tis_spi_cr50.c
-@@ -287,7 +287,7 @@ int cr50_spi_probe(struct spi_device *spi)
- 	if (spi->irq > 0) {
- 		ret = devm_request_irq(&spi->dev, spi->irq,
- 				       cr50_spi_irq_handler,
--				       IRQF_TRIGGER_RISING | IRQF_ONESHOT,
-+				       IRQF_TRIGGER_RISING,
- 				       "cr50_spi", cr50_phy);
- 		if (ret < 0) {
- 			if (ret == -EPROBE_DEFER)
 -- 
-2.51.0
+Best regards,
+Coiby
 
 
