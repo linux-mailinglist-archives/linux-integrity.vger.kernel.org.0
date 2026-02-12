@@ -1,296 +1,112 @@
-Return-Path: <linux-integrity+bounces-8486-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8487-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SIoPI7/Ii2kwbAAAu9opvQ
-	(envelope-from <linux-integrity+bounces-8486-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Feb 2026 01:09:35 +0100
+	id +M5TKw8ZjWkwzAAAu9opvQ
+	(envelope-from <linux-integrity+bounces-8487-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 01:04:31 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 039AD1203B0
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Feb 2026 01:09:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEFBB1286CD
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 01:04:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9B249302C35D
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Feb 2026 00:09:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A964630B5BC6
+	for <lists+linux-integrity@lfdr.de>; Thu, 12 Feb 2026 00:04:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071903207;
-	Wed, 11 Feb 2026 00:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9826AF50F;
+	Thu, 12 Feb 2026 00:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="aey7S7E6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LULYkR93"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F08A3C465;
-	Wed, 11 Feb 2026 00:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75512EEAB;
+	Thu, 12 Feb 2026 00:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770768571; cv=none; b=SCUELKP5niMSc2Jzvy163z8VvLKFUY2nLghF1sDa39wZZ/VhZg0yQZIYWLQIHL6ZLEznF421YbH7ZZzpsLe+6JWI23X5a617FnUnBQiMI3cs6Vb42H1e16qm/YHLOmh6VdjfPE6cR8EzTDco583/aQgkYVVCBEymyQUunslpr/A=
+	t=1770854654; cv=none; b=tn7wuPkXAFaB7wPVZ+qhlTZ2ULCphR0EeKaZjXll7pVnU3Vb0+2/ZB4kVCsddooA7frfoC1Dkkrl0oPW10YUFQJvtiGWac0gfIxP5rnC8S/BGeibTABYZHiMBkqvoEAym2Rt1BslJwa3RtP8ILsqxzei48nmi8Hyl1/2mLa/8WA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770768571; c=relaxed/simple;
-	bh=PGSjreK4laPXnFm1B/0xauo/R+rULx+muFKhDH1hA7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FB01CsrRl1qx8iVKeAYcxsC7rJhSgVAoRBTV2DxgzOy+FTSqkM4I5WzHaHdZ86ZTy+ng/U/hJnnfT395SxasfiRzsYDbKlipoAlcEsLuujd5iXdJujz95uKQPZkc+BbKsZAFXUbkhq0WyMSUicLPkXQ46D246vdbgUYCx8hKjQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=aey7S7E6; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.14.34.58] (unknown [131.107.1.186])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 2A37720B7167;
-	Tue, 10 Feb 2026 16:09:24 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2A37720B7167
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1770768564;
-	bh=qdq0OTS1cnyJKI0m4amY0YNcRP9yyMsIbRMtck1kkLs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aey7S7E6dFJfF+SJpKGBWtuIRPLT/O0a8+T2rjo65cSHz4GHhH/CJHbfTToD7zroC
-	 U9+DsNiigCfytfwSvSIzgXn+m8CuKEzNCdbdSu497y+8xjrtVpS/hiPZGdMP/865pC
-	 dnbN1IYzcBY2G3Q8bLJTvPC7LSkrjd2UnXWXc8ck=
-Message-ID: <8db7000e-56ef-43cb-b5f6-bd55c1da0237@linux.microsoft.com>
-Date: Tue, 10 Feb 2026 16:09:22 -0800
+	s=arc-20240116; t=1770854654; c=relaxed/simple;
+	bh=tm31/nzUvhc/4Ww+yDScRDT6wgFUsXFUcSi/jLsHU+0=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=X4z7e9WU9JMKyvA/My40PrTOGZKoGSJd2wd2pXhPPGFgEsJtzyw94iXVy5CzdCBBQvizOYDs8ERnNuYqTSNXbPzqV/hHxIHPJMUJMYtjQJE6+68qxZipgS4NQBsh22tewzrphGm91BjOkRH+WVIQT3Mfz+wujmaII5U0v3RXMow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LULYkR93; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59CB7C4CEF7;
+	Thu, 12 Feb 2026 00:04:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770854654;
+	bh=tm31/nzUvhc/4Ww+yDScRDT6wgFUsXFUcSi/jLsHU+0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=LULYkR933u/wqcOi2lrDYAlaF7c/s0mFUS9FkF6pr5Pmz1dGgR7ZAdo7Xod13jmkn
+	 g2plHYfzMqXuQ1Xj0Jaj6pq4zy0G92hMjlbk42P2X6eedjFus9sInV5HvjLqbFjMbY
+	 lVdC80HWya8nqOOF+6HX7P6VrMdPDHdUMx8MowcqwPrmajBjT0GVU07mJmf4je/Zqv
+	 dwZeY2TOjMg0kx+soP8O9bVYycgiodF7lAwxpLGzzg5c2YcZa/Ppe1lBRVhsU/LIxO
+	 yO9lwpIjoTJGe0+bN9OMqC7r0HGCc5ecilBONeI0jUvm86vRX5vqQdmWp2dqEYiaTh
+	 2Lozd5cCwErbA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4823939EF966;
+	Thu, 12 Feb 2026 00:04:10 +0000 (UTC)
+Subject: Re: [GIT PULL] integrity: subsystem updates for v7.0
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <a6da3d9309492557026cee3b5a50c6aea8967365.camel@linux.ibm.com>
+References: <a6da3d9309492557026cee3b5a50c6aea8967365.camel@linux.ibm.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <a6da3d9309492557026cee3b5a50c6aea8967365.camel@linux.ibm.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/ tags/integrity-v7.0
+X-PR-Tracked-Commit-Id: 0496fc9cdc384f67be4413b1c6156eb64fccd5c4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d0e91e401e31959154b6518c29d130b1973e3785
+Message-Id: <177085464892.803048.6387495979058605718.pr-tracker-bot@kernel.org>
+Date: Thu, 12 Feb 2026 00:04:08 +0000
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-integrity <linux-integrity@vger.kernel.org>, linux-kernel <linux-kernel@vger.kernel.org>, Roberto Sassu <roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v2] ima: Add support for staging measurements for
- deletion and trimming
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
- zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
- paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com,
- Roberto Sassu <roberto.sassu@huawei.com>,
- steven chen <chenste@linux.microsoft.com>
-References: <20251212171932.316676-1-roberto.sassu@huaweicloud.com>
- <6b36d6b3-34e8-4bdc-bd68-d71ddf44eba8@linux.microsoft.com>
- <52069703-98fc-4667-8c29-446ea73249cb@huaweicloud.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <52069703-98fc-4667-8c29-446ea73249cb@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8486-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8487-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[huaweicloud.com,lwn.net,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	TO_DN_ALL(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NO_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chenste@linux.microsoft.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[linux.microsoft.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pr-tracker-bot@kernel.org,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.microsoft.com:mid,linux.microsoft.com:dkim]
-X-Rspamd-Queue-Id: 039AD1203B0
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EEFBB1286CD
 X-Rspamd-Action: no action
 
-On 1/29/2026 12:20 AM, Roberto Sassu wrote:
-> On 1/28/2026 10:30 PM, steven chen wrote:
->> On 12/12/2025 9:19 AM, Roberto Sassu wrote:
->>> From: Roberto Sassu <roberto.sassu@huawei.com>
->>>
->>> Introduce the ability of staging the entire (or a portion of the) IMA
->>> measurement list for deletion. Staging means moving the current 
->>> content of
->>> the measurement list to a separate location, and allowing users to 
->>> read and
->>> delete it. This causes the measurement list to be atomically truncated
->>> before new measurements can be added. Staging can be done only once 
->>> at a
->>> time. In the event of kexec(), staging is reverted and staged 
->>> entries will
->>> be carried over to the new kernel.
->>>
->>> User space is responsible to concatenate the staged IMA measurements 
->>> list
->>> portions following the temporal order in which the operations were 
->>> done,
->>> together with the current measurement list. Then, it can send the 
->>> collected
->>> data to the remote verifiers.
->>>
->>> Also introduce the ability of trimming N measurements entries from 
->>> the IMA
->>> measurements list, provided that user space has already read them. 
->>> Trimming
->>> combines staging and deletion in one operation.
->>>
->>> The benefit of these solutions is the ability to free precious kernel
->>> memory, in exchange of delegating user space to reconstruct the full
->>> measurement list from the chunks. No trust needs to be given to user 
->>> space,
->>> since the integrity of the measurement list is protected by the TPM.
->>>
->>> By default, staging/trimming the measurements list does not alter 
->>> the hash
->>> table. When staging/trimming are done, IMA is still able to detect
->>> collisions on the staged and later deleted measurement entries, by 
->>> keeping
->>> the entry digests (only template data are freed).
->>>
->>> However, since during the measurements list serialization only the SHA1
->>> digest is passed, and since there are no template data to 
->>> recalculate the
->>> other digests from, the hash table is currently not populated with 
->>> digests
->>> from staged/deleted entries after kexec().
->>>
->>> Introduce the new kernel option ima_flush_htable to decide whether 
->>> or not
->>> the digests of staged measurement entries are flushed from the hash 
->>> table.
->>>
->>> Then, introduce ascii_runtime_measurements_staged_<algo> and
->>> binary_runtime_measurement_staged_<algo> interfaces to 
->>> stage/trim/delete
->>> the measurements. Use 'echo A > <IMA interface>' and
->>> 'echo D > <IMA interface>' to respectively stage and delete the entire
->>> measurements list. Use 'echo N > <IMA interface>', with N between 1 and
->>> LONG_MAX, to stage the selected portion of the measurements list, and
->>> 'echo -N > <IMA interface>' to trim N measurements entries.
->>>
->>> The ima_measure_users counter (protected by the ima_measure_lock 
->>> mutex) has
->>> been introduced to protect access to the measurements list and the 
->>> staged
->>> part. The open method of all the measurement interfaces has been 
->>> extended
->>> to allow only one writer at a time or, in alternative, multiple 
->>> readers.
->>> The write permission is used to stage/trim/delete the measurements, the
->>> read permission to read them. Write requires also the CAP_SYS_ADMIN
->>> capability.
->>>
->>> Finally, introduce and maintain dedicate counters for the number of
->>> measurement entries and binary size, for the current measurements list
->>> (BINARY_SIZE), for the current measurements list plus staged entries
->>> (BINARY_SIZE_STAGED) useful for kexec() segment allocation, and for the
->>> entire measurement list without staging/trimming (BINARY_SIZE_FULL) 
->>> useful
->>> for the kexec-related critical data records.
->> Is the following possible race condition for staged list:
->>
->> Agent A: create staged list            Staged list A1
->>           new measurement added    Measurement list M1
->>           Two lists in kernel: A1 and M1
->>
->> Agent B: read staged list (A1) to do verification
->>           new measurement added    Measurement list M2
->>           Two lists in kernel: A1 and M2
->>
->> Agent A: verified and remove staged list (A1)
->>           new measurement added    Measurement list M3
->>           One list in kernel: M3
->>
->> Agent C: create staged list            Staged list C1
->>           new measurement added    Measurement list M4
->>           Two lists in kernel: C1 and M4
->>
->> Agent B: remove staged list (?), C1 removed ---this will cause problem
->>           new measurement added    Measurement list M5
->>           One list in kernel: M5
->>
->> Agent C: try to remove staged list(?)
->
-> If you remember the patch, we added a read-write protection to the 
-> measurements interfaces. As long as you keep the interface open for 
-> write no one else can make change on the staging. Sure, you can drop 
-> the write, and reopen for read, but then you should expect someone 
-> else to operate on the interface.
->
-> If you want to be sure no one else changes the staged measurements, 
-> just keep the interface open for write, read the staged measurements 
-> and delete them.
->
-> Roberto
->
-For different use cases, we can compare lock time for both staged method 
-and trim N method:
+The pull request you sent on Tue, 10 Feb 2026 09:54:41 -0500:
 
-t1: user space measurement list lock time
-t2: kernel measurement list lock time
+> https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/ tags/integrity-v7.0
 
-     Stage approach use case 1:
-               1. read PCR quote
-               2. read list
-               3. attestation
-               4. get N from attestation response
----          5. hold the list in the user space
-  ^   ---    6. hold the measurement list
-        ^     7. stage the list
-t1    t2   8. trim N
-        v     9. put the rest of stage back to measurement list
-  v   ---    10. release the measurement list
----          11. release the list in the user space
-  For this case, agent race condition may happen
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d0e91e401e31959154b6518c29d130b1973e3785
 
-   Stage approach use case 2:
-               1. read PCR quote
----          2. hold the list in the user space
-  ^           3. stage the list
-               4. read list
-               5. attestation
-t1    ---  6. hold the measurement list
-          ^   7. get N from attestation response
-          t2  8. trim N
-          v    9. put the rest of stage back to measurement list
-  v    ---   10. release the measurement list
----          11. release the list in the user space
-  For this case, no agent race condition happen
+Thank you!
 
-the following use case for trim N method
-
-    Trim N approach use case:
-              1. read total trimmed T
-              2. read PCR quote
-              3. read list,
-              4. attestation
-              5. get N from attestation response
----         6. hold the list in the user space
-  ^   ---   7. hold the measurement list
-        ^
-t1   t2   8. trim with format T:N, update T
-        v
-  v   ---    9 . release the measurement list
----          10. release the list in the user space
-     no agent race condition happen
-
-For all use cases, I think for both t1 and t2, trim N method has better 
-result.
-
-Steven
-
->> Possible solution?
->>    Save the total number trimmed T or tag
->>
->>    Trim request sync this parameter to trim the staged list
->>
->> Regards,
->>
->> Steven
->>
->>> Note: This code derives from the Alt-IMA Huawei project, and is being
->>>        released under the dual license model (GPL-2.0 OR MIT).
->>>
->>> Link: https://github.com/linux-integrity/linux/issues/1
->>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->>> --- 
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
