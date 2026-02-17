@@ -1,207 +1,748 @@
-Return-Path: <linux-integrity+bounces-8506-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8507-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yJnkJxf6kmlx0gEAu9opvQ
-	(envelope-from <linux-integrity+bounces-8506-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Feb 2026 12:05:59 +0100
+	id iLOGAVAQlGnC/gEAu9opvQ
+	(envelope-from <linux-integrity+bounces-8507-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Feb 2026 07:53:04 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFBC2142A83
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Feb 2026 12:05:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66007149121
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Feb 2026 07:53:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6C1A83008CBF
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Feb 2026 11:05:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0D4FC3013A5F
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Feb 2026 06:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D3C2F12C6;
-	Mon, 16 Feb 2026 11:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97CE1FC7C5;
+	Tue, 17 Feb 2026 06:53:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="OppS9KB+";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Vp0Bpwv9"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="btVO8xDh"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFB822B5AD
-	for <linux-integrity@vger.kernel.org>; Mon, 16 Feb 2026 11:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED6B5FDA7;
+	Tue, 17 Feb 2026 06:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771239905; cv=none; b=SZ9uV+0lUoBbX0Pxq28Uvb4UTaCdugqIBBRCp5w2MIPHRqWgjbkfeMHtk2BsQPKralhjUeJ4x7Adlt9GQoN6hwlM24I2ATItsaAlbafeyFKQPawedXJ2kYiZ8c+UyNYZhh9KMb/G/nPOTorGMxEhhx0z2838/myJIiZIT9vHJgY=
+	t=1771311180; cv=none; b=Jf1pKbCqBrCNebfxISGDAHuFh3TS5Cn4H+O4hTDjPPhFEGB5z+dlISqRmCnwYOhWDlAyIFlA4xtDTii8o/s6iqvK2XLLlSoxdr8EajUnbWl76/FpGU2VnznVSTnJeK6Hcp+OL6DusmTXPGLoigSmoAeuNbiQzEELU9bQhw9VrIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771239905; c=relaxed/simple;
-	bh=xwRzJ3CVjxDVtF4g5dtQ/6rT6NS2KPIILMkhUqkpIXs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Htf5+is6f7Lb8caGXDl9sa4/zDQwfL/MYrVnxusf1CderyuJpieo2eI0m0jxeWsoTP22GfjChKV8Cl5p0FGHQ5tXka7/MwqnN/Uj521dd9DY4r86dIg8x4wxodx9LHUNvhB3/7iY1fqhQib9g86WgB8kK6zq1xxj7/ixrCiXI/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=OppS9KB+; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Vp0Bpwv9; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GAtBBJ2647738
-	for <linux-integrity@vger.kernel.org>; Mon, 16 Feb 2026 11:05:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=1YdR03rD7ZpyV9jb9eSEhnHmP1wdw0dWCm1
-	wpGBwvhc=; b=OppS9KB+5xUK3WxW5SNowfHh2S04kujrNSIhi8AT0pSKI0/uyu/
-	a5XjCGJRN2uzP/gkL4rCW/0UMnqScaJ5G3/SLxrMc1NQB/CNHqxNZ0pbnW2Td9+t
-	OS+dNVeTCm6ek5XNFd+WWRdAYD0iQCdteuJgg9/DxmjUnBVah/JGBrvNYchtiSA4
-	+qZNbbzHbQdNXRjbSAHXtr5gaptq+8X8rzlkSXOH8wnF0qfRZLfGnGQZv8DlnIOp
-	Dwm+fahRz0SlNCFPbaXKGmUayYjWwa2DuNwooT//prXFgXtUcLtFhLG1TCgDIzsR
-	Ba+HtL7ic5wZHtAdrRIRht1Vd40z5zw0ATA==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cbfuw1vcm-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-integrity@vger.kernel.org>; Mon, 16 Feb 2026 11:05:03 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8c70e610242so1873557485a.2
-        for <linux-integrity@vger.kernel.org>; Mon, 16 Feb 2026 03:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1771239902; x=1771844702; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1YdR03rD7ZpyV9jb9eSEhnHmP1wdw0dWCm1wpGBwvhc=;
-        b=Vp0Bpwv92z0BRTRUXZQLMh9TnGSF8uscZBkj1f1x71hjfUthXbge3ueAs+y+kIOZ8N
-         iVGG5IjvuT4Hq+NO5gf9h0y/qbjVTxzixRKT5Tk6fsaPyphx/V7tWzK+W6Kxu+tqKHyY
-         i08v/xqDqr19oDqOfK5mt8qVlkRvn8ByynJqbrRpmFilZF/ZF65Z3gLvbI2otn0JNQQ7
-         Ti27rrLn9U+uDdnUYEm1fuFCVNb5rnpK5Nf48FWnlt2YjtvFYtcLrQeJdbdR4IWJMDJk
-         2pk3IIEgU4yUMs8eYIlw6/WtTb5UbY/znjibPj/D45pqP4y2xDRj4SdSLDU3zJdoYKDI
-         1/Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771239902; x=1771844702;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1YdR03rD7ZpyV9jb9eSEhnHmP1wdw0dWCm1wpGBwvhc=;
-        b=woK+vN6II1x9ZNT8wGXWP1Rj5SnAmBVotz9Lzs/9FlcRhG7wxS2MoXVDpnJh2JUqNv
-         ifG0ULkKQEX7IQKFxhgsjLz+G/CrYaLnYxTgx42FUwuH5JiWjPBLaPCCDihad57nmzPU
-         t2IsfmYaYv+twjgkK83hTPYvFMeeHJy72rW6YGOoEk5hhPWTKMO29qU4f8tfioqp9ROz
-         V2qjcr2Ici3gHL6z0smGgfFM6Ps7LR7r3B0C4NTK4bOam33Negr0fV4WWmsCFOoXmIJN
-         /iQMPKAAVPavRw3SJspfsuOzaf4lH1JN74hiJrMOXKMcUTH73clfxd0ZIYmwEn88qOCl
-         FXVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVDklKm1t2mGY9e6YMx0L8BybP542hpPSLuN9GGbJRdIL18ai6tb5zI8s1L2dVCOSTQGZGgrZm1TmovDokm/G0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyYeqrtJw1UAs9phmAZwjaGXYSuEBI93IMLanA9HSn2uP6sytA
-	4HkdsL9ocBHa0ngs2WvzhVJZ10agZ8Ok3fZLklLyzs4F3OesVCNODmmkJDjKxV70f7POduCSUBB
-	P6vfLLR6NiGhMRipy+M+P06yi1Bi6AoYkpD/QuLgxN0zvuUA76dCaAV1tJMRcuMj8tqD40O8=
-X-Gm-Gg: AZuq6aLBcDNCcIKBGKumoCKTz+5Kh28yIVxhdEQQcpAXt1ozPUTNioo9pzviKAnSA+a
-	6FiqcwGO3dPxHoJ+XpzYRn3f/WQ77EZk1tw63mhm1UJrOFWjNwhtFYIZXZUDDrGD4yLteubBiuX
-	kDjtYA7ymgQM5UtVlr+DItoqsvu6lRf0+hvph7WK/I0uy4j5lKofb9jypw2RPurchi6J/d33Aur
-	zVsdHir8VappWgMl4x9t+LP9CALDSrD7ZljVUiW6UQg1B2ih16f6wGo3bfrhnX3QuauQZMLoUB5
-	jdzegop25rp0QMZ0SI1ADt9uzyjZZAmoNc6nEtbnDrKU855uuBuXFbSa6RYJevFJMBMSZAP5CEs
-	M5lF1llDFTLMmdmx33otM5ay/8JBJQDj9oz9TQQ==
-X-Received: by 2002:a05:620a:1725:b0:8c5:310d:3b2d with SMTP id af79cd13be357-8cb4229f08cmr1203766885a.33.1771239902422;
-        Mon, 16 Feb 2026 03:05:02 -0800 (PST)
-X-Received: by 2002:a05:620a:1725:b0:8c5:310d:3b2d with SMTP id af79cd13be357-8cb4229f08cmr1203762485a.33.1771239901878;
-        Mon, 16 Feb 2026 03:05:01 -0800 (PST)
-Received: from quoll ([178.197.223.140])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4835dcfb28dsm389300025e9.11.2026.02.16.03.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Feb 2026 03:05:01 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Subject: [PATCH] tpm: Make tcpci_pm_ops variable static const
-Date: Mon, 16 Feb 2026 12:04:59 +0100
-Message-ID: <20260216110458.160357-2-krzysztof.kozlowski@oss.qualcomm.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1771311180; c=relaxed/simple;
+	bh=NWlhU+VZAdoMQgB4qo7AOJYsrhpnlsY7uHuvDHi1xR8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TnLXBmg90fqKVmCQuQzeHH09M9MRwbuYz9wYSswA38t/AseB9envrQ+sTZR7zhwHLz3Xdc6WP21QU7D41kvquihQtvVPoU9wPz65vNV3/7+wETp8QUYcThxKRIQvVVBcK/HoK74RKa8fFPSu0IuWPgzDUdVmH3zOzUke/Rs2Y8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=btVO8xDh; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GDxonn3800571;
+	Tue, 17 Feb 2026 06:52:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=AAjhmf
+	KkcZgG6YJce51j6QJpADLdJ8F7gWkbyez8V8c=; b=btVO8xDhB+2iVuGFuXErzy
+	7e0YmXKyaHU+EvZvLzZuFUVXTuXw89A+e/ZgKEdAg8YBXlS/jkLOHoLLMxs+LKED
+	liBVkLB92aGLri1NDfMgoX/bZwDSRft0zlkscgaRqhMak8dysBDIROUm6jhFof3C
+	d0/jr8A/7zcPYme8gJUlqJUPJwspRQYjWwRrkfOCc8aTE/oa0i2hfsqwH0ShAcNP
+	FbaLKLHvHHka8knleFs1chEbfTTmcQ2b1Xs82la1lydvL6jlfJwtfTo1M2k9RW9s
+	jnA0+6PyVU1zO/LpuuNj+P+UVyBplgsgnOahfA4398frety2qB40Qp6736d4IoKg
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcja1c8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Feb 2026 06:52:48 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61H3DvNx001419;
+	Tue, 17 Feb 2026 06:52:48 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ccb2b9dhx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Feb 2026 06:52:48 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61H6qkog31916578
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Feb 2026 06:52:46 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B24995805A;
+	Tue, 17 Feb 2026 06:52:46 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 532725803F;
+	Tue, 17 Feb 2026 06:52:43 +0000 (GMT)
+Received: from [9.39.26.105] (unknown [9.39.26.105])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 17 Feb 2026 06:52:42 +0000 (GMT)
+Message-ID: <6f53ba98-ca01-47f0-978f-809ef01917f0@linux.ibm.com>
+Date: Tue, 17 Feb 2026 12:22:39 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1004; i=krzysztof.kozlowski@oss.qualcomm.com;
- h=from:subject; bh=xwRzJ3CVjxDVtF4g5dtQ/6rT6NS2KPIILMkhUqkpIXs=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpkvnaNkEpSElmWzgShI9w037NIMx8zJ3k6byPn
- t6nTqpGt/mJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaZL52gAKCRDBN2bmhouD
- 10p5D/48RCLtwDruY6O5AG1lq04dAa8cS3Ci6ksDHzUdB+oCa1hZk9IgHO0N0tPQE6V7u9FPwMt
- ryUoIwG7AwT1fn4qz9EcWt1T733yIlQ0gDmtUJgbUh9rqUSsyEmzp5YTPkB1HzLpr7GAdMNQV46
- HWjtqfq/GgqLlf0lwBhtHk2fnf1Kt9UzyxOy5w0384ZENxFGl00yUjI20tOEGu6iLY96LH3bHF0
- sb6Sf1rmpy2urJAheEukcjJrKx+2CEfASArT18Z00vB2YmudCMIgmFnTS3tP77bLIQC1WkBQMs5
- QYooylHLr1FTpflMT7XwKq1tmQSocEcIK0PWLQUo7XKCciuE4l1G8EwulM4JJFzn8AdHirXf9RK
- tnQr58PDWU86Bhi7IJdwpRmfj+gXoi4rThtHuYjol3g1vY3jMfsMqYGxAL+EfstKz+s4PQ4EQuY
- /d+/nwM9BB+MfyIXGNy8YFm4No4B6k36M3gjx9ZXJF3jBSpMDfmEsTeApRx+Sgz3RGZRdvJaCdM
- vW2H1SXdXGWIOWRhCl7DWm7fQdlkqf93NLyXS4Q8fUX2HW6oOlnF7giilh6AEHS7BGO0eoP6BLL
- gLAjAFoEjA9+dIul7YAWaKX4VBNEsQLNLPOQQb5juX0i0smwYM9ptTVMQk8IEOJOTLr874Q4ezT kUearkoPAUtEsQA==
-X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=Jb+xbEKV c=1 sm=1 tr=0 ts=6992f9df cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=6nO30s3o7FuWeffXwhKHTA==:17
- a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=EUspDBNiAAAA:8
- a=8XC4yJfEbrSXX8NmzEEA:9 a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-ORIG-GUID: Z1ZZgLXTD52kLnCovV56zm9v0si7ng7B
-X-Proofpoint-GUID: Z1ZZgLXTD52kLnCovV56zm9v0si7ng7B
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA5MyBTYWx0ZWRfX3U9w+lg7U9pC
- HpzDdssn7Ju/9EgK9qkcV5AuDTV3s4HLUaARGTNqeV6oUCMxaFKP1UVXDBglS9cTR+QnrPQ2UYt
- GuQdRBJee5qJ9GzMgU/mQ4KPZvUEiT9XRyct/6DLwTrLiJHxx3upXSHub0aZT7nBefdJVBlls7Z
- Vf29/5eNcwU137iU2m0uBdlW04QvLXX92fVcvtiXFeDE+lwTkGDIcBxxjWPvTet3XGeyIb3uFOs
- mpagYcX5s3C5hDZabjJ+7DhMy8DhFcXXV5bjzdkbHo+T4qTDPatMHDy4zUs/4vBKzDumJ7JMXEQ
- MJKhN9BbWI0bZEP5AVWFRB1oGdNJxoASN25kBFJmTirqo95qhuGzYuzGbmgQCK+cmv2ywzpu4bA
- T34T4ttQ4ORNMygO0VcrxkUovwodWsHkHQlA7pXP33E4t9gmEDVOfDLPy9lJpACcR/sCgCbbNLX
- UAqa0sVLVRQDZRmBBtQ==
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] keys/trusted_keys: move TPM-specific fields into
+ trusted_tpm_options
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, zohar@linux.ibm.com,
+        nayna@linux.ibm.com, stefanb@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Srish Srinivasan <ssrish@linux.ibm.com>
+References: <20260123165504.461607-1-ssrish@linux.ibm.com>
+ <20260123165504.461607-3-ssrish@linux.ibm.com> <aXZMLbQ2ykqPQp48@kernel.org>
+Content-Language: en-US
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+In-Reply-To: <aXZMLbQ2ykqPQp48@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: gIXG3ZA-TAiKiXS5IEv7DlDkH-DqEA0_
+X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=69941040 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
+ a=w09nOruQvyUnvy34TYAA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDA1NCBTYWx0ZWRfX7oNaHed7uGR6
+ zyYFkIOsjxbK/WWiYupp2N7NkoX8/2SBnnnhx0TBOViYRNNcovw6+vga2zzvDJHPETTZlmtKVR1
+ vQAJKpPbW93q0FkGBF5zgCbmnj+aXJ3Ak5G5Ns5XD04CHpD5Xi8D/t7kF6scjyZUSX0qDGwnN1h
+ i961QJjE3a7jgLsDktPTu8Cv3+NCD126SD4oC4TZCU/6XDjau8A+ZO7+qWnWLPhCqzlyEWvdUpe
+ VBn924lOkLHT2TX5Aabt/L2h8CKp5Fikh39uvccNasZS0VWCxaQma144iQ2+n9T5D7NacnGbT8D
+ vDo8VPsoO8DR3zk5q5xnB53Ef+VNR1qR6gBTQ+2h54/uINYJu3/wxPQXvFnZnp9jp7TrPexMF02
+ vG9RfyjMd4vbHsYgSllnqGgsxhkqEPxdhiaHCROoxLFfZEsLQsg3MmMOIE5BUxYHLqn0Z1LCN2Q
+ 0vHEZVoMJnxFpqdJu0A==
+X-Proofpoint-GUID: gIXG3ZA-TAiKiXS5IEv7DlDkH-DqEA0_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-16_04,2026-02-16_01,2025-10-01_01
+ definitions=2026-02-17_01,2026-02-16_04,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 clxscore=1011
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602160093
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170054
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-8506-lists,linux-integrity=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmx.de,kernel.org,ziepe.ca,vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzysztof.kozlowski@oss.qualcomm.com,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: CFBC2142A83
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ssrish@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8507-lists,linux-integrity=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+]
+X-Rspamd-Queue-Id: 66007149121
 X-Rspamd-Action: no action
 
-File-scope 'tcpci_pm_ops' is not used outside of this unit and is not
-modified anywhere, so make it static const to silence sparse warning:
+Hi Jarkko,
+thanks for taking a look.
 
-  tcpci.c:1002:1: warning: symbol 'tcpci_pm_ops' was not declared. Should it be static?
+And, apologies for the delayed response.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
----
- drivers/char/tpm/tpm2-cmd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 1/25/26 10:30 PM, Jarkko Sakkinen wrote:
+> On Fri, Jan 23, 2026 at 10:25:04PM +0530, Srish Srinivasan wrote:
+>> The trusted_key_options struct contains TPM-specific fields (keyhandle,
+>> keyauth, blobauth_len, blobauth, pcrinfo_len, pcrinfo, pcrlock, hash,
+>> policydigest_len, policydigest, and policyhandle). This leads to the
+>> accumulation of backend-specific fields in the generic options structure.
+>>
+>> Define trusted_tpm_options structure and move the TPM-specific fields
+>> there. Store a pointer to trusted_tpm_options in trusted_key_options's
+>> private.
+>>
+>> No functional change intended.
+>>
+>> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
+>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   include/keys/trusted-type.h               |  11 ---
+>>   include/keys/trusted_tpm.h                |  14 +++
+>>   security/keys/trusted-keys/trusted_tpm1.c | 103 ++++++++++++++--------
+>>   security/keys/trusted-keys/trusted_tpm2.c |  62 ++++++++-----
+>>   4 files changed, 121 insertions(+), 69 deletions(-)
+>>
+>> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+>> index 03527162613f..b80f250305b8 100644
+>> --- a/include/keys/trusted-type.h
+>> +++ b/include/keys/trusted-type.h
+>> @@ -39,17 +39,6 @@ struct trusted_key_payload {
+>>   
+>>   struct trusted_key_options {
+>>   	uint16_t keytype;
+>> -	uint32_t keyhandle;
+>> -	unsigned char keyauth[TPM_DIGEST_SIZE];
+>> -	uint32_t blobauth_len;
+>> -	unsigned char blobauth[TPM_DIGEST_SIZE];
+>> -	uint32_t pcrinfo_len;
+>> -	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
+>> -	int pcrlock;
+>> -	uint32_t hash;
+>> -	uint32_t policydigest_len;
+>> -	unsigned char policydigest[MAX_DIGEST_SIZE];
+>> -	uint32_t policyhandle;
+>>   	void *private;
+>>   };
+>>   
+>> diff --git a/include/keys/trusted_tpm.h b/include/keys/trusted_tpm.h
+>> index 0fadc6a4f166..355ebd36cbfd 100644
+>> --- a/include/keys/trusted_tpm.h
+>> +++ b/include/keys/trusted_tpm.h
+>> @@ -7,6 +7,20 @@
+>>   
+>>   extern struct trusted_key_ops trusted_key_tpm_ops;
+>>   
+>> +struct trusted_tpm_options {
+>> +	uint32_t keyhandle;
+>> +	unsigned char keyauth[TPM_DIGEST_SIZE];
+>> +	uint32_t blobauth_len;
+>> +	unsigned char blobauth[TPM_DIGEST_SIZE];
+>> +	uint32_t pcrinfo_len;
+>> +	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
+>> +	int pcrlock;
+>> +	uint32_t hash;
+>> +	uint32_t policydigest_len;
+>> +	unsigned char policydigest[MAX_DIGEST_SIZE];
+>> +	uint32_t policyhandle;
+>> +};
+>> +
+>>   int tpm2_seal_trusted(struct tpm_chip *chip,
+>>   		      struct trusted_key_payload *payload,
+>>   		      struct trusted_key_options *options);
+>> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+>> index 636acb66a4f6..0ab0234ebe37 100644
+>> --- a/security/keys/trusted-keys/trusted_tpm1.c
+>> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+>> @@ -50,12 +50,14 @@ enum {
+>>   #if TPM_DEBUG
+>>   static inline void dump_options(struct trusted_key_options *o)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts = o->private;
+>
+> TPM context is obvious i.e., actually private would be a better name.
 
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index 3a77be7ebf4a..e00f668f8c84 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -21,7 +21,7 @@ static bool disable_pcr_integrity;
- module_param(disable_pcr_integrity, bool, 0444);
- MODULE_PARM_DESC(disable_pcr_integrity, "Disable integrity protection of TPM2_PCR_Extend");
- 
--struct tpm2_hash tpm2_hash_map[] = {
-+static const struct tpm2_hash tpm2_hash_map[] = {
- 	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
- 	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
- 	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
--- 
-2.51.0
+
+Noted. Will make the change.
+
+
+>
+>> +
+>>   	pr_info("sealing key type %d\n", o->keytype);
+>> -	pr_info("sealing key handle %0X\n", o->keyhandle);
+>> -	pr_info("pcrlock %d\n", o->pcrlock);
+>> -	pr_info("pcrinfo %d\n", o->pcrinfo_len);
+>> +	pr_info("sealing key handle %0X\n", tpm_opts->keyhandle);
+>> +	pr_info("pcrlock %d\n", tpm_opts->pcrlock);
+>> +	pr_info("pcrinfo %d\n", tpm_opts->pcrinfo_len);
+>>   	print_hex_dump(KERN_INFO, "pcrinfo ", DUMP_PREFIX_NONE,
+>> -		       16, 1, o->pcrinfo, o->pcrinfo_len, 0);
+>> +		       16, 1, tpm_opts->pcrinfo, tpm_opts->pcrinfo_len, 0);
+>>   }
+> Should be replaced with pr_debug() and KERN_DEBUG as precursory patch
+> (and remove TPM_DEBUG).
+
+
+Will fix this, and make it a preparatory clean-up patch.
+
+
+>
+>>   
+>>   static inline void dump_sess(struct osapsess *s)
+>> @@ -624,6 +626,7 @@ static int tpm_unseal(struct tpm_buf *tb,
+>>   static int key_seal(struct trusted_key_payload *p,
+>>   		    struct trusted_key_options *o)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	struct tpm_buf tb;
+>>   	int ret;
+>>   
+>> @@ -634,9 +637,12 @@ static int key_seal(struct trusted_key_payload *p,
+>>   	/* include migratable flag at end of sealed key */
+>>   	p->key[p->key_len] = p->migratable;
+>>   
+>> -	ret = tpm_seal(&tb, o->keytype, o->keyhandle, o->keyauth,
+>> +	tpm_opts = o->private;
+> Not sure why this is not done in the declaration.
+
+
+Will fix this.
+
+
+>
+>> +
+>> +	ret = tpm_seal(&tb, o->keytype, tpm_opts->keyhandle, tpm_opts->keyauth,
+>>   		       p->key, p->key_len + 1, p->blob, &p->blob_len,
+>> -		       o->blobauth, o->pcrinfo, o->pcrinfo_len);
+>> +		       tpm_opts->blobauth, tpm_opts->pcrinfo,
+>> +		       tpm_opts->pcrinfo_len);
+>>   	if (ret < 0)
+>>   		pr_info("srkseal failed (%d)\n", ret);
+>>   
+>> @@ -650,6 +656,7 @@ static int key_seal(struct trusted_key_payload *p,
+>>   static int key_unseal(struct trusted_key_payload *p,
+>>   		      struct trusted_key_options *o)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	struct tpm_buf tb;
+>>   	int ret;
+>>   
+>> @@ -657,8 +664,10 @@ static int key_unseal(struct trusted_key_payload *p,
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	ret = tpm_unseal(&tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
+>> -			 o->blobauth, p->key, &p->key_len);
+>> +	tpm_opts = o->private;
+>> +
+>> +	ret = tpm_unseal(&tb, tpm_opts->keyhandle, tpm_opts->keyauth, p->blob,
+>> +			 p->blob_len, tpm_opts->blobauth, p->key, &p->key_len);
+>>   	if (ret < 0)
+>>   		pr_info("srkunseal failed (%d)\n", ret);
+>>   	else
+>> @@ -695,6 +704,7 @@ static const match_table_t key_tokens = {
+>>   static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   		      struct trusted_key_options *opt)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	substring_t args[MAX_OPT_ARGS];
+>>   	char *p = c;
+>>   	int token;
+>> @@ -710,7 +720,9 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   	if (tpm2 < 0)
+>>   		return tpm2;
+>>   
+>> -	opt->hash = tpm2 ? HASH_ALGO_SHA256 : HASH_ALGO_SHA1;
+>> +	tpm_opts = opt->private;
+>> +
+> I'd remove this empty line.
+
+
+Will fix this.
+
+
+>
+>> +	tpm_opts->hash = tpm2 ? HASH_ALGO_SHA256 : HASH_ALGO_SHA1;
+>>   
+>>   	if (!c)
+>>   		return 0;
+>> @@ -724,11 +736,11 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   
+>>   		switch (token) {
+>>   		case Opt_pcrinfo:
+>> -			opt->pcrinfo_len = strlen(args[0].from) / 2;
+>> -			if (opt->pcrinfo_len > MAX_PCRINFO_SIZE)
+>> +			tpm_opts->pcrinfo_len = strlen(args[0].from) / 2;
+>> +			if (tpm_opts->pcrinfo_len > MAX_PCRINFO_SIZE)
+>>   				return -EINVAL;
+>> -			res = hex2bin(opt->pcrinfo, args[0].from,
+>> -				      opt->pcrinfo_len);
+>> +			res = hex2bin(tpm_opts->pcrinfo, args[0].from,
+>> +				      tpm_opts->pcrinfo_len);
+>>   			if (res < 0)
+>>   				return -EINVAL;
+>>   			break;
+>> @@ -737,12 +749,12 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   			if (res < 0)
+>>   				return -EINVAL;
+>>   			opt->keytype = SEAL_keytype;
+>> -			opt->keyhandle = handle;
+>> +			tpm_opts->keyhandle = handle;
+>>   			break;
+>>   		case Opt_keyauth:
+>>   			if (strlen(args[0].from) != 2 * SHA1_DIGEST_SIZE)
+>>   				return -EINVAL;
+>> -			res = hex2bin(opt->keyauth, args[0].from,
+>> +			res = hex2bin(tpm_opts->keyauth, args[0].from,
+>>   				      SHA1_DIGEST_SIZE);
+>>   			if (res < 0)
+>>   				return -EINVAL;
+>> @@ -753,21 +765,23 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   			 * hex strings.  TPM 2.0 authorizations are simple
+>>   			 * passwords (although it can take a hash as well)
+>>   			 */
+>> -			opt->blobauth_len = strlen(args[0].from);
+>> +			tpm_opts->blobauth_len = strlen(args[0].from);
+>>   
+>> -			if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
+>> -				res = hex2bin(opt->blobauth, args[0].from,
+>> +			if (tpm_opts->blobauth_len == 2 * TPM_DIGEST_SIZE) {
+>> +				res = hex2bin(tpm_opts->blobauth, args[0].from,
+>>   					      TPM_DIGEST_SIZE);
+>>   				if (res < 0)
+>>   					return -EINVAL;
+>>   
+>> -				opt->blobauth_len = TPM_DIGEST_SIZE;
+>> +				tpm_opts->blobauth_len = TPM_DIGEST_SIZE;
+>>   				break;
+>>   			}
+>>   
+>> -			if (tpm2 && opt->blobauth_len <= sizeof(opt->blobauth)) {
+>> -				memcpy(opt->blobauth, args[0].from,
+>> -				       opt->blobauth_len);
+>> +			if (tpm2 &&
+>> +			    tpm_opts->blobauth_len <=
+>> +				sizeof(tpm_opts->blobauth)) {
+>> +				memcpy(tpm_opts->blobauth, args[0].from,
+>> +				       tpm_opts->blobauth_len);
+>>   				break;
+>>   			}
+>>   
+>> @@ -785,14 +799,14 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   			res = kstrtoul(args[0].from, 10, &lock);
+>>   			if (res < 0)
+>>   				return -EINVAL;
+>> -			opt->pcrlock = lock;
+>> +			tpm_opts->pcrlock = lock;
+>>   			break;
+>>   		case Opt_hash:
+>>   			if (test_bit(Opt_policydigest, &token_mask))
+>>   				return -EINVAL;
+>>   			for (i = 0; i < HASH_ALGO__LAST; i++) {
+>>   				if (!strcmp(args[0].from, hash_algo_name[i])) {
+>> -					opt->hash = i;
+>> +					tpm_opts->hash = i;
+>>   					break;
+>>   				}
+>>   			}
+>> @@ -804,14 +818,14 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   			}
+>>   			break;
+>>   		case Opt_policydigest:
+>> -			digest_len = hash_digest_size[opt->hash];
+>> +			digest_len = hash_digest_size[tpm_opts->hash];
+>>   			if (!tpm2 || strlen(args[0].from) != (2 * digest_len))
+>>   				return -EINVAL;
+>> -			res = hex2bin(opt->policydigest, args[0].from,
+>> +			res = hex2bin(tpm_opts->policydigest, args[0].from,
+>>   				      digest_len);
+>>   			if (res < 0)
+>>   				return -EINVAL;
+>> -			opt->policydigest_len = digest_len;
+>> +			tpm_opts->policydigest_len = digest_len;
+>>   			break;
+>>   		case Opt_policyhandle:
+>>   			if (!tpm2)
+>> @@ -819,7 +833,7 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   			res = kstrtoul(args[0].from, 16, &handle);
+>>   			if (res < 0)
+>>   				return -EINVAL;
+>> -			opt->policyhandle = handle;
+>> +			tpm_opts->policyhandle = handle;
+>>   			break;
+>>   		default:
+>>   			return -EINVAL;
+>> @@ -830,6 +844,7 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
+>>   
+>>   static struct trusted_key_options *trusted_options_alloc(void)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	struct trusted_key_options *options;
+>>   	int tpm2;
+>>   
+>> @@ -842,14 +857,23 @@ static struct trusted_key_options *trusted_options_alloc(void)
+>>   		/* set any non-zero defaults */
+>>   		options->keytype = SRK_keytype;
+>>   
+>> -		if (!tpm2)
+>> -			options->keyhandle = SRKHANDLE;
+>> +		tpm_opts = kzalloc(sizeof(*tpm_opts), GFP_KERNEL);
+>> +		if (!tpm_opts) {
+>> +			kfree_sensitive(options);
+>> +			options = NULL;
+>> +		} else {
+>> +			if (!tpm2)
+>> +				tpm_opts->keyhandle = SRKHANDLE;
+>> +
+>> +			options->private = tpm_opts;
+>> +		}
+>>   	}
+>>   	return options;
+>>   }
+>>   
+>>   static int trusted_tpm_seal(struct trusted_key_payload *p, char *datablob)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts = NULL;
+>>   	struct trusted_key_options *options = NULL;
+>>   	int ret = 0;
+>>   	int tpm2;
+>> @@ -867,7 +891,9 @@ static int trusted_tpm_seal(struct trusted_key_payload *p, char *datablob)
+>>   		goto out;
+>>   	dump_options(options);
+>>   
+>> -	if (!options->keyhandle && !tpm2) {
+>> +	tpm_opts = options->private;
+>> +
+>> +	if (!tpm_opts->keyhandle && !tpm2) {
+>>   		ret = -EINVAL;
+>>   		goto out;
+>>   	}
+>> @@ -881,20 +907,22 @@ static int trusted_tpm_seal(struct trusted_key_payload *p, char *datablob)
+>>   		goto out;
+>>   	}
+>>   
+>> -	if (options->pcrlock) {
+>> -		ret = pcrlock(options->pcrlock);
+>> +	if (tpm_opts->pcrlock) {
+>> +		ret = pcrlock(tpm_opts->pcrlock);
+>>   		if (ret < 0) {
+>>   			pr_info("pcrlock failed (%d)\n", ret);
+>>   			goto out;
+>>   		}
+>>   	}
+>>   out:
+>> +	kfree_sensitive(options->private);
+>>   	kfree_sensitive(options);
+>>   	return ret;
+>>   }
+>>   
+>>   static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts = NULL;
+>>   	struct trusted_key_options *options = NULL;
+>>   	int ret = 0;
+>>   	int tpm2;
+>> @@ -912,7 +940,9 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
+>>   		goto out;
+>>   	dump_options(options);
+>>   
+>> -	if (!options->keyhandle && !tpm2) {
+>> +	tpm_opts = options->private;
+>> +
+>> +	if (!tpm_opts->keyhandle && !tpm2) {
+>>   		ret = -EINVAL;
+>>   		goto out;
+>>   	}
+>> @@ -924,14 +954,15 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
+>>   	if (ret < 0)
+>>   		pr_info("key_unseal failed (%d)\n", ret);
+>>   
+>> -	if (options->pcrlock) {
+>> -		ret = pcrlock(options->pcrlock);
+>> +	if (tpm_opts->pcrlock) {
+>> +		ret = pcrlock(tpm_opts->pcrlock);
+>>   		if (ret < 0) {
+>>   			pr_info("pcrlock failed (%d)\n", ret);
+>>   			goto out;
+>>   		}
+>>   	}
+>>   out:
+>> +	kfree_sensitive(options->private);
+>>   	kfree_sensitive(options);
+>>   	return ret;
+>>   }
+>> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+>> index 6340823f8b53..568c4af9010c 100644
+>> --- a/security/keys/trusted-keys/trusted_tpm2.c
+>> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+>> @@ -24,6 +24,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>>   			   struct trusted_key_options *options,
+>>   			   u8 *src, u32 len)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	const int SCRATCH_SIZE = PAGE_SIZE;
+>>   	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
+>>   	u8 *work = scratch, *work1;
+>> @@ -46,7 +47,9 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>>   	work = asn1_encode_oid(work, end_work, tpm2key_oid,
+>>   			       asn1_oid_len(tpm2key_oid));
+>>   
+>> -	if (options->blobauth_len == 0) {
+>> +	tpm_opts = options->private;
+>> +
+>> +	if (tpm_opts->blobauth_len == 0) {
+>>   		unsigned char bool[3], *w = bool;
+>>   		/* tag 0 is emptyAuth */
+>>   		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+>> @@ -69,7 +72,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>>   		goto err;
+>>   	}
+>>   
+>> -	work = asn1_encode_integer(work, end_work, options->keyhandle);
+>> +	work = asn1_encode_integer(work, end_work, tpm_opts->keyhandle);
+>>   	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
+>>   	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
+>>   
+>> @@ -102,6 +105,7 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
+>>   			   struct trusted_key_options *options,
+>>   			   u8 **buf)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	int ret;
+>>   	struct tpm2_key_context ctx;
+>>   	u8 *blob;
+>> @@ -120,8 +124,10 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
+>>   	if (!blob)
+>>   		return -ENOMEM;
+>>   
+>> +	tpm_opts = options->private;
+>> +
+>>   	*buf = blob;
+>> -	options->keyhandle = ctx.parent;
+>> +	tpm_opts->keyhandle = ctx.parent;
+>>   
+>>   	memcpy(blob, ctx.priv, ctx.priv_len);
+>>   	blob += ctx.priv_len;
+>> @@ -233,6 +239,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>>   		      struct trusted_key_payload *payload,
+>>   		      struct trusted_key_options *options)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	off_t offset = TPM_HEADER_SIZE;
+>>   	struct tpm_buf buf, sized;
+>>   	int blob_len = 0;
+>> @@ -240,11 +247,13 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>>   	u32 flags;
+>>   	int rc;
+>>   
+>> -	hash = tpm2_find_hash_alg(options->hash);
+>> +	tpm_opts = options->private;
+>> +
+>> +	hash = tpm2_find_hash_alg(tpm_opts->hash);
+>>   	if (hash < 0)
+>>   		return hash;
+>>   
+>> -	if (!options->keyhandle)
+>> +	if (!tpm_opts->keyhandle)
+>>   		return -EINVAL;
+>>   
+>>   	rc = tpm_try_get_ops(chip);
+>> @@ -268,18 +277,19 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>>   		goto out_put;
+>>   	}
+>>   
+>> -	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
+>> +	rc = tpm_buf_append_name(chip, &buf, tpm_opts->keyhandle, NULL);
+>>   	if (rc)
+>>   		goto out;
+>>   
+>>   	tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_DECRYPT,
+>> -				    options->keyauth, TPM_DIGEST_SIZE);
+>> +				    tpm_opts->keyauth, TPM_DIGEST_SIZE);
+>>   
+>>   	/* sensitive */
+>> -	tpm_buf_append_u16(&sized, options->blobauth_len);
+>> +	tpm_buf_append_u16(&sized, tpm_opts->blobauth_len);
+>>   
+>> -	if (options->blobauth_len)
+>> -		tpm_buf_append(&sized, options->blobauth, options->blobauth_len);
+>> +	if (tpm_opts->blobauth_len)
+>> +		tpm_buf_append(&sized, tpm_opts->blobauth,
+>> +			       tpm_opts->blobauth_len);
+>>   
+>>   	tpm_buf_append_u16(&sized, payload->key_len);
+>>   	tpm_buf_append(&sized, payload->key, payload->key_len);
+>> @@ -292,14 +302,15 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
+>>   
+>>   	/* key properties */
+>>   	flags = 0;
+>> -	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
+>> +	flags |= tpm_opts->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
+>>   	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT);
+>>   	tpm_buf_append_u32(&sized, flags);
+>>   
+>>   	/* policy */
+>> -	tpm_buf_append_u16(&sized, options->policydigest_len);
+>> -	if (options->policydigest_len)
+>> -		tpm_buf_append(&sized, options->policydigest, options->policydigest_len);
+>> +	tpm_buf_append_u16(&sized, tpm_opts->policydigest_len);
+>> +	if (tpm_opts->policydigest_len)
+>> +		tpm_buf_append(&sized, tpm_opts->policydigest,
+>> +			       tpm_opts->policydigest_len);
+>>   
+>>   	/* public parameters */
+>>   	tpm_buf_append_u16(&sized, TPM_ALG_NULL);
+>> @@ -373,6 +384,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>>   			 u32 *blob_handle)
+>>   {
+>>   	u8 *blob_ref __free(kfree) = NULL;
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	struct tpm_buf buf;
+>>   	unsigned int private_len;
+>>   	unsigned int public_len;
+>> @@ -391,8 +403,10 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>>   		blob_ref = blob;
+>>   	}
+>>   
+>> +	tpm_opts = options->private;
+>> +
+>>   	/* new format carries keyhandle but old format doesn't */
+>> -	if (!options->keyhandle)
+>> +	if (!tpm_opts->keyhandle)
+>>   		return -EINVAL;
+>>   
+>>   	/* must be big enough for at least the two be16 size counts */
+>> @@ -433,11 +447,11 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
+>>   		return rc;
+>>   	}
+>>   
+>> -	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
+>> +	rc = tpm_buf_append_name(chip, &buf, tpm_opts->keyhandle, NULL);
+>>   	if (rc)
+>>   		goto out;
+>>   
+>> -	tpm_buf_append_hmac_session(chip, &buf, 0, options->keyauth,
+>> +	tpm_buf_append_hmac_session(chip, &buf, 0, tpm_opts->keyauth,
+>>   				    TPM_DIGEST_SIZE);
+>>   
+>>   	tpm_buf_append(&buf, blob, blob_len);
+>> @@ -481,6 +495,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+>>   			   struct trusted_key_options *options,
+>>   			   u32 blob_handle)
+>>   {
+>> +	struct trusted_tpm_options *tpm_opts;
+>>   	struct tpm_header *head;
+>>   	struct tpm_buf buf;
+>>   	u16 data_len;
+>> @@ -502,10 +517,12 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+>>   	if (rc)
+>>   		goto out;
+>>   
+>> -	if (!options->policyhandle) {
+>> +	tpm_opts = options->private;
+>> +
+>> +	if (!tpm_opts->policyhandle) {
+>>   		tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT,
+>> -					    options->blobauth,
+>> -					    options->blobauth_len);
+>> +					    tpm_opts->blobauth,
+>> +					    tpm_opts->blobauth_len);
+>>   	} else {
+>>   		/*
+>>   		 * FIXME: The policy session was generated outside the
+>> @@ -518,9 +535,10 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
+>>   		 * could repeat our actions with the exfiltrated
+>>   		 * password.
+>>   		 */
+>> -		tpm2_buf_append_auth(&buf, options->policyhandle,
+>> +		tpm2_buf_append_auth(&buf, tpm_opts->policyhandle,
+>>   				     NULL /* nonce */, 0, 0,
+>> -				     options->blobauth, options->blobauth_len);
+>> +				     tpm_opts->blobauth,
+>> +				     tpm_opts->blobauth_len);
+>>   		if (tpm2_chip_auth(chip)) {
+>>   			tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT, NULL, 0);
+>>   		} else  {
+>> -- 
+>> 2.43.0
+>>
+> BR, Jarkko
+
+
+I will shortly send out v2 with the changes.
+
+Thanks,
+Srish.
 
 
