@@ -1,242 +1,166 @@
-Return-Path: <linux-integrity+bounces-8511-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8512-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gImnK0oilmnYawIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8511-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Feb 2026 21:34:18 +0100
+	id iBsONV4ilmnYawIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8512-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Feb 2026 21:34:38 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ACD7159764
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Feb 2026 21:34:18 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7098515978D
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Feb 2026 21:34:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 49DF73024102
-	for <lists+linux-integrity@lfdr.de>; Wed, 18 Feb 2026 20:34:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 559F0300617F
+	for <lists+linux-integrity@lfdr.de>; Wed, 18 Feb 2026 20:34:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F6F345CC0;
-	Wed, 18 Feb 2026 20:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C013A248F64;
+	Wed, 18 Feb 2026 20:34:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b="Z4MERPRO"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Aa1k1C+z"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF8A3168F7
-	for <linux-integrity@vger.kernel.org>; Wed, 18 Feb 2026 20:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771446855; cv=pass; b=YJxua82GeCMoHPM88rd2rR2TY/gfSbJeZpALWIMb8cVGdsuW/dT0bpTdRrfC/xD8AYohpHxROsMWTr5s8f6ilPtqICMuSGoVQszksbIsAt5iE6AacnpX8itBOWwLCHUjqCcVETY5Kul7MQKrJ8DGk7P7RxH6lpLwekPaHJ1xd9M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771446855; c=relaxed/simple;
-	bh=7C5a/FWuVnB5cGwTAOV2Br2wE+JlZH1M0yzztc2OQnA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YNss5VHtDkcLWQXZJVCfzpVy9IgxRehbvH1Ix/bgM0SjXPG/xOEyctdGIY/P4Q99ipfE0Bpk6IOpcb2c2DAPkC2k0GWkf6LWreMzI1nGBbqpsGCd3vec8K7CXP6C/AGvkwFq77+ItBKBhgaBnmseEtIVxfqV1E2EPGQziBHdJoA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net; spf=pass smtp.mailfrom=amacapital.net; dkim=pass (2048-bit key) header.d=amacapital-net.20230601.gappssmtp.com header.i=@amacapital-net.20230601.gappssmtp.com header.b=Z4MERPRO; arc=pass smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amacapital.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amacapital.net
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59e5aa4ca41so260153e87.2
-        for <linux-integrity@vger.kernel.org>; Wed, 18 Feb 2026 12:34:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771446852; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SaoEHxLv2y85pyVCh8NXwQzaRFTiJZwAsFNO0V1Yp1BIN2eWgm8JPLaivSzH+chIgb
-         yPQ6ilqtffl90/CcYNE4u7JlPK55KVWEB3YoB3EFBWqaFLHziVRd6+MCBZ71a9wUEJxw
-         Rex6WGjKfOqp5XY+0dbl0fPnN5GJJ3PVgRRu3pMb2F+t/4WnzMNREkNvLglLoDUvGzQZ
-         XRfG7yz33FgMMRGYiWAmoB6PcKnZy8A4JR5mGlZgoVo6W+xxRdozDklruRMzOFX7a8eb
-         cQa4BvTGLFRy5xyow9JnZJ3TbMxd9ZwcOqCvzmNYhuh7Rv2mZPylSnbXQxJCnIk8Gg3g
-         1w3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6AtdZqt2ARoYJJMPe919rNdJ3JohEndwFbHKNaMS4Pw=;
-        fh=Adow8jC9UYBZIedg5QhVYc57+n7u0rEIpksecCBKkjY=;
-        b=FQ/UhK8xw5/6g0RFJwnHUNSi6rVhZZq6x3QWJhfVAC6i+548wma0iuTn2iGVcCmUNY
-         bfXnbQLeWO/VP45noJKKvB2OhFsfNqc2WNkbyc4UHzZL+aKAgkza8sSUrhMwe6pUzZAE
-         V43LgbPaJpxbDTJMj0+KMWkA3BIbciuzUR3lhAThzp+nM6fzK4azZq8bkQrQVfl9PwvM
-         KKzxg4Nq9VsTaLpEzQ1rbSXDjF1cxpLa7lBXlJgsGOPl4wX/cxW+y2a1sfDMBtswiH0q
-         yaSACbyNIna3znXg4mzK/q20rKblL8yIV3l7RAp9omDoMBGdfASZl0cWXpVmexCSCUyF
-         eAqg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20230601.gappssmtp.com; s=20230601; t=1771446852; x=1772051652; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6AtdZqt2ARoYJJMPe919rNdJ3JohEndwFbHKNaMS4Pw=;
-        b=Z4MERPROgc9FSVfsG/kG3t98pIsPZiZa2ci+uYC8QxNYZkIennmepWfaiy7Su18KK4
-         XL22ZPuUBe0n4IDEa5pCurRylazjGAVX1OmmoNEjfSxpevk9PQUIMFk5G6kXLbqdjiOO
-         fqYt3arXfK+vc7SaJ/DL7BwDklV9pbrB8HHrXjb+oweXnLTx4Cdk5LXocPhK7369V3HC
-         aBoWerMPnojZBqm+P7TfDpbyBsNBRPoofMPIJsdtWxi+ymZYmqEnYt2BJKtIS6s8nGkP
-         h+gbveSCj6t3jiYDKFzSlZTqUuiFL/tNzrF6CYvIzH75E4v/8g0KMg91glEciuzyaGGt
-         Ltkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771446852; x=1772051652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6AtdZqt2ARoYJJMPe919rNdJ3JohEndwFbHKNaMS4Pw=;
-        b=UO+4X3g8jnQipycaAxXZMLaMKwrHQ5Y8G7ZRTC/pSevhaC0Irri9DP6oGNT3HFX4Pv
-         6O663eImgO8asZg+sp+dgL4gBroyzNgWrJuhjvtP2byInnV2nC6FhsXZe7wyLBdTTva8
-         eZQUl+QCHR4LESF+DPwLYlAYk+rmamrwwS+XLk1Ip+co9UPoeLOnjnpelUgw7KF7d5DY
-         YyhXNHiMINF+XN8F+m5P1Nn9r5/zklTbfNI+Kiu8fIw0jfInMaXBnHQNH5G0Gvavg0ds
-         7k9co6tyIf8eEfrcqb1oCYzmv60Ks0hCRsLWqaYuXoub3+QPJ5YGUY7zqDxSy81nUFm3
-         BrXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVa9OiApAnGI/RJ9uhJNe5T2XFSLtvXq7XEPFZ1Ut0gVDeA9TMG/UG2MuGKAFF1A6I+wfSXIOtuxLRE8jGtRSw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzBzw53x9m5pxBNFn8HTba49xlVJequmxnV/3+6YukUsrlq/48
-	bkWTlAC0GOw/nll1aUsQVPkcl7BO3S7ROz2zGPV1UFFvupibdiRwsrf0PmbDDqwZ7hwlw4/Dp4Q
-	FDZd7z3SjCdWda94g+uTnmTQtd07kAZtuZ/VmLY+E
-X-Gm-Gg: AZuq6aK2by253O8i9hQ3GZzAhCAx3yFqD8yqAYqzsi6jyMexNbXylqMHzT9gCbX7ZWM
-	QFPC9ZtJJk3hXbDWIBYQvEkS1wP1f1j/dFlVJAXqmX2zMGBR+pen4Ugo/ND1tVtkGznwp2XIOk0
-	2rv0G8LfGflKHOWfiJVtV3DTXbbbz3Y1r3zFDXQ2EHwjHI8bHdbEhT22qVLPMIniypX8+7efEUO
-	9JJL80JnSJH6WEpKyG2M3/V4FQeYcb04K8j8XXQPbA9WNsbk58eRZtQszQdfYvPTEhHJMo84FFk
-	dfxH
-X-Received: by 2002:a05:6512:1284:b0:59e:63b7:585e with SMTP id
- 2adb3069b0e04-59f69c68122mr5099221e87.36.1771446852112; Wed, 18 Feb 2026
- 12:34:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EF13019BE
+	for <linux-integrity@vger.kernel.org>; Wed, 18 Feb 2026 20:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771446874; cv=none; b=SYYHdKzuwbDkMHsX3zc0VFVPbeUD4gZTfOSEC3uMd0tnJBSpiW4qtapOF0LtVg1vl5clAYkccRKmR4X02bTmagP2nAY08i5RcD0X7L3wvBhziZc93In7IMXAA+th/WDr6sCXQacg+5FKNJ757pOfDtColLiEfVbVa8oPIvwBx4E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771446874; c=relaxed/simple;
+	bh=A7Q+JUcty3eUYeSn8uunWE7txomFOUbFjOJQYTFDUYE=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=HB+ZuferLM2YMlBnzVdGto9qlgLvVzP8QPNtWhpEcXd/mFbraWqCHjemnxvE5m4i25EZphyuIUDy8DIWPJlIG2hmINl4D9yMikAsIlLlkP/osjgHIgx5n2Nl9STH4qRe9DHzwHkHaCLv38UsyQf91DGy05nQSn/NlbS0aE/9UKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Aa1k1C+z; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61IAaohh3664605;
+	Wed, 18 Feb 2026 20:34:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=fZAhBl
+	75zpYnOKQseLph/fJLlpU/dYFjLzerWnzVNME=; b=Aa1k1C+zR3+4B5i7i6IchE
+	iaZzYeAnMFk9P3YeLVYrIUAUiDKbHMPQ1AVW+0xGShvtTuNq+7hhZ7cQxnT3vpzv
+	N0FwXnxAhf881ZaXq/xS9H8vJ/WYpRbe8Hv3gPluNwBrlMP7UtmOTDL2rmxU2m92
+	70UzSmujdrWOdDbKOIMmtf39wjpecgXh8jinzT3wdfFoTs5LBYomHEbHH/Jqhp5I
+	rJx5PsL5VBhRpV84QA46WIYrCmR53s3nJ1fn1BisyHbYmUE9QeoxJpdizW3kyT1k
+	x/5nk6F+N3c3ZzAj7H0PDybVwKVuAN22w0UtlxfK8r8WQmJ1TLskJBnBTTJn8AOA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcjj09j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 18 Feb 2026 20:34:11 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61IHMGAo011912;
+	Wed, 18 Feb 2026 20:34:11 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ccb271fxs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 18 Feb 2026 20:34:11 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61IKYAq326149528
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 18 Feb 2026 20:34:11 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B85085805A;
+	Wed, 18 Feb 2026 20:34:10 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 69B3E5803F;
+	Wed, 18 Feb 2026 20:34:10 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.31.96.173])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 18 Feb 2026 20:34:10 +0000 (GMT)
+Message-ID: <6624db4e55eedb555b38a6b1bd56243493419f5d.camel@linux.ibm.com>
+Subject: Re: [PATCH v2] ima: fallback to using i_version to detect file
+ change
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Frederick Lawler <fred@cloudflare.com>
+Cc: linux-integrity@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        Roberto Sassu
+ <roberto.sassu@huawei.com>
+In-Reply-To: <aY-ApsCkJQ05-FIk@CMGLRV3>
+References: <20260213174947.976924-1-zohar@linux.ibm.com>
+	 <aY-ApsCkJQ05-FIk@CMGLRV3>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 18 Feb 2026 15:34:10 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215233316.1076248-1-ross.philipson@oracle.com>
- <b5f2b5a5-b984-4ed3-a023-c06d634f9146@app.fastmail.com> <1ffd3cb5-2c76-4371-a067-3e4849907d80@apertussolutions.com>
- <49d169bf-0ad2-49be-b7d7-fceb9e7f831a@app.fastmail.com> <CALCETrUE8c-dxRWhtHKz_PojwZuWMXJSzOsFQf2vt5LS3ATwpA@mail.gmail.com>
- <1BBD7449-8420-43FD-930B-A4E1BA38FFC6@zytor.com>
-In-Reply-To: <1BBD7449-8420-43FD-930B-A4E1BA38FFC6@zytor.com>
-From: Andy Lutomirski <luto@amacapital.net>
-Date: Wed, 18 Feb 2026 12:34:00 -0800
-X-Gm-Features: AaiRm52O5CUthtEuekouveR3oQDy41lsj_ZjT1TsYC4xSgI6Vkc6OZxoV-XcGok
-Message-ID: <CALCETrWzG1Mjb-RcwLQ5-tGFZ15WKHjZbqtLvyif+UPuVKJ_5g@mail.gmail.com>
-Subject: Re: [PATCH v15 00/28] x86: Secure Launch support for Intel TXT
-To: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>, "Daniel P. Smith" <dpsmith@apertussolutions.com>, 
-	Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-efi@vger.kernel.org, iommu@lists.linux.dev, dave.hansen@linux.intel.com, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com, peterhuewe@gmx.de, 
-	Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca, nivedita@alum.mit.edu, 
-	Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net, corbet@lwn.net, 
-	ebiederm@xmission.com, dwmw2@infradead.org, baolu.lu@linux.intel.com, 
-	kanth.ghatraju@oracle.com, andrew.cooper3@citrix.com, 
-	trenchboot-devel@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: AwA2tA9nDatGnxNby1ktBijIzjtzg6cu
+X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=69962243 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=EG7W4yiQAAAA:8
+ a=GWZrtOqQPpmB_2jjjMAA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE4MDE3MiBTYWx0ZWRfX5AnNYV+FnIRt
+ mQkYunksWDHeASKOchXgXts88p6cqVdAdRgI3VMDS8uNmoiFsvUJ65EB8gjw+y6PT4u3GMpcHQS
+ VTtOEyA4aBv0LNbrNOrB4GQ1beqzhGfDZ8tmdYAYBDok2t4joNCF22R+W+TPAUOwa4kg3rnjABA
+ UMofyM5PtnYvTH8DIFVaWYYWmouyP91Z8c71t6163NzX9TlvbCpnVnqVUN1Hqq3V+4Db1H6ZLkf
+ Rp+8cKL8jzgOQwWM4PWEvT9wA4PHjZGx2KMdW2t+BQrA/J0BdAJeN3IGv5ptKmtth1UUD6uckKy
+ aJfcliO18u76t0lx9lxlydRHbxttbWyirxyFG2G3gpWyU5UQ5Zix3ThkLPRYf9M6PeHwq31SPiz
+ FRXP5hhSqUNZSaE+3C5oxY4ByVpYuQST/6kWvYksxndgvllK+jU8TfZ/q6QOxQqGXkJHrC82NTi
+ m6whbuuwTx/GxMwk5Sw==
+X-Proofpoint-GUID: AwA2tA9nDatGnxNby1ktBijIzjtzg6cu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-18_04,2026-02-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602180172
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_DKIM_ALLOW(-0.20)[amacapital-net.20230601.gappssmtp.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[amacapital.net];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8511-lists,linux-integrity=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[31];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,apertussolutions.com,oracle.com,vger.kernel.org,lists.infradead.org,lists.linux.dev,linux.intel.com,linutronix.de,redhat.com,alien8.de,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,xmission.com,infradead.org,citrix.com,googlegroups.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8512-lists,linux-integrity=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,cloudflare.com:email];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[luto@amacapital.net,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[amacapital-net.20230601.gappssmtp.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amacapital-net.20230601.gappssmtp.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amacapital.net:email,zytor.com:email,tandasat.github.io:url,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 1ACD7159764
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: 7098515978D
 X-Rspamd-Action: no action
 
-On Wed, Feb 18, 2026 at 12:29=E2=80=AFPM H. Peter Anvin <hpa@zytor.com> wro=
-te:
->
-> On February 18, 2026 12:03:27 PM PST, Andy Lutomirski <luto@amacapital.ne=
-t> wrote:
-> >On Thu, Feb 12, 2026 at 12:40=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org=
-> wrote:
-> >>
-> >> On Thu, 12 Feb 2026, at 20:49, Daniel P. Smith wrote:
-> >> > On 2/9/26 09:04, Ard Biesheuvel wrote:
-> >> ...
-> >> >> Surprisingly, even when doing a secure launch, the EFI runtime serv=
-ices still work happily, which means (AIUI) that code that was excluded fro=
-m the D-RTM TCB is still being executed at ring 0? Doesn't this defeat D-RT=
-M entirely in the case some exploit is hidden in the EFI runtime code? Shou=
-ld we measure the contents of EfiRuntimeServicesCode regions too?
-> >> >
-> >> > Yes, in fact in the early days I specifically stated that we should
-> >> > provide for the ability to measure the RS blocks. Particularly if yo=
-u
-> >> > are not in an environment where you can isolate the calls to RS from=
- the
-> >> > TCB. While the RS can pose runtime corruption risks, the larger conc=
-ern
-> >> > is integrating the D-RTM validation of the Intel System Resources
-> >> > Defense (ISRD), aka SMI isolation/SMM Supervisor, provided by the In=
-tel
-> >> > System Security Report (ISSR). Within the ISSR is a list of memory
-> >> > regions which the SMM Policy Shim (SPS) restricts a SMI handler's ac=
-cess
-> >> > when running. This allows a kernel to restrict what access a SMI han=
-dler
-> >> > are able to reach, thus allowing them to be removed from the TCB whe=
-n
-> >> > the appropriate guards are put in place.
-> >> >
-> >> > If you are interested in understanding these further, Satoshi Tanda =
-has
-> >> > probably the best technical explanation without Intel market speak.
-> >> >
-> >> > ISRD: https://tandasat.github.io/blog/2024/02/29/ISRD.html
-> >> > ISSR: https://tandasat.github.io/blog/2024/03/18/ISSR.html
-> >> >
-> >>
-> >> Thanks, I'll take a look at those.
-> >>
-> >> But would it be better to disable the runtime services by default when=
- doing a secure launch? PREEMPT_RT already does the same.
-> >
-> >So I have a possible way to disable EFI runtime service without losing
-> >the ability to write EFI vars.  We come up with a simple file format
-> >to store deferred EFI var updates and we come up with a place to put
-> >it so that we find it early-ish in boot the next time around.  (This
-> >could be done via integration with systemd-boot or shim some other
-> >boot loader or it could actually be part of the kernel.)  And then,
-> >instead of writing variables directly, we write them to the deferred
-> >list and then update them on reboot (before TXT launch, etc).  [0]
-> >This would be a distincly nontrivial project and would not work for
-> >all configurations.
-> >
-> >As a maybe less painful option, we could disable EFI runtime services
-> >but have a root-writable thing in sysfs that (a) turns them back on
-> >but (b) first extends a PCR to say that they're turned back on.
-> >
-> >(Or someone could try running runtime services at CPL3...)
-> >
-> >[0] I have thought for years that Intel and AMD should do this on
-> >their end, too.  Keep the sensitive part of SMI flash entirely locked
-> >after boot and, instead of using magic SMM stuff to validate that
-> >write attempts have the appropriate permissions and signatures, queue
-> >them up as deferred upates and validate the signatures on the next
-> >boot before locking flash.
-> >
->
-> *If* a physical EFI partition exists there is a lot to be said for this a=
-pproach.
->
-> The only issue with this that I can see is for things like network or CD/=
-DVD booting where there isn't necessarily any EFI boot partition, it might =
-not be writable, or it might not be persistent (e.g. http booting typically=
- uses a ramdisk, like the old Linux initrd.)
+On Fri, 2026-02-13 at 13:51 -0600, Frederick Lawler wrote:
+> On Fri, Feb 13, 2026 at 12:49:47PM -0500, Mimi Zohar wrote:
+> > Commit db1d1e8b9867 ("IMA: use vfs_getattr_nosec to get the i_version")
+> > replaced detecting file change based on i_version with
+> > STATX_CHANGE_COOKIE.
+> >=20
+> > On filesystems without STATX_CHANGE_COOKIE enabled, revert back to
+> > detecting file change based on i_version.
+> >=20
+> > On filesystems which do not support either, assume the file changed.
+> >=20
+>=20
+> Tested-by: Frederick Lawler <fred@cloudflare.com>
 
-Hmm, I guess my approach is a 100% complete nonstarter for installing
-Linux from a CD, and it's really not awesome for installing Linux from
-a USB stick.
+Thanks, Fred.  It's temporarily queued in the next-integrity-testing branch=
+.
+>=20
 
