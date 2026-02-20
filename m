@@ -1,345 +1,168 @@
-Return-Path: <linux-integrity+bounces-8525-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8526-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qOpRB7gbmGnp/wIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8525-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 09:30:48 +0100
+	id fdqqHBckmGkJBwMAu9opvQ
+	(envelope-from <linux-integrity+bounces-8526-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 10:06:31 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB6C6165ABE
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 09:30:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AACB3166027
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 10:06:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 783273003D0F
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 08:30:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 15B8E3011C54
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 09:06:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193E230EF77;
-	Fri, 20 Feb 2026 08:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aPwL1llw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92B231AAAF;
+	Fri, 20 Feb 2026 09:06:26 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E413D24169D;
-	Fri, 20 Feb 2026 08:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59B815ADB4;
+	Fri, 20 Feb 2026 09:06:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771576245; cv=none; b=QKklWGJYIz7MDsysjtGvxPRcO2ZipjSrYlCmc36zNtI487V+w9V+gSKTVD5ImgQYIevbbixTXnxR0c3GBcMlwbEeHZZkZamrVMzB/uT96pY/1X5sK4vKY5Lj5Xu6jX2rNclumaNqpREo3leLrMOYCdHKaA0Q0JBD41nfVZ/3JNQ=
+	t=1771578386; cv=none; b=mVS/ogUkCjabcNIfPr1Evg7CqyOH0r54sV2uPWu0TBPeomtjxxlTBkRWmsM1cmBq4caJenmIv0HRpX7Fjy3fx/5EperwyRPmYeTg2oUIyj3+gVfRD2968BWBDeHOG+8LG6Vna7dp18G/oWeLWMw5rpEGvD7N70IlB+ScTrmjjoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771576245; c=relaxed/simple;
-	bh=OOkNKzJWZ2PKiWVeYu871t9knsMGA4JMCfqoaCA5Qc0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Wf2JvZosiPJ7llNITqDCgxir+oU0qA0THzrfo4HvP0tNxxW9Wbo4MYxf5Owi5izvuLrgzjpIHLX9huBZGrfB7YcKdHdw+4snIcptYC/ckWZAdr3fWJoaucAE9uy0d/1eh5toBnp9GKXPiEFLbF1PT9sPAma4hOEHFC+ElEIb8YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aPwL1llw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66FF9C116C6;
-	Fri, 20 Feb 2026 08:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771576244;
-	bh=OOkNKzJWZ2PKiWVeYu871t9knsMGA4JMCfqoaCA5Qc0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=aPwL1llwYZ0PhJbYJjiccMMsFKNTpSN3h6HKEogc0SQMz0qNQ95k7ksQcMyHLRjzK
-	 V60/YPqUhDW73lmKblFgu8a0slvOz89MYLjGDR+YttCGKKNianvSxnuMy9ax4BfD14
-	 lZU0a4EmplrZP3FXNHbo6CJoWZS4W9XjwvCLq4/ylA8nJQ0Lulhq0hN7rX3Gx52dEn
-	 36cwfpbnut6G1KNsmrkILyKkomEwq3EsuUQ6xL4TCJYqfZhZ8qmk0A48pXktKFzez/
-	 RDCSP8cYbJqnbb50y21F212txXq/CGSZ2GdpPOCoOov13wP8rjvPAnbGqej0BOJA5Y
-	 3J8X2mNNwPAMg==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id EF254F40069;
-	Fri, 20 Feb 2026 03:30:41 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-01.internal (MEProxy); Fri, 20 Feb 2026 03:30:42 -0500
-X-ME-Sender: <xms:sRuYaZtdO-kEDZ6jyrUg29QVVJFQrny0pZ3ezNCYPVygXUo8kPT68Q>
-    <xme:sRuYadTw0jR6o4mFsXaOb3AWdfxTdgAv1HFsKo5j_w9sORkvJLEhzV-q3spNFynOh
-    2Ubtqz0ZMXu-WayYa5VUA01TJLh6XvD099OkNR3ywFqD-joIDr8dsw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvvdejleehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrugcu
-    uehivghshhgvuhhvvghlfdcuoegrrhgusgeskhgvrhhnvghlrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeeuteeiudeigeekjedvheduieehteetgfdtuefghfejgffhfedtleehvdeh
-    fffhvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdehtddtjeel
-    qdeffedvudeigeduhedqrghruggspeepkhgvrhhnvghlrdhorhhgseifohhrkhhofhgrrh
-    gurdgtohhmpdhnsggprhgtphhtthhopeefvddpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtohepnhhivhgvughithgrsegrlh
-    humhdrmhhithdrvgguuhdprhgtphhtthhopehluhhtohesrghmrggtrghpihhtrghlrdhn
-    vghtpdhrtghpthhtohepughpshhmihhthhesrghpvghrthhushhsohhluhhtihhonhhsrd
-    gtohhmpdhrtghpthhtoheprghnughrvgifrdgtohhophgvrhefsegtihhtrhhigidrtgho
-    mhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoh
-    epphgvthgvrhhhuhgvfigvsehgmhigrdguvgdprhgtphhtthhopehhvghrsggvrhhtsehg
-    ohhnughorhdrrghprghnrgdrohhrghdrrghupdhrtghpthhtohepthhrvghntghhsghooh
-    htqdguvghvvghlsehgohhoghhlvghgrhhouhhpshdrtghomh
-X-ME-Proxy: <xmx:sRuYaSE41zy-0gKhEDntCwr9EkMSTDAbWBC6gFogmaZORdtSCZazBg>
-    <xmx:sRuYaQuD_PamJME6yIMQvHwc-vTB6378FCneQDrqKdQkZr2d7YsGNg>
-    <xmx:sRuYaYKiRTSt0NGzQEf8b1tar7A2Ez8t7wct0zTn-wFVaEhdpoQwBw>
-    <xmx:sRuYafx_Sf8aIzNhbGWpWKYWTwuFMiqozbcCiCP20ySSLcMVutcyMg>
-    <xmx:sRuYaT4yNHzt4j55xgiWueu0sefZ18usY5pqg8AA7-I87bnf8eokGbBA>
-Feedback-ID: ice86485a:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id BE6FD700069; Fri, 20 Feb 2026 03:30:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1771578386; c=relaxed/simple;
+	bh=16sVxko9HV9n5CWc4iDY+WQSvl6MzmmdZ/Z1oXWYF7Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D1PRucN4REKlBeUfiOVc3ZrEgbL0qVeu5yhEY8QSwxZRbxyDKV1ePhcmmNTibPsRsGTOTur7+xir27b6eaRJqY6QPRLifqnGMC85oAnrx4NhC8NsVqQS0QixC7gzDvy/YDNEzbX3Zd2uO/WLlqSdgWWU+EJ2GAUfwGQ6mpPhgHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fHPRN3Yk5z1HC9x;
+	Fri, 20 Feb 2026 17:03:12 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 65E134056B;
+	Fri, 20 Feb 2026 17:06:16 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwBnMm3_I5hp05YlBA--.42095S2;
+	Fri, 20 Feb 2026 10:06:15 +0100 (CET)
+Message-ID: <c35775ef24edb89f2ec2c658c6255ac07bb708b3.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 v2] evm: check return values of crypto_shash functions
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Daniel Hodges <daniel@danielhodges.dev>
+Cc: Daniel Hodges <git@danielhodges.dev>, zohar@linux.ibm.com, 
+ roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com,  paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com,  linux-integrity@vger.kernel.org,
+ linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org
+Date: Fri, 20 Feb 2026 10:06:04 +0100
+In-Reply-To: <lj2loy57pavtihqeuywpc2aev7zy3k3poop346dtmelmocp75q@lbejeufrrxwr>
+References: <aYNprpzxppKE0Gf2@fb.com>
+	 <20260206024240.19059-1-git@danielhodges.dev>
+	 <6ce273a26b396232f3ee64a980575562e766c501.camel@huaweicloud.com>
+	 <cfbd9e3c63e03500279198ec7a80ba009dfccc63.camel@huaweicloud.com>
+	 <lj2loy57pavtihqeuywpc2aev7zy3k3poop346dtmelmocp75q@lbejeufrrxwr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AAnEvm6syrbF
-Date: Fri, 20 Feb 2026 09:30:21 +0100
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "Andy Lutomirski" <luto@amacapital.net>
-Cc: "Simo Sorce" <simo@redhat.com>, "H . Peter Anvin" <hpa@zytor.com>,
- "Daniel P. Smith" <dpsmith@apertussolutions.com>,
- "Ross Philipson" <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux.dev,
- dave.hansen@linux.intel.com, "Thomas Gleixner" <tglx@linutronix.de>,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
- peterhuewe@gmx.de, "Jarkko Sakkinen" <jarkko@kernel.org>, jgg@ziepe.ca,
- nivedita@alum.mit.edu, "Herbert Xu" <herbert@gondor.apana.org.au>,
- davem@davemloft.net, corbet@lwn.net, ebiederm@xmission.com,
- dwmw2@infradead.org, baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
- andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
-Message-Id: <9034c6a1-ebce-40b6-9ac8-0b8cc5a50dd4@app.fastmail.com>
-In-Reply-To: 
- <CALCETrWynypSD7vEjJNLcym3JhBw4k0ovDiR_3YuOHh92TnM=A@mail.gmail.com>
-References: <20251215233316.1076248-1-ross.philipson@oracle.com>
- <b5f2b5a5-b984-4ed3-a023-c06d634f9146@app.fastmail.com>
- <1ffd3cb5-2c76-4371-a067-3e4849907d80@apertussolutions.com>
- <49d169bf-0ad2-49be-b7d7-fceb9e7f831a@app.fastmail.com>
- <CALCETrUE8c-dxRWhtHKz_PojwZuWMXJSzOsFQf2vt5LS3ATwpA@mail.gmail.com>
- <1BBD7449-8420-43FD-930B-A4E1BA38FFC6@zytor.com>
- <CALCETrWzG1Mjb-RcwLQ5-tGFZ15WKHjZbqtLvyif+UPuVKJ_5g@mail.gmail.com>
- <32e62cef7b89d9691bdd4120388ce752fd041230.camel@redhat.com>
- <CALCETrUMR0RvOFXGzL7=F4c-3veL+1Sm2xf-BprHTK4=UKw8yA@mail.gmail.com>
- <558d0f28-01fb-4447-891c-2ffbf869c077@app.fastmail.com>
- <CALCETrWynypSD7vEjJNLcym3JhBw4k0ovDiR_3YuOHh92TnM=A@mail.gmail.com>
-Subject: Re: [PATCH v15 00/28] x86: Secure Launch support for Intel TXT
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:GxC2BwBnMm3_I5hp05YlBA--.42095S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1UJrWkXw1UKryxXw48Crg_yoW8Cr1DpF
+	WrGayqkrWDtFyUArnxt3WrXr10yrWFkw15Xr1kGryFvasIvFn2qr4xC3W0ga4DCr15Gr1j
+	vr4ftr9xuw1jyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBGmX0yAHWgAAsc
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.15 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	XM_UA_NO_VERSION(0.01)[];
-	TAGGED_FROM(0.00)[bounces-8525-lists,linux-integrity=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[redhat.com,zytor.com,apertussolutions.com,oracle.com,vger.kernel.org,kernel.org,lists.infradead.org,lists.linux.dev,linux.intel.com,linutronix.de,alien8.de,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,xmission.com,infradead.org,citrix.com,googlegroups.com];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-8526-lists,linux-integrity=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[huaweicloud.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[app.fastmail.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FREEMAIL_CC(0.00)[danielhodges.dev,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ardb@kernel.org,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: AB6C6165ABE
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.975];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huaweicloud.com:mid]
+X-Rspamd-Queue-Id: AACB3166027
 X-Rspamd-Action: no action
 
+On Thu, 2026-02-19 at 10:01 -0500, Daniel Hodges wrote:
+> On Thu, Feb 19, 2026 at 01:36:39PM +0100, Roberto Sassu wrote:
+> > On Thu, 2026-02-19 at 10:26 +0100, Roberto Sassu wrote:
+> > > On Thu, 2026-02-05 at 21:42 -0500, Daniel Hodges wrote:
+> > > > The crypto_shash_update() and crypto_shash_final() functions can fa=
+il
+> > > > and return error codes, but their return values were not being chec=
+ked
+> > > > in several places in security/integrity/evm/evm_crypto.c:
+> > > >=20
+> > > > - hmac_add_misc() ignored returns from crypto_shash_update() and
+> > > >   crypto_shash_final()
+> > > > - evm_calc_hmac_or_hash() ignored returns from crypto_shash_update(=
+)
+> > > > - evm_init_hmac() ignored returns from crypto_shash_update()
+> > > >=20
+> > > > If these hash operations fail silently, the resulting HMAC could be
+> > > > invalid or incomplete, which could weaken the integrity verificatio=
+n
+> > > > security that EVM provides.
+> > > >=20
+> > > > This patch converts hmac_add_misc() from void to int return type an=
+d
+> > > > adds proper error checking and propagation for all crypto_shash_*
+> > > > function calls. All callers are updated to handle the new return va=
+lues.
+> > > > Additionally, error messages are logged when cryptographic operatio=
+ns
+> > > > fail to provide visibility into the failure rather than silently
+> > > > returning error codes.
+> > > >=20
+> > > > Fixes: 66dbc325afce ("evm: re-release")
+> > > > Signed-off-by: Daniel Hodges <git@danielhodges.dev>
+> > >=20
+> > > After fixing the minor issue below:
+> >=20
+> > Already did it. The patch is here (after fixing a conflict with
+> > 0496fc9cdc38 "evm: Use ordered xattrs list to calculate HMAC in
+> > evm_init_hmac()"):
+> >=20
+> > https://github.com/robertosassu/linux/commit/d5aba42198b602c6de002ef02a=
+4e6cc1d75652d7
+> >=20
+> > Roberto
+>=20
+> Nice, thanks for handling that!
 
+Welcome!
 
-On Thu, 19 Feb 2026, at 18:34, Andy Lutomirski wrote:
-> On Wed, Feb 18, 2026 at 11:55=E2=80=AFPM Ard Biesheuvel <ardb@kernel.o=
-rg> wrote:
->>
->> On Wed, 18 Feb 2026, at 22:54, Andy Lutomirski wrote:
->> > On Wed, Feb 18, 2026 at 1:04=E2=80=AFPM Simo Sorce <simo@redhat.com=
-> wrote:
->> >>
->> >> On Wed, 2026-02-18 at 12:34 -0800, Andy Lutomirski wrote:
->> >> > On Wed, Feb 18, 2026 at 12:29=E2=80=AFPM H. Peter Anvin <hpa@zyt=
-or.com> wrote:
->> >> > >
->> >> > > On February 18, 2026 12:03:27 PM PST, Andy Lutomirski <luto@am=
-acapital.net> wrote:
->> >> > > > On Thu, Feb 12, 2026 at 12:40=E2=80=AFPM Ard Biesheuvel <ard=
-b@kernel.org> wrote:
->> >> > > > >
->> >> > > > > On Thu, 12 Feb 2026, at 20:49, Daniel P. Smith wrote:
->> >> > > > > > On 2/9/26 09:04, Ard Biesheuvel wrote:
->> >> > > > > ...
->> >> > > > > But would it be better to disable the runtime services by =
-default when doing a secure launch? PREEMPT_RT already does the same.
->> >> > > >
->> >> > > > So I have a possible way to disable EFI runtime service with=
-out losing
->> >> > > > the ability to write EFI vars.  We come up with a simple fil=
-e format
->> >> > > > to store deferred EFI var updates and we come up with a plac=
-e to put
->> >> > > > it so that we find it early-ish in boot the next time around=
-.  (This
->> >> > > > could be done via integration with systemd-boot or shim some=
- other
->> >> > > > boot loader or it could actually be part of the kernel.)  An=
-d then,
->> >> > > > instead of writing variables directly, we write them to the =
-deferred
->> >> > > > list and then update them on reboot (before TXT launch, etc)=
-.  [0]
->> >> > > > This would be a distincly nontrivial project and would not w=
-ork for
->> >> > > > all configurations.
->> >> > > >
->> >> > > > As a maybe less painful option, we could disable EFI runtime=
- services
->> >> > > > but have a root-writable thing in sysfs that (a) turns them =
-back on
->> >> > > > but (b) first extends a PCR to say that they're turned back =
-on.
->> >> > > >
->> >> > > > (Or someone could try running runtime services at CPL3...)
->> >> > > >
->> >> > > > [0] I have thought for years that Intel and AMD should do th=
-is on
->> >> > > > their end, too.  Keep the sensitive part of SMI flash entire=
-ly locked
->> >> > > > after boot and, instead of using magic SMM stuff to validate=
- that
->> >> > > > write attempts have the appropriate permissions and signatur=
-es, queue
->> >> > > > them up as deferred upates and validate the signatures on th=
-e next
->> >> > > > boot before locking flash.
->> >> > > >
->> >> > >
->> >> > > *If* a physical EFI partition exists there is a lot to be said=
- for this approach.
->> >> > >
->> >> > > The only issue with this that I can see is for things like net=
-work or CD/DVD booting where there isn't necessarily any EFI boot partit=
-ion, it might not be writable, or it might not be persistent (e.g. http =
-booting typically uses a ramdisk, like the old Linux initrd.)
->> >> >
->> >> > Hmm, I guess my approach is a 100% complete nonstarter for insta=
-lling
->> >> > Linux from a CD, and it's really not awesome for installing Linu=
-x from
->> >> > a USB stick.
->> >>
->> >> Doing any of this on a removable device feels generally like a tra=
-p.
->> >> You get your USB disk in, try to boot, and it saves vars, but rebo=
-ot
->> >> fails for whatever reason, you plug it in another machine ... and =
-it
->> >> tries to "continue" from there? The amount of validation needed and
->> >> testing for failure modes across reboots sounds really painful.
->> >
->> > I kind of stand by my other previous suggestion, though:
->> >
->> > As a maybe less painful option, we could disable EFI runtime servic=
-es
->> > but have a root-writable thing in sysfs that (a) turns them back on
->> > but (b) first extends a PCR to say that they're turned back on.
->> >
->>
->> After setting the EFI boot path to GRUB (or systemd-boot or whatever)=
- at installation time, what other meaningful interactions do we expect w=
-ith the EFI runtime services?
->>
->> And given that the secure launch is orchestrated by the bootloader , =
-with which the kernel has a backchannel via its configuration file, it s=
-hould be rather straight-forward to implement the staging of variable up=
-dates there if we really need it.
->>
->> Doing any of this at the EFI/spec level might lead to a situation whe=
-re the OS now has to guess which of the provided APIs to manipulate vari=
-ables is the least broken.
->>
->> Of course, for readinf variables, dumping the RT variables into a mem=
-ory buffer at boot time and exposing it via a EFI config table would be =
-rather straight-forward, but it is also something I feel should be the j=
-ob of the boot component that takes part in the decision to shield the r=
-untime services from the OS.
->
-> So there's sort of a usability issue here.  On the one hand, this can
-> all be orchestrated to work.  We build a kernel, and the kernel
-> supports secure launch.  Someone makes an installer image, and that
-> image is configured to skip secure launch, then install to disk, then
-> program EFI vars, then reboot.  And the installed image is configured
-> to do the secure launch, and EFI variable writes are turned off.
->
-> On the other hand, this all sucks.  I'm getting sick of having the
-> kernel tell me that I am not permitted to do things.  I'm sick of
-> writing software that deals with unnecessary restrictions.  If I were
-> writing an OS with a USB stick-based installer, I might want to be
-> able to boot the thing and decide later whether I'm installing an OS
-> to disk.  (In fact, many USB installers work this way.)  But, in the
-> model where EFI variable writes are hard-disabled on a secure launch,
-> the decision to do the secure launch happens before the decision to
-> install an OS, and we all lose.
->
-> So I'm proposing that EFI variable writes be treated a bit like kexec
-> [0] -- root (which is already part of the TCB for any practical
-> purpose) is going to decide, like a grown up, to execute some code
-> that it doesn't fully trust -- in this case, the EFI variable writes.
-> And root will coordinate, correctly, with whomever it's busy using the
-> TPM to coordinate with, and tell it that it's going to do something
-> that will change its trustworthiness.  So it works like this:
->
-> 1. Secure launch the environment on the stick.  (At this stage,
-> neither the boot loader nor the kernel has the faintest clue whether
-> anyone needs that secure launch, but this doesn't matter.)
->
-> 2. The owner of the machine clicks "install".
->
-> 3. The installer makes some partitions and writes some files.
->
-> (Up until now, the security posture of the running environment has not=
- changed.)
->
-> 4. The installer decides that it's now time to do untrustworthy
-> things, namely writing EFI vars.  So it unmounts anything it mounted
-> using TPM-sealed keys (or not -- this is between the distro and
-> whoever trusts the distro), and it does:
->
-> # echo 1 >/sys/.../extend_pcr_and_unlock_efi
->
-> which *first* extends a PCR because we are about to change our
-> security posture and *second* sets whatever flag permits use of EFI
-> runtime services.
->
-> 5. The installer writes to EFI variables.  And the installer can no
-> longer generate attestations to its previous security posture, which
-> is the correct behavior.  And maybe the user can no longer unlock
-> their home directory or whatever until they reboot.  Which is not
-> really a big deal.
->
-> (This is *dynamic* root of trust.  In theory the system could do a
-> DRTM re-launch and recover its security posture, but I don't think
-> this is implemented.)
->
->
-> One thing I like about this is that it involves very little code.
->
+Roberto
 
-It does seem rather straight-forward, and it doesn't have to be specific=
- to TXT either. I.e., we should probably always measure the runtime enab=
-led/disabled state into the PCRs.
-
-But given the actual problem at hand (untrustworthy glue code running in=
- ring 3 that does little more than poke SMM, which itself fundamentally =
-remains part of the TCB), it would be nice if we could just sandbox that=
- code using virtualization.
-
-This came up in a separate discussion regarding ACPI PRM (the new dumpin=
-g ground for evil vendor code now that SMM has gone out of fashion), alt=
-hough there it should be feasible to run it unprivileged, as the spec re=
-quires that capability for the PRM payloads.
 
