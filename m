@@ -1,168 +1,182 @@
-Return-Path: <linux-integrity+bounces-8526-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8527-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id fdqqHBckmGkJBwMAu9opvQ
-	(envelope-from <linux-integrity+bounces-8526-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 10:06:31 +0100
+	id kKtGI4B/mGlMJQMAu9opvQ
+	(envelope-from <linux-integrity+bounces-8527-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 16:36:32 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AACB3166027
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 10:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A41D168F19
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 16:36:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 15B8E3011C54
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 09:06:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 174273039828
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 15:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E92B231AAAF;
-	Fri, 20 Feb 2026 09:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55DFF3451BA;
+	Fri, 20 Feb 2026 15:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d8j24fM/"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59B815ADB4;
-	Fri, 20 Feb 2026 09:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303E425F7B9;
+	Fri, 20 Feb 2026 15:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771578386; cv=none; b=mVS/ogUkCjabcNIfPr1Evg7CqyOH0r54sV2uPWu0TBPeomtjxxlTBkRWmsM1cmBq4caJenmIv0HRpX7Fjy3fx/5EperwyRPmYeTg2oUIyj3+gVfRD2968BWBDeHOG+8LG6Vna7dp18G/oWeLWMw5rpEGvD7N70IlB+ScTrmjjoE=
+	t=1771601785; cv=none; b=dvupQpn2Ug1bg67/pSi/lO9C3HktS5giCp/C4baan7woix0lPWJdm2JxKPWknJgHHR8Jn7BgXo3fVs43EcMxXkf0yBJS/BsdLhkQ9rs+bjN/xvayhLrlIQdJ+fjQE/gR55RXrY9HMewAUQ92/VNqf3IPw1dg3qW1RpdV0CnS1/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771578386; c=relaxed/simple;
-	bh=16sVxko9HV9n5CWc4iDY+WQSvl6MzmmdZ/Z1oXWYF7Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D1PRucN4REKlBeUfiOVc3ZrEgbL0qVeu5yhEY8QSwxZRbxyDKV1ePhcmmNTibPsRsGTOTur7+xir27b6eaRJqY6QPRLifqnGMC85oAnrx4NhC8NsVqQS0QixC7gzDvy/YDNEzbX3Zd2uO/WLlqSdgWWU+EJ2GAUfwGQ6mpPhgHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.235])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4fHPRN3Yk5z1HC9x;
-	Fri, 20 Feb 2026 17:03:12 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 65E134056B;
-	Fri, 20 Feb 2026 17:06:16 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBnMm3_I5hp05YlBA--.42095S2;
-	Fri, 20 Feb 2026 10:06:15 +0100 (CET)
-Message-ID: <c35775ef24edb89f2ec2c658c6255ac07bb708b3.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 v2] evm: check return values of crypto_shash functions
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Daniel Hodges <daniel@danielhodges.dev>
-Cc: Daniel Hodges <git@danielhodges.dev>, zohar@linux.ibm.com, 
- roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com,  paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com,  linux-integrity@vger.kernel.org,
- linux-security-module@vger.kernel.org,  linux-kernel@vger.kernel.org
-Date: Fri, 20 Feb 2026 10:06:04 +0100
-In-Reply-To: <lj2loy57pavtihqeuywpc2aev7zy3k3poop346dtmelmocp75q@lbejeufrrxwr>
-References: <aYNprpzxppKE0Gf2@fb.com>
-	 <20260206024240.19059-1-git@danielhodges.dev>
-	 <6ce273a26b396232f3ee64a980575562e766c501.camel@huaweicloud.com>
-	 <cfbd9e3c63e03500279198ec7a80ba009dfccc63.camel@huaweicloud.com>
-	 <lj2loy57pavtihqeuywpc2aev7zy3k3poop346dtmelmocp75q@lbejeufrrxwr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1771601785; c=relaxed/simple;
+	bh=Ip+Ok3z4b8Mn4e2k/xxO7ygofUYVx5NJdGPJvg3Uvvo=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=pZRh+19iPeKcn1RZRAMyDTv1jGPx82l0Bqx/Qps1cdNZgjxhxd1fN0YVjCSFq8ZIS1GSKKqzFDTfsJw6ka9F3TeIsCo1XnuIcDW8fkO4yzC1bG3cY+8opTeC18khHTuHMXgeCGKRaGXxyzYU1O0CwbPwFdIudg0KRKcKb/nmrCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d8j24fM/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07B75C116C6;
+	Fri, 20 Feb 2026 15:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771601784;
+	bh=Ip+Ok3z4b8Mn4e2k/xxO7ygofUYVx5NJdGPJvg3Uvvo=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=d8j24fM/iIueOFUXQImLRiw/Nvq9i5abxog58HkgSvv3tfg3f8bPIw4TIaTL2cNsF
+	 gj5E9/mdWAZ8jDtMoQbP0PsHlnKjlIaYKj+W4RmlL35pZsFnxdbTRoGlT/HDBOL1oD
+	 hS9oP7F1wMw4vHb8tBOq8YsCezfJ2JQwZUjGQnK92/Q6OTmB+qs8Dhl4KVI+wJ9Ynn
+	 bL7miOtFFyZc+7gtzmfTPsDwSVtXhaWtx6TIZIex4mvbDtrG809w7MJGHQP/NDckLn
+	 BLhR46uTaItrkYXBa7Po6XxMGAHum954lWlXf6VMAlRckrSh48zxvKM9vVUQTwYL26
+	 EkdgubbdOGCcQ==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id DD74FF4006D;
+	Fri, 20 Feb 2026 10:36:22 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-01.internal (MEProxy); Fri, 20 Feb 2026 10:36:22 -0500
+X-ME-Sender: <xms:dn-YaXpKzgBI7lLLXvVnqkp9s_8LSG6eYRHb_v7Dh4I_nA74WDDqdw>
+    <xme:dn-Yacclxv5BJtKZ-Qq1XI4iHx3RyLHcNXmhZ9xG5qOn3jV4EcwK33tH6kozNhz9o
+    AbjnGXi1_VPLoTivYQYVCdUF9t9jfiBkqZ4d5ah8cdAmjyXu-PjMSg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvvdekkedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrugcu
+    uehivghshhgvuhhvvghlfdcuoegrrhgusgeskhgvrhhnvghlrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvueehiedtvedtleekuddutefgffdtleetfeetveejveejieehfefhjeei
+    jeefudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdehtddtjeel
+    qdeffedvudeigeduhedqrghruggspeepkhgvrhhnvghlrdhorhhgseifohhrkhhofhgrrh
+    gurdgtohhmpdhnsggprhgtphhtthhopeefvddpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtohepnhhivhgvughithgrsegrlh
+    humhdrmhhithdrvgguuhdprhgtphhtthhopehluhhtohesrghmrggtrghpihhtrghlrdhn
+    vghtpdhrtghpthhtohepughpshhmihhthhesrghpvghrthhushhsohhluhhtihhonhhsrd
+    gtohhmpdhrtghpthhtoheprghnughrvgifrdgtohhophgvrhefsegtihhtrhhigidrtgho
+    mhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoh
+    epphgvthgvrhhhuhgvfigvsehgmhigrdguvgdprhgtphhtthhopehhvghrsggvrhhtsehg
+    ohhnughorhdrrghprghnrgdrohhrghdrrghupdhrtghpthhtohepthhrvghntghhsghooh
+    htqdguvghvvghlsehgohhoghhlvghgrhhouhhpshdrtghomh
+X-ME-Proxy: <xmx:dn-YaZBdaidTbvEBGfz-iUZ-mgy8GA-vuxokns0lACS79eaqin2sjQ>
+    <xmx:dn-YaU4tmc_oQXzOQdSawhF3iuF8TCBCCqScSkC_zNOtmM0y7z9SfA>
+    <xmx:dn-YaQlTtj_nEiNEidchtEBlqmzl0pkyLthbR5p7BnKlCdBg4gvexw>
+    <xmx:dn-YaXfzUes1HVb7VveqSbLUM6qO4SVJqCj2HwTjJqow0G19GkCsMw>
+    <xmx:dn-YaZ3f8bIvTNMtbs-XCNvgBOCGXlsfh9Hb0ZD3p2MiApd3SUqnKoDq>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id A57F1700065; Fri, 20 Feb 2026 10:36:22 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwBnMm3_I5hp05YlBA--.42095S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw1UJrWkXw1UKryxXw48Crg_yoW8Cr1DpF
-	WrGayqkrWDtFyUArnxt3WrXr10yrWFkw15Xr1kGryFvasIvFn2qr4xC3W0ga4DCr15Gr1j
-	vr4ftr9xuw1jyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
-	v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBGmX0yAHWgAAsc
+X-ThreadId: A1ToacgRLhLF
+Date: Fri, 20 Feb 2026 16:35:44 +0100
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Daniel P. Smith" <dpsmith@apertussolutions.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Eric W. Biederman" <ebiederm@xmission.com>,
+ "Eric Biggers" <ebiggers@kernel.org>
+Cc: "Ross Philipson" <ross.philipson@oracle.com>,
+ linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
+ linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "H . Peter Anvin" <hpa@zytor.com>, dave.hansen@linux.intel.com,
+ "Matthew Garrett" <mjg59@srcf.ucam.org>,
+ "James Bottomley" <James.Bottomley@hansenpartnership.com>, peterhuewe@gmx.de,
+ "Jarkko Sakkinen" <jarkko@kernel.org>, jgg@ziepe.ca,
+ "Andy Lutomirski" <luto@amacapital.net>, nivedita@alum.mit.edu,
+ "Herbert Xu" <herbert@gondor.apana.org.au>, davem@davemloft.net,
+ corbet@lwn.net, dwmw2@infradead.org, baolu.lu@linux.intel.com,
+ kanth.ghatraju@oracle.com, "Andrew Cooper" <andrew.cooper3@citrix.com>,
+ trenchboot-devel@googlegroups.com
+Message-Id: <c9a0cd9f-17cb-49e5-a411-b78ef9c7e35e@app.fastmail.com>
+In-Reply-To: <281c3bb3-13f6-47a2-9a9a-134e397bf686@apertussolutions.com>
+References: <20240531010331.134441-1-ross.philipson@oracle.com>
+ <20240531010331.134441-7-ross.philipson@oracle.com>
+ <20240531021656.GA1502@sol.localdomain>
+ <874jaegk8i.fsf@email.froward.int.ebiederm.org>
+ <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
+ <87ttflli09.ffs@tglx>
+ <281c3bb3-13f6-47a2-9a9a-134e397bf686@apertussolutions.com>
+Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch early
+ measurements
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.15 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-8526-lists,linux-integrity=lfdr.de];
+	XM_UA_NO_VERSION(0.01)[];
+	TAGGED_FROM(0.00)[bounces-8527-lists,linux-integrity=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[32];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[huaweicloud.com];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[oracle.com,vger.kernel.org,kernel.org,lists.infradead.org,lists.linux-foundation.org,redhat.com,alien8.de,zytor.com,linux.intel.com,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,amacapital.net,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,infradead.org,citrix.com,googlegroups.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[danielhodges.dev,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[app.fastmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.975];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ardb@kernel.org,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huaweicloud.com:mid]
-X-Rspamd-Queue-Id: AACB3166027
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 3A41D168F19
 X-Rspamd-Action: no action
 
-On Thu, 2026-02-19 at 10:01 -0500, Daniel Hodges wrote:
-> On Thu, Feb 19, 2026 at 01:36:39PM +0100, Roberto Sassu wrote:
-> > On Thu, 2026-02-19 at 10:26 +0100, Roberto Sassu wrote:
-> > > On Thu, 2026-02-05 at 21:42 -0500, Daniel Hodges wrote:
-> > > > The crypto_shash_update() and crypto_shash_final() functions can fa=
-il
-> > > > and return error codes, but their return values were not being chec=
-ked
-> > > > in several places in security/integrity/evm/evm_crypto.c:
-> > > >=20
-> > > > - hmac_add_misc() ignored returns from crypto_shash_update() and
-> > > >   crypto_shash_final()
-> > > > - evm_calc_hmac_or_hash() ignored returns from crypto_shash_update(=
-)
-> > > > - evm_init_hmac() ignored returns from crypto_shash_update()
-> > > >=20
-> > > > If these hash operations fail silently, the resulting HMAC could be
-> > > > invalid or incomplete, which could weaken the integrity verificatio=
-n
-> > > > security that EVM provides.
-> > > >=20
-> > > > This patch converts hmac_add_misc() from void to int return type an=
-d
-> > > > adds proper error checking and propagation for all crypto_shash_*
-> > > > function calls. All callers are updated to handle the new return va=
-lues.
-> > > > Additionally, error messages are logged when cryptographic operatio=
-ns
-> > > > fail to provide visibility into the failure rather than silently
-> > > > returning error codes.
-> > > >=20
-> > > > Fixes: 66dbc325afce ("evm: re-release")
-> > > > Signed-off-by: Daniel Hodges <git@danielhodges.dev>
-> > >=20
-> > > After fixing the minor issue below:
-> >=20
-> > Already did it. The patch is here (after fixing a conflict with
-> > 0496fc9cdc38 "evm: Use ordered xattrs list to calculate HMAC in
-> > evm_init_hmac()"):
-> >=20
-> > https://github.com/robertosassu/linux/commit/d5aba42198b602c6de002ef02a=
-4e6cc1d75652d7
-> >=20
-> > Roberto
->=20
-> Nice, thanks for handling that!
+Coming back to this old thread after having spent some time playing with the code:
 
-Welcome!
+On Thu, 22 Aug 2024, at 20:29, Daniel P. Smith wrote:
 
-Roberto
+<selective snip>
+
+> Another fact to consider is that the current Intel's TXT MLE 
+> specification dictates SHA1 as a valid configuration. Secure Launch's 
+> use of SHA1 is therefore to comply with Intel's specification for TXT. 
+
+As I understand the Intel TXT spec and the code:
+
+- TPM 1.2 is no longer supported by the TXT spec (since 2023)
+- TPM 1.2 is not supported by your GRUB implementation
+- in TPM 2.0 mode, SHA1 is only supported by the TXT spec if it is the /only/ algo supported by the TPM
+- the proposed kernel implementation ignores any SHA-384 and SM3-256 PCR banks if they are active, and caps them using a { 1, 0, ... } fake digest.
+
+So apologies for being slow, but I still struggle to understand why it is so important to have a SHA-1 implementation to cap those PCRs. Is it just to support systems with a TPM 2.0 that only has SHA-1 banks enabled?
+
+Assuming that this code will get merged this year, it will be in a LTS branch by 2027, by which time distros like Debian will pick it up. 
+
+I fully understand that this code has lived out-of-tree for more than a decade, and you likely prefer to get everything upstream that your current users may be relying on. But for Linux, this is a new feature, and merging code now that is basically obsolete on day 1 is not something we should entertain imo.
+
+(and apologies for re-opening yet another can of worms - I assure you I am trying to be constructive here)
+
+-- 
+Ard.
 
 
