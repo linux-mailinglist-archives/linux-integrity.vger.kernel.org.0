@@ -1,87 +1,100 @@
-Return-Path: <linux-integrity+bounces-8532-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8533-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wHeINXipmGmvKgMAu9opvQ
-	(envelope-from <linux-integrity+bounces-8532-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 19:35:36 +0100
+	id 0JG/BtO8mGl4LgMAu9opvQ
+	(envelope-from <linux-integrity+bounces-8533-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 20:58:11 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77EE016A1B4
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 19:35:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AF5616A871
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 20:58:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 46251308C2F9
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 18:34:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 154E730427E1
+	for <lists+linux-integrity@lfdr.de>; Fri, 20 Feb 2026 19:58:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F99366542;
-	Fri, 20 Feb 2026 18:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B3602FB969;
+	Fri, 20 Feb 2026 19:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WmQrputN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CWy0tF60"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f194.google.com (mail-qt1-f194.google.com [209.85.160.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FD436680C;
-	Fri, 20 Feb 2026 18:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA752F6591
+	for <linux-integrity@vger.kernel.org>; Fri, 20 Feb 2026 19:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771612489; cv=none; b=NPwpK87BGTczhmwW3TQHl64uP5BLkFG0Bq4X0VE/dBFvh4QJZQRjh90K/nL4k7Gjl6BNntjFu+fuAkSM5pC6iTjzboGnNpdgjsQ+pLeGMt7FvWFbRvyHpG1qbBR7Si0b6p9CS7iCXII+u2nAOorRxbgCqim3g92xxJ23vXdfDbM=
+	t=1771617485; cv=none; b=pnCbJ9Dh4egKX/ypZ5wZqCCK1uEk3AycMNjaJ8LyLtmm5dYEosTXtGxbT+KUflSaP59pndG3PeRzc7tpw1CdnRPn9fbTN5aPLW9bl+6ykKpFssQb8yXuRrDchrfDedEg4WN9fr2fpOkY3208AdZgbEoGW6LkBzrBPwAw5gLpGBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771612489; c=relaxed/simple;
-	bh=Y/uR169HEfHE4T/s2n4IaC0XZxqzTy5HB8XBwjfIn5E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KCpETJYP5t4ntBCLwZS2KAV7+M/gkf7ctjJcio5dtoVk2b3I+FckJimHhS9S8U2tdLpcmvmtl2AIKMWJ82CTXtdXaSz039Q1hapWPGTxQHlLvjN+j1zKmsOpU45f8IRBOjc0VgcIW+e0YxqL4TPAcydl1SkWluhheJNEs7j91HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WmQrputN; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61KEvON81296147;
-	Fri, 20 Feb 2026 18:34:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=EyEQf2xGL70GiAdGq
-	RMb7xyTB21HSDFi6aO9Csu8eMo=; b=WmQrputNkpByJHFIWLozBP4Spkkiyot2s
-	hA79uEIPIj87AJ1QtuzzXBDoVuRKytQ++LOSPB/liWWuAf9j+TpptyNDXxa5T9YU
-	6SsSdM53RVn3hekfugfm9j0wLvDl/I4/hK0Lqws+Ch8HYzqJlxhH606uUo1jBsfY
-	5NhYN+YNmZ+azRK/JyZIc7kGelMu0SQoR4dXla+gdazSQ7bf0WKiWRd1xISgsu9j
-	W7ZX7J6nZCSrTAIcoPsHHM6WNDZIVKle9DwMPNcKB/RVnEwGmy5kWsv9tfnmUgAH
-	s6ybn+iHRO/tWuDOEJ67zVVeYC6uZKu4ieKyhC+eJiVJm+HWsdZpA==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj64k0du-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Feb 2026 18:34:43 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61KEQxe7001375;
-	Fri, 20 Feb 2026 18:34:42 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ccb2bshxx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 20 Feb 2026 18:34:42 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61KIYc3446399878
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 20 Feb 2026 18:34:38 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9DD88202F9;
-	Fri, 20 Feb 2026 18:34:38 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3D8C920301;
-	Fri, 20 Feb 2026 18:34:36 +0000 (GMT)
-Received: from li-fc74f8cc-3279-11b2-a85c-ef5828687581.ibm.com.com (unknown [9.39.26.213])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 20 Feb 2026 18:34:36 +0000 (GMT)
-From: Srish Srinivasan <ssrish@linux.ibm.com>
-To: linux-integrity@vger.kernel.org, keyrings@vger.kernel.org
-Cc: James.Bottomley@HansenPartnership.com, jarkko@kernel.org,
-        zohar@linux.ibm.com, stefanb@linux.ibm.com, nayna@linux.ibm.com,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
-        ssrish@linux.ibm.com
-Subject: [PATCH v2 2/2] keys/trusted_keys: move TPM-specific fields into trusted_tpm_options
-Date: Sat, 21 Feb 2026 00:04:26 +0530
-Message-ID: <20260220183426.80446-3-ssrish@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260220183426.80446-1-ssrish@linux.ibm.com>
-References: <20260220183426.80446-1-ssrish@linux.ibm.com>
+	s=arc-20240116; t=1771617485; c=relaxed/simple;
+	bh=NAbbElAOUyGVOUsIDLJCv4J1I23aj72XuN333S2mYao=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m7aydjDzRjMGYn0Y8/4t96wJvWobpqDBlvgz2XPtn3+KFZhQaEUslWA50IYYZ03Vq8n+0C9FTZ5dAkR2byC1eWj7nN2oougvECgepKzGj+Scb0lpWsowIr1UsyEIXVTSCQD1zacHI12Hu1oii1945oN5FnDjI2psW2Hw+fdGEJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CWy0tF60; arc=none smtp.client-ip=209.85.160.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f194.google.com with SMTP id d75a77b69052e-503347e8715so28524191cf.2
+        for <linux-integrity@vger.kernel.org>; Fri, 20 Feb 2026 11:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771617481; x=1772222281; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZLfl1XSeCu9xJkVAcoZv117wxs0LRN1g0//k51/MzHs=;
+        b=CWy0tF60xGgzrspqMXXC91AEW9KNXd2EBWYD/54uMSUyq+0jtAZCE3NOaWX1bmuaSn
+         SeGPgV7cGtkxcaO+cQigOgKqUlMSJv3XL/xdLUVZn00LtoxjtU2CAbjhXC6OnTiyoQ9K
+         XWQSpnIKZzEcE8qnwum3kqD279KIVJYFaqbQzohLUEKheeWkanFpGKyt+/rGVWzfaxOS
+         Z3Lgw2HLUTxl62qEjtJ3QaHPvb+VsVcYUS+XPebZxRkueLkb62+7hecN9o6qeOdslUZP
+         wx8eA6LV70EjaGPA4+2QIoi/kGRQSaGxxgppLV+1Tiuc26wrSe2/unCanmHKLlTt7+Qu
+         1mAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771617481; x=1772222281;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZLfl1XSeCu9xJkVAcoZv117wxs0LRN1g0//k51/MzHs=;
+        b=aOahmocDLukyJ7WVjdmvxehI8jnMdV0Cy1HBiOJGFbLAF/9H0wocAYzsg+1QrDbk46
+         8oM1JAn2Jpcgvirv8tEm5p+bDoyf1gQqtdbfRYy9ZIkTvAO//Q8BT+5eMEhS1SMMmldp
+         FzTZW5zI+UZkGndVMcaPPplf2aJFmarqidBJOoBN3X6Nb17SbSc33IiNbIijBSvbbt3q
+         isiNnwiqhxgZ1O7V5K6T72nwbXw3TPpY8Vm60WQGZs0qhXGqGzHx5uleh+LP7yzPc26s
+         2jGK8qiQO9vcK+CYRyoXFSFEbp+iW3DV5st2702cFoEytxqZdzNjblJGVd/lJA2jSCco
+         IDKg==
+X-Forwarded-Encrypted: i=1; AJvYcCUmGtLaLlTFLt6oiTLebF4YZ0JelPjOVA6smw7XkjVRNnNISPmZGNcATXhPEXIPsUwa8yfcs69ozyYWJ5ikLJA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9PmjwwpLNmSlKSu3koWmp+tBqy8AlBJb5EXPj2uiCaFJIVdkU
+	Y6x5paW5Q9XLyDhnOBfjVKCMB8w1WS6ltmUGKhDIJ6tQhhkHgkLQ1bzT
+X-Gm-Gg: AZuq6aIHHPwKBhctnC7hXbxo6ZtdjczUJYha8dSRE1vEEkz/xnvnRubP8K86NvMJdBT
+	p3NuuGtOSdyhr0sJJtDoJ0IWCGyuTnb+GxaHhMbEF40m1OMoyezz3BKU625QyRp6btaKt+4kRUS
+	ipD41HEunSBM5VjaVeVffc2v1yzk3gOi/XjFlLjUsaDnrNbl9FITXulJdMoJkl8TmzD7rzYF8sD
+	rfOiIxG69zw2l4VXW70LdrLVj0Ouhx+iQ5vHe52MWfv6+M+/I6QYbedZ/DZdRXGsNhYEZmX6Yi8
+	KyPlCAE1I3vjdSnBExiSRP/G1DEm2wI5sceBp0vQK32jLxDbKiPAQhnlIKatjwvsNF89OlTGX/c
+	ASLVmPgdMkXKoEF9ptGPSoO09s+G3rp/MK6Nv0k4yybuOXq1+LBji3WIMbzgH8fjPAWOnShA26E
+	GmolxuncipBk3ReYcw45Ggler+J/e2R8+6ocx13Yf25CnWJJ6FYLI/cN0fcqizNu7Z3UzBSD65p
+	YF/n3cv8OXRlRAQYh1X0/XAtrVI
+X-Received: by 2002:ac8:5985:0:b0:503:2efb:9a09 with SMTP id d75a77b69052e-5070bd00c15mr14521551cf.76.1771617480820;
+        Fri, 20 Feb 2026 11:58:00 -0800 (PST)
+Received: from localhost (ec2-52-70-167-183.compute-1.amazonaws.com. [52.70.167.183])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5070d550785sm1902901cf.11.2026.02.20.11.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Feb 2026 11:58:00 -0800 (PST)
+From: danieldurning.work@gmail.com
+To: linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	linux-integrity@vger.kernel.org
+Cc: stephen.smalley.work@gmail.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	john.johansen@canonical.com,
+	zohar@linux.ibm.com,
+	roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com,
+	mic@digikod.net,
+	casey@schaufler-ca.com,
+	takedakn@nttdata.co.jp,
+	penguin-kernel@I-love.SAKURA.ne.jp
+Subject: [PATCH] lsm: move inode IS_PRIVATE checks to individual LSMs
+Date: Fri, 20 Feb 2026 19:54:05 +0000
+Message-ID: <20260220195405.30612-1-danieldurning.work@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -89,590 +102,1412 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3FBsKpOl1eqszax_Z8G0yEBf2nU2ejSf
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIwMDE1MyBTYWx0ZWRfXyAKCOU7Az/q/
- aC6mD++zO8jpy7TrO9xykSM9O9+vjnCHOavfEXEsOTe+4aHy3mTGoSCdBw0WaWCPi0vlgqQop85
- oqCtehbmkopI36gI8RoD2cDOEMXCOhBhMzwE6tJh5vLijQfnCK7FbdPjpxS5GCyQoRKfRy3ycG0
- +S79Kz41bDiPzSH8L3aBI+4Ba47iODM7iD2aQnLpWlYxKkLUFYMCz927mTBPbRdhmIps8Clca5i
- sCP53gJ6aSje/nofQ/PMzm56CyVziM8BEKtdPEBf389X7wwmQeBqucHw4+1+kzNXJa7yAzzROgW
- aaTQNdsFOOXfvTBIgPsiyJr6q4abeqwmrGguihKRVhOmeCWA1A20Z7DW/ZBFLTZdO6lo0WPXWBI
- +J6uSAvXKcQe9LP3KYDoK9Pbz2rBp1is2RPzqAt/rK1roSd/WYtEPnlD0LoI0bGLRHIvi7xl7rt
- D63zbitiacDl7hFzbRw==
-X-Proofpoint-GUID: 3FBsKpOl1eqszax_Z8G0yEBf2nU2ejSf
-X-Authority-Analysis: v=2.4 cv=U+mfzOru c=1 sm=1 tr=0 ts=6998a943 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=Jts-3Rt90Sf2m4vj4rUA:9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-20_02,2026-02-20_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 bulkscore=0 impostorscore=0 malwarescore=0 spamscore=0
- adultscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602200153
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8532-lists,linux-integrity=lfdr.de];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	FROM_NEQ_ENVFROM(0.00)[ssrish@linux.ibm.com,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	FREEMAIL_CC(0.00)[gmail.com,paul-moore.com,namei.org,hallyn.com,canonical.com,linux.ibm.com,huawei.com,digikod.net,schaufler-ca.com,nttdata.co.jp,I-love.SAKURA.ne.jp];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8533-lists,linux-integrity=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FROM_NO_DN(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 77EE016A1B4
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[danieldurningwork@gmail.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8AF5616A871
 X-Rspamd-Action: no action
 
-The trusted_key_options struct contains TPM-specific fields (keyhandle,
-keyauth, blobauth_len, blobauth, pcrinfo_len, pcrinfo, pcrlock, hash,
-policydigest_len, policydigest, and policyhandle). This leads to the
-accumulation of backend-specific fields in the generic options structure.
+From: Daniel Durning <danieldurning.work@gmail.com>
 
-Define trusted_tpm_options structure and move the TPM-specific fields
-there. Store a pointer to trusted_tpm_options in trusted_key_options's
-private.
+Move responsibility of bypassing S_PRIVATE inodes to the
+individual LSMs. Originally the LSM framework would skip calling
+the hooks on any inode that was marked S_PRIVATE. This would
+prevent the LSMs from controlling access to any inodes marked as
+such (ie. pidfds). We now perform the same IS_PRIVATE checks
+within the LSMs instead. This is consistent with the general goal
+of deferring as much as possible to the individual LSMs.
 
-No functional change intended.
+This reorganization enables the LSMs to eventually implement
+checks or labeling for some specific S_PRIVATE inodes like pidfds.
 
-Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Signed-off-by: Daniel Durning <danieldurning.work@gmail.com>
 ---
- include/keys/trusted-type.h               | 11 ---
- include/keys/trusted_tpm.h                | 14 ++++
- security/keys/trusted-keys/trusted_tpm1.c | 95 ++++++++++++++---------
- security/keys/trusted-keys/trusted_tpm2.c | 51 ++++++------
- 4 files changed, 102 insertions(+), 69 deletions(-)
+ security/apparmor/lsm.c               |  32 ++++++++
+ security/commoncap.c                  |  11 ++-
+ security/integrity/evm/evm_main.c     |  33 +++++++++
+ security/integrity/ima/ima_appraise.c |  12 +++
+ security/integrity/ima/ima_main.c     |   6 ++
+ security/landlock/fs.c                |  23 ++++++
+ security/security.c                   | 101 ++------------------------
+ security/selinux/hooks.c              |  77 ++++++++++++++++++++
+ security/smack/smack_lsm.c            |  56 ++++++++++++++
+ security/tomoyo/tomoyo.c              |  35 +++++++++
+ 10 files changed, 290 insertions(+), 96 deletions(-)
 
-diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-index 03527162613f..b80f250305b8 100644
---- a/include/keys/trusted-type.h
-+++ b/include/keys/trusted-type.h
-@@ -39,17 +39,6 @@ struct trusted_key_payload {
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index a87cd60ed206..5b3ced11bdbc 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -323,18 +323,27 @@ static int common_perm_create(const char *op, const struct path *dir,
  
- struct trusted_key_options {
- 	uint16_t keytype;
--	uint32_t keyhandle;
--	unsigned char keyauth[TPM_DIGEST_SIZE];
--	uint32_t blobauth_len;
--	unsigned char blobauth[TPM_DIGEST_SIZE];
--	uint32_t pcrinfo_len;
--	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
--	int pcrlock;
--	uint32_t hash;
--	uint32_t policydigest_len;
--	unsigned char policydigest[MAX_DIGEST_SIZE];
--	uint32_t policyhandle;
- 	void *private;
- };
- 
-diff --git a/include/keys/trusted_tpm.h b/include/keys/trusted_tpm.h
-index 0fadc6a4f166..355ebd36cbfd 100644
---- a/include/keys/trusted_tpm.h
-+++ b/include/keys/trusted_tpm.h
-@@ -7,6 +7,20 @@
- 
- extern struct trusted_key_ops trusted_key_tpm_ops;
- 
-+struct trusted_tpm_options {
-+	uint32_t keyhandle;
-+	unsigned char keyauth[TPM_DIGEST_SIZE];
-+	uint32_t blobauth_len;
-+	unsigned char blobauth[TPM_DIGEST_SIZE];
-+	uint32_t pcrinfo_len;
-+	unsigned char pcrinfo[MAX_PCRINFO_SIZE];
-+	int pcrlock;
-+	uint32_t hash;
-+	uint32_t policydigest_len;
-+	unsigned char policydigest[MAX_DIGEST_SIZE];
-+	uint32_t policyhandle;
-+};
-+
- int tpm2_seal_trusted(struct tpm_chip *chip,
- 		      struct trusted_key_payload *payload,
- 		      struct trusted_key_options *options);
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index 216caef97ffc..741b1d47d9f8 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -48,12 +48,14 @@ enum {
- 
- static inline void dump_options(struct trusted_key_options *o)
+ static int apparmor_path_unlink(const struct path *dir, struct dentry *dentry)
  {
-+	struct trusted_tpm_options *private = o->private;
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
 +
- 	pr_debug("sealing key type %d\n", o->keytype);
--	pr_debug("sealing key handle %0X\n", o->keyhandle);
--	pr_debug("pcrlock %d\n", o->pcrlock);
--	pr_debug("pcrinfo %d\n", o->pcrinfo_len);
-+	pr_debug("sealing key handle %0X\n", private->keyhandle);
-+	pr_debug("pcrlock %d\n", private->pcrlock);
-+	pr_debug("pcrinfo %d\n", private->pcrinfo_len);
- 	print_hex_dump(KERN_DEBUG, "pcrinfo ", DUMP_PREFIX_NONE,
--		       16, 1, o->pcrinfo, o->pcrinfo_len, 0);
-+		       16, 1, private->pcrinfo, private->pcrinfo_len, 0);
+ 	return common_perm_rm(OP_UNLINK, dir, dentry, AA_MAY_DELETE);
  }
  
- static inline void dump_sess(struct osapsess *s)
-@@ -609,6 +611,7 @@ static int tpm_unseal(struct tpm_buf *tb,
- static int key_seal(struct trusted_key_payload *p,
- 		    struct trusted_key_options *o)
+ static int apparmor_path_mkdir(const struct path *dir, struct dentry *dentry,
+ 			       umode_t mode)
  {
-+	struct trusted_tpm_options *private = o->private;
- 	struct tpm_buf tb;
- 	int ret;
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
++
+ 	return common_perm_create(OP_MKDIR, dir, dentry, AA_MAY_CREATE,
+ 				  S_IFDIR);
+ }
  
-@@ -619,9 +622,10 @@ static int key_seal(struct trusted_key_payload *p,
- 	/* include migratable flag at end of sealed key */
- 	p->key[p->key_len] = p->migratable;
- 
--	ret = tpm_seal(&tb, o->keytype, o->keyhandle, o->keyauth,
-+	ret = tpm_seal(&tb, o->keytype, private->keyhandle, private->keyauth,
- 		       p->key, p->key_len + 1, p->blob, &p->blob_len,
--		       o->blobauth, o->pcrinfo, o->pcrinfo_len);
-+		       private->blobauth, private->pcrinfo,
-+		       private->pcrinfo_len);
- 	if (ret < 0)
- 		pr_info("srkseal failed (%d)\n", ret);
- 
-@@ -635,6 +639,7 @@ static int key_seal(struct trusted_key_payload *p,
- static int key_unseal(struct trusted_key_payload *p,
- 		      struct trusted_key_options *o)
+ static int apparmor_path_rmdir(const struct path *dir, struct dentry *dentry)
  {
-+	struct trusted_tpm_options *private = o->private;
- 	struct tpm_buf tb;
- 	int ret;
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
++
+ 	return common_perm_rm(OP_RMDIR, dir, dentry, AA_MAY_DELETE);
+ }
  
-@@ -642,8 +647,8 @@ static int key_unseal(struct trusted_key_payload *p,
- 	if (ret)
- 		return ret;
+@@ -346,6 +355,9 @@ static int apparmor_path_mknod(const struct path *dir, struct dentry *dentry,
  
--	ret = tpm_unseal(&tb, o->keyhandle, o->keyauth, p->blob, p->blob_len,
--			 o->blobauth, p->key, &p->key_len);
-+	ret = tpm_unseal(&tb, private->keyhandle, private->keyauth, p->blob,
-+			 p->blob_len, private->blobauth, p->key, &p->key_len);
- 	if (ret < 0)
- 		pr_info("srkunseal failed (%d)\n", ret);
- 	else
-@@ -680,6 +685,7 @@ static const match_table_t key_tokens = {
- static int getoptions(char *c, struct trusted_key_payload *pay,
- 		      struct trusted_key_options *opt)
+ static int apparmor_path_truncate(const struct path *path)
  {
-+	struct trusted_tpm_options *private = opt->private;
- 	substring_t args[MAX_OPT_ARGS];
- 	char *p = c;
- 	int token;
-@@ -695,7 +701,7 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 	if (tpm2 < 0)
- 		return tpm2;
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return common_perm_cond(OP_TRUNC, path, MAY_WRITE | AA_MAY_SETATTR);
+ }
  
--	opt->hash = tpm2 ? HASH_ALGO_SHA256 : HASH_ALGO_SHA1;
-+	private->hash = tpm2 ? HASH_ALGO_SHA256 : HASH_ALGO_SHA1;
+@@ -357,6 +369,9 @@ static int apparmor_file_truncate(struct file *file)
+ static int apparmor_path_symlink(const struct path *dir, struct dentry *dentry,
+ 				 const char *old_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
++
+ 	return common_perm_create(OP_SYMLINK, dir, dentry, AA_MAY_CREATE,
+ 				  S_IFLNK);
+ }
+@@ -367,6 +382,9 @@ static int apparmor_path_link(struct dentry *old_dentry, const struct path *new_
+ 	struct aa_label *label;
+ 	int error = 0;
  
- 	if (!c)
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry))))
++		return 0;
++
+ 	if (!path_mediated_fs(old_dentry))
  		return 0;
-@@ -709,11 +715,11 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
  
- 		switch (token) {
- 		case Opt_pcrinfo:
--			opt->pcrinfo_len = strlen(args[0].from) / 2;
--			if (opt->pcrinfo_len > MAX_PCRINFO_SIZE)
-+			private->pcrinfo_len = strlen(args[0].from) / 2;
-+			if (private->pcrinfo_len > MAX_PCRINFO_SIZE)
- 				return -EINVAL;
--			res = hex2bin(opt->pcrinfo, args[0].from,
--				      opt->pcrinfo_len);
-+			res = hex2bin(private->pcrinfo, args[0].from,
-+				      private->pcrinfo_len);
- 			if (res < 0)
- 				return -EINVAL;
- 			break;
-@@ -722,12 +728,12 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 			if (res < 0)
- 				return -EINVAL;
- 			opt->keytype = SEAL_keytype;
--			opt->keyhandle = handle;
-+			private->keyhandle = handle;
- 			break;
- 		case Opt_keyauth:
- 			if (strlen(args[0].from) != 2 * SHA1_DIGEST_SIZE)
- 				return -EINVAL;
--			res = hex2bin(opt->keyauth, args[0].from,
-+			res = hex2bin(private->keyauth, args[0].from,
- 				      SHA1_DIGEST_SIZE);
- 			if (res < 0)
- 				return -EINVAL;
-@@ -738,21 +744,23 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 			 * hex strings.  TPM 2.0 authorizations are simple
- 			 * passwords (although it can take a hash as well)
- 			 */
--			opt->blobauth_len = strlen(args[0].from);
-+			private->blobauth_len = strlen(args[0].from);
+@@ -386,6 +404,11 @@ static int apparmor_path_rename(const struct path *old_dir, struct dentry *old_d
+ 	struct aa_label *label;
+ 	int error = 0;
  
--			if (opt->blobauth_len == 2 * TPM_DIGEST_SIZE) {
--				res = hex2bin(opt->blobauth, args[0].from,
-+			if (private->blobauth_len == 2 * TPM_DIGEST_SIZE) {
-+				res = hex2bin(private->blobauth, args[0].from,
- 					      TPM_DIGEST_SIZE);
- 				if (res < 0)
- 					return -EINVAL;
- 
--				opt->blobauth_len = TPM_DIGEST_SIZE;
-+				private->blobauth_len = TPM_DIGEST_SIZE;
- 				break;
- 			}
- 
--			if (tpm2 && opt->blobauth_len <= sizeof(opt->blobauth)) {
--				memcpy(opt->blobauth, args[0].from,
--				       opt->blobauth_len);
-+			if (tpm2 &&
-+			    private->blobauth_len <=
-+			    sizeof(private->blobauth)) {
-+				memcpy(private->blobauth, args[0].from,
-+				       private->blobauth_len);
- 				break;
- 			}
- 
-@@ -770,14 +778,14 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 			res = kstrtoul(args[0].from, 10, &lock);
- 			if (res < 0)
- 				return -EINVAL;
--			opt->pcrlock = lock;
-+			private->pcrlock = lock;
- 			break;
- 		case Opt_hash:
- 			if (test_bit(Opt_policydigest, &token_mask))
- 				return -EINVAL;
- 			for (i = 0; i < HASH_ALGO__LAST; i++) {
- 				if (!strcmp(args[0].from, hash_algo_name[i])) {
--					opt->hash = i;
-+					private->hash = i;
- 					break;
- 				}
- 			}
-@@ -789,14 +797,14 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 			}
- 			break;
- 		case Opt_policydigest:
--			digest_len = hash_digest_size[opt->hash];
-+			digest_len = hash_digest_size[private->hash];
- 			if (!tpm2 || strlen(args[0].from) != (2 * digest_len))
- 				return -EINVAL;
--			res = hex2bin(opt->policydigest, args[0].from,
-+			res = hex2bin(private->policydigest, args[0].from,
- 				      digest_len);
- 			if (res < 0)
- 				return -EINVAL;
--			opt->policydigest_len = digest_len;
-+			private->policydigest_len = digest_len;
- 			break;
- 		case Opt_policyhandle:
- 			if (!tpm2)
-@@ -804,7 +812,7 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 			res = kstrtoul(args[0].from, 16, &handle);
- 			if (res < 0)
- 				return -EINVAL;
--			opt->policyhandle = handle;
-+			private->policyhandle = handle;
- 			break;
- 		default:
- 			return -EINVAL;
-@@ -815,6 +823,7 @@ static int getoptions(char *c, struct trusted_key_payload *pay,
- 
- static struct trusted_key_options *trusted_options_alloc(void)
- {
-+	struct trusted_tpm_options *private;
- 	struct trusted_key_options *options;
- 	int tpm2;
- 
-@@ -827,14 +836,23 @@ static struct trusted_key_options *trusted_options_alloc(void)
- 		/* set any non-zero defaults */
- 		options->keytype = SRK_keytype;
- 
--		if (!tpm2)
--			options->keyhandle = SRKHANDLE;
-+		private = kzalloc(sizeof(*private), GFP_KERNEL);
-+		if (!private) {
-+			kfree_sensitive(options);
-+			options = NULL;
-+		} else {
-+			if (!tpm2)
-+				private->keyhandle = SRKHANDLE;
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry)) ||
++		(d_is_positive(new_dentry) &&
++		IS_PRIVATE(d_backing_inode(new_dentry)))))
++		return 0;
 +
-+			options->private = private;
-+		}
- 	}
- 	return options;
+ 	if (!path_mediated_fs(old_dentry))
+ 		return 0;
+ 	if ((flags & RENAME_EXCHANGE) && !path_mediated_fs(new_dentry))
+@@ -444,16 +467,25 @@ static int apparmor_path_rename(const struct path *old_dir, struct dentry *old_d
+ 
+ static int apparmor_path_chmod(const struct path *path, umode_t mode)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return common_perm_cond(OP_CHMOD, path, AA_MAY_CHMOD);
  }
  
- static int trusted_tpm_seal(struct trusted_key_payload *p, char *datablob)
+ static int apparmor_path_chown(const struct path *path, kuid_t uid, kgid_t gid)
  {
-+	struct trusted_tpm_options *private = NULL;
- 	struct trusted_key_options *options = NULL;
- 	int ret = 0;
- 	int tpm2;
-@@ -852,7 +870,8 @@ static int trusted_tpm_seal(struct trusted_key_payload *p, char *datablob)
- 		goto out;
- 	dump_options(options);
- 
--	if (!options->keyhandle && !tpm2) {
-+	private = options->private;
-+	if (!private->keyhandle && !tpm2) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
-@@ -866,20 +885,22 @@ static int trusted_tpm_seal(struct trusted_key_payload *p, char *datablob)
- 		goto out;
- 	}
- 
--	if (options->pcrlock) {
--		ret = pcrlock(options->pcrlock);
-+	if (private->pcrlock) {
-+		ret = pcrlock(private->pcrlock);
- 		if (ret < 0) {
- 			pr_info("pcrlock failed (%d)\n", ret);
- 			goto out;
- 		}
- 	}
- out:
-+	kfree_sensitive(options->private);
- 	kfree_sensitive(options);
- 	return ret;
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return common_perm_cond(OP_CHOWN, path, AA_MAY_CHOWN);
  }
  
- static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
+ static int apparmor_inode_getattr(const struct path *path)
  {
-+	struct trusted_tpm_options *private = NULL;
- 	struct trusted_key_options *options = NULL;
- 	int ret = 0;
- 	int tpm2;
-@@ -897,7 +918,8 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
- 		goto out;
- 	dump_options(options);
- 
--	if (!options->keyhandle && !tpm2) {
-+	private = options->private;
-+	if (!private->keyhandle && !tpm2) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
-@@ -909,14 +931,15 @@ static int trusted_tpm_unseal(struct trusted_key_payload *p, char *datablob)
- 	if (ret < 0)
- 		pr_info("key_unseal failed (%d)\n", ret);
- 
--	if (options->pcrlock) {
--		ret = pcrlock(options->pcrlock);
-+	if (private->pcrlock) {
-+		ret = pcrlock(private->pcrlock);
- 		if (ret < 0) {
- 			pr_info("pcrlock failed (%d)\n", ret);
- 			goto out;
- 		}
- 	}
- out:
-+	kfree_sensitive(options->private);
- 	kfree_sensitive(options);
- 	return ret;
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return common_perm_cond(OP_GETATTR, path, AA_MAY_GETATTR);
  }
-diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
-index 6340823f8b53..94e01249b921 100644
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -24,6 +24,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 			   struct trusted_key_options *options,
- 			   u8 *src, u32 len)
+ 
+diff --git a/security/commoncap.c b/security/commoncap.c
+index 8a23dfab7fac..1b61d43529c2 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -88,7 +88,7 @@ static inline int cap_capable_helper(const struct cred *cred,
+ 		if (ns->level <= cred_ns->level)
+ 			return -EPERM;
+ 
+-		/* 
++		/*
+ 		 * The owner of the user namespace in the parent of the
+ 		 * user namespace has all caps.
+ 		 */
+@@ -432,6 +432,9 @@ int cap_inode_getsecurity(struct mnt_idmap *idmap,
+ 	struct dentry *dentry;
+ 	struct user_namespace *fs_ns;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return -EOPNOTSUPP;
++
+ 	if (strcmp(name, "capability") != 0)
+ 		return -EOPNOTSUPP;
+ 
+@@ -1027,6 +1030,9 @@ int cap_inode_setxattr(struct dentry *dentry, const char *name,
  {
-+	struct trusted_tpm_options *private = options->private;
- 	const int SCRATCH_SIZE = PAGE_SIZE;
- 	u8 *scratch = kmalloc(SCRATCH_SIZE, GFP_KERNEL);
- 	u8 *work = scratch, *work1;
-@@ -46,7 +47,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 	work = asn1_encode_oid(work, end_work, tpm2key_oid,
- 			       asn1_oid_len(tpm2key_oid));
+ 	struct user_namespace *user_ns = dentry->d_sb->s_user_ns;
  
--	if (options->blobauth_len == 0) {
-+	if (private->blobauth_len == 0) {
- 		unsigned char bool[3], *w = bool;
- 		/* tag 0 is emptyAuth */
- 		w = asn1_encode_boolean(w, w + sizeof(bool), true);
-@@ -69,7 +70,7 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
- 		goto err;
- 	}
- 
--	work = asn1_encode_integer(work, end_work, options->keyhandle);
-+	work = asn1_encode_integer(work, end_work, private->keyhandle);
- 	work = asn1_encode_octet_string(work, end_work, pub, pub_len);
- 	work = asn1_encode_octet_string(work, end_work, priv, priv_len);
- 
-@@ -102,6 +103,7 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
- 			   struct trusted_key_options *options,
- 			   u8 **buf)
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/* Ignore non-security xattrs */
+ 	if (strncmp(name, XATTR_SECURITY_PREFIX,
+ 			XATTR_SECURITY_PREFIX_LEN) != 0)
+@@ -1068,6 +1074,9 @@ int cap_inode_removexattr(struct mnt_idmap *idmap,
  {
-+	struct trusted_tpm_options *private = options->private;
- 	int ret;
- 	struct tpm2_key_context ctx;
- 	u8 *blob;
-@@ -121,7 +123,7 @@ static int tpm2_key_decode(struct trusted_key_payload *payload,
- 		return -ENOMEM;
+ 	struct user_namespace *user_ns = dentry->d_sb->s_user_ns;
  
- 	*buf = blob;
--	options->keyhandle = ctx.parent;
-+	private->keyhandle = ctx.parent;
- 
- 	memcpy(blob, ctx.priv, ctx.priv_len);
- 	blob += ctx.priv_len;
-@@ -233,6 +235,7 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		      struct trusted_key_payload *payload,
- 		      struct trusted_key_options *options)
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/* Ignore non-security xattrs */
+ 	if (strncmp(name, XATTR_SECURITY_PREFIX,
+ 			XATTR_SECURITY_PREFIX_LEN) != 0)
+diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+index 73d500a375cb..0095712b8d75 100644
+--- a/security/integrity/evm/evm_main.c
++++ b/security/integrity/evm/evm_main.c
+@@ -590,6 +590,9 @@ static int evm_inode_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
  {
-+	struct trusted_tpm_options *private = options->private;
- 	off_t offset = TPM_HEADER_SIZE;
- 	struct tpm_buf buf, sized;
- 	int blob_len = 0;
-@@ -240,11 +243,11 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 	u32 flags;
+ 	const struct evm_ima_xattr_data *xattr_data = xattr_value;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/* Policy permits modification of the protected xattrs even though
+ 	 * there's no HMAC key loaded
+ 	 */
+@@ -675,6 +678,9 @@ static int evm_inode_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ {
+ 	enum integrity_status evm_status;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/* Policy permits modification of the protected xattrs even though
+ 	 * there's no HMAC key loaded
+ 	 */
+@@ -725,6 +731,9 @@ static int evm_inode_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ static int evm_inode_remove_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ 				const char *acl_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return evm_inode_set_acl(idmap, dentry, acl_name, NULL);
+ }
+ 
+@@ -807,6 +816,9 @@ static void evm_inode_post_setxattr(struct dentry *dentry,
+ 				    size_t xattr_value_len,
+ 				    int flags)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	if (!evm_revalidate_status(xattr_name))
+ 		return;
+ 
+@@ -836,6 +848,9 @@ static void evm_inode_post_setxattr(struct dentry *dentry,
+ static void evm_inode_post_set_acl(struct dentry *dentry, const char *acl_name,
+ 				   struct posix_acl *kacl)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	return evm_inode_post_setxattr(dentry, acl_name, NULL, 0, 0);
+ }
+ 
+@@ -852,6 +867,9 @@ static void evm_inode_post_set_acl(struct dentry *dentry, const char *acl_name,
+ static void evm_inode_post_removexattr(struct dentry *dentry,
+ 				       const char *xattr_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	if (!evm_revalidate_status(xattr_name))
+ 		return;
+ 
+@@ -879,6 +897,9 @@ static inline void evm_inode_post_remove_acl(struct mnt_idmap *idmap,
+ 					     struct dentry *dentry,
+ 					     const char *acl_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	evm_inode_post_removexattr(dentry, acl_name);
+ }
+ 
+@@ -911,6 +932,9 @@ static int evm_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	unsigned int ia_valid = attr->ia_valid;
+ 	enum integrity_status evm_status;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/* Policy permits modification of the protected attrs even though
+ 	 * there's no HMAC key loaded
+ 	 */
+@@ -960,6 +984,9 @@ static int evm_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ static void evm_inode_post_setattr(struct mnt_idmap *idmap,
+ 				   struct dentry *dentry, int ia_valid)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	if (!evm_revalidate_status(NULL))
+ 		return;
+ 
+@@ -1019,6 +1046,9 @@ int evm_inode_init_security(struct inode *inode, struct inode *dir,
+ 	bool evm_protected_xattrs = false;
  	int rc;
  
--	hash = tpm2_find_hash_alg(options->hash);
-+	hash = tpm2_find_hash_alg(private->hash);
- 	if (hash < 0)
- 		return hash;
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	if (!(evm_initialized & EVM_INIT_HMAC) || !xattrs)
+ 		return 0;
  
--	if (!options->keyhandle)
-+	if (!private->keyhandle)
+@@ -1094,6 +1124,9 @@ static void evm_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ 	struct inode *inode = d_backing_inode(dentry);
+ 	struct evm_iint_cache *iint = evm_iint_inode(inode);
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return;
++
+ 	if (!S_ISREG(inode->i_mode))
+ 		return;
+ 
+diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+index 5149ff4fd50d..d705c908132f 100644
+--- a/security/integrity/ima/ima_appraise.c
++++ b/security/integrity/ima/ima_appraise.c
+@@ -665,6 +665,9 @@ static void ima_inode_post_setattr(struct mnt_idmap *idmap,
+ 	struct ima_iint_cache *iint;
+ 	int action;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	if (!(ima_policy_flag & IMA_APPRAISE) || !S_ISREG(inode->i_mode)
+ 	    || !(inode->i_opflags & IOP_XATTR))
+ 		return;
+@@ -790,6 +793,9 @@ static int ima_inode_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	int result;
+ 	int err;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	result = ima_protect_xattr(dentry, xattr_name, xattr_value,
+ 				   xattr_value_len);
+ 	if (result == 1) {
+@@ -817,6 +823,9 @@ static int ima_inode_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ static int ima_inode_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ 			     const char *acl_name, struct posix_acl *kacl)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	if (evm_revalidate_status(acl_name))
+ 		ima_reset_appraise_flags(d_backing_inode(dentry), -1);
+ 
+@@ -842,6 +851,9 @@ static int ima_inode_removexattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ static int ima_inode_remove_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ 				const char *acl_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return ima_inode_set_acl(idmap, dentry, acl_name, NULL);
+ }
+ 
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index 5770cf691912..5ddac6c15c7f 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -794,6 +794,9 @@ static void ima_post_create_tmpfile(struct mnt_idmap *idmap,
+ 	struct ima_iint_cache *iint;
+ 	int must_appraise;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return;
++
+ 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+ 		return;
+ 
+@@ -826,6 +829,9 @@ static void ima_post_path_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ 	struct inode *inode = dentry->d_inode;
+ 	int must_appraise;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return;
++
+ 	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+ 		return;
+ 
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index fe794875ad46..5fe15313a3f5 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -1528,6 +1528,9 @@ static int hook_path_link(struct dentry *const old_dentry,
+ 			  const struct path *const new_dir,
+ 			  struct dentry *const new_dentry)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry))))
++		return 0;
++
+ 	return current_check_refer_path(old_dentry, new_dir, new_dentry, false,
+ 					false);
+ }
+@@ -1538,6 +1541,11 @@ static int hook_path_rename(const struct path *const old_dir,
+ 			    struct dentry *const new_dentry,
+ 			    const unsigned int flags)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry)) ||
++		(d_is_positive(new_dentry) &&
++		IS_PRIVATE(d_backing_inode(new_dentry)))))
++		return 0;
++
+ 	/* old_dir refers to old_dentry->d_parent and new_dir->mnt */
+ 	return current_check_refer_path(old_dentry, new_dir, new_dentry, true,
+ 					!!(flags & RENAME_EXCHANGE));
+@@ -1546,6 +1554,9 @@ static int hook_path_rename(const struct path *const old_dir,
+ static int hook_path_mkdir(const struct path *const dir,
+ 			   struct dentry *const dentry, const umode_t mode)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
++
+ 	return current_check_access_path(dir, LANDLOCK_ACCESS_FS_MAKE_DIR);
+ }
+ 
+@@ -1560,23 +1571,35 @@ static int hook_path_symlink(const struct path *const dir,
+ 			     struct dentry *const dentry,
+ 			     const char *const old_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
++
+ 	return current_check_access_path(dir, LANDLOCK_ACCESS_FS_MAKE_SYM);
+ }
+ 
+ static int hook_path_unlink(const struct path *const dir,
+ 			    struct dentry *const dentry)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
++
+ 	return current_check_access_path(dir, LANDLOCK_ACCESS_FS_REMOVE_FILE);
+ }
+ 
+ static int hook_path_rmdir(const struct path *const dir,
+ 			   struct dentry *const dentry)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
++		return 0;
++
+ 	return current_check_access_path(dir, LANDLOCK_ACCESS_FS_REMOVE_DIR);
+ }
+ 
+ static int hook_path_truncate(const struct path *const path)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return current_check_access_path(path, LANDLOCK_ACCESS_FS_TRUNCATE);
+ }
+ 
+diff --git a/security/security.c b/security/security.c
+index 31a688650601..658dbb10ea40 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -1310,9 +1310,6 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
+ 	struct xattr *new_xattrs = NULL;
+ 	int ret = -EOPNOTSUPP, xattr_count = 0;
+ 
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return 0;
+-
+ 	if (!blob_sizes.lbs_xattr_count)
+ 		return 0;
+ 
+@@ -1386,8 +1383,6 @@ int security_inode_init_security_anon(struct inode *inode,
+ int security_path_mknod(const struct path *dir, struct dentry *dentry,
+ 			umode_t mode, unsigned int dev)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+-		return 0;
+ 	return call_int_hook(path_mknod, dir, dentry, mode, dev);
+ }
+ EXPORT_SYMBOL(security_path_mknod);
+@@ -1401,8 +1396,6 @@ EXPORT_SYMBOL(security_path_mknod);
+  */
+ void security_path_post_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return;
+ 	call_void_hook(path_post_mknod, idmap, dentry);
+ }
+ 
+@@ -1419,8 +1412,6 @@ void security_path_post_mknod(struct mnt_idmap *idmap, struct dentry *dentry)
+ int security_path_mkdir(const struct path *dir, struct dentry *dentry,
+ 			umode_t mode)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+-		return 0;
+ 	return call_int_hook(path_mkdir, dir, dentry, mode);
+ }
+ EXPORT_SYMBOL(security_path_mkdir);
+@@ -1436,8 +1427,6 @@ EXPORT_SYMBOL(security_path_mkdir);
+  */
+ int security_path_rmdir(const struct path *dir, struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+-		return 0;
+ 	return call_int_hook(path_rmdir, dir, dentry);
+ }
+ 
+@@ -1452,8 +1441,6 @@ int security_path_rmdir(const struct path *dir, struct dentry *dentry)
+  */
+ int security_path_unlink(const struct path *dir, struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+-		return 0;
+ 	return call_int_hook(path_unlink, dir, dentry);
+ }
+ EXPORT_SYMBOL(security_path_unlink);
+@@ -1471,8 +1458,6 @@ EXPORT_SYMBOL(security_path_unlink);
+ int security_path_symlink(const struct path *dir, struct dentry *dentry,
+ 			  const char *old_name)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dir->dentry))))
+-		return 0;
+ 	return call_int_hook(path_symlink, dir, dentry, old_name);
+ }
+ 
+@@ -1489,8 +1474,6 @@ int security_path_symlink(const struct path *dir, struct dentry *dentry,
+ int security_path_link(struct dentry *old_dentry, const struct path *new_dir,
+ 		       struct dentry *new_dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry))))
+-		return 0;
+ 	return call_int_hook(path_link, old_dentry, new_dir, new_dentry);
+ }
+ 
+@@ -1510,11 +1493,6 @@ int security_path_rename(const struct path *old_dir, struct dentry *old_dentry,
+ 			 const struct path *new_dir, struct dentry *new_dentry,
+ 			 unsigned int flags)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry)) ||
+-		     (d_is_positive(new_dentry) &&
+-		      IS_PRIVATE(d_backing_inode(new_dentry)))))
+-		return 0;
+-
+ 	return call_int_hook(path_rename, old_dir, old_dentry, new_dir,
+ 			     new_dentry, flags);
+ }
+@@ -1532,8 +1510,6 @@ EXPORT_SYMBOL(security_path_rename);
+  */
+ int security_path_truncate(const struct path *path)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
+-		return 0;
+ 	return call_int_hook(path_truncate, path);
+ }
+ 
+@@ -1550,8 +1526,6 @@ int security_path_truncate(const struct path *path)
+  */
+ int security_path_chmod(const struct path *path, umode_t mode)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
+-		return 0;
+ 	return call_int_hook(path_chmod, path, mode);
+ }
+ 
+@@ -1567,8 +1541,6 @@ int security_path_chmod(const struct path *path, umode_t mode)
+  */
+ int security_path_chown(const struct path *path, kuid_t uid, kgid_t gid)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
+-		return 0;
+ 	return call_int_hook(path_chown, path, uid, gid);
+ }
+ 
+@@ -1599,8 +1571,6 @@ int security_path_chroot(const struct path *path)
+ int security_inode_create(struct inode *dir, struct dentry *dentry,
+ 			  umode_t mode)
+ {
+-	if (unlikely(IS_PRIVATE(dir)))
+-		return 0;
+ 	return call_int_hook(inode_create, dir, dentry, mode);
+ }
+ EXPORT_SYMBOL_GPL(security_inode_create);
+@@ -1615,8 +1585,6 @@ EXPORT_SYMBOL_GPL(security_inode_create);
+ void security_inode_post_create_tmpfile(struct mnt_idmap *idmap,
+ 					struct inode *inode)
+ {
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return;
+ 	call_void_hook(inode_post_create_tmpfile, idmap, inode);
+ }
+ 
+@@ -1633,8 +1601,6 @@ void security_inode_post_create_tmpfile(struct mnt_idmap *idmap,
+ int security_inode_link(struct dentry *old_dentry, struct inode *dir,
+ 			struct dentry *new_dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry))))
+-		return 0;
+ 	return call_int_hook(inode_link, old_dentry, dir, new_dentry);
+ }
+ 
+@@ -1649,8 +1615,6 @@ int security_inode_link(struct dentry *old_dentry, struct inode *dir,
+  */
+ int security_inode_unlink(struct inode *dir, struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_unlink, dir, dentry);
+ }
+ 
+@@ -1667,8 +1631,6 @@ int security_inode_unlink(struct inode *dir, struct dentry *dentry)
+ int security_inode_symlink(struct inode *dir, struct dentry *dentry,
+ 			   const char *old_name)
+ {
+-	if (unlikely(IS_PRIVATE(dir)))
+-		return 0;
+ 	return call_int_hook(inode_symlink, dir, dentry, old_name);
+ }
+ 
+@@ -1685,8 +1647,6 @@ int security_inode_symlink(struct inode *dir, struct dentry *dentry,
+  */
+ int security_inode_mkdir(struct inode *dir, struct dentry *dentry, umode_t mode)
+ {
+-	if (unlikely(IS_PRIVATE(dir)))
+-		return 0;
+ 	return call_int_hook(inode_mkdir, dir, dentry, mode);
+ }
+ EXPORT_SYMBOL_GPL(security_inode_mkdir);
+@@ -1702,8 +1662,6 @@ EXPORT_SYMBOL_GPL(security_inode_mkdir);
+  */
+ int security_inode_rmdir(struct inode *dir, struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_rmdir, dir, dentry);
+ }
+ 
+@@ -1724,8 +1682,6 @@ int security_inode_rmdir(struct inode *dir, struct dentry *dentry)
+ int security_inode_mknod(struct inode *dir, struct dentry *dentry,
+ 			 umode_t mode, dev_t dev)
+ {
+-	if (unlikely(IS_PRIVATE(dir)))
+-		return 0;
+ 	return call_int_hook(inode_mknod, dir, dentry, mode, dev);
+ }
+ 
+@@ -1745,11 +1701,6 @@ int security_inode_rename(struct inode *old_dir, struct dentry *old_dentry,
+ 			  struct inode *new_dir, struct dentry *new_dentry,
+ 			  unsigned int flags)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry)) ||
+-		     (d_is_positive(new_dentry) &&
+-		      IS_PRIVATE(d_backing_inode(new_dentry)))))
+-		return 0;
+-
+ 	if (flags & RENAME_EXCHANGE) {
+ 		int err = call_int_hook(inode_rename, new_dir, new_dentry,
+ 					old_dir, old_dentry);
+@@ -1771,8 +1722,6 @@ int security_inode_rename(struct inode *old_dir, struct dentry *old_dentry,
+  */
+ int security_inode_readlink(struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_readlink, dentry);
+ }
+ 
+@@ -1790,8 +1739,6 @@ int security_inode_readlink(struct dentry *dentry)
+ int security_inode_follow_link(struct dentry *dentry, struct inode *inode,
+ 			       bool rcu)
+ {
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return 0;
+ 	return call_int_hook(inode_follow_link, dentry, inode, rcu);
+ }
+ 
+@@ -1811,8 +1758,6 @@ int security_inode_follow_link(struct dentry *dentry, struct inode *inode,
+  */
+ int security_inode_permission(struct inode *inode, int mask)
+ {
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return 0;
+ 	return call_int_hook(inode_permission, inode, mask);
+ }
+ 
+@@ -1832,8 +1777,6 @@ int security_inode_permission(struct inode *inode, int mask)
+ int security_inode_setattr(struct mnt_idmap *idmap,
+ 			   struct dentry *dentry, struct iattr *attr)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_setattr, idmap, dentry, attr);
+ }
+ EXPORT_SYMBOL_GPL(security_inode_setattr);
+@@ -1849,8 +1792,6 @@ EXPORT_SYMBOL_GPL(security_inode_setattr);
+ void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 				 int ia_valid)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return;
+ 	call_void_hook(inode_post_setattr, idmap, dentry, ia_valid);
+ }
+ 
+@@ -1864,8 +1805,6 @@ void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+  */
+ int security_inode_getattr(const struct path *path)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
+-		return 0;
+ 	return call_int_hook(inode_getattr, path);
+ }
+ 
+@@ -1901,11 +1840,11 @@ int security_inode_setxattr(struct mnt_idmap *idmap,
+ {
+ 	int rc;
+ 
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+-
+ 	/* enforce the capability checks at the lsm layer, if needed */
+ 	if (!call_int_hook(inode_xattr_skipcap, name)) {
++		if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++			return 0;
++
+ 		rc = cap_inode_setxattr(dentry, name, value, size, flags);
+ 		if (rc)
+ 			return rc;
+@@ -1931,8 +1870,6 @@ int security_inode_set_acl(struct mnt_idmap *idmap,
+ 			   struct dentry *dentry, const char *acl_name,
+ 			   struct posix_acl *kacl)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_set_acl, idmap, dentry, acl_name, kacl);
+ }
+ 
+@@ -1948,8 +1885,6 @@ int security_inode_set_acl(struct mnt_idmap *idmap,
+ void security_inode_post_set_acl(struct dentry *dentry, const char *acl_name,
+ 				 struct posix_acl *kacl)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return;
+ 	call_void_hook(inode_post_set_acl, dentry, acl_name, kacl);
+ }
+ 
+@@ -1967,8 +1902,6 @@ void security_inode_post_set_acl(struct dentry *dentry, const char *acl_name,
+ int security_inode_get_acl(struct mnt_idmap *idmap,
+ 			   struct dentry *dentry, const char *acl_name)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_get_acl, idmap, dentry, acl_name);
+ }
+ 
+@@ -1986,8 +1919,6 @@ int security_inode_get_acl(struct mnt_idmap *idmap,
+ int security_inode_remove_acl(struct mnt_idmap *idmap,
+ 			      struct dentry *dentry, const char *acl_name)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_remove_acl, idmap, dentry, acl_name);
+ }
+ 
+@@ -2003,8 +1934,6 @@ int security_inode_remove_acl(struct mnt_idmap *idmap,
+ void security_inode_post_remove_acl(struct mnt_idmap *idmap,
+ 				    struct dentry *dentry, const char *acl_name)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return;
+ 	call_void_hook(inode_post_remove_acl, idmap, dentry, acl_name);
+ }
+ 
+@@ -2021,8 +1950,6 @@ void security_inode_post_remove_acl(struct mnt_idmap *idmap,
+ void security_inode_post_setxattr(struct dentry *dentry, const char *name,
+ 				  const void *value, size_t size, int flags)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return;
+ 	call_void_hook(inode_post_setxattr, dentry, name, value, size, flags);
+ }
+ 
+@@ -2038,8 +1965,6 @@ void security_inode_post_setxattr(struct dentry *dentry, const char *name,
+  */
+ int security_inode_getxattr(struct dentry *dentry, const char *name)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_getxattr, dentry, name);
+ }
+ 
+@@ -2054,8 +1979,6 @@ int security_inode_getxattr(struct dentry *dentry, const char *name)
+  */
+ int security_inode_listxattr(struct dentry *dentry)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+ 	return call_int_hook(inode_listxattr, dentry);
+ }
+ 
+@@ -2087,11 +2010,11 @@ int security_inode_removexattr(struct mnt_idmap *idmap,
+ {
+ 	int rc;
+ 
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return 0;
+-
+ 	/* enforce the capability checks at the lsm layer, if needed */
+ 	if (!call_int_hook(inode_xattr_skipcap, name)) {
++		if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++			return 0;
++
+ 		rc = cap_inode_removexattr(idmap, dentry, name);
+ 		if (rc)
+ 			return rc;
+@@ -2109,8 +2032,6 @@ int security_inode_removexattr(struct mnt_idmap *idmap,
+  */
+ void security_inode_post_removexattr(struct dentry *dentry, const char *name)
+ {
+-	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+-		return;
+ 	call_void_hook(inode_post_removexattr, dentry, name);
+ }
+ 
+@@ -2197,9 +2118,6 @@ int security_inode_getsecurity(struct mnt_idmap *idmap,
+ 			       struct inode *inode, const char *name,
+ 			       void **buffer, bool alloc)
+ {
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return LSM_RET_DEFAULT(inode_getsecurity);
+-
+ 	return call_int_hook(inode_getsecurity, idmap, inode, name, buffer,
+ 			     alloc);
+ }
+@@ -2222,9 +2140,6 @@ int security_inode_getsecurity(struct mnt_idmap *idmap,
+ int security_inode_setsecurity(struct inode *inode, const char *name,
+ 			       const void *value, size_t size, int flags)
+ {
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return LSM_RET_DEFAULT(inode_setsecurity);
+-
+ 	return call_int_hook(inode_setsecurity, inode, name, value, size,
+ 			     flags);
+ }
+@@ -2245,8 +2160,6 @@ int security_inode_setsecurity(struct inode *inode, const char *name,
+ int security_inode_listsecurity(struct inode *inode,
+ 				char *buffer, size_t buffer_size)
+ {
+-	if (unlikely(IS_PRIVATE(inode)))
+-		return 0;
+ 	return call_int_hook(inode_listsecurity, inode, buffer, buffer_size);
+ }
+ EXPORT_SYMBOL(security_inode_listsecurity);
+@@ -3596,8 +3509,6 @@ int security_sem_semop(struct kern_ipc_perm *sma, struct sembuf *sops,
+  */
+ void security_d_instantiate(struct dentry *dentry, struct inode *inode)
+ {
+-	if (unlikely(inode && IS_PRIVATE(inode)))
+-		return;
+ 	call_void_hook(d_instantiate, dentry, inode);
+ }
+ EXPORT_SYMBOL(security_d_instantiate);
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index feda34b18d83..e17d776fb159 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2948,6 +2948,9 @@ static int selinux_inode_init_security(struct inode *inode, struct inode *dir,
+ 	int rc;
+ 	char *context;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	sbsec = selinux_superblock(dir->i_sb);
+ 
+ 	newsid = crsec->create_sid;
+@@ -3049,42 +3052,68 @@ static int selinux_inode_init_security_anon(struct inode *inode,
+ 
+ static int selinux_inode_create(struct inode *dir, struct dentry *dentry, umode_t mode)
+ {
++	if (unlikely(IS_PRIVATE(dir)))
++		return 0;
++
+ 	return may_create(dir, dentry, SECCLASS_FILE);
+ }
+ 
+ static int selinux_inode_link(struct dentry *old_dentry, struct inode *dir, struct dentry *new_dentry)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry))))
++		return 0;
++
+ 	return may_link(dir, old_dentry, MAY_LINK);
+ }
+ 
+ static int selinux_inode_unlink(struct inode *dir, struct dentry *dentry)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return may_link(dir, dentry, MAY_UNLINK);
+ }
+ 
+ static int selinux_inode_symlink(struct inode *dir, struct dentry *dentry, const char *name)
+ {
++	if (unlikely(IS_PRIVATE(dir)))
++		return 0;
++
+ 	return may_create(dir, dentry, SECCLASS_LNK_FILE);
+ }
+ 
+ static int selinux_inode_mkdir(struct inode *dir, struct dentry *dentry, umode_t mask)
+ {
++	if (unlikely(IS_PRIVATE(dir)))
++		return 0;
++
+ 	return may_create(dir, dentry, SECCLASS_DIR);
+ }
+ 
+ static int selinux_inode_rmdir(struct inode *dir, struct dentry *dentry)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return may_link(dir, dentry, MAY_RMDIR);
+ }
+ 
+ static int selinux_inode_mknod(struct inode *dir, struct dentry *dentry, umode_t mode, dev_t dev)
+ {
++	if (unlikely(IS_PRIVATE(dir)))
++		return 0;
++
+ 	return may_create(dir, dentry, inode_mode_to_security_class(mode));
+ }
+ 
+ static int selinux_inode_rename(struct inode *old_inode, struct dentry *old_dentry,
+ 				struct inode *new_inode, struct dentry *new_dentry)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry)) ||
++		(d_is_positive(new_dentry) &&
++		IS_PRIVATE(d_backing_inode(new_dentry)))))
++		return 0;
++
+ 	return may_rename(old_inode, old_dentry, new_inode, new_dentry);
+ }
+ 
+@@ -3092,6 +3121,9 @@ static int selinux_inode_readlink(struct dentry *dentry)
+ {
+ 	const struct cred *cred = current_cred();
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return dentry_has_perm(cred, dentry, FILE__READ);
+ }
+ 
+@@ -3102,6 +3134,9 @@ static int selinux_inode_follow_link(struct dentry *dentry, struct inode *inode,
+ 	struct inode_security_struct *isec;
+ 	u32 sid = current_sid();
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	ad.type = LSM_AUDIT_DATA_DENTRY;
+ 	ad.u.dentry = dentry;
+ 	isec = inode_security_rcu(inode, rcu);
+@@ -3230,6 +3265,9 @@ static int selinux_inode_permission(struct inode *inode, int requested)
+ 	int rc, rc2;
+ 	u32 audited, denied;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	mask = requested & (MAY_READ|MAY_WRITE|MAY_EXEC|MAY_APPEND);
+ 
+ 	/* No permission to check.  Existence test. */
+@@ -3283,6 +3321,9 @@ static int selinux_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	unsigned int ia_valid = iattr->ia_valid;
+ 	u32 av = FILE__WRITE;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	/* ATTR_FORCE is just used for ATTR_KILL_S[UG]ID. */
+ 	if (ia_valid & ATTR_FORCE) {
+ 		ia_valid &= ~(ATTR_KILL_SUID | ATTR_KILL_SGID | ATTR_MODE |
+@@ -3308,6 +3349,9 @@ static int selinux_inode_getattr(const struct path *path)
+ {
+ 	struct task_security_struct *tsec;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	tsec = selinux_task(current);
+ 
+ 	if (task_avdcache_permnoaudit(tsec, current_sid()))
+@@ -3356,6 +3400,9 @@ static int selinux_inode_setxattr(struct mnt_idmap *idmap,
+ 	u32 newsid, sid = current_sid();
+ 	int rc = 0;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/* if not a selinux xattr, only check the ordinary setattr perm */
+ 	if (strcmp(name, XATTR_NAME_SELINUX))
+ 		return dentry_has_perm(current_cred(), dentry, FILE__SETATTR);
+@@ -3435,18 +3482,27 @@ static int selinux_inode_set_acl(struct mnt_idmap *idmap,
+ 				 struct dentry *dentry, const char *acl_name,
+ 				 struct posix_acl *kacl)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return dentry_has_perm(current_cred(), dentry, FILE__SETATTR);
+ }
+ 
+ static int selinux_inode_get_acl(struct mnt_idmap *idmap,
+ 				 struct dentry *dentry, const char *acl_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return dentry_has_perm(current_cred(), dentry, FILE__GETATTR);
+ }
+ 
+ static int selinux_inode_remove_acl(struct mnt_idmap *idmap,
+ 				    struct dentry *dentry, const char *acl_name)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return dentry_has_perm(current_cred(), dentry, FILE__SETATTR);
+ }
+ 
+@@ -3459,6 +3515,9 @@ static void selinux_inode_post_setxattr(struct dentry *dentry, const char *name,
+ 	u32 newsid;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	if (strcmp(name, XATTR_NAME_SELINUX)) {
+ 		/* Not an attribute we recognize, so nothing to do. */
+ 		return;
+@@ -3494,6 +3553,9 @@ static int selinux_inode_getxattr(struct dentry *dentry, const char *name)
+ {
+ 	const struct cred *cred = current_cred();
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return dentry_has_perm(cred, dentry, FILE__GETATTR);
+ }
+ 
+@@ -3501,6 +3563,9 @@ static int selinux_inode_listxattr(struct dentry *dentry)
+ {
+ 	const struct cred *cred = current_cred();
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	return dentry_has_perm(cred, dentry, FILE__GETATTR);
+ }
+ 
+@@ -3593,6 +3658,9 @@ static int selinux_inode_getsecurity(struct mnt_idmap *idmap,
+ 	char *context = NULL;
+ 	struct inode_security_struct *isec;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return -EOPNOTSUPP;
++
+ 	/*
+ 	 * If we're not initialized yet, then we can't validate contexts, so
+ 	 * just let vfs_getxattr fall back to using the on-disk xattr.
+@@ -3637,6 +3705,9 @@ static int selinux_inode_setsecurity(struct inode *inode, const char *name,
+ 	u32 newsid;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return -EOPNOTSUPP;
++
+ 	if (strcmp(name, XATTR_SELINUX_SUFFIX))
+ 		return -EOPNOTSUPP;
+ 
+@@ -3664,6 +3735,9 @@ static int selinux_inode_listsecurity(struct inode *inode, char *buffer, size_t
+ {
+ 	const int len = sizeof(XATTR_NAME_SELINUX);
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	if (!selinux_initialized())
+ 		return 0;
+ 
+@@ -6546,6 +6620,9 @@ static void selinux_ipc_getlsmprop(struct kern_ipc_perm *ipcp,
+ 
+ static void selinux_d_instantiate(struct dentry *dentry, struct inode *inode)
+ {
++	if (unlikely(inode && IS_PRIVATE(inode)))
++		return;
++
+ 	if (inode)
+ 		inode_doinit_with_dentry(inode, dentry);
+ }
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index a0bd4919a9d9..8f432348dfbd 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -1020,6 +1020,9 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
+ 	bool trans_cred;
+ 	bool trans_rule;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	/*
+ 	 * UNIX domain sockets use lower level socket data. Let
+ 	 * UDS inode have fixed * label to keep smack_inode_permission() calm
+@@ -1093,6 +1096,9 @@ static int smack_inode_link(struct dentry *old_dentry, struct inode *dir,
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, old_dentry);
+ 
+@@ -1124,6 +1130,9 @@ static int smack_inode_unlink(struct inode *dir, struct dentry *dentry)
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+ 
+@@ -1157,6 +1166,9 @@ static int smack_inode_rmdir(struct inode *dir, struct dentry *dentry)
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+ 
+@@ -1199,6 +1211,11 @@ static int smack_inode_rename(struct inode *old_inode,
+ 	struct smack_known *isp;
+ 	struct smk_audit_info ad;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry)) ||
++		(d_is_positive(new_dentry) &&
++		IS_PRIVATE(d_backing_inode(new_dentry)))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, old_dentry);
+ 
+@@ -1231,6 +1248,9 @@ static int smack_inode_permission(struct inode *inode, int mask)
+ 	int no_block = mask & MAY_NOT_BLOCK;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	mask &= (MAY_READ|MAY_WRITE|MAY_EXEC|MAY_APPEND);
+ 	/*
+ 	 * No permission to check. Existence test. Yup, it's there.
+@@ -1267,6 +1287,9 @@ static int smack_inode_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/*
+ 	 * Need to allow for clearing the setuid bit.
+ 	 */
+@@ -1292,6 +1315,9 @@ static int smack_inode_getattr(const struct path *path)
+ 	struct inode *inode = d_backing_inode(path->dentry);
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_PATH);
+ 	smk_ad_setfield_u_fs_path(&ad, *path);
+ 	rc = smk_curacc(smk_of_inode(inode), MAY_READ, &ad);
+@@ -1351,6 +1377,9 @@ static int smack_inode_setxattr(struct mnt_idmap *idmap,
+ 	int rc = 0;
+ 	umode_t const i_mode = d_backing_inode(dentry)->i_mode;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	/*
+ 	 * Check label validity here so import won't fail in post_setxattr
+ 	 */
+@@ -1421,6 +1450,9 @@ static void smack_inode_post_setxattr(struct dentry *dentry, const char *name,
+ 	struct smack_known *skp;
+ 	struct inode_smack *isp = smack_inode(d_backing_inode(dentry));
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return;
++
+ 	if (strcmp(name, XATTR_NAME_SMACKTRANSMUTE) == 0) {
+ 		isp->smk_flags |= SMK_INODE_TRANSMUTE;
+ 		return;
+@@ -1455,6 +1487,9 @@ static int smack_inode_getxattr(struct dentry *dentry, const char *name)
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+ 
+@@ -1541,6 +1576,9 @@ static int smack_inode_set_acl(struct mnt_idmap *idmap,
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+ 
+@@ -1563,6 +1601,9 @@ static int smack_inode_get_acl(struct mnt_idmap *idmap,
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+ 
+@@ -1585,6 +1626,9 @@ static int smack_inode_remove_acl(struct mnt_idmap *idmap,
+ 	struct smk_audit_info ad;
+ 	int rc;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
++		return 0;
++
+ 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_DENTRY);
+ 	smk_ad_setfield_u_fs_path_dentry(&ad, dentry);
+ 
+@@ -1616,6 +1660,9 @@ static int smack_inode_getsecurity(struct mnt_idmap *idmap,
+ 	size_t label_len;
+ 	char *label = NULL;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return -EOPNOTSUPP;
++
+ 	if (strcmp(name, XATTR_SMACK_SUFFIX) == 0) {
+ 		isp = smk_of_inode(inode);
+ 	} else if (strcmp(name, XATTR_SMACK_TRANSMUTE) == 0) {
+@@ -1672,6 +1719,9 @@ static int smack_inode_listsecurity(struct inode *inode, char *buffer,
+ {
+ 	int len = sizeof(XATTR_NAME_SMACK);
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return 0;
++
+ 	if (buffer != NULL && len <= buffer_size)
+ 		memcpy(buffer, XATTR_NAME_SMACK, len);
+ 
+@@ -2918,6 +2968,9 @@ static int smack_inode_setsecurity(struct inode *inode, const char *name,
+ 	struct socket *sock;
+ 	int rc = 0;
+ 
++	if (unlikely(IS_PRIVATE(inode)))
++		return -EOPNOTSUPP;
++
+ 	if (value == NULL || size > SMK_LONGLABEL || size == 0)
  		return -EINVAL;
  
- 	rc = tpm_try_get_ops(chip);
-@@ -268,18 +271,19 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 		goto out_put;
- 	}
+@@ -3517,6 +3570,9 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
+ 	if (inode == NULL)
+ 		return;
  
--	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
-+	rc = tpm_buf_append_name(chip, &buf, private->keyhandle, NULL);
- 	if (rc)
- 		goto out;
++	if (unlikely(IS_PRIVATE(inode)))
++		return;
++
+ 	isp = smack_inode(inode);
  
- 	tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_DECRYPT,
--				    options->keyauth, TPM_DIGEST_SIZE);
-+				    private->keyauth, TPM_DIGEST_SIZE);
- 
- 	/* sensitive */
--	tpm_buf_append_u16(&sized, options->blobauth_len);
-+	tpm_buf_append_u16(&sized, private->blobauth_len);
- 
--	if (options->blobauth_len)
--		tpm_buf_append(&sized, options->blobauth, options->blobauth_len);
-+	if (private->blobauth_len)
-+		tpm_buf_append(&sized, private->blobauth,
-+			       private->blobauth_len);
- 
- 	tpm_buf_append_u16(&sized, payload->key_len);
- 	tpm_buf_append(&sized, payload->key, payload->key_len);
-@@ -292,14 +296,15 @@ int tpm2_seal_trusted(struct tpm_chip *chip,
- 
- 	/* key properties */
- 	flags = 0;
--	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
-+	flags |= private->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
- 	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM | TPM2_OA_FIXED_PARENT);
- 	tpm_buf_append_u32(&sized, flags);
- 
- 	/* policy */
--	tpm_buf_append_u16(&sized, options->policydigest_len);
--	if (options->policydigest_len)
--		tpm_buf_append(&sized, options->policydigest, options->policydigest_len);
-+	tpm_buf_append_u16(&sized, private->policydigest_len);
-+	if (private->policydigest_len)
-+		tpm_buf_append(&sized, private->policydigest,
-+			       private->policydigest_len);
- 
- 	/* public parameters */
- 	tpm_buf_append_u16(&sized, TPM_ALG_NULL);
-@@ -373,6 +378,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 			 u32 *blob_handle)
+ 	/*
+diff --git a/security/tomoyo/tomoyo.c b/security/tomoyo/tomoyo.c
+index c66e02ed8ee3..98eb8cd67f78 100644
+--- a/security/tomoyo/tomoyo.c
++++ b/security/tomoyo/tomoyo.c
+@@ -120,6 +120,9 @@ static int tomoyo_bprm_check_security(struct linux_binprm *bprm)
+  */
+ static int tomoyo_inode_getattr(const struct path *path)
  {
- 	u8 *blob_ref __free(kfree) = NULL;
-+	struct trusted_tpm_options *private = options->private;
- 	struct tpm_buf buf;
- 	unsigned int private_len;
- 	unsigned int public_len;
-@@ -392,7 +398,7 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 	}
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return tomoyo_path_perm(TOMOYO_TYPE_GETATTR, path, NULL);
+ }
  
- 	/* new format carries keyhandle but old format doesn't */
--	if (!options->keyhandle)
-+	if (!private->keyhandle)
- 		return -EINVAL;
- 
- 	/* must be big enough for at least the two be16 size counts */
-@@ -433,11 +439,11 @@ static int tpm2_load_cmd(struct tpm_chip *chip,
- 		return rc;
- 	}
- 
--	rc = tpm_buf_append_name(chip, &buf, options->keyhandle, NULL);
-+	rc = tpm_buf_append_name(chip, &buf, private->keyhandle, NULL);
- 	if (rc)
- 		goto out;
- 
--	tpm_buf_append_hmac_session(chip, &buf, 0, options->keyauth,
-+	tpm_buf_append_hmac_session(chip, &buf, 0, private->keyauth,
- 				    TPM_DIGEST_SIZE);
- 
- 	tpm_buf_append(&buf, blob, blob_len);
-@@ -481,6 +487,7 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 			   struct trusted_key_options *options,
- 			   u32 blob_handle)
+@@ -132,6 +135,9 @@ static int tomoyo_inode_getattr(const struct path *path)
+  */
+ static int tomoyo_path_truncate(const struct path *path)
  {
-+	struct trusted_tpm_options *private = options->private;
- 	struct tpm_header *head;
- 	struct tpm_buf buf;
- 	u16 data_len;
-@@ -502,10 +509,10 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 	if (rc)
- 		goto out;
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return tomoyo_path_perm(TOMOYO_TYPE_TRUNCATE, path, NULL);
+ }
  
--	if (!options->policyhandle) {
-+	if (!private->policyhandle) {
- 		tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT,
--					    options->blobauth,
--					    options->blobauth_len);
-+					    private->blobauth,
-+					    private->blobauth_len);
- 	} else {
- 		/*
- 		 * FIXME: The policy session was generated outside the
-@@ -518,9 +525,9 @@ static int tpm2_unseal_cmd(struct tpm_chip *chip,
- 		 * could repeat our actions with the exfiltrated
- 		 * password.
- 		 */
--		tpm2_buf_append_auth(&buf, options->policyhandle,
-+		tpm2_buf_append_auth(&buf, private->policyhandle,
- 				     NULL /* nonce */, 0, 0,
--				     options->blobauth, options->blobauth_len);
-+				     private->blobauth, private->blobauth_len);
- 		if (tpm2_chip_auth(chip)) {
- 			tpm_buf_append_hmac_session(chip, &buf, TPM2_SA_ENCRYPT, NULL, 0);
- 		} else  {
+@@ -159,6 +165,9 @@ static int tomoyo_path_unlink(const struct path *parent, struct dentry *dentry)
+ {
+ 	struct path path = { .mnt = parent->mnt, .dentry = dentry };
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(parent->dentry))))
++		return 0;
++
+ 	return tomoyo_path_perm(TOMOYO_TYPE_UNLINK, &path, NULL);
+ }
+ 
+@@ -176,6 +185,9 @@ static int tomoyo_path_mkdir(const struct path *parent, struct dentry *dentry,
+ {
+ 	struct path path = { .mnt = parent->mnt, .dentry = dentry };
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(parent->dentry))))
++		return 0;
++
+ 	return tomoyo_path_number_perm(TOMOYO_TYPE_MKDIR, &path,
+ 				       mode & S_IALLUGO);
+ }
+@@ -192,6 +204,9 @@ static int tomoyo_path_rmdir(const struct path *parent, struct dentry *dentry)
+ {
+ 	struct path path = { .mnt = parent->mnt, .dentry = dentry };
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(parent->dentry))))
++		return 0;
++
+ 	return tomoyo_path_perm(TOMOYO_TYPE_RMDIR, &path, NULL);
+ }
+ 
+@@ -209,6 +224,9 @@ static int tomoyo_path_symlink(const struct path *parent, struct dentry *dentry,
+ {
+ 	struct path path = { .mnt = parent->mnt, .dentry = dentry };
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(parent->dentry))))
++		return 0;
++
+ 	return tomoyo_path_perm(TOMOYO_TYPE_SYMLINK, &path, old_name);
+ }
+ 
+@@ -229,6 +247,9 @@ static int tomoyo_path_mknod(const struct path *parent, struct dentry *dentry,
+ 	int type = TOMOYO_TYPE_CREATE;
+ 	const unsigned int perm = mode & S_IALLUGO;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(parent->dentry))))
++		return 0;
++
+ 	switch (mode & S_IFMT) {
+ 	case S_IFCHR:
+ 		type = TOMOYO_TYPE_MKCHAR;
+@@ -267,6 +288,9 @@ static int tomoyo_path_link(struct dentry *old_dentry, const struct path *new_di
+ 	struct path path1 = { .mnt = new_dir->mnt, .dentry = old_dentry };
+ 	struct path path2 = { .mnt = new_dir->mnt, .dentry = new_dentry };
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry))))
++		return 0;
++
+ 	return tomoyo_path2_perm(TOMOYO_TYPE_LINK, &path1, &path2);
+ }
+ 
+@@ -290,6 +314,11 @@ static int tomoyo_path_rename(const struct path *old_parent,
+ 	struct path path1 = { .mnt = old_parent->mnt, .dentry = old_dentry };
+ 	struct path path2 = { .mnt = new_parent->mnt, .dentry = new_dentry };
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(old_dentry)) ||
++		(d_is_positive(new_dentry) &&
++		IS_PRIVATE(d_backing_inode(new_dentry)))))
++		return 0;
++
+ 	if (flags & RENAME_EXCHANGE) {
+ 		const int err = tomoyo_path2_perm(TOMOYO_TYPE_RENAME, &path2,
+ 				&path1);
+@@ -360,6 +389,9 @@ static int tomoyo_file_ioctl(struct file *file, unsigned int cmd,
+  */
+ static int tomoyo_path_chmod(const struct path *path, umode_t mode)
+ {
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	return tomoyo_path_number_perm(TOMOYO_TYPE_CHMOD, path,
+ 				       mode & S_IALLUGO);
+ }
+@@ -377,6 +409,9 @@ static int tomoyo_path_chown(const struct path *path, kuid_t uid, kgid_t gid)
+ {
+ 	int error = 0;
+ 
++	if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
++		return 0;
++
+ 	if (uid_valid(uid))
+ 		error = tomoyo_path_number_perm(TOMOYO_TYPE_CHOWN, path,
+ 						from_kuid(&init_user_ns, uid));
 -- 
-2.43.0
+2.52.0
 
 
