@@ -1,311 +1,327 @@
-Return-Path: <linux-integrity+bounces-8542-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8543-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0AiuHlHJnGkwKQQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8542-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 22:40:33 +0100
+	id oJ1rBqHKnGlHKQQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8543-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 22:46:09 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 245FC17DA88
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 22:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACD6617DB63
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 22:46:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E7686307D612
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 21:39:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3FB86310AEC6
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 21:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C119378D96;
-	Mon, 23 Feb 2026 21:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E5B3793A0;
+	Mon, 23 Feb 2026 21:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b="P7PcAYWe"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="DtNafl26"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from sender4-of-o51.zoho.com (sender4-of-o51.zoho.com [136.143.188.51])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D6E377543;
-	Mon, 23 Feb 2026 21:39:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771882764; cv=pass; b=qvoheuN2w0uiLbjy8TcUD1pnLVQkL08kwxb9/Ifa3CU/nX0keWxdWjkp9d28ujkAKMWgn68mLshEC86pmjcPyiEGDxWoh39CIx4DSP+7FTIuC+RsqK5sLy8zjSzYBBS6Br1wYkJXMiUVJqYJLBXrpUUvUEcT0eabdvkRUXldiIU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771882764; c=relaxed/simple;
-	bh=uZGxSgxVWt2XAaBxrM4B4yacmSav+waMJqGMxbIEW+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kbtDq8WNpVWlSD3uxcgfEIG8K6rGfAzp4SYdV8Lu9wF1Av6YFwzWJn/oTViK3eRRrhOMx5HjPetHAcDBXxwC0EfA9Tf2rhAFCTd6rgBqp68PvQ0VzFpGBNOFaI90p7Il8xw4fup/QoXBEKI4jFhJSacosTt0/1xhG/7Li52XJzw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com; spf=pass smtp.mailfrom=apertussolutions.com; dkim=pass (1024-bit key) header.d=apertussolutions.com header.i=dpsmith@apertussolutions.com header.b=P7PcAYWe; arc=pass smtp.client-ip=136.143.188.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=apertussolutions.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=apertussolutions.com
-ARC-Seal: i=1; a=rsa-sha256; t=1771882677; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ffjYtNOjrVDY85s8H1n2+Y4wa878dKU05XaPBpiQhMjhrkbwRhTcsvhek9WA/vN8ptkYTLjn3ypd8dCSySrh0XT8P/i6R8nunHsBLimTczlL+Ek5eICIVFPgNRrsepAyk10HAydAF5MLLeI1gsErtl0StDUwjMG9hG/FXJrDCb8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1771882677; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=h8NnLyDahIjYa2r/mE8SrBY5YeZya77iJfvSt7LZAuk=; 
-	b=cWaxR9XlGzKr65BZnm8jUFH1zgUwhL/DodbGfpIZlIM6Ycs+8FSpsYy5EVqYJ8yvKXz4rWeqH9bMtM4ChWBG1gDLNIVVwqqy22uLA4krxCrJCHSW4H9R2d3sp8gUavrTZM7GdIKtQb+BT4CZpCf0bMFzxB+VnXTtLdxgXKmg9Dc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=apertussolutions.com;
-	spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
-	dmarc=pass header.from=<dpsmith@apertussolutions.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1771882677;
-	s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=h8NnLyDahIjYa2r/mE8SrBY5YeZya77iJfvSt7LZAuk=;
-	b=P7PcAYWewsxI7zMHuuIOTExnellqQJfITJDN8fsRqp3WdhX/HuQGt6f8wbGjUdM1
-	JnV8NQ1V6ZrXfrsve9kHI39ivmu766uO0AFsZKamepbKgMiMfAH4HyTZfJ7ZQQ9OAZk
-	pfRpttFfJlE5rMuuoCcq3Qcr/SI4uvU8EZarOy3A=
-Received: by mx.zohomail.com with SMTPS id 1771882674971616.8376032703019;
-	Mon, 23 Feb 2026 13:37:54 -0800 (PST)
-Message-ID: <f5323525-493c-4419-8199-d65630fce084@apertussolutions.com>
-Date: Mon, 23 Feb 2026 16:37:51 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5A437881C;
+	Mon, 23 Feb 2026 21:43:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771883015; cv=none; b=E2nMgB4w8hch24c6olU98JA5Z7yiYIBxokDuOygNfT3Ka184xSOR8CsUheA3EfKW39c7i2J8GzAZPN6e0bY0K1VAC8Ovl5g+vOsX+zs0TVQGVc1HDzpbndreX6BhQ9H+s7iivWqO7cVQeHh3nIaOLaTVS99oGdJGIjvfdp3l0mI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771883015; c=relaxed/simple;
+	bh=f/RGyyEjxiTV1HAvGsXVhUhx0QauEA+D4aTLJ9rlFUY=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eRrsUiW8FOeSFiwNooKAceXfJyKZ3mfpxO97Xf3Dba1qZ7m6LHmB64kFfnfOTQH+HX0R54taKipg7aBaaGi8Jn9gMmX+d77Wd32inYY9ZBn3yq/1elk0desqj/JfJLRQqkPU+E6p/RUS4q7kgE/jZ5YNLpLY9X6SHsT6arrcNNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=DtNafl26; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1771883011;
+	bh=f/RGyyEjxiTV1HAvGsXVhUhx0QauEA+D4aTLJ9rlFUY=;
+	h=Date:From:To:Subject:References:In-Reply-To:From;
+	b=DtNafl26QWwqrEhxfMVJt7qi0VOQ+517xajhYFHcF+PGQBS3hyDAm0AZBdaYhEIV0
+	 BPTveOVyjJh7AzZ2ede0B0Zo9hAemmvCqhanqT/ftLkbYfKvroulfGOCMEty+YjZ/s
+	 N4rhaBsvNOn/4HeDhUervVSBgCJam9Inr6UpFbdI=
+Date: Mon, 23 Feb 2026 22:43:30 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Nicolas Schier <nsc@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
+	Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Daniel Gomez <da.gomez@kernel.org>, 
+	Aaron Tomlin <atomlin@atomlin.com>, "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
+	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>, 
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>, 
+	Christian Heusel <christian@heusel.eu>, =?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
+Message-ID: <06054e9a-2b7a-4063-98b8-7d6c539e543f@t-8ch.de>
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+ <aZol1Rsa2tX-WNaZ@derry.ads.avm.de>
+ <0d70db8d-702b-46ec-a010-298fe6515aab@t-8ch.de>
+ <aZyfcDCWOBJJztQ2@levanger>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v15 00/28] x86: Secure Launch support for Intel TXT
-Content-Language: en-US
-To: Ard Biesheuvel <ardb@kernel.org>, Andy Lutomirski <luto@amacapital.net>
-Cc: Simo Sorce <simo@redhat.com>, "H . Peter Anvin" <hpa@zytor.com>,
- Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux.dev,
- dave.hansen@linux.intel.com, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- mjg59@srcf.ucam.org, James.Bottomley@hansenpartnership.com,
- peterhuewe@gmx.de, Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca,
- nivedita@alum.mit.edu, Herbert Xu <herbert@gondor.apana.org.au>,
- davem@davemloft.net, corbet@lwn.net, ebiederm@xmission.com,
- dwmw2@infradead.org, baolu.lu@linux.intel.com, kanth.ghatraju@oracle.com,
- andrew.cooper3@citrix.com, trenchboot-devel@googlegroups.com
-References: <20251215233316.1076248-1-ross.philipson@oracle.com>
- <b5f2b5a5-b984-4ed3-a023-c06d634f9146@app.fastmail.com>
- <1ffd3cb5-2c76-4371-a067-3e4849907d80@apertussolutions.com>
- <49d169bf-0ad2-49be-b7d7-fceb9e7f831a@app.fastmail.com>
- <CALCETrUE8c-dxRWhtHKz_PojwZuWMXJSzOsFQf2vt5LS3ATwpA@mail.gmail.com>
- <1BBD7449-8420-43FD-930B-A4E1BA38FFC6@zytor.com>
- <CALCETrWzG1Mjb-RcwLQ5-tGFZ15WKHjZbqtLvyif+UPuVKJ_5g@mail.gmail.com>
- <32e62cef7b89d9691bdd4120388ce752fd041230.camel@redhat.com>
- <CALCETrUMR0RvOFXGzL7=F4c-3veL+1Sm2xf-BprHTK4=UKw8yA@mail.gmail.com>
- <558d0f28-01fb-4447-891c-2ffbf869c077@app.fastmail.com>
- <CALCETrWynypSD7vEjJNLcym3JhBw4k0ovDiR_3YuOHh92TnM=A@mail.gmail.com>
- <9034c6a1-ebce-40b6-9ac8-0b8cc5a50dd4@app.fastmail.com>
-From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-Autocrypt: addr=dpsmith@apertussolutions.com; keydata=
- xsJuBFYrueARCACPWL3r2bCSI6TrkIE/aRzj4ksFYPzLkJbWLZGBRlv7HQLvs6i/K4y/b4fs
- JDq5eL4e9BdfdnZm/b+K+Gweyc0Px2poDWwKVTFFRgxKWq9R7McwNnvuZ4nyXJBVn7PTEn/Z
- G7D08iZg94ZsnUdeXfgYdJrqmdiWA6iX9u84ARHUtb0K4r5WpLUMcQ8PVmnv1vVrs/3Wy/Rb
- foxebZNWxgUiSx+d02e3Ad0aEIur1SYXXv71mqKwyi/40CBSHq2jk9eF6zmEhaoFi5+MMMgX
- X0i+fcBkvmT0N88W4yCtHhHQds+RDbTPLGm8NBVJb7R5zbJmuQX7ADBVuNYIU8hx3dF3AQCm
- 601w0oZJ0jGOV1vXQgHqZYJGHg5wuImhzhZJCRESIwf+PJxik7TJOgBicko1hUVOxJBZxoe0
- x+/SO6tn+s8wKlR1Yxy8gYN9ZRqV2I83JsWZbBXMG1kLzV0SAfk/wq0PAppA1VzrQ3JqXg7T
- MZ3tFgxvxkYqUP11tO2vrgys+InkZAfjBVMjqXWHokyQPpihUaW0a8mr40w9Qui6DoJj7+Gg
- DtDWDZ7Zcn2hoyrypuht88rUuh1JuGYD434Q6qwQjUDlY+4lgrUxKdMD8R7JJWt38MNlTWvy
- rMVscvZUNc7gxcmnFUn41NPSKqzp4DDRbmf37Iz/fL7i01y7IGFTXaYaF3nEACyIUTr/xxi+
- MD1FVtEtJncZNkRn7WBcVFGKMAf+NEeaeQdGYQ6mGgk++i/vJZxkrC/a9ZXme7BhWRP485U5
- sXpFoGjdpMn4VlC7TFk2qsnJi3yF0pXCKVRy1ukEls8o+4PF2JiKrtkCrWCimB6jxGPIG3lk
- 3SuKVS/din3RHz+7Sr1lXWFcGYDENmPd/jTwr1A1FiHrSj+u21hnJEHi8eTa9029F1KRfocp
- ig+k0zUEKmFPDabpanI323O5Tahsy7hwf2WOQwTDLvQ+eqQu40wbb6NocmCNFjtRhNZWGKJS
- b5GrGDGu/No5U6w73adighEuNcCSNBsLyUe48CE0uTO7eAL6Vd+2k28ezi6XY4Y0mgASJslb
- NwW54LzSSM0uRGFuaWVsIFAuIFNtaXRoIDxkcHNtaXRoQGFwZXJ0dXNzb2x1dGlvbnMuY29t
- PsJ6BBMRCAAiBQJWK7ngAhsjBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRBTc6WbYpR8
- KrQ9AP94+xjtFfJ8gj5c7PVx06Zv9rcmFUqQspZ5wSEkvxOuQQEAg6qEsPYegI7iByLVzNEg
- 7B7fUG7pqWIfMqFwFghYhQzOwU0EViu54BAIAL6MXXNlrJ5tRUf+KMBtVz1LJQZRt/uxWrCb
- T06nZjnbp2UcceuYNbISOVHGXTzu38r55YzpkEA8eURQf+5hjtvlrOiHxvpD+Z6WcpV6rrMB
- kcAKWiZTQihW2HoGgVB3gwG9dCh+n0X5OzliAMiGK2a5iqnIZi3o0SeW6aME94bSkTkuj6/7
- OmH9KAzK8UnlhfkoMg3tXW8L6/5CGn2VyrjbB/rcrbIR4mCQ+yCUlocuOjFCJhBd10AG1IcX
- OXUa/ux+/OAV9S5mkr5Fh3kQxYCTcTRt8RY7+of9RGBk10txi94dXiU2SjPbassvagvu/hEi
- twNHms8rpkSJIeeq0/cAAwUH/jV3tXpaYubwcL2tkk5ggL9Do+/Yo2WPzXmbp8vDiJPCvSJW
- rz2NrYkd/RoX+42DGqjfu8Y04F9XehN1zZAFmCDUqBMa4tEJ7kOT1FKJTqzNVcgeKNBGcT7q
- 27+wsqbAerM4A0X/F/ctjYcKwNtXck1Bmd/T8kiw2IgyeOC+cjyTOSwKJr2gCwZXGi5g+2V8
- NhJ8n72ISPnOh5KCMoAJXmCF+SYaJ6hIIFARmnuessCIGw4ylCRIU/TiXK94soilx5aCqb1z
- ke943EIUts9CmFAHt8cNPYOPRd20pPu4VFNBuT4fv9Ys0iv0XGCEP+sos7/pgJ3gV3pCOric
- p15jV4PCYQQYEQgACQUCViu54AIbDAAKCRBTc6WbYpR8Khu7AP9NJrBUn94C/3PeNbtQlEGZ
- NV46Mx5HF0P27lH3sFpNrwD/dVdZ5PCnHQYBZ287ZxVfVr4Zuxjo5yJbRjT93Hl0vMY=
-In-Reply-To: <9034c6a1-ebce-40b6-9ac8-0b8cc5a50dd4@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+In-Reply-To: <aZyfcDCWOBJJztQ2@levanger>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_DKIM_ALLOW(-0.20)[apertussolutions.com:s=zoho];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8543-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[apertussolutions.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8542-lists,linux-integrity=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[32];
+	RCVD_COUNT_THREE(0.00)[3];
+	FREEMAIL_TO(0.00)[kernel.org,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[redhat.com,zytor.com,oracle.com,vger.kernel.org,kernel.org,lists.infradead.org,lists.linux.dev,linux.intel.com,linutronix.de,alien8.de,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,xmission.com,infradead.org,citrix.com,googlegroups.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[39];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dpsmith@apertussolutions.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[apertussolutions.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[linux@weissschuh.net,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[weissschuh.net:+];
+	NEURAL_HAM(-0.00)[-0.998];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[zytor.com:email,amacapital.net:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 245FC17DA88
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:email,weissschuh.net:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,breakpoint.cc:email]
+X-Rspamd-Queue-Id: ACD6617DB63
 X-Rspamd-Action: no action
 
-On 2/20/26 03:30, Ard Biesheuvel wrote:
+On 2026-02-23 19:41:52+0100, Nicolas Schier wrote:
+> On Mon, Feb 23, 2026 at 08:53:29AM +0100, Thomas Weißschuh wrote:
+> > On 2026-02-21 22:38:29+0100, Nicolas Schier wrote:
+> > > On Tue, Jan 13, 2026 at 01:28:59PM +0100, Thomas Weißschuh wrote:
+> > > > The current signature-based module integrity checking has some drawbacks
+> > > > in combination with reproducible builds. Either the module signing key
+> > > > is generated at build time, which makes the build unreproducible, or a
+> > > > static signing key is used, which precludes rebuilds by third parties
+> > > > and makes the whole build and packaging process much more complicated.
+> > > > 
+> > > > The goal is to reach bit-for-bit reproducibility. Excluding certain
+> > > > parts of the build output from the reproducibility analysis would be
+> > > > error-prone and force each downstream consumer to introduce new tooling.
+> > > > 
+> > > > Introduce a new mechanism to ensure only well-known modules are loaded
+> > > > by embedding a merkle tree root of all modules built as part of the full
+> > > > kernel build into vmlinux.
+> > > > 
+> > > > Non-builtin modules can be validated as before through signatures.
+> > > > 
+> > > > Normally the .ko module files depend on a fully built vmlinux to be
+> > > > available for modpost validation and BTF generation. With
+> > > > CONFIG_MODULE_HASHES, vmlinux now depends on the modules
+> > > > to build a merkle tree. This introduces a dependency cycle which is
+> > > > impossible to satisfy. Work around this by building the modules during
+> > > > link-vmlinux.sh, after vmlinux is complete enough for modpost and BTF
+> > > > but before the final module hashes are
+> > > > 
+> > > > The PKCS7 format which is used for regular module signatures can not
+> > > > represent Merkle proofs, so a new kind of module signature is
+> > > > introduced. As this signature type is only ever used for builtin
+> > > > modules, no compatibility issues can arise.
+> > > > 
+> > > > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > > > ---
+> > > >  .gitignore                                   |   1 +
+> > > >  Documentation/kbuild/reproducible-builds.rst |   5 +-
+> > > >  Makefile                                     |   8 +-
+> > > >  include/asm-generic/vmlinux.lds.h            |  11 +
+> > > >  include/linux/module_hashes.h                |  25 ++
+> > > >  include/linux/module_signature.h             |   1 +
+> > > >  kernel/module/Kconfig                        |  21 +-
+> > > >  kernel/module/Makefile                       |   1 +
+> > > >  kernel/module/hashes.c                       |  92 ++++++
+> > > >  kernel/module/hashes_root.c                  |   6 +
+> > > >  kernel/module/internal.h                     |   1 +
+> > > >  kernel/module/main.c                         |   4 +-
+> > > >  scripts/.gitignore                           |   1 +
+> > > >  scripts/Makefile                             |   3 +
+> > > >  scripts/Makefile.modfinal                    |  11 +
+> > > >  scripts/Makefile.modinst                     |  13 +
+> > > >  scripts/Makefile.vmlinux                     |   5 +
+> > > >  scripts/link-vmlinux.sh                      |  14 +-
+> > > >  scripts/modules-merkle-tree.c                | 467 +++++++++++++++++++++++++++
+> > > >  security/lockdown/Kconfig                    |   2 +-
+> > > >  20 files changed, 685 insertions(+), 7 deletions(-)
+> > > > 
+> > > [...]
+> > > 
+> > > > diff --git a/kernel/module/hashes_root.c b/kernel/module/hashes_root.c
+> > > > new file mode 100644
+> > > > index 000000000000..1abfcd3aa679
+> > > > --- /dev/null
+> > > > +++ b/kernel/module/hashes_root.c
+> > > > @@ -0,0 +1,6 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > +
+> > > > +#include <linux/module_hashes.h>
+> > > > +
+> > > > +/* Blank dummy data. Will be overridden by link-vmlinux.sh */
+> > > > +const struct module_hashes_root module_hashes_root __module_hashes_section = {};
+> > > > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> > > > index e2d49122c2a1..e22837d3ac76 100644
+> > > > --- a/kernel/module/internal.h
+> > > > +++ b/kernel/module/internal.h
+> > > > @@ -338,6 +338,7 @@ void module_mark_ro_after_init(const Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+> > > >  			       const char *secstrings);
+> > > >  
+> > > >  int module_sig_check(struct load_info *info, const u8 *sig, size_t sig_len);
+> > > > +int module_hash_check(struct load_info *info, const u8 *sig, size_t sig_len);
+> > > >  
+> > > >  #ifdef CONFIG_DEBUG_KMEMLEAK
+> > > >  void kmemleak_load_module(const struct module *mod, const struct load_info *info);
+> > > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > > > index 2a28a0ece809..fa30b6387936 100644
+> > > > --- a/kernel/module/main.c
+> > > > +++ b/kernel/module/main.c
+> > > > @@ -3362,8 +3362,10 @@ static int module_integrity_check(struct load_info *info, int flags)
+> > > >  
+> > > >  	if (IS_ENABLED(CONFIG_MODULE_SIG) && sig_type == PKEY_ID_PKCS7) {
+> > > >  		err = module_sig_check(info, sig, sig_len);
+> > > > +	} else if (IS_ENABLED(CONFIG_MODULE_HASHES) && sig_type == PKEY_ID_MERKLE) {
+> > > > +		err = module_hash_check(info, sig, sig_len);
+> > > >  	} else {
+> > > > -		pr_err("module: not signed with expected PKCS#7 message\n");
+> > > > +		pr_err("module: not signed with signature mechanism\n");
+> > > >  		err = -ENOPKG;
+> > > 
+> > > To prevent others from running into the same issue:
+> > > 
+> > > My first test got stuck here, as I tested with virtme-ng, which symlinks
+> > > modules from build tree to /lib/modules/$(uname -r)/..., resulting in
+> > > 
+> > >     [   15.956855] module: not signed with signature mechanism
+> > >     modprobe: ERROR: could not insert 'efivarfs': Package not installed
+> > > 
+> > > As the modules_install step was missing, modules were not being signed.
+> > 
+> > Currently the signing is deferred to installation time to keep in sync
+> > with regular module signing and to keep the logic simpler by not having
+> > to gracefully handle previously-signed files.
+> > But this could be changed.
 > 
+> I did not want to suggest changing the behaviour, that would make things
+> more complicated to prevent needless rebuilds.  I just wanted to mention
+> it here to prevent others from burning time.
+
+Understood.
+
+> > > [...]
+> > > > diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
+> > > > new file mode 100644
+> > > > index 000000000000..a6ec0e21213b
+> > > > --- /dev/null
+> > > > +++ b/scripts/modules-merkle-tree.c
+> > > > @@ -0,0 +1,467 @@
+> > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > +/*
+> > > > + * Compute hashes for modules files and build a merkle tree.
+> > > > + *
+> > > > + * Copyright (C) 2025 Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+> > > > + * Copyright (C) 2025 Thomas Weißschuh <linux@weissschuh.net>
+> > > > + *
+> > > > + */
+> > > > +#define _GNU_SOURCE 1
+> > > > +#include <arpa/inet.h>
+> > > > +#include <err.h>
+> > > > +#include <unistd.h>
+> > > > +#include <fcntl.h>
+> > > > +#include <stdarg.h>
+> > > > +#include <stdio.h>
+> > > > +#include <string.h>
+> > > > +#include <stdbool.h>
+> > > > +#include <stdlib.h>
+> > > > +
+> > > > +#include <sys/stat.h>
+> > > > +#include <sys/mman.h>
+> > > > +
+> > > > +#include <openssl/evp.h>
+> > > > +#include <openssl/err.h>
+> > > > +
+> > > > +#include "ssl-common.h"
+> > > > +
+> > > > +static int hash_size;
+> > > > +static EVP_MD_CTX *ctx;
+> > > > +
+> > > > +struct module_signature {
+> > > > +	uint8_t		algo;		/* Public-key crypto algorithm [0] */
+> > > > +	uint8_t		hash;		/* Digest algorithm [0] */
+> > > > +	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
+> > > > +	uint8_t		signer_len;	/* Length of signer's name [0] */
+> > > > +	uint8_t		key_id_len;	/* Length of key identifier [0] */
+> > > > +	uint8_t		__pad[3];
+> > > > +	uint32_t	sig_len;	/* Length of signature data */
+> > > > +};
+> > > > +
+> > > > +#define PKEY_ID_MERKLE 3
+> > > > +
+> > > > +static const char magic_number[] = "~Module signature appended~\n";
+> > > 
+> > > This here will be the forth definition of struct module_signature,
+> > > increasing the risk of unwanted diversion.  I second Petr's suggestion
+> > > to reuse a _common_ definition instead.
+> > 
+> > Ack.
+> > 
+> > > (Here, even include/linux/module_signature.h could be included itself.)
+> > 
+> > I'd like to avoid including internal headers from other components.
+> > We could move it to an UAPI header. Various other subsystems use those
+> > for not-really-UAPI but still ABI definitions.
 > 
-> On Thu, 19 Feb 2026, at 18:34, Andy Lutomirski wrote:
->> On Wed, Feb 18, 2026 at 11:55 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->>>
->>> On Wed, 18 Feb 2026, at 22:54, Andy Lutomirski wrote:
->>>> On Wed, Feb 18, 2026 at 1:04 PM Simo Sorce <simo@redhat.com> wrote:
->>>>>
->>>>> On Wed, 2026-02-18 at 12:34 -0800, Andy Lutomirski wrote:
->>>>>> On Wed, Feb 18, 2026 at 12:29 PM H. Peter Anvin <hpa@zytor.com> wrote:
->>>>>>>
->>>>>>> On February 18, 2026 12:03:27 PM PST, Andy Lutomirski <luto@amacapital.net> wrote:
->>>>>>>> On Thu, Feb 12, 2026 at 12:40 PM Ard Biesheuvel <ardb@kernel.org> wrote:
->>>>>>>>>
->>>>>>>>> On Thu, 12 Feb 2026, at 20:49, Daniel P. Smith wrote:
->>>>>>>>>> On 2/9/26 09:04, Ard Biesheuvel wrote:
->>>>>>>>> ...
->>>>>>>>> But would it be better to disable the runtime services by default when doing a secure launch? PREEMPT_RT already does the same.
->>>>>>>>
->>>>>>>> So I have a possible way to disable EFI runtime service without losing
->>>>>>>> the ability to write EFI vars.  We come up with a simple file format
->>>>>>>> to store deferred EFI var updates and we come up with a place to put
->>>>>>>> it so that we find it early-ish in boot the next time around.  (This
->>>>>>>> could be done via integration with systemd-boot or shim some other
->>>>>>>> boot loader or it could actually be part of the kernel.)  And then,
->>>>>>>> instead of writing variables directly, we write them to the deferred
->>>>>>>> list and then update them on reboot (before TXT launch, etc).  [0]
->>>>>>>> This would be a distincly nontrivial project and would not work for
->>>>>>>> all configurations.
->>>>>>>>
->>>>>>>> As a maybe less painful option, we could disable EFI runtime services
->>>>>>>> but have a root-writable thing in sysfs that (a) turns them back on
->>>>>>>> but (b) first extends a PCR to say that they're turned back on.
->>>>>>>>
->>>>>>>> (Or someone could try running runtime services at CPL3...)
->>>>>>>>
->>>>>>>> [0] I have thought for years that Intel and AMD should do this on
->>>>>>>> their end, too.  Keep the sensitive part of SMI flash entirely locked
->>>>>>>> after boot and, instead of using magic SMM stuff to validate that
->>>>>>>> write attempts have the appropriate permissions and signatures, queue
->>>>>>>> them up as deferred upates and validate the signatures on the next
->>>>>>>> boot before locking flash.
->>>>>>>>
->>>>>>>
->>>>>>> *If* a physical EFI partition exists there is a lot to be said for this approach.
->>>>>>>
->>>>>>> The only issue with this that I can see is for things like network or CD/DVD booting where there isn't necessarily any EFI boot partition, it might not be writable, or it might not be persistent (e.g. http booting typically uses a ramdisk, like the old Linux initrd.)
->>>>>>
->>>>>> Hmm, I guess my approach is a 100% complete nonstarter for installing
->>>>>> Linux from a CD, and it's really not awesome for installing Linux from
->>>>>> a USB stick.
->>>>>
->>>>> Doing any of this on a removable device feels generally like a trap.
->>>>> You get your USB disk in, try to boot, and it saves vars, but reboot
->>>>> fails for whatever reason, you plug it in another machine ... and it
->>>>> tries to "continue" from there? The amount of validation needed and
->>>>> testing for failure modes across reboots sounds really painful.
->>>>
->>>> I kind of stand by my other previous suggestion, though:
->>>>
->>>> As a maybe less painful option, we could disable EFI runtime services
->>>> but have a root-writable thing in sysfs that (a) turns them back on
->>>> but (b) first extends a PCR to say that they're turned back on.
->>>>
->>>
->>> After setting the EFI boot path to GRUB (or systemd-boot or whatever) at installation time, what other meaningful interactions do we expect with the EFI runtime services?
->>>
->>> And given that the secure launch is orchestrated by the bootloader , with which the kernel has a backchannel via its configuration file, it should be rather straight-forward to implement the staging of variable updates there if we really need it.
->>>
->>> Doing any of this at the EFI/spec level might lead to a situation where the OS now has to guess which of the provided APIs to manipulate variables is the least broken.
->>>
->>> Of course, for readinf variables, dumping the RT variables into a memory buffer at boot time and exposing it via a EFI config table would be rather straight-forward, but it is also something I feel should be the job of the boot component that takes part in the decision to shield the runtime services from the OS.
->>
->> So there's sort of a usability issue here.  On the one hand, this can
->> all be orchestrated to work.  We build a kernel, and the kernel
->> supports secure launch.  Someone makes an installer image, and that
->> image is configured to skip secure launch, then install to disk, then
->> program EFI vars, then reboot.  And the installed image is configured
->> to do the secure launch, and EFI variable writes are turned off.
->>
->> On the other hand, this all sucks.  I'm getting sick of having the
->> kernel tell me that I am not permitted to do things.  I'm sick of
->> writing software that deals with unnecessary restrictions.  If I were
->> writing an OS with a USB stick-based installer, I might want to be
->> able to boot the thing and decide later whether I'm installing an OS
->> to disk.  (In fact, many USB installers work this way.)  But, in the
->> model where EFI variable writes are hard-disabled on a secure launch,
->> the decision to do the secure launch happens before the decision to
->> install an OS, and we all lose.
->>
->> So I'm proposing that EFI variable writes be treated a bit like kexec
->> [0] -- root (which is already part of the TCB for any practical
->> purpose) is going to decide, like a grown up, to execute some code
->> that it doesn't fully trust -- in this case, the EFI variable writes.
->> And root will coordinate, correctly, with whomever it's busy using the
->> TPM to coordinate with, and tell it that it's going to do something
->> that will change its trustworthiness.  So it works like this:
->>
->> 1. Secure launch the environment on the stick.  (At this stage,
->> neither the boot loader nor the kernel has the faintest clue whether
->> anyone needs that secure launch, but this doesn't matter.)
->>
->> 2. The owner of the machine clicks "install".
->>
->> 3. The installer makes some partitions and writes some files.
->>
->> (Up until now, the security posture of the running environment has not changed.)
->>
->> 4. The installer decides that it's now time to do untrustworthy
->> things, namely writing EFI vars.  So it unmounts anything it mounted
->> using TPM-sealed keys (or not -- this is between the distro and
->> whoever trusts the distro), and it does:
->>
->> # echo 1 >/sys/.../extend_pcr_and_unlock_efi
->>
->> which *first* extends a PCR because we are about to change our
->> security posture and *second* sets whatever flag permits use of EFI
->> runtime services.
->>
->> 5. The installer writes to EFI variables.  And the installer can no
->> longer generate attestations to its previous security posture, which
->> is the correct behavior.  And maybe the user can no longer unlock
->> their home directory or whatever until they reboot.  Which is not
->> really a big deal.
->>
->> (This is *dynamic* root of trust.  In theory the system could do a
->> DRTM re-launch and recover its security posture, but I don't think
->> this is implemented.)
->>
->>
->> One thing I like about this is that it involves very little code.
->>
+> Yeah, ack.
+
+What exactly is the 'ack' for?
+* Avoiding to include internal headers?
+* Moving the definition to UAPI headers?
+
+(...)
+
+> > > Can you verify if I get the mechanics roughly correct?
+> > > 
+> > >   * Modules are merkle tree leaves.  Modules are built and logically
+> > >     paired by the order from modules.order; a single left-over module is
+> > >     paired with itself.
+> > > 
+> > >   * Hashes of paired modules are hashed again (branch node hash);
+> > >     hashes of pairs of branch nodes' hashes are hashed again;
+> > >     repeat until we reach the single merkle tree root hash
+> > > 
+> > >   * The final merkle tree root hash (and the count of tree levels) is
+> > >     included in vmlinux
+> > 
+> > The merkle tree code was written by Sebastian so he will have the best
+> > knowledge about it. But this is also my understanding.
 > 
-> It does seem rather straight-forward, and it doesn't have to be specific to TXT either. I.e., we should probably always measure the runtime enabled/disabled state into the PCRs.
+> I'd like to see some (rough) description in Documentation or in a commit
+> message at least, otherwise future me will have to ask that again.
+
+Ack in general. I'd prefer to document it in a source code comment,
+though. That feels like the best fit to me.
 
 
-As you mentioned, this is not unique to the DRTM case, but allow me to 
-provide our perspective. We would enjoy a sysfs controlled lock that 
-results in a PCR Event. With that said, while it may be getting down 
-into the implementation details, I would like to suggest the PCR be 
-configurable. When under DRTM, it would be desirable to have the ability 
-for the measurement to be extended into a DRTM PCR.
-
-v/r,
-dps
-
-> But given the actual problem at hand (untrustworthy glue code running in ring 3 that does little more than poke SMM, which itself fundamentally remains part of the TCB), it would be nice if we could just sandbox that code using virtualization.
-> 
-> This came up in a separate discussion regarding ACPI PRM (the new dumping ground for evil vendor code now that SMM has gone out of fashion), although there it should be feasible to run it unprivileged, as the spec requires that capability for the PRM payloads.
-
+Thomas
 
