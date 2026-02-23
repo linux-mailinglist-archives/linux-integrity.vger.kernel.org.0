@@ -1,345 +1,321 @@
-Return-Path: <linux-integrity+bounces-8536-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8537-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MHGsG4QHnGmO/AMAu9opvQ
-	(envelope-from <linux-integrity+bounces-8536-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 08:53:40 +0100
+	id 51exGiZsnGlNGQQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8537-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 16:03:02 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 198D9172D88
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 08:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C6C6178654
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 16:03:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 83526300BC88
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 07:53:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E5AC9303A8E7
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 14:57:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82D334BA4B;
-	Mon, 23 Feb 2026 07:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D084727380A;
+	Mon, 23 Feb 2026 14:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="UBLlbx6r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMjFkSTk"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C3734B669;
-	Mon, 23 Feb 2026 07:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5FF27144B;
+	Mon, 23 Feb 2026 14:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771833214; cv=none; b=r0rYKA1ySAR2Hmvs6XoaJxBe3HCGdOL4VU7udVVBEZdnW/g8d570uFjGu/e0bL79cPaqBkBO/qU9VLEFc0ZghY0M5nBJli97SdnNBOchuOXY0I2PgQ5Xa/V6PKmXksZNE7mwai7ONkg7ZMx0hIo8YQvQ1xhSefCgp7bpjzD4f2Y=
+	t=1771858626; cv=none; b=tx69CbjcrLF2Rn3dHdMArBkXU9HdNvW89CEMPzeA2kgmpKnBf25v0Co/J5tY73G3syrVa8mw1Up2cUDUDiuBZZ5Js7i+bwltoU8gx6aFb4rqpxmALUloUWbASpqLsvYfLrkxToPUhmgdRuw0hU/j29ySnZS36d5G0gZZWod3kkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771833214; c=relaxed/simple;
-	bh=nYV9JeJzQ3cvBQGeC5/lhY69NNQylLWUFgiVvFPfShg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JYzGIks1ANjKJYpW10zUfQpeCln/a0CXSeC+A5AoKvd3AADBQHgVyoNdIR+uChAMpIBqoNroJX3pwyN4bHyFNQhKXtG884aA/mBrDPgM6vAroFGhXBm9n3BQx5MbK9ly1on4WKEIVCeqOeF7I9KrQA/OLBokbUaNMzANgB2ermE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=UBLlbx6r; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1771833210;
-	bh=nYV9JeJzQ3cvBQGeC5/lhY69NNQylLWUFgiVvFPfShg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UBLlbx6rGRzhB0lc8jmUhiwdOSlc22ZND7JHZWW4sRNkp+NBvBnncnMPS1yVQbgOV
-	 DymrASfqtlntMVz/GvTCjMNRdBah/OWyHZRmpdBJ/j56Uf6K1XZArBL2sV3NTKngvN
-	 Lufi5ad54jpSd2BodXC8KOcnZyRYF4fvDZt5qkc4=
-Date: Mon, 23 Feb 2026 08:53:29 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Nicolas Schier <nsc@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez <da.gomez@samsung.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, 
-	Xiu Jianfeng <xiujianfeng@huawei.com>, Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
-	Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
-	kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>, 
-	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <0d70db8d-702b-46ec-a010-298fe6515aab@t-8ch.de>
-References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
- <aZol1Rsa2tX-WNaZ@derry.ads.avm.de>
+	s=arc-20240116; t=1771858626; c=relaxed/simple;
+	bh=0QkG7IXYCVY7+kXNdqi/xvny/8zHAyZSF7ImhneqUvM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WgwiEydSqRJBtAA8qY0XN0oAZLJZeOjdYZHP4OLcqEhMHVjxI5vhN7nOvDrSDws9bhCamQ9KfTfKzYWYUyKmiAzpnYViZKZHpXdqFxvEY9pOGFSxUmxyx6qOyCv3TQy1iNALURrN39eF7RWbyQwkgr8sE4i3s2IgaDt9rgFJ2qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMjFkSTk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 43863C116C6;
+	Mon, 23 Feb 2026 14:57:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771858626;
+	bh=0QkG7IXYCVY7+kXNdqi/xvny/8zHAyZSF7ImhneqUvM=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=AMjFkSTkrSanhesNmQ7LN96u9B4gaJtWkbpgjNowXVJOGM2L5qYuL3kqvBTeqozZd
+	 aaMiNGugn4+Le2W0LAAeWuEPdcM/69jjWyOCoAuAwW79yaUN8eD37UpJzoZ9aYJ33z
+	 dAkX3Ot2BMJKchYfxtLNGWtOSWKuwXbJJAHKnRUUuWX1Le3qvzVHMpvBRqrx37r7aN
+	 I2KuBRgDAbJzTBmj/gmvpgaJaqD+Xuon29y9jNzEr0Hlv33D1Ka4znRK1AnX6S5RgW
+	 fqXr+RfXe16T3rO1M0+U94cDAyaIwTxYUOVtiBqQy18AKKltYYjHJY0K6Sl8pOCilm
+	 jdMtYvMZGnGmA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F47CEA4FCE;
+	Mon, 23 Feb 2026 14:57:06 +0000 (UTC)
+From: Dmitry Safonov via B4 Relay <devnull+dima.arista.com@kernel.org>
+Date: Mon, 23 Feb 2026 14:56:57 +0000
+Subject: [PATCH v5] ima_fs: Avoid creating measurement lists for
+ unsupported hash algos
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aZol1Rsa2tX-WNaZ@derry.ads.avm.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260223-ima-oob-v5-1-91cc1064e767@arista.com>
+X-B4-Tracking: v=1; b=H4sIALhqnGkC/3XNSw6CMBgE4KuQrq3pCyiuvIdx8fclXUBNSxoN4
+ e627AxhOcl8MytKNnqb0K1ZUbTZJx/mEtpLg/QI88tib0pGjLCOUNZjPwEOQeHBgeTQcWF6hUr
+ 7Ha3zn33p8SxZQbJYRZj1WP0EabGxFkeflhC/+2OmtX4czxRTzIxgjgsqbdvfIRYGVx0mVNczO
+ 4GsQMclUKllS7Q7QH4CeYHUGDI4oRl0cIDiBIoClSPa9G5Qwog/uG3bD4rTvItjAQAA
+X-Change-ID: 20260127-ima-oob-9fa83a634d7b
+To: Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Silvia Sisinni <silvia.sisinni@polito.it>, 
+ Enrico Bravi <enrico.bravi@polito.it>
+Cc: Jonathan McDowell <noodles@earth.li>, linux-integrity@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>, 
+ Dmitry Safonov <dima@arista.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771858625; l=7264;
+ i=dima@arista.com; s=20250521; h=from:subject:message-id;
+ bh=1zfQNwMpVQJJaErTAqhxb6R+h8DyzMNUh2coTShYYwI=;
+ b=nhQathIFcET8SfpfXIav3K2AOzBW6ism7bQXCJsUkL79MmyGOx2g3SREXbaG8SA6L98h6xupL
+ DYdLNLtOFVNAWW9by0sqNAxU3d/NPNweGe3GN8KQ8zKG/pLhT8WPQuH
+X-Developer-Key: i=dima@arista.com; a=ed25519;
+ pk=/z94x2T59rICwjRqYvDsBe0MkpbkkdYrSW2J1G2gIcU=
+X-Endpoint-Received: by B4 Relay for dima@arista.com/20250521 with
+ auth_id=405
+X-Original-From: Dmitry Safonov <dima@arista.com>
+Reply-To: dima@arista.com
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8536-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8537-lists,linux-integrity=lfdr.de,dima.arista.com];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
+	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,polito.it];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[39];
-	FREEMAIL_CC(0.00)[kernel.org,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FREEMAIL_CC(0.00)[earth.li,vger.kernel.org,gmail.com,arista.com];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	HAS_REPLYTO(0.00)[dima@arista.com];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linux@weissschuh.net,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[weissschuh.net:+];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-integrity@vger.kernel.org];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
 	NEURAL_HAM(-0.00)[-0.999];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:email,weissschuh.net:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,t-8ch.de:mid]
-X-Rspamd-Queue-Id: 198D9172D88
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huawei.com:email,polito.it:email]
+X-Rspamd-Queue-Id: 0C6C6178654
 X-Rspamd-Action: no action
 
-On 2026-02-21 22:38:29+0100, Nicolas Schier wrote:
-> On Tue, Jan 13, 2026 at 01:28:59PM +0100, Thomas Weißschuh wrote:
-> > The current signature-based module integrity checking has some drawbacks
-> > in combination with reproducible builds. Either the module signing key
-> > is generated at build time, which makes the build unreproducible, or a
-> > static signing key is used, which precludes rebuilds by third parties
-> > and makes the whole build and packaging process much more complicated.
-> > 
-> > The goal is to reach bit-for-bit reproducibility. Excluding certain
-> > parts of the build output from the reproducibility analysis would be
-> > error-prone and force each downstream consumer to introduce new tooling.
-> > 
-> > Introduce a new mechanism to ensure only well-known modules are loaded
-> > by embedding a merkle tree root of all modules built as part of the full
-> > kernel build into vmlinux.
-> > 
-> > Non-builtin modules can be validated as before through signatures.
-> > 
-> > Normally the .ko module files depend on a fully built vmlinux to be
-> > available for modpost validation and BTF generation. With
-> > CONFIG_MODULE_HASHES, vmlinux now depends on the modules
-> > to build a merkle tree. This introduces a dependency cycle which is
-> > impossible to satisfy. Work around this by building the modules during
-> > link-vmlinux.sh, after vmlinux is complete enough for modpost and BTF
-> > but before the final module hashes are
-> > 
-> > The PKCS7 format which is used for regular module signatures can not
-> > represent Merkle proofs, so a new kind of module signature is
-> > introduced. As this signature type is only ever used for builtin
-> > modules, no compatibility issues can arise.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >  .gitignore                                   |   1 +
-> >  Documentation/kbuild/reproducible-builds.rst |   5 +-
-> >  Makefile                                     |   8 +-
-> >  include/asm-generic/vmlinux.lds.h            |  11 +
-> >  include/linux/module_hashes.h                |  25 ++
-> >  include/linux/module_signature.h             |   1 +
-> >  kernel/module/Kconfig                        |  21 +-
-> >  kernel/module/Makefile                       |   1 +
-> >  kernel/module/hashes.c                       |  92 ++++++
-> >  kernel/module/hashes_root.c                  |   6 +
-> >  kernel/module/internal.h                     |   1 +
-> >  kernel/module/main.c                         |   4 +-
-> >  scripts/.gitignore                           |   1 +
-> >  scripts/Makefile                             |   3 +
-> >  scripts/Makefile.modfinal                    |  11 +
-> >  scripts/Makefile.modinst                     |  13 +
-> >  scripts/Makefile.vmlinux                     |   5 +
-> >  scripts/link-vmlinux.sh                      |  14 +-
-> >  scripts/modules-merkle-tree.c                | 467 +++++++++++++++++++++++++++
-> >  security/lockdown/Kconfig                    |   2 +-
-> >  20 files changed, 685 insertions(+), 7 deletions(-)
-> > 
-> [...]
-> 
-> > diff --git a/kernel/module/hashes_root.c b/kernel/module/hashes_root.c
-> > new file mode 100644
-> > index 000000000000..1abfcd3aa679
-> > --- /dev/null
-> > +++ b/kernel/module/hashes_root.c
-> > @@ -0,0 +1,6 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +
-> > +#include <linux/module_hashes.h>
-> > +
-> > +/* Blank dummy data. Will be overridden by link-vmlinux.sh */
-> > +const struct module_hashes_root module_hashes_root __module_hashes_section = {};
-> > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-> > index e2d49122c2a1..e22837d3ac76 100644
-> > --- a/kernel/module/internal.h
-> > +++ b/kernel/module/internal.h
-> > @@ -338,6 +338,7 @@ void module_mark_ro_after_init(const Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
-> >  			       const char *secstrings);
-> >  
-> >  int module_sig_check(struct load_info *info, const u8 *sig, size_t sig_len);
-> > +int module_hash_check(struct load_info *info, const u8 *sig, size_t sig_len);
-> >  
-> >  #ifdef CONFIG_DEBUG_KMEMLEAK
-> >  void kmemleak_load_module(const struct module *mod, const struct load_info *info);
-> > diff --git a/kernel/module/main.c b/kernel/module/main.c
-> > index 2a28a0ece809..fa30b6387936 100644
-> > --- a/kernel/module/main.c
-> > +++ b/kernel/module/main.c
-> > @@ -3362,8 +3362,10 @@ static int module_integrity_check(struct load_info *info, int flags)
-> >  
-> >  	if (IS_ENABLED(CONFIG_MODULE_SIG) && sig_type == PKEY_ID_PKCS7) {
-> >  		err = module_sig_check(info, sig, sig_len);
-> > +	} else if (IS_ENABLED(CONFIG_MODULE_HASHES) && sig_type == PKEY_ID_MERKLE) {
-> > +		err = module_hash_check(info, sig, sig_len);
-> >  	} else {
-> > -		pr_err("module: not signed with expected PKCS#7 message\n");
-> > +		pr_err("module: not signed with signature mechanism\n");
-> >  		err = -ENOPKG;
-> 
-> To prevent others from running into the same issue:
-> 
-> My first test got stuck here, as I tested with virtme-ng, which symlinks
-> modules from build tree to /lib/modules/$(uname -r)/..., resulting in
-> 
->     [   15.956855] module: not signed with signature mechanism
->     modprobe: ERROR: could not insert 'efivarfs': Package not installed
-> 
-> As the modules_install step was missing, modules were not being signed.
+From: Dmitry Safonov <dima@arista.com>
 
-Currently the signing is deferred to installation time to keep in sync
-with regular module signing and to keep the logic simpler by not having
-to gracefully handle previously-signed files.
-But this could be changed.
+ima_tpm_chip->allocated_banks[i].crypto_id is initialized to
+HASH_ALGO__LAST if the TPM algorithm is not supported. However there
+are places relying on the algorithm to be valid because it is accessed
+by hash_algo_name[].
 
-> [...]
-> > diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
-> > new file mode 100644
-> > index 000000000000..a6ec0e21213b
-> > --- /dev/null
-> > +++ b/scripts/modules-merkle-tree.c
-> > @@ -0,0 +1,467 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Compute hashes for modules files and build a merkle tree.
-> > + *
-> > + * Copyright (C) 2025 Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-> > + * Copyright (C) 2025 Thomas Weißschuh <linux@weissschuh.net>
-> > + *
-> > + */
-> > +#define _GNU_SOURCE 1
-> > +#include <arpa/inet.h>
-> > +#include <err.h>
-> > +#include <unistd.h>
-> > +#include <fcntl.h>
-> > +#include <stdarg.h>
-> > +#include <stdio.h>
-> > +#include <string.h>
-> > +#include <stdbool.h>
-> > +#include <stdlib.h>
-> > +
-> > +#include <sys/stat.h>
-> > +#include <sys/mman.h>
-> > +
-> > +#include <openssl/evp.h>
-> > +#include <openssl/err.h>
-> > +
-> > +#include "ssl-common.h"
-> > +
-> > +static int hash_size;
-> > +static EVP_MD_CTX *ctx;
-> > +
-> > +struct module_signature {
-> > +	uint8_t		algo;		/* Public-key crypto algorithm [0] */
-> > +	uint8_t		hash;		/* Digest algorithm [0] */
-> > +	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
-> > +	uint8_t		signer_len;	/* Length of signer's name [0] */
-> > +	uint8_t		key_id_len;	/* Length of key identifier [0] */
-> > +	uint8_t		__pad[3];
-> > +	uint32_t	sig_len;	/* Length of signature data */
-> > +};
-> > +
-> > +#define PKEY_ID_MERKLE 3
-> > +
-> > +static const char magic_number[] = "~Module signature appended~\n";
-> 
-> This here will be the forth definition of struct module_signature,
-> increasing the risk of unwanted diversion.  I second Petr's suggestion
-> to reuse a _common_ definition instead.
+On 6.12.40 I observe the following read out-of-bounds in hash_algo_name:
+  ==================================================================
+  BUG: KASAN: global-out-of-bounds in create_securityfs_measurement_lists+0x396/0x440
+  Read of size 8 at addr ffffffff83e18138 by task swapper/0/1
 
-Ack.
+  CPU: 4 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.40 #3
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x61/0x90
+   print_report+0xc4/0x580
+   ? kasan_addr_to_slab+0x26/0x80
+   ? create_securityfs_measurement_lists+0x396/0x440
+   kasan_report+0xc2/0x100
+   ? create_securityfs_measurement_lists+0x396/0x440
+   create_securityfs_measurement_lists+0x396/0x440
+   ima_fs_init+0xa3/0x300
+   ima_init+0x7d/0xd0
+   init_ima+0x28/0x100
+   do_one_initcall+0xa6/0x3e0
+   kernel_init_freeable+0x455/0x740
+   kernel_init+0x24/0x1d0
+   ret_from_fork+0x38/0x80
+   ret_from_fork_asm+0x11/0x20
+   </TASK>
 
-> (Here, even include/linux/module_signature.h could be included itself.)
+  The buggy address belongs to the variable:
+   hash_algo_name+0xb8/0x420
 
-I'd like to avoid including internal headers from other components.
-We could move it to an UAPI header. Various other subsystems use those
-for not-really-UAPI but still ABI definitions.
+  Memory state around the buggy address:
+   ffffffff83e18000: 00 01 f9 f9 f9 f9 f9 f9 00 01 f9 f9 f9 f9 f9 f9
+   ffffffff83e18080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  >ffffffff83e18100: 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 00 05 f9 f9
+                                          ^
+   ffffffff83e18180: f9 f9 f9 f9 00 00 00 00 00 00 00 04 f9 f9 f9 f9
+   ffffffff83e18200: 00 00 00 00 00 00 00 00 04 f9 f9 f9 f9 f9 f9 f9
+  ==================================================================
 
-(...)
+Seems like the TPM chip supports sha3_256, which isn't yet in
+tpm_algorithms:
+  tpm tpm0: TPM with unsupported bank algorithm 0x0027
 
-> > +static inline char *xasprintf(const char *fmt, ...)
-> > +{
-> > +	va_list ap;
-> > +	char *strp;
-> > +	int ret;
-> > +
-> > +	va_start(ap, fmt);
-> > +	ret = vasprintf(&strp, fmt, ap);
-> > +	va_end(ap);
-> > +	if (ret == -1)
-> > +		err(1, "Memory allocation failed");
-> > +
-> > +	return strp;
-> > +}
-> 
-> Please consider moving these x* functions into scripts/include/xalloc.h
-> for reuse.  (I am sure someone else wrote this already, but I can't find
-> it...)
+Thus solve the problem by creating a file name with "_tpm_alg_<ID>"
+postfix if the crypto algorithm isn't initialized.
 
-Petr suggested it somewhere, it is done for the next revision.
+This is how it looks on the test machine (patch ported to v6.12 release):
+  # ls -1 /sys/kernel/security/ima/
+  ascii_runtime_measurements
+  ascii_runtime_measurements_tpm_alg_27
+  ascii_runtime_measurements_sha1
+  ascii_runtime_measurements_sha256
+  binary_runtime_measurements
+  binary_runtime_measurements_tpm_alg_27
+  binary_runtime_measurements_sha1
+  binary_runtime_measurements_sha256
+  policy
+  runtime_measurements_count
+  violations
 
-> thanks for all your efforts for reproducibility!
-> 
-> As I have no clue about that:  Is the patent for merkle trees [1] a
-> problem when integrating that here?
+Fixes: 9fa8e7625008 ("ima: add crypto agility support for template-hash algorithm")
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+Cc: Enrico Bravi <enrico.bravi@polito.it>
+Cc: Silvia Sisinni <silvia.sisinni@polito.it>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+---
+Changes in v5:
+- Use lower-case for sysfs file name (as suggested-by Jonathan and Roberto)
+- Don't use email quotes for patch description (Roberto)
+- Re-word the patch description (suggested-by Roberto)
+- Link to v4: https://lore.kernel.org/r/20260127-ima-oob-v4-1-bf0cd7f9b4d4@arista.com
 
-That should have expired a long time ago [2].
-And fs-verity is also using merkle trees.
+Changes in v4:
+- Use ima_tpm_chip->allocated_banks[algo_idx].digest_size instead of hash_digest_size[algo]
+  (Roberto Sassu)
+- Link to v3: https://lore.kernel.org/r/20260127-ima-oob-v3-1-1dd09f4c2a6a@arista.com
+Testing note: I test it on v6.12.40 kernel backport, which slightly differs as
+lookup_template_data_hash_algo() was yet present.
 
-> Can you verify if I get the mechanics roughly correct?
-> 
->   * Modules are merkle tree leaves.  Modules are built and logically
->     paired by the order from modules.order; a single left-over module is
->     paired with itself.
-> 
->   * Hashes of paired modules are hashed again (branch node hash);
->     hashes of pairs of branch nodes' hashes are hashed again;
->     repeat until we reach the single merkle tree root hash
-> 
->   * The final merkle tree root hash (and the count of tree levels) is
->     included in vmlinux
+Changes in v3:
+- Now fix the spelling *for real* (sorry, messed it up in v2)
+- Link to v2: https://lore.kernel.org/r/20260127-ima-oob-v2-1-f38a18c850cf@arista.com
 
-The merkle tree code was written by Sebastian so he will have the best
-knowledge about it. But this is also my understanding.
+Changes in v2:
+- Instead of skipping unknown algorithms, add files under their TPM_ALG_ID (Roberto Sassu)
+- Fix spelling (Roberto Sassu)
+- Copy @stable on the fix
+- Link to v1: https://lore.kernel.org/r/20260127-ima-oob-v1-1-2d42f3418e57@arista.com
+---
+ security/integrity/ima/ima_fs.c | 34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
 
-> 'make && find . -name '*.ko' -exec rm {} \; && make' does not rebuild
-> the in-tree modules.  Shifting the module-hashes support from
-> scripts/link-vmlinux.sh to scripts/Makefile.vmlinux might (make it
-> easier) to fix this again.
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index 012a58959ff0..3d9996ed486d 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -132,16 +132,12 @@ int ima_measurements_show(struct seq_file *m, void *v)
+ 	char *template_name;
+ 	u32 pcr, namelen, template_data_len; /* temporary fields */
+ 	bool is_ima_template = false;
+-	enum hash_algo algo;
+ 	int i, algo_idx;
+ 
+ 	algo_idx = ima_sha1_idx;
+-	algo = HASH_ALGO_SHA1;
+ 
+-	if (m->file != NULL) {
++	if (m->file != NULL)
+ 		algo_idx = (unsigned long)file_inode(m->file)->i_private;
+-		algo = ima_algo_array[algo_idx].algo;
+-	}
+ 
+ 	/* get entry */
+ 	e = qe->entry;
+@@ -160,7 +156,8 @@ int ima_measurements_show(struct seq_file *m, void *v)
+ 	ima_putc(m, &pcr, sizeof(e->pcr));
+ 
+ 	/* 2nd: template digest */
+-	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
++	ima_putc(m, e->digests[algo_idx].digest,
++		 ima_tpm_chip->allocated_banks[algo_idx].digest_size);
+ 
+ 	/* 3rd: template name size */
+ 	namelen = !ima_canonical_fmt ? strlen(template_name) :
+@@ -229,16 +226,12 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
+ 	struct ima_queue_entry *qe = v;
+ 	struct ima_template_entry *e;
+ 	char *template_name;
+-	enum hash_algo algo;
+ 	int i, algo_idx;
+ 
+ 	algo_idx = ima_sha1_idx;
+-	algo = HASH_ALGO_SHA1;
+ 
+-	if (m->file != NULL) {
++	if (m->file != NULL)
+ 		algo_idx = (unsigned long)file_inode(m->file)->i_private;
+-		algo = ima_algo_array[algo_idx].algo;
+-	}
+ 
+ 	/* get entry */
+ 	e = qe->entry;
+@@ -252,7 +245,8 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
+ 	seq_printf(m, "%2d ", e->pcr);
+ 
+ 	/* 2nd: template hash */
+-	ima_print_digest(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
++	ima_print_digest(m, e->digests[algo_idx].digest,
++			 ima_tpm_chip->allocated_banks[algo_idx].digest_size);
+ 
+ 	/* 3th:  template name */
+ 	seq_printf(m, " %s", template_name);
+@@ -404,16 +398,24 @@ static int __init create_securityfs_measurement_lists(void)
+ 		char file_name[NAME_MAX + 1];
+ 		struct dentry *dentry;
+ 
+-		sprintf(file_name, "ascii_runtime_measurements_%s",
+-			hash_algo_name[algo]);
++		if (algo == HASH_ALGO__LAST)
++			sprintf(file_name, "ascii_runtime_measurements_tpm_alg_%x",
++				ima_tpm_chip->allocated_banks[i].alg_id);
++		else
++			sprintf(file_name, "ascii_runtime_measurements_%s",
++				hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_ascii_measurements_ops);
+ 		if (IS_ERR(dentry))
+ 			return PTR_ERR(dentry);
+ 
+-		sprintf(file_name, "binary_runtime_measurements_%s",
+-			hash_algo_name[algo]);
++		if (algo == HASH_ALGO__LAST)
++			sprintf(file_name, "binary_runtime_measurements_tpm_alg_%x",
++				ima_tpm_chip->allocated_banks[i].alg_id);
++		else
++			sprintf(file_name, "binary_runtime_measurements_%s",
++				hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_measurements_ops);
 
-I'll take a look at it.
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260127-ima-oob-9fa83a634d7b
 
-> [1]: https://worldwide.espacenet.com/patent/search/family/022107098/publication/US4309569A?q=pn%3DUS4309569
-
-[2] https://patents.stackexchange.com/questions/17901/validity-of-patent-on-merkle-trees
+Best regards,
+-- 
+Dmitry Safonov <dima@arista.com>
 
 
-Thomas
 
