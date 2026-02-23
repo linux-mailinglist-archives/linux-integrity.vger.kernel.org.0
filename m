@@ -1,180 +1,419 @@
-Return-Path: <linux-integrity+bounces-8540-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8541-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oPbiCBCfnGnPJgQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8540-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 19:40:16 +0100
+	id 4O+5Ao6fnGnPJgQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8541-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 19:42:22 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FD7817B9ED
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 19:40:15 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E99417BA37
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 19:42:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4AD6C30479DF
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 18:38:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 11C1D3011682
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 18:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA163385AB;
-	Mon, 23 Feb 2026 18:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9BD368268;
+	Mon, 23 Feb 2026 18:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="coLR2RMc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DK8QjHK0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB533330317;
-	Mon, 23 Feb 2026 18:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 559FD30DD22;
+	Mon, 23 Feb 2026 18:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771871900; cv=none; b=HhhCl2ViBSWEsHSkJ1WRzN+wHhscCegJ8VO8jA7SZP4A8U6V4Y5JhP6qrIdPO3r+/YyMKExI1OSWO6vsHShnkzPw/PR80hZwmjjiKo4a+XrTuOcS72Zp3CPTy1Lcf9KfY3LwFRKNxJmk9ALmhzCNk+V8ov2AJvk5pRRIl3DTALw=
+	t=1771872132; cv=none; b=FUxaZkREEU01lWl2fCAHhx6GkWnUI+l9yvzFMxnH4UvKtZsQh/YX9o3PsT0QieSkI92rzdFZ8ox2ae+ZRXqBD8GGFVROBhpuEQYF25L0m1/XG3YZUzLyRZYUD7wN7v6+hbMlFHsAZBmc7YfFexNPIN99drlfXb+7wO9RoixDCt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771871900; c=relaxed/simple;
-	bh=JMvy0l1fqGognu60QEz8wWzG3P9L9D0a9DQWPhiNSWk=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=EqyWyHGp7x2/ncexZm2CWFRkh3cQL+uG0C2xXmEyEALEBhYJ5N1H2vjLhYI7ABaPKKoYeZ0KwesneqDALkvx9jLN48n2N2Q/OODZQye5PhLejd/HDw8WKrSovl9pOh+YbZ+IB5iO+d/xqqujuJ3Wy33H049bEO/jVrFMQQRFNrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=coLR2RMc; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NEFxL62722347;
-	Mon, 23 Feb 2026 18:38:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=JMvy0l
-	1fqGognu60QEz8wWzG3P9L9D0a9DQWPhiNSWk=; b=coLR2RMcQu8iIuV77CTY2Y
-	ihEvdQIjPnYioGbBo9cA8R3mDIWw/nyGZTWR79M0aGCjs8QTcL1N4yGRDNF+dj4i
-	b7cypd4uk0XyLFUztaEuzQxuOQDbpfBwT6sB+uvxAFiByL+t6ux9KNbWaF2NLtBC
-	A/vO/eR8qdoqUWf5ynQiQYSdtrIIYPvMrzE1wdvd1Js92nSewnMwcBlz7fy1Nz9Z
-	TlqwWG9fWiKqHAsDM5IdwhS9uN1qmEJONjuxNGUPMrdFb7C73TKch/48AIx1rAch
-	XNzhw6x7kZWnFZU5kkR4JwLnhYJnbMX8EPbZ/7ayvP0FCpXj1jphkWZdQAeblLjg
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf471reec-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 18:38:15 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61NGjET2027821;
-	Mon, 23 Feb 2026 18:38:14 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfsr1nk0c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 18:38:14 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61NIcC2l29229582
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Feb 2026 18:38:12 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9681D5804E;
-	Mon, 23 Feb 2026 18:38:12 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 516FC5803F;
-	Mon, 23 Feb 2026 18:38:11 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.83.143])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 23 Feb 2026 18:38:11 +0000 (GMT)
-Message-ID: <82f97981195dd5e0c1c265c21d5dac3ab907ed4c.camel@linux.ibm.com>
-Subject: Re: [PATCH v3 3/3] s390: Drop unnecessary
- CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Coiby Xu <coxu@redhat.com>, linux-integrity@vger.kernel.org
-Cc: Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Egorenkov	
- <egorenar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Dave Hansen	
- <dave.hansen@intel.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander
- Gordeev	 <agordeev@linux.ibm.com>,
-        Christian Borntraeger
- <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "open
- list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>,
-        open list	
- <linux-kernel@vger.kernel.org>
-In-Reply-To: <20260213012851.2532722-4-coxu@redhat.com>
-References: <20260213012851.2532722-1-coxu@redhat.com>
-	 <20260213012851.2532722-4-coxu@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 23 Feb 2026 13:38:10 -0500
+	s=arc-20240116; t=1771872132; c=relaxed/simple;
+	bh=rCHmm/zok/ZHYhXcvb3BF39F3olQG5YTVbanELl+Bew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c7l8HQrLPMKg39v9o714OkOzuveT/8XrREaQfH4Jc/9xXG6W+Zgo2npQdiTu/9JQ5K8bmlMottfT389CGc0Mnyi3WbBX58yKcEZfPjky0Kp1sKkzo7KzyAGYhQYDVxp5bzK96sy887D2w1+FkyAF/d3VjtOgVisP1d9ie8LFdMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DK8QjHK0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 709E6C116C6;
+	Mon, 23 Feb 2026 18:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771872132;
+	bh=rCHmm/zok/ZHYhXcvb3BF39F3olQG5YTVbanELl+Bew=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DK8QjHK0ArTdo0esgtiCQsgDKxZaepF19ebhrRv6gpMnFJmkZCUOY/vBwLWk4S0Hr
+	 jeE98gLGcP4Ym2xfc5E0GjYCF7QA4hl2VSMouUR0B0gX7MBSqWFfe3Dv5RT/06FG7k
+	 pOYexreZSggTeyisgt2W7jyCfdEf0q8MOj8/XK/IX7x2+LGL00UVWk7MhGMWy2u/VD
+	 FKEVZdxFzPp3vAbavWlo04c/BnGbugnbetDM37BSzKhHz6mH4PUbnePbGYFQjNZLvK
+	 Tvsoyfb0adJkDjOy4pnS6Uq/oZLqlCqjKueb+LTn1Z9620sBfpD62Ed4clE8B5gBoZ
+	 8aXhrmCuJp56w==
+Date: Mon, 23 Feb 2026 19:41:52 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
+Message-ID: <aZyfcDCWOBJJztQ2@levanger>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+	Arnout Engelen <arnout@bzzt.net>,
+	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
+	Christian Heusel <christian@heusel.eu>,
+	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
+References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+ <aZol1Rsa2tX-WNaZ@derry.ads.avm.de>
+ <0d70db8d-702b-46ec-a010-298fe6515aab@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: OPsiRZ3ijIutWSWgxD1zPyXZ0wIY_47B
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDE1NyBTYWx0ZWRfX5sF0TZ0CaS70
- rrA4zZbVVUkn/Hr0pjDHscKty4i8X4vMZLBiJBbDPlgf6/kqHGJKxOla1qwCvhY0CsTct3/+IMd
- GNXqZV886El36mZKpk6xfYHYs5XueYDsvi1fiCIhXIlKNlsMLiVGNWmY1gZQwB3pWha6FB2LAax
- 4RTqVky2Dp4AA3x2qNmZqZ6F1NWRsE/Q6VKWGxLaC0P69uIBjMkwPUm/rO3jmNpTI6yWWp3zsp6
- XcVbTM91QnihPy8earF0MIaTGUQ1FjRn9clynI9AuNy3A8iwQt0iRzj7GvB8Kt4wcbkXkwMAaub
- CgGamZNWQ9plmxcbz52W5Adccz6D0yN1Z9Q2UfYwjzy0Dp82G4EnhIn1ZqKaVbKvJC6SU2KlEzT
- 5S5HDjEJpNo3FZ2t5PDFMnMLefPt7Jkw+dObG4VZB6AVWBtPeg0Y6He2L0gVzOfkr55BY2Zyo95
- idV6XSyZj8yDReHkXiA==
-X-Authority-Analysis: v=2.4 cv=R7wO2NRX c=1 sm=1 tr=0 ts=699c9e97 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=20KFwNOVAAAA:8
- a=wvvUMd83uN3BuOnqX7wA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: OPsiRZ3ijIutWSWgxD1zPyXZ0wIY_47B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-23_04,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 impostorscore=0 phishscore=0 spamscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230157
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0d70db8d-702b-46ec-a010-298fe6515aab@t-8ch.de>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	TAGGED_FROM(0.00)[bounces-8540-lists,linux-integrity=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8541-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.ibm.com:mid];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[39];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[kernel.org,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
+	FROM_NEQ_ENVFROM(0.00)[nsc@kernel.org,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 7FD7817B9ED
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,stackexchange.com:url,link-vmlinux.sh:url,weissschuh.net:email,breakpoint.cc:email,espacenet.com:url]
+X-Rspamd-Queue-Id: 7E99417BA37
 X-Rspamd-Action: no action
 
-On Fri, 2026-02-13 at 09:28 +0800, Coiby Xu wrote:
-> Commit b5ca117365d9 ("ima: prevent kexec_load syscall based on runtime
-> secureboot flag") and commit 268a78404973 ("s390/kexec_file: Disable
-> kexec_load when IPLed secure") disabled the kexec_load syscall based
-> on the secureboot mode. Commit 9e2b4be377f0 ("ima: add a new CONFIG
-> for loading arch-specific policies") needed to detect the secure boot
-> mode, not to load an IMA architecture specific policy. Since there is
-> the new CONFIG_INTEGRITY_SECURE_BOOT, drop
-> CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT for s390.
->=20
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
+On Mon, Feb 23, 2026 at 08:53:29AM +0100, Thomas Weiﬂschuh wrote:
+> On 2026-02-21 22:38:29+0100, Nicolas Schier wrote:
+> > On Tue, Jan 13, 2026 at 01:28:59PM +0100, Thomas Weiﬂschuh wrote:
+> > > The current signature-based module integrity checking has some drawbacks
+> > > in combination with reproducible builds. Either the module signing key
+> > > is generated at build time, which makes the build unreproducible, or a
+> > > static signing key is used, which precludes rebuilds by third parties
+> > > and makes the whole build and packaging process much more complicated.
+> > > 
+> > > The goal is to reach bit-for-bit reproducibility. Excluding certain
+> > > parts of the build output from the reproducibility analysis would be
+> > > error-prone and force each downstream consumer to introduce new tooling.
+> > > 
+> > > Introduce a new mechanism to ensure only well-known modules are loaded
+> > > by embedding a merkle tree root of all modules built as part of the full
+> > > kernel build into vmlinux.
+> > > 
+> > > Non-builtin modules can be validated as before through signatures.
+> > > 
+> > > Normally the .ko module files depend on a fully built vmlinux to be
+> > > available for modpost validation and BTF generation. With
+> > > CONFIG_MODULE_HASHES, vmlinux now depends on the modules
+> > > to build a merkle tree. This introduces a dependency cycle which is
+> > > impossible to satisfy. Work around this by building the modules during
+> > > link-vmlinux.sh, after vmlinux is complete enough for modpost and BTF
+> > > but before the final module hashes are
+> > > 
+> > > The PKCS7 format which is used for regular module signatures can not
+> > > represent Merkle proofs, so a new kind of module signature is
+> > > introduced. As this signature type is only ever used for builtin
+> > > modules, no compatibility issues can arise.
+> > > 
+> > > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> > > ---
+> > >  .gitignore                                   |   1 +
+> > >  Documentation/kbuild/reproducible-builds.rst |   5 +-
+> > >  Makefile                                     |   8 +-
+> > >  include/asm-generic/vmlinux.lds.h            |  11 +
+> > >  include/linux/module_hashes.h                |  25 ++
+> > >  include/linux/module_signature.h             |   1 +
+> > >  kernel/module/Kconfig                        |  21 +-
+> > >  kernel/module/Makefile                       |   1 +
+> > >  kernel/module/hashes.c                       |  92 ++++++
+> > >  kernel/module/hashes_root.c                  |   6 +
+> > >  kernel/module/internal.h                     |   1 +
+> > >  kernel/module/main.c                         |   4 +-
+> > >  scripts/.gitignore                           |   1 +
+> > >  scripts/Makefile                             |   3 +
+> > >  scripts/Makefile.modfinal                    |  11 +
+> > >  scripts/Makefile.modinst                     |  13 +
+> > >  scripts/Makefile.vmlinux                     |   5 +
+> > >  scripts/link-vmlinux.sh                      |  14 +-
+> > >  scripts/modules-merkle-tree.c                | 467 +++++++++++++++++++++++++++
+> > >  security/lockdown/Kconfig                    |   2 +-
+> > >  20 files changed, 685 insertions(+), 7 deletions(-)
+> > > 
+> > [...]
+> > 
+> > > diff --git a/kernel/module/hashes_root.c b/kernel/module/hashes_root.c
+> > > new file mode 100644
+> > > index 000000000000..1abfcd3aa679
+> > > --- /dev/null
+> > > +++ b/kernel/module/hashes_root.c
+> > > @@ -0,0 +1,6 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > +
+> > > +#include <linux/module_hashes.h>
+> > > +
+> > > +/* Blank dummy data. Will be overridden by link-vmlinux.sh */
+> > > +const struct module_hashes_root module_hashes_root __module_hashes_section = {};
+> > > diff --git a/kernel/module/internal.h b/kernel/module/internal.h
+> > > index e2d49122c2a1..e22837d3ac76 100644
+> > > --- a/kernel/module/internal.h
+> > > +++ b/kernel/module/internal.h
+> > > @@ -338,6 +338,7 @@ void module_mark_ro_after_init(const Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+> > >  			       const char *secstrings);
+> > >  
+> > >  int module_sig_check(struct load_info *info, const u8 *sig, size_t sig_len);
+> > > +int module_hash_check(struct load_info *info, const u8 *sig, size_t sig_len);
+> > >  
+> > >  #ifdef CONFIG_DEBUG_KMEMLEAK
+> > >  void kmemleak_load_module(const struct module *mod, const struct load_info *info);
+> > > diff --git a/kernel/module/main.c b/kernel/module/main.c
+> > > index 2a28a0ece809..fa30b6387936 100644
+> > > --- a/kernel/module/main.c
+> > > +++ b/kernel/module/main.c
+> > > @@ -3362,8 +3362,10 @@ static int module_integrity_check(struct load_info *info, int flags)
+> > >  
+> > >  	if (IS_ENABLED(CONFIG_MODULE_SIG) && sig_type == PKEY_ID_PKCS7) {
+> > >  		err = module_sig_check(info, sig, sig_len);
+> > > +	} else if (IS_ENABLED(CONFIG_MODULE_HASHES) && sig_type == PKEY_ID_MERKLE) {
+> > > +		err = module_hash_check(info, sig, sig_len);
+> > >  	} else {
+> > > -		pr_err("module: not signed with expected PKCS#7 message\n");
+> > > +		pr_err("module: not signed with signature mechanism\n");
+> > >  		err = -ENOPKG;
+> > 
+> > To prevent others from running into the same issue:
+> > 
+> > My first test got stuck here, as I tested with virtme-ng, which symlinks
+> > modules from build tree to /lib/modules/$(uname -r)/..., resulting in
+> > 
+> >     [   15.956855] module: not signed with signature mechanism
+> >     modprobe: ERROR: could not insert 'efivarfs': Package not installed
+> > 
+> > As the modules_install step was missing, modules were not being signed.
+> 
+> Currently the signing is deferred to installation time to keep in sync
+> with regular module signing and to keep the logic simpler by not having
+> to gracefully handle previously-signed files.
+> But this could be changed.
 
-Alexander, you added your Tested-by for the original version of this patch =
-set.
-Can I apply it for v3?
+I did not want to suggest changing the behaviour, that would make things
+more complicated to prevent needless rebuilds.  I just wanted to mention
+it here to prevent others from burning time.
 
-thanks,
+> > [...]
+> > > diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
+> > > new file mode 100644
+> > > index 000000000000..a6ec0e21213b
+> > > --- /dev/null
+> > > +++ b/scripts/modules-merkle-tree.c
+> > > @@ -0,0 +1,467 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > +/*
+> > > + * Compute hashes for modules files and build a merkle tree.
+> > > + *
+> > > + * Copyright (C) 2025 Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+> > > + * Copyright (C) 2025 Thomas Weiﬂschuh <linux@weissschuh.net>
+> > > + *
+> > > + */
+> > > +#define _GNU_SOURCE 1
+> > > +#include <arpa/inet.h>
+> > > +#include <err.h>
+> > > +#include <unistd.h>
+> > > +#include <fcntl.h>
+> > > +#include <stdarg.h>
+> > > +#include <stdio.h>
+> > > +#include <string.h>
+> > > +#include <stdbool.h>
+> > > +#include <stdlib.h>
+> > > +
+> > > +#include <sys/stat.h>
+> > > +#include <sys/mman.h>
+> > > +
+> > > +#include <openssl/evp.h>
+> > > +#include <openssl/err.h>
+> > > +
+> > > +#include "ssl-common.h"
+> > > +
+> > > +static int hash_size;
+> > > +static EVP_MD_CTX *ctx;
+> > > +
+> > > +struct module_signature {
+> > > +	uint8_t		algo;		/* Public-key crypto algorithm [0] */
+> > > +	uint8_t		hash;		/* Digest algorithm [0] */
+> > > +	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
+> > > +	uint8_t		signer_len;	/* Length of signer's name [0] */
+> > > +	uint8_t		key_id_len;	/* Length of key identifier [0] */
+> > > +	uint8_t		__pad[3];
+> > > +	uint32_t	sig_len;	/* Length of signature data */
+> > > +};
+> > > +
+> > > +#define PKEY_ID_MERKLE 3
+> > > +
+> > > +static const char magic_number[] = "~Module signature appended~\n";
+> > 
+> > This here will be the forth definition of struct module_signature,
+> > increasing the risk of unwanted diversion.  I second Petr's suggestion
+> > to reuse a _common_ definition instead.
+> 
+> Ack.
+> 
+> > (Here, even include/linux/module_signature.h could be included itself.)
+> 
+> I'd like to avoid including internal headers from other components.
+> We could move it to an UAPI header. Various other subsystems use those
+> for not-really-UAPI but still ABI definitions.
 
-Mimi
+Yeah, ack.
+
+> (...)
+> 
+> > > +static inline char *xasprintf(const char *fmt, ...)
+> > > +{
+> > > +	va_list ap;
+> > > +	char *strp;
+> > > +	int ret;
+> > > +
+> > > +	va_start(ap, fmt);
+> > > +	ret = vasprintf(&strp, fmt, ap);
+> > > +	va_end(ap);
+> > > +	if (ret == -1)
+> > > +		err(1, "Memory allocation failed");
+> > > +
+> > > +	return strp;
+> > > +}
+> > 
+> > Please consider moving these x* functions into scripts/include/xalloc.h
+> > for reuse.  (I am sure someone else wrote this already, but I can't find
+> > it...)
+> 
+> Petr suggested it somewhere, it is done for the next revision.
+> 
+> > thanks for all your efforts for reproducibility!
+> > 
+> > As I have no clue about that:  Is the patent for merkle trees [1] a
+> > problem when integrating that here?
+> 
+> That should have expired a long time ago [2].
+> And fs-verity is also using merkle trees.
+
+Great, thanks.
+
+
+> > Can you verify if I get the mechanics roughly correct?
+> > 
+> >   * Modules are merkle tree leaves.  Modules are built and logically
+> >     paired by the order from modules.order; a single left-over module is
+> >     paired with itself.
+> > 
+> >   * Hashes of paired modules are hashed again (branch node hash);
+> >     hashes of pairs of branch nodes' hashes are hashed again;
+> >     repeat until we reach the single merkle tree root hash
+> > 
+> >   * The final merkle tree root hash (and the count of tree levels) is
+> >     included in vmlinux
+> 
+> The merkle tree code was written by Sebastian so he will have the best
+> knowledge about it. But this is also my understanding.
+
+I'd like to see some (rough) description in Documentation or in a commit
+message at least, otherwise future me will have to ask that again.
+
+
+> > 'make && find . -name '*.ko' -exec rm {} \; && make' does not rebuild
+> > the in-tree modules.  Shifting the module-hashes support from
+> > scripts/link-vmlinux.sh to scripts/Makefile.vmlinux might (make it
+> > easier) to fix this again.
+> 
+> I'll take a look at it.
+
+Thanks!
+
+Kind regards,
+Nicolas
+
+
+
+> > [1]: https://worldwide.espacenet.com/patent/search/family/022107098/publication/US4309569A?q=pn%3DUS4309569
+> 
+> [2] https://patents.stackexchange.com/questions/17901/validity-of-patent-on-merkle-trees
+> 
+> 
+> Thomas
+
+-- 
+Nicolas
 
