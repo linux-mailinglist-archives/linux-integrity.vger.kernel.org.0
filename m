@@ -1,266 +1,204 @@
-Return-Path: <linux-integrity+bounces-8547-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8548-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IDnDKU1hnWksPQQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8547-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 09:29:01 +0100
+	id +NHsFpa5nWnERQQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8548-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 15:45:42 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 146E4183ACF
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 09:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B96381889DE
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 15:45:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EAEFE3026C10
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 08:27:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6D9A2311DED5
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 14:44:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0092436680A;
-	Tue, 24 Feb 2026 08:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AF6A3A0B07;
+	Tue, 24 Feb 2026 14:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="axVIXYxU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LBOcavK0"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED6E366556;
-	Tue, 24 Feb 2026 08:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771921620; cv=none; b=W0h9eZvgU1QgO3Oo84TZ9mkez+kQUcOXgktBPz4nwPz2eHeBjmSqdUFXa4EEAA1mp8diJ2ta6h3sdAVFALCEKNukUccKnwWe8klz/mbsEsf6UiZYPCksXCZVBUJ62uqKDOq+hEcjaG83zN+ZBeR6vqAnFlXutT2J0VkUHxi/yYc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771921620; c=relaxed/simple;
-	bh=uGL5V4ybrZtgDy4Ez2EE0bWwenNORHtw2SqAtXBgfrM=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bMw+wLYHIkqqJ3SI14GJKpyE8W9OT7R47j8wUncLtD5K9xWdeS5YtATSWETT/odzWQZySmzgbwCLP16LGz23TtRHIrR2ZQklMywVC1bAaV7w4D3x/Utzytf+LMCkk8CtVCP3X1LQ2cyo5TyfK6hUY59UCuo1hUT7DNQbKO5BPS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=axVIXYxU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99FC4C4AF0B;
-	Tue, 24 Feb 2026 08:26:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771921620;
-	bh=uGL5V4ybrZtgDy4Ez2EE0bWwenNORHtw2SqAtXBgfrM=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=axVIXYxUgRkP5VNvV98V1g0wnA7ipOtwAd357KTFn/CRheTNFVp2/ypFLpseuiOSL
-	 s9Q7QuK+wValYwI9sm1NvSzwKKauls2jJemU2qF4e2xWQENKI5xKo6RkUE1FQx1B6Q
-	 vVyy4y3eIPEpyz/hZYwSrq7o9uLSizPq5zATgrc1OgaUp8r4HGU/V6B/QLFH3tXvZv
-	 jxyPe5nAOBfUIt5RSL/OxgJ4TK0+zElK7XNg+lj1xTPrTENRsg8gx6GocV9NXgfZPb
-	 49tGwDX7vI7I+gmhucE9HiReXDACKRnKGuO23ez5Ccp5cxjJxw9fzJi/X67fWXSBqk
-	 3RDTrQdPBZ1jQ==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 8F85BF4006A;
-	Tue, 24 Feb 2026 03:26:58 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-01.internal (MEProxy); Tue, 24 Feb 2026 03:26:58 -0500
-X-ME-Sender: <xms:0mCdaeS4gs9_4cI0M3pb0ELas63mgebvYSvnSqB9RAqe_bOYHciYMQ>
-    <xme:0mCdaelkhNJa-C8gAgeqSnHrqMx1JykXK-Eg_2ErefnrT4Df3ZGe-uThtv4pUDPFO
-    ZQhtHrXX3ZH00eunOoHDteXfbtsHZRZiB_CKFosv4GOq7i0LD320dc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvfeelieekucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrugcu
-    uehivghshhgvuhhvvghlfdcuoegrrhgusgeskhgvrhhnvghlrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeeuteeiudeigeekjedvheduieehteetgfdtuefghfejgffhfedtleehvdeh
-    fffhvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdehtddtjeel
-    qdeffedvudeigeduhedqrghruggspeepkhgvrhhnvghlrdhorhhgseifohhrkhhofhgrrh
-    gurdgtohhmpdhnsggprhgtphhtthhopeefvddpmhhouggvpehsmhhtphhouhhtpdhrtghp
-    thhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtohepnhhivhgvughithgrsegrlh
-    humhdrmhhithdrvgguuhdprhgtphhtthhopehluhhtohesrghmrggtrghpihhtrghlrdhn
-    vghtpdhrtghpthhtohepughpshhmihhthhesrghpvghrthhushhsohhluhhtihhonhhsrd
-    gtohhmpdhrtghpthhtoheprghnughrvgifrdgtohhophgvrhefsegtihhtrhhigidrtgho
-    mhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtoh
-    epphgvthgvrhhhuhgvfigvsehgmhigrdguvgdprhgtphhtthhopehhvghrsggvrhhtsehg
-    ohhnughorhdrrghprghnrgdrohhrghdrrghupdhrtghpthhtohepthhrvghntghhsghooh
-    htqdguvghvvghlsehgohhoghhlvghgrhhouhhpshdrtghomh
-X-ME-Proxy: <xmx:0mCdaVC92Ri72Ftpm6M5ZohWHZYKotgc9AzwW5hBVioygJzJDEfkLw>
-    <xmx:0mCdaeNvbe_P3jm_Oi-bOhVymevi0WIoW07XL-dampoag-b4eTcdow>
-    <xmx:0mCdaUkYLeWTXG5vbaFJ-xDDYExrF_SQLlH8ZGP-nr6zp_k6ZkhkZA>
-    <xmx:0mCdaQc57QXzPMBBpX0iwdRcBoNXBcYM2z9j-KjrSVl2AiKAzVHE5Q>
-    <xmx:0mCdaZD30e_5mV6VzzV0zJSiWC_PzLK46AJe_IvUTDxy6JlFAdW7YCjw>
-Feedback-ID: ice86485a:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 5DE47700069; Tue, 24 Feb 2026 03:26:58 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4373A0B1A
+	for <linux-integrity@vger.kernel.org>; Tue, 24 Feb 2026 14:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771944298; cv=pass; b=TMfQxk8Ouksf6JeiKDg5SPQVQX96gX2XNcMAsHNADfBr1toPaxU9yrrgH673fXAh7ZN5+RxH8pondOlFJjQbYp9VHwMtMoaTOAzQehfdPQjXWzTR/UNEXzDd0C/EHeoFU0QRd04wd4yR15OKVTZuc6CpQuIMge9MudnlhL5lIJU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771944298; c=relaxed/simple;
+	bh=NpXDBXAqbPlLtzWPxOL/h0QZP9LJz3X72C7AQTPy0jA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rZmXiDz66dEoZrvSGdukOF1N79Cbo1vVF+AltpkcSV9nNlKF5pfeLS6KJb2eaBnhyVvGWfLZ7gRVgD1pN5jLzoZ3hMIfJ6woGDMxxrUUekfTvtZCoCxrMru5XdqKCmPscrlXhjC7e9Ctov0wogbOwosLxYONdDKfIXGmlOWogS8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LBOcavK0; arc=pass smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c70b4a69bc7so1117108a12.0
+        for <linux-integrity@vger.kernel.org>; Tue, 24 Feb 2026 06:44:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771944296; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SQUta3L07RsMuUbuOxc+ISMa45lKX1gjzfhYJk/OzdCLk1DTb67RcpuQChBVit1MTo
+         gFL6no8B90rryOmI7AseWu1WSa2xWtdLnn/bxo58MJLKBPNpJtPtI0ltKCuVKSe6Rgpb
+         cbi6ykKBpHghWd3SP6BRvS6qoIJqsDgb6rMH656beIo/YqvV+/XFJXP+cEGeAE77pIEs
+         alJKAPYD6hBX1Zu0S03TvOc1ePz+H9P7tzyZbBkoz87WqMcE4yQyhbVx5s1pfrrsBs4C
+         PYfk9uUtEsn18wyE2Oki4xMzg/9ZptRlb/5veMGaJgK1UBFH3QNzZZFy3BM7bAXIblbL
+         clzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=g3vFWFpXe0pZI7fYc1bsMNxvQ7fGJt0aDflHuDb/YTs=;
+        fh=1lRWDbUH1jqBEGYk73bUiG1Q7hO8OLkMD5gstiZudZU=;
+        b=MS1t6Iqhdl+4G977fRvemsPIvqXWaG/O0UEWT9sPtuDUFoJOLuutzPH6DDuo0RMoVB
+         iL15DsacUogwh5jtyhfl7A6NyjMYGkg1wCJsDm6pgSVkJcXAqLQq0+0sYaXAcejUWbZ0
+         ZXmrUes6qK64GzfoOvKTfsf435mJ7Qx4O7t3yj/fSpSP7i/6HocScdQ5hqpsYyihD2dy
+         1H40LI49Ci72qxOY51U/c0j50eymlLbUn9aVcWhGX6x4naqsPTgea+WVi1ScPOOaGTbc
+         gfO+tTh4DWByRMRsMA6MyOnYimCC9IQqtaYMygKpQWXo+x7LCZ10xCzy3DXC8VVH+Sd8
+         EQlw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771944296; x=1772549096; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g3vFWFpXe0pZI7fYc1bsMNxvQ7fGJt0aDflHuDb/YTs=;
+        b=LBOcavK0uZWARHpfwTPAPRL5N89Z1QVZ43J6IN1qDaESM80vqGti73ZLcQ2HqG8aLQ
+         FP4xrvcPMnUTPHoo+zyhHmBSI6Q0wLvzsoh5iVk3aifVv0xFKbCeuAkeQYp5Vc9FrYni
+         5LSl679JJ0OP7GlIqLGhgA57/k+40Mu6UHwz3k4Fx94frpv4tQItF5rFAA7XVGoH2q8n
+         OhP8N71bZ4OtpTypA9Z8inSlfz/QYYT04pnSWEX9LMRe3/gP7IsrDOd6Mj19H2NAO2zK
+         7xv0bp3GMOxqTSyG+sx0m0Tg+n24tMxDiiGlsi4qzxfLC1/81hu+Pp6I55JIwNNbLALT
+         /byg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771944296; x=1772549096;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=g3vFWFpXe0pZI7fYc1bsMNxvQ7fGJt0aDflHuDb/YTs=;
+        b=DzGfl6jI3dLj6DKlDNmvkQq1lQiVNx4/xbJzKjHbAUCfSnppoRo9KwomM9bHNb97Bx
+         JFRKOQp8W5+Oddz/s8IMplge+NWSAlIYRpGDRuLiIyJB53rMUeIxxP6JcxDUUel95mry
+         Eu97HrQ3N7/P6XXtlppYF/Mv7s/+lq7kZMitzr7mPL0ZsTHe5NjJA3fPXC1ZkarCcvde
+         8LRR8heOVS7LM5zMNkjLtue4CvtYOhP4owE0ZW7B+V+leiJQ4Yliiw7hJehEu9u5bORv
+         tipHjtoXcc1CrjVYVHK7T35ZMhYctIW6JcOfWR7a7OOgMhMiftWuPD8DxgAeCy2NzwVr
+         6Uig==
+X-Forwarded-Encrypted: i=1; AJvYcCXuGRXu7lQg7tE7TgN/cBxRnVMWqzcj4/8Lp8o26RJ+8V9ygBLVkmufL0bGiZHA2+WytgcRwB4zJQH2hr0hhKA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyx0/o2kg1wrC0nRLuh9tTHf30VxJrWtmF89fBoPV61YF/FSJ+/
+	oj0CGSQLew96A/Le5QzIxGyevnlPasLpzrbRxsaBFbxA4xXdDSawTOBGhjRHoxyuhkb267YChQT
+	hVrt/4X8Og6BAAttAp8AG46KUVOKBovE=
+X-Gm-Gg: ATEYQzzkEEZXHVcr8rqgCbpNT/PG2U7Ixbb+1ksOjmRd0Alch70J+8TYkznuzZIf+GA
+	EIsIJyr73/MXUUmg99f1jyOvMjhQHkJ0EgDueQ4PTQimeVX43vzIz+IW1mnE1OTrjJGmLi5Azt8
+	H5dO4BQ3PysnlqkkE/IC6x8aqvDsMmnweWpTwsBdSaIM982hCXkbEa+u1n9hjDwyQ8qvLFAedEO
+	kh/II8b6Zvl2+XxoDLJANgCn8iLZEXBpCMGk9pT/yZGkceMjPjozeuer+k+B4o1ZTZxsNUC7vUm
+	BwfVPLQ=
+X-Received: by 2002:a17:90a:e7d1:b0:343:3898:e7c7 with SMTP id
+ 98e67ed59e1d1-35903849c76mr121288a91.12.1771944296292; Tue, 24 Feb 2026
+ 06:44:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A1ToacgRLhLF
-Date: Tue, 24 Feb 2026 09:25:33 +0100
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "Andrew Cooper" <andrew.cooper3@citrix.com>,
- "Daniel P. Smith" <dpsmith@apertussolutions.com>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Eric W. Biederman" <ebiederm@xmission.com>,
- "Eric Biggers" <ebiggers@kernel.org>
-Cc: "Ross Philipson" <ross.philipson@oracle.com>,
- linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
- "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
- "H . Peter Anvin" <hpa@zytor.com>, dave.hansen@linux.intel.com,
- "Matthew Garrett" <mjg59@srcf.ucam.org>,
- "James Bottomley" <James.Bottomley@hansenpartnership.com>, peterhuewe@gmx.de,
- "Jarkko Sakkinen" <jarkko@kernel.org>, jgg@ziepe.ca,
- "Andy Lutomirski" <luto@amacapital.net>, nivedita@alum.mit.edu,
- "Herbert Xu" <herbert@gondor.apana.org.au>, davem@davemloft.net,
- corbet@lwn.net, dwmw2@infradead.org, baolu.lu@linux.intel.com,
- kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Message-Id: <ce68fcc7-d90d-4ee3-bb25-3f960442e281@app.fastmail.com>
-In-Reply-To: <02e6a889-ff72-4c18-b9ee-35fcef3570f6@citrix.com>
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
- <20240531010331.134441-7-ross.philipson@oracle.com>
- <20240531021656.GA1502@sol.localdomain>
- <874jaegk8i.fsf@email.froward.int.ebiederm.org>
- <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
- <87ttflli09.ffs@tglx>
- <281c3bb3-13f6-47a2-9a9a-134e397bf686@apertussolutions.com>
- <c9a0cd9f-17cb-49e5-a411-b78ef9c7e35e@app.fastmail.com>
- <02e6a889-ff72-4c18-b9ee-35fcef3570f6@citrix.com>
-Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch early
- measurements
-Content-Type: text/plain; charset=utf-8
+References: <20260220195405.30612-1-danieldurning.work@gmail.com>
+ <9229d70d-aa7a-459f-b005-695e99888783@schaufler-ca.com> <CAHC9VhSp+X8YNocS7sDz+UyhdJh2yY8CRoi6dwV1eOGdCu9f9w@mail.gmail.com>
+In-Reply-To: <CAHC9VhSp+X8YNocS7sDz+UyhdJh2yY8CRoi6dwV1eOGdCu9f9w@mail.gmail.com>
+From: Stephen Smalley <stephen.smalley.work@gmail.com>
+Date: Tue, 24 Feb 2026 09:44:45 -0500
+X-Gm-Features: AaiRm50Bs0-On7LLkESDz1iNdkf3h1DBjn6hYvjZSdJVINzCMBHE_JQir6F04Vo
+Message-ID: <CAEjxPJ79V7hM=VnbB1dVA96jjr1yeN9qsLjXb4ALv1VmcRfJ-A@mail.gmail.com>
+Subject: Re: [PATCH] lsm: move inode IS_PRIVATE checks to individual LSMs
+To: Paul Moore <paul@paul-moore.com>
+Cc: Casey Schaufler <casey@schaufler-ca.com>, danieldurning.work@gmail.com, 
+	linux-security-module@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, jmorris@namei.org, serge@hallyn.com, 
+	john.johansen@canonical.com, zohar@linux.ibm.com, roberto.sassu@huawei.com, 
+	dmitry.kasatkin@gmail.com, mic@digikod.net, takedakn@nttdata.co.jp, 
+	penguin-kernel@i-love.sakura.ne.jp
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.15 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	XM_UA_NO_VERSION(0.01)[];
-	TAGGED_FROM(0.00)[bounces-8547-lists,linux-integrity=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[32];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[oracle.com,vger.kernel.org,kernel.org,lists.infradead.org,lists.linux-foundation.org,redhat.com,alien8.de,zytor.com,linux.intel.com,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,amacapital.net,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,infradead.org,googlegroups.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,app.fastmail.com:mid];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ardb@kernel.org,linux-integrity@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-8548-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_CC(0.00)[schaufler-ca.com,gmail.com,vger.kernel.org,namei.org,hallyn.com,canonical.com,linux.ibm.com,huawei.com,digikod.net,nttdata.co.jp,i-love.sakura.ne.jp];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 146E4183ACF
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stephensmalleywork@gmail.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: B96381889DE
 X-Rspamd-Action: no action
 
+On Mon, Feb 23, 2026 at 5:21=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
+ote:
+> I'm not going to argue with that, and perhaps that is a good next
+> step: send a quick RFC patch to the VFS folks, with the LSM list CC'd,
+> that drops setting the S_PRIVATE flag to see if they complain too
+> loudly.  Based on other threads, Christian is aware that we are
+> starting to look at better/proper handling of pidfds/pidfs so he may
+> be open to dropping S_PRIVATE since it doesn't really have much impact
+> outside of the LSM, but who knows; the VFS folks have been growing a
+> bit more anti-LSM as of late.
 
+Adding S_PRIVATE to pidfs inodes was originally motivated by this bug repor=
+t:
+https://lore.kernel.org/linux-fsdevel/20240222190334.GA412503@dev-arch.thel=
+io-3990X/
+when pidfs was first introduced as its own distinct filesystem type.
+Otherwise, Fedora (and likely any other system enforcing SELinux)
+stopped working.
+So we can't unconditionally remove S_PRIVATE from pidfs inodes without brea=
+king
+existing userspace/policy. If we want to introduce controls over pidfs
+inodes and do so in a
+backward-compatible manner, we have to either move the S_PRIVATE
+handling into the
+individual LSMs or introduce a new hook in pidfs_init_inode() to
+determine whether or not to
+set S_PRIVATE. Such a hook might also handle labeling the pidfs inode
+although we'd have to
+see if we have enough information there to do so fully. Note that such
+an approach will still likely
+end up leaving pidfs inodes created before initial policy load with
+the S_PRIVATE flag and hence
+uncontrolled; not sure if that is a problem in practice.
 
-On Tue, 24 Feb 2026, at 00:08, Andrew Cooper wrote:
-> On 20/02/2026 3:35 pm, Ard Biesheuvel wrote:
->> Coming back to this old thread after having spent some time playing w=
-ith the code:
->>
->> On Thu, 22 Aug 2024, at 20:29, Daniel P. Smith wrote:
->>
->> <selective snip>
->>
->>> Another fact to consider is that the current Intel's TXT MLE=20
->>> specification dictates SHA1 as a valid configuration. Secure Launch'=
-s=20
->>> use of SHA1 is therefore to comply with Intel's specification for TX=
-T.=20
->> As I understand the Intel TXT spec and the code:
->>
->> - TPM 1.2 is no longer supported by the TXT spec (since 2023)
->> - TPM 1.2 is not supported by your GRUB implementation
->> - in TPM 2.0 mode, SHA1 is only supported by the TXT spec if it is th=
-e /only/ algo supported by the TPM
->> - the proposed kernel implementation ignores any SHA-384 and SM3-256 =
-PCR banks if they are active, and caps them using a { 1, 0, ... } fake d=
-igest.
->>
->> So apologies for being slow, but I still struggle to understand why i=
-t is so important to have a SHA-1 implementation to cap those PCRs. Is i=
-t just to support systems with a TPM 2.0 that only has SHA-1 banks enabl=
-ed?
->>
->> Assuming that this code will get merged this year, it will be in a LT=
-S branch by 2027, by which time distros like Debian will pick it up.=20
->>
->> I fully understand that this code has lived out-of-tree for more than=
- a decade, and you likely prefer to get everything upstream that your cu=
-rrent users may be relying on. But for Linux, this is a new feature, and=
- merging code now that is basically obsolete on day 1 is not something w=
-e should entertain imo.
->>
->> (and apologies for re-opening yet another can of worms - I assure you=
- I am trying to be constructive here)
->>
 >
-> I appreciate that you've got concerns, but I don't think these
-> characterisations are fair.=C2=A0 Ultimately yes, we do want to suppor=
-t TPM
-> 1.2 systems because we have users wanting a way off the out-of-tree pa=
-tches.
+> diff --git a/fs/pidfs.c b/fs/pidfs.c
+> index 318253344b5c..4cec73b4cbcf 100644
+> --- a/fs/pidfs.c
+> +++ b/fs/pidfs.c
+> @@ -921,7 +921,7 @@ static int pidfs_init_inode(struct inode *inode, void=
+ *data)
+>        const struct pid *pid =3D data;
 >
-
-That was my question, yes. So supporting TPM 1.2 as well as TPM 2.0 with=
- only SHA-1 banks enabled is needed not to comply with the spec, but to =
-support existing out-of-tree users. That needs to be called out, because=
- what I am quoting above is a claim that it is needed to comply with the=
- TXT MLE spec.
-
-So the debate is really about whether or not such systems should be cons=
-idered obsolete at this point.
-
-And why is it ok to just cap active SHA-384 banks rather than perform th=
-e proper measurements?
-
-> 3-year-old hardware is new enough to still be in full support from OEM=
-s,
-> and totally fair game for distro LTS's even at this juncture.
+>        inode->i_private =3D data;
+> -       inode->i_flags |=3D S_PRIVATE | S_ANON_INODE;
+> +       inode->i_flags |=3D S_ANON_INODE;
+>        /* We allow to set xattrs. */
+>        inode->i_flags &=3D ~S_IMMUTABLE;
+>        inode->i_mode |=3D S_IRWXU;
 >
-
-3-year old hardware that shipped with a TPM 1.2?
-
-> The TXT spec does not speak for what OEMs choose to support, nor for t=
-he
-> TPM spec (where SHA1 is a mandatory algorithm for TPM 2.0), nor does it
-> speak for other silicon vendors we're trying to support (there are AMD
-> patches waiting for the interface to stop changing).
->
->
-> But lets ask the question the other way around.=C2=A0 What does refusi=
-ng SHA1
-> gain?
->
-> AFAICT, there's no meaningful reduction in complexity in the early cod=
-e;
-> the TPM library speaks TPM 1.2 and 2.0.=C2=A0 There is a small reducti=
-on in
-> binary size for not including SHA-1, but including it is no extra C
-> because we reuse the library that already exists.
->
-
-The complexity of the code is not the problem. The problem is that we'll=
- be stuck supporting it long past the point where anyone is making meani=
-ngful use of it. I'm not keen on being on the receiving end of a bug rep=
-ort from your last remaining TPM 1.2 user, with no means whatsoever to t=
-est or reproduce.
-
-> The cost is a failure to operate in some TXT configurations that exist
-> on in-support CPUs, as well as older systems.
->
-
-Sure, some systems will be left behind. I just wonder how many of those =
-would be upgrading to the v7.3 LTS kernel to begin with, 4 years after T=
-PM 1.2 support was dropped from the TXT spec.
-
-In any case, the code changes themselves look fine to me. I am more conc=
-erned about the long term maintenance: the x86 boot code is very complex=
-, given how many boot methods it supports, and it is rather difficult to=
- regression test all of those.
-
-
-
+> --
+> paul-moore.com
 
