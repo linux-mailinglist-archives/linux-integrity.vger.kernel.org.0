@@ -1,288 +1,182 @@
-Return-Path: <linux-integrity+bounces-8545-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8546-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +AeFESvenGl/LwQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8545-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 00:09:31 +0100
+	id +HX6Mrk8nWkGNwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8546-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 06:52:57 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2F0017EE67
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 00:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E5D518236D
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 06:52:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2B66930F36F2
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Feb 2026 23:08:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 06CD2302A686
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Feb 2026 05:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C083783BB;
-	Mon, 23 Feb 2026 23:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BEB72C3757;
+	Tue, 24 Feb 2026 05:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b="t5dYP7Me"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TTA+LMoL"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013029.outbound.protection.outlook.com [40.107.201.29])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC487DF76;
-	Mon, 23 Feb 2026 23:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.29
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771888106; cv=fail; b=i2FZqs2IB2IRk7/jMJ1TowCnr/B7lynWoEw66V9h2CDCXvHsumECC2nXnfb2TG74w2ZoOR9JHUyoB93edQNPTEYIa1v1l3v0wBLqgQ+ROm5dDTVpxCRrpx7TjB5TYnrHl8YGQwNq92/6TaUT3J4UdA9lCxmjfDGarupftH7SBn0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771888106; c=relaxed/simple;
-	bh=uebCgnr+5e2PZQ6sJjw7i0eQQfTJ4lAqvwrBUrZgSt4=;
-	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=BoVKnMUy4Zg3WIe8jMpK8fDZOAjCZL7C3dLk/7MfoT9jbrMcA50Gd9PXLk2NnFNGXyRATh8vluC0RgQMkqhaAaU/aFmMPJJ4t7w6Y+tdm9KQXO7YmBFCB0itcBZwYZ7imfsUOqnQCSPYZgnBVKYWU0AylvIlH8XkofmNPqQw3KA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com; spf=pass smtp.mailfrom=citrix.com; dkim=pass (1024-bit key) header.d=citrix.com header.i=@citrix.com header.b=t5dYP7Me; arc=fail smtp.client-ip=40.107.201.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=citrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=citrix.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EGjBVE8nXLhkSuw87Yzqy7NS5yQMbRPJ7MZR3sQqoeENhYl30m/j2cDNMHERNTs82UFRSRfcdzNVn/0NOSbWgpxxbvofzuZ2KzGLCJVbqZpUhMGFjs91gadcay8FJMrjNpkpnTU2seYL0nT9wk4pe0lZJ1W0NXePV7Tq2H0o7qE/aupqT2/h0/iKG6jBFvC2oGLyCxWJj7yq4BXpSo04KIw/zanDOu5yWF5H9eNb0knJfrDG+iDG/DyfRs3D0M0BRbsQabzA7Mi7t6cREVp394n5jiIlp5IJpsp1muJw0mVBV4vs7nv0BE1mUsT6RHuXchfBUoYlDPRI+BDlR8T/5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aLnhh1bX8ifl+cTx/fiBs7PM+4kPn1+YIeJaFHd//D8=;
- b=vWgt7rzkKqjOLAwWYg5qohhuGmyRMvBtXKsciMbOLYqhveiL8J7ZxVw818CnIpjQjaV21FpgAiJx8tLU/n2zbQHe9SuJsh0hYzAYuap5aPGXSXyiflM0LVrLBK4eFVC6bVWiDZwIdLReF6g6eU0mmdPMp2XOJ7mT4OpuI9e6336TGyYBwRjc1xPQ9BL0tn6ty840l2kHPpdrZsY8n3mQXKwF9KeJdsCVVljTbsSQPBaR5bGTU8rHNU2Db8cSzobUioH1FZmAWDD9fNT8UdOXVUsfb1ENnqHNdq0eBE6yqyJH82pAWAF4ZIX9o06/6UuEx+i2fKqM1UMoqSxM/uvNBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=citrix.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aLnhh1bX8ifl+cTx/fiBs7PM+4kPn1+YIeJaFHd//D8=;
- b=t5dYP7MeYHebXTVfTgbMZy8jh8pnz4ms6J2V2VKLiZWMyOUiKxF8k6ApPW1F03b4++cealyRFSAYRSpnbaYmGHdcrxe1FDtvQUB2R9dln4D94oHcKEHbtP9r10rgWtUZ8uuKW2PSxwINHfzJ/i61gMFD7f38ZJYsedg/5Fn1H0A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from CH8PR03MB8275.namprd03.prod.outlook.com (2603:10b6:610:2b9::7)
- by CO1PR03MB7985.namprd03.prod.outlook.com (2603:10b6:303:273::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.21; Mon, 23 Feb
- 2026 23:08:21 +0000
-Received: from CH8PR03MB8275.namprd03.prod.outlook.com
- ([fe80::a70d:dc32:bba8:ce37]) by CH8PR03MB8275.namprd03.prod.outlook.com
- ([fe80::a70d:dc32:bba8:ce37%6]) with mapi id 15.20.9632.017; Mon, 23 Feb 2026
- 23:08:21 +0000
-Message-ID: <02e6a889-ff72-4c18-b9ee-35fcef3570f6@citrix.com>
-Date: Mon, 23 Feb 2026 23:08:15 +0000
-User-Agent: Mozilla Thunderbird
-Cc: Andrew Cooper <andrew.cooper3@citrix.com>,
- Ross Philipson <ross.philipson@oracle.com>, linux-kernel@vger.kernel.org,
- x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
- linux-efi@vger.kernel.org, iommu@lists.linux-foundation.org,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- "H . Peter Anvin" <hpa@zytor.com>, dave.hansen@linux.intel.com,
- Matthew Garrett <mjg59@srcf.ucam.org>,
- James Bottomley <James.Bottomley@hansenpartnership.com>, peterhuewe@gmx.de,
- Jarkko Sakkinen <jarkko@kernel.org>, jgg@ziepe.ca,
- Andy Lutomirski <luto@amacapital.net>, nivedita@alum.mit.edu,
- Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
- corbet@lwn.net, dwmw2@infradead.org, baolu.lu@linux.intel.com,
- kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v9 06/19] x86: Add early SHA-1 support for Secure Launch
- early measurements
-To: Ard Biesheuvel <ardb@kernel.org>,
- "Daniel P. Smith" <dpsmith@apertussolutions.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- "Eric W. Biederman" <ebiederm@xmission.com>,
- Eric Biggers <ebiggers@kernel.org>
-References: <20240531010331.134441-1-ross.philipson@oracle.com>
- <20240531010331.134441-7-ross.philipson@oracle.com>
- <20240531021656.GA1502@sol.localdomain>
- <874jaegk8i.fsf@email.froward.int.ebiederm.org>
- <5b1ce8d3-516d-4dfd-a976-38e5cee1ef4e@apertussolutions.com>
- <87ttflli09.ffs@tglx>
- <281c3bb3-13f6-47a2-9a9a-134e397bf686@apertussolutions.com>
- <c9a0cd9f-17cb-49e5-a411-b78ef9c7e35e@app.fastmail.com>
-Content-Language: en-GB
-From: Andrew Cooper <andrew.cooper3@citrix.com>
-In-Reply-To: <c9a0cd9f-17cb-49e5-a411-b78ef9c7e35e@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO4P265CA0308.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:391::7) To CH8PR03MB8275.namprd03.prod.outlook.com
- (2603:10b6:610:2b9::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDF21D5170;
+	Tue, 24 Feb 2026 05:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771912375; cv=none; b=tA8sEkTH3ZnPpI2BdBjUwCYTGpA8/uHWXGpPdC25Q8uqtiVkv6EKH85rFuSyBaMFdALj6Zj2gTEWBJHCzzm36VpvV6FMrrbTv/Xe0IA7pb/Zuf3LhjfEGL5nkntHG/9u4/syDBF5XsJaqJvUWvBqrStANQxqZNgJ4GHT69HJs5o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771912375; c=relaxed/simple;
+	bh=kH4o+o59w7G9ikQ6tVVWWwR1R5OfG0PsSFFjkcxW2ac=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=fil1G5y3D3FxKosb/hmXdqX2X2Xjl6hU3KwvoPcQXHq6D1fGIYn9gC6PyXU4537oJFPRuLAVMEI7sYJ4fpQxhLaOPUav02QRgQ9BxMzJXmY9JTLtvvweBxb0OARuuhn8byHKx6JniRcRic1/xPTxegYZCa+gHhx3fx/m4anhGSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TTA+LMoL; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NIdo113039381;
+	Tue, 24 Feb 2026 05:52:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=JyzHRyhMS23W43iQ6/kdXznfjN0Z7X
+	zq2lHwd9qxF+o=; b=TTA+LMoLMpcNwXiqgL/sNC/S4hDp3GITzSS78OwwTuEkBh
+	dfFw29SsosNk+quCE0tF9SzIgCxRy5smLlQXVQ2hz7b7I3V7+WAAEu6790SJRcRJ
+	xgVa4GjjxxaUfvwUEHEcvA/uZX3+12X15D5hNeAXs0rImOU1UQ9QFt48vt0eiso9
+	MUca4d7N2aNuiBoZ0NQSyAy6BRuWrxfZfdmfKrmuwxigyW775Mu+3NjbQ370QNN3
+	kJbUkLBqELX1clIjEI+ZXGptD8u9XvbQAAvu/wCXef7YbuCDVLcmQrJrAjw6ly6k
+	9yKnmdbxEISFRJLbzljGhR7ai79HEThP7hNcI4lg==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4cqt2vt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 05:52:43 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61O2wvGw004541;
+	Tue, 24 Feb 2026 05:52:42 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfs8jqfjg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 05:52:42 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61O5qccL53084470
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Feb 2026 05:52:39 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CD7B620043;
+	Tue, 24 Feb 2026 05:52:38 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B995420040;
+	Tue, 24 Feb 2026 05:52:38 +0000 (GMT)
+Received: from localhost (unknown [9.52.203.71])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Feb 2026 05:52:38 +0000 (GMT)
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, Coiby Xu <coxu@redhat.com>,
+        linux-integrity@vger.kernel.org
+Cc: Heiko Carstens <hca@linux.ibm.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander
+ Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger
+ <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "open
+ list:S390 ARCHITECTURE" <linux-s390@vger.kernel.org>,
+        open list
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 3/3] s390: Drop unnecessary
+ CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
+In-Reply-To: <82f97981195dd5e0c1c265c21d5dac3ab907ed4c.camel@linux.ibm.com>
+References: <20260213012851.2532722-1-coxu@redhat.com>
+ <20260213012851.2532722-4-coxu@redhat.com>
+ <82f97981195dd5e0c1c265c21d5dac3ab907ed4c.camel@linux.ibm.com>
+Date: Tue, 24 Feb 2026 06:52:38 +0100
+Message-ID: <87tsv6ofh5.fsf@li-0ccc18cc-2c67-11b2-a85c-a193851e4c5d.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH8PR03MB8275:EE_|CO1PR03MB7985:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6aa165ad-2093-4c5c-0d13-08de7330708a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Nm5Ca1YvOHptbnNuZWRIUVVreElYTkdSR0FQMWl2R0xXcmxXRVpxVGpEOThJ?=
- =?utf-8?B?YnVLT1c0aTE1dHNZd00rc3I4czM2UlpGZVBjekR2M1ZtS2Yxa1hJL3Uwdk1C?=
- =?utf-8?B?MnI5azhHZkl3MUxPeHVjcU44TVRaTzZXcUdaK29OTzh4T0lZL24vdXhDaDdl?=
- =?utf-8?B?TUcwcTU4SSttTTN6VGVaKzJuQjdIcEwzSHVETk5iSjgzaFdNcUJMd3kvUGRC?=
- =?utf-8?B?L2d4NnhXSTBKd1MwUDg4cDFTYlRHcU5LMmlJNTIwQzdyNXhrYXA3ajFQRlB3?=
- =?utf-8?B?WlBiaXNJT1k0a0lFbEdkemFaL0doYmQ2RGZYRGF1eEdZWUxzQWpseWhtVkJm?=
- =?utf-8?B?NGhWT295TE1xd1NCMmgyaVROSUdGVjFialpkWUpzaVVsTitQRW8vUE1SVGNC?=
- =?utf-8?B?TzhEbEFNWXltclpKbkViZElTdlJSZHRwbFp0WnpQNGFnN080dzRWK25rcWdl?=
- =?utf-8?B?ZVhWOFJ1bGJrZGlzaVpuNWh3cVpLWit5Smp0cDlHLzMrV2EwOFAxOVFONjgv?=
- =?utf-8?B?bkdiZVZjaSt2Sm1KcTVVTnk5TTU4a0w3QVpoOVFNY0lybFRXVHNSS0NNSTM4?=
- =?utf-8?B?T0FNL2pOb0pmeUNPc0FuT2tSNTRkYWRCQ29kK3BMOU1PRlY2YmJrQzhKUzJF?=
- =?utf-8?B?N2JIN2xYdGd4UGlWYmJDVEsvaFJ0OTF6WjAyZGFvZ0ZhY2pWYmNwbkZkb3Jm?=
- =?utf-8?B?bTNpWERkeUtUYTFQQ1A4MGRqMXNhaFgrdGtvNGRXWXVOekhjN1k4bmdzMDlr?=
- =?utf-8?B?Z09WNXM2QVR2NGp6c2N6alhnMFpmWGhFWHBoVkl5Q0pELy9QRFg3b3ZKZzBU?=
- =?utf-8?B?bnVNcjJIYWZ6UjZPd21GK2FodlJ2cHlYZFpWcUJPSFErWm5nbTMxQmZ0MW90?=
- =?utf-8?B?Q0RvUHlnNjVyYW5WMU1TMkhnZlE0QWU0Rm5MZ0I2NW5YZWtBTVpXaEhDVWE5?=
- =?utf-8?B?Lzl1cWRrQlRPTVpJRkhGRzdGa0ZqMkJIbXlLYTNCVzRiK3RETWk2WEdUMjVn?=
- =?utf-8?B?V0h4cWx4RkU2TS9qUXg3UjRxZ2J1RkdnVU9OSTNWM21ncDZWNnFiWHl4USt5?=
- =?utf-8?B?SWNJUXF0NlU5V0dTNVYwd0E1YVNCMll1OVRaSW9PUlJGZHJJRFdtaG9PUXM0?=
- =?utf-8?B?NUFJQklGUnl1RkhOMmVONHdIVmtmSVBKQzNxdmhBRXNpOVVuTmpGRUV1OXMx?=
- =?utf-8?B?bzBUcHNWYnhUU28zdXozcEplYys1WWIwa3Y0enhkaFRaeE9KRC8ybGJCWjdT?=
- =?utf-8?B?WGxBT25tZmpXQ0pSRjFDWGx1YTl3c3ZSNVJ3Uy9MYWZuTVo0SjVsZk9tM0VF?=
- =?utf-8?B?TVFWS3pBRGpoeHNPSW9uZVIxWTJBMHpmWHNZb0FMaHM2bUR1QkVuUjlvTjdu?=
- =?utf-8?B?dmcxZk1ScnJSUmc3VlR6RldqYnBZTXBHMGhKSGVvb3l5Z3Q2c0lmdk9NNHNh?=
- =?utf-8?B?NTFBVTRTUzJPcHl1aWplOW9OSExTb0ErSlhIZGF4UDZ0VzB6dm51OTFTSFRF?=
- =?utf-8?B?bEJEc1pDTjlGNVlPSUZRM2dYMzBWMVhIRlpYRGVJTWw2MzdFeW9qOGY0M2t1?=
- =?utf-8?B?bVdzWWVJRHd3WXRpQW1zVUx4cloxMkxlUjBzbjVCblJnZ1dQT3VzeUx5dkZN?=
- =?utf-8?B?MDVkTUpSTDl4NFllWEJVTFBSbDZkN1JrbUx4TGRLSTZodG1RWklXeVc5eXNJ?=
- =?utf-8?B?RnkxOEFhUmlzSXhaMXJuVkhhZ1dnWHVsZFk4TExCeFNNTzF5R3lFUVRzNklw?=
- =?utf-8?B?dkZ0SldRblhlZXcreFhTNkpBOWJKNjhZOXp2dy9oYWRvczVCL0I1d3FFZGpq?=
- =?utf-8?B?ckJZNGhmYWJRL1dYZFZ1Vmx0TWhoS2VOTHZ2akEzYlhxM1pnVWtEWFVHNm96?=
- =?utf-8?B?Zk1NUklzcWUwZTU5RUdWOStVZ1pDcGZjK2ExRCswU3NGcFREWFpPYnJnMTF1?=
- =?utf-8?B?OExmTjhGUHNJVGpSUnF6eWhqV0UvbVVIa20vYmUydFR5TkovcFgzTC9qYzlN?=
- =?utf-8?B?Q295eWxOWGU5bGJ0cmRIbkNON0UxeG93SUwxNjBGZVk0NEo5VFUwZkxXckp6?=
- =?utf-8?B?ekhBUnhWNFlibmE5S2p1TzdXclljK3crWGhKSWhydUlQblgxQWZIbk9RNWJO?=
- =?utf-8?Q?3ZME=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH8PR03MB8275.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?eVNXajRzTWYrK0VqNHFmQlZISEJ6c3BNYVRmREtHN3dkaG85ZDI1RDdLZEl0?=
- =?utf-8?B?eWtXdTFuaEpzR2lienA1Y3BPL0N2N0d2QXpZdWpyd2tidGlVUis4RW1yazBj?=
- =?utf-8?B?MUZjT2szTExOcjh0bWtvZG9oZmRUOVNSV3NFT3pmNjR5Sm16cm5hajA4eG4y?=
- =?utf-8?B?bEx2b0NxeFlheEhiM0RXbFZqSW1aRnljb1ZmQ0R2S1NJZEZVYTRyc3krVmto?=
- =?utf-8?B?RWZwdjlrbndHblNsMXc5SHdFVUlsZTBRT3VRL2FEOFA0c1BheUVmYmZxSW9C?=
- =?utf-8?B?WFVnNGVkWGsrcDdDbGovQzl6eDN2QVdCMnNWemNOUE9JL1JxVGpxNTRtZkZu?=
- =?utf-8?B?NFo2M2IweWVFV3Z0S05Vbis3VWFhMnpyeFBtbjRhcEhiRCtSWGk4MEE2d1lO?=
- =?utf-8?B?SjVqSmRTWDJrR0g4eVRnZXJmR29TWVFjZlhOUElZQXBqV2gxSWlDZHdOYWE0?=
- =?utf-8?B?ZllJTkRsNi9CV1ExSk9vU2g1aWN5eFNJNkRUUXMrbW9jZTdvQ2Flam4veXBN?=
- =?utf-8?B?MEJwdGQweGJDVDd2c0VEc3dvcytBQ0VuVitUVEhzZ2JLbkNTS0VYbzFrb3o0?=
- =?utf-8?B?V2RERTRnVzBYQURpRkJkQnJHK2I0OWxKK1psRHNNQmN0c0VZSmRzb2xSRkIz?=
- =?utf-8?B?TCtlM1VMQUxGV0hYT21pcHBKTHJMUk1PUS8yUzM5OSs3dmNvOGpCaDhsTWYx?=
- =?utf-8?B?M21tZUpSOEJWSlFzNVlFMHZad21za1ZpUW5ZM0FOdFlPMnJMWk9IeW5nMHNj?=
- =?utf-8?B?TVA3MGxLaWFId0h1Uy9iSE1JbGxEd01PYTZuVytkdU1GYm9Ecklab0d1U0FC?=
- =?utf-8?B?WXY0L2dFZ2RLb0V2emJJcHJNbjNLQ1IwZmFSQ00ycEptcGIxQnR0a0pGWnhR?=
- =?utf-8?B?WGdmZW1BYXhYNTRwUTRLdHBjS2k5UnNjbDE3c040aFRtdFVhR1h6NG8xT0l4?=
- =?utf-8?B?bVl4YnJOTlFzeDNtQ0RQYUMwVWZtR1dKN3hXVGNkeTNINzFSMnNzM2FpVkEy?=
- =?utf-8?B?ZVI0Ri9SOExVTTBjeWh4WVVoTlZIZ2oxVXNlWHBnaG5kTWYxVG1RaU52OVlX?=
- =?utf-8?B?dERZdW1wQ1FWUUdCTHFRYUFocWY4V0s1NVlERHpDUVlwVUd6SjNFTFFyRjZz?=
- =?utf-8?B?TXFabzdsV04yQXNaSWdocjdwajYxdGpuTnhlYXJDMElBczRKRXFOZ0FJUW1i?=
- =?utf-8?B?dWs2eVNsSjY5WnBZVC9DWEg0UlJhTFVCNnNZNkFlbUFrTllyaEdhUjlNOTE5?=
- =?utf-8?B?cVNnVWVtTDlrcUYzOEppL3N2Mk1VdFh4WEFNWVUvNnd2ZXRpeU00M3RtdW9R?=
- =?utf-8?B?dEpTdjBrdzZVR0U1MGNBNjhPcjkrUWY1R1c1SUhQckt6VFMrMHAzS0V1QitE?=
- =?utf-8?B?UnVSVmRadS9SOVF6KzBWbk5HUXZtMXpIYXNVREtGVXdFT1kvNndXdCtvWmFl?=
- =?utf-8?B?ODNSRUEzRUZOOFVpc3hVaVMvc1lHSmlvSmNSMnhnWjZYbWtnQ1ZlSUMzVnpF?=
- =?utf-8?B?aWJnNGc1QlBiZlV3Z1NQbFd4MythTDhHMGN6VGdqaFhiNWl2Tm1YSUZZMDN3?=
- =?utf-8?B?WmxNWHFIZDRYN2FpakpFaFlCOUpaZ1F1YW9DM1g3blBRanhGVjRLRzBXQ0lI?=
- =?utf-8?B?WFhDR1R6NWhtK1lFbzZLWlg5Q3JIYzNCZXdPN0xuUy9VLzQ4OHQraFpreHRO?=
- =?utf-8?B?Tm9UeVVZUHZFWklWSjgrZEhTSktCcFNPd2NTSXRQWUtDeEhRc1czeS91RUQx?=
- =?utf-8?B?aG5tYUpJeVJoRUZFWGFGOWowYTFJN0g0YXZHc3RIYzFLL0hZOXhabm5IUE01?=
- =?utf-8?B?am9jeFJXREVhdC9tNEpZRmRjbStUZFVoUVBDN1lRUzFnNFVjU2xVRlZMcDNW?=
- =?utf-8?B?d00vREpONFpKRm15YkpjYjVKVS80Yi9nWFFydGtEZ0xncXFlNkxmRm5YNjNp?=
- =?utf-8?B?Q2VmUGRGT0hpT25tRnptalYrbmZvMTRUdnJpNHdES0JWdzhnVUcxYkNHZEtG?=
- =?utf-8?B?Q1BveFhSOUlKNEN0Wmc4UHcwWGZKTVdBZlcxeUE2MTFLMTR1MTlJUE56anE4?=
- =?utf-8?B?NEV0SGRWWHdWaHpRdno1WVJqTzk3cDVRWTdWZ3ptYnJmWkY5MnR6YlVMTmtZ?=
- =?utf-8?B?Qm1UNFZkY0FqRVdvbmVGSG5NZkpRRUlmZkxmNUJwWXdUM3VXbDREUFptY0lV?=
- =?utf-8?B?d0JibzhlTU9rUEFQWWtHZ1hUTjk0WHZnVWwvbk5VRmRKK3lNeWtoMnRrL2s3?=
- =?utf-8?B?cTlRNmNxMHBoNGVKUTRqVkc4T01Gek42YVNBUDZVMUdXeDRWM0hyNlNRanQ4?=
- =?utf-8?B?RkNxa0drNTlLeFd6emEvUXgyTndhR3h3eE1OR0xpTTRDVkQrWlcveDVISVVH?=
- =?utf-8?Q?lXfvv19DB+c4LRa4=3D?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6aa165ad-2093-4c5c-0d13-08de7330708a
-X-MS-Exchange-CrossTenant-AuthSource: CH8PR03MB8275.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2026 23:08:21.7637
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WqsQiCZojkXaADdSkp+XTrKfMygXpKjhJpsjT0KHy2pqNzyhrM1T5rCzqZq4CgF3LjWE7EeyMqNeyc7inLEvtw+MZShZVAEmdUsWge6XER4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR03MB7985
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: iKa9TPH8N-ofN4SZVxV0G6iSrYVwDXCG
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDA0NiBTYWx0ZWRfXyrhdVVNJVZ75
+ cwS/bPPYXgfWbnNo11nE0CfCBxS8abyMbOZ5TVrWnyoBiA/pGdi1R+ns1GAbffuamrVdhpR32Sv
+ gMSrEGKbml16s25U+9ev3BL9HrCOXAkCvt4GPhERuuzQifSbxraeENyKqJnqomW+12JKGJPa6wK
+ u/ZILJ/aHOb8xZ3XWIeAFXtb7Dd+0ODN+Ib3+kVDd+FbqqqTRYlNlup2DySaQl447gPnvJB9cvF
+ Z5gJsEQW64a9h4kLJo5mBCg9xecISxn+z2Xv5xJbF78+gxbYb9qa8rCIfEmzWXyHGK9DTe+TIUt
+ yUIS81x+rgDWpVO6F+P1bJd+FDn+Q2R6bo/2s8SY2EVYO9J4eq+yzEJMrImAYTDl7rv7whykxA1
+ /ns84pdp6AC2nexOwRlA6ouWP7Bjcu/Jid2gV3Ezn6Nu7IWxayREz9kqrXf0I6ELYiGNFpMioW2
+ epI7zUPBFxOzxBoxW1Q==
+X-Proofpoint-GUID: iKa9TPH8N-ofN4SZVxV0G6iSrYVwDXCG
+X-Authority-Analysis: v=2.4 cv=bbBmkePB c=1 sm=1 tr=0 ts=699d3cab cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=20KFwNOVAAAA:8
+ a=zHVu4LtvGnjouKcQAcIA:9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-23_06,2026-02-23_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1011 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602240046
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[citrix.com,reject];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[citrix.com:s=selector1];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[33];
-	TAGGED_FROM(0.00)[bounces-8545-lists,linux-integrity=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-8546-lists,linux-integrity=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[citrix.com,oracle.com,vger.kernel.org,kernel.org,lists.infradead.org,lists.linux-foundation.org,redhat.com,alien8.de,zytor.com,linux.intel.com,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,amacapital.net,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,infradead.org,googlegroups.com];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andrew.cooper3@citrix.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[citrix.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,citrix.com:mid,citrix.com:dkim]
-X-Rspamd-Queue-Id: A2F0017EE67
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[egorenar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[li-0ccc18cc-2c67-11b2-a85c-a193851e4c5d.ibm.com:mid];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: 6E5D518236D
 X-Rspamd-Action: no action
 
-On 20/02/2026 3:35 pm, Ard Biesheuvel wrote:
-> Coming back to this old thread after having spent some time playing with the code:
->
-> On Thu, 22 Aug 2024, at 20:29, Daniel P. Smith wrote:
->
-> <selective snip>
->
->> Another fact to consider is that the current Intel's TXT MLE 
->> specification dictates SHA1 as a valid configuration. Secure Launch's 
->> use of SHA1 is therefore to comply with Intel's specification for TXT. 
-> As I understand the Intel TXT spec and the code:
->
-> - TPM 1.2 is no longer supported by the TXT spec (since 2023)
-> - TPM 1.2 is not supported by your GRUB implementation
-> - in TPM 2.0 mode, SHA1 is only supported by the TXT spec if it is the /only/ algo supported by the TPM
-> - the proposed kernel implementation ignores any SHA-384 and SM3-256 PCR banks if they are active, and caps them using a { 1, 0, ... } fake digest.
->
-> So apologies for being slow, but I still struggle to understand why it is so important to have a SHA-1 implementation to cap those PCRs. Is it just to support systems with a TPM 2.0 that only has SHA-1 banks enabled?
->
-> Assuming that this code will get merged this year, it will be in a LTS branch by 2027, by which time distros like Debian will pick it up. 
->
-> I fully understand that this code has lived out-of-tree for more than a decade, and you likely prefer to get everything upstream that your current users may be relying on. But for Linux, this is a new feature, and merging code now that is basically obsolete on day 1 is not something we should entertain imo.
->
-> (and apologies for re-opening yet another can of worms - I assure you I am trying to be constructive here)
->
+Mimi Zohar <zohar@linux.ibm.com> writes:
 
-I appreciate that you've got concerns, but I don't think these
-characterisations are fair.  Ultimately yes, we do want to support TPM
-1.2 systems because we have users wanting a way off the out-of-tree patches.
+> On Fri, 2026-02-13 at 09:28 +0800, Coiby Xu wrote:
+>> Commit b5ca117365d9 ("ima: prevent kexec_load syscall based on runtime
+>> secureboot flag") and commit 268a78404973 ("s390/kexec_file: Disable
+>> kexec_load when IPLed secure") disabled the kexec_load syscall based
+>> on the secureboot mode. Commit 9e2b4be377f0 ("ima: add a new CONFIG
+>> for loading arch-specific policies") needed to detect the secure boot
+>> mode, not to load an IMA architecture specific policy. Since there is
+>> the new CONFIG_INTEGRITY_SECURE_BOOT, drop
+>> CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT for s390.
+>> 
+>> Signed-off-by: Coiby Xu <coxu@redhat.com>
+>
+> Alexander, you added your Tested-by for the original version of this patch set.
+> Can I apply it for v3?
+>
+> thanks,
+>
+> Mimi
 
-3-year-old hardware is new enough to still be in full support from OEMs,
-and totally fair game for distro LTS's even at this juncture.
+I have verified v3 on one of our secure boot machines, it looks good too.
 
-The TXT spec does not speak for what OEMs choose to support, nor for the
-TPM spec (where SHA1 is a mandatory algorithm for TPM 2.0), nor does it
-speak for other silicon vendors we're trying to support (there are AMD
-patches waiting for the interface to stop changing).
-
-
-But lets ask the question the other way around.  What does refusing SHA1
-gain?
-
-AFAICT, there's no meaningful reduction in complexity in the early code;
-the TPM library speaks TPM 1.2 and 2.0.  There is a small reduction in
-binary size for not including SHA-1, but including it is no extra C
-because we reuse the library that already exists.
-
-The cost is a failure to operate in some TXT configurations that exist
-on in-support CPUs, as well as older systems.
-
-~Andrew
+Tested-by: Alexander Egorenkov <egorenar@linux.ibm.com> 
 
