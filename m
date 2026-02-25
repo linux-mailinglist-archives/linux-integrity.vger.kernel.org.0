@@ -1,253 +1,249 @@
-Return-Path: <linux-integrity+bounces-8552-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8553-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0IoQEoo8nmkrUQQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8552-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Feb 2026 01:04:26 +0100
+	id CKzRLgXxnmnoXwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8553-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Feb 2026 13:54:29 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEDA918E43C
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Feb 2026 01:04:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33058197AB3
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Feb 2026 13:54:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4D3D2301671F
-	for <lists+linux-integrity@lfdr.de>; Wed, 25 Feb 2026 00:04:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B7E2E3022FA1
+	for <lists+linux-integrity@lfdr.de>; Wed, 25 Feb 2026 12:54:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ECAE18024;
-	Wed, 25 Feb 2026 00:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TDPeo8v/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F09E3A1A54;
+	Wed, 25 Feb 2026 12:54:07 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B82A4A0C;
-	Wed, 25 Feb 2026 00:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A622B225390;
+	Wed, 25 Feb 2026 12:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771977863; cv=none; b=uAYtS9XKNc+wSiF9YCoG8MK9I0RekUwo1iXkENKJSgAkGg+uth5cGIzbsauvYJP+MLzDbOq1FziXzJtPz7vSuGzNjOev9hHK2rUlwq97cSIiljAnyMN2y0kZ1npCmBhnoivHXtubTGCD+nuySyqnXBxc/qGMOFqamukxBg73IEw=
+	t=1772024047; cv=none; b=d4XuS6sVZdScveh8k17AmzxO8eTxLWBEFZ4YBiOTWH41d8Xe6vxwTXkHwn/sU+reu9OorD6oPNZBePe5U+GKOOaEWugVJ1qbfi2ysZfJgh6siCEStZd/iebQB66c/9tmeoxMg931k2Nu189BuyJmbZUr3khglv9TGXCzpa65wHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771977863; c=relaxed/simple;
-	bh=k5W8VL5lwkNu+ahLTvERTa+BjYNi4GO4VhNBxytZTFs=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=uNL/HpShtn0trq40z97S0DRwKoCoXJKEQGlL2WuKb9d1CHLsHcPRp7TUT9ORQ/NqHGnnHMBeCS3NLgaU1THv1NCuK1B7KIaCpYCAkfOYel0GeS++x5c/RbcxDWXjWFYS+wvwCg+qZ7oJDxdQ3rL/Hr4tCXnBjkyS+Ynq5DXv0To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TDPeo8v/; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OKo3mo2894740;
-	Wed, 25 Feb 2026 00:03:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=cFbFxI
-	Lw8z/WHEBjoq2ZMztetevIFEwE8orbafe4X+g=; b=TDPeo8v/2+wirzhVbwsQUy
-	hYpVYSVAc0lg1TDb8j+bjbT6nU7ETrG+IW1bV3dwqFTJ6ryXa/vazci9dAxEZTNG
-	za6txZ0VpMGiiTyrUkYkGSynN5Ugck33b3VltjtkuYTBAXc2QR0FcN2P2Jgs9bPx
-	33pfHCbLbYKsuq2iKQ4mZMaPcoeJcGDnQZdFaoTQPUpF6waYgUBh2mw1Xmyj4WfK
-	jmg+Q3C2q+Q8FFiQtMa7+TqiQdMIpB2/iOqevicTdezsXzN5wVOQkBIzazGpnvp9
-	ZrPaq3cjiJH4QOKOjUUkRtj0uNcvGJ+LBM3BOZgkZvNY8O2h1gvNk7hddd9AbgWQ
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf471x2sa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 00:03:15 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61OLXORR030259;
-	Wed, 25 Feb 2026 00:03:14 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhkb1gd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 00:03:14 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61P03DrN32375318
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Feb 2026 00:03:13 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1E5865805A;
-	Wed, 25 Feb 2026 00:03:13 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D3A8E5805C;
-	Wed, 25 Feb 2026 00:03:10 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.83.151])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 25 Feb 2026 00:03:10 +0000 (GMT)
-Message-ID: <ad471c33eeb9e21c49ac81032dc64555a2fb816f.camel@linux.ibm.com>
-Subject: Re: [PATCH 1/3] integrity: Make arch_ima_get_secureboot
- integrity-wide
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Coiby Xu <coxu@redhat.com>, Dave Hansen <dave.hansen@intel.com>,
-        linux-integrity@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Catalin Marinas
- <catalin.marinas@arm.com>,
-        Will Deacon	 <will@kernel.org>,
-        Madhavan
- Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman	 <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)"
- <chleroy@kernel.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev	
- <agordeev@linux.ibm.com>,
-        Christian Borntraeger
- <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav
- Petkov	 <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)"	 <x86@kernel.org>,
-        "H.
- Peter Anvin" <hpa@zytor.com>,
-        Roberto Sassu	 <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Eric Snowberg
- <eric.snowberg@oracle.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>,
-        "Serge E. Hallyn"	 <serge@hallyn.com>,
-        Jarkko
- Sakkinen <jarkko@kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64
- ARCHITECTURE)"	 <linux-arm-kernel@lists.infradead.org>,
-        open list
- <linux-kernel@vger.kernel.org>,
-        "open list:LINUX FOR POWERPC (32-BIT AND
- 64-BIT)"	 <linuxppc-dev@lists.ozlabs.org>,
-        "open list:S390 ARCHITECTURE"	
- <linux-s390@vger.kernel.org>,
-        "open list:EXTENSIBLE FIRMWARE INTERFACE
- (EFI)"	 <linux-efi@vger.kernel.org>,
-        "open list:SECURITY SUBSYSTEM"	
- <linux-security-module@vger.kernel.org>,
-        "open
- list:KEYS/KEYRINGS_INTEGRITY"	 <keyrings@vger.kernel.org>
-In-Reply-To: <CAMj1kXFBMSEdRL8FotASbQO3dcfNG0bpp9Vnm5JPn-yjyDr=GA@mail.gmail.com>
-References: <20260115004328.194142-1-coxu@redhat.com>
-	 <20260115004328.194142-2-coxu@redhat.com>
-	 <CAMj1kXFXNo1-pMbo-VZrjQ3TYe1tufebrLr_avL12A0nHMSGnA@mail.gmail.com>
-	 <8bfa859ed3a4f1cf0db0ab64d8c1c3b24684582a.camel@linux.ibm.com>
-	 <CAMj1kXHsJNZoUEnbD1y=v4Ftuv9d2c08VckRV7ru4k4P83vZbQ@mail.gmail.com>
-	 <97b69bc79a5d9246f7a399510908c7b95b2e95e7.camel@linux.ibm.com>
-	 <CAMj1kXGx4ebaK87W7k0SNUNQnO9+=z1nmYxXC7retmp3OqRRFg@mail.gmail.com>
-	 <ac5e5e45c12e9b0bda19807e60b06057d74be0b3.camel@linux.ibm.com>
-	 <aW2i3yacr5TvWU-m@Rk>
-	 <1a0b6e5601a673a81f8823de0815f92b7afbeb60.camel@linux.ibm.com>
-	 <CAMj1kXFBMSEdRL8FotASbQO3dcfNG0bpp9Vnm5JPn-yjyDr=GA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 24 Feb 2026 19:03:10 -0500
+	s=arc-20240116; t=1772024047; c=relaxed/simple;
+	bh=Mo97FHpQWwCjDKtGkv7cV+Szm089ioixlt0f+mpCv8E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C8eMcVXOS0BkiknXl7Cp+fst931O/0D3IzU9dih7YvyVnJZR0Qv7Hh51r2LY1mwJPWeMYX6wXyY3ynNZPFO/QH6ZEc9eYKY0UGIUD121vfU8XsPqRXJDo2DwD5MEYdg6k6sLgRR6p+CbHkn1wetWTlQrVFh82Z1ziJM9xx+BP+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.196])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4fLZFd2KrmzpTZg;
+	Wed, 25 Feb 2026 20:50:45 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id 7E84040568;
+	Wed, 25 Feb 2026 20:53:57 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwC38gTd8J5pyL96BA--.35098S2;
+	Wed, 25 Feb 2026 13:53:56 +0100 (CET)
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com
+Cc: linux-integrity@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devnull+dima.arista.com@kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH] ima: Add digest_size field to ima_algo_desc structure and use to show meas.
+Date: Wed, 25 Feb 2026 13:53:01 +0100
+Message-ID: <20260225125301.87996-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: KmeUE4GQkjFCEA-onCkjAzUZBg2oc_Jk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDIwOSBTYWx0ZWRfX2xjh5sVgzhOS
- dnNMnaiYXxvEopWHavbqXkdT3qDid/FcKrZW6PmQdfwrcST/ZX7r1DIOCK79NPeBkmvn5ZHnYe9
- iQCAUuGXNwIfntSmXBmb3sUwGlIdjaEKqZi1yYK+izhn6dUmiu/Nzuts6JG8Ag64IbvlsCzY9HR
- y1IRHwNmX0lY22905adj132keU3lKlbxSTaMIzXpdbD2idW7uvTZCuaRnWcSmyCenN1pvMDPDtz
- Ojr2imkhf9l9gWYtYrhl9C6I4J8BD8+fWsWgo8o8r/qtjNfpI8oxVuSL/ZlJTwW4+zm6hRkbkoN
- 4lqBW+WzVRY5+AOS30Msdg/NZ8hJlFIKGLqUHVrs0oDlu2icF3c2sOI3QWj0LDoJJ5HzB/Elg74
- cnpm/637Zl1QbABBe956sXpIE+1HpOurd+ceDGYdkaBpuRjH9KncE0ga2Ag7Qpm+1XRIU3zjk+0
- 9ddSy/sJJwN86SA5NEA==
-X-Authority-Analysis: v=2.4 cv=R7wO2NRX c=1 sm=1 tr=0 ts=699e3c44 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=20KFwNOVAAAA:8 a=VnNF1IyMAAAA:8 a=qGODes0vNXlHMsmaWvgA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 2x_WgBn-lXEWRE-KKGAySI2MMRU7Qajr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_03,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 impostorscore=0 phishscore=0 spamscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602240209
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:LxC2BwC38gTd8J5pyL96BA--.35098S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrW3uFy7Xw1Dtw1xJFyDtrb_yoWrtw18p3
+	Z5GF1FkF1kAFy2kr93CasxCFWagrWY9Fy7Wws5J34vyFnxXr1UGwn3CryFkrWrWrW5JFyx
+	trWqqr45Cw1DtaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
+	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xU4NB_UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBGmeaqAMDgAAs2
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[36];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8552-lists,linux-integrity=lfdr.de];
-	FREEMAIL_CC(0.00)[redhat.com,intel.com,vger.kernel.org,linux.ibm.com,huaweicloud.com,arm.com,kernel.org,ellerman.id.au,gmail.com,linutronix.de,alien8.de,linux.intel.com,zytor.com,huawei.com,oracle.com,paul-moore.com,namei.org,hallyn.com,lists.infradead.org,lists.ozlabs.org];
+	TAGGED_FROM(0.00)[bounces-8553-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	DMARC_NA(0.00)[huaweicloud.com];
+	FREEMAIL_TO(0.00)[linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	NEURAL_HAM(-0.00)[-0.989];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.993];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: DEDA918E43C
+	TAGGED_RCPT(0.00)[linux-integrity,dima.arista.com];
+	PRECEDENCE_BULK(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 33058197AB3
 X-Rspamd-Action: no action
 
-On Wed, 2026-01-21 at 17:25 +0100, Ard Biesheuvel wrote:
-> On Wed, 21 Jan 2026 at 16:41, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >=20
-> > On Mon, 2026-01-19 at 12:04 +0800, Coiby Xu wrote:
-> >=20
-> > > diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/=
-Kconfig
-> > > index 976e75f9b9ba..5dce572192d6 100644
-> > > --- a/security/integrity/ima/Kconfig
-> > > +++ b/security/integrity/ima/Kconfig
-> > > @@ -311,6 +311,7 @@ config IMA_QUEUE_EARLY_BOOT_KEYS
-> > >   config IMA_SECURE_AND_OR_TRUSTED_BOOT
-> > >          bool
-> > >          depends on IMA_ARCH_POLICY
-> > > +       depends on INTEGRITY_SECURE_BOOT
-> > >=20
-> > >=20
-> > > Another idea is make a tree-wide arch_get_secureboot i.e. to move
-> > > current arch_ima_get_secureboot code to arch-specific secure boot
-> > > implementation. By this way, there will no need for a new Kconfig opt=
-ion
-> > > INTEGRITY_SECURE_BOOT. But I'm not sure if there is any unforeseen
-> > > concern.
-> >=20
-> > Originally basing IMA policy on the secure boot mode was an exception. =
- As long
-> > as making it public isn't an issue any longer, this sounds to me.  Ard,=
- Dave, do
-> > you have any issues with replacing arch_ima_get_secureboot() with
-> > arch_get_secureboot()?
->=20
-> I don't see an issue with that. If there is a legitimate need to
-> determine this even if IMA is not enabled, then this makes sense.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Ard, Dave -
+Add the digest_size field to the ima_algo_desc structure to determine the
+digest size from the correct source.
 
-FYI, Coiby posted v3 of this patch set[1], which is queued in the next-
-integrity-testing branch[2].
+If the hash algorithm is among allocated PCR banks, take the value from the
+TPM bank info; if the hash algorithm is SHA1, use the predefined value; if
+the hash algorithm is the default one but not among the PCR banks, take the
+digest size from the crypto subsystem (the default hash algorithm is
+checked when parsing the ima_hash= command line option).
 
-[1]
-https://lore.kernel.org/linux-integrity/20260213012851.2532722-1-coxu@redha=
-t.com/
+Finally, use the new information to correctly show the template digest in
+ima_measurements_show() and ima_ascii_measurements_show().
 
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.g=
-it/
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ security/integrity/ima/ima.h        |  1 +
+ security/integrity/ima/ima_crypto.c |  6 ++++++
+ security/integrity/ima/ima_fs.c     | 18 ++++++------------
+ 3 files changed, 13 insertions(+), 12 deletions(-)
 
-Mimi
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index 89ebe98ffc5e..c38a9eb945b6 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -53,6 +53,7 @@ extern atomic_t ima_setxattr_allowed_hash_algorithms;
+ struct ima_algo_desc {
+ 	struct crypto_shash *tfm;
+ 	enum hash_algo algo;
++	unsigned int digest_size;
+ };
+ 
+ /* set during initialization */
+diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+index 8ae7821a65c2..c2a859710d20 100644
+--- a/security/integrity/ima/ima_crypto.c
++++ b/security/integrity/ima/ima_crypto.c
+@@ -109,6 +109,7 @@ static struct crypto_shash *ima_alloc_tfm(enum hash_algo algo)
+ 
+ int __init ima_init_crypto(void)
+ {
++	unsigned int digest_size;
+ 	enum hash_algo algo;
+ 	long rc;
+ 	int i;
+@@ -147,7 +148,9 @@ int __init ima_init_crypto(void)
+ 
+ 	for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
+ 		algo = ima_tpm_chip->allocated_banks[i].crypto_id;
++		digest_size = ima_tpm_chip->allocated_banks[i].digest_size;
+ 		ima_algo_array[i].algo = algo;
++		ima_algo_array[i].digest_size = digest_size;
+ 
+ 		/* unknown TPM algorithm */
+ 		if (algo == HASH_ALGO__LAST)
+@@ -183,12 +186,15 @@ int __init ima_init_crypto(void)
+ 		}
+ 
+ 		ima_algo_array[ima_sha1_idx].algo = HASH_ALGO_SHA1;
++		ima_algo_array[ima_sha1_idx].digest_size = SHA1_DIGEST_SIZE;
+ 	}
+ 
+ 	if (ima_hash_algo_idx >= NR_BANKS(ima_tpm_chip) &&
+ 	    ima_hash_algo_idx != ima_sha1_idx) {
++		digest_size = hash_digest_size[ima_hash_algo];
+ 		ima_algo_array[ima_hash_algo_idx].tfm = ima_shash_tfm;
+ 		ima_algo_array[ima_hash_algo_idx].algo = ima_hash_algo;
++		ima_algo_array[ima_hash_algo_idx].digest_size = digest_size;
+ 	}
+ 
+ 	return 0;
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index 012a58959ff0..23d3a14b8ce3 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -132,16 +132,12 @@ int ima_measurements_show(struct seq_file *m, void *v)
+ 	char *template_name;
+ 	u32 pcr, namelen, template_data_len; /* temporary fields */
+ 	bool is_ima_template = false;
+-	enum hash_algo algo;
+ 	int i, algo_idx;
+ 
+ 	algo_idx = ima_sha1_idx;
+-	algo = HASH_ALGO_SHA1;
+ 
+-	if (m->file != NULL) {
++	if (m->file != NULL)
+ 		algo_idx = (unsigned long)file_inode(m->file)->i_private;
+-		algo = ima_algo_array[algo_idx].algo;
+-	}
+ 
+ 	/* get entry */
+ 	e = qe->entry;
+@@ -160,7 +156,8 @@ int ima_measurements_show(struct seq_file *m, void *v)
+ 	ima_putc(m, &pcr, sizeof(e->pcr));
+ 
+ 	/* 2nd: template digest */
+-	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
++	ima_putc(m, e->digests[algo_idx].digest,
++		 ima_algo_array[algo_idx].digest_size);
+ 
+ 	/* 3rd: template name size */
+ 	namelen = !ima_canonical_fmt ? strlen(template_name) :
+@@ -229,16 +226,12 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
+ 	struct ima_queue_entry *qe = v;
+ 	struct ima_template_entry *e;
+ 	char *template_name;
+-	enum hash_algo algo;
+ 	int i, algo_idx;
+ 
+ 	algo_idx = ima_sha1_idx;
+-	algo = HASH_ALGO_SHA1;
+ 
+-	if (m->file != NULL) {
++	if (m->file != NULL)
+ 		algo_idx = (unsigned long)file_inode(m->file)->i_private;
+-		algo = ima_algo_array[algo_idx].algo;
+-	}
+ 
+ 	/* get entry */
+ 	e = qe->entry;
+@@ -252,7 +245,8 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
+ 	seq_printf(m, "%2d ", e->pcr);
+ 
+ 	/* 2nd: template hash */
+-	ima_print_digest(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
++	ima_print_digest(m, e->digests[algo_idx].digest,
++			 ima_algo_array[algo_idx].digest_size);
+ 
+ 	/* 3th:  template name */
+ 	seq_printf(m, " %s", template_name);
+-- 
+2.43.0
+
 
