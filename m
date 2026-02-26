@@ -1,211 +1,286 @@
-Return-Path: <linux-integrity+bounces-8646-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8647-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GPsIAu+JoGlvkgQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8646-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 18:59:11 +0100
+	id 6O3BAzWJoGlvkgQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8647-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 18:56:05 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 918171AD238
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 18:59:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C18311AD09B
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 18:56:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id DD5E9300DCDC
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 17:15:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 23B0330300C8
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 17:29:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF07279DCA;
-	Thu, 26 Feb 2026 17:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF553290D4;
+	Thu, 26 Feb 2026 17:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="aeZK+BM6"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572922DCF55
-	for <linux-integrity@vger.kernel.org>; Thu, 26 Feb 2026 17:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E4A3290AE;
+	Thu, 26 Feb 2026 17:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772126095; cv=none; b=kWeefRhI8FvszauLQuDAih4v+9+gwc5Ikib7+Lt+LUZZPvcqBkH0GafwbUPzUpH0/wuIsIJOOXRd5oxL7ejLZJwDkS3Yb+jdPJYNfMLyAXe0JCqFDcTSRJc48FmPrNmVj2u0bxgrrS7Wp1Rspd5D23iJ6yY4A6AU5NKoemc33ZA=
+	t=1772126941; cv=none; b=GLH6o66NebAqSimhTuPIcDHr8PDrDfp2CL2q5dRdMF1Ut7ZJMQQ2wes5Nf4RRhSUsvkT5q14u1mkmCUSlFaYq0f9660Vg3PA7WX/u4p0spTKsJf854zarqAj5shH1az/GO0Roijsxbzu2kNQxu+5b1YxWUw1PfSuam0xlwqPrz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772126095; c=relaxed/simple;
-	bh=YZRwMqvtGuUuBjol5HM197k9sIv6689wm8DyJM9xQOo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qzEmL6zn/Kt5qaTHt5etSPqxXsEpqwcDcUrdNM0kbknPXdbiNUDWs0eOKt9IBJtUJNupoikTQmLqm6gcac8YcOLc/PyHPtbRjzmlFPZ6XY3u9kySf4CjWkjRRR6vxj9auImtBF6HaAuoUmRD0kZk3xa/OBRuZZKs2FbmcC3ZHKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 919C83FE1F;
-	Thu, 26 Feb 2026 17:14:50 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6C45E3EA69;
-	Thu, 26 Feb 2026 17:14:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id UnrAGYp/oGkOSwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 26 Feb 2026 17:14:50 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 01DECA0A27; Thu, 26 Feb 2026 18:14:45 +0100 (CET)
-Date: Thu, 26 Feb 2026 18:14:45 +0100
-From: Jan Kara <jack@suse.cz>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox <willy@infradead.org>, 
-	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	David Hildenbrand <david@kernel.org>, David Howells <dhowells@redhat.com>, 
-	Paulo Alcantara <pc@manguebit.org>, Andreas Dilger <adilger.kernel@dilger.ca>, 
-	Jan Kara <jack@suse.com>, Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
-	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
-	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
-	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
-	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
-	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
-	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
-	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
-	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
-	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
-	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
-	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, 
-	Amir Goldstein <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
-	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
-	Joseph Qi <joseph.qi@linux.alibaba.com>, Mike Marshall <hubcap@omnibond.com>, 
-	Martin Brandenburg <martin@omnibond.com>, Miklos Szeredi <miklos@szeredi.hu>, 
-	Anders Larsen <al@alarsen.net>, Zhihao Cheng <chengzhihao1@huawei.com>, 
-	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
-	Johannes Thumshirn <jth@kernel.org>, John Johansen <john.johansen@canonical.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
-	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	"Darrick J. Wong" <djwong@kernel.org>, Martin Schiller <ms@dev.tdt.de>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
-	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
-	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
-	linux-nilfs@vger.kernel.org, v9fs@lists.linux.dev, linux-afs@lists.infradead.org, 
-	autofs@vger.kernel.org, ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
-	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
-	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev, 
-	devel@lists.orangefs.org, linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
-	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-fscrypt@vger.kernel.org, linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
-	linux-x25@vger.kernel.org
-Subject: Re: [PATCH 01/61] vfs: widen inode hash/lookup functions to u64
-Message-ID: <hbvcdh2qnimdnbqnayykrcja6et2oyofe5h3s7n4imwbcaqht5@xq576inhcje4>
-References: <20260226-iino-u64-v1-0-ccceff366db9@kernel.org>
- <20260226-iino-u64-v1-1-ccceff366db9@kernel.org>
- <cmxf6pu3xuwvbhg3alu725hd4b3dheowoumd6drolde7pypwor@eplss6764uuf>
+	s=arc-20240116; t=1772126941; c=relaxed/simple;
+	bh=bjaNKFkzHoUI+kWr67zSeFe+Bb6StP2VQr7jdluS3Mw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EXv6jwAGD8Kvv/xR6OaVzATsCzX1QF0fHLCaR+ASOaVkmKx7ZEYl9Q4u22ONsxyBynjqdj849tyI5hiTDUdSIcNnKmprwObEthnKfnu6i4hNsbp9r54TwrlHGWtzbGJS7aYcLai4qPopG2UfW2hn8gRzcmpyymN7POOTlqAXp94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=aeZK+BM6; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61QDHKel2345995;
+	Thu, 26 Feb 2026 17:22:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=D1o3ev
+	FHvAD1MYwkO3j4sN6+RY/qe+ugyNzSt+LRcek=; b=aeZK+BM6j5SlrEEE0NyS4a
+	lO5222pxrMIv5bnNGQyfJGCP8IOJ8pl1IemGYpLP3Abtt2cOJszHH81ZHGVTh5x4
+	Wb1LBqHKNB53PKm6dF5dr6PbLpzzKCqVtcAOXor/Wq0nHgZujCOPLU8j3lmCXxEt
+	ez9/nV0LACYmHwFbD1ckQkCLVBQLXBCX9jyJ/EuUFRi7kprFIFxT/6rSmtdASBHY
+	NOaMJDpZ1Adlde9LOJxBH5BeZg59rX84UwXM64p2XI6zlX3tfTDP5gJ36E764G8+
+	a1LDiQi0bXuIhDQqZMsI9Z5uq/4L366vSSe9sjr37afMbqZxZe08HntcsDxzd58A
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ch858wc93-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Feb 2026 17:22:39 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61QGTf7f027887;
+	Thu, 26 Feb 2026 17:22:39 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfsr24q73-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Feb 2026 17:22:38 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61QHMcY815532768
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 26 Feb 2026 17:22:38 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 84B8B5803F;
+	Thu, 26 Feb 2026 17:22:38 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AC73658056;
+	Thu, 26 Feb 2026 17:22:37 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 26 Feb 2026 17:22:37 +0000 (GMT)
+Message-ID: <969c74f3-81ed-442c-87dd-381274a642a7@linux.ibm.com>
+Date: Thu, 26 Feb 2026 12:22:32 -0500
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cmxf6pu3xuwvbhg3alu725hd4b3dheowoumd6drolde7pypwor@eplss6764uuf>
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Score: -4.00
-X-Spam-Level: 
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: IMA and PQC
+To: Eric Biggers <ebiggers@kernel.org>, Simo Sorce <simo@redhat.com>
+Cc: Coiby Xu <coxu@redhat.com>,
+        =?UTF-8?Q?Johannes_Wiesb=C3=B6ck?= <johannes.wiesboeck@aisec.fraunhofer.de>,
+        dhowells@redhat.com, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
+        roberto.sassu@huawei.com, zohar@linux.ibm.com,
+        michael.weiss@aisec.fraunhofer.de
+References: <aXrKaTem9nnWNuGV@Rk>
+ <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
+ <aYHznG6vbptVOjHQ@Rk> <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
+ <20260226001049.GA3135@quark>
+ <cba10ac6-3557-4fc1-9b86-55361d14156d@linux.ibm.com>
+ <dc09be79-5efe-4756-a295-5b0428985525@linux.ibm.com>
+ <da190dbbc692b9da8464bbbfffdde7bab26b3f1c.camel@redhat.com>
+ <20260226165819.GA2251@sol>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20260226165819.GA2251@sol>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI2MDE1NSBTYWx0ZWRfX6BhYsrxbCFzO
+ r49GkhBY4NvgTUJcI4mhd1sx7zNQ7ekW0OifMbKBadBSL9DPhSZ+ixrtiQJJOYv5pAEu17cqJdd
+ Ah0jSDIOzb83M7aC9vLm6pE86beajbk1+gjMYkX8m5YfL1UpW6p2PKNRMT8thxstbQm+CRnNuk7
+ XppY1Dih6bv4jxsxNp8Pcgbxa0UWx4iPRF326Z6LzAKqSO/x5ef1p+cLceeEKd5Jb/Uk2+DcxIo
+ g+HBmhf63ifdlW/6gnR8xnVumRK6Jy5aCJpjYacLJX6+9jABO/B37LLGjeu1JyR+bR3NEcJnNx8
+ n1JljDw9e0bV6Qgd4v20k9IvY7fQtQ74pMKtUnrfDgZedxW0fIjgzfuUXZah67dw/D9A7sE0rwi
+ m4Aoo0OwARLIpM8fglCkGktT4paL5UrFIArh9yZR/YNCSdYWx719e2l2sPN+lcF2ZrHtrMv7T0+
+ xtrd7SeDs7ER6IHHLHA==
+X-Proofpoint-GUID: zvqGvLYmqPH-mtQViRvGYitqTKR9a8sy
+X-Authority-Analysis: v=2.4 cv=S4HUAYsP c=1 sm=1 tr=0 ts=69a08160 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=NEAV23lmAAAA:8
+ a=or4u6VGYAAAA:8 a=KSdFDonAzZUnY1rFAaAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=f52p4T1hNPgkgD0SKpRM:22
+X-Proofpoint-ORIG-GUID: uo65ftNaWgDJnXHFOyq6XUGy94c9AUMI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-26_01,2026-02-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 clxscore=1015 impostorscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602260155
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[suse.cz];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,kernel.org,suse.cz,goodmis.org,efficios.com,intel.com,infradead.org,mit.edu,linux.dev,suse.de,redhat.com,manguebit.org,dilger.ca,suse.com,oracle.com,brown.name,talpey.com,samba.org,gmail.com,microsoft.com,dubeyko.com,ionkov.net,codewreck.org,crudebyte.com,auristor.com,themaw.net,cs.cmu.edu,fluxnic.net,tyhicks.com,physik.fu-berlin.de,vivo.com,artax.karlin.mff.cuni.cz,nod.at,paragon-software.com,fasheh.com,evilplan.org,linux.alibaba.com,omnibond.com,szeredi.hu,alarsen.net,huawei.com,wdc.com,canonical.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,schaufler-ca.com,amd.com,ffwll.ch,linaro.org,google.com,davemloft.net,arm.com,linux.intel.com,dev.tdt.de,vger.kernel.org,lists.linux.dev,kvack.org,lists.sourceforge.net,lists.samba.org,lists.infradead.org,coda.cs.cmu.edu,lists.orangefs.org,lists.ubuntu.com,lists.freedesktop.org,lists.linaro.org];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8646-lists,linux-integrity=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8647-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[redhat.com,aisec.fraunhofer.de,gmail.com,oracle.com,vger.kernel.org,huawei.com,linux.ibm.com];
 	RCVD_TLS_LAST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,suse.com:email,suse.cz:email];
-	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,keymaterial.net:url,linux.ibm.com:mid];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jack@suse.cz,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[stefanb@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_GT_50(0.00)[146];
-	R_DKIM_NA(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	NEURAL_HAM(-0.00)[-0.987];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 918171AD238
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: C18311AD09B
 X-Rspamd-Action: no action
 
-On Thu 26-02-26 18:00:36, Jan Kara wrote:
-> On Thu 26-02-26 10:55:03, Jeff Layton wrote:
-> > Change the inode hash/lookup VFS API functions to accept u64 parameters
-> > instead of unsigned long for inode numbers and hash values. This is
-> > preparation for widening i_ino itself to u64, which will allow
-> > filesystems to store full 64-bit inode numbers on 32-bit architectures.
-> > 
-> > Since unsigned long implicitly widens to u64 on all architectures, this
-> > change is backward-compatible with all existing callers.
-> > 
-> > Functions updated:
-> >   - hash(), find_inode_fast(), find_inode_by_ino_rcu(), test_inode_iunique()
-> >   - __insert_inode_hash(), iget_locked(), iget5_locked(), iget5_locked_rcu()
-> >   - ilookup(), ilookup5(), ilookup5_nowait()
-> >   - find_inode_nowait(), find_inode_rcu()
-> >   - inode_insert5(), insert_inode_locked4()
-> >   - insert_inode_locked() (local variable)
-> >   - dump_mapping() (local variable and format string)
-> > 
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> 
-> Looks good. Feel free to add:
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
 
-Thinking some more about this (and also seeing the discussion about patch
-2) - maybe instead of using explicit u64 we should typedef kino_t as u64
-and use that?
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+On 2/26/26 11:58 AM, Eric Biggers wrote:
+> On Thu, Feb 26, 2026 at 10:27:43AM -0500, Simo Sorce wrote:
+>> On Thu, 2026-02-26 at 09:16 -0500, Stefan Berger wrote:
+>>> On 2/26/26 7:42 AM, Stefan Berger wrote:
+>>>> On 2/25/26 7:10 PM, Eric Biggers wrote:
+>>>>> On Wed, Feb 25, 2026 at 09:25:43AM -0500, Stefan Berger wrote:
+>>>>>> To avoid duplicate work: Is either one of you planning on writing
+>>>>>> patches
+>>>>>> for IMA to use ML-DSA and convert the current ML-DSA to also support
+>>>>>> HashML?
+>>>>>> I had done the work on this before and could dig out the patches
+>>>>>> again...
+>>>>>
+>>>>> IMA already had to add its own digest prefixing support, since it was
+>>>>> needed to disambiguate between full-file digests and fsverity digests.
+>>>>> See 'struct ima_file_id'.  Thus the message signed is at most 66 bytes.
+>>>>
+>>>> The hash there is still only a hash over a file and that hash is signed,
+>>>> isn't it?
+>>>>
+>>>>>
+>>>>> With that being the case, HashML-DSA isn't necessary.  It's not even
+>>>>> possible to use here, since there are no OIDs assigned for the fsverity
+>>>>> digests, so it cannot replace the ima_file_id.
+>>>>
+>>>> For non-fsverify IMA signatures it is 'possible' to use HashML-DSA and
+>>>> it's 'working' (recycled old patches yesterday):
+>>>>
+>>>> Linux: https://github.com/stefanberger/linux/commits/
+>>>> dhmlsa%2Bima.202602025/
+>>>>
+>>>> ima-evm-utils: https://github.com/linux-integrity/ima-evm-utils/pull/19/
+>>>> commits
+>>>>
+>>>>>
+>>>>> I'll also note that HashML-DSA is controversial (e.g. see
+>>>>> https://keymaterial.net/2024/11/05/hashml-dsa-considered-harmful/),
+>>>>
+>>>> The problem with this is that NIST would have to react to these
+>>>> controversies as we race to support PQC. If something is wrong with the
+>>>> standard then it would be best for NIST to withdraw/modify HashML-DSA
+>>>> asap. Otherwise it's the best to follow the standard IMO because if you
+>>>> don't you get criticism otherwise.
+>>>
+>>> What I am not clear about from FIPS-204 is whether availability of
+>>> HashML-DSA is a "must-use" or  a "may-use". What speaks against it for
+>>> our use case is performance. The lookup of a hash's ID (last digit of
+>>> OID) and the creation of the 11 byte encoding to prepend before every
+>>> digest for every signature takes cycles.
+>>
+>> It is a recommendation, but there are plenty of protocols (TLS,
+>> OpenPGP, etc...) where the decision has been made to use "pure" ML-DSA
+>> only, even if what you are signing is not the full data, but something
+>> containing a hash.
+>>
+>> Ideally you do not sign *just* a hash, but some structured data, like a
+>> context label that identifies the hash and some other related metadata
+>> for example. In order to make forgeries much harder should the hashing
+>> algorithm used to hash the data weaken over time. But it is not
+>> strictly necessary (NIST mentioned in some forum, sorry I do not have
+>> the message handy for quoting, that a structured packet is perfectly
+>> fine for use with pure ML-DSA, because it does enough to address the
+>> same issues that a separate internal context does with HashML-DSA).
+>>
+>> If pure-ML-DSA works better for IMA, just use pure ML-DSA.
+>>
+>>> Maybe it should explicitly state in FIPS-204 something along the lines
+>>> of "with a given hash either ML-DSA or HashML-DSA can be used (for as
+>>> long as you use it in the same way from then on)." At least this way
+>>> nobody can point out that HashML-DSA should have been used when you didn't.
+>>
+>> NIST will not change the standard documents any time soon, but for FIPS
+>> certification there are Implementation Guidelines.
+>>
+>> In any case a FIPS module cannot distinguish between data that happens
+>> to be 32 bytes long and a hash of larger data, so the point is kind of
+>> moot. From the FIPS perspective HashML-DSA is just an available
+>> algorithm that protocol implementations can use, or not.
+>>
+>> There are additional guidelines on what this may be useful for, but so
+>> far NIST has not objected to the use of pure ML-DSA even where
+>> theoretically HashML-DSA could be used.
+> 
+> I see that IMA indeed never upgraded full file hashes to use
+> 'struct ima_file_id'.  Building a new feature that relies on this seems
+ > like a bad idea though, given that it's a security bug that makes 
+the> IMA protocol cryptographically ambiguous.  I.e., it means that in IMA,
+> when the contents of some file are signed, that signature is sometimes
+> also valid for some other file contents which the signer didn't intend.
+
+You mean IMA should not sign the digest in the ima_file_id structure but 
+hash the ima_file_id structure in which this file digest is written into 
+(that we currently sign) and sign/verify this digest? And we would do 
+this to avoid two different files (with presumably different content) 
+from having the same hashes leading to the same signature? Which hashes 
+(besides the non-recommended ones) are so weak now that you must not 
+merely sign a file's hash?
+
+The problem with this is that older kernels (without patching) won't be 
+able to handle newer signatures.
+
+> 
+> Just fix that bug first, which has to be done anyway.  Then just use
+> pure ML-DSA to sign and verify the 'struct ima_file_id'.
+ > > As Simo mentioned, FIPS 204 doesn't require HashML-DSA when signing a
+> hash.  It's there as an *option* to solve a perceived problem, which is
+> actually solvable in better ways.
+> 
+> NIST doesn't plan to update FIPS 204 until 2029, and most likely the
+> updates will just be errata in the text (such as the ones I reported to
+> them), not changes or withdrawals in the algorithms themselves.  But
+> it's irrelevant: just because HashML-DSA is an option doesn't mean it
+> has to be used.  Pure ML-DSA supports arbitrary data, which includes
+
+And I was sure whether it was merely an 'option'. Who would use it then 
+if it takes more cycles to hash the prepended 11 byte oid in HashML-DSA?
+
+> formatted hashes which allow for pre-hashing perfectly well.
+> 
+> - Eric
+
 
