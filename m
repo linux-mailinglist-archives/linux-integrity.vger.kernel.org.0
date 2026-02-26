@@ -1,215 +1,507 @@
-Return-Path: <linux-integrity+bounces-8641-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8642-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GAT2OEeOoGkokwQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8641-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 19:17:43 +0100
+	id wFTHKM6OoGkokwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8642-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 19:19:58 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 887EF1AD75B
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 19:17:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FFDC1AD792
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 19:19:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C27A9336B564
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 17:05:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C2E6D37A1F78
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Feb 2026 17:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FD6E3603EF;
-	Thu, 26 Feb 2026 16:59:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F352644105A;
+	Thu, 26 Feb 2026 17:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XcFxLOPy"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="XJGRYCvU";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HFKLpE5P";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="P0cj5v4E";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="qDd8WHtq"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292BC3603C4;
-	Thu, 26 Feb 2026 16:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9130F42EEAA
+	for <linux-integrity@vger.kernel.org>; Thu, 26 Feb 2026 17:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772125151; cv=none; b=bxvqR8/tIMiO6d27OHiLvWBqv1I+CJ/UFCRqrJjuZJ/PFAQi0RWVTSXcD3b0Ck7EbMYyAvvxmH8/patHKh+ebl1BTkHTeo0ATXnn65cPYu15tQIgBI/dvq4EY2OVZUAgnW7jVh7URBaFDmGgRC7vvqCIJxY9qcyYFi+GV08KldI=
+	t=1772125250; cv=none; b=EHB/wsWt7okFlS3XN+cSuv9tnVrr71Cz/CE7c4VQMHkXqWGO3R4XQneFIwxsgNWP1+2vyoQPiBzbxHoryliPtxmjqNT91SZQhr+huzKDnAA4mg/V4RXIl7oom1UNR+DfkYpViZfWip9+9LRwxuIBU0viEf09BwXSuVm6aWiwLuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772125151; c=relaxed/simple;
-	bh=oJDJEbAWxgLYmkQ6DTSv5PS50Mjko22LLF5USPQEs4A=;
+	s=arc-20240116; t=1772125250; c=relaxed/simple;
+	bh=O6HHUUDrLr/eInYgsM941bFrgO4t8gNBauSRVXLgB2k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WmI6gsjSHHWU2dYbF/K43r0biWkPQ1PY903e3FVwFcla9hL8rZ9MU5bgpDYcih/1xcsMsjvXOwzsf1cawAzKk1U6iGChEvln83VkdlVejZaAPUDM8+BkbSd6HV2ne9i7jLViQolrm8hiewbxTiZugpukT7/7MKbpsMN7F79jLKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XcFxLOPy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F38C19423;
-	Thu, 26 Feb 2026 16:59:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772125150;
-	bh=oJDJEbAWxgLYmkQ6DTSv5PS50Mjko22LLF5USPQEs4A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XcFxLOPyCG0NK2anWiba2L+HDKVAX4IsndXWrCIDCSL8ZQxQ/sxk1mpZwSNdrIf8h
-	 Ilmd7ABOWB97Zsw47pKRCMnAxgusYp1ILL6vc3rlmcnUjlnVPa8Ao9NzxIUD7+8tiK
-	 aKV/xh9bDf7+YSOtP/aASPVou+xZvVqaXVquMspPvcMs/cZTZRoNJU56Sd1s0CNatM
-	 +kyV95HqQECxllcxyVNFLB+XgLQvdEUHqvwzht1zV4sIUcA1J8+0neJl4tT0ipe88M
-	 KaXiU21mfCZwX08VKeHWE+LnRPnWvm04fImvyEThDCDStSEiRQWSqbzE2rmh0CIwhC
-	 y96214Fs98rxQ==
-Date: Thu, 26 Feb 2026 08:58:19 -0800
-From: Eric Biggers <ebiggers@kernel.org>
-To: Simo Sorce <simo@redhat.com>
-Cc: Stefan Berger <stefanb@linux.ibm.com>, Coiby Xu <coxu@redhat.com>,
-	Johannes =?iso-8859-1?Q?Wiesb=F6ck?= <johannes.wiesboeck@aisec.fraunhofer.de>,
-	dhowells@redhat.com, dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com, keyrings@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	roberto.sassu@huawei.com, zohar@linux.ibm.com,
-	michael.weiss@aisec.fraunhofer.de
-Subject: Re: IMA and PQC
-Message-ID: <20260226165819.GA2251@sol>
-References: <aXrKaTem9nnWNuGV@Rk>
- <20260130203126.662082-1-johannes.wiesboeck@aisec.fraunhofer.de>
- <aYHznG6vbptVOjHQ@Rk>
- <ee36981d-d658-4296-9acb-874c72606b3e@linux.ibm.com>
- <20260226001049.GA3135@quark>
- <cba10ac6-3557-4fc1-9b86-55361d14156d@linux.ibm.com>
- <dc09be79-5efe-4756-a295-5b0428985525@linux.ibm.com>
- <da190dbbc692b9da8464bbbfffdde7bab26b3f1c.camel@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=k9w47fl/uK1NUudHvczeV62E9y99n/HZQfI4/2Hi3INszm1KFN98cRvNMHp5bZFcKHbGPBiWacAhfCKQNJwLRoWPPiT6/Tan3brCrf96DjvGxXCzFvHZb9g6mJtckKWnXm9I526/ssSq023lmQxuCdnE0V9seIN3H1IdFG3kl3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=XJGRYCvU; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HFKLpE5P; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=P0cj5v4E; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=qDd8WHtq; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E0CE73F999;
+	Thu, 26 Feb 2026 17:00:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1772125243; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2UqxE3+lcinVC8tUtPMhxZS4tV0HDyUFUfF7VsRmpXg=;
+	b=XJGRYCvUQEtIavuwyI0SAwKPiy3GZ/OGVFA/HK00Zt+6pITIKUpnRL9qJli9zFinAkD1W7
+	Vxgy8eY26i46GzNiwxgtrpkXkYptZJCqiB05xpDR2FfG7+w4FXN6zZ2zwKUXqTSCs2t/PT
+	iRkQO9+ZXTTMOyySveoDk4AAkQYE2SE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1772125243;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2UqxE3+lcinVC8tUtPMhxZS4tV0HDyUFUfF7VsRmpXg=;
+	b=HFKLpE5PEy48uwFKGnDhcBt+zN1U7QXn1+eST5YuNecl5/9geGKgIwMhoURm5MEd+cRRnD
+	Ek1LpwK7K+IiblBQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=P0cj5v4E;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=qDd8WHtq
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1772125240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2UqxE3+lcinVC8tUtPMhxZS4tV0HDyUFUfF7VsRmpXg=;
+	b=P0cj5v4E6hRE7j8RzUgxGJPn1i5piS2UxiIx1ItwZ56RFolWcP2L5iYRpfabk3xpxJajdy
+	2cskCjRdF1qAxrAvUUWm9uDlwOb5uzOicFHIkGNUOGU2xvBSrsDYnKZwwsWhpkbVWNZGW4
+	nC9jI1iVB3z8PRq+9A6F/BRSx4k26yM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1772125240;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2UqxE3+lcinVC8tUtPMhxZS4tV0HDyUFUfF7VsRmpXg=;
+	b=qDd8WHtqgMZ3g7j76If0cqNMPcnUnXUjZYYYy50JHWmm2+96xHsEXdjzAcqO2Nfud1EwU2
+	UYQIvBB456QifSAA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B8C193EA69;
+	Thu, 26 Feb 2026 17:00:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id WCSuLDh8oGmsPAAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 26 Feb 2026 17:00:40 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 545EAA0A27; Thu, 26 Feb 2026 18:00:36 +0100 (CET)
+Date: Thu, 26 Feb 2026 18:00:36 +0100
+From: Jan Kara <jack@suse.cz>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox <willy@infradead.org>, 
+	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	David Hildenbrand <david@kernel.org>, David Howells <dhowells@redhat.com>, 
+	Paulo Alcantara <pc@manguebit.org>, Andreas Dilger <adilger.kernel@dilger.ca>, 
+	Jan Kara <jack@suse.com>, Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
+	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
+	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
+	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
+	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
+	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
+	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
+	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
+	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, 
+	Amir Goldstein <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
+	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
+	Joseph Qi <joseph.qi@linux.alibaba.com>, Mike Marshall <hubcap@omnibond.com>, 
+	Martin Brandenburg <martin@omnibond.com>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Anders Larsen <al@alarsen.net>, Zhihao Cheng <chengzhihao1@huawei.com>, 
+	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
+	Johannes Thumshirn <jth@kernel.org>, John Johansen <john.johansen@canonical.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	"Darrick J. Wong" <djwong@kernel.org>, Martin Schiller <ms@dev.tdt.de>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
+	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
+	linux-nilfs@vger.kernel.org, v9fs@lists.linux.dev, linux-afs@lists.infradead.org, 
+	autofs@vger.kernel.org, ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
+	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev, 
+	devel@lists.orangefs.org, linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-fscrypt@vger.kernel.org, linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
+	linux-x25@vger.kernel.org
+Subject: Re: [PATCH 01/61] vfs: widen inode hash/lookup functions to u64
+Message-ID: <cmxf6pu3xuwvbhg3alu725hd4b3dheowoumd6drolde7pypwor@eplss6764uuf>
+References: <20260226-iino-u64-v1-0-ccceff366db9@kernel.org>
+ <20260226-iino-u64-v1-1-ccceff366db9@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <da190dbbc692b9da8464bbbfffdde7bab26b3f1c.camel@redhat.com>
+In-Reply-To: <20260226-iino-u64-v1-1-ccceff366db9@kernel.org>
+X-Spamd-Bar: /
+X-Spam-Flag: NO
+X-Spam-Score: -0.51
+X-Spam-Level: 
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8641-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8642-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	DMARC_NA(0.00)[suse.cz];
+	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,kernel.org,suse.cz,goodmis.org,efficios.com,intel.com,infradead.org,mit.edu,linux.dev,suse.de,redhat.com,manguebit.org,dilger.ca,suse.com,oracle.com,brown.name,talpey.com,samba.org,gmail.com,microsoft.com,dubeyko.com,ionkov.net,codewreck.org,crudebyte.com,auristor.com,themaw.net,cs.cmu.edu,fluxnic.net,tyhicks.com,physik.fu-berlin.de,vivo.com,artax.karlin.mff.cuni.cz,nod.at,paragon-software.com,fasheh.com,evilplan.org,linux.alibaba.com,omnibond.com,szeredi.hu,alarsen.net,huawei.com,wdc.com,canonical.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,schaufler-ca.com,amd.com,ffwll.ch,linaro.org,google.com,davemloft.net,arm.com,linux.intel.com,dev.tdt.de,vger.kernel.org,lists.linux.dev,kvack.org,lists.sourceforge.net,lists.samba.org,lists.infradead.org,coda.cs.cmu.edu,lists.orangefs.org,lists.ubuntu.com,lists.freedesktop.org,lists.linaro.org];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[linux.ibm.com,redhat.com,aisec.fraunhofer.de,gmail.com,oracle.com,vger.kernel.org,huawei.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.994];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,keymaterial.net:url]
-X-Rspamd-Queue-Id: 887EF1AD75B
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jack@suse.cz,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[146];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	NEURAL_HAM(-0.00)[-0.997];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 3FFDC1AD792
 X-Rspamd-Action: no action
 
-On Thu, Feb 26, 2026 at 10:27:43AM -0500, Simo Sorce wrote:
-> On Thu, 2026-02-26 at 09:16 -0500, Stefan Berger wrote:
-> > On 2/26/26 7:42 AM, Stefan Berger wrote:
-> > > On 2/25/26 7:10 PM, Eric Biggers wrote:
-> > > > On Wed, Feb 25, 2026 at 09:25:43AM -0500, Stefan Berger wrote:
-> > > > > To avoid duplicate work: Is either one of you planning on writing 
-> > > > > patches
-> > > > > for IMA to use ML-DSA and convert the current ML-DSA to also support 
-> > > > > HashML?
-> > > > > I had done the work on this before and could dig out the patches 
-> > > > > again...
-> > > > 
-> > > > IMA already had to add its own digest prefixing support, since it was
-> > > > needed to disambiguate between full-file digests and fsverity digests.
-> > > > See 'struct ima_file_id'.  Thus the message signed is at most 66 bytes.
-> > > 
-> > > The hash there is still only a hash over a file and that hash is signed, 
-> > > isn't it?
-> > > 
-> > > > 
-> > > > With that being the case, HashML-DSA isn't necessary.  It's not even
-> > > > possible to use here, since there are no OIDs assigned for the fsverity
-> > > > digests, so it cannot replace the ima_file_id.
-> > > 
-> > > For non-fsverify IMA signatures it is 'possible' to use HashML-DSA and 
-> > > it's 'working' (recycled old patches yesterday):
-> > > 
-> > > Linux: https://github.com/stefanberger/linux/commits/ 
-> > > dhmlsa%2Bima.202602025/
-> > > 
-> > > ima-evm-utils: https://github.com/linux-integrity/ima-evm-utils/pull/19/ 
-> > > commits
-> > > 
-> > > > 
-> > > > I'll also note that HashML-DSA is controversial (e.g. see
-> > > > https://keymaterial.net/2024/11/05/hashml-dsa-considered-harmful/),
-> > > 
-> > > The problem with this is that NIST would have to react to these 
-> > > controversies as we race to support PQC. If something is wrong with the 
-> > > standard then it would be best for NIST to withdraw/modify HashML-DSA 
-> > > asap. Otherwise it's the best to follow the standard IMO because if you 
-> > > don't you get criticism otherwise.
-> > 
-> > What I am not clear about from FIPS-204 is whether availability of 
-> > HashML-DSA is a "must-use" or  a "may-use". What speaks against it for 
-> > our use case is performance. The lookup of a hash's ID (last digit of 
-> > OID) and the creation of the 11 byte encoding to prepend before every 
-> > digest for every signature takes cycles.
+On Thu 26-02-26 10:55:03, Jeff Layton wrote:
+> Change the inode hash/lookup VFS API functions to accept u64 parameters
+> instead of unsigned long for inode numbers and hash values. This is
+> preparation for widening i_ino itself to u64, which will allow
+> filesystems to store full 64-bit inode numbers on 32-bit architectures.
 > 
-> It is a recommendation, but there are plenty of protocols (TLS,
-> OpenPGP, etc...) where the decision has been made to use "pure" ML-DSA
-> only, even if what you are signing is not the full data, but something
-> containing a hash.
+> Since unsigned long implicitly widens to u64 on all architectures, this
+> change is backward-compatible with all existing callers.
 > 
-> Ideally you do not sign *just* a hash, but some structured data, like a
-> context label that identifies the hash and some other related metadata
-> for example. In order to make forgeries much harder should the hashing
-> algorithm used to hash the data weaken over time. But it is not
-> strictly necessary (NIST mentioned in some forum, sorry I do not have
-> the message handy for quoting, that a structured packet is perfectly
-> fine for use with pure ML-DSA, because it does enough to address the
-> same issues that a separate internal context does with HashML-DSA).
+> Functions updated:
+>   - hash(), find_inode_fast(), find_inode_by_ino_rcu(), test_inode_iunique()
+>   - __insert_inode_hash(), iget_locked(), iget5_locked(), iget5_locked_rcu()
+>   - ilookup(), ilookup5(), ilookup5_nowait()
+>   - find_inode_nowait(), find_inode_rcu()
+>   - inode_insert5(), insert_inode_locked4()
+>   - insert_inode_locked() (local variable)
+>   - dump_mapping() (local variable and format string)
 > 
-> If pure-ML-DSA works better for IMA, just use pure ML-DSA.
-> 
-> > Maybe it should explicitly state in FIPS-204 something along the lines 
-> > of "with a given hash either ML-DSA or HashML-DSA can be used (for as 
-> > long as you use it in the same way from then on)." At least this way 
-> > nobody can point out that HashML-DSA should have been used when you didn't.
-> 
-> NIST will not change the standard documents any time soon, but for FIPS
-> certification there are Implementation Guidelines.
-> 
-> In any case a FIPS module cannot distinguish between data that happens
-> to be 32 bytes long and a hash of larger data, so the point is kind of
-> moot. From the FIPS perspective HashML-DSA is just an available
-> algorithm that protocol implementations can use, or not.
-> 
-> There are additional guidelines on what this may be useful for, but so
-> far NIST has not objected to the use of pure ML-DSA even where
-> theoretically HashML-DSA could be used.
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-I see that IMA indeed never upgraded full file hashes to use
-'struct ima_file_id'.  Building a new feature that relies on this seems
-like a bad idea though, given that it's a security bug that makes the
-IMA protocol cryptographically ambiguous.  I.e., it means that in IMA,
-when the contents of some file are signed, that signature is sometimes
-also valid for some other file contents which the signer didn't intend.
+Looks good. Feel free to add:
 
-Just fix that bug first, which has to be done anyway.  Then just use
-pure ML-DSA to sign and verify the 'struct ima_file_id'.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-As Simo mentioned, FIPS 204 doesn't require HashML-DSA when signing a
-hash.  It's there as an *option* to solve a perceived problem, which is
-actually solvable in better ways.
+								Honza
 
-NIST doesn't plan to update FIPS 204 until 2029, and most likely the
-updates will just be errata in the text (such as the ones I reported to
-them), not changes or withdrawals in the algorithms themselves.  But
-it's irrelevant: just because HashML-DSA is an option doesn't mean it
-has to be used.  Pure ML-DSA supports arbitrary data, which includes
-formatted hashes which allow for pre-hashing perfectly well.
-
-- Eric
+> ---
+>  fs/inode.c         | 46 +++++++++++++++++++++++-----------------------
+>  include/linux/fs.h | 26 +++++++++++++-------------
+>  2 files changed, 36 insertions(+), 36 deletions(-)
+> 
+> diff --git a/fs/inode.c b/fs/inode.c
+> index cc12b68e021b2c97cc88a46ddc736334ecb8edfa..2cabec9043e8176d20aecc5ce7e0f276c114f122 100644
+> --- a/fs/inode.c
+> +++ b/fs/inode.c
+> @@ -672,7 +672,7 @@ static inline void inode_sb_list_del(struct inode *inode)
+>  	}
+>  }
+>  
+> -static unsigned long hash(struct super_block *sb, unsigned long hashval)
+> +static unsigned long hash(struct super_block *sb, u64 hashval)
+>  {
+>  	unsigned long tmp;
+>  
+> @@ -685,12 +685,12 @@ static unsigned long hash(struct super_block *sb, unsigned long hashval)
+>  /**
+>   *	__insert_inode_hash - hash an inode
+>   *	@inode: unhashed inode
+> - *	@hashval: unsigned long value used to locate this object in the
+> + *	@hashval: u64 value used to locate this object in the
+>   *		inode_hashtable.
+>   *
+>   *	Add an inode to the inode hash for this superblock.
+>   */
+> -void __insert_inode_hash(struct inode *inode, unsigned long hashval)
+> +void __insert_inode_hash(struct inode *inode, u64 hashval)
+>  {
+>  	struct hlist_head *b = inode_hashtable + hash(inode->i_sb, hashval);
+>  
+> @@ -726,7 +726,7 @@ void dump_mapping(const struct address_space *mapping)
+>  	struct dentry *dentry_ptr;
+>  	struct dentry dentry;
+>  	char fname[64] = {};
+> -	unsigned long ino;
+> +	u64 ino;
+>  
+>  	/*
+>  	 * If mapping is an invalid pointer, we don't want to crash
+> @@ -750,14 +750,14 @@ void dump_mapping(const struct address_space *mapping)
+>  	}
+>  
+>  	if (!dentry_first) {
+> -		pr_warn("aops:%ps ino:%lx\n", a_ops, ino);
+> +		pr_warn("aops:%ps ino:%llx\n", a_ops, ino);
+>  		return;
+>  	}
+>  
+>  	dentry_ptr = container_of(dentry_first, struct dentry, d_u.d_alias);
+>  	if (get_kernel_nofault(dentry, dentry_ptr) ||
+>  	    !dentry.d_parent || !dentry.d_name.name) {
+> -		pr_warn("aops:%ps ino:%lx invalid dentry:%px\n",
+> +		pr_warn("aops:%ps ino:%llx invalid dentry:%px\n",
+>  				a_ops, ino, dentry_ptr);
+>  		return;
+>  	}
+> @@ -768,7 +768,7 @@ void dump_mapping(const struct address_space *mapping)
+>  	 * Even if strncpy_from_kernel_nofault() succeeded,
+>  	 * the fname could be unreliable
+>  	 */
+> -	pr_warn("aops:%ps ino:%lx dentry name(?):\"%s\"\n",
+> +	pr_warn("aops:%ps ino:%llx dentry name(?):\"%s\"\n",
+>  		a_ops, ino, fname);
+>  }
+>  
+> @@ -1087,7 +1087,7 @@ static struct inode *find_inode(struct super_block *sb,
+>   * iget_locked for details.
+>   */
+>  static struct inode *find_inode_fast(struct super_block *sb,
+> -				struct hlist_head *head, unsigned long ino,
+> +				struct hlist_head *head, u64 ino,
+>  				bool hash_locked, bool *isnew)
+>  {
+>  	struct inode *inode = NULL;
+> @@ -1301,7 +1301,7 @@ EXPORT_SYMBOL(unlock_two_nondirectories);
+>   * Note that both @test and @set are called with the inode_hash_lock held, so
+>   * they can't sleep.
+>   */
+> -struct inode *inode_insert5(struct inode *inode, unsigned long hashval,
+> +struct inode *inode_insert5(struct inode *inode, u64 hashval,
+>  			    int (*test)(struct inode *, void *),
+>  			    int (*set)(struct inode *, void *), void *data)
+>  {
+> @@ -1378,7 +1378,7 @@ EXPORT_SYMBOL(inode_insert5);
+>   * Note that both @test and @set are called with the inode_hash_lock held, so
+>   * they can't sleep.
+>   */
+> -struct inode *iget5_locked(struct super_block *sb, unsigned long hashval,
+> +struct inode *iget5_locked(struct super_block *sb, u64 hashval,
+>  		int (*test)(struct inode *, void *),
+>  		int (*set)(struct inode *, void *), void *data)
+>  {
+> @@ -1408,7 +1408,7 @@ EXPORT_SYMBOL(iget5_locked);
+>   * This is equivalent to iget5_locked, except the @test callback must
+>   * tolerate the inode not being stable, including being mid-teardown.
+>   */
+> -struct inode *iget5_locked_rcu(struct super_block *sb, unsigned long hashval,
+> +struct inode *iget5_locked_rcu(struct super_block *sb, u64 hashval,
+>  		int (*test)(struct inode *, void *),
+>  		int (*set)(struct inode *, void *), void *data)
+>  {
+> @@ -1455,7 +1455,7 @@ EXPORT_SYMBOL_GPL(iget5_locked_rcu);
+>   * hashed, and with the I_NEW flag set.  The file system gets to fill it in
+>   * before unlocking it via unlock_new_inode().
+>   */
+> -struct inode *iget_locked(struct super_block *sb, unsigned long ino)
+> +struct inode *iget_locked(struct super_block *sb, u64 ino)
+>  {
+>  	struct hlist_head *head = inode_hashtable + hash(sb, ino);
+>  	struct inode *inode;
+> @@ -1527,7 +1527,7 @@ EXPORT_SYMBOL(iget_locked);
+>   *
+>   * Returns 1 if the inode number is unique, 0 if it is not.
+>   */
+> -static int test_inode_iunique(struct super_block *sb, unsigned long ino)
+> +static int test_inode_iunique(struct super_block *sb, u64 ino)
+>  {
+>  	struct hlist_head *b = inode_hashtable + hash(sb, ino);
+>  	struct inode *inode;
+> @@ -1616,7 +1616,7 @@ EXPORT_SYMBOL(igrab);
+>   *
+>   * Note2: @test is called with the inode_hash_lock held, so can't sleep.
+>   */
+> -struct inode *ilookup5_nowait(struct super_block *sb, unsigned long hashval,
+> +struct inode *ilookup5_nowait(struct super_block *sb, u64 hashval,
+>  		int (*test)(struct inode *, void *), void *data, bool *isnew)
+>  {
+>  	struct hlist_head *head = inode_hashtable + hash(sb, hashval);
+> @@ -1647,7 +1647,7 @@ EXPORT_SYMBOL(ilookup5_nowait);
+>   *
+>   * Note: @test is called with the inode_hash_lock held, so can't sleep.
+>   */
+> -struct inode *ilookup5(struct super_block *sb, unsigned long hashval,
+> +struct inode *ilookup5(struct super_block *sb, u64 hashval,
+>  		int (*test)(struct inode *, void *), void *data)
+>  {
+>  	struct inode *inode;
+> @@ -1677,7 +1677,7 @@ EXPORT_SYMBOL(ilookup5);
+>   * Search for the inode @ino in the inode cache, and if the inode is in the
+>   * cache, the inode is returned with an incremented reference count.
+>   */
+> -struct inode *ilookup(struct super_block *sb, unsigned long ino)
+> +struct inode *ilookup(struct super_block *sb, u64 ino)
+>  {
+>  	struct hlist_head *head = inode_hashtable + hash(sb, ino);
+>  	struct inode *inode;
+> @@ -1726,8 +1726,8 @@ EXPORT_SYMBOL(ilookup);
+>   * very carefully implemented.
+>   */
+>  struct inode *find_inode_nowait(struct super_block *sb,
+> -				unsigned long hashval,
+> -				int (*match)(struct inode *, unsigned long,
+> +				u64 hashval,
+> +				int (*match)(struct inode *, u64,
+>  					     void *),
+>  				void *data)
+>  {
+> @@ -1773,7 +1773,7 @@ EXPORT_SYMBOL(find_inode_nowait);
+>   *
+>   * The caller must hold the RCU read lock.
+>   */
+> -struct inode *find_inode_rcu(struct super_block *sb, unsigned long hashval,
+> +struct inode *find_inode_rcu(struct super_block *sb, u64 hashval,
+>  			     int (*test)(struct inode *, void *), void *data)
+>  {
+>  	struct hlist_head *head = inode_hashtable + hash(sb, hashval);
+> @@ -1812,7 +1812,7 @@ EXPORT_SYMBOL(find_inode_rcu);
+>   * The caller must hold the RCU read lock.
+>   */
+>  struct inode *find_inode_by_ino_rcu(struct super_block *sb,
+> -				    unsigned long ino)
+> +				    u64 ino)
+>  {
+>  	struct hlist_head *head = inode_hashtable + hash(sb, ino);
+>  	struct inode *inode;
+> @@ -1833,7 +1833,7 @@ EXPORT_SYMBOL(find_inode_by_ino_rcu);
+>  int insert_inode_locked(struct inode *inode)
+>  {
+>  	struct super_block *sb = inode->i_sb;
+> -	ino_t ino = inode->i_ino;
+> +	u64 ino = inode->i_ino;
+>  	struct hlist_head *head = inode_hashtable + hash(sb, ino);
+>  	bool isnew;
+>  
+> @@ -1884,7 +1884,7 @@ int insert_inode_locked(struct inode *inode)
+>  }
+>  EXPORT_SYMBOL(insert_inode_locked);
+>  
+> -int insert_inode_locked4(struct inode *inode, unsigned long hashval,
+> +int insert_inode_locked4(struct inode *inode, u64 hashval,
+>  		int (*test)(struct inode *, void *), void *data)
+>  {
+>  	struct inode *old;
+> @@ -2642,7 +2642,7 @@ void init_special_inode(struct inode *inode, umode_t mode, dev_t rdev)
+>  		break;
+>  	default:
+>  		printk(KERN_DEBUG "init_special_inode: bogus i_mode (%o) for"
+> -				  " inode %s:%lu\n", mode, inode->i_sb->s_id,
+> +				  " inode %s:%llu\n", mode, inode->i_sb->s_id,
+>  				  inode->i_ino);
+>  		break;
+>  	}
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index 8b3dd145b25ec12b00ac1df17a952d9116b88047..dfa1f475b1c480c503ab6f00e891aa9b051607fa 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2935,32 +2935,32 @@ static inline int inode_generic_drop(struct inode *inode)
+>  extern void d_mark_dontcache(struct inode *inode);
+>  
+>  extern struct inode *ilookup5_nowait(struct super_block *sb,
+> -		unsigned long hashval, int (*test)(struct inode *, void *),
+> +		u64 hashval, int (*test)(struct inode *, void *),
+>  		void *data, bool *isnew);
+> -extern struct inode *ilookup5(struct super_block *sb, unsigned long hashval,
+> +extern struct inode *ilookup5(struct super_block *sb, u64 hashval,
+>  		int (*test)(struct inode *, void *), void *data);
+> -extern struct inode *ilookup(struct super_block *sb, unsigned long ino);
+> +extern struct inode *ilookup(struct super_block *sb, u64 ino);
+>  
+> -extern struct inode *inode_insert5(struct inode *inode, unsigned long hashval,
+> +extern struct inode *inode_insert5(struct inode *inode, u64 hashval,
+>  		int (*test)(struct inode *, void *),
+>  		int (*set)(struct inode *, void *),
+>  		void *data);
+> -struct inode *iget5_locked(struct super_block *, unsigned long,
+> +struct inode *iget5_locked(struct super_block *, u64,
+>  			   int (*test)(struct inode *, void *),
+>  			   int (*set)(struct inode *, void *), void *);
+> -struct inode *iget5_locked_rcu(struct super_block *, unsigned long,
+> +struct inode *iget5_locked_rcu(struct super_block *, u64,
+>  			       int (*test)(struct inode *, void *),
+>  			       int (*set)(struct inode *, void *), void *);
+> -extern struct inode * iget_locked(struct super_block *, unsigned long);
+> +extern struct inode *iget_locked(struct super_block *, u64);
+>  extern struct inode *find_inode_nowait(struct super_block *,
+> -				       unsigned long,
+> +				       u64,
+>  				       int (*match)(struct inode *,
+> -						    unsigned long, void *),
+> +						    u64, void *),
+>  				       void *data);
+> -extern struct inode *find_inode_rcu(struct super_block *, unsigned long,
+> +extern struct inode *find_inode_rcu(struct super_block *, u64,
+>  				    int (*)(struct inode *, void *), void *);
+> -extern struct inode *find_inode_by_ino_rcu(struct super_block *, unsigned long);
+> -extern int insert_inode_locked4(struct inode *, unsigned long, int (*test)(struct inode *, void *), void *);
+> +extern struct inode *find_inode_by_ino_rcu(struct super_block *, u64);
+> +extern int insert_inode_locked4(struct inode *, u64, int (*test)(struct inode *, void *), void *);
+>  extern int insert_inode_locked(struct inode *);
+>  #ifdef CONFIG_DEBUG_LOCK_ALLOC
+>  extern void lockdep_annotate_inode_mutex_key(struct inode *inode);
+> @@ -3015,7 +3015,7 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
+>   */
+>  #define alloc_inode_sb(_sb, _cache, _gfp) kmem_cache_alloc_lru(_cache, &_sb->s_inode_lru, _gfp)
+>  
+> -extern void __insert_inode_hash(struct inode *, unsigned long hashval);
+> +extern void __insert_inode_hash(struct inode *, u64 hashval);
+>  static inline void insert_inode_hash(struct inode *inode)
+>  {
+>  	__insert_inode_hash(inode, inode->i_ino);
+> 
+> -- 
+> 2.53.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
