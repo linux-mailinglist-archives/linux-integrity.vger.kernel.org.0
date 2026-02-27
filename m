@@ -1,254 +1,475 @@
-Return-Path: <linux-integrity+bounces-8680-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8681-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id II38MvSIoWmVuAQAu9opvQ
-	(envelope-from <linux-integrity+bounces-8680-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Feb 2026 13:07:16 +0100
+	id EK25FanLoWnbwQQAu9opvQ
+	(envelope-from <linux-integrity+bounces-8681-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Feb 2026 17:51:53 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614431B6EAD
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Feb 2026 13:07:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F245A1BB081
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Feb 2026 17:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BE610304EA44
-	for <lists+linux-integrity@lfdr.de>; Fri, 27 Feb 2026 12:07:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 461C9307E84A
+	for <lists+linux-integrity@lfdr.de>; Fri, 27 Feb 2026 16:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B4973A0E97;
-	Fri, 27 Feb 2026 12:07:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890FA3542CA;
+	Fri, 27 Feb 2026 16:47:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="g62khbgR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4CC3195F0;
-	Fri, 27 Feb 2026 12:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772194033; cv=none; b=brfRb79o0xJTgiX5pxuOxq0bIFro1d+vbwdZnSnW2LfhGEXNiOOpZqn1PJMoDZGBKmAw68pTS1slBCJauSswuqEf8U2lbMtzRns9G3GsDxMyxU04fIdqRZgrzISx8U2Emi5XSa5S0yH2W7k41ZwHr8Lyt7QbtTFZ33y/A7jN6fs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772194033; c=relaxed/simple;
-	bh=04SHwE5oCQpOakymHVJTL2yLNocaSt4O1akHJnQ7FKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hwPKAI05/3xSSwNJxtaL+JuICFj38QqMrq3XT0ud8vKdmoY3C7sRwyez3+188IzcawoXbWmBaLOh+HCLz5Io30TWgtt/fQfx8GIEZORn09jv2JnUfmhTgnxDb9ftjfIiY5Jm1vMZrq8Fo4ByhEUo4DWnuv6GcEs4wY4WfhIR2M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.235])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4fMn6W3c77zpVBV;
-	Fri, 27 Feb 2026 20:03:47 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 214074056B;
-	Fri, 27 Feb 2026 20:07:02 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCX0wXdiKFpsT6ZBA--.60481S2;
-	Fri, 27 Feb 2026 13:07:01 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com
-Cc: linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	devnull+dima.arista.com@kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v2] ima: Define and use a digest_size field in the ima_algo_desc structure
-Date: Fri, 27 Feb 2026 13:06:45 +0100
-Message-ID: <20260227120645.1374192-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F15234D392
+	for <linux-integrity@vger.kernel.org>; Fri, 27 Feb 2026 16:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.125.188.123
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772210850; cv=pass; b=fH5v+JyBLNyZN/pmrUJNujnmekeCd/S+gihy8iGZZYjMInPBfPvRDRXnnwUnuqgwTYh9dZhmDmxwiD+QuMOdsMLYQYMN37NYsQIeRLnIQa05HrMFwHNMD9NU7H2VXnx1k/NRNvA5KRi31ZlV1h9gIlZ1d+c5WnsDs/t3ahldMRk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772210850; c=relaxed/simple;
+	bh=EtniMrkccfrrFst83snpcJ9FJYzCqUqT1Eux3rWxpmo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=euiwOOpG0SR2KEWv5RhjDrEMU91QdwIWzyc8W1tQgXsHYjai9u6PcK0mWqP9++WYjZFfoxpztPK4837Tq6R2e0rBD4V1sbmcoxcrkwOeKygspz3sH8NSQ51+n/fproh5bNzbB8OS9mLLB7lj32aNCsb0UGUb6vPS0idSkJTebdU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=g62khbgR; arc=pass smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-yx1-f70.google.com (mail-yx1-f70.google.com [74.125.224.70])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id DB937403F8
+	for <linux-integrity@vger.kernel.org>; Fri, 27 Feb 2026 16:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1772210833;
+	bh=BKQzT9t7ZI3mb+6EDIKBTxaX0DX68JkIAcPYLBp08+M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=g62khbgRpWzZ6oapqpH54HEvITHPseCVkUma3rQ9B8T2WgRybEyTq+6sfXuBx3Ltj
+	 7KBVjSc+0H8t+Au4qhaMxtxvbPxHdGF+u/G760BXANgWJDx8nqazhwF0leAiC5Q1h+
+	 NUhi+Er/YqGXNnpW+MxhihbYkB5OyUqmBrZvF44ortsnVtuJKYsm7SmPuhy+A8pymf
+	 963JuClel6Q/7RfqFkXRfp/vSyiUoRwzpAVvYzyEJ7TgykGt1o359enXfLtKWI4BYX
+	 spKGjenOKVJWai1UVtLsVBHkfX/lnmrJ998cvCSPPHcovG6XL00dPEg6/yKDP329YL
+	 ooKWQnSJXZxUkmeU+yNgAOhwBP1X93GJFfE/zo1egLVW8uPX6CnIhqtGg5FjPffA+Y
+	 A5+ohUCJD7mLb/shq1FzzFxx8U268W3mLMOwAr7sNqPPnSjmBLl1bsYYPBfKAySwyc
+	 NHJlCelbqG+N5vGNefy9ezDpb2Zjj09zGvt5pM3mq44wFJ8X+lXUiF3112VK+1aGIJ
+	 k3SYMDYAXxjf+7InJ3/InclUbDtDIyVdI88bzRswPzUw7Nny6mV5xk3PjBBwMP55jT
+	 3gqeJjhwZjl/NF71XbRQRUhQ2RZt6S2fX/E74VmqLLunIsSocV3b49YQwajn/zs8Aq
+	 ja63de/wXDR9n54Rtl93jpkU=
+Received: by mail-yx1-f70.google.com with SMTP id 956f58d0204a3-64ca2fce827so5119631d50.0
+        for <linux-integrity@vger.kernel.org>; Fri, 27 Feb 2026 08:47:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772210831; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UFnV4mgtwmtH4/K1a2Rv+9qazV4+8XVMYGtxF2lM61aEBw3oFU82bSwUEa3ujElrdu
+         a2E9/lrfR3xKtqG2HCduCsIjWJ0zX8YLYinUylnmCy9xoAZWxgWAEhG02WQDo2Lgkcr3
+         BagSqwkpT3c/7BvRUGYegVWDHWbPdi8GlbkW6aReBizAxpZZAz4JtX5g6KXH7kLFXYD0
+         hQr8XqZDeFx6s31UrCGm0yc6Dz2uZO0BVDHiYh4UjQ5zKZKG1+CDWKEOEsHCJG+wzw+y
+         myuvgjhCOPW7ynj8dkR56kO3s/eyRA0JL8ww0ZlGtn2ByJG+GLBY1cEM4Q3e7yc2fGM1
+         8zzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version;
+        bh=BKQzT9t7ZI3mb+6EDIKBTxaX0DX68JkIAcPYLBp08+M=;
+        fh=isohgBC8TKnKgSy3Lwlxxuk6z+K6jUW4NJuxNz21s2k=;
+        b=TqvNn3oTs64+5/cVjEGadQNlvKg/4S1n/pKD7kOPZe/gvB537r1BRvpw5wsuFAvOCP
+         h7sfc07b+8oMIkvzE4YHiVxBIRXPvILqhcrPn4LquCMeN329mB5noK9q9O57418yatqh
+         x3XwRoHuGzb6H4ipxCwCnqZclTABrtVFiXkuTscTZjlVBcR63+MDoXSaON5FlHifZMmY
+         KdKzcdY9B3BBtVPqAOJSUfcQ2hebQD3LQCu7suIy1m6M79CglOZNRHSJX7V2A8jWPJNq
+         KYtD4x+UHclDZs/FgAKEf7g9uYXePRzXMcfKnxh7+4E54a+DZnzlTLn0jOR9CxAIWl95
+         mpIg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772210831; x=1772815631;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BKQzT9t7ZI3mb+6EDIKBTxaX0DX68JkIAcPYLBp08+M=;
+        b=XFBP6dr5qFd3PG/1o7D7ZKBBi/CjaG6YxVLd1yzBLp7c1HKB+SLKiSfMgd4MYXaZLc
+         mmpkHCiGI9DXveAdiVA0K9z4rr87/P8OC5PirxDt8m9/jwHLPDuXfWjyxBDG7QmstKQg
+         gokyyi3id7XGtI+CkTTMXhIir6EK/5V7RzJFuxDlaAvnP9mPxE17urrIylKnsO4iGosa
+         mqiUQw8neykmZQryVBzydli6dpAjCpKYWW+cM05SiS+c8pVNuBEBSBcmUocUsdDc2FSv
+         XeceZeijtTbgbNIAMV2WQMrmJnIhOTEGhN9X4leRYTTzhZELN2c77tBJV9Ix5tdubzSE
+         Bs5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV1ciGHDXj0xNKkIand0sSg+U4TA9NhLV7rdn7hvl6CNSTD+BSKtPly9b0esuDHab2PAvpC8Rb9ictR3YSUyWQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWOVfsYIdq2/t/XwXFSPVbLMwUertDqWkzHiRmUDFzUyg/a9wR
+	4DsbSgWMiACKcQSKPbL6I1pVTVOS4XKuUSblIV2cCidSBmpcQeAmXa1pTmspbXVtBti/50oFwgI
+	E/PBwaMgpMTolapO1f6eheBE57nCQn7K53HLhKNU8bE5hFmMmhBjo6z+PmpshJt+D7JFkycgD2m
+	BgMAuzwCXtWm7MG1Zg9TVIxTWx3/uFn1h+kM/vvEnExl+J79ShWnRnrlaZI0we
+X-Gm-Gg: ATEYQzyNsJhNLn36PIiHNLBYon/Z6EmgjVmED8S44q6mis6ZLJ62/jCeMYqILRh3Bgn
+	O9erz8HLFEUzum9mAg51qUQQ5MC9+fPoF77AtEPUE3h4vyTmzsvcV+tSGv2wGIyOfWDzq/yzwVI
+	4YzccNrR15mCjY18weWh0w0KXQnxzwyQfEjD2uJQpgIkEy4D+yrx2BOHPnBzVUyZchBygvHk7Ms
+	poUmc87xF5tLsxrjmdVdWWyxLje6l5nL441tVCMtG0HVVIHonlYTsDfNGNk8FvHPuM=
+X-Received: by 2002:a53:b743:0:b0:64c:9b84:92ee with SMTP id 956f58d0204a3-64cb6f438a9mr3821183d50.31.1772210830743;
+        Fri, 27 Feb 2026 08:47:10 -0800 (PST)
+X-Received: by 2002:a53:b743:0:b0:64c:9b84:92ee with SMTP id
+ 956f58d0204a3-64cb6f438a9mr3821130d50.31.1772210830102; Fri, 27 Feb 2026
+ 08:47:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwCX0wXdiKFpsT6ZBA--.60481S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrW3uFy7Xw1Dtw1xJFyDtrb_yoW7Jw47p3
-	Z5WF1FkF1kAFy2krn3CasxCFWagrWY9Fy7W395J34vyFn8Wr1UKwn3CrySkrW5WrW5JFyx
-	trWqqr15Cwn8taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-	w2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q
-	6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUF1v3UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGmhDaAIPwAAsF
+References: <20260226-iino-u64-v1-0-ccceff366db9@kernel.org> <20260226-iino-u64-v1-51-ccceff366db9@kernel.org>
+In-Reply-To: <20260226-iino-u64-v1-51-ccceff366db9@kernel.org>
+From: Ryan Lee <ryan.lee@canonical.com>
+Date: Fri, 27 Feb 2026 08:46:58 -0800
+X-Gm-Features: AaiRm50sr0j0-BwzNnmwGRvH8jyB1wNkHgZo3vdp3K_4YIT1mBOH-BzuS2c5S3A
+Message-ID: <CAKCV-6ujQK3yj8sB2eHafaw4pvrJUeK18Hu4vzvNSjH48RVgYg@mail.gmail.com>
+Subject: Re: [PATCH 51/61] security: update audit format strings for u64 i_ino
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Matthew Wilcox <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>, 
+	"Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>, 
+	David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>, 
+	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
+	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
+	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
+	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
+	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
+	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
+	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
+	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
+	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, Amir Goldstein <amir73il@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
+	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
+	Joel Becker <jlbec@evilplan.org>, Joseph Qi <joseph.qi@linux.alibaba.com>, 
+	Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg <martin@omnibond.com>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>, 
+	Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
+	John Johansen <john.johansen@canonical.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>, 
+	Martin Schiller <ms@dev.tdt.de>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
+	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
+	v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
+	ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
+	ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, 
+	ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
+	linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+	selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
+	linux-x25@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[canonical.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[canonical.com:s=20251003];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8680-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[huaweicloud.com];
-	FREEMAIL_TO(0.00)[linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,kernel.org,suse.cz,goodmis.org,efficios.com,intel.com,infradead.org,mit.edu,linux.dev,suse.de,redhat.com,manguebit.org,dilger.ca,suse.com,oracle.com,brown.name,talpey.com,samba.org,gmail.com,microsoft.com,dubeyko.com,ionkov.net,codewreck.org,crudebyte.com,auristor.com,themaw.net,cs.cmu.edu,fluxnic.net,tyhicks.com,physik.fu-berlin.de,vivo.com,artax.karlin.mff.cuni.cz,nod.at,paragon-software.com,fasheh.com,evilplan.org,linux.alibaba.com,omnibond.com,szeredi.hu,alarsen.net,huawei.com,wdc.com,canonical.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,schaufler-ca.com,amd.com,ffwll.ch,linaro.org,google.com,davemloft.net,arm.com,linux.intel.com,dev.tdt.de,vger.kernel.org,lists.linux.dev,kvack.org,lists.sourceforge.net,lists.samba.org,lists.infradead.org,coda.cs.cmu.edu,lists.orangefs.org,lists.ubuntu.com,lists.freedesktop.org,lists.linaro.org];
 	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8681-lists,linux-integrity=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.978];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity,dima.arista.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[canonical.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,huawei.com:email,huaweicloud.com:mid]
-X-Rspamd-Queue-Id: 614431B6EAD
+	FROM_NEQ_ENVFROM(0.00)[ryan.lee@canonical.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[146];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[canonical.com:email,canonical.com:dkim,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: F245A1BB081
 X-Rspamd-Action: no action
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Feb 26, 2026 at 9:13=E2=80=AFAM Jeff Layton <jlayton@kernel.org> wr=
+ote:
+>
+> Update %lu/%ld to %llu/%lld in security audit logging functions that
+> print inode->i_ino, since i_ino is now u64.
+>
+> Files updated: apparmor/apparmorfs.c, integrity/integrity_audit.c,
+> ipe/audit.c, lsm_audit.c.
+>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  security/apparmor/apparmorfs.c       |  4 ++--
+>  security/integrity/integrity_audit.c |  2 +-
+>  security/ipe/audit.c                 |  2 +-
+>  security/lsm_audit.c                 | 10 +++++-----
+>  security/selinux/hooks.c             |  4 ++--
+>  security/smack/smack_lsm.c           | 12 ++++++------
+>  6 files changed, 17 insertions(+), 17 deletions(-)
+>
+> diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorf=
+s.c
+> index 2f84bd23edb69e7e69cb097e554091df0132816d..7b645f40e71c956f216fa6a7d=
+69c3ecd4e2a5ff4 100644
+> --- a/security/apparmor/apparmorfs.c
+> +++ b/security/apparmor/apparmorfs.c
+> @@ -149,7 +149,7 @@ static int aafs_count;
+>
+>  static int aafs_show_path(struct seq_file *seq, struct dentry *dentry)
+>  {
+> -       seq_printf(seq, "%s:[%lu]", AAFS_NAME, d_inode(dentry)->i_ino);
+> +       seq_printf(seq, "%s:[%llu]", AAFS_NAME, d_inode(dentry)->i_ino);
+>         return 0;
+>  }
+>
+> @@ -2644,7 +2644,7 @@ static int policy_readlink(struct dentry *dentry, c=
+har __user *buffer,
+>         char name[32];
 
-Add the digest_size field to the ima_algo_desc structure to determine the
-digest size from the correct source.
+I have confirmed that the buffer is still big enough for a 64-bit inode num=
+ber.
 
-If the hash algorithm is among allocated PCR banks, take the value from the
-TPM bank info (equal to the value from the crypto subsystem if the TPM
-algorithm is supported by it; otherwise, not exceding the size of the
-digest buffer in the tpm_digest structure, used by IMA).
+>         int res;
+>
+> -       res =3D snprintf(name, sizeof(name), "%s:[%lu]", AAFS_NAME,
+> +       res =3D snprintf(name, sizeof(name), "%s:[%llu]", AAFS_NAME,
+>                        d_inode(dentry)->i_ino);
+>         if (res > 0 && res < sizeof(name))
+>                 res =3D readlink_copy(buffer, buflen, name, strlen(name))=
+;
 
-If the hash algorithm is SHA1, use the predefined value. Lastly, if the
-hash algorithm is the default one but not among the PCR banks, take the
-digest size from the crypto subsystem (the default hash algorithm is
-checked when parsing the ima_hash= command line option).
+For the AppArmor portion:
 
-Finally, use the new information to correctly show the template digest in
-ima_measurements_show() and ima_ascii_measurements_show().
+Reviewed-By: Ryan Lee <ryan.lee@canonical.com>
 
-Link: https://github.com/linux-integrity/linux/issues/14
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/ima/ima.h        |  1 +
- security/integrity/ima/ima_crypto.c |  6 ++++++
- security/integrity/ima/ima_fs.c     | 18 ++++++------------
- 3 files changed, 13 insertions(+), 12 deletions(-)
-
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 89ebe98ffc5e..c38a9eb945b6 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -53,6 +53,7 @@ extern atomic_t ima_setxattr_allowed_hash_algorithms;
- struct ima_algo_desc {
- 	struct crypto_shash *tfm;
- 	enum hash_algo algo;
-+	unsigned int digest_size;
- };
- 
- /* set during initialization */
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index 8ae7821a65c2..c2a859710d20 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -109,6 +109,7 @@ static struct crypto_shash *ima_alloc_tfm(enum hash_algo algo)
- 
- int __init ima_init_crypto(void)
- {
-+	unsigned int digest_size;
- 	enum hash_algo algo;
- 	long rc;
- 	int i;
-@@ -147,7 +148,9 @@ int __init ima_init_crypto(void)
- 
- 	for (i = 0; i < NR_BANKS(ima_tpm_chip); i++) {
- 		algo = ima_tpm_chip->allocated_banks[i].crypto_id;
-+		digest_size = ima_tpm_chip->allocated_banks[i].digest_size;
- 		ima_algo_array[i].algo = algo;
-+		ima_algo_array[i].digest_size = digest_size;
- 
- 		/* unknown TPM algorithm */
- 		if (algo == HASH_ALGO__LAST)
-@@ -183,12 +186,15 @@ int __init ima_init_crypto(void)
- 		}
- 
- 		ima_algo_array[ima_sha1_idx].algo = HASH_ALGO_SHA1;
-+		ima_algo_array[ima_sha1_idx].digest_size = SHA1_DIGEST_SIZE;
- 	}
- 
- 	if (ima_hash_algo_idx >= NR_BANKS(ima_tpm_chip) &&
- 	    ima_hash_algo_idx != ima_sha1_idx) {
-+		digest_size = hash_digest_size[ima_hash_algo];
- 		ima_algo_array[ima_hash_algo_idx].tfm = ima_shash_tfm;
- 		ima_algo_array[ima_hash_algo_idx].algo = ima_hash_algo;
-+		ima_algo_array[ima_hash_algo_idx].digest_size = digest_size;
- 	}
- 
- 	return 0;
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 012a58959ff0..23d3a14b8ce3 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -132,16 +132,12 @@ int ima_measurements_show(struct seq_file *m, void *v)
- 	char *template_name;
- 	u32 pcr, namelen, template_data_len; /* temporary fields */
- 	bool is_ima_template = false;
--	enum hash_algo algo;
- 	int i, algo_idx;
- 
- 	algo_idx = ima_sha1_idx;
--	algo = HASH_ALGO_SHA1;
- 
--	if (m->file != NULL) {
-+	if (m->file != NULL)
- 		algo_idx = (unsigned long)file_inode(m->file)->i_private;
--		algo = ima_algo_array[algo_idx].algo;
--	}
- 
- 	/* get entry */
- 	e = qe->entry;
-@@ -160,7 +156,8 @@ int ima_measurements_show(struct seq_file *m, void *v)
- 	ima_putc(m, &pcr, sizeof(e->pcr));
- 
- 	/* 2nd: template digest */
--	ima_putc(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
-+	ima_putc(m, e->digests[algo_idx].digest,
-+		 ima_algo_array[algo_idx].digest_size);
- 
- 	/* 3rd: template name size */
- 	namelen = !ima_canonical_fmt ? strlen(template_name) :
-@@ -229,16 +226,12 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
- 	struct ima_queue_entry *qe = v;
- 	struct ima_template_entry *e;
- 	char *template_name;
--	enum hash_algo algo;
- 	int i, algo_idx;
- 
- 	algo_idx = ima_sha1_idx;
--	algo = HASH_ALGO_SHA1;
- 
--	if (m->file != NULL) {
-+	if (m->file != NULL)
- 		algo_idx = (unsigned long)file_inode(m->file)->i_private;
--		algo = ima_algo_array[algo_idx].algo;
--	}
- 
- 	/* get entry */
- 	e = qe->entry;
-@@ -252,7 +245,8 @@ static int ima_ascii_measurements_show(struct seq_file *m, void *v)
- 	seq_printf(m, "%2d ", e->pcr);
- 
- 	/* 2nd: template hash */
--	ima_print_digest(m, e->digests[algo_idx].digest, hash_digest_size[algo]);
-+	ima_print_digest(m, e->digests[algo_idx].digest,
-+			 ima_algo_array[algo_idx].digest_size);
- 
- 	/* 3th:  template name */
- 	seq_printf(m, " %s", template_name);
--- 
-2.43.0
-
+> diff --git a/security/integrity/integrity_audit.c b/security/integrity/in=
+tegrity_audit.c
+> index 0ec5e4c22cb2a1066c2b897776ead6d3db72635c..d8d9e5ff1cd22b091f462d1e8=
+3d28d2d6bd983e9 100644
+> --- a/security/integrity/integrity_audit.c
+> +++ b/security/integrity/integrity_audit.c
+> @@ -62,7 +62,7 @@ void integrity_audit_message(int audit_msgno, struct in=
+ode *inode,
+>         if (inode) {
+>                 audit_log_format(ab, " dev=3D");
+>                 audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -               audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+> +               audit_log_format(ab, " ino=3D%llu", inode->i_ino);
+>         }
+>         audit_log_format(ab, " res=3D%d errno=3D%d", !result, errno);
+>         audit_log_end(ab);
+> diff --git a/security/ipe/audit.c b/security/ipe/audit.c
+> index 3f0deeb54912730d9acf5e021a4a0cb29a34e982..93fb59fbddd60b56c0b22be2a=
+38b809ef9e18b76 100644
+> --- a/security/ipe/audit.c
+> +++ b/security/ipe/audit.c
+> @@ -153,7 +153,7 @@ void ipe_audit_match(const struct ipe_eval_ctx *const=
+ ctx,
+>                 if (inode) {
+>                         audit_log_format(ab, " dev=3D");
+>                         audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -                       audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+> +                       audit_log_format(ab, " ino=3D%llu", inode->i_ino)=
+;
+>                 } else {
+>                         audit_log_format(ab, " dev=3D? ino=3D?");
+>                 }
+> diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+> index 7d623b00495c14b079e10e963c21a9f949c11f07..737f5a263a8f79416133315ed=
+f363ece3d79c722 100644
+> --- a/security/lsm_audit.c
+> +++ b/security/lsm_audit.c
+> @@ -202,7 +202,7 @@ void audit_log_lsm_data(struct audit_buffer *ab,
+>                 if (inode) {
+>                         audit_log_format(ab, " dev=3D");
+>                         audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -                       audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+> +                       audit_log_format(ab, " ino=3D%llu", inode->i_ino)=
+;
+>                 }
+>                 break;
+>         }
+> @@ -215,7 +215,7 @@ void audit_log_lsm_data(struct audit_buffer *ab,
+>                 if (inode) {
+>                         audit_log_format(ab, " dev=3D");
+>                         audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -                       audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+> +                       audit_log_format(ab, " ino=3D%llu", inode->i_ino)=
+;
+>                 }
+>                 break;
+>         }
+> @@ -228,7 +228,7 @@ void audit_log_lsm_data(struct audit_buffer *ab,
+>                 if (inode) {
+>                         audit_log_format(ab, " dev=3D");
+>                         audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -                       audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+> +                       audit_log_format(ab, " ino=3D%llu", inode->i_ino)=
+;
+>                 }
+>
+>                 audit_log_format(ab, " ioctlcmd=3D0x%hx", a->u.op->cmd);
+> @@ -246,7 +246,7 @@ void audit_log_lsm_data(struct audit_buffer *ab,
+>                 if (inode) {
+>                         audit_log_format(ab, " dev=3D");
+>                         audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -                       audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+> +                       audit_log_format(ab, " ino=3D%llu", inode->i_ino)=
+;
+>                 }
+>                 break;
+>         }
+> @@ -265,7 +265,7 @@ void audit_log_lsm_data(struct audit_buffer *ab,
+>                 }
+>                 audit_log_format(ab, " dev=3D");
+>                 audit_log_untrustedstring(ab, inode->i_sb->s_id);
+> -               audit_log_format(ab, " ino=3D%lu", inode->i_ino);
+> +               audit_log_format(ab, " ino=3D%llu", inode->i_ino);
+>                 rcu_read_unlock();
+>                 break;
+>         }
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index d8224ea113d1ac273aac1fb52324f00b3301ae75..150ea86ebc1f7c7f8391af410=
+9a3da82b12d00d2 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -1400,7 +1400,7 @@ static int inode_doinit_use_xattr(struct inode *ino=
+de, struct dentry *dentry,
+>         if (rc < 0) {
+>                 kfree(context);
+>                 if (rc !=3D -ENODATA) {
+> -                       pr_warn("SELinux: %s:  getxattr returned %d for d=
+ev=3D%s ino=3D%ld\n",
+> +                       pr_warn("SELinux: %s:  getxattr returned %d for d=
+ev=3D%s ino=3D%lld\n",
+>                                 __func__, -rc, inode->i_sb->s_id, inode->=
+i_ino);
+>                         return rc;
+>                 }
+> @@ -3477,7 +3477,7 @@ static void selinux_inode_post_setxattr(struct dent=
+ry *dentry, const char *name,
+>                                            &newsid);
+>         if (rc) {
+>                 pr_err("SELinux:  unable to map context to SID"
+> -                      "for (%s, %lu), rc=3D%d\n",
+> +                      "for (%s, %llu), rc=3D%d\n",
+>                        inode->i_sb->s_id, inode->i_ino, -rc);
+>                 return;
+>         }
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index 98af9d7b943469d0ddd344fc78c0b87ca40c16c4..7e2f54c17a5d5c70740bbfa92=
+ba4d4f1aca2cf22 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -182,7 +182,7 @@ static int smk_bu_inode(struct inode *inode, int mode=
+, int rc)
+>         char acc[SMK_NUM_ACCESS_TYPE + 1];
+>
+>         if (isp->smk_flags & SMK_INODE_IMPURE)
+> -               pr_info("Smack Unconfined Corruption: inode=3D(%s %ld) %s=
+\n",
+> +               pr_info("Smack Unconfined Corruption: inode=3D(%s %lld) %=
+s\n",
+>                         inode->i_sb->s_id, inode->i_ino, current->comm);
+>
+>         if (rc <=3D 0)
+> @@ -195,7 +195,7 @@ static int smk_bu_inode(struct inode *inode, int mode=
+, int rc)
+>
+>         smk_bu_mode(mode, acc);
+>
+> -       pr_info("Smack %s: (%s %s %s) inode=3D(%s %ld) %s\n", smk_bu_mess=
+[rc],
+> +       pr_info("Smack %s: (%s %s %s) inode=3D(%s %lld) %s\n", smk_bu_mes=
+s[rc],
+>                 tsp->smk_task->smk_known, isp->smk_inode->smk_known, acc,
+>                 inode->i_sb->s_id, inode->i_ino, current->comm);
+>         return 0;
+> @@ -214,7 +214,7 @@ static int smk_bu_file(struct file *file, int mode, i=
+nt rc)
+>         char acc[SMK_NUM_ACCESS_TYPE + 1];
+>
+>         if (isp->smk_flags & SMK_INODE_IMPURE)
+> -               pr_info("Smack Unconfined Corruption: inode=3D(%s %ld) %s=
+\n",
+> +               pr_info("Smack Unconfined Corruption: inode=3D(%s %lld) %=
+s\n",
+>                         inode->i_sb->s_id, inode->i_ino, current->comm);
+>
+>         if (rc <=3D 0)
+> @@ -223,7 +223,7 @@ static int smk_bu_file(struct file *file, int mode, i=
+nt rc)
+>                 rc =3D 0;
+>
+>         smk_bu_mode(mode, acc);
+> -       pr_info("Smack %s: (%s %s %s) file=3D(%s %ld %pD) %s\n", smk_bu_m=
+ess[rc],
+> +       pr_info("Smack %s: (%s %s %s) file=3D(%s %lld %pD) %s\n", smk_bu_=
+mess[rc],
+>                 sskp->smk_known, smk_of_inode(inode)->smk_known, acc,
+>                 inode->i_sb->s_id, inode->i_ino, file,
+>                 current->comm);
+> @@ -244,7 +244,7 @@ static int smk_bu_credfile(const struct cred *cred, s=
+truct file *file,
+>         char acc[SMK_NUM_ACCESS_TYPE + 1];
+>
+>         if (isp->smk_flags & SMK_INODE_IMPURE)
+> -               pr_info("Smack Unconfined Corruption: inode=3D(%s %ld) %s=
+\n",
+> +               pr_info("Smack Unconfined Corruption: inode=3D(%s %lld) %=
+s\n",
+>                         inode->i_sb->s_id, inode->i_ino, current->comm);
+>
+>         if (rc <=3D 0)
+> @@ -253,7 +253,7 @@ static int smk_bu_credfile(const struct cred *cred, s=
+truct file *file,
+>                 rc =3D 0;
+>
+>         smk_bu_mode(mode, acc);
+> -       pr_info("Smack %s: (%s %s %s) file=3D(%s %ld %pD) %s\n", smk_bu_m=
+ess[rc],
+> +       pr_info("Smack %s: (%s %s %s) file=3D(%s %lld %pD) %s\n", smk_bu_=
+mess[rc],
+>                 sskp->smk_known, smk_of_inode(inode)->smk_known, acc,
+>                 inode->i_sb->s_id, inode->i_ino, file,
+>                 current->comm);
+>
+> --
+> 2.53.0
+>
+>
 
