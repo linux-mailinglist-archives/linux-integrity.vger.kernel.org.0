@@ -1,212 +1,140 @@
-Return-Path: <linux-integrity+bounces-8702-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8703-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kPhnCjyIpWmWDQYAu9opvQ
-	(envelope-from <linux-integrity+bounces-8702-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 02 Mar 2026 13:53:16 +0100
+	id AMvrKiuTpWnXEAYAu9opvQ
+	(envelope-from <linux-integrity+bounces-8703-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 02 Mar 2026 14:39:55 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FE8B1D9338
-	for <lists+linux-integrity@lfdr.de>; Mon, 02 Mar 2026 13:53:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 236D71D9F49
+	for <lists+linux-integrity@lfdr.de>; Mon, 02 Mar 2026 14:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A0FDC30FC90F
-	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2026 12:44:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2B7AD307C436
+	for <lists+linux-integrity@lfdr.de>; Mon,  2 Mar 2026 13:33:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A3C3B8D75;
-	Mon,  2 Mar 2026 12:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12AC53FB07C;
+	Mon,  2 Mar 2026 13:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IoqCtrXo";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ONAn918A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fEL+VDLf"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099CD3876AC;
-	Mon,  2 Mar 2026 12:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8113ED11C;
+	Mon,  2 Mar 2026 13:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772455384; cv=none; b=AKI5w9fmajRatu8tSl1fpiB1148mdy52R8aebVi46Zteli7HLc4QJZQY/eP2Au2rpqva7vSIjQuhtGxPQkoyTsOUM2jKn097gKAbLregHTja8ClRva/IALJuBIBLAgX57Vuna/B8ied+p94hwDfJgPGn7rs71/0LCjo62lIE5sI=
+	t=1772458356; cv=none; b=ry6tllnqMMBcb64Pc+bYD3ZjZMPHf3uzTw/OcdpFNrZ1MhEDrIdzNdPPHoSf1WhMh3+OIauPjEvmM7JOO3OImnfj0/LQ5LlV0JvmT7j0zGSPyb4tmz74LW92qyVDwOiYYhW2/LeVQrxUawbRS47YJ5fV1kGBnCXFISbEK46UgHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772455384; c=relaxed/simple;
-	bh=cSyXaR9CC/kzl95o4jDS3lCVCTRqIF6V40mtMwdZY4s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=em8Hr5ONQL7Fu9vYU52mWlmAWT8W7XEOpGTInIzq06/Lb2+bwc5/YN3ZfGEbdfkGVtWYIUGK8eKSQ94Im2zdWYYabp4GGnFWBQ/oHB2ceMcIjPYNVeRu+sk27kj1wuHaltC5e2khNcHBK4UcHYfAix/nmeszIniS2KL7U+xMwTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IoqCtrXo; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ONAn918A; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772455380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7zIQjC5c3Xpy63Pp68hHQZNu1F60+I8OSONI8GYykYA=;
-	b=IoqCtrXoaJwzS6N6YTMfyUCj8OoW/1gp3fYpZspd73A5UUdimUnCT3INryfBOp/Uidvt2O
-	fFZBSh625EH/xOiIUs7bliPhEW7eIe4oVRbndQ7JS0HExPt2BnyyJr3BBFi0HANX3JY+U6
-	qFbpYUo/e8e9VwdmLq9ekhd6KfZylVBHlHOHTiuCuUrnCaZLG019mVSHnZ/Lyf+cWBhcsS
-	T2eHYhWbptKMW1dTMPI03AVU7pIPWBhnVBFcsKpQ5KcueStobqAfhhAciAS3S0oxluNuGs
-	3LTkoF7DadXFNeuYl1q9LHB9gjovU0Vq093pmu6Rfx1KcM0E3m55fqPDcKGEIw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772455380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7zIQjC5c3Xpy63Pp68hHQZNu1F60+I8OSONI8GYykYA=;
-	b=ONAn918AO3qUbTFSO+cpvPOefdI2PFu7IqaG5s12rfqY+JxpiTHetkmBVDwhXDQ+tZasVd
-	KGa3KguKgsiBfwDw==
-Date: Mon, 02 Mar 2026 13:42:44 +0100
-Subject: [PATCH 8/8] selftests/bpf: verify_pkcs7_sig: Use 'struct
- module_signature' from the UAPI headers
+	s=arc-20240116; t=1772458356; c=relaxed/simple;
+	bh=MMO6QzhJTBpjIamFxQOPnoG0lDTOenIytlKAn/pj/E4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=kGVnpRHOJ5g9uDKp/8dLcObeRF3KRaqAECu8g1PgyBPrRRonFsb9YuhUW/ThrGBTEudCJ0QYZ5TUHG7VeioYf3Ie8u9IdWMC0mW6xUErNhxtqdQqu+Q6f8wwlKKD8GQrQvEC4IRwpkD4AH+xTik24qkusez9z5B3kRmikGooHQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fEL+VDLf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F17BBC2BCAF;
+	Mon,  2 Mar 2026 13:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772458355;
+	bh=MMO6QzhJTBpjIamFxQOPnoG0lDTOenIytlKAn/pj/E4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=fEL+VDLfWgejB2UiD3yfu4w39ugAxlb20659+wBdunWi1Bmc39BavexRTwtcs+1l3
+	 sX93ULfh/tz4Vhr0v3imaxSkT35vp3EVg9Gy+LgXN+2mq96c3xiAwr/WyFIihORW9w
+	 BGpyRT/a1j1nBY0ZjXH/GPrvJyTo9mEc3DN+Xka8m1xkvcDYFegbdDh9ZTD8HmUkK0
+	 nxghDIgYeXQX0sbRhzs9+fSGH8XrM7dswPU2XpiF4ZdmAB25gPYcvE+LjIAqNBNgUi
+	 +UUD9qGbudgTDkVZ7YshLPbkpT5245i6bbuZy3My6iob9UzGq4b2JfAUxFrzM/2uTT
+	 vDicKTI56lTsw==
+Content-Type: multipart/mixed; boundary="===============7930476675043711056=="
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260302-module-signature-uapi-v1-8-207d955e0d69@linutronix.de>
-References: <20260302-module-signature-uapi-v1-0-207d955e0d69@linutronix.de>
-In-Reply-To: <20260302-module-signature-uapi-v1-0-207d955e0d69@linutronix.de>
-To: David Howells <dhowells@redhat.com>, 
- David Woodhouse <dwmw2@infradead.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-modules@vger.kernel.org, linux-s390@vger.kernel.org, 
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772455374; l=2301;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=cSyXaR9CC/kzl95o4jDS3lCVCTRqIF6V40mtMwdZY4s=;
- b=mt33KH6e4U4abWVfxbWix+ZkiYK/4AzVrqC4RxG9vRwCPeDfWtoMAsO7WQhrIzjBQx3/Orhg9
- AizCR+OrzOJDG/jUpSJSipbzlY/d2Yw2F4CzWtoPNcOrPYGTWaVIQux
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Message-Id: <b6c00e7ecc633ab02ee8689f5647ce9090cf72d75f5bf9f2cc2c09983d963b58@mail.kernel.org>
+In-Reply-To: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
+References: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
+Subject: Re: [PATCH 6/8] tools uapi headers: add linux/module_signature.h
+From: bot+bpf-ci@kernel.org
+To: thomas.weissschuh@linutronix.de,dhowells@redhat.com,dwmw2@infradead.org,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,atomlin@atomlin.com,hca@linux.ibm.com,gor@linux.ibm.com,agordeev@linux.ibm.com,borntraeger@linux.ibm.com,svens@linux.ibm.com,zohar@linux.ibm.com,roberto.sassu@huawei.com,dmitry.kasatkin@gmail.com,eric.snowberg@oracle.com,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,nathan@kernel.org,nsc@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org
+Cc: keyrings@vger.kernel.org,linux-kernel@vger.kernel.org,linux-modules@vger.kernel.org,linux-s390@vger.kernel.org,linux-integrity@vger.kernel.org,linux-security-module@vger.kernel.org,linux-kbuild@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,thomas.weissschuh@linutronix.de,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  2 Mar 2026 13:32:34 +0000 (UTC)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	CTYPE_MIXED_BOGUS(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linutronix.de,kernel.org,iogearbox.net,gmail.com,linux.dev,meta.com];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[bot@kernel.org,linux-integrity@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8702-lists,linux-integrity=lfdr.de];
-	FREEMAIL_TO(0.00)[redhat.com,infradead.org,kernel.org,suse.com,google.com,atomlin.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,iogearbox.net,linux.dev,fomichev.me];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-8703-lists,linux-integrity=lfdr.de,bpf-ci];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCPT_COUNT_TWELVE(0.00)[44];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[linutronix.de,redhat.com,infradead.org,kernel.org,suse.com,google.com,atomlin.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,iogearbox.net,linux.dev,fomichev.me];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
+	FROM_NO_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+];
+	RCPT_COUNT_GT_50(0.00)[53];
+	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:mid,linutronix.de:dkim,linutronix.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7FE8B1D9338
+	NEURAL_HAM(-0.00)[-0.992];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.kernel.org:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 236D71D9F49
 X-Rspamd-Action: no action
 
-Now that the UAPI headers provide the required definitions, use those.
-Some symbols have been renamed, adapt to those.
+--===============7930476675043711056==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> diff --git a/tools/include/uapi/linux/module_signature.h b/tools/include/uapi/linux/module_signature.h
+> --- /dev/null
+> +++ b/tools/include/uapi/linux/module_signature.h
+
+[ ... ]
+
+> +enum module_signature_type {
+> +	MODULE_SIGNATURE_TYPE_PKCS7 = 2,	/* Signature in PKCS#7 message */
+> +	MODULE_SIGNATURE_TYPE_MERKLE = 3,	/* Merkle proof for modules */
+> +};
+
+The source UAPI header at include/uapi/linux/module_signature.h does not
+define MODULE_SIGNATURE_TYPE_MERKLE:
+
+include/uapi/linux/module_signature.h:
+    enum module_signature_type {
+        MODULE_SIGNATURE_TYPE_PKCS7 = 2,
+    };
+
+Was this value intentionally added here ahead of the kernel header?  It
+appears to come from the CONFIG_MODULE_HASHES series referenced in the
+cover letter, but no commit in this series adds it to the kernel UAPI
+header, so the tools copy diverges from its source at creation time.
+
+
 ---
- .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 +++-------------------
- 1 file changed, 3 insertions(+), 25 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-index 4d69d9d55e17..f327feb8e38c 100644
---- a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-@@ -18,6 +18,7 @@
- #include <linux/keyctl.h>
- #include <sys/xattr.h>
- #include <linux/fsverity.h>
-+#include <linux/module_signature.h>
- #include <test_progs.h>
- 
- #include "test_verify_pkcs7_sig.skel.h"
-@@ -33,29 +34,6 @@
- #define SHA256_DIGEST_SIZE      32
- #endif
- 
--/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
--#define MODULE_SIG_STRING "~Module signature appended~\n"
--
--/*
-- * Module signature information block.
-- *
-- * The constituents of the signature section are, in order:
-- *
-- *	- Signer's name
-- *	- Key identifier
-- *	- Signature data
-- *	- Information block
-- */
--struct module_signature {
--	__u8	algo;		/* Public-key crypto algorithm [0] */
--	__u8	hash;		/* Digest algorithm [0] */
--	__u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
--	__u8	signer_len;	/* Length of signer's name [0] */
--	__u8	key_id_len;	/* Length of key identifier [0] */
--	__u8	__pad[3];
--	__be32	sig_len;	/* Length of signature data */
--};
--
- struct data {
- 	__u8 data[MAX_DATA_SIZE];
- 	__u32 data_len;
-@@ -215,7 +193,7 @@ static int populate_data_item_mod(struct data *data_item)
- 		return 0;
- 
- 	modlen = st.st_size;
--	marker_len = sizeof(MODULE_SIG_STRING) - 1;
-+	marker_len = sizeof(MODULE_SIGNATURE_MARKER) - 1;
- 
- 	fd = open(mod_path, O_RDONLY);
- 	if (fd == -1)
-@@ -228,7 +206,7 @@ static int populate_data_item_mod(struct data *data_item)
- 	if (mod == MAP_FAILED)
- 		return -errno;
- 
--	if (strncmp(mod + modlen - marker_len, MODULE_SIG_STRING, marker_len)) {
-+	if (strncmp(mod + modlen - marker_len, MODULE_SIGNATURE_MARKER, marker_len)) {
- 		ret = -EINVAL;
- 		goto out;
- 	}
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22577240517
 
--- 
-2.53.0
+AI-authorship-score: low
+AI-authorship-explanation: Straightforward mechanical UAPI header copy with terse commit message, consistent with experienced kernel developer style from a known Linutronix contributor.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: The tools UAPI copy contains an enum value (MODULE_SIGNATURE_TYPE_MERKLE) not present in the kernel source header, creating a content mismatch that does not affect runtime behavior but violates the convention that tools copies mirror kernel UAPI headers.
 
+--===============7930476675043711056==--
 
