@@ -1,57 +1,68 @@
-Return-Path: <linux-integrity+bounces-8878-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8879-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CH8LMaNSp2lsgwAAu9opvQ
-	(envelope-from <linux-integrity+bounces-8878-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 03 Mar 2026 22:29:07 +0100
+	id WIkuGG5Tp2lsgwAAu9opvQ
+	(envelope-from <linux-integrity+bounces-8879-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 03 Mar 2026 22:32:30 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FAD01F786B
-	for <lists+linux-integrity@lfdr.de>; Tue, 03 Mar 2026 22:29:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02F2A1F791D
+	for <lists+linux-integrity@lfdr.de>; Tue, 03 Mar 2026 22:32:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F3522315BA0C
-	for <lists+linux-integrity@lfdr.de>; Tue,  3 Mar 2026 21:26:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 69A143143973
+	for <lists+linux-integrity@lfdr.de>; Tue,  3 Mar 2026 21:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D14A3A5E9B;
-	Tue,  3 Mar 2026 21:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC105425CFE;
+	Tue,  3 Mar 2026 21:30:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DFM+J3nM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tdPm33CT"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9AC377ED7;
-	Tue,  3 Mar 2026 21:26:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96410314A64;
+	Tue,  3 Mar 2026 21:30:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772573214; cv=none; b=dB705FTUPEN47PR8dRL4N9LQrEx5NGKBcH4EKcZYn9AuPZM6V/0++bwGb+Fq0L/w5SgQ6PXbAjOnCHtXRdfp4hkzl/joTeMghkrao3afhzTVxnNdqm44hbr4jPaFuQrgx16Y4Ny/ABJHh0iVgSO2rK943QpLlEPvSTvUhQa7Nxw=
+	t=1772573448; cv=none; b=pSCRFlvoobNUxNGctx/xDJEV7io1kM3ZW7dqf2OHBKeeyD5uARfPHI2C42ZxT7BTeQ0T0MRZHIcJ3gOnGPMdvq05j0HDOZHF18O8nQlN76hC6FFuMXBNfTtGd5nOY6JRex5jKVgYmkJ8Sj3tVWCiv9v0it0fEzSdaAMIRv4OR8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772573214; c=relaxed/simple;
-	bh=o8qtxAvcpI27fXxm+YDkyazulCEfeVWfNjp8JBioi+8=;
+	s=arc-20240116; t=1772573448; c=relaxed/simple;
+	bh=4c0TFwH2b+pC4Fu9mQ0jIAlqb8vgIoFBsfbu1qKF5Ho=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QwrKCBikAvIrl10ytWX0/tri0qnMvWUKjF81+6X5796EkH71tHmPR51m9xTjNwB2Ia2UyXLDDJSoPWv3iUM98EYopd3US0YcmlPK6KP4hdKixOet9pgQYdILeMHxwrOgXN0zqpC27sq+7zSQbjaifVZnDQK2VTedkKkGXeuWXwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DFM+J3nM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD82C116C6;
-	Tue,  3 Mar 2026 21:26:53 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ma4pvVIarc46eOr+6amrPcOGZ0Nnk1WmTJVhThj6HKyO1X/A57NT7SiSaaEaUZ2vNAFweuntXQRa906t8FyIsEJR7bVNDHEwaAmCoIZQ8AgxzKQ9CpBkol/EEi3T/gr9CotaNx1jAzdizLw41ZLpVyguZ/WvR1T2SReBqTCDTo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tdPm33CT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A827C116C6;
+	Tue,  3 Mar 2026 21:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772573213;
-	bh=o8qtxAvcpI27fXxm+YDkyazulCEfeVWfNjp8JBioi+8=;
+	s=k20201202; t=1772573448;
+	bh=4c0TFwH2b+pC4Fu9mQ0jIAlqb8vgIoFBsfbu1qKF5Ho=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DFM+J3nMaee3cMzTxWiyLn1yDX8TvzPu1+qxXPbRNEMs9mq56KljD7+GaaHLYtsdp
-	 5ksDCK5WD+4yr93n0cB6ap+sj15CCVBZJeI7ITdnM45zBdXtZQaj517lyz8XP4L5i0
-	 LeExIZv4uKOM6aMGeYvxFX7OOskXH/O7YFThl5UijKy/SUYpP7kU3YFh1OXiH+oK85
-	 RGZ2Ag5wNAmSqv7W9B5V+CdTjiuiNLjirui/93B3UquUTLpaSEaAEV1I7EWPVmEP9M
-	 nfzSCK/9D7DZ+Ghi6w0UCkQl+5axboIQmX+Dcns5zSZUGQwBNRw/olm0fLlFCZJalF
-	 efGr6HO5wMeQw==
-Date: Tue, 3 Mar 2026 23:26:49 +0200
+	b=tdPm33CT9vKuaJdE08c73fl9+Ivp84fXqk9CB4KIxnEWBRibooUEe5ecWwnDvIbpf
+	 cph3GW5+3KlfuIeVn7KOel/x9D9EBKlWkPi5Z2mmWX1xwOPvesx1I9anh9sY8fRIC1
+	 3gIMU5bR3ENXKHjeoFsY9q7FSGc5xgAEX35C+m3t1m+UORHn7zrySlnIx/HaIZAwqx
+	 XhQxj3pke+Hpam0NBTJBelZfWdCWpnFr+sj/Ik4hciMX/b0DltBElCEKC2S3mNbLZ0
+	 Hcl2DARBS6X6SdtT764dgWurtfm/HXVKZdjFHYYhdnz7UXw+pfoHqxqrRfFu7JDLli
+	 vaxlpmCtXDsXA==
+Date: Tue, 3 Mar 2026 23:30:43 +0200
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tpm: Make tcpci_pm_ops variable static const
-Message-ID: <aadSGbFHY7CT1G7B@kernel.org>
-References: <20260216110458.160357-2-krzysztof.kozlowski@oss.qualcomm.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: linux-integrity@vger.kernel.org, Chris Fenner <cfenn@google.com>,
+	Jonathan McDowell <noodles@earth.li>,
+	Eric Biggers <ebiggers@kernel.org>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	"open list:KEYS-TRUSTED" <keyrings@vger.kernel.org>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>
+Subject: Re: [PATCH v9 01/11] KEYS: trusted: Use get_random-fallback for TPM
+Message-ID: <aadTA3paHqNBlvSY@kernel.org>
+References: <20260125192526.782202-1-jarkko@kernel.org>
+ <20260125192526.782202-2-jarkko@kernel.org>
+ <06a08cbbe47111a1795e5dcd42fb8cc4be643a72.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -60,28 +71,27 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260216110458.160357-2-krzysztof.kozlowski@oss.qualcomm.com>
-X-Rspamd-Queue-Id: 3FAD01F786B
+In-Reply-To: <06a08cbbe47111a1795e5dcd42fb8cc4be643a72.camel@linux.ibm.com>
+X-Rspamd-Queue-Id: 02F2A1F791D
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-8878-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8879-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
@@ -89,41 +99,32 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,qualcomm.com:email]
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Mon, Feb 16, 2026 at 12:04:59PM +0100, Krzysztof Kozlowski wrote:
-> File-scope 'tcpci_pm_ops' is not used outside of this unit and is not
-> modified anywhere, so make it static const to silence sparse warning:
+On Fri, Feb 20, 2026 at 01:04:30PM -0500, Mimi Zohar wrote:
+> [Cc: Chris Fenner, Jonathan McDowell, Roberto]
 > 
->   tcpci.c:1002:1: warning: symbol 'tcpci_pm_ops' was not declared. Should it be static?
+> On Sun, 2026-01-25 at 21:25 +0200, Jarkko Sakkinen wrote:
+> > 1. tpm2_get_random() is costly when TCG_TPM2_HMAC is enabled and thus its
+> >    use should be pooled rather than directly used. This both reduces
+> >    latency and improves its predictability.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> ---
->  drivers/char/tpm/tpm2-cmd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> If the concern is the latency of encrypting the bus session, please remember
+> that:
 > 
-> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-> index 3a77be7ebf4a..e00f668f8c84 100644
-> --- a/drivers/char/tpm/tpm2-cmd.c
-> +++ b/drivers/char/tpm/tpm2-cmd.c
-> @@ -21,7 +21,7 @@ static bool disable_pcr_integrity;
->  module_param(disable_pcr_integrity, bool, 0444);
->  MODULE_PARM_DESC(disable_pcr_integrity, "Disable integrity protection of TPM2_PCR_Extend");
->  
-> -struct tpm2_hash tpm2_hash_map[] = {
-> +static const struct tpm2_hash tpm2_hash_map[] = {
->  	{HASH_ALGO_SHA1, TPM_ALG_SHA1},
->  	{HASH_ALGO_SHA256, TPM_ALG_SHA256},
->  	{HASH_ALGO_SHA384, TPM_ALG_SHA384},
-> -- 
-> 2.51.0
+> - Not all environments expose the TPM bus to sniffing.
+> - The current TPM trusted keys design is based on TPM RNG, but already allows it
+> to be replaced with the kernel RNG via the "trusted_rng=kernel" boot command
+> line option.
+> - The proposed patch removes that possibility for no reason.
 > 
+> Mimi & Elaine
 
-Applied.
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+I'm keeping this patch set in queue branch, possibly picking patches to
+some other patch set or they are available for picking to other patch
+sets.
 
 BR, Jarkko
 
