@@ -1,65 +1,65 @@
-Return-Path: <linux-integrity+bounces-8922-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8921-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gCQtFRBPqWk14AAAu9opvQ
-	(envelope-from <linux-integrity+bounces-8922-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 05 Mar 2026 10:38:24 +0100
+	id SG9GJUZOqWk14AAAu9opvQ
+	(envelope-from <linux-integrity+bounces-8921-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 05 Mar 2026 10:35:02 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF3A20EA93
-	for <lists+linux-integrity@lfdr.de>; Thu, 05 Mar 2026 10:38:23 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE19220E87A
+	for <lists+linux-integrity@lfdr.de>; Thu, 05 Mar 2026 10:35:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA021312DA0C
-	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2026 09:32:30 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B111030452C2
+	for <lists+linux-integrity@lfdr.de>; Thu,  5 Mar 2026 09:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B29037CD21;
-	Thu,  5 Mar 2026 09:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8CD37C0EC;
+	Thu,  5 Mar 2026 09:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="u4Ey9NAy";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bEppHdnl"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="p9C5y9rw";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/OGcQce9"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812C037AA97;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A257137A492;
 	Thu,  5 Mar 2026 09:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772703107; cv=none; b=gTYbp0mQ2QTiSnmpGEhCICal6BwmJtoMoF84zgW7oUFZuAa84dPIYWaH3RYOiUYFtGsFaw1HzQoejBb36+xfdxrKL59HnZ2+1WNRe4ElpHmlJhVyQsWhtINhEtncFh0rWQf3qQe7UlpR15kc0ABslHBQLQ+Kip3GraB+3yuV/0k=
+	t=1772703107; cv=none; b=uxXEMDETzc1xd8qlETYbVVf8JtGul4SPAmuF7WZPOPjoEACp5wJVca8iVEeIk9zwfGtxOuspUg4BFsn/j1vdGCVbcO6TeL5otV55DqifrYM8OU+d7i17eZpx6d8wAfNXHs5jcYreG2jEoRmXSeN+TsjmkcdvMeZQWMrDIB2OucQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772703107; c=relaxed/simple;
-	bh=zLOR26cLBLYh5Klh+Pn0d+Hj/jKctPEuA5Lkndxr7M8=;
+	bh=MilPBKT5qdBGv3KAqViaqGXVrPTSiq77sK756EO+4xk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ffDQNn6nZ3A+DL6FxaTKRKCsfHA8yY6RTjy+7P+1N+kqe04JzZMQ5arYLD+yTgjh+kDwpxxNt1P+TAs8LmN+QJjlZ/fYStVDp23oCTm8wdN7DJyVSbpk/kkIfADIkzhh6qVqf3RN72aYY5m2MXnnmf7NpHiRrkzMx9U8nnT8jYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=u4Ey9NAy; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bEppHdnl; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=fO1KKUIp2epjBtf92z8DplHqPs0jpVzBuNxYcVFBvuZluC94fe9WLYDV6sYISRxF35Cqlp0BuxZ2TqSsmNnDZHqcPlii9WS18VlVvTxBm0dA1pqHOsmrdUMpPDWUZR1P8mwVj4ITxxBsFnRuL76OFrXNw9/JKs/4XfGNnMiftas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=p9C5y9rw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/OGcQce9; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772703102;
+	s=2020; t=1772703103;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=co01dxvIFWtkmzMGUBe0JJ0whr193iX3Ll+T6RjyBMU=;
-	b=u4Ey9NAyGUWhFzkNvW79whLpHoE678j2ZVNI7l110NkoHqN/cvmf1WNc3en60CY14hUlcd
-	kGiibB4af3kjSPeilIZYEZVe6jXa4M/ZzqJ7K24k+SsbED4eMaTIf7dq3jyeqyptm+uzzo
-	pajMZj8GX8f16XWZsq6rPOlGiLslBquq0Rwar2AumaULhH058WMlwnGrQkKGgFr4qf8Ujd
-	JeyEcLkiWaC/LgpXfmVyPchP4j+ox31IW901B3NWKwjirWkOfrbx00ujQHARucnXbzr39h
-	6qmNSlRU7Ksg/rNroUDh+eKhwj8+sBpNk4i5P/TkWF3Pp4pJLaGRco2c2F7wpA==
+	bh=+RqUxSzmka9uuI1Wx1AJs8zJfLvQqhjOS+vbWhu9tD0=;
+	b=p9C5y9rwFEmnAp2CGqAtFKMjnqIe1zdQ4+nOtpBSsamNDNzfKJgdqzAeQDDsLd4DJF+kgZ
+	6sNvKLC3RvhGMB3hVQwOQ6ekuINp+DWT3tlf4gywh84hFHdri/uBlqAJNeU8UFgPnlbnNW
+	EvtRJDgwGFT1FOe57Z5Ea3hK3zv4JW3VUCJ79ZXL9XpWUYFxehI00gpyoMxHx5fUbLqiOM
+	b1X+UVgjJ+fmT1tLUJ98b0nMgyhY5il29ACDOPkGI5fCRopEXXYwtoWpU5UeKzMtwr4rRm
+	bwezwyrPY9P3y/HIfrI1KsUx3TVUwMvGvdIxhHY5SxLrtqgRT7HzC5V4mr+1uQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772703102;
+	s=2020e; t=1772703103;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=co01dxvIFWtkmzMGUBe0JJ0whr193iX3Ll+T6RjyBMU=;
-	b=bEppHdnlxpvy3m7oFR2YBsCtCjTREF5/5uSe5duOhyg3S0XxgXU4LtbYlykc9tTHgO6Ibx
-	csrqBtCXrUrD4UAA==
-Date: Thu, 05 Mar 2026 10:31:43 +0100
-Subject: [PATCH v3 7/8] sign-file: use 'struct module_signature' from the
- UAPI headers
+	bh=+RqUxSzmka9uuI1Wx1AJs8zJfLvQqhjOS+vbWhu9tD0=;
+	b=/OGcQce9mannqgNlVUhX9Q2OG9BZlxlgOuGhkqtIhPYabSxY7r4FrUr3NWSidwwpjnL85d
+	IQvqXwinNVdG3rCA==
+Date: Thu, 05 Mar 2026 10:31:44 +0100
+Subject: [PATCH v3 8/8] selftests/bpf: verify_pkcs7_sig: Use 'struct
+ module_signature' from the UAPI headers
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260305-module-signature-uapi-v3-7-92f45ea6028c@linutronix.de>
+Message-Id: <20260305-module-signature-uapi-v3-8-92f45ea6028c@linutronix.de>
 References: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
 In-Reply-To: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
 To: David Howells <dhowells@redhat.com>, 
@@ -98,26 +98,26 @@ Cc: keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772703098; l=3380;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772703098; l=2348;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=zLOR26cLBLYh5Klh+Pn0d+Hj/jKctPEuA5Lkndxr7M8=;
- b=cbKMWPxLR0aa06YPMJMNH+3sP2FeyyExCNDYs8ZhrAmgMGdFUszFLlFGXUBMFrAX7ZUpY1tuP
- TT9qQLgbqBID7uuHWdtKTfOJ/DTI7Hziz33pfmvgOnHWrkQKgvv0/7w
+ bh=MilPBKT5qdBGv3KAqViaqGXVrPTSiq77sK756EO+4xk=;
+ b=rKfAFWzdoNIT7gthnby0DUqAt4PvCm+Oyhh6b2OsiAR4IYV2cjqpGSAzej9eSAFHoarRyr7W8
+ 1JYGHvD0QNQA34xWrSWMB2K3+eZa4zH/T3ZRUnvHW48bm8RU3tfyNrX
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
-X-Rspamd-Queue-Id: EEF3A20EA93
+X-Rspamd-Queue-Id: DE19220E87A
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
 	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8922-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8921-lists,linux-integrity=lfdr.de];
 	FREEMAIL_TO(0.00)[redhat.com,infradead.org,kernel.org,suse.com,google.com,atomlin.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,iogearbox.net,linux.dev,fomichev.me];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
@@ -131,94 +131,81 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[linutronix.de:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:dkim,linutronix.de:email,linutronix.de:mid,suse.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:dkim,linutronix.de:email,linutronix.de:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,suse.com:email]
 X-Rspamd-Action: no action
 
 Now that the UAPI headers provide the required definitions, use those.
 Some symbols have been renamed, adapt to those.
 
-Also adapt the include path for the custom sign-file rule in the
-bpf selftests.
-
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Reviewed-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- scripts/Makefile                     |  1 +
- scripts/sign-file.c                  | 19 ++++---------------
- tools/testing/selftests/bpf/Makefile |  1 +
- 3 files changed, 6 insertions(+), 15 deletions(-)
+ .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 +++-------------------
+ 1 file changed, 3 insertions(+), 25 deletions(-)
 
-diff --git a/scripts/Makefile b/scripts/Makefile
-index 0941e5ce7b57..3434a82a119f 100644
---- a/scripts/Makefile
-+++ b/scripts/Makefile
-@@ -35,6 +35,7 @@ HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
- HOSTLDLIBS_sorttable = -lpthread
- HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
- HOSTCFLAGS_sign-file.o = $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null)
-+HOSTCFLAGS_sign-file.o += -I$(srctree)/tools/include/uapi/
- HOSTLDLIBS_sign-file = $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+diff --git a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+index 4d69d9d55e17..f327feb8e38c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
++++ b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+@@ -18,6 +18,7 @@
+ #include <linux/keyctl.h>
+ #include <sys/xattr.h>
+ #include <linux/fsverity.h>
++#include <linux/module_signature.h>
+ #include <test_progs.h>
  
- ifdef CONFIG_UNWINDER_ORC
-diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-index 73fbefd2e540..86b010ac1514 100644
---- a/scripts/sign-file.c
-+++ b/scripts/sign-file.c
-@@ -40,19 +40,7 @@
+ #include "test_verify_pkcs7_sig.skel.h"
+@@ -33,29 +34,6 @@
+ #define SHA256_DIGEST_SIZE      32
  #endif
- #include "ssl-common.h"
  
+-/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
+-#define MODULE_SIG_STRING "~Module signature appended~\n"
+-
+-/*
+- * Module signature information block.
+- *
+- * The constituents of the signature section are, in order:
+- *
+- *	- Signer's name
+- *	- Key identifier
+- *	- Signature data
+- *	- Information block
+- */
 -struct module_signature {
--	uint8_t		algo;		/* Public-key crypto algorithm [0] */
--	uint8_t		hash;		/* Digest algorithm [0] */
--	uint8_t		id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
--	uint8_t		signer_len;	/* Length of signer's name [0] */
--	uint8_t		key_id_len;	/* Length of key identifier [0] */
--	uint8_t		__pad[3];
--	uint32_t	sig_len;	/* Length of signature data */
+-	__u8	algo;		/* Public-key crypto algorithm [0] */
+-	__u8	hash;		/* Digest algorithm [0] */
+-	__u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
+-	__u8	signer_len;	/* Length of signer's name [0] */
+-	__u8	key_id_len;	/* Length of key identifier [0] */
+-	__u8	__pad[3];
+-	__be32	sig_len;	/* Length of signature data */
 -};
 -
--#define PKEY_ID_PKCS7 2
--
--static char magic_number[] = "~Module signature appended~\n";
-+#include <linux/module_signature.h>
+ struct data {
+ 	__u8 data[MAX_DATA_SIZE];
+ 	__u32 data_len;
+@@ -215,7 +193,7 @@ static int populate_data_item_mod(struct data *data_item)
+ 		return 0;
  
- static __attribute__((noreturn))
- void format(void)
-@@ -197,7 +185,7 @@ static X509 *read_x509(const char *x509_name)
+ 	modlen = st.st_size;
+-	marker_len = sizeof(MODULE_SIG_STRING) - 1;
++	marker_len = sizeof(MODULE_SIGNATURE_MARKER) - 1;
  
- int main(int argc, char **argv)
- {
--	struct module_signature sig_info = { .id_type = PKEY_ID_PKCS7 };
-+	struct module_signature sig_info = { .id_type = MODULE_SIGNATURE_TYPE_PKCS7 };
- 	char *hash_algo = NULL;
- 	char *private_key_name = NULL, *raw_sig_name = NULL;
- 	char *x509_name, *module_name, *dest_name;
-@@ -357,7 +345,8 @@ int main(int argc, char **argv)
- 	sig_size = BIO_number_written(bd) - module_size;
- 	sig_info.sig_len = htonl(sig_size);
- 	ERR(BIO_write(bd, &sig_info, sizeof(sig_info)) < 0, "%s", dest_name);
--	ERR(BIO_write(bd, magic_number, sizeof(magic_number) - 1) < 0, "%s", dest_name);
-+	ERR(BIO_write(bd, MODULE_SIGNATURE_MARKER, sizeof(MODULE_SIGNATURE_MARKER) - 1) < 0,
-+	    "%s", dest_name);
+ 	fd = open(mod_path, O_RDONLY);
+ 	if (fd == -1)
+@@ -228,7 +206,7 @@ static int populate_data_item_mod(struct data *data_item)
+ 	if (mod == MAP_FAILED)
+ 		return -errno;
  
- 	ERR(BIO_free(bd) != 1, "%s", dest_name);
- 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6776158f1f3e..2b1080892208 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -270,6 +270,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
- $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
- 	$(call msg,SIGN-FILE,,$@)
- 	$(Q)$(CC) $(shell $(PKG_CONFIG) --cflags libcrypto 2> /dev/null) \
-+		  -I$(srctree)/tools/include/uapi/ \
- 		  $< -o $@ \
- 		  $(shell $(PKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
- 
+-	if (strncmp(mod + modlen - marker_len, MODULE_SIG_STRING, marker_len)) {
++	if (strncmp(mod + modlen - marker_len, MODULE_SIGNATURE_MARKER, marker_len)) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
 
 -- 
 2.53.0
