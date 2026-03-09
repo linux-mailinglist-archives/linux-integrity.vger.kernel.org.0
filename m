@@ -1,94 +1,108 @@
-Return-Path: <linux-integrity+bounces-8946-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8947-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GF0PIR/irmlPJwIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8946-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 09 Mar 2026 16:07:11 +0100
+	id 0CFxJNEHr2kUMAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8947-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 09 Mar 2026 18:48:01 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B8CC23B40B
-	for <lists+linux-integrity@lfdr.de>; Mon, 09 Mar 2026 16:07:11 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD8223DDCC
+	for <lists+linux-integrity@lfdr.de>; Mon, 09 Mar 2026 18:48:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 89F943087D00
-	for <lists+linux-integrity@lfdr.de>; Mon,  9 Mar 2026 15:04:23 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 57EFD30101D6
+	for <lists+linux-integrity@lfdr.de>; Mon,  9 Mar 2026 17:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09F53BE16E;
-	Mon,  9 Mar 2026 15:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3062D8384;
+	Mon,  9 Mar 2026 17:47:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tsovsDN5"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="O46FAzGv"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9EB8258EFF;
-	Mon,  9 Mar 2026 15:04:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EEF17A2F6;
+	Mon,  9 Mar 2026 17:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773068662; cv=none; b=CW7F3zRxDZF59P8ewcxKr2CmEERmypWzdR/Srs+H0/mpkr/2ufAuiI4hErGIIOMZXDSAfdcC9m793k1Rt6sGtUEoY6KAVkaBJjrvWU0KDZb4Pfr3XvhCp1xRBDEBvHm+ymG7sjZ1mNA7YV9iTSEl96iGTgGnc1F0xxgc1lg1iGg=
+	t=1773078473; cv=none; b=CF9VK1oaAMIbaWiuSnS9hQgMQzv8hT438J91V3anP0ECFrx2agd/pEzffGJUuF6EgCE5YSrjuBwkYg/q2/eoiYRS98hRv+wR4OPBXkzcWJjcQY6Rm6a+lK1YtJtuCgHAxiyeSp6TzMMf6MFaVuAHfsHyTMtDl3RSOQAwLbRNoME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773068662; c=relaxed/simple;
-	bh=Y9E4Z9E/tWu9+O1lJltg9G3VDK3rwHuLHZCZOj8vri0=;
+	s=arc-20240116; t=1773078473; c=relaxed/simple;
+	bh=lgfykUqPjgDxE5127M/CRcYsCPDM1g1nEUgEbLyv9aM=;
 	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=lktk2eDPiy7/ZHYNKdE0mqaCeXLVCRS9a9b+yQFF43uc2L5nkknhCPO9NEH+HgcFbpQ5ZWFFo6GXBlFYthPF7r8nZmYP+ro5s9rrjiOEmu50YdqZV65/Naic4k8vNvyQeM1Mpbz9phpMNGMr86bRsYlbvfxeQW9ruu91skdJ5jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tsovsDN5; arc=none smtp.client-ip=148.163.156.1
+	 Date:MIME-Version; b=n+oWdhN4zbY+/S7BMvOE1YbnH6HnEPGCZBzMVUYb1D3aK5roxJOn2dplf/BUwbOaUX55fxzzKNp5FlTabaaUKtJcw8LZXJ54yw+tVMborGfcdvVEYWqTYbucLStTBRXhhCggc5T3WI27PQuJuO3vEf8GIOZAe+wVNJDx9/DV2nI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=O46FAzGv; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 628MMD3N1493050;
-	Mon, 9 Mar 2026 15:03:42 GMT
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 629F7to91275175;
+	Mon, 9 Mar 2026 17:47:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=eJsmWl
-	9HXscCHpoOnTBXgxLOBfsLrA8q1oEitwqFooQ=; b=tsovsDN5TsW++u12nuVxb8
-	6FBz6GdAukjGaVJJt1DoG31Dd4lxvIrcDFj+DV/2RbxRhOoxgbt7JcC5F17K7BSt
-	uTjK1on6vT3SBGL8NExXsscufW9JipJfJ+8o7VOUNOifTRWAqcWcbDRn5wReDOsu
-	is88U7kmEtmSyyzES2E/grCI5tW72EkkLe2korcjoEJwGTD8C1o9sSTx4YY5Znf0
-	0twcB41spu6IxJFoHc8zFJj3dRF18IlEvkLpfO0Sn3h9RETPkWvXqRDDlijEqnxm
-	XXTQmgeEu5mGaxjbD5GAOpWwLKPKI6A8Ypv+9xCQ+HJL47uQzBBLBTHGjDgN0HJA
+	:message-id:mime-version:references:subject:to; s=pp1; bh=k/HLlQ
+	fqfXVQs+Pamcq/LePEaOpgjPTSxe75E2LQHmw=; b=O46FAzGvsE2YmZ6439UqTH
+	f//oqGS2NuJoB8xY2lcg12hMD2aNtQ4ID9XxubauhUUNB5XWruUCNbrIED9U/sy2
+	gQV+VyjgSVjVmAG4Kam45dqeg/cEF7wexHdqP7q6amhZ86wA+YW4+a7JvMwqNGHX
+	K+CR1szr/+ThnSfgYQtyXM8JHrNaKlVVJxj2UpO9B9nfw7GY0lpUaQgYj3FXUBhW
+	hCYFfYxjosdklAtClo/CAOyDK0Kz8Ak4d419uQhCeU81c/npAiEGpAq1IaGDP95R
+	6czGdohxtpKDTNPNp0U2JdVL6ApX0w6YBruEMYsSerjEZYuw8x9syT1jr4FLueng
 	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcyw73jc-1
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4crcvr7huu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Mar 2026 15:03:41 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 629AbxLv025033;
-	Mon, 9 Mar 2026 15:03:40 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cs0jjw85x-1
+	Mon, 09 Mar 2026 17:47:15 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 629FqYI5015725;
+	Mon, 9 Mar 2026 17:47:14 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cs121wp59-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Mar 2026 15:03:40 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 629F3eTZ19792528
+	Mon, 09 Mar 2026 17:47:14 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 629HlDVJ60162522
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 9 Mar 2026 15:03:40 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 088D258059;
-	Mon,  9 Mar 2026 15:03:40 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CDA8158043;
-	Mon,  9 Mar 2026 15:03:38 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.73.138])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  9 Mar 2026 15:03:38 +0000 (GMT)
-Message-ID: <c1d570271884159e6c14617fa7dcd39bc2103e45.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 v2] evm: check return values of crypto_shash
- functions
+	Mon, 9 Mar 2026 17:47:13 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5E5775805A;
+	Mon,  9 Mar 2026 17:47:13 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4442758054;
+	Mon,  9 Mar 2026 17:47:09 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.72.80])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  9 Mar 2026 17:47:09 +0000 (GMT)
+Message-ID: <05b5d55c49b5a1bbc43a5315e3c84872e7e634b3.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 00/12] vfs: change inode->i_ino from unsigned long
+ to u64
 From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        Daniel Hodges
-	 <git@danielhodges.dev>
-Cc: roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <6ce273a26b396232f3ee64a980575562e766c501.camel@huaweicloud.com>
-References: <aYNprpzxppKE0Gf2@fb.com>
-		 <20260206024240.19059-1-git@danielhodges.dev>
-	 <6ce273a26b396232f3ee64a980575562e766c501.camel@huaweicloud.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+        fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org,
+        v9fs@lists.linux.dev, linux-afs@lists.infradead.org,
+        autofs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
+        linux-mtd@lists.infradead.org, jfs-discussion@lists.sourceforge.net,
+        ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+        devel@lists.orangefs.org, linux-unionfs@vger.kernel.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        netdev@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-hams@vger.kernel.org, linux-x25@vger.kernel.org,
+        audit@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-sctp@vger.kernel.org,
+        bpf@vger.kernel.org
+In-Reply-To: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
+References: <20260304-iino-u64-v3-0-2257ad83d372@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 09 Mar 2026 11:03:38 -0400
+Date: Mon, 09 Mar 2026 13:47:08 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -97,98 +111,113 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDEzNiBTYWx0ZWRfX9UYLtICT+1LW
- c2FTY9iVp68hMJX96VTZgKdDBX6wL4N1qJ22/W6rb/7bJMf65LTB0XgfiVeYmj9cZzDNheJjCVE
- FqXvYkbc9IlNL9TVHCzM1MZdgep2XIE2toO+U3eiQdjQMxgINRQQyaIXzrio30j7lnx1fbu1dpA
- NhggSQ2FsGHHn6FF57sClhvxo54rXluwrFXyIqIULOV8wZ25D5U/fcR+ALygwTa0hhC4h53luiB
- tIv0kkvefh46D/p6j2Szl/6I0GwBzru/7e08Yux7YDSNExmXnghmv7C1fNlDbYEvyu76xXlnZFC
- cH2DxZlmsX93DlPjkbBNwxYRx1j3elfawb0H89EOEcHiFchncGwvns5ZZiuyemp3KifhMTL4Ggk
- i2SFfabkqoe0/8ku0Lo7uvHm2vOHru23FGMSfUdPMXqZtNbHZWhma+Egy9ZX2iimQ8FBijIlBUV
- AChTKQ7FPXfvMaIVCew==
-X-Authority-Analysis: v=2.4 cv=QaVrf8bv c=1 sm=1 tr=0 ts=69aee14e cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA5MDE1OCBTYWx0ZWRfX4MWriKER56jj
+ FHMwPduc6Ya80ytljBjcJCflJZJQpLHypO90MyIljV3F+YGnUEWqD2zkjjI4tBlT1Isyk88nQqD
+ Bxsi6y6lZ0wNsui73O82C4s92lOeLYZxoPRW/EZDUOjQSMymQTWQJKaIWTXxL4ETx9VAdofRsxH
+ 1pntH+n6NhQwxXW3M12fPcKiL5ADcuXldDKiDw4m+7ix+qwvBlo3nspOLghaJ2LE6mxrOiKA5Lh
+ GMTERNprgwZauxVcqC/p8dLI9p6C/LOkJmscaf6mdPih3AOPO2LV5vS62FSOrim10LguG5ezUsF
+ rdAkmDzMNpwcB3l0gkLlsufFyGUR7bS4yrPNzNHAbiSDJiUdpsUzX7AZ0qjMDEeQhvmbO0coQJz
+ 4Dc1QnM6RvCUkwZGaB0uRcWv6crLl/+68sTOTDKRYLJY7AFXUTAN+lczmFotg9pSQAz65D+NPWn
+ mWAaXfwB8yIBs0IZagQ==
+X-Proofpoint-GUID: k-5kS7gQwSwb7EbHSrKEnUBgm0EngagK
+X-Proofpoint-ORIG-GUID: k-5kS7gQwSwb7EbHSrKEnUBgm0EngagK
+X-Authority-Analysis: v=2.4 cv=QoFTHFyd c=1 sm=1 tr=0 ts=69af07a3 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=i0EeH86SAAAA:8
- a=23jcPEmS34k7qPULnOIA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: p1QpP31w_H5Cwguvjn9cOC30GZXntYia
-X-Proofpoint-ORIG-GUID: ldIXQIqXIeDiKZNXhPIpWug7aKerVfrk
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
+ a=x61hcHDQ_TxU8J0rBBAA:9 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-09_04,2026-03-09_01,2025-10-01_01
+ definitions=2026-03-09_04,2026-03-09_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 impostorscore=0 clxscore=1011 adultscore=0
- bulkscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603090136
-X-Rspamd-Queue-Id: 2B8CC23B40B
+ impostorscore=0 spamscore=0 priorityscore=1501 phishscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1011 malwarescore=0 suspectscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603090158
+X-Rspamd-Queue-Id: 7DD8223DDCC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[45];
+	TAGGED_FROM(0.00)[bounces-8947-lists,linux-integrity=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[ibm.com:+];
-	TAGGED_FROM(0.00)[bounces-8946-lists,linux-integrity=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,huawei.com:email,linux.ibm.com:mid,danielhodges.dev:email];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.992];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	PRECEDENCE_BULK(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Action: no action
 
-On Thu, 2026-02-19 at 10:26 +0100, Roberto Sassu wrote:
-> On Thu, 2026-02-05 at 21:42 -0500, Daniel Hodges wrote:
-> > The crypto_shash_update() and crypto_shash_final() functions can fail
-> > and return error codes, but their return values were not being checked
-> > in several places in security/integrity/evm/evm_crypto.c:
-> >=20
-> > - hmac_add_misc() ignored returns from crypto_shash_update() and
-> >   crypto_shash_final()
-> > - evm_calc_hmac_or_hash() ignored returns from crypto_shash_update()
-> > - evm_init_hmac() ignored returns from crypto_shash_update()
-> >=20
-> > If these hash operations fail silently, the resulting HMAC could be
-> > invalid or incomplete, which could weaken the integrity verification
-> > security that EVM provides.
-> >=20
-> > This patch converts hmac_add_misc() from void to int return type and
-> > adds proper error checking and propagation for all crypto_shash_*
-> > function calls. All callers are updated to handle the new return values=
-.
-> > Additionally, error messages are logged when cryptographic operations
-> > fail to provide visibility into the failure rather than silently
-> > returning error codes.
-> >=20
-> > Fixes: 66dbc325afce ("evm: re-release")
-> > Signed-off-by: Daniel Hodges <git@danielhodges.dev>
->=20
-> After fixing the minor issue below:
->=20
-> Reviewed-by: Roberto Sassu <roberto.sassu@huawei.com>
+[ I/O socket time out.  Trimming the To list.]
 
-Thanks Daniel, Roberto.  Daniel there are a couple of places where the line
-length is greater than 80.  To see them, add "--max-line-length=3D80" to
-scripts/checkpatch.pl.  I'd appreciate your fixing them.  Otherwise, the pa=
-tch
-looks good.
+On Wed, 2026-03-04 at 10:32 -0500, Jeff Layton wrote:
+> This version squashes all of the format-string changes and the i_ino
+> type change into the same patch. This results in a giant 600+ line patch
+> at the end of the series, but it does remain bisectable.  Because the
+> patchset was reorganized (again) some of the R-b's and A-b's have been
+> dropped.
+>=20
+> The entire pile is in the "iino-u64" branch of my tree, if anyone is
+> interested in testing this.
+>=20
+>     https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git/
+>=20
+> Original cover letter follows:
+>=20
+> ----------------------8<-----------------------
+>=20
+> Christian said [1] to "just do it" when I proposed this, so here we are!
+>=20
+> For historical reasons, the inode->i_ino field is an unsigned long,
+> which means that it's 32 bits on 32 bit architectures. This has caused a
+> number of filesystems to implement hacks to hash a 64-bit identifier
+> into a 32-bit field, and deprives us of a universal identifier field for
+> an inode.
+>=20
+> This patchset changes the inode->i_ino field from an unsigned long to a
+> u64. This shouldn't make any material difference on 64-bit hosts, but
+> 32-bit hosts will see struct inode grow by at least 4 bytes. This could
+> have effects on slabcache sizes and field alignment.
+>=20
+> The bulk of the changes are to format strings and tracepoints, since the
+> kernel itself doesn't care that much about the i_ino field. The first
+> patch changes some vfs function arguments, so check that one out
+> carefully.
+>=20
+> With this change, we may be able to shrink some inode structures. For
+> instance, struct nfs_inode has a fileid field that holds the 64-bit
+> inode number. With this set of changes, that field could be eliminated.
+> I'd rather leave that sort of cleanups for later just to keep this
+> simple.
+>=20
+> Much of this set was generated by LLM, but I attributed it to myself
+> since I consider this to be in the "menial tasks" category of LLM usage.
+>=20
+> [1]: https://lore.kernel.org/linux-fsdevel/20260219-portrait-winkt-959070=
+cee42f@brauner/
+>=20
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Thanks,=20
+Jeff, missing from this patch set is EVM.  In hmac_add_misc() EVM copies th=
+e
+i_ino and calculates either an HMAC or file meta-data hash, which is then
+signed.=20
 
 Mimi
 
