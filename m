@@ -1,50 +1,50 @@
-Return-Path: <linux-integrity+bounces-8964-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8965-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qJxWMvCIsGmOkQIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8964-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:11:12 +0100
+	id kKyREyuJsGmOkQIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8965-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:12:11 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CDEC2581F9
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:11:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E912025826C
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:12:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C761830817FD
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 21:11:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B81B9306466E
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 21:11:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D2903AA502;
-	Tue, 10 Mar 2026 21:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2CB33AC0D1;
+	Tue, 10 Mar 2026 21:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dFYD1ByL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VH0SHwW2"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2273A3802;
-	Tue, 10 Mar 2026 21:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CE9D279DCA;
+	Tue, 10 Mar 2026 21:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773177070; cv=none; b=YDdWS7wfkRpxyvj40GAVUl2t4XA8OC8hoIwiRS6BfV0pibpcAPu79KX4htl+7fshiQxXqFfvFc18/JgJCFkBnf5l/4RSVQRYZXFE9xjmlkCPZiRSnAvT2lzs5DaqTa/JjBU1TihNYz8gXea6cpYB64PB+ulxP0dAHitMIBVW4Dg=
+	t=1773177102; cv=none; b=X+m2/SOnTEkNTLQXpie88OMYdAdX04i34k14v7xpxdgvqs5joVY8o5rQkMJcAmAbGMPwJQXKtM4NPh/Zb1Ob6ufXuoVQ+/eP8/44xT8idjH2uLb8hAkMXUJNgB3XYCoWazQSlNMxSSklOTCSTvzQCyKHqnyRPDtYELGeUT4lxnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773177070; c=relaxed/simple;
-	bh=yyzdGp+0sPRPTiABz81aZRloIPxSgjyHr2YQUr/A+N8=;
+	s=arc-20240116; t=1773177102; c=relaxed/simple;
+	bh=u9D4qSIhsqbHAEaJC+KfjGBC0/+qWnDd2jVHhVc12Po=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WU+jP/yzwI215TxeFGYdWePmDYqzCfC/22QBIL2AIQaBAAgksJP8v1x56Gnw98g+9wCmjFaR+kGNd/QoONG2Fw/0Wlas8dgbBqUezdtCg0sbYuM5DTgBKJJlECxJO/YS2JKvuFmlR4ARAqvNVe16s73KnF2FPzKHBW3TE/AuL4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dFYD1ByL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E792DC19423;
-	Tue, 10 Mar 2026 21:11:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qx2rFt3b+90O5lV8X381fLwte3nxWA/TApYzWWWiRPu5LSijmYotmW4AaGidLOJWEcM+t1/kXhR2N3Xlg3Ufm1+lzkNR1837S8pECgflZ76gQ3ZWpOYGhvve0HUMz/QakeW3E6iUItz/J55I9pH2KyqPiCztMFbmewI5yieKqGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VH0SHwW2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD220C19423;
+	Tue, 10 Mar 2026 21:11:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773177069;
-	bh=yyzdGp+0sPRPTiABz81aZRloIPxSgjyHr2YQUr/A+N8=;
+	s=k20201202; t=1773177102;
+	bh=u9D4qSIhsqbHAEaJC+KfjGBC0/+qWnDd2jVHhVc12Po=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dFYD1ByLLsnPqMH8HvpxcPSYDZmiTMH9uIgAC5+zFHLZxBhpolkrX+vcWCFVr8dmj
-	 29js3lSD3EP6jNZyT+AW/TyMOyiweLB8zLOj+u1rKJO+Yk5G4k4INqFDRribqkQwYG
-	 PU5Sqe0GLid9VxVNNxx6J7CXuJfFQ3+3PM3bfGXpngtw1jEkAz3zyt3foM96dA+4PA
-	 gNPBVPESP3sZ2w5NQjwiuGdGIuRenZrAmo8N1lZ2ElCPuIwn9/4e2+Fy9uJ3qTwYGb
-	 FUBKESjL6+R7Ljy++ot4ShKUaVNg5AnAT+CWS1XDngm6viJftDOM2Y43c8qq4sW242
-	 w6uDBPIYTGkYQ==
-Date: Tue, 10 Mar 2026 14:11:06 -0700
+	b=VH0SHwW2EakhuoAOlXnHVG/DOFMds3YD5l8iS+OsAyWWfAno1uHNcQOkOsZg89/vB
+	 sz5gNWAqBUEneU4LKkjUrzRVARqs1112fvzBRDiOMYdvrEyNWjGXJ6Bvwdq/acoFSA
+	 U6+LmcJGgJFC49mosiJc7sTvP3V+uiVO16/Txt+eHELFQICkwZm983kOdwv6Q1QWkP
+	 y1OsGkdoUhwWPrrrb49qHzB2wtjJR3fPEyAnzxNnHFX3G+dAbwuLypQ1jQusvNgUwh
+	 hDA7v1J8dkw8hcBMyAzbwpeQZyNRNVBZWNOw+MGNxQJA/oBWuskHTU40OJv/9zXKlJ
+	 g19Oq0oWIxXSg==
+Date: Tue, 10 Mar 2026 14:11:39 -0700
 From: Eric Biggers <ebiggers@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -79,11 +79,11 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 02/17] powerpc/ima: Drop unnecessary check for
- CONFIG_MODULE_SIG
-Message-ID: <20260310211106.GA120274@quark>
+Subject: Re: [PATCH v4 03/17] ima: efi: Drop unnecessary check for
+ CONFIG_MODULE_SIG/CONFIG_KEXEC_SIG
+Message-ID: <20260310211139.GB120274@quark>
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-2-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-3-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -93,8 +93,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260113-module-hashes-v4-2-0b932db9b56b@weissschuh.net>
-X-Rspamd-Queue-Id: 2CDEC2581F9
+In-Reply-To: <20260113-module-hashes-v4-3-0b932db9b56b@weissschuh.net>
+X-Rspamd-Queue-Id: E912025826C
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -102,11 +102,11 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8964-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8965-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -121,22 +121,22 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,weissschuh.net:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Jan 13, 2026 at 01:28:46PM +0100, Thomas Weiﬂschuh wrote:
-> When CONFIG_MODULE_SIG is disabled set_module_sig_enforced() is defined
-> as an empty stub, so the check is unnecessary.
+On Tue, Jan 13, 2026 at 01:28:47PM +0100, Thomas Weiﬂschuh wrote:
+> When configuration settings are disabled the guarded functions are
+> defined as empty stubs, so the check is unnecessary.
 > The specific configuration option for set_module_sig_enforced() is
-> about to change and removing the check avoids some later churn.
+> about to change and removing the checks avoids some later churn.
 > 
 > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > ---
->  arch/powerpc/kernel/ima_arch.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  security/integrity/ima/ima_efi.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 
 Reviewed-by: Eric Biggers <ebiggers@kernel.org>
 
