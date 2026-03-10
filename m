@@ -1,245 +1,279 @@
-Return-Path: <linux-integrity+bounces-8962-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8963-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gKUOIXpVsGkJiQIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8962-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 18:31:38 +0100
+	id kAQdK61XsGlciQIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8963-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 18:41:01 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E172525598F
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 18:31:37 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50BC7255C1A
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 18:41:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B414A314E9BA
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 17:28:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B53C430098AB
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 17:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36033AD50C;
-	Tue, 10 Mar 2026 17:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0AD3D1710;
+	Tue, 10 Mar 2026 17:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LgOBuB78"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aBYs+kuw"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB883A4F2A;
-	Tue, 10 Mar 2026 17:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FE4314D08;
+	Tue, 10 Mar 2026 17:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773163706; cv=none; b=BZanBGUXxMM7QreyTKjVyeo5mXcR2rCoioCOJyBb6bPDEAaX6SgtWlr7cc5j54oG5ISuLTH/qlrKpKgZC3kohPMATivzDuV0LFaQuHdo7ylyn/rhzwUR8ys2B4Xy0ahGOtcMZYtcU8Qp3p8lgGR2x6ECjKwLIqt1uaDaI3QVgk8=
+	t=1773164457; cv=none; b=dy22hqZkYIzg/iTX97QAZ61DVwQWid66vL4IHUHCjnZ3oLGjKNNzjd/XbQPvVGPWDl7kLZdkfG5OB9/Srmtcffwm3ULdd28zUIIzCShiAz7SaYGis466YZAtXCGY7DHQfgsjJhp9Abq5hx56TM9zBB7WoycB2m2wrJbYcb2cgo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773163706; c=relaxed/simple;
-	bh=q/MA2EPx5lJgB6HZP9ewlQVZn3z96gyXREivMza9azM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SeMX47tsql5Rhcg2EqNmXV0+wKmAR29whyFfzAy1d77PMMCNFfAonO6MmqrXN2MIsKMD8Fn8uV1tV89wDwxBaU+STPzzmgUe1XrbSvlx0Ho3aER+Hd8hUZuef0dY4OUHVhZyrBi6pThRPK8vueaXRF0kDqf9iGUCnpBE+GMnlVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LgOBuB78; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABF50C19423;
-	Tue, 10 Mar 2026 17:28:24 +0000 (UTC)
+	s=arc-20240116; t=1773164457; c=relaxed/simple;
+	bh=Vh+dv7G9JYYz79ZKRs5UBfA3zrs7LB5npwqEsYHYRpc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NbiA5rVe0PS3ilMqQ54DIXWrFT1qWkDj3emDJ9pl5xPNovZ0Om1AEE3jVb0UyYrF7ivK1trW6QJSP+LrB8/WAQr1CVJG/hsaf5xsEBRjBr8GyTctJ6Jth8nsKKWRjC7Y/FbLEQpTS5NMBVuP6ssPUu5qqUhrpAz2INouSGs9as0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aBYs+kuw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 559C3C19425;
+	Tue, 10 Mar 2026 17:40:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773163706;
-	bh=q/MA2EPx5lJgB6HZP9ewlQVZn3z96gyXREivMza9azM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=LgOBuB78xavER0ssRCZu/MI9N/npwSRacODBIw3BRijWcYu6KKRFpt4g+9TiGI/7g
-	 WzY8FYaqzXWwjzbLMUhOJUaCdIZLLaP5Xtw4vmlpOkk0MUK68yyr8nAL4FgMS4InCJ
-	 hyA2PZEgFaZ+gxyA44UIS3TCjQoamSt1YmHSESOigymTkNrK7niQUTFwxPyAfqhYmd
-	 nFd5Q/D0Tgm+bFv407u3eJ/712XRevA+VkrDQz/F8C3DyF0D4+bHziEFdwSNmg9Lpv
-	 5P82t9YQ4s0j2fDObgSX+GgYVJfGL+VycqA5lGS6oVk+tpLNJSzXZNTX3dI1ZvCMhQ
-	 PYstmOL6l3niQ==
-Message-ID: <78190c229db1d61cd45caf0f55d0f8d4fb1e8787.camel@kernel.org>
-Subject: Re: [PATCH 1/2] nilfs2: fix 64-bit division operations in
- nilfs_bmap_find_target_in_group()
-From: Jeff Layton <jlayton@kernel.org>
-To: Viacheslav Dubeyko <slava@dubeyko.com>, Christian Brauner	
- <brauner@kernel.org>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, Mimi
- Zohar	 <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg
- <eric.snowberg@oracle.com>, Paul Moore	 <paul@paul-moore.com>, James Morris
- <jmorris@namei.org>, "Serge E. Hallyn"	 <serge@hallyn.com>
-Cc: linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
- kernel test robot
-	 <lkp@intel.com>
-Date: Tue, 10 Mar 2026 13:28:22 -0400
-In-Reply-To: <b0225cff966425a16213e2dae7cd30ba438e5af7.camel@dubeyko.com>
-References: <20260310-iino-u64-v1-0-18422a053b04@kernel.org>
-		 <20260310-iino-u64-v1-1-18422a053b04@kernel.org>
-	 <b0225cff966425a16213e2dae7cd30ba438e5af7.camel@dubeyko.com>
-Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
- keydata=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
- QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+	s=k20201202; t=1773164457;
+	bh=Vh+dv7G9JYYz79ZKRs5UBfA3zrs7LB5npwqEsYHYRpc=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=aBYs+kuwKvZ0aYvGTXyvc+fuvvQ6XpGehugZpXagGcjSotftPXN7YLlTmaOBg4USw
+	 0nhGG7bqIqbXBktvddTiEMWctddAZOVmbpaA5aEVnMUiJbNea6wZ97/+RaOEsaUvbz
+	 gQFdoRYpalCTwwazDiLHhC4xKL88Gr5hmiAZuqZBculktceFQcqD9SdFLbo5SvTEbc
+	 ieNlum6zxusZ3qyjJkO9ZI76lquOzMedGCncJV2PBN0ZntyOduUe5xPcB909w8C1N9
+	 mIyXKCWZj+FWzlXTFwM3msgK3mLXvM9ifENLitcxAAP5PuUJBrhVxWhMN2lD24NJwW
+	 HcYxI1gTTCxCg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C52FD4F0F;
+	Tue, 10 Mar 2026 17:40:57 +0000 (UTC)
+From: Dmitry Safonov via B4 Relay <devnull+dima.arista.com@kernel.org>
+Date: Tue, 10 Mar 2026 17:40:39 +0000
+Subject: [PATCH v6] ima_fs: Correctly create securityfs files for
+ unsupported hash algos
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: E172525598F
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260310-ima-oob-v6-1-dc111c846ff4@arista.com>
+X-B4-Tracking: v=1; b=H4sIAJZXsGkC/3XPzWrEIBQF4FcZXNdWr0aTrvoeQxfXv0ZotGgaM
+ gx595rZDCVkeeB+53DvpPoSfSXvlzspfok15tSCerkQO2L68jS6lgkwUIyDpnFCmrOhQ8BeoBL
+ SaUPa9U/xIa6Pputnywarp6ZgsuPuv2P6XWny6/w2YZ192c0Y65zL7TG+8F0edxZOOQUnIQjJe
+ 9/pDyyN4avNE9mHFjiB0GAQPfLe9h2z4QDFCRQNcufYEKQFVHiA8gTKBk1g1ukwGOnkAXZPCCC
+ esGtw4NZypqTX6v+P27b9AZ+1ApqnAQAA
+X-Change-ID: 20260127-ima-oob-9fa83a634d7b
+To: Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
+ James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+ Silvia Sisinni <silvia.sisinni@polito.it>, 
+ Enrico Bravi <enrico.bravi@polito.it>
+Cc: Jonathan McDowell <noodles@earth.li>, linux-integrity@vger.kernel.org, 
+ linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Dmitry Safonov <0x7f454c46@gmail.com>, 
+ Dmitry Safonov <dima@arista.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1773164456; l=6024;
+ i=dima@arista.com; s=20250521; h=from:subject:message-id;
+ bh=aq1ttERu1XDpBBqiZqrxKRBcfhL+biDFjN6ZxrU3vP8=;
+ b=o30ye5QpjVsbTScv873hURw3Nubq8cWd8rhurtiSKi+Od3xBv+9DMJuhs5e6Eit8c6zphrtSk
+ XL5EKGrXQhqBkeEwOzBcBHhJgB+oCZgA5FNkXQUVv4Vtg0RyNt/JDEg
+X-Developer-Key: i=dima@arista.com; a=ed25519;
+ pk=/z94x2T59rICwjRqYvDsBe0MkpbkkdYrSW2J1G2gIcU=
+X-Endpoint-Received: by B4 Relay for dima@arista.com/20250521 with
+ auth_id=405
+X-Original-From: Dmitry Safonov <dima@arista.com>
+Reply-To: dima@arista.com
+X-Rspamd-Queue-Id: 50BC7255C1A
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8962-lists,linux-integrity=lfdr.de];
-	FREEMAIL_TO(0.00)[dubeyko.com,kernel.org,gmail.com,linux.ibm.com,huawei.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-8963-lists,linux-integrity=lfdr.de,dima.arista.com];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,polito.it];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jlayton@kernel.org,linux-integrity@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FREEMAIL_CC(0.00)[earth.li,vger.kernel.org,gmail.com,arista.com];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.999];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-integrity@vger.kernel.org];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	HAS_WP_URI(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	HAS_REPLYTO(0.00)[dima@arista.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,huawei.com:email,trustedcomputinggroup.org:url,arista.com:replyto,arista.com:email,arista.com:mid]
 X-Rspamd-Action: no action
 
-On Tue, 2026-03-10 at 09:54 -0700, Viacheslav Dubeyko wrote:
-> On Tue, 2026-03-10 at 07:43 -0400, Jeff Layton wrote:
-> > With the change to make inode->i_ino a u64, the build started failing
-> > on
-> > 32-bit ARM with:
-> >=20
-> > =C2=A0=C2=A0=C2=A0 ERROR: modpost: "__aeabi_uldivmod" [fs/nilfs2/nilfs2=
-.ko]
-> > undefined!
-> >=20
-> > Fix this by using the 64-bit division interfaces in
-> > nilfs_bmap_find_target_in_group().
-> >=20
-> > Fixes: 998a59d371c2 ("treewide: fix missed i_ino format specifier
-> > conversions")
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes:
-> > https://lore.kernel.org/oe-kbuild-all/202603100602.KPxiClIO-lkp@intel.c=
-om/
-> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> > =C2=A0fs/nilfs2/bmap.c | 9 ++++++---
-> > =C2=A01 file changed, 6 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/fs/nilfs2/bmap.c b/fs/nilfs2/bmap.c
-> > index
-> > 824f2bd91c167965ec3a660202b6e6c5f1fe007e..4ce9a93149a5af13bc215cc1877
-> > a757e2c6cf49b 100644
-> > --- a/fs/nilfs2/bmap.c
-> > +++ b/fs/nilfs2/bmap.c
-> > @@ -455,11 +455,14 @@ __u64 nilfs_bmap_find_target_in_group(const
-> > struct nilfs_bmap *bmap)
-> > =C2=A0{
-> > =C2=A0	struct inode *dat =3D nilfs_bmap_get_dat(bmap);
-> > =C2=A0	unsigned long entries_per_group =3D
-> > nilfs_palloc_entries_per_group(dat);
-> > -	unsigned long group =3D bmap->b_inode->i_ino /
-> > entries_per_group;
-> > +	unsigned long group;
-> > +	u32 rem;
-> > +
-> > +	group =3D div_u64(bmap->b_inode->i_ino, entries_per_group);
-> > +	div_u64_rem(bmap->b_inode->i_ino, NILFS_BMAP_GROUP_DIV,
-> > &rem);
-> > =C2=A0
-> > =C2=A0	return group * entries_per_group +
-> > -		(bmap->b_inode->i_ino % NILFS_BMAP_GROUP_DIV) *
-> > -		(entries_per_group / NILFS_BMAP_GROUP_DIV);
-> > +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rem * (entries_per_group / NILFS=
-_BMAP_GROUP_DIV);
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0static struct lock_class_key nilfs_bmap_dat_lock_key;
->=20
-> Makes sense. :) Maybe, rem is not very good variable name, but the
-> whole logic looks good.
->=20
-> Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
->=20
+From: Dmitry Safonov <dima@arista.com>
 
-Thanks. My thinking was "remainder" but I don't have an objection if
-you guys want to change it.
---=20
-Jeff Layton <jlayton@kernel.org>
+ima_tpm_chip->allocated_banks[i].crypto_id is initialized to
+HASH_ALGO__LAST if the TPM algorithm is not supported. However there
+are places relying on the algorithm to be valid because it is accessed
+by hash_algo_name[].
+
+On 6.12.40 I observe the following read out-of-bounds in hash_algo_name:
+  ==================================================================
+  BUG: KASAN: global-out-of-bounds in create_securityfs_measurement_lists+0x396/0x440
+  Read of size 8 at addr ffffffff83e18138 by task swapper/0/1
+
+  CPU: 4 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.12.40 #3
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x61/0x90
+   print_report+0xc4/0x580
+   ? kasan_addr_to_slab+0x26/0x80
+   ? create_securityfs_measurement_lists+0x396/0x440
+   kasan_report+0xc2/0x100
+   ? create_securityfs_measurement_lists+0x396/0x440
+   create_securityfs_measurement_lists+0x396/0x440
+   ima_fs_init+0xa3/0x300
+   ima_init+0x7d/0xd0
+   init_ima+0x28/0x100
+   do_one_initcall+0xa6/0x3e0
+   kernel_init_freeable+0x455/0x740
+   kernel_init+0x24/0x1d0
+   ret_from_fork+0x38/0x80
+   ret_from_fork_asm+0x11/0x20
+   </TASK>
+
+  The buggy address belongs to the variable:
+   hash_algo_name+0xb8/0x420
+
+  Memory state around the buggy address:
+   ffffffff83e18000: 00 01 f9 f9 f9 f9 f9 f9 00 01 f9 f9 f9 f9 f9 f9
+   ffffffff83e18080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  >ffffffff83e18100: 00 00 00 00 00 00 00 f9 f9 f9 f9 f9 00 05 f9 f9
+                                          ^
+   ffffffff83e18180: f9 f9 f9 f9 00 00 00 00 00 00 00 04 f9 f9 f9 f9
+   ffffffff83e18200: 00 00 00 00 00 00 00 00 04 f9 f9 f9 f9 f9 f9 f9
+  ==================================================================
+
+Seems like the TPM chip supports sha3_256, which isn't yet in
+tpm_algorithms:
+  tpm tpm0: TPM with unsupported bank algorithm 0x0027
+
+That's TPM_ALG_SHA3_256 == 0x0027 from "Trusted Platform Module 2.0
+Library Part 2: Structures", page 51 [1].
+See also the related U-Boot algorithms update [2].
+
+Thus solve the problem by creating a file name with "_tpm_alg_<ID>"
+postfix if the crypto algorithm isn't initialized.
+
+This is how it looks on the test machine (patch ported to v6.12 release):
+  # ls -1 /sys/kernel/security/ima/
+  ascii_runtime_measurements
+  ascii_runtime_measurements_tpm_alg_27
+  ascii_runtime_measurements_sha1
+  ascii_runtime_measurements_sha256
+  binary_runtime_measurements
+  binary_runtime_measurements_tpm_alg_27
+  binary_runtime_measurements_sha1
+  binary_runtime_measurements_sha256
+  policy
+  runtime_measurements_count
+  violations
+
+[1]: https://trustedcomputinggroup.org/wp-content/uploads/Trusted-Platform-Module-2.0-Library-Part-2-Version-184_pub.pdf
+[2]: https://lists.denx.de/pipermail/u-boot/2024-July/558835.html
+
+Fixes: 9fa8e7625008 ("ima: add crypto agility support for template-hash algorithm")
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+Cc: Enrico Bravi <enrico.bravi@polito.it>
+Cc: Silvia Sisinni <silvia.sisinni@polito.it>
+Cc: Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+---
+Changes in v6:
+- Change subject now that securityfs files are created (Mimi Zohar)
+- Added a link to TCG document and the related U-Boot changes
+- Link to v5: https://lore.kernel.org/r/20260223-ima-oob-v5-1-91cc1064e767@arista.com
+
+Changes in v5:
+- Use lower-case for sysfs file name (as suggested-by Jonathan and Roberto)
+- Don't use email quotes for patch description (Roberto)
+- Re-word the patch description (suggested-by Roberto)
+- Link to v4: https://lore.kernel.org/r/20260127-ima-oob-v4-1-bf0cd7f9b4d4@arista.com
+
+Changes in v4:
+- Use ima_tpm_chip->allocated_banks[algo_idx].digest_size instead of hash_digest_size[algo]
+  (Roberto Sassu)
+- Link to v3: https://lore.kernel.org/r/20260127-ima-oob-v3-1-1dd09f4c2a6a@arista.com
+Testing note: I test it on v6.12.40 kernel backport, which slightly differs as
+lookup_template_data_hash_algo() was yet present.
+
+Changes in v3:
+- Now fix the spelling *for real* (sorry, messed it up in v2)
+- Link to v2: https://lore.kernel.org/r/20260127-ima-oob-v2-1-f38a18c850cf@arista.com
+
+Changes in v2:
+- Instead of skipping unknown algorithms, add files under their TPM_ALG_ID (Roberto Sassu)
+- Fix spelling (Roberto Sassu)
+- Copy @stable on the fix
+- Link to v1: https://lore.kernel.org/r/20260127-ima-oob-v1-1-2d42f3418e57@arista.com
+---
+ security/integrity/ima/ima_fs.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index 23d3a14b8ce3..ca4931a95098 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -398,16 +398,24 @@ static int __init create_securityfs_measurement_lists(void)
+ 		char file_name[NAME_MAX + 1];
+ 		struct dentry *dentry;
+ 
+-		sprintf(file_name, "ascii_runtime_measurements_%s",
+-			hash_algo_name[algo]);
++		if (algo == HASH_ALGO__LAST)
++			sprintf(file_name, "ascii_runtime_measurements_tpm_alg_%x",
++				ima_tpm_chip->allocated_banks[i].alg_id);
++		else
++			sprintf(file_name, "ascii_runtime_measurements_%s",
++				hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_ascii_measurements_ops);
+ 		if (IS_ERR(dentry))
+ 			return PTR_ERR(dentry);
+ 
+-		sprintf(file_name, "binary_runtime_measurements_%s",
+-			hash_algo_name[algo]);
++		if (algo == HASH_ALGO__LAST)
++			sprintf(file_name, "binary_runtime_measurements_tpm_alg_%x",
++				ima_tpm_chip->allocated_banks[i].alg_id);
++		else
++			sprintf(file_name, "binary_runtime_measurements_%s",
++				hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_measurements_ops);
+
+---
+base-commit: 343f51842f4ed7143872f3aa116a214a5619a4b9
+change-id: 20260127-ima-oob-9fa83a634d7b
+
+Best regards,
+-- 
+Dmitry Safonov <dima@arista.com>
+
+
 
