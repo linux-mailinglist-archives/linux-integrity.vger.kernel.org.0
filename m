@@ -1,50 +1,50 @@
-Return-Path: <linux-integrity+bounces-8966-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8967-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iB1VNy6JsGmukQIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8966-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:12:14 +0100
+	id INkVCs2OsGkukgIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8967-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:36:13 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96BE825829B
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D24652585E3
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 22:36:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6E62D30185A3
-	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 21:12:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B15D6302D5A7
+	for <lists+linux-integrity@lfdr.de>; Tue, 10 Mar 2026 21:36:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FA553B19CD;
-	Tue, 10 Mar 2026 21:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2809F3DD522;
+	Tue, 10 Mar 2026 21:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7fKUptr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rFsrzVKi"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297A43B0AE5;
-	Tue, 10 Mar 2026 21:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018B838AC64;
+	Tue, 10 Mar 2026 21:36:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773177129; cv=none; b=D4OO6mx9lcpwIwYxNcplB9kw6+KFqUm0yR++CLBONbAqOLNaseKRp3x8cGsvQI0BTJfOwUYI/sA3w50CDU+zEoeDDCZV7WazexIRwvpEEB3SIIje9XR7pOPuUaQHdqQz4c4OHi+3gCQQ/GI+/ENz6DvUFNbLT1GzwKXRPVnmgss=
+	t=1773178570; cv=none; b=g/oRt8gTQmo5qVO/OtVa1DTxChnA8l+IvWruyBWOmrGSeg08EpYX+y498mQ8Lx8QzUgZ4WX06jS8rV6E9vWh9pPFl+x4o5qoXSIPm4NvgHaaK3XrJTVQATHkah+RZV/IUEWzyhUkBe6MHZw+374TpqobU6dsVLWVhi3tsjKBOIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773177129; c=relaxed/simple;
-	bh=I0hRXA8vzphZyPkmaTEi2UnR4I9riSViZx4ZP8KHRbY=;
+	s=arc-20240116; t=1773178570; c=relaxed/simple;
+	bh=Xg4CGBK3u8/ArgMip1X0dYT6v82ryRISxkCSzREkPSY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TRuK3iwgcc02saHxWB1zAgdy0skPKVkQ6mjqh8aDqzZEAhQBOHCk8WJSuXswtebUwnYDHjoNQJ7FkAeulqRe95oOR/5vqHYctgO9azZu67IT2Ik0zWvSNWRaLdylqRmKamKM8h009qloNKDcuG6OXabAFtnFqfz8jFF8rtRmxlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7fKUptr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE8FC19423;
-	Tue, 10 Mar 2026 21:12:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YyA7XzZa8/rjYNwqKeKZbs3acCpeVhvd8EzU6us+K7MIAaaXRAlDMDOgZDpo+0E9zOL9fyLuGrP3foHw7GYXyfqvlmbIhMecUzz7Xg/8xTdOrwXiAz6gT2T2GeZegQAdSoWJFboyB+myizpds3XGsPUVx4QxSprpyVeSnxWEbqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rFsrzVKi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47922C19423;
+	Tue, 10 Mar 2026 21:36:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773177128;
-	bh=I0hRXA8vzphZyPkmaTEi2UnR4I9riSViZx4ZP8KHRbY=;
+	s=k20201202; t=1773178569;
+	bh=Xg4CGBK3u8/ArgMip1X0dYT6v82ryRISxkCSzREkPSY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R7fKUptrVOBNk+lqoq2TGcmqzyyjfveB/G4PfGYInXiYCctySVHzOBa/UUoB33G61
-	 MmJGLpJ+mo49MHhJD6aD1XApq+fSFdW/dHzoHTjOMiz6fetsczx/N6BP3wKmhjYRuT
-	 drpMGbJM9ukEMtNJyyFHtTD1ePlkUiafmvvtZN8JT6pAdwRYXD3+cTaqX/42GtCJ1E
-	 MMafX+lc4Ql0IAOp4t5FyN5fUaWaw2pCHhQjKDELAQ8Pik3Iut0hg+Bx85zMaVSQmQ
-	 vMGEHIo5jDcg8mMPiODtqCIvJhPlv0kMQVWgJKmRw9pF1k6OP3TUMj8/1LakJ/MrPO
-	 UqlCpZx+AHtog==
-Date: Tue, 10 Mar 2026 14:12:05 -0700
+	b=rFsrzVKiD8VQjeGuN+nEd00lZPd0I4jL+qZRfGtN3x1gIsiu+MJ8jFnr83Y+560yY
+	 SpEl2asG9qxhQgwS/T+7OdXOjJP4Uie/qk7vLBGXJ0YEdOMD+VtIK3iVBP5xb5t+sR
+	 AWlWnw+zk3tSDoW3EImfYu5Du8Uy4F2++O1V2FGVqKKSjV9YKUWJsj37oEu5TaaYv0
+	 h0LIbjKFNgwn0zf9efYj16MNz7kz27oGqtw+c1YEGZVjJ1TxHDJwF3v+Gs1h4mihps
+	 jFoLf8wbuiKkjVBnQqE0JrNES33AIWTX6ZkcyETw1CBNFaoCmmu6oY8B5yjWBz8zag
+	 9wnK1qInBajjw==
+Date: Tue, 10 Mar 2026 14:36:06 -0700
 From: Eric Biggers <ebiggers@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
 Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -79,10 +79,10 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 04/17] module: Make mod_verify_sig() static
-Message-ID: <20260310211205.GC120274@quark>
+Subject: Re: [PATCH v4 06/17] kbuild: add stamp file for vmlinux BTF data
+Message-ID: <20260310213606.GD120274@quark>
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-4-0b932db9b56b@weissschuh.net>
+ <20260113-module-hashes-v4-6-0b932db9b56b@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -92,8 +92,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260113-module-hashes-v4-4-0b932db9b56b@weissschuh.net>
-X-Rspamd-Queue-Id: 96BE825829B
+In-Reply-To: <20260113-module-hashes-v4-6-0b932db9b56b@weissschuh.net>
+X-Rspamd-Queue-Id: D24652585E3
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -105,7 +105,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8966-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8967-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -123,19 +123,76 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,weissschuh.net:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,weissschuh.net:email,link-vmlinux.sh:url]
 X-Rspamd-Action: no action
 
-On Tue, Jan 13, 2026 at 01:28:48PM +0100, Thomas Weiﬂschuh wrote:
-> It is not used outside of signing.c.
+On Tue, Jan 13, 2026 at 01:28:50PM +0100, Thomas Weiﬂschuh wrote:
+> The upcoming module hashes functionality will build the modules in
+> between the generation of the BTF data and the final link of vmlinux.
+> Having a dependency from the modules on vmlinux would make this
+> impossible as it would mean having a cyclic dependency.
+> Break this cyclic dependency by introducing a new target.
 > 
 > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > ---
->  kernel/module/internal.h | 1 -
->  kernel/module/signing.c  | 2 +-
->  2 files changed, 1 insertion(+), 2 deletions(-)
+>  scripts/Makefile.modfinal | 4 ++--
+>  scripts/link-vmlinux.sh   | 6 ++++++
+>  2 files changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 149e12ff5700..adfef1e002a9 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+> @@ -56,8 +56,8 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
+>  	printf '%s\n' 'savedcmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
+>  
+>  # Re-generate module BTFs if either module's .ko or vmlinux changed
+> -%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+> -	+$(call if_changed_except,ld_ko_o,$(objtree)/vmlinux)
+> +%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/.tmp_vmlinux_btf.stamp) FORCE
+> +	+$(call if_changed_except,ld_ko_o,$(objtree)/.tmp_vmlinux_btf.stamp)
+>  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+>  	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+>  endif
+> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+> index 4ab44c73da4d..8c98f8645a5c 100755
+> --- a/scripts/link-vmlinux.sh
+> +++ b/scripts/link-vmlinux.sh
+> @@ -111,6 +111,7 @@ vmlinux_link()
+>  gen_btf()
+>  {
+>  	local btf_data=${1}.btf.o
+> +	local btf_stamp=.tmp_vmlinux_btf.stamp
+>  
+>  	info BTF "${btf_data}"
+>  	LLVM_OBJCOPY="${OBJCOPY}" ${PAHOLE} -J ${PAHOLE_FLAGS} ${1}
+> @@ -131,6 +132,11 @@ gen_btf()
+>  	fi
+>  	printf "${et_rel}" | dd of="${btf_data}" conv=notrunc bs=1 seek=16 status=none
+>  
+> +	info STAMP $btf_stamp
+> +	if ! cmp --silent $btf_data $btf_stamp; then
+> +		cp $btf_data $btf_stamp
+> +	fi
 
-Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+A "stamp file" is traditionally an empty file that is written when some
+build step has completed.  The above code is instead copying the entire
+.tmp_vmlinux1.btf.o file (megabytes in size) to .tmp_vmlinux_btf.stamp.
+
+So, it's not clear to me why the stamp file is needed at all, versus
+depending directly on .tmp_vmlinux1.btf.o.
+
+I guess 'make' doesn't know about the dependencies of
+.tmp_vmlinux1.btf.o.  But the same is true of the stamp file, right?  So
+either way, how would 'make' know to finish rebuilding the file before
+starting to execute the "Re-generate module BTFs" rule?
+
+Also, passing the long option '--silent' to 'cmp' creates a dependency
+on the GNU implementation of 'cmp', which isn't documented as a kernel
+build dependency.  Probably better to use the short option '-s'.
+
+Also, the stamp file isn't being deleted by 'make clean'.  It looks like
+it would need to be added to cleanup() in link-vmlinux.sh.
 
 - Eric
 
