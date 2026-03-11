@@ -1,55 +1,55 @@
-Return-Path: <linux-integrity+bounces-8970-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8971-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oOOJBnvBsGkamwIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8970-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 02:12:27 +0100
+	id CloqD+3CsGlwmwIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8971-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 02:18:37 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C544625A43A
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 02:12:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA88A25A4C9
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 02:18:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0EFB13056B5D
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 01:12:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 297883052628
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 01:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24F9F36E480;
-	Wed, 11 Mar 2026 01:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E4B532D45B;
+	Wed, 11 Mar 2026 01:18:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sdt6QFSr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rNElMcZ/"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60BF36E46C;
-	Wed, 11 Mar 2026 01:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060F123EAB2;
+	Wed, 11 Mar 2026 01:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773191542; cv=none; b=rO9o6hB5eB1QIbFBgzbGQ8mEgsTgPIDM1mALB3BAhbbmrY9AtJ4R5imINAkZjm+sdZqM5/nwwLcEQmLsc914b5PHvXAeVn+2YJ5Vi9ULm6Cr7G4uQNZYQ5gwF9Y5Jq/bLgstzTHE63ccaqxXhdozVAwZ08vz6VbL8GqBiqaKzMI=
+	t=1773191912; cv=none; b=aQyI+uQ1IdWoIvXgh6k13glNR2Ard7EsPppG7cwZzgb3Vs7f++VaPdjPqQy4NtUgwQ/ip5Lfps9JNkgyj2T8P4QR54VU3WYCWpKXs0o1iiesiOfk7ysdTo3l9++6z75erhJsBNidzcbrjuZM7JGNzarQwKJFiQ+bC1+eyQHAeCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773191542; c=relaxed/simple;
-	bh=U/SQlh9eoA7aNwhrztie/y/wf13I3qMxDdkdMOCTE1c=;
+	s=arc-20240116; t=1773191912; c=relaxed/simple;
+	bh=3MN5J7gHtT0iB6q2hgPDZbQjxnI7iGXFyfIUNXZZ6RE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OxsqUj6u5U1bVBDqJnIWBZAaaBLpzgSktfAsCqgXk97+O4HQzForOM25lZvmKOKCsBNYdnL7KRZrfLJKrHTF9BOsS/sYFLhP+RMnNFfWrREPxivaoyCcpQoxZxvoGnt/i7h2to5VYl63plU9WUak7MoYr0w7+8ozvMba0/iXMHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sdt6QFSr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E371FC19423;
-	Wed, 11 Mar 2026 01:12:19 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=YyZKuo+wkwTW6d73zxGVR/PpmvWswd9InpeZA95HQ0juxOYReiUBP6S2XFdAqMHc6F5s8bVnX1DMFyVjmjMmrlc72Xme/2seTRUp3kiRmGB1xGW+G1uUIF2llCWbYVJYDbaBjR5n9EVHMBnO8w7fSIXARY5Xj0UCu/KskDRiiIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rNElMcZ/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8A1C2BC87;
+	Wed, 11 Mar 2026 01:18:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773191541;
-	bh=U/SQlh9eoA7aNwhrztie/y/wf13I3qMxDdkdMOCTE1c=;
+	s=k20201202; t=1773191911;
+	bh=3MN5J7gHtT0iB6q2hgPDZbQjxnI7iGXFyfIUNXZZ6RE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sdt6QFSrTCNLiZBwKHlduCFIqUyGtdRPe5EFgpkF9YeyDcF3v3jNsJscSUkGuqXvL
-	 d5P/Ui/E5sCPsCJm+cGK+Ear/ZMW1+OstQw2o5RYIdgPe9Y6Gf77hLvxJuoV+J6CLL
-	 +XBDMxYZXyY8ct5nR/O6mvNq8tC9q2VPa47380Ks78EqPMbMK0QpGUtLSMzBlM0Wz+
-	 yojTIufSanR7vEU7B1goXkTIBlA4ySiZoJhbcTZnHDSUG2Cu+bHafIUTuUch3hTD9C
-	 u9kXjtUnuL66e/t++jOmq2Et+/hBvUdZoeJYVK895TToskvqqvrQZgYYAjvXbNfbqo
-	 BUUPS7Xy7eppg==
-Date: Tue, 10 Mar 2026 18:12:18 -0700
+	b=rNElMcZ/oiqPMT/syzmk66cskejh79Cstrn6kGqi34MlnfQgHH3oXRf/b6pp8t3cr
+	 eQZBKlG0YUGoy6qvmNbm9VSkZGe89hTvf9S3KYoOuY87OOonsgjldShGI0h9JswIlT
+	 kIOBDzzz/9diVIPAtmu4HqB2KW3ucNm2B01I2HzMecC5r//hLXyMPoEUZgtUpWOt2j
+	 KXJZwBeOS1svS+9hOO3uappOtHNYbprQqULxT4smEtsN26/95gWugNwpPQ2af8mWew
+	 HQDisRYaMYMTxu22UqX8vhhY8Jz4kxSYTeCzDitiCkuKPat1c3I4xcTuhQyrmL0xyi
+	 Kp8gn9th2s7Mg==
+Date: Tue, 10 Mar 2026 18:18:28 -0700
 From: Eric Biggers <ebiggers@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>,
 	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
@@ -80,20 +80,20 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
 Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <20260311011218.GA212983@quark>
+Message-ID: <20260311011828.GB212983@quark>
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
  <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+ <fab2af64-e396-45f9-8876-feff4002e04b@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
-X-Rspamd-Queue-Id: C544625A43A
+In-Reply-To: <fab2af64-e396-45f9-8876-feff4002e04b@suse.com>
+X-Rspamd-Queue-Id: CA88A25A4C9
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -101,18 +101,18 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8970-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8971-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCPT_COUNT_TWELVE(0.00)[41];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
+	FREEMAIL_CC(0.00)[weissschuh.net,kernel.org,arndb.de,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
@@ -120,260 +120,41 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Jan 13, 2026 at 01:28:59PM +0100, Thomas Weißschuh wrote:
-> The current signature-based module integrity checking has some drawbacks
-> in combination with reproducible builds. Either the module signing key
-> is generated at build time, which makes the build unreproducible, or a
-> static signing key is used, which precludes rebuilds by third parties
-> and makes the whole build and packaging process much more complicated.
+On Tue, Feb 03, 2026 at 01:19:20PM +0100, Petr Pavlu wrote:
+> > +static unsigned int get_pow2(unsigned int val)
+> > +{
+> > +	return 31 - __builtin_clz(val);
+> > +}
+> > +
+> > +static unsigned int roundup_pow2(unsigned int val)
+> > +{
+> > +	return 1 << (get_pow2(val - 1) + 1);
+> > +}
+> > +
+> > +static unsigned int log2_roundup(unsigned int val)
+> > +{
+> > +	return get_pow2(roundup_pow2(val));
+> > +}
+> 
+> In the edge case when the kernel is built with only one module, the code
+> calls log2_roundup(1) -> roundup_pow2(1) -> get_pow2(0) ->
+> __builtin_clz(0). The return value of __builtin_clz() is undefined if
+> the input is zero.
 
-I think this actually undersells the feature.  It's also much simpler
-than the signature-based module authentication.  The latter relies on
-PKCS#7, X.509, ASN.1, OID registry, crypto_sig API, etc in addition to
-the implementations of the actual signature algorithm (RSA / ECDSA /
-ML-DSA) and at least one hash algorithm.
+A suggestion:
 
-I've even seen a case where the vmlinux size decreases by almost 200KB
-just by disabling module signing.  That's not even counting the
-signatures themselves, which ML-DSA has increased to 2-5 KB each.
-
-The hashes are much simpler, even accounting for the Merkle tree proofs
-that make them scalable.  They're less likely to have vulnerabilities
-like the PKCS#7 bugs the kernel has had historically.  They also
-eliminate the dependency on a lot of userspace libcrypto functionality
-that has been causing portability problems, such as the CMS functions.
-
-So I think this is how module authentication should have been done
-originally, and I'm glad to see this is finally being fixed.
-
-> +struct module_hashes_proof {
-> +	__be32 pos;
-> +	u8 hash_sigs[][MODULE_HASHES_HASH_SIZE];
-> +} __packed;
-
-Is the choice of big endian for consistency with struct
-module_signature?  Little endian is the usual choice in new code.
-
-> diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
-> index a45ce3b24403..3b510651830d 100644
-> --- a/include/linux/module_signature.h
-> +++ b/include/linux/module_signature.h
-> @@ -18,6 +18,7 @@ enum pkey_id_type {
->  	PKEY_ID_PGP,		/* OpenPGP generated key ID */
->  	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
->  	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
-> +	PKEY_ID_MERKLE,		/* Merkle proof for modules */
-
-I recommend making the hash algorithm explicit:
-
-        PKEY_ID_MERKLE_SHA256,	/* SHA-256 merkle proof for modules */
-
-While I wouldn't encourage the addition of another hash algorithm
-(specifying one good algorithm for now is absolutely the right choice),
-if someone ever does need to add another one, we'd want them to be
-guided to simply introduce a new value of this enum rather than hack it
-in some other way.
-
-> +static void hash_entry(const void *left, const void *right, void *out)
-
-Byte arrays should use u8 instead of void
-
-> diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
-[...]
-
-> +struct file_entry {
-> +	char *name;
-> +	unsigned int pos;
-> +	unsigned char hash[EVP_MAX_MD_SIZE];
-
-Considering that the hash algorithm is fixed, EVP_MAX_MD_SIZE can be
-replaced with a tighter local definition:
-
-    #define MAX_HASH_SIZE 32
-
-> +static struct file_entry *fh_list;
-> +static size_t num_files;
-> +
-> +struct leaf_hash {
-> +	unsigned char hash[EVP_MAX_MD_SIZE];
-> +};
-> +
-> +struct mtree {
-> +	struct leaf_hash **l;
-> +	unsigned int *entries;
-> +	unsigned int levels;
-> +};
-
-'struct leaf_hash' is confusing because it's actually used for the
-hashes of internal nodes, not leaf nodes.
-
-Maybe rename it to 'struct hash' and use it for both the hashes and leaf
-nodes and internal nodes.
-
-Also, clearer naming would improve readability, e.g.:
-
-    struct merkle_tree {
-            struct hash **level_hashes;
-            unsigned int level_size;
-            unsigned int num_levels;
-    };
-
-> +static void hash_data(void *p, unsigned int pos, size_t size, void *ret_hash)
-
-static void hash_data(const uint8_t *data, unsigned int pos,
-                      size_t size, struct hash *ret_hash)
-
-> +	unsigned char magic = 0x01;
-
-uint8_t
-
-Also, when defining these magic numbers, maybe explicitly document that
-they are domain separation prefixes:
-
-        uint8_t magic = 0x01; /* domain separation prefix */
-
-> +	unsigned int pos_be;
-
-uint32_t
-
-> +static void hash_entry(void *left, void *right, void *ret_hash)
-
-Could use stronger typing:
-
-static void hash_entry(const struct hash *left, const struct hash *right,
-                       struct hash *ret_hash)
-
-> +static struct mtree *build_merkle(struct file_entry *fh, size_t num)
-
-Could use clearer names, and constify the file_entry array:
-
-static struct merkle_tree *build_merkle(const struct file_entry *files,
-                                        size_t num_files)
-
-> +	/* First level of pairs */
-> +	for (unsigned int i = 0; i < num; i += 2) {
-> +		if (i == num - 1) {
-> +			/* Odd number of files, no pair. Hash with itself */
-> +			hash_entry(fh[i].hash, fh[i].hash, mt->l[0][i / 2].hash);
-> +		} else {
-> +			hash_entry(fh[i].hash, fh[i + 1].hash, mt->l[0][i / 2].hash);
-> +		}
-> +	}
-> +	for (unsigned int i = 1; i < mt->levels; i++) {
-> +		int odd = 0;
-> +
-> +		if (le & 1) {
-> +			le++;
-> +			odd++;
-> +		}
-> +
-> +		mt->entries[i] = le / 2;
-> +		mt->l[i] = xcalloc(sizeof(**mt->l), le);
-> +
-> +		for (unsigned int n = 0; n < le; n += 2) {
-> +			if (n == le - 2 && odd) {
-> +				/* Odd number of pairs, no pair. Hash with itself */
-> +				hash_entry(mt->l[i - 1][n].hash, mt->l[i - 1][n].hash,
-> +					   mt->l[i][n / 2].hash);
-> +			} else {
-> +				hash_entry(mt->l[i - 1][n].hash, mt->l[i - 1][n + 1].hash,
-> +					   mt->l[i][n / 2].hash);
-> +			}
-> +		}
-> +		le =  mt->entries[i];
-> +	}
-
-There should be an assertion at the end that we ended up with exactly 1
-hash in the root level.
-
-It might also be possible to refactor this code such that the leaf nodes
-and internal nodes are handled in the same loop, rather than handling
-the leaf nodes as a special case.
-
-> +static void write_merkle_root(struct mtree *mt, const char *fp)
-
-fp => filename since it's a string, not e.g. a 'FILE *'.
-
-> +{
-> +	char buf[1024];
-> +	unsigned int levels;
-> +	unsigned char *h;
-> +	FILE *f;
-> +
-> +	if (mt) {
-> +		levels = mt->levels;
-> +		h = mt->l[mt->levels - 1][0].hash;
-> +	} else {
-> +		levels = 0;
-> +		h = xcalloc(1, hash_size);
-> +	}
-> +
-> +	f = fopen(fp, "w");
-> +	if (!f)
-> +		err(1, "Failed to create %s", buf);
-
-Above should log the name of the file.  'buf' should be removed.
-
-> +static char *xstrdup_replace_suffix(const char *str, const char *new_suffix)
-> +{
-> +	const char *current_suffix;
-> +	size_t base_len;
-> +
-> +	current_suffix = strchr(str, '.');
-> +	if (!current_suffix)
-> +		errx(1, "No existing suffix in '%s'", str);
-
-This doesn't handle base names that contain a period.  strrchr() would
-work if the old suffix always contains exactly one period.  Otherwise
-another solution would be needed to identify the old suffix.
-
-> +static __attribute__((noreturn))
-> +void format(void)
-
-usage()
-
-> +{
-> +	fprintf(stderr,
-> +		"Usage: scripts/modules-merkle-tree <root definition>\n");
-> +	exit(2);
-
-This should show both parameters, <root hash> <new suffix>
-
-But they probably should be flipped to put the output second.
-
-Though, is <new suffix> needed at all?  It looks like it doesn't
-actually affect the output.
-
-> +	hash_evp = EVP_get_digestbyname("sha256");
-
-EVP_sha256()
-
-> +	hash_size = EVP_MD_get_size(hash_evp);
-
-The old name 'EVP_MD_size()' would have wider compatibility.
-
-> +	ERR(hash_size <= 0, "EVP_get_digestbyname");
-
-Log message should say EVP_MD_size
-
-> +	for (unsigned int i = 0; i < num_files; i++) {
-
-size_t, for consistency with the type of num_files
-
-> +		fd = open(signame, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-> +		if (fd < 0)
-> +			err(1, "Can't create %s", signame);
-> +
-> +		build_proof(mt, i, fd);
-> +		append_module_signature_magic(fd, lseek(fd, 0, SEEK_CUR));
-
-Maybe build_and_append_proof()?
+        static unsigned int log2_roundup(unsigned int val)
+        {
+                if (val <= 1)
+                        return 0;
+                return 32 - __builtin_clz(val - 1);
+        }
 
 - Eric
 
