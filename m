@@ -1,47 +1,47 @@
-Return-Path: <linux-integrity+bounces-8975-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8976-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UG+tJGtnsWnsugIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8975-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 14:00:27 +0100
+	id GLVxKqJssWlVvAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8976-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 14:22:42 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D09A264090
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 14:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B09E26462C
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 14:22:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 354AE3051460
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 12:59:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EC0A631B1E88
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 13:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AD7E2C21C3;
-	Wed, 11 Mar 2026 12:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57EF030DED1;
+	Wed, 11 Mar 2026 13:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="CEiZ87VU"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="HQsb0mto"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D786F282F33;
-	Wed, 11 Mar 2026 12:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2206298CA3;
+	Wed, 11 Mar 2026 13:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773233988; cv=none; b=d9TZzf7rQ8MZyPX18HJXDpQNImKYPWX3gs+BpMJEZ/8iI11S5FyQhJtiwT8J7SmmgRuJkjPMXqMNamRin8BrSzraw3FfzyhwhpWAHLJoSSmn423sNz9p45WdJTq6MqDfzOQwyZiaajqhXTQAEFEy8iGmRmdrIdAKuia1lSrKXG4=
+	t=1773235146; cv=none; b=LebxM1EtPRUiXEUQCPRUNnt8AQyDhItksg4/JBupduR7wxm782FHag5rZyN1Lh3MUCYBGiWoRl2KX4fPlyFYEeYdAG0JpIL+8PjA4T0h7Zd7CehPxDMQW9KUJt/yHePSqHXGKgtuAs28bWpxvFfAVOFncxNMwVO/AFhr+NPzU2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773233988; c=relaxed/simple;
-	bh=6iMI2XFYcGmArDxHVD1cNM01BLfDHO/WY4pBP+fXMLQ=;
+	s=arc-20240116; t=1773235146; c=relaxed/simple;
+	bh=yORSnb4FKH66tX09G1qK8g0oY/Uo2rIpyvZkEjNDm84=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q/tUwcikpTcsHHrNFI2YjlVjMZf7OFMN1SvomY7jJJTBql9fvZJxaVb4e539PQc8NNeMWPBf7WBXIvG/BnzBYuCUdvwqxrCZXcX1weDt2z0WQMHJQPVu34UK+FkeJPXaVC88e43Hq+awh3yVWXfadqTJCWogSUGRat4H4U0MrGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=CEiZ87VU; arc=none smtp.client-ip=159.69.126.157
+	 Content-Type:Content-Disposition:In-Reply-To; b=R5nnth5HYYP2Hm+EDAUv+LHfZzN0uASaW/pJw+KxG6wdxYA/wfRzr2z4xESFYy8EO/Sd5dXW62CGpBS9Rnc35jgsk2q5gE7ijSzr1N521qQouONrQ1LFixXQCyUK833xq88JsbbckXcRf4dgw75xxNUvmwMi4mP6VGoUGpREX+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=HQsb0mto; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1773233984;
-	bh=6iMI2XFYcGmArDxHVD1cNM01BLfDHO/WY4pBP+fXMLQ=;
+	s=mail; t=1773235142;
+	bh=yORSnb4FKH66tX09G1qK8g0oY/Uo2rIpyvZkEjNDm84=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CEiZ87VUhKkkjxvvSxzMolbjRXZkdgJY0Rzic3nGaTRS6rUPbCgJmnQ+/+MVDz77B
-	 T0VB914Hs6kRIOMVG/+6qkbqwiEQ6Ju+JDASONipQYTCXd3FloBmK2xVggCqy7Xgzr
-	 wkmrvsN0vaq/eTWXkiLVV77iXHXn2bYLd9icP6MQ=
-Date: Wed, 11 Mar 2026 13:59:44 +0100
+	b=HQsb0mtoTbwEGco/L3lRbJ0WTajceIyEQmoKsZbs3ijP9DIl6uMUH7DyCJEKEf4Nm
+	 owAHusHX0qnegQ4fOa4IysSRsA4AurPsIoJqlTnoeOwj3DxmUIvbEJueidEPMQxkvz
+	 Uowp8NlWKsfgXCHMDcyu0Ko9Yx9jg/4i7nHbYH8o=
+Date: Wed, 11 Mar 2026 14:19:02 +0100
 From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
 To: Eric Biggers <ebiggers@kernel.org>
 Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
@@ -63,12 +63,11 @@ Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
 	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
 	linux-modules@vger.kernel.org, linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 09/17] module: Make module loading policy usable
- without MODULE_SIG
-Message-ID: <2f702140-32cf-40aa-80fb-3650145a2adf@t-8ch.de>
+Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
+Message-ID: <5726fc65-7d24-4353-b341-81b785f2575c@t-8ch.de>
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
- <20260113-module-hashes-v4-9-0b932db9b56b@weissschuh.net>
- <20260310220146.GE120274@quark>
+ <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
+ <20260311011218.GA212983@quark>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -78,8 +77,8 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260310220146.GE120274@quark>
-X-Rspamd-Queue-Id: 3D09A264090
+In-Reply-To: <20260311011218.GA212983@quark>
+X-Rspamd-Queue-Id: 4B09E26462C
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -91,7 +90,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-8975-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-8976-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
@@ -107,52 +106,115 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,weissschuh.net:dkim,weissschuh.net:email,t-8ch.de:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:dkim,t-8ch.de:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On 2026-03-10 15:01:46-0700, Eric Biggers wrote:
-> On Tue, Jan 13, 2026 at 01:28:53PM +0100, Thomas Weißschuh wrote:
-> > The loading policy functionality will also be used by the hash-based
-> > module validation. Split it out from CONFIG_MODULE_SIG so it is usable
-> > by both.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >  include/linux/module.h  |  8 ++++----
-> >  kernel/module/Kconfig   |  5 ++++-
-> >  kernel/module/main.c    | 26 +++++++++++++++++++++++++-
-> >  kernel/module/signing.c | 21 ---------------------
-> >  4 files changed, 33 insertions(+), 27 deletions(-)
-> > 
-> > diff --git a/include/linux/module.h b/include/linux/module.h
-> > index f288ca5cd95b..f9601cba47cd 100644
-> > --- a/include/linux/module.h
-> > +++ b/include/linux/module.h
-> > @@ -444,7 +444,7 @@ struct module {
-> >  	const u32 *gpl_crcs;
-> >  	bool using_gplonly_symbols;
-> >  
-> > -#ifdef CONFIG_MODULE_SIG
-> > +#ifdef CONFIG_MODULE_SIG_POLICY
-> >  	/* Signature was verified. */
-> >  	bool sig_ok;
-> >  #endif
-> [...]
-> > +config MODULE_SIG_POLICY
-> > +	def_bool MODULE_SIG
+On 2026-03-10 18:12:18-0700, Eric Biggers wrote:
+> On Tue, Jan 13, 2026 at 01:28:59PM +0100, Thomas Weißschuh wrote:
+> > The current signature-based module integrity checking has some drawbacks
+> > in combination with reproducible builds. Either the module signing key
+> > is generated at build time, which makes the build unreproducible, or a
+> > static signing key is used, which precludes rebuilds by third parties
+> > and makes the whole build and packaging process much more complicated.
 > 
-> Maybe MODULE_AUTH_POLICY?  Hash-based module authentication does not use
-> signatures.
-> 
-> This issue appears elsewhere in the code too.  There are lots of places
-> that still refer to module signatures or "sigs", when really module
-> authentication is meant.
-> 
-> I'm not sure how far you want to go with the renaming, but it's
-> something to think about.  It's confusing to use the term "signature" to
-> mean something that is not a signature.
+> I think this actually undersells the feature.
 
-Ack. "authentication" is much better, I'll use that.
+(...)
+
+> So I think this is how module authentication should have been done
+> originally, and I'm glad to see this is finally being fixed.
+
+Thanks, that is nice to hear.
+
+> > +struct module_hashes_proof {
+> > +	__be32 pos;
+> > +	u8 hash_sigs[][MODULE_HASHES_HASH_SIZE];
+> > +} __packed;
+> 
+> Is the choice of big endian for consistency with struct
+> module_signature?  Little endian is the usual choice in new code.
+
+Yes, it's for consistency. But I am fine with either way. Given that
+this is essentially an internal ABI, we could always change it later.
+
+> > diff --git a/include/linux/module_signature.h b/include/linux/module_signature.h
+> > index a45ce3b24403..3b510651830d 100644
+> > --- a/include/linux/module_signature.h
+> > +++ b/include/linux/module_signature.h
+> > @@ -18,6 +18,7 @@ enum pkey_id_type {
+> >  	PKEY_ID_PGP,		/* OpenPGP generated key ID */
+> >  	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
+> >  	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
+> > +	PKEY_ID_MERKLE,		/* Merkle proof for modules */
+> 
+> I recommend making the hash algorithm explicit:
+> 
+>         PKEY_ID_MERKLE_SHA256,	/* SHA-256 merkle proof for modules */
+> 
+> While I wouldn't encourage the addition of another hash algorithm
+> (specifying one good algorithm for now is absolutely the right choice),
+> if someone ever does need to add another one, we'd want them to be
+> guided to simply introduce a new value of this enum rather than hack it
+> in some other way.
+
+The idea here was that this will only ever be used for module built as
+part of the kernel build. So the actual implementation could change freely
+without affecting anything.
+
+But I don't have hard feelings about it.
+
+> > +static void hash_entry(const void *left, const void *right, void *out)
+> 
+> Byte arrays should use u8 instead of void
+
+Ack.
+
+> > diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
+> [...]
+> 
+> > +struct file_entry {
+> > +	char *name;
+> > +	unsigned int pos;
+> > +	unsigned char hash[EVP_MAX_MD_SIZE];
+> 
+> Considering that the hash algorithm is fixed, EVP_MAX_MD_SIZE can be
+> replaced with a tighter local definition:
+
+Ack.
+
+>     #define MAX_HASH_SIZE 32
+
+IMO it shouldn't even mention 'MAX', as there is only one hash
+algorithm.
+
+(...)
+
+> > +{
+> > +	fprintf(stderr,
+> > +		"Usage: scripts/modules-merkle-tree <root definition>\n");
+> > +	exit(2);
+> 
+> This should show both parameters, <root hash> <new suffix>
+
+Ack.
+
+> But they probably should be flipped to put the output second.
+
+Ack.
+
+> Though, is <new suffix> needed at all?  It looks like it doesn't
+> actually affect the output.
+
+It will be required for compatibility with INSTALL_MOD_STRIP,
+two patches later. I'll move this code into the later patch.
+
+> > +	hash_evp = EVP_get_digestbyname("sha256");
+> 
+> EVP_sha256()
+
+(...)
+
+Ack to all other remarks.
 
 
 Thomas
