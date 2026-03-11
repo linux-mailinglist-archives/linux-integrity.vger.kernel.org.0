@@ -1,55 +1,66 @@
-Return-Path: <linux-integrity+bounces-8971-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-8972-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CloqD+3CsGlwmwIAu9opvQ
-	(envelope-from <linux-integrity+bounces-8971-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 02:18:37 +0100
+	id uP9ZG+MssWkBrgIAu9opvQ
+	(envelope-from <linux-integrity+bounces-8972-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 09:50:43 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA88A25A4C9
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 02:18:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1685225FB99
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 09:50:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 297883052628
-	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 01:18:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7BBDA302A552
+	for <lists+linux-integrity@lfdr.de>; Wed, 11 Mar 2026 08:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E4B532D45B;
-	Wed, 11 Mar 2026 01:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49FC23C3429;
+	Wed, 11 Mar 2026 08:50:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rNElMcZ/"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="o4tcifl1";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LMTIauJ8"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060F123EAB2;
-	Wed, 11 Mar 2026 01:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4543B7775;
+	Wed, 11 Mar 2026 08:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773191912; cv=none; b=aQyI+uQ1IdWoIvXgh6k13glNR2Ard7EsPppG7cwZzgb3Vs7f++VaPdjPqQy4NtUgwQ/ip5Lfps9JNkgyj2T8P4QR54VU3WYCWpKXs0o1iiesiOfk7ysdTo3l9++6z75erhJsBNidzcbrjuZM7JGNzarQwKJFiQ+bC1+eyQHAeCA=
+	t=1773219018; cv=none; b=A5ZRB4C9p5ir5+pLHK4JjV6oaJsiNxZGtPWdvOBzPx0XIoYVHqJLk3QtEbJs0UgXCHXaqu2hroz6GAykHA8Iy408cbuW8LGz1qO931dUbjCAriLyFGPRF+tC6rD8DOvkbUv93UipnaFgDd3rCoPMTRD76PwXbhSM+gDyzcxY62g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773191912; c=relaxed/simple;
-	bh=3MN5J7gHtT0iB6q2hgPDZbQjxnI7iGXFyfIUNXZZ6RE=;
+	s=arc-20240116; t=1773219018; c=relaxed/simple;
+	bh=ZjFxYEjK8aozfmve4JoaBaV+xJQhTcTGAjUyYSMn6lQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YyZKuo+wkwTW6d73zxGVR/PpmvWswd9InpeZA95HQ0juxOYReiUBP6S2XFdAqMHc6F5s8bVnX1DMFyVjmjMmrlc72Xme/2seTRUp3kiRmGB1xGW+G1uUIF2llCWbYVJYDbaBjR5n9EVHMBnO8w7fSIXARY5Xj0UCu/KskDRiiIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rNElMcZ/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F8A1C2BC87;
-	Wed, 11 Mar 2026 01:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773191911;
-	bh=3MN5J7gHtT0iB6q2hgPDZbQjxnI7iGXFyfIUNXZZ6RE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rNElMcZ/oiqPMT/syzmk66cskejh79Cstrn6kGqi34MlnfQgHH3oXRf/b6pp8t3cr
-	 eQZBKlG0YUGoy6qvmNbm9VSkZGe89hTvf9S3KYoOuY87OOonsgjldShGI0h9JswIlT
-	 kIOBDzzz/9diVIPAtmu4HqB2KW3ucNm2B01I2HzMecC5r//hLXyMPoEUZgtUpWOt2j
-	 KXJZwBeOS1svS+9hOO3uappOtHNYbprQqULxT4smEtsN26/95gWugNwpPQ2af8mWew
-	 HQDisRYaMYMTxu22UqX8vhhY8Jz4kxSYTeCzDitiCkuKPat1c3I4xcTuhQyrmL0xyi
-	 Kp8gn9th2s7Mg==
-Date: Tue, 10 Mar 2026 18:18:28 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Petr Pavlu <petr.pavlu@suse.com>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=dkknLweiGRXZL0r0X9Aw7ULotf1kxciKseOAE0aUhy2ZsH2mOf/qpaLACyISXnyrR+vOFLV8EUkR967oU25kjN/LlyWJFVsrZr6VZEyM6BMqBNCIwm7ycQan5LFr3EIjA+LMpkE0staIdLHbCMi+wIxenVqy+A/N9xxucfZn7ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=o4tcifl1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LMTIauJ8; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Wed, 11 Mar 2026 09:50:08 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1773219010;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Dh2u910Dr9v3m0hVo537X6ofb5vKqJBESKL7gfq66iU=;
+	b=o4tcifl1o8jywgLPdg/s+WX7sDPzz+eCAnhiMj3T66TG/Q1htV1GOGeOOud7SVVEX+GX92
+	OVl1a0sAtFbXIhn6q8VAYV3nbRQ8ydhQIs0OB6MXRRv1VFkebNYQxNtC6ZpsNfMUc2HPJe
+	my1FYPw0ldYH8kKSZm/D/y2nEimFEJIe4djKU6CH2C6et4c58of1WcZakycG05pAwk+5+R
+	vRjsqZMlne+14maN+9VGVI5qg7hbBIk6aqyB10RpJcYkoRJbGh9dKeD1rxtrSKP3zP2jcK
+	nzJWn+wPTcYCVcLlRx9uC67R6D4rj8jJI+lZcpjDoC0/26vEYJrmilrpcNilQg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1773219010;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Dh2u910Dr9v3m0hVo537X6ofb5vKqJBESKL7gfq66iU=;
+	b=LMTIauJ88fFcgqN/jXiJPCLOHnYrJyLVhh0TJD/NNsp9hdkMfEbyqHXmdDHdxxwf8KEeF3
+	WVtUAKnV6l5hwHDQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
 	Sami Tolvanen <samitolvanen@google.com>,
 	Daniel Gomez <da.gomez@samsung.com>,
 	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
@@ -69,92 +80,118 @@ Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
 	Nicolas Schier <nsc@kernel.org>,
 	Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
 	Xiu Jianfeng <xiujianfeng@huawei.com>,
-	Fabian =?iso-8859-1?Q?Gr=FCnbichler?= <f.gruenbichler@proxmox.com>,
+	Fabian =?utf-8?Q?Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>,
 	Arnout Engelen <arnout@bzzt.net>,
 	Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
 	Christian Heusel <christian@heusel.eu>,
-	=?iso-8859-1?Q?C=E2ju?= Mihai-Drosi <mcaju95@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	=?utf-8?B?Q8OianU=?= Mihai-Drosi <mcaju95@gmail.com>,
 	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
 	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org
 Subject: Re: [PATCH v4 15/17] module: Introduce hash-based integrity checking
-Message-ID: <20260311011828.GB212983@quark>
+Message-ID: <20260311085008.TSnh3YR1@linutronix.de>
 References: <20260113-module-hashes-v4-0-0b932db9b56b@weissschuh.net>
  <20260113-module-hashes-v4-15-0b932db9b56b@weissschuh.net>
- <fab2af64-e396-45f9-8876-feff4002e04b@suse.com>
+ <20260311011218.GA212983@quark>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <fab2af64-e396-45f9-8876-feff4002e04b@suse.com>
-X-Rspamd-Queue-Id: CA88A25A4C9
+In-Reply-To: <20260311011218.GA212983@quark>
+X-Rspamd-Queue-Id: 1685225FB99
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
+	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-8971-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-8972-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[weissschuh.net,kernel.org,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,vger.kernel.org,lists.ozlabs.org];
 	RCPT_COUNT_TWELVE(0.00)[41];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[weissschuh.net,kernel.org,arndb.de,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,gmail.com,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,vger.kernel.org,lists.ozlabs.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[linutronix.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-On Tue, Feb 03, 2026 at 01:19:20PM +0100, Petr Pavlu wrote:
-> > +static unsigned int get_pow2(unsigned int val)
-> > +{
-> > +	return 31 - __builtin_clz(val);
-> > +}
-> > +
-> > +static unsigned int roundup_pow2(unsigned int val)
-> > +{
-> > +	return 1 << (get_pow2(val - 1) + 1);
-> > +}
-> > +
-> > +static unsigned int log2_roundup(unsigned int val)
-> > +{
-> > +	return get_pow2(roundup_pow2(val));
-> > +}
+On 2026-03-10 18:12:18 [-0700], Eric Biggers wrote:
+> > diff --git a/scripts/modules-merkle-tree.c b/scripts/modules-merkle-tree.c
+> [...]
 > 
-> In the edge case when the kernel is built with only one module, the code
-> calls log2_roundup(1) -> roundup_pow2(1) -> get_pow2(0) ->
-> __builtin_clz(0). The return value of __builtin_clz() is undefined if
-> the input is zero.
+> > +struct file_entry {
+> > +	char *name;
+> > +	unsigned int pos;
+> > +	unsigned char hash[EVP_MAX_MD_SIZE];
+> 
+> Considering that the hash algorithm is fixed, EVP_MAX_MD_SIZE can be
+> replaced with a tighter local definition:
+> 
+>     #define MAX_HASH_SIZE 32
+> 
+> > +static struct file_entry *fh_list;
+> > +static size_t num_files;
+> > +
+> > +struct leaf_hash {
+> > +	unsigned char hash[EVP_MAX_MD_SIZE];
+> > +};
+> > +
+> > +struct mtree {
+> > +	struct leaf_hash **l;
+> > +	unsigned int *entries;
+> > +	unsigned int levels;
+> > +};
+> 
+> 'struct leaf_hash' is confusing because it's actually used for the
+> hashes of internal nodes, not leaf nodes.
 
-A suggestion:
+You could still consider the internal nodes as leafs.
 
-        static unsigned int log2_roundup(unsigned int val)
-        {
-                if (val <= 1)
-                        return 0;
-                return 32 - __builtin_clz(val - 1);
-        }
+> Maybe rename it to 'struct hash' and use it for both the hashes and leaf
+> nodes and internal nodes.
+> 
+> Also, clearer naming would improve readability, e.g.:
+> 
+>     struct merkle_tree {
+>             struct hash **level_hashes;
+>             unsigned int level_size;
+>             unsigned int num_levels;
+>     };
 
-- Eric
+but this could improve it, indeed.
+
+> > +	hash_evp = EVP_get_digestbyname("sha256");
+> 
+> EVP_sha256()
+
+I would suggest to use EVP_MD_fetch() instead.
+
+> > +	hash_size = EVP_MD_get_size(hash_evp);
+> 
+> The old name 'EVP_MD_size()' would have wider compatibility.
+
+EVP_MD_fetch() and EVP_MD_get_size() are openssl 3.0.0+ and nothing
+below 3.0.0 is considered supported (while 3.0.0 is EOL 07 Sep 2026).
+
+Sebastian
 
