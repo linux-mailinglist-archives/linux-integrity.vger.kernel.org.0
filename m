@@ -1,139 +1,162 @@
-Return-Path: <linux-integrity+bounces-9006-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9008-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YDTsONFpuWmZDwIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9006-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 15:48:49 +0100
+	id cFvmOR59uWmxHAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9008-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 17:11:10 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5371D2AC4A7
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 15:48:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 595472ADAED
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 17:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6E88A3153791
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 14:39:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 88843311FF27
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 16:06:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADB763E51FF;
-	Tue, 17 Mar 2026 14:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5185F2F83CB;
+	Tue, 17 Mar 2026 16:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DZxYgYDn"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="S9Op6TgM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A18D3E3C6E;
-	Tue, 17 Mar 2026 14:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1172D2F6170;
+	Tue, 17 Mar 2026 16:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773758366; cv=none; b=N7nGp/ZN7l64N1V6D1ZcPJXLjfHLsUzqS9/zfLl5d3qJjVCFASlejUKccIK/go6QaPCI5IQF8sUuREt03UlX9jsGZIOuXd0NEtG+misHlwZFXlSZLXjVAbrru6jBxIFZzQTusN0JnDm20o25DvzuW05UMsfV0wmo4qboEhuF56I=
+	t=1773763619; cv=none; b=Y6dqOm/J4S+Ogimg2fTyN3ZYXC3JxgZrsDDjuokaVBOTTIJ7hYuapfWhlMCfLo1kPltpJtiKdHzSIcNMjmz3K9fQaz2q8WxfJ6pC67SY+9swlIL6z4Cp3XkrnnMpa7Evp6d7dpymA/qfvfujR5JifkJ+YQwS0VBRy6bPG8m8py0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773758366; c=relaxed/simple;
-	bh=PWfE+o5Hz+nic40jQHCKcE3T28Qk2FdkhdgeMe1G7Jc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fGRgxuXc0jIurbPp1m6NpHxpN0NanOjm4+Tu+X0V0r5iOTfLs5IUUrGctyORFt2ifsgw3NL0yBRwIxpZckE/x+R/NQReE97AvgLBla4dkp4WXfmzpPbHrWs3rZeg1Y/ujWiYcia0awWhg405kZiWAIaya08MUXqYi7R+xdzAKcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DZxYgYDn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12CEAC4CEF7;
-	Tue, 17 Mar 2026 14:39:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773758366;
-	bh=PWfE+o5Hz+nic40jQHCKcE3T28Qk2FdkhdgeMe1G7Jc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DZxYgYDnyUnQJBVCjIKBFtdKrR2n2NDrbhTvaPnowGyWoBVJekeM7cIgG+q1myQN0
-	 Q3LaLPEsNuYB0/60IkP+b/ZQc+WFEI/JROmJfRmFVKm3ao+OixC+nKDHQhyeP89YhT
-	 mWlJVI0tZhEVv1Ri05KsVEN7QkwB5o9jvOoNmo8+Yb+HJWh6ZUXo1nMf/zo6bOHDC0
-	 N2QuhWcAwm0LaRrEMx8DuU9zjtS4kL0cz06zZwAdJ/ToHBt78o33mXZiTrQzuhns8U
-	 nmErHEvDg9TEY8zFd2ckWIo+VmPouiHiZwlw8IDAVjJ8+On/NOY0cZs/BML0xNqAuK
-	 sBolTqWEqo6kQ==
-From: Christian Brauner <brauner@kernel.org>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	David Laight <david.laight.linux@gmail.com>,
-	linux-nilfs@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-	Viacheslav Dubeyko <slava@dubeyko.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH v3 0/2] vfs: follow-on fixes for i_ino widening
-Date: Tue, 17 Mar 2026 15:39:13 +0100
-Message-ID: <20260317-sinkflug-symmetrie-0f05964e6492@brauner>
+	s=arc-20240116; t=1773763619; c=relaxed/simple;
+	bh=wX7zijGQVzQcNvjZ+YiFhp5KmVoBtRFpHYg0zMP79lU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=slOkCGo7d4QAZWyLVtv5qxgm0rIC5wVo/UWxoF7oSyPY4HK7GuDorQB0QVA1Xbt0SrA6Xj2zweSIavaXOB5muC8qoWr7bsPQEJaAYeQ9I7t28U3lvowKi86v6cblhuCU8cO4VrrXSm9lfJFZQnGTOJbQlKH27RLCP/MpjrJTY1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=S9Op6TgM; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62HE9Y0t037683;
+	Tue, 17 Mar 2026 16:06:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=43dwuMnFnaFQovGqpg258vYjKjQhQ
+	NAZxgt49emEB1s=; b=S9Op6TgMS0VdGZddxUjPmWAYOUkWaPfNkiTUznZj9uDDz
+	4O/0l3uMx4VDBED5Sg6lF+NZTPNHve+KKj/nH3hdAEUXqzScU1anfOgx1U3Z26ah
+	d3LqMvljLcDN4UKNRNhDg+9dguPM/ph/Cr4dTDyRnn2g8Z7LMgwH+uhzVZdWFrV6
+	q202o2LfeCZlb8rUikkvSGSrJ7NVntbdEg4+1SN6OMGj8KebgN1t0fRbB/dfP3Jh
+	bLz9U+XsmEqVhhmZ/F6v1iBch6BShfw2lSJ+sgB4fP+Ov/JWpJvgBCIJPU9k+6XO
+	aHTJVFrzEHqkBvkTDjgGGe51N9sTjFw9V9uwUGVFg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvx8x4fec-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Mar 2026 16:06:37 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62HG1s4n014011;
+	Tue, 17 Mar 2026 16:06:36 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4aafts-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Mar 2026 16:06:36 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62HG11WT020887;
+	Tue, 17 Mar 2026 16:06:36 GMT
+Received: from localhost (alecbro-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.255.11])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4aafrm-1;
+	Tue, 17 Mar 2026 16:06:35 +0000
+From: Alec Brown <alec.r.brown@oracle.com>
+To: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        jarkko@kernel.org
+Cc: peterhuewe@gmx.de, jarkko.sakkinen@iki.fi, jgg@ziepe.ca,
+        ross.philipson@oracle.com, dpsmith@apertussolutions.com,
+        daniel.kiper@oracle.com, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com, ardb@kernel.org,
+        alec.r.brown@oracle.com
+Subject: [PATCH 0/4] Reorganize TPM public headers
+Date: Tue, 17 Mar 2026 16:03:31 +0000
+Message-ID: <20260317160613.2899129-1-alec.r.brown@oracle.com>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260316-iino-u64-v3-0-d1076b8f7a20@kernel.org>
-References: <20260316-iino-u64-v3-0-d1076b8f7a20@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1142; i=brauner@kernel.org; h=from:subject:message-id; bh=PWfE+o5Hz+nic40jQHCKcE3T28Qk2FdkhdgeMe1G7Jc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTuTJ9uts1atzj19PQgX3uBpmW2KeHf5/RMYZrsfYLj3 r+nO3Z2dZSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAExE+ijDX8mHen/cTkl2SNxT XyElLh3AushE/ufxeHfeSwYHv050EmVkOPteyPUTy+HPZzdsWJh86/sJzo4dvTyPf4Skn1wr+U7 Ykg8A
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [3.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-17_03,2026-03-17_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
+ phishscore=0 mlxscore=0 mlxlogscore=597 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
+ definitions=main-2603170142
+X-Proofpoint-GUID: iNm804fl9NSQ6i-INWYfXgXQ9G96eVfV
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDE0MiBTYWx0ZWRfX8zx8LcTgMxAQ
+ lM0L/Yu6vrgcdS78PAoTdbyBzePgMogiGBCLmSxQbipP+TAmadtU1atvcKvgALhya3AWCy02x7R
+ MvGK44eE1QE5GGL6r3ZECqrjWV3FYCjcsAsXXKp85QqqpfP0uHIG1wmyaI5MQ7Z63iok461Phxw
+ gk5PEqMWF2/nGJQXDgB8kx7QC0ZX4DJ20WtcGgONCsZ3JBrq/P1QYiEqt8koceOUHgTVMSizcSU
+ b0vyvzrbULrcp5Q+R2FyCOVfnu42SwP53cAcrI0lLimPJ284HDSQeSOYpxHXGSHfAes7qs0SRp8
+ C55GDFUrSiKFDo8vWYbTAKtv3snMEG0ua4P2uJWNvwswkXRapLUPreq4v7k4j/vvj4B9OgiVrDU
+ tpoceo0/w4O4GY3d1IrhiKYn8qIeNcTljRMzGOEPF28xniHgkY1YoFJQT0sObNcNSxfv999v4Uz
+ uPCEyKgqIBPblRmNrHQ==
+X-Authority-Analysis: v=2.4 cv=dJmrWeZb c=1 sm=1 tr=0 ts=69b97c0d cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
+ a=RD47p0oAkeU5bO7t-o6f:22 a=2sZGKimuh84ZaeTFltkA:9
+X-Proofpoint-ORIG-GUID: iNm804fl9NSQ6i-INWYfXgXQ9G96eVfV
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
+	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9006-lists,linux-integrity=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9008-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[gmx.de,iki.fi,ziepe.ca,oracle.com,apertussolutions.com,googlegroups.com,kernel.org];
+	DKIM_TRACE(0.00)[oracle.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alec.r.brown@oracle.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-0.991];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,linux-integrity@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org,intel.com,dubeyko.com,linux.ibm.com,huawei.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
+	TO_DN_NONE(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:dkim,oracle.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5371D2AC4A7
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: 595472ADAED
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 16 Mar 2026 15:02:21 -0400, Jeff Layton wrote:
-> Just some patches to fix follow-on issues reported after the
-> inode->i_ino widening series. Christian, could you toss these
-> onto the vfs-7.1.kino branch?
+This patch series reorganizes various TPM definitions into tpm_command.h and
+groups them corresponding to the TCG specification for TPM1 and TPM2. The
+purpose in reorganizing these definitions is to assist the TPM driver usability
+in pre-boot environments. This series is related to Jarkko Sakkinen's work
+streamlining TPM2 HMAC sessions but can be applied independently of his
+patches.
 
-Applied to the vfs-7.1.kino branch of the vfs/vfs.git tree.
-Patches in the vfs-7.1.kino branch should appear in linux-next soon.
+Ross Philipson (4):
+      tpm: Initial step to reorganize TPM public headers
+      tpm: Move TPM1 specific definitions to the command header
+      tpm: Move TPM2 specific definitions to the command header
+      tpm: Move TPM common base definitions to the command header
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+ drivers/char/tpm/tpm-buf.c                |   1 -
+ drivers/char/tpm/tpm.h                    | 179 ----------
+ drivers/char/tpm/tpm1-cmd.c               |  19 +-
+ drivers/char/tpm/tpm2-cmd.c               |  30 --
+ drivers/char/tpm/tpm2-space.c             |  13 -
+ include/keys/trusted_tpm.h                |   1 -
+ include/linux/tpm.h                       | 195 +----------
+ include/linux/tpm_command.h               | 520 +++++++++++++++++++++++++++++-
+ security/keys/trusted-keys/trusted_tpm1.c |   1 -
+ security/keys/trusted-keys/trusted_tpm2.c |   1 -
+ 10 files changed, 510 insertions(+), 450 deletions(-)
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.1.kino
-
-[1/2] EVM: add comment describing why ino field is still unsigned long
-      https://git.kernel.org/vfs/vfs/c/bef5b11087ce
-[2/2] nilfs2: fix 64-bit division operations in nilfs_bmap_find_target_in_group()
-      https://git.kernel.org/vfs/vfs/c/81359c146fba
 
