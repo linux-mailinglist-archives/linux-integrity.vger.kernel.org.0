@@ -1,347 +1,184 @@
-Return-Path: <linux-integrity+bounces-9007-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9012-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2JmILQt9uWmxHAIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9007-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 17:10:51 +0100
+	id qDCxEWmouWkhLwIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9012-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 20:15:53 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35FA62ADAC8
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 17:10:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D55222B16BA
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 20:15:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4C66330BB96E
-	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 16:06:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 35439303BF4A
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 19:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4FB2F25F3;
-	Tue, 17 Mar 2026 16:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6947919AD8B;
+	Tue, 17 Mar 2026 19:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="X8q65HHz"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="b0UKRU8E"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E0026F293;
-	Tue, 17 Mar 2026 16:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1116C1DFF0;
+	Tue, 17 Mar 2026 19:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773763617; cv=none; b=FVpQotqeGYK2cL/x8vNaJ93466UGR4yGwVIu4y6pZFcssZqQL3fchEZiwIZ0mwHk86RFaDXR7Fjj6lT/wQFp+jPXPeVQ/41O6U03hBaF5shSO+cxik5ncz+ihWYDtty7Vp/j8ovBuN8LkmGK4yDJ7iZ1a5N+W5YlgsXOxd1Txo4=
+	t=1773774950; cv=none; b=ZT0r9Sfqkj7dXuxQXOS7FcQnrKTELvzid/QhI7X6ppUhkpiqtyHFcwWTx/llywOjHPamll3iKXTs1DNClcN++Huq3WpH1895t9rAkOpazoaLRZ9hGfbX7Hf305jb8wH5WeOrC9tHHULRF+cxIshOVLILw7E2z60WxZD3iH2WaIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773763617; c=relaxed/simple;
-	bh=wrzci2Meegi1bKuXCl6+mRdzgZT0jW/C1Kb+skqurLs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZQCmUMa7I614szBZB9pnC7+snbvg6V7j2SjHrzB30vZ8ZYaOisjA5DPh+1gMJFkrAD8w+UVPdapBaN5RuDygGzw600q2q/4AbW7EdQYfH2WYVWzcRF3Xp+nwG92BRcZboTxYS4thqU/QgbminUXcO13TzZSFzpFLnKJheg/vZY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=X8q65HHz; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62HE4BRs104304;
-	Tue, 17 Mar 2026 16:06:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=vy8KW
-	SDHCCeTGCwkFTZCGK5NcEj8xZNfPUiYETykNRo=; b=X8q65HHzQaQ2csvKn2Yxw
-	hFieQfnKUZcxNkCE38XkCAaCP2H6D4sKwM1aQ3pyhLFh30WIpVtAxeFHycCz3Q8u
-	XmVx/gklIXRFwlS/+ohSXPJac9WT0uAPZWYHYDySSyvjX2SQampRBgP177p3h+hF
-	rn/lnRUKMIb5zPguz89u/W5qlcDKmWwgaR2OcZdJOSnno9EEnKo8QwyfE1HQuCmq
-	OZK+mwSw6PayVtNxlWmESNN7spFbXizpeI6XELseQGcDA3HINN8je740Tla6yEw3
-	hWBMGcXLXF3IzU9bRVuH/L/aB9aDtDWds1+zqbICsQW7txYluDs22s847xbXJ0hP
-	Q==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cvx8x4fet-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Mar 2026 16:06:42 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 62HEcgmW014108;
-	Tue, 17 Mar 2026 16:06:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cvx4aag40-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Mar 2026 16:06:41 +0000
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 62HG6Pvk031124;
-	Tue, 17 Mar 2026 16:06:41 GMT
-Received: from localhost (alecbro-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.255.11])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cvx4aag0r-1;
-	Tue, 17 Mar 2026 16:06:40 +0000
-From: Alec Brown <alec.r.brown@oracle.com>
-To: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        jarkko@kernel.org
-Cc: peterhuewe@gmx.de, jarkko.sakkinen@iki.fi, jgg@ziepe.ca,
-        ross.philipson@oracle.com, dpsmith@apertussolutions.com,
-        daniel.kiper@oracle.com, kanth.ghatraju@oracle.com,
-        trenchboot-devel@googlegroups.com, ardb@kernel.org,
-        alec.r.brown@oracle.com
-Subject: [PATCH 4/4] tpm: Move TPM common base definitions to the command header
-Date: Tue, 17 Mar 2026 16:03:35 +0000
-Message-ID: <20260317160613.2899129-5-alec.r.brown@oracle.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260317160613.2899129-1-alec.r.brown@oracle.com>
-References: <20260317160613.2899129-1-alec.r.brown@oracle.com>
+	s=arc-20240116; t=1773774950; c=relaxed/simple;
+	bh=t9oHWXID0X3IHZuxMJ21N4KTmPJckQAHF9PGj65HaI4=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=PwvZaBpT8klmZ0e+BBPNnnCKxZGvNkyx5nxzLGr8NvBgWJpzbdW3seK2g2PVpgsV3RtuvwbnHNuSiN8lO8KSH8T32fEegl9oN6N9EB6Yx05AamKsWUC7mQI1fGVcRzcaVxxPLrMAs/C0HfHmNRGUzUg8I9+go7awxTNKwRUo0Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=b0UKRU8E; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62H9wbg81189478;
+	Tue, 17 Mar 2026 19:15:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=LwbSbs
+	xqaV6DD51oggoOiP/qa89tlN4mvUgF4J6nzno=; b=b0UKRU8EZwYdLN1mXAzHwQ
+	lZHIyrhZ4c/VuTetYqSBPvNmABgGqq2adnyI4G08y7BM9AqP9Krq0ELfxJWFNp8P
+	p6D2mIJQshF5U7Rzgl9COoNeNXpD+w+VsVC8MssX9+0PT4EnUnbZraumzpO/Flmi
+	zMA46T7ZpZhR4czYIWXqoYXXWy7XEznqpELrAbOd9qUfnZaOx4rcAgTzhr8iPe+E
+	D5kJptDxe1T7trBee9h2J8lRmf6LWdp5NB7v2UJvbQEKlh/79f+8zJWbtx3DlaJ4
+	8npgCSo2F4tiLLxcLKb8MwY+ZXBW5SrSVjpRRiMM72t5X2wjfRP4sIl1VTwwtF1w
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cx7vfgrjv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Mar 2026 19:15:12 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62HIkPxR028708;
+	Tue, 17 Mar 2026 19:15:11 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cwkgkamua-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Mar 2026 19:15:11 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62HJFAYx18154188
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Mar 2026 19:15:10 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 59C9758058;
+	Tue, 17 Mar 2026 19:15:10 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4CC3F58057;
+	Tue, 17 Mar 2026 19:15:09 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.96.49])
+	by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 17 Mar 2026 19:15:09 +0000 (GMT)
+Message-ID: <c61aeaa79929a98cb3a6d30835972891fac3570f.camel@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] ima: Remove ima_h_table structure
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+        skhan@linuxfoundation.org, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com,
+        nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
+In-Reply-To: <20260311171956.2317781-1-roberto.sassu@huaweicloud.com>
+References: <20260311171956.2317781-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 17 Mar 2026 15:15:08 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: hEc5q3wd8MTvePR4-Qc55BKf-FHdD7Ji
+X-Authority-Analysis: v=2.4 cv=KajfcAYD c=1 sm=1 tr=0 ts=69b9a840 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=i0EeH86SAAAA:8
+ a=Pu4qpp7xOsI_tI_u5rgA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDE2OSBTYWx0ZWRfX4k2K5tgkU1o8
+ jSQtcMJK6TS1yfvX0FMHmL2UFfFG9r1xa1kl0Nbc8J4QfqOUba0af1pTeb1TLjdm25lDpMBoOFb
+ EU0I0V7ORdPX+BWSFHQdA+I3MDxDBEldDPnH2dOznGiSgc+ctcxKsyDENBgjAKvmPmJxSILMYf/
+ AFzXuAPX0Gzk3hR/ECwQ8jbwldxGUx25atWVGZAX+z/COQxtCCDzOwOgkgd+jsdKchQRBcmw6GP
+ inEEhuWmOCgXcKLpCtFxgvHXoy7Mxec4Roj9mz6Qg85gZKUFYHRm4X0i0UiNFC29K5GyqJ5+++q
+ yIcCR877HJikqARa+EbztCc42YB4aQZlLFq+7sVetJ6Otcn7ZvF9QxYCdYTfO8oIAGm6mjpD6il
+ HMK0U/8VpCf/Y0oRqQomGy8pfZNxmeZ8EQYztoKiZ2XzK8V2A7xMGlqT+0AjO40ZAZcZlsKvpU0
+ KIAV1i+IQtPJMij3vWg==
+X-Proofpoint-GUID: UUqMRk-lq9FK62kRCYkW6ZTtaKOkuVu7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-17_03,2026-03-17_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
- phishscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2603050001
- definitions=main-2603170142
-X-Proofpoint-GUID: E6JBUFNjpcHBobTqDCDcu7BsSoQxqWL8
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDE0MiBTYWx0ZWRfX7tZXo5RrF0xl
- K/jYP9r+k1QNl3rRfTi/pnTsmTgtWZXWBAKge8XFMiTQZTdtXZeE8Uqw0OkEFCn/eVGuiM7vTG7
- ycuwgLDjJ4iNJwX/VTtwSuPLMEo/I+P6TDjWN9Vfs9mHqBwe9JYaDf39X6wSPDiEwMcwPl8PZne
- tohI/dkMJnWzsa1VsXV8gMiPDc8PGLxnBhrLQryp43KdoqXDLfIscFf2QVU1T7BTGLJzySEEAbZ
- iVVtIfNYe8Rxzy79Ac1wUsdlzJQYkhra7O7JXXV2fumU0lqGJZvTAHyqi9o51GoEkgGJ8jPo97N
- eycSE7/SiI26eFok4Belvtkoj9RCVJF3mxiay9cTlUEJlskcNTwH+x1MdYe4PBlYUTmR1o+6JJG
- 7qzjPaMNRRx7zJOzpuOJ77fuv3WuSK5IB+Oqf4y3FbNLT4Z29/gLgKRlRcSz2JDG9O5D5HKscLA
- Ygba7dz/AcfhU/hiy9g==
-X-Authority-Analysis: v=2.4 cv=dJmrWeZb c=1 sm=1 tr=0 ts=69b97c12 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=RD47p0oAkeU5bO7t-o6f:22 a=yPCof4ZbAAAA:8 a=UN5060LkAAAA:8
- a=9u39xqQJ7Ymw5X7hPw4A:9 a=E6eXv-vVeS7VqOnxGRGn:22
-X-Proofpoint-ORIG-GUID: E6JBUFNjpcHBobTqDCDcu7BsSoQxqWL8
+ definitions=2026-03-17_04,2026-03-17_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0 spamscore=0 malwarescore=0 clxscore=1011
+ impostorscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2603170169
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[oracle.com,reject];
-	R_DKIM_ALLOW(-0.20)[oracle.com:s=corp-2025-04-25];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9012-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9007-lists,linux-integrity=lfdr.de];
-	FREEMAIL_CC(0.00)[gmx.de,iki.fi,ziepe.ca,oracle.com,apertussolutions.com,googlegroups.com,kernel.org];
-	DKIM_TRACE(0.00)[oracle.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alec.r.brown@oracle.com,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[huaweicloud.com,lwn.net,linuxfoundation.org,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.ibm.com:mid];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[apertussolutions.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,oracle.com:dkim,oracle.com:email,oracle.com:mid];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: 35FA62ADAC8
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: D55222B16BA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-From: Ross Philipson <ross.philipson@oracle.com>
+On Wed, 2026-03-11 at 18:19 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>=20
+> With the upcoming change of dynamically allocating and replacing the hash
+> table, we would need to keep the counters for number of measurements
+> entries and violations.
+>=20
+> Since anyway, those counters don't belong there, remove the ima_h_table
+> structure instead and move the counters and the hash table as a separate
+> variables.
 
-From: Ross Philipson <ross.philipson@oracle.com>
+There's no cover letter or motivation in this patch description for needing=
+ to
+"dynamically allocating or replacing the existing hash table."
 
-These are top level definitions shared by both TPM 1 and 2
-family chips. This includes core definitions like TPM localities,
-common crypto algorithm IDs, and the base TPM command header.
+Saying that the htable, number of records in the measurement list, and viol=
+ation
+counter don't belong grouped together is insufficient.  There must have bee=
+n a
+valid reason for why they were grouped together originally (e.g. never remo=
+ved
+or reset).
 
-Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
-Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
-Signed-off-by: Alec Brown <alec.r.brown@oracle.com>
----
- include/linux/tpm.h         | 50 +--------------------
- include/linux/tpm_command.h | 89 +++++++++++++++++++++++++++++++++++++
- 2 files changed, 90 insertions(+), 49 deletions(-)
+Please provide a motivation for removing the ima_h_table struct and its usa=
+ge
+and defining them independently of each other.
 
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 92957452f7a7..a282b7045a24 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -27,49 +27,12 @@
- 
- #include "tpm_command.h"
- 
--#define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
--
--#define TPM2_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
--#define TPM2_MAX_PCR_BANKS	8
--
- struct tpm_chip;
- struct trusted_key_payload;
- struct trusted_key_options;
- /* opaque structure, holds auth session parameters like the session key */
- struct tpm2_auth;
- 
--/* if you add a new hash to this, increment TPM_MAX_HASHES below */
--enum tpm_algorithms {
--	TPM_ALG_ERROR		= 0x0000,
--	TPM_ALG_SHA1		= 0x0004,
--	TPM_ALG_AES		= 0x0006,
--	TPM_ALG_KEYEDHASH	= 0x0008,
--	TPM_ALG_SHA256		= 0x000B,
--	TPM_ALG_SHA384		= 0x000C,
--	TPM_ALG_SHA512		= 0x000D,
--	TPM_ALG_NULL		= 0x0010,
--	TPM_ALG_SM3_256		= 0x0012,
--	TPM_ALG_ECC		= 0x0023,
--	TPM_ALG_CFB		= 0x0043,
--};
--
--/*
-- * maximum number of hashing algorithms a TPM can have.  This is
-- * basically a count of every hash in tpm_algorithms above
-- */
--#define TPM_MAX_HASHES	5
--
--struct tpm_digest {
--	u16 alg_id;
--	u8 digest[TPM2_MAX_DIGEST_SIZE];
--} __packed;
--
--struct tpm_bank_info {
--	u16 alg_id;
--	u16 digest_size;
--	u16 crypto_id;
--};
--
- enum TPM_OPS_FLAGS {
- 	TPM_OPS_AUTO_STARTUP = BIT(0),
- };
-@@ -127,7 +90,7 @@ struct tpm_chip_seqops {
- 	const struct seq_operations *seqops;
- };
- 
--/* fixed define for the curve we use which is NIST_P256 */
-+/* Fixed define for the curve we use which is NIST_P256 */
- #define EC_PT_SZ	32
- 
- /*
-@@ -209,8 +172,6 @@ struct tpm_chip {
- #endif
- };
- 
--#define TPM_HEADER_SIZE		10
--
- static inline enum tpm2_mso_type tpm2_handle_mso(u32 handle)
- {
- 	return handle >> 24;
-@@ -239,15 +200,6 @@ enum tpm_chip_flags {
- 
- #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
- 
--struct tpm_header {
--	__be16 tag;
--	__be32 length;
--	union {
--		__be32 ordinal;
--		__be32 return_code;
--	};
--} __packed;
--
- enum tpm_buf_flags {
- 	/* the capacity exceeded: */
- 	TPM_BUF_OVERFLOW	= BIT(0),
-diff --git a/include/linux/tpm_command.h b/include/linux/tpm_command.h
-index ee76fcd5ecef..25a247254140 100644
---- a/include/linux/tpm_command.h
-+++ b/include/linux/tpm_command.h
-@@ -431,4 +431,93 @@ struct tpm2_context {
- 	__be16 blob_size;
- } __packed;
- 
-+/************************************************/
-+/* TPM Common Defs                              */
-+/************************************************/
-+
-+#define TPM_DIGEST_SIZE		20	/* Max TPM v1.2 PCR size */
-+#define TPM_BUFSIZE		4096
-+
-+/*
-+ * SHA-512 is, as of today, the largest digest in the TCG algorithm repository.
-+ */
-+#define TPM2_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
-+
-+/*
-+ * A TPM name digest i.e., TPMT_HA, is a concatenation of TPM_ALG_ID of the
-+ * name algorithm and hash of TPMT_PUBLIC.
-+ */
-+#define TPM2_MAX_NAME_SIZE	(TPM2_MAX_DIGEST_SIZE + 2)
-+
-+/*
-+ * Fixed define for the size of a name.  This is actually HASHALG size
-+ * plus 2, so 32 for SHA256
-+ */
-+#define TPM2_NULL_NAME_SIZE	34
-+
-+/*
-+ * The maximum number of PCR banks.
-+ */
-+#define TPM2_MAX_PCR_BANKS	8
-+
-+/* If you add a new hash to this, increment TPM_MAX_HASHES below */
-+enum tpm_algorithms {
-+	TPM_ALG_ERROR		= 0x0000,
-+	TPM_ALG_SHA1		= 0x0004,
-+	TPM_ALG_AES		= 0x0006,
-+	TPM_ALG_KEYEDHASH	= 0x0008,
-+	TPM_ALG_SHA256		= 0x000B,
-+	TPM_ALG_SHA384		= 0x000C,
-+	TPM_ALG_SHA512		= 0x000D,
-+	TPM_ALG_NULL		= 0x0010,
-+	TPM_ALG_SM3_256		= 0x0012,
-+	TPM_ALG_ECC		= 0x0023,
-+	TPM_ALG_CFB		= 0x0043,
-+};
-+
-+/*
-+ * The locality (0 - 4) for a TPM, as defined in section 3.2 of the
-+ * Client Platform Profile Specification.
-+ */
-+enum tpm_localities {
-+	TPM_LOCALITY_0		= 0, /* Static RTM */
-+	TPM_LOCALITY_1		= 1, /* Dynamic OS */
-+	TPM_LOCALITY_2		= 2, /* DRTM Environment */
-+	TPM_LOCALITY_3		= 3, /* Aux Components */
-+	TPM_LOCALITY_4		= 4, /* CPU DRTM Establishment */
-+	TPM_MAX_LOCALITY	= TPM_LOCALITY_4
-+};
-+
-+/*
-+ * Structure to represent active PCR algorithm banks usable by the
-+ * TPM chip.
-+ */
-+struct tpm_bank_info {
-+	u16 alg_id;
-+	u16 digest_size;
-+	u16 crypto_id;
-+};
-+
-+/*
-+ * Maximum number of hashing algorithms a TPM can have.  This is
-+ * basically a count of every hash in tpm_algorithms above
-+ */
-+#define TPM_MAX_HASHES		5
-+
-+struct tpm_digest {
-+	u16 alg_id;
-+	u8 digest[TPM2_MAX_DIGEST_SIZE];
-+} __packed;
-+
-+#define TPM_HEADER_SIZE		10
-+
-+struct tpm_header {
-+	__be16 tag;
-+	__be32 length;
-+	union {
-+		__be32 ordinal;
-+		__be32 return_code;
-+	};
-+} __packed;
-+
- #endif
--- 
-2.47.3
+thanks,
 
+Mimi
 
