@@ -1,184 +1,266 @@
-Return-Path: <linux-integrity+bounces-9001-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9002-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sIIuEslUuGmKcAEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9001-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Mar 2026 20:06:49 +0100
+	id CBz8FsjIuGnTjAEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9002-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 04:21:44 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 981C829F81D
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Mar 2026 20:06:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE08A2A3243
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 04:21:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 92F0730C1C07
-	for <lists+linux-integrity@lfdr.de>; Mon, 16 Mar 2026 19:02:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C5B4C30A282F
+	for <lists+linux-integrity@lfdr.de>; Tue, 17 Mar 2026 03:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 826D53ED5B6;
-	Mon, 16 Mar 2026 19:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23A042C324C;
+	Tue, 17 Mar 2026 03:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJW4Vh0H"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Fie2dKJh"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C75C3EC2E2;
-	Mon, 16 Mar 2026 19:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44AD2D1936;
+	Tue, 17 Mar 2026 03:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773687766; cv=none; b=r+22LtYqhp9CKG/EycSCqW9zRE10H11MUsIhPksQbk3wDSM3TjlmvTpyCLN2QaXkT30ZfOR+/R5zlHAFv5HKKu/tMserWL4jf8L8JbanOMqnVbDnWTn9ShY+2wkwgzr7aeHG/ucGqj1ZqyXUTAmtpmEE/hFJOAbPpmu8k5g4Jc8=
+	t=1773717256; cv=none; b=tkVAT/OAiX18DSchJ0F1AonxGKCu5tZxmtETs7CxH4dA6dwTl4Q7/e7+49/urNBDK8IcS95wEpigxkP0Wpv5kaKVv2c6I2xtBmxuktgX1Gu57z3GNTr7pU5tehR3qI0pi0fi1O+O9yUToCJiYjoBhBNrbbhuXPArkEmmF1EGdUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773687766; c=relaxed/simple;
-	bh=CUkhw3xl8xIRjoR4RbMKIcmO3c0dZFO7usOuKJlm4c4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Co8BaSrH4OJ9PbTt9IOPyuTMiOUQ5qO7uF/aP36NSNlwov7MMZtU+LfU5YxAbFgHYo8qgvEX0Et3Ji+8aHl4u9aPMQr3yYbPbQn+jlKmkzjzHQDbzZXlyQcHFX651wy7585kix524+25+04vy1Xe7J9lPP+6OuTILh/MvC6BINg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJW4Vh0H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B275FC2BCB3;
-	Mon, 16 Mar 2026 19:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773687766;
-	bh=CUkhw3xl8xIRjoR4RbMKIcmO3c0dZFO7usOuKJlm4c4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=mJW4Vh0HAFzhHgFoWvUIXGQKWxXFMsnpcqEiyNCLCT3r9CSByh3g0E0fND07bqgRb
-	 0Hb1/kBe+iFnKWX0GeqaraDUgsCr26BkJNw8y0jepowt3oWEKI6XlGubU2aNf4FV+T
-	 MaGVsXE5OfF/nu+sGW4eYjCggEDdSbn1lGoAVtCH3f2TssdyXZ9nFPfhJyhw4TO5aT
-	 HeFEzmdP3r491jMRfD3yhl7CQCiRNE/qzgWRCtYKnp0fOOK3PqSrpl2jRpf+ZyHtbu
-	 +FtVYvn+e4ucu/WfVKkzpjv8y4IqkVTPNhad4QZ4gwZV3J+pPEUX2b+REKYDripGw3
-	 mLJz/25prB3iA==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Mon, 16 Mar 2026 15:02:23 -0400
-Subject: [PATCH v3 2/2] nilfs2: fix 64-bit division operations in
- nilfs_bmap_find_target_in_group()
+	s=arc-20240116; t=1773717256; c=relaxed/simple;
+	bh=Hgvv2sMzviIsV5ayhpOLXlczyg1/nMnPBTWtKtUGjIY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U2ZNxSLVQ1CS/pWiemPmmw6/iDx7jnUD256+Iu3XR0ltaaPKQsQtTkgMqbEjI9qaxBE1sNX7Z7Ud31HpqjiLab6s4/I1TRXT7ug+XgqQEMmQuVqdxKecBBe5YUMIRIDElueqcQgDCoBCK+szNLJjVUWqCCcQ7JyHQQoWX0RqDnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Fie2dKJh; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62H0X9pp3176840;
+	Tue, 17 Mar 2026 03:14:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=BYrhz7
+	7AlelDhFzZFk/8Tq75BeLNIKaJmT3DwxUnets=; b=Fie2dKJh1TnlA7ppPKNOva
+	M6WApmALK1dUigITCnFmKeUuq3AfAWs4Xwumytpvkhmh5GTY+1uh48ewjUY4/ZkT
+	2mCZAIz7FI1GIhX1OzXD0pEYcSpaXFphY4t5pOHViRc6dx8WpXC2TADBL9LSsiGO
+	Tje5q1e7RwMkvKQ9Mik/3GowklT+htPe2DfJR3r2tfa9pr7a7ex13F83saD8UuBZ
+	akANITX6llMc62h4Rk8iJL7wpKytBT7+ekGuvjeB50I/g3tFcyTupeSKRcAEmC/6
+	PWmBSYKDfyJeNWhAIbEw+aBI5ATB5R/v9F5BdgQEcOWAFOifnReva5x6wSt4aFhg
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cvx3ctddf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Mar 2026 03:14:09 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62H1MCMn004575;
+	Tue, 17 Mar 2026 03:14:09 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cwj0s7g1g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Mar 2026 03:14:09 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62H3E8nd27066988
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Mar 2026 03:14:08 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2BF9C5805D;
+	Tue, 17 Mar 2026 03:14:08 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 18E1C58056;
+	Tue, 17 Mar 2026 03:14:05 +0000 (GMT)
+Received: from [9.123.14.23] (unknown [9.123.14.23])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 17 Mar 2026 03:14:04 +0000 (GMT)
+Message-ID: <21cc6859-1750-4c22-91bb-116620764ca9@linux.ibm.com>
+Date: Tue, 17 Mar 2026 08:44:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260316-iino-u64-v3-2-d1076b8f7a20@kernel.org>
-References: <20260316-iino-u64-v3-0-d1076b8f7a20@kernel.org>
-In-Reply-To: <20260316-iino-u64-v3-0-d1076b8f7a20@kernel.org>
-To: Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
- Viacheslav Dubeyko <slava@dubeyko.com>, 
- Christian Brauner <brauner@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>
-Cc: David Laight <david.laight.linux@gmail.com>, 
- linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, Jeff Layton <jlayton@kernel.org>, 
- kernel test robot <lkp@intel.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2169; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=CUkhw3xl8xIRjoR4RbMKIcmO3c0dZFO7usOuKJlm4c4=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBpuFPQVZMUYX+O8fn7SpAIPVmqwkRvPuMz5JaPj
- Tv7vfY/ClOJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCabhT0AAKCRAADmhBGVaC
- FQZ9D/9E+wUpb9S2ol0rfVLUqP434oMLE4Z/2pT0pJ8AOVE2CMqfbA/2KzU2Y3HrHnYJAirEMNN
- v6WbqhZFaeVxOomaU9Gb5Kyasvd2dBEFWgjXc0U39kzMsyAhE3WRUGEk66Eqvi0bzdKYCpyfjbO
- fSO1JrbT9RPgHhlv2KCWiGhm5/5LRoaYd8k65+YMi4mLkIRhxInG6v9DCfMwjKStdoK37I93Rgq
- eUF78aT52ToEax/9u1vW+my6MkKSm9nXzvDsioOE2o5GoFAt2Nk1fxuO0qWHyCzVYKGN8i2ksvr
- bxODCyGUoOCQ3mq327mQeMlGAUOoXFwmV5nVstqNFhZIRIdsk281GbAajSZc1ScDrrfR2CDbzmp
- z1CbSRGcEs9h4OoJEho7gi4uldeXUAE3YDIJK68UaTAZJS6J+1aa5XXLTNrUGrN2lk4lzhIOWxZ
- kqv31A8mDElVKBLeF4c7/OwTGCi4cKDEFgK1sDVDpmOykQ+m5trn8jwUYwUVLQmF2pZ18gExtn3
- 9GEfptvkU/Hg/GUtoK+8nfuFNq6KHuAkxNHMXxSCjIYJxNURiy725EnzbTg7yzDshNOeeKbX8EU
- anxZv7rNTnkkyKqA5QiwbyAFmgbzIx5NlsDHGsrSuki0nrK+IxKwhU3dqFi78WkRCdTO+84Lcaq
- +s47Dz1vuvvgACA==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] keys/trusted_keys: clean up debug message logging
+ in the tpm backend
+To: Nayna Jain <nayna@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        keyrings@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>
+Cc: James.Bottomley@HansenPartnership.com, jarkko@kernel.org,
+        zohar@linux.ibm.com, stefanb@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+References: <20260220183426.80446-1-ssrish@linux.ibm.com>
+ <20260220183426.80446-2-ssrish@linux.ibm.com>
+ <7f8b8478-5cd8-4d97-bfd0-341fd5cf10f9@linux.ibm.com>
+Content-Language: en-US
+From: Srish Srinivasan <ssrish@linux.ibm.com>
+In-Reply-To: <7f8b8478-5cd8-4d97-bfd0-341fd5cf10f9@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=arO/yCZV c=1 sm=1 tr=0 ts=69b8c702 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8
+ a=jGS_jZea7UBjrvt4MQIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzE3MDAyNSBTYWx0ZWRfXzLrFejMze+q7
+ 7vTx2T3Jbm/ssCwg6vki8X02yIx59v1T+pKDr2vvmJ9TtlZjFX+7vQItyd8BT1Wt5S7h2lzlhgj
+ S4F/DjfPfIaXoJmojqSV1Joboj038broD9o0dpTKaby/o4lwj5WBadVdzjU/O8geMq7wxojojjJ
+ fJdrskA0jh7M8JTD28T36OgE69QdlGXeNAiNIqZzOpbPbTZNIDP5HUPnJGYKgCDJJGxlw1a1iXz
+ h+TyW4gF14YK/q5J8/Xvt7kiwPPIyA+o79/WZaDCEK4/uIHdY1KY0C2Xnx6JMTx3pMXwmHvQnaD
+ Mue/pIIRaQcfPsA1/xReaxA4KbRbkaCnGDG/fyQru/yv1EIxnauQlqUA9Bm4qdV6D1x/rGccYYF
+ 7J2w4gW9c5BBQDvpQsOUO52z8sVYHRpUWpchy0xvm5i+qx16RTSNsD+9qGlo5kfCw2WmL+SOOdr
+ uVTu9HgJ5nlieK8mtgQ==
+X-Proofpoint-GUID: QE8ppXUkowZJqhn0dm_i5UNsmv1NZE-b
+X-Proofpoint-ORIG-GUID: QE8ppXUkowZJqhn0dm_i5UNsmv1NZE-b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-16_06,2026-03-16_06,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 lowpriorityscore=0 impostorscore=0
+ adultscore=0 bulkscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2603050001
+ definitions=main-2603170025
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9001-lists,linux-integrity=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,dubeyko.com,kernel.org,linux.ibm.com,huawei.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,kernel.org,intel.com];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jlayton@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9002-lists,linux-integrity=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,dubeyko.com:email,intel.com:email]
-X-Rspamd-Queue-Id: 981C829F81D
+	FROM_NEQ_ENVFROM(0.00)[ssrish@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: AE08A2A3243
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-With the change to make inode->i_ino a u64, the build started failing on
-32-bit ARM with:
 
-    ERROR: modpost: "__aeabi_uldivmod" [fs/nilfs2/nilfs2.ko] undefined!
+On 3/10/26 4:15 AM, Nayna Jain wrote:
+>
+> On 2/20/26 1:34 PM, Srish Srinivasan wrote:
+>> The TPM trusted-keys backend uses a local TPM_DEBUG guard and pr_info()
+>> for logging debug information.
+>>
+>> Replace pr_info() with pr_debug(), and use KERN_DEBUG for 
+>> print_hex_dump().
+>> Remove TPM_DEBUG.
+>>
+>> No functional change intended.
+> There is functional change here.  This change allows secret and nonce 
+> in the function dump_sess() to be logged to kernel logs when dynamic 
+> debug is enabled. Previously, it was possible only in the debug builds 
+> and not the production builds at runtime. With this change, it is 
+> always there in production build. This can result in possible attack.
 
-Fix this by using udiv_u64() for the division.
 
-For finding the index into the group, switch to using a bitwise &
-operation since that's more efficient. With this change however,
-NILFS_BMAP_GROUP_DIV must be a power of two, so add a compile-time
-assertion for that.
+Hi Jarkko,
+Could you please let us know your thoughts on this one?
 
-Fixes: 998a59d371c2 ("treewide: fix missed i_ino format specifier conversions")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202603100602.KPxiClIO-lkp@intel.com/
-Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
-Acked-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/nilfs2/bmap.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+And Nayna,
+thanks for bringing this up.
 
-diff --git a/fs/nilfs2/bmap.c b/fs/nilfs2/bmap.c
-index 824f2bd91c167965ec3a660202b6e6c5f1fe007e..5f0f1f283af0208e1879e2e84b0b5b9629fd6b8a 100644
---- a/fs/nilfs2/bmap.c
-+++ b/fs/nilfs2/bmap.c
-@@ -450,18 +450,25 @@ __u64 nilfs_bmap_find_target_seq(const struct nilfs_bmap *bmap, __u64 key)
- 		return NILFS_BMAP_INVALID_PTR;
- }
- 
--#define NILFS_BMAP_GROUP_DIV	8
-+#define NILFS_BMAP_GROUP_DIV	8	/* must be power of 2 */
-+
- __u64 nilfs_bmap_find_target_in_group(const struct nilfs_bmap *bmap)
- {
- 	struct inode *dat = nilfs_bmap_get_dat(bmap);
- 	unsigned long entries_per_group = nilfs_palloc_entries_per_group(dat);
--	unsigned long group = bmap->b_inode->i_ino / entries_per_group;
-+	unsigned long group;
-+	u32 index;
-+
-+	BUILD_BUG_ON_NOT_POWER_OF_2(NILFS_BMAP_GROUP_DIV);
-+
-+	group = div_u64(bmap->b_inode->i_ino, entries_per_group);
-+	index = bmap->b_inode->i_ino & (NILFS_BMAP_GROUP_DIV - 1);
- 
- 	return group * entries_per_group +
--		(bmap->b_inode->i_ino % NILFS_BMAP_GROUP_DIV) *
--		(entries_per_group / NILFS_BMAP_GROUP_DIV);
-+	       index * (entries_per_group / NILFS_BMAP_GROUP_DIV);
- }
- 
-+
- static struct lock_class_key nilfs_bmap_dat_lock_key;
- static struct lock_class_key nilfs_bmap_mdt_lock_key;
- 
+thanks,
+Srish.
 
--- 
-2.53.0
 
+>
+> Instead of doing this change, I think add a comment to prevent this 
+> sort of change in the future.
+>
+> Thanks & Regards,
+>
+>     - Nayna
+>
+>>
+>> Signed-off-by: Srish Srinivasan <ssrish@linux.ibm.com>
+>> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   security/keys/trusted-keys/trusted_tpm1.c | 40 +++++++----------------
+>>   1 file changed, 12 insertions(+), 28 deletions(-)
+>>
+>> diff --git a/security/keys/trusted-keys/trusted_tpm1.c 
+>> b/security/keys/trusted-keys/trusted_tpm1.c
+>> index c865c97aa1b4..216caef97ffc 100644
+>> --- a/security/keys/trusted-keys/trusted_tpm1.c
+>> +++ b/security/keys/trusted-keys/trusted_tpm1.c
+>> @@ -46,28 +46,25 @@ enum {
+>>       SRK_keytype = 4
+>>   };
+>>   -#define TPM_DEBUG 0
+>> -
+>> -#if TPM_DEBUG
+>>   static inline void dump_options(struct trusted_key_options *o)
+>>   {
+>> -    pr_info("sealing key type %d\n", o->keytype);
+>> -    pr_info("sealing key handle %0X\n", o->keyhandle);
+>> -    pr_info("pcrlock %d\n", o->pcrlock);
+>> -    pr_info("pcrinfo %d\n", o->pcrinfo_len);
+>> -    print_hex_dump(KERN_INFO, "pcrinfo ", DUMP_PREFIX_NONE,
+>> +    pr_debug("sealing key type %d\n", o->keytype);
+>> +    pr_debug("sealing key handle %0X\n", o->keyhandle);
+>> +    pr_debug("pcrlock %d\n", o->pcrlock);
+>> +    pr_debug("pcrinfo %d\n", o->pcrinfo_len);
+>> +    print_hex_dump(KERN_DEBUG, "pcrinfo ", DUMP_PREFIX_NONE,
+>>                  16, 1, o->pcrinfo, o->pcrinfo_len, 0);
+>>   }
+>>     static inline void dump_sess(struct osapsess *s)
+>>   {
+>> -    print_hex_dump(KERN_INFO, "trusted-key: handle ", DUMP_PREFIX_NONE,
+>> +    print_hex_dump(KERN_DEBUG, "trusted-key: handle ", 
+>> DUMP_PREFIX_NONE,
+>>                  16, 1, &s->handle, 4, 0);
+>> -    pr_info("secret:\n");
+>> -    print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
+>> +    pr_debug("secret:\n");
+>> +    print_hex_dump(KERN_DEBUG, "", DUMP_PREFIX_NONE,
+>>                  16, 1, &s->secret, SHA1_DIGEST_SIZE, 0);
+>> -    pr_info("trusted-key: enonce:\n");
+>> -    print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
+>> +    pr_debug("trusted-key: enonce:\n");
+>> +    print_hex_dump(KERN_DEBUG, "", DUMP_PREFIX_NONE,
+>>                  16, 1, &s->enonce, SHA1_DIGEST_SIZE, 0);
+>>   }
+>>   @@ -75,23 +72,10 @@ static inline void dump_tpm_buf(unsigned char 
+>> *buf)
+>>   {
+>>       int len;
+>>   -    pr_info("\ntpm buffer\n");
+>> +    pr_debug("\ntpm buffer\n");
+>>       len = LOAD32(buf, TPM_SIZE_OFFSET);
+>> -    print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1, buf, len, 
+>> 0);
+>> -}
+>> -#else
+>> -static inline void dump_options(struct trusted_key_options *o)
+>> -{
+>> -}
+>> -
+>> -static inline void dump_sess(struct osapsess *s)
+>> -{
+>> -}
+>> -
+>> -static inline void dump_tpm_buf(unsigned char *buf)
+>> -{
+>> +    print_hex_dump(KERN_DEBUG, "", DUMP_PREFIX_NONE, 16, 1, buf, 
+>> len, 0);
+>>   }
+>> -#endif
+>>     static int TSS_rawhmac(unsigned char *digest, const unsigned char 
+>> *key,
+>>                  unsigned int keylen, ...)
 
