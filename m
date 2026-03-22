@@ -1,228 +1,184 @@
-Return-Path: <linux-integrity+bounces-9023-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9024-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qIArM1mpvWkAAAMAu9opvQ
-	(envelope-from <linux-integrity+bounces-9023-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2026 21:08:57 +0100
+	id jnzmJm5Nv2kp1wMAu9opvQ
+	(envelope-from <linux-integrity+bounces-9024-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 03:01:18 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA5252E0BD5
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2026 21:08:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB56F2E7EF5
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 03:01:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 785143014F5F
-	for <lists+linux-integrity@lfdr.de>; Fri, 20 Mar 2026 20:08:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 96C903016D14
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 02:01:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5303CB2E1;
-	Fri, 20 Mar 2026 20:08:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91874126F3B;
+	Sun, 22 Mar 2026 02:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LodkSHxI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UZJWAI6r"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A300F34CFAC;
-	Fri, 20 Mar 2026 20:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DB740DFBE;
+	Sun, 22 Mar 2026 02:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774037308; cv=none; b=Av1i+baBPjwkaa8gRdcu9CD0vacKNAocQmZSurX849c7fVpfCDk6pVQ9aijVGPTdiHRFZdSmE0xlmWbi4BjQWfWHhEe1qrmp7VM6HW+4AuiBElQbBHPITT/WbrF6Z30xWOHsXVb6EOHM1jLjWB42NtaEw54fbBOywuHt6AtCC6M=
+	t=1774144873; cv=none; b=IUNbyaeK8ROH0V/5UXdQziK+B9ZnD4dVA+zPaj2SKKWenVKaqtR6ReGAG1sfbVAbsEPmnWsQSFxJiS7UoxoAZvGDBZLVQZ6XNTwv4pOrDkwmRELjFQsBPx2x4bIsM+KBFcHd1fOhVe3ToQMzB5vxeilXFleKbvRfp1nBVwsW3MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774037308; c=relaxed/simple;
-	bh=vx3bx2hdX+DWgaO/OJedYdtXCDdFIOissz/oOsXsnDE=;
+	s=arc-20240116; t=1774144873; c=relaxed/simple;
+	bh=ScmjluGtv5MNt9F1fRePDNsYZzDjPwtXOtfc53smfLE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P5Ega9n8kTkhwQkLP4iKkKyIMmRUbZZs3sf5FkKhhQuqbznjd1JdQRSgoSTSakapbS3II4Ef2OhxyyTiYIXta2lnqLNCmxV+GNCGr1VKTDenfCxTjvcokoAjin8RDpiNmvYdAfMeTzX/vF29Y+OXpibMvJ8x0YK9VWlxrpD5mFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LodkSHxI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9029DC4CEF7;
-	Fri, 20 Mar 2026 20:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774037308;
-	bh=vx3bx2hdX+DWgaO/OJedYdtXCDdFIOissz/oOsXsnDE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LodkSHxIvJNRjJ0QlVSnqUTNKoqzLyjXZ+54g67kcbIxbHi60e6zwY7sNAClqP5I8
-	 Q8LvyL15y9l4BrWYAyfVyIIV5Ae2PUhuSvF8Tp2iBHEWwRvbRAAerY9UGvJQbo1jgO
-	 X+e7I546E6wrP2trtDpWAItyrn1Eq+NL/30BDr8aQ86kT9t8+AjMy+h54FWzzg6mP5
-	 HWiSzZ9TLocC75m0qhCvQOW++S5+Eu/6Wu4GOw2T8CvWhJotr/QVSMlhk+nwwAuixm
-	 PCdCV1b6N27TqbyXHcS5Ok0Rm4d52ULLI/Z30UhtoRYyx/PEvmHYPxWduAIUaDc2GJ
-	 DvhLcsnwXbPYg==
-Date: Fri, 20 Mar 2026 21:06:13 +0100
-From: Nicolas Schier <nsc@kernel.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: David Howells <dhowells@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	Roberto Sassu <roberto.sassu@huawei.com>,
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-	Eric Snowberg <eric.snowberg@oracle.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, keyrings@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/8] module: Move 'struct module_signature' to UAPI
-Message-ID: <ab2otbZrni1GKn0U@derry.ads.avm.de>
-References: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rw2JgQh69fsb4MoSpfS4fXbgc/pjJncWzBYWvN9BwzUXFWGjqWvqywh+Qa3bSrj8HytD3WtDobl1wMT371NJ/8MkmKXXsZdyVQphetV+QpUl8zUT4w0456HSyyiODxx9OUq4CDM9Ts3sePoGeUe2a6kxOZiIDKFsuNHRf1G4wss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UZJWAI6r; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1774144871; x=1805680871;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ScmjluGtv5MNt9F1fRePDNsYZzDjPwtXOtfc53smfLE=;
+  b=UZJWAI6rwP2QcGNseInxHiDIbckLSeb3oV/txtlmX7X9veXhwQ/bwu6y
+   VSoU075bvS0pSYleoLEnwzZ/AIBE1tyIStqdfzyLk/STu+4C7otI3WtmF
+   uOjX+iD8DE4FmldYau0SY7+5q38MDcJ4Ik5dYfWAHvTCib49lLTC1HMTU
+   XdVJRUy5QV8NcAPRhfkPRzUsQBjS/VZyfrnZP4QxlBs6O05BKX0iCRQKL
+   1jWOIo5nRtRyPJr5edAM7/FmaLSaFq5hkXdAAu7bBL5V7iTaQTUNZPhI9
+   o/KiPoV8hJIFeVZK16FY5mVzdQ3+8W7uoG2EJqBA1ChUto7u2BittG+Ux
+   A==;
+X-CSE-ConnectionGUID: acv2wPJeSvSF0Z17iSWfJg==
+X-CSE-MsgGUID: 0OEHc+y5RH2oXINXCXlZeA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11736"; a="75093899"
+X-IronPort-AV: E=Sophos;i="6.23,134,1770624000"; 
+   d="scan'208";a="75093899"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2026 19:01:10 -0700
+X-CSE-ConnectionGUID: 4iqZcCQFQDahQwPUCFmPcg==
+X-CSE-MsgGUID: ptBhm/47RbiH28TLvWPlEg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,134,1770624000"; 
+   d="scan'208";a="222746200"
+Received: from lkp-server02.sh.intel.com (HELO d7fefbca0d04) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 21 Mar 2026 19:01:06 -0700
+Received: from kbuild by d7fefbca0d04 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1w487j-000000001VR-2cL1;
+	Sun, 22 Mar 2026 02:01:03 +0000
+Date: Sun, 22 Mar 2026 10:00:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alec Brown <alec.r.brown@oracle.com>, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org, jarkko@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, peterhuewe@gmx.de,
+	jarkko.sakkinen@iki.fi, jgg@ziepe.ca, ross.philipson@oracle.com,
+	dpsmith@apertussolutions.com, daniel.kiper@oracle.com,
+	kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
+	ardb@kernel.org, alec.r.brown@oracle.com
+Subject: Re: [PATCH 4/4] tpm: Move TPM common base definitions to the command
+ header
+Message-ID: <202603220920.LNzslwgU-lkp@intel.com>
+References: <20260317160613.2899129-5-alec.r.brown@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yJawVUAGknQ6l3sb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260305-module-signature-uapi-v3-0-92f45ea6028c@linutronix.de>
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <20260317160613.2899129-5-alec.r.brown@oracle.com>
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9023-lists,linux-integrity=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-9024-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[lists.linux.dev,gmx.de,iki.fi,ziepe.ca,oracle.com,apertussolutions.com,googlegroups.com,kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[redhat.com,infradead.org,kernel.org,suse.com,google.com,atomlin.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,iogearbox.net,linux.dev,fomichev.me,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[43];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nsc@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:email,derry.ads.avm.de:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: EA5252E0BD5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,intel.com:email,intel.com:mid,01.org:url]
+X-Rspamd-Queue-Id: EB56F2E7EF5
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi Alec,
 
---yJawVUAGknQ6l3sb
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-On Thu, Mar 05, 2026 at 10:31:36AM +0100, Thomas Wei=DFschuh wrote:
-> This structure definition is used outside the kernel proper.
-> For example in kmod and the kernel build environment.
->=20
-> To allow reuse, move it to a new UAPI header.
->=20
-> While it is not a true UAPI, it is a common practice to have
-> non-UAPI interface definitions in the kernel's UAPI headers.
->=20
-> This came up as part of my CONFIG_MODULE_HASHES series [0].
-> But it is useful on its own and so we get it out of the way.
->=20
-> [0] https://lore.kernel.org/lkml/aZ3OfJJSJgfOb0rJ@levanger/
->=20
-> Signed-off-by: Thomas Wei=DFschuh <thomas.weissschuh@linutronix.de>
-> ---
-> Changes in v3:
-> - Also adapt the include path for the custom sign-file rule in the bpf se=
-lftests.
->   (My manual run of BPF CI still fails, due to an BUG() on s390,
->   I don't see how this is due to this patch)
-> - Link to v2: https://lore.kernel.org/r/20260305-module-signature-uapi-v2=
--0-dc4d81129dee@linutronix.de
->=20
-> Changes in v2:
-> - Drop spurious definition of MODULE_SIGNATURE_TYPE_MERKLE.
-> - s/modules/module/ in two patch subjects.
-> - Pick up review tags.
-> - Link to v1: https://lore.kernel.org/r/20260302-module-signature-uapi-v1=
--0-207d955e0d69@linutronix.de
->=20
-> ---
-> Thomas Wei=DFschuh (8):
->       extract-cert: drop unused definition of PKEY_ID_PKCS7
->       module: Drop unused signature types
->       module: Give 'enum pkey_id_type' a more specific name
->       module: Give MODULE_SIG_STRING a more descriptive name
->       module: Move 'struct module_signature' to UAPI
->       tools uapi headers: add linux/module_signature.h
->       sign-file: use 'struct module_signature' from the UAPI headers
->       selftests/bpf: verify_pkcs7_sig: Use 'struct module_signature' from=
- the UAPI headers
->=20
->  arch/s390/kernel/machine_kexec_file.c              |  6 ++--
->  certs/extract-cert.c                               |  2 --
->  include/linux/module_signature.h                   | 30 +---------------
->  include/uapi/linux/module_signature.h              | 41 ++++++++++++++++=
-++++++
->  kernel/module/signing.c                            |  4 +--
->  kernel/module_signature.c                          |  2 +-
->  scripts/Makefile                                   |  1 +
->  scripts/sign-file.c                                | 19 +++-------
->  security/integrity/ima/ima_modsig.c                |  6 ++--
->  tools/include/uapi/linux/module_signature.h        | 41 ++++++++++++++++=
-++++++
->  tools/testing/selftests/bpf/Makefile               |  1 +
->  .../selftests/bpf/prog_tests/verify_pkcs7_sig.c    | 28 ++-------------
->  12 files changed, 101 insertions(+), 80 deletions(-)
-> ---
-> base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-> change-id: 20260302-module-signature-uapi-61fa80b1e2bb
->=20
+[auto build test WARNING on char-misc/char-misc-testing]
+[also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v7.0-rc4 next-20260320]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks for these patches!
+url:    https://github.com/intel-lab-lkp/linux/commits/Alec-Brown/tpm-Initial-step-to-reorganize-TPM-public-headers/20260322-021741
+base:   char-misc/char-misc-testing
+patch link:    https://lore.kernel.org/r/20260317160613.2899129-5-alec.r.brown%40oracle.com
+patch subject: [PATCH 4/4] tpm: Move TPM common base definitions to the command header
+config: arm-randconfig-r132-20260322 (https://download.01.org/0day-ci/archive/20260322/202603220920.LNzslwgU-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 4abb927bacf37f18f6359a41639a6d1b3bffffb5)
+sparse: v0.6.5-rc1
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260322/202603220920.LNzslwgU-lkp@intel.com/reproduce)
 
-For the whole series:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603220920.LNzslwgU-lkp@intel.com/
 
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
+All warnings (new ones prefixed by >>):
 
---=20
-Nicolas
+   In file included from drivers/char/tpm/tpm-dev-common.c:19:
+   In file included from drivers/char/tpm/tpm.h:29:
+   include/linux/tpm_eventlog.h:167:6: warning: variable 'mapping_size' set but not used [-Wunused-but-set-variable]
+     167 |         int mapping_size;
+         |             ^
+   In file included from drivers/char/tpm/tpm-dev-common.c:19:
+   In file included from drivers/char/tpm/tpm.h:28:
+   In file included from include/linux/tpm.h:28:
+>> include/linux/tpm_command.h:517:2: warning: field  within 'struct tpm_header' is less aligned than 'union tpm_header::(anonymous at include/linux/tpm_command.h:517:2)' and is usually due to 'struct tpm_header' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     517 |         union {
+         |         ^
+   2 warnings generated.
+--
+   In file included from drivers/char/tpm/tpm-buf.c:7:
+   In file included from include/linux/tpm.h:28:
+>> include/linux/tpm_command.h:517:2: warning: field  within 'struct tpm_header' is less aligned than 'union tpm_header::(anonymous at include/linux/tpm_command.h:517:2)' and is usually due to 'struct tpm_header' being packed, which can lead to unaligned accesses [-Wunaligned-access]
+     517 |         union {
+         |         ^
+   1 warning generated.
 
---yJawVUAGknQ6l3sb
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +517 include/linux/tpm_command.h
 
-iQIzBAABCgAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmm9qLUACgkQB1IKcBYm
-Emm24hAAtnE71JBVW9GLy5SvZjxPMmvU7d7e2U0M4eVgP9+ddzbw7tF/ZjE42raS
-w1jpL29qt7ESYnCXSkuH7/ABfeH0ALjPsm0Wsz9wl3l9dqqPAnYcRNxc2VzH6BNA
-rrVYspjDhrArD6fzZHXi9t7gaN2md/qr8GQVl2tzYXq+ORadVve64niJ5HXVEGtk
-igmI03sH5OaQXvg78v/Ui51AdL+8HbHNZUxG3G5n1VN8Qag0/aH6hfcwlSmayNvn
-W0iAghaJHI4qfPufwYl+FPCKVGE10+rIKQx4AUQcm0fysHAn+4LSOnFqI2mCwL6y
-oqbZdOAOdCh6YezgtK/WdwVdrZNVYNuukHmm1FPuGXIU/bIA1me5oC1NmEsWtqQB
-QgI3yvKBO7UrtNYmElLOMDt2FnlSB6l5XX7FqWBHGlfhHymzo8vVNkWuRw6/z63P
-ezdeAR0qwkxesxRSgwJdcICz2r7G2MAmWBJgSBRzdTIyGF3GHwb8uOQLNEXag6Dm
-9SjsnyS5mkq4CWHKanGqUrfUFvw04DPM5o/7D6l5Uj41kJ0scVixHT36NtJkg4hG
-k2rFFfEp/qmTcb3V8fVVBzHFKuasNWAzkHLRviOxugoFXjC7ctxU7+YcmAB3yez1
-ZRZTrXsVpAtC1xI+L4J/vIFW4jZlXgte8nOZK3/TWAlAYMGp7pk=
-=Qr2Y
------END PGP SIGNATURE-----
+   513	
+   514	struct tpm_header {
+   515		__be16 tag;
+   516		__be32 length;
+ > 517		union {
+   518			__be32 ordinal;
+   519			__be32 return_code;
+   520		};
+   521	} __packed;
+   522	
 
---yJawVUAGknQ6l3sb--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
