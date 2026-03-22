@@ -1,213 +1,156 @@
-Return-Path: <linux-integrity+bounces-9025-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9026-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CJdOOjbOv2nu8gMAu9opvQ
-	(envelope-from <linux-integrity+bounces-9025-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 12:10:46 +0100
+	id YIwnCvL5v2nICAQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9026-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 15:17:22 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90B182E8E62
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 12:10:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94BA12E9999
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 15:17:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AD64730067A3
-	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 11:10:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7620C30073FD
+	for <lists+linux-integrity@lfdr.de>; Sun, 22 Mar 2026 14:17:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E440363091;
-	Sun, 22 Mar 2026 11:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467D52DF3FD;
+	Sun, 22 Mar 2026 14:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bg48Iizk";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="CPn9v9Qz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWUlYzmM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357362DA74A
-	for <linux-integrity@vger.kernel.org>; Sun, 22 Mar 2026 11:10:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231B31A682B;
+	Sun, 22 Mar 2026 14:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774177836; cv=none; b=BM3mee3gaHVhZkKY3BGM7JW3vfC8FKZ5ukldZwnzHi0R8A62vPtZ4WZDi83zg3uBFpbQSuy1SWboJF7B/E+oOT+4kMs/UoRoHYBfQD0w2eT+3ckAGaUiEec9dWKCP8eYDDe4ZpGGJ3Tphz2ZbfbPhdEcMkoAB1yGWRxyHbP3Avk=
+	t=1774189039; cv=none; b=mNxduDcg7uWw8DJ4iB6K+DKooIz9N98wlqIdkk7qBaX7BfO8u3N90WLKfGk0JpH/1kRmVTQllOUNUrFbtddhPMDQIZpF1WDQ5Z5PhHjoOkYDGiTjNSiR5v/Q0q9vHmsRG6mo7K1qWAnj3zoLjHJqkz+x37A8+fyy9OevTgqHOvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774177836; c=relaxed/simple;
-	bh=NLIEw1ZR7mTPpeFnQNrEtJKL+JrWXPexTzwN4Rbrlp8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q6ErgmEU8doCKPbRGCBj0i7GYJ4GxyqHfMkandX/eNwLKzF944OFm7AUDOOXinKenW3pXiGaqOElO3XGZJdFLeLpPXV8QEw7wrf1kKEKng2nprnWfV6hknzcMmn0hpbxOuSbGEu+a5UjfhNVkd00Qfj7VpMUDXz2VzZeK5/d1PU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bg48Iizk; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=CPn9v9Qz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774177832;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pD6rEELAAr02II5508NHP6GW7PMLu9br7i436TBlft0=;
-	b=Bg48IizkNtcO1N/jMJNTV1D3XT4sVVu6grEvS0OhhKTrqCI2nb7Cq+KHopz+QBZ8CGY/a+
-	MBySdybcdalUhOMrbHAzndFOBmG4hEVUwue4dcpWbDzXwdsvMvZZtIWzrRvls9Z0n6C0O5
-	RcIDSz8tirLCkxJ7c68r/2Wi/SugMJ4=
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
- [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-253-3N8x4dmtOC-tpwnzKKFeIA-1; Sun, 22 Mar 2026 07:10:30 -0400
-X-MC-Unique: 3N8x4dmtOC-tpwnzKKFeIA-1
-X-Mimecast-MFC-AGG-ID: 3N8x4dmtOC-tpwnzKKFeIA_1774177829
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b630b4d8d52so1226274a12.3
-        for <linux-integrity@vger.kernel.org>; Sun, 22 Mar 2026 04:10:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774177829; x=1774782629; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pD6rEELAAr02II5508NHP6GW7PMLu9br7i436TBlft0=;
-        b=CPn9v9Qzx2MheDZQArmzhU5/2IbSYDCrWjTNyr/GBm3/8JoXnkcunbl5fPgUHE1taI
-         ixOve1di3ytX3w5gB03TicDjgkAh6ySZWy3EPJTiyN+gXeipHqNGlnBwKKZNnTe7Z8xp
-         eetGree4JlP2lIdVYctN2avFWsBCn6csH4T9HwadbkqwBnNKTe3d479/MAXTWNpwIT8c
-         moF7C1iNS0XjeA96Dik8lDNGzFw1CvHv5n5qlQ7aYUBKFrBf/6ARKiVy1ypydflidRwM
-         owcevKDIRSzK5+wwU6VkTcDKDGk+C6ge9Oewj5bnKHyczvjiGvYoNRNCLdWtpcuz2OGb
-         ju4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774177829; x=1774782629;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pD6rEELAAr02II5508NHP6GW7PMLu9br7i436TBlft0=;
-        b=rWeI5veAU72IrRY8Tjg7nQ6xY2LJ2YcGji48DE3ALVYJcwf/ajlZTGl4Lj5HeSMEVw
-         UqIyxqU0Lun6NmSde0CqoVqXajT2m9fIWtU/HnC/SZT/PkWxNlTMxQmnEeJVKCun/YUg
-         lZUHszUtRe7KAI8VNBWyAFEC/8SS5Icp/yq8RdZOyk4VfW9auFUm6ICmF+un2j34zPIt
-         lqyUJ6BB/Kg3VsouSlOm+5fqygwRG7kbHwWnLSCALE/WNb42w05puomOOYtl6ZDDsniP
-         XEOW0nZrN/eMYMsVecnkf3S11my9pZ9XlfMl/ng4xqCF0kmPAXVmC+A6Z2Ws/c5ijoTJ
-         JrkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWnELmQxbou9bXzYwL6M2E08DuIpseDY7Qr9JsBkI5RLM2TLi0KdPRE/vVGaNSDM+nxZ+c+o8cpK6vlKWpHGXc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF5z4X0aNuCfdYVBcKSHoPTaFa5k+kJd0fa3EhCup1XfVBooZV
-	2lgCdWjHvaazrPChfqKCf/lHKEJjvx2jGUi8OEuGtEUo0+JL/srr3XdJzqZGO8Br23Nj/SeSD8a
-	NpQ3MpyH7M1+hjDojo06AbEhhXlUcLxvHcbmwlQgABuomIB6/AD2y8etjgAbTjdDXTd+zrg==
-X-Gm-Gg: ATEYQzyf3zVPDR6LhRfoBvN6OwEZBNImBml+oNGCcLTdYob8b2vYAjIyH3DRHuDDM90
-	wyhLUsBkUMDkTX6rBzj1YHylg0ni2q845kw8E3XGrenFwDYUfQwOJVm/ngYNDVmAl2A1zjBAtOC
-	uUxcpcFPJncfBuI/56AsF3WQZXC2kKJqxTxLZulyJECdIyCRlT9tTj4RqABJ2Z/FBn7Yh/fJbSS
-	Ut5VY2qzlH57cffjwaKW7xjQUjcBwS0H0qkfJadsQGHXq3jn0Jprr1lWY4CbrYh40H3vhbQgPMa
-	kXLWz712RAgkV45jGjNH5EA4H6lXYYhGQvxA3VttVJ7hRaWwi/zUVCTOyM6OCaHUM+D85SBk6uX
-	xKsN7K6C4FeqaUBGqYbt950A9BIwS27WoY5lahDNAaoYM5g==
-X-Received: by 2002:a05:6300:8b0f:b0:398:981e:2e13 with SMTP id adf61e73a8af0-39bcec310bdmr7945014637.62.1774177829510;
-        Sun, 22 Mar 2026 04:10:29 -0700 (PDT)
-X-Received: by 2002:a05:6300:8b0f:b0:398:981e:2e13 with SMTP id adf61e73a8af0-39bcec310bdmr7944993637.62.1774177829069;
-        Sun, 22 Mar 2026 04:10:29 -0700 (PDT)
-Received: from kernel-devel.tail62cea.ts.net ([240d:1a:c0d:9f00:be24:11ff:fe35:71b3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c743a801b79sm5277794a12.3.2026.03.22.04.10.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Mar 2026 04:10:28 -0700 (PDT)
-From: Shigeru Yoshida <syoshida@redhat.com>
-To: Mimi Zohar <zohar@linux.ibm.com>,
+	s=arc-20240116; t=1774189039; c=relaxed/simple;
+	bh=uL3y1n/5xs4hBoDhl/sWONCOW2Xvzld3GyVrrNfzD/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HK9A6PfNN3VU/biWm3xkYK0x6tVBsz9CqwO3dTTrQ3CUAEq7B/Plo3+bzIxGCTP3pvZjs1Oq/wEsS5joisjplV2AoZ2fTVD/SYwNA2rMP+hbpApkAkICXWIW5yK+f8tP5t1SzPKbdR/vIdeuBaIwC8RCvC3J8WJzxgQkYehfFOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWUlYzmM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A02C19424;
+	Sun, 22 Mar 2026 14:17:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774189038;
+	bh=uL3y1n/5xs4hBoDhl/sWONCOW2Xvzld3GyVrrNfzD/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LWUlYzmMprcPtvsNtcoqQsdisQe1Xqgwo/i1bCtqPF3+enJhLJVVatxij3NnY/L1Y
+	 FoY2gXd8z4Mnjsd3LRXCglcug7A2R+BhU9NQKVke+CVLcCr7Rm3rFIihNOvvaIKozv
+	 HtnVZxFuYUH81xwhYH/lhUDnPGeczimGv49BRKnP8lCQtSMlhAo9dvXV62eG8Oosj6
+	 zL8OqLDRuZE08lXu0AS/BKg4RbMN6Jb7xq8Yed2w33eQqsOIfrFnlqnaIqBqWkP/lq
+	 2eu+kMv92WMuvKU14ciMDzeTHWwiLP2pqpkqaGULOu3g2L8HQT2s9piB2PwL2yP/gd
+	 1kzmanwc294mw==
+Date: Sun, 22 Mar 2026 07:17:16 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Shigeru Yoshida <syoshida@redhat.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>,
 	Roberto Sassu <roberto.sassu@huawei.com>,
 	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
 	Eric Snowberg <eric.snowberg@oracle.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>
-Cc: Shigeru Yoshida <syoshida@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
 	syzbot+6ed94e81a1492fe1d512@syzkaller.appspotmail.com,
 	linux-integrity@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] ima: abort file hash computation on fatal signal
-Date: Sun, 22 Mar 2026 20:10:19 +0900
-Message-ID: <20260322111019.2815601-1-syoshida@redhat.com>
-X-Mailer: git-send-email 2.52.0
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ima: abort file hash computation on fatal signal
+Message-ID: <20260322141716.GB2183@quark>
+References: <20260322111019.2815601-1-syoshida@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.84 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260322111019.2815601-1-syoshida@redhat.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_TO(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-9026-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9025-lists,linux-integrity=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syoshida@redhat.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-integrity,6ed94e81a1492fe1d512];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,syzkaller.appspotmail.com,vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ebiggers@kernel.org,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-integrity,6ed94e81a1492fe1d512];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 90B182E8E62
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,appspotmail.com:email]
+X-Rspamd-Queue-Id: 94BA12E9999
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-ima_calc_file_hash_atfm() and ima_calc_file_hash_tfm() compute a hash
-over the entire file contents without checking for pending fatal
-signals. When a very large file is being hashed during mmap (via
-ima_file_mmap), the computation can take an extended period. If a
-coredump is initiated by another thread in the same thread group during
-this time, the dumper thread waits in coredump_wait() for all other
-threads to exit. However, the hashing thread cannot exit until the hash
-loop completes, resulting in a hung task.
+On Sun, Mar 22, 2026 at 08:10:19PM +0900, Shigeru Yoshida wrote:
+> ima_calc_file_hash_atfm() and ima_calc_file_hash_tfm() compute a hash
+> over the entire file contents without checking for pending fatal
+> signals. When a very large file is being hashed during mmap (via
+> ima_file_mmap), the computation can take an extended period. If a
+> coredump is initiated by another thread in the same thread group during
+> this time, the dumper thread waits in coredump_wait() for all other
+> threads to exit. However, the hashing thread cannot exit until the hash
+> loop completes, resulting in a hung task.
+> 
+> Add fatal_signal_pending() checks to both the ahash and shash file
+> hashing loops so that the computation is aborted promptly when SIGKILL
+> is received.
+> 
+> Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
+> Reported-by: syzbot+6ed94e81a1492fe1d512@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=6ed94e81a1492fe1d512
+> Tested-by: syzbot+6ed94e81a1492fe1d512@syzkaller.appspotmail.com
+> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+> ---
+>  security/integrity/ima/ima_crypto.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+> index aff61643415d..7b721b9c944f 100644
+> --- a/security/integrity/ima/ima_crypto.c
+> +++ b/security/integrity/ima/ima_crypto.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/crypto.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/err.h>
+> +#include <linux/sched/signal.h>
+>  #include <linux/slab.h>
+>  #include <crypto/hash.h>
+>  
+> @@ -416,6 +417,12 @@ static int ima_calc_file_hash_atfm(struct file *file,
+>  
+>  		if (rbuf[1])
+>  			active = !active; /* swap buffers, if we use two */
+> +
+> +		if (fatal_signal_pending(current)) {
+> +			ahash_wait(ahash_rc, &wait);
+> +			rc = -EINTR;
+> +			goto out3;
+> +		}
 
-Add fatal_signal_pending() checks to both the ahash and shash file
-hashing loops so that the computation is aborted promptly when SIGKILL
-is received.
+I think you'll need to rebase onto
+https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/log/?h=next-integrity
+since there is a patch queued up that removes ima_calc_file_hash_atfm().
+So only ima_calc_file_hash_tfm() will need to be updated.
 
-Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
-Reported-by: syzbot+6ed94e81a1492fe1d512@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=6ed94e81a1492fe1d512
-Tested-by: syzbot+6ed94e81a1492fe1d512@syzkaller.appspotmail.com
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- security/integrity/ima/ima_crypto.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
-index aff61643415d..7b721b9c944f 100644
---- a/security/integrity/ima/ima_crypto.c
-+++ b/security/integrity/ima/ima_crypto.c
-@@ -17,6 +17,7 @@
- #include <linux/crypto.h>
- #include <linux/scatterlist.h>
- #include <linux/err.h>
-+#include <linux/sched/signal.h>
- #include <linux/slab.h>
- #include <crypto/hash.h>
- 
-@@ -416,6 +417,12 @@ static int ima_calc_file_hash_atfm(struct file *file,
- 
- 		if (rbuf[1])
- 			active = !active; /* swap buffers, if we use two */
-+
-+		if (fatal_signal_pending(current)) {
-+			ahash_wait(ahash_rc, &wait);
-+			rc = -EINTR;
-+			goto out3;
-+		}
- 	}
- 	/* wait for the last update request to complete */
- 	rc = ahash_wait(ahash_rc, &wait);
-@@ -491,6 +498,10 @@ static int ima_calc_file_hash_tfm(struct file *file,
- 		rc = crypto_shash_update(shash, rbuf, rbuf_len);
- 		if (rc)
- 			break;
-+		if (fatal_signal_pending(current)) {
-+			rc = -EINTR;
-+			break;
-+		}
- 	}
- 	kfree(rbuf);
- out:
--- 
-2.52.0
-
+- Eric
 
