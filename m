@@ -1,66 +1,71 @@
-Return-Path: <linux-integrity+bounces-9040-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9041-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SIdxMncDwWlUPgQAu9opvQ
-	(envelope-from <linux-integrity+bounces-9040-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2026 10:10:15 +0100
+	id UMs0BQNFwWnpRwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9041-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2026 14:49:55 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36E842EEBC7
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2026 10:10:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 503EA2F34F7
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2026 14:49:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 39885300C59F
-	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2026 09:00:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C84B43061749
+	for <lists+linux-integrity@lfdr.de>; Mon, 23 Mar 2026 13:42:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6874338553B;
-	Mon, 23 Mar 2026 09:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E54353AB295;
+	Mon, 23 Mar 2026 13:42:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9IYcWu4"
+	dkim=pass (1024-bit key) header.d=zohomail.com header.i=trunixcodes@zohomail.com header.b="PzeuQvOq"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-o94.zoho.com (sender4-pp-o94.zoho.com [136.143.188.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427A538552F;
-	Mon, 23 Mar 2026 09:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774256458; cv=none; b=ZGvDvJ1QSk2cUFRfpdISpcg8aKscQ4U2SIKdZt29kgAxrFbH6spm0jmC8VkTZewX/U9KI5kbgJxz/b9IOGvw+DIEwd//ufAsWk7NWonaye6EQONJh8JBFRPK1uSSEtKhVHZnV4B81w+b0PqUFX2sdq+JDnF4PeaPQgME2BuZ8AY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774256458; c=relaxed/simple;
-	bh=boHUn6iDG0dYkEh2Bc6qGCC4x8BwAF4mz+H4mphbm4A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uTtE5NrUzhi3I0iwJsqBjNHTZkLOXqN+CdVY2sdyErjcaun5PstnEsTpGUTXDcrLB0/G4HWSM0EYWhSA0aykRbmHo56n+ujTt6PXE7SYK+H4i/4PvaL6T2FC135Os/VHqLLFUmcE9BFdJERhPNgUPRpekVYUmvybCTxK/w5j8UQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9IYcWu4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52B95C4CEF7;
-	Mon, 23 Mar 2026 09:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774256457;
-	bh=boHUn6iDG0dYkEh2Bc6qGCC4x8BwAF4mz+H4mphbm4A=;
-	h=From:To:Cc:Subject:Date:From;
-	b=d9IYcWu4Vwk7DSHM66W4jYLJzidh7vb6V4geecZ0VVt9aUKgTUxdQpvPS1P+MrFhr
-	 ioqWXt7gurreooaz2N46eY19jIFLxGTLl8GhTIn0oM9ceHE2BnDa44ATkW1wnSS5aa
-	 Mzt023GKQMrZKy+kWQzQrAI6q6dGrK6um9aPM1TLhmAvAkSuB9gT50kzQvdO7vzW2K
-	 vjS0tfP/It1l7rYlcTYBGMI+cvWT3Vh0N7FNOLA9DlJoaO2NPGxUWw1dnEHwqeSvmR
-	 Fs/U8nxGrBZkT9w3C8L6sX2LeU/I9t8yEyNAeOq13ySFEkNSNJdAbTLGPudkGtDGe9
-	 8Vn5BqYatOZww==
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: linux-integrity@vger.kernel.org
-Cc: keyrings@vger.kernel.org,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Srish Srinivasan <ssrish@linux.ibm.com>,
-	Nayna Jain <nayna@linux.ibm.com>,
-	James Bottomley <James.Bottomley@HansenPartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] KEYS: trusted: Protocol debugging as a feature
-Date: Mon, 23 Mar 2026 11:00:46 +0200
-Message-ID: <20260323090047.632499-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.47.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863A73AA1BB;
+	Mon, 23 Mar 2026 13:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.94
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774273355; cv=pass; b=mn9fP985gDcfmjp725dWaSbHJEVwRDra83aD8doCHYTXYcTZr8AEeqk85NE0ShL6835JHX6g+xh4JdPThTMNiSpPxG1yTLP+iJHxzO+7nhjEOryeTP9exLpwL4DDIgLTDBlDK2TfHDEeVB+8hAVPsE9W/3iQBdl2YEhbUBy3ZIY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774273355; c=relaxed/simple;
+	bh=/Zq8pUGdEs2OEJGx8xgc0ULpnnxaadIxF0/6iRXoUTI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Px70PAW7TxyUSXWm7lWYRul3AABkJ0jxPMW6+R4VYIZ4QpgM4mi+nvqEvXIDTUchmiNWpng5w99YuE/lsFh5GdMBKnJMVPad3Fu4hj5t7L7xVJqh2QvDY4ea5YOXuwBv5CwQ5/kKT5B9BG2YUpnCAqXHzSlpIDIp3vGObZ/BOhM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com; spf=pass smtp.mailfrom=zohomail.com; dkim=pass (1024-bit key) header.d=zohomail.com header.i=trunixcodes@zohomail.com header.b=PzeuQvOq; arc=pass smtp.client-ip=136.143.188.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1774273332; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=YWLMt1BESz0MDJjpIIoY7lbYGoBRIuj33ljFEmeSeZqYLKo3+hKwNjGByRc0GRpOi6C2DOzexIDl7KMjdOLpQagFz8cmWDk8Yp4TWCGCdOF8Z/X+J9sJKeZGvXIp74XfN3Dt+sil0cWQ1HMn35Xh3DC1p3KfKpOqyz4SYx+vhfA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1774273332; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=B/YWoZ3/P7yhoach9i5x35UvO4eHF6OSW5RXxRtkbv8=; 
+	b=c+/0LEkWxn8b+GazaZ0hzWuxWGBF3qSJ4foEfi07WkFvuBVYMXQhYQPBpouXxoMXr1R/usFVFG2fa/0urWGN5n1cPzU9TXZ0BLKLjrKybqevlUC4xDRHNDXCYOvkOVi4y9gQ0OLNrDw2FPLS8u55JoG55tUI4Zp9eYmMOu4WXLU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=zohomail.com;
+	spf=pass  smtp.mailfrom=trunixcodes@zohomail.com;
+	dmarc=pass header.from=<trunixcodes@zohomail.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1774273332;
+	s=zm2022; d=zohomail.com; i=trunixcodes@zohomail.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Feedback-ID:Message-Id:Reply-To;
+	bh=B/YWoZ3/P7yhoach9i5x35UvO4eHF6OSW5RXxRtkbv8=;
+	b=PzeuQvOqP58m2fvoBqtKod2LL54xID/NdzECU7cl/IZ02DOlxfjbzdgcb9ZgGoV8
+	n7D4L1P0ON713IQs3iCAKvcRJx82jzMbvr2wI5VFif5J2Fzq2aEYQmPFVthteyGAv/6
+	+nHUEZMUBY2RIgxQxUJHGyYedmmGiMDcUnuOUVQQ=
+Received: by mx.zohomail.com with SMTPS id 1774273331223815.8540051298768;
+	Mon, 23 Mar 2026 06:42:11 -0700 (PDT)
+From: Ethan Luna <trunixcodes@zohomail.com>
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: jgg@ziepe.ca,
+	nicolas.ferre@microchip.com,
+	claudiu.beznea@tuxon.dev,
+	linux-integrity@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] tpm: i2c: atmel: fix block comment formatting
+Date: Mon, 23 Mar 2026 06:40:49 -0700
+Message-ID: <20260323134200.7766-1-trunixcodes@zohomail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -68,142 +73,139 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Feedback-ID: rr080112276cb5c677688b0b5d5a8bdc4700000e571217a95e1510df44e1961518088c0ac02099ae0364b407:zu0801122744ffdf8d598da53cf7b50c340000fb9598dcb6b536ab228881c1662b59ba53ed999511fea69f49:rf0801122cf7ce3eb0d7f27411f9ae9099000095ac9992e66c5daedf75e7720fa1c9b1866df24cda0360e94f433d2aafd1:ZohoMail
+X-ZohoMailClient: External
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[zohomail.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[zohomail.com:s=zm2022];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9040-lists,linux-integrity=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[13];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9041-lists,linux-integrity=lfdr.de];
+	TO_DN_NONE(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[trunixcodes@zohomail.com,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[zohomail.com:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 36E842EEBC7
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,zohomail.com:dkim,zohomail.com:email,zohomail.com:mid]
+X-Rspamd-Queue-Id: 503EA2F34F7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-TPM_DEBUG is a non-standard way to specify a feature in Linux kernel.
-Introduce CONFIG_TRUSTED_KEYS_DEBUG, and use it to replace TPM_DEBUG in
-TPM 1.x trusted keys.
+Multiple block comments in tpm_i2c_atmel.c placed the closing '*/' on the
+same line as the comment text. This violates the kernel's preferred
+comment style, which requires the closing delimiter to appear on its
+line.
 
-Given that protocol bus could contain sensitive data, harden the feature as
-follows:
+Fix the formatting to improve readability and resolve checkpatch
+warnings.
 
-1. In the  Kconfig description postulate that pr_debug() statements must be
-   used.
-2. Use pr_debug() statements in TPM 1.x driver to print the protocol dump.
-
-Traces can be enabled e.g., by providing trusted.dyndbg='+p' for the kernel
-command-line.
-
-Cc: Srish Srinivasan <ssrish@linux.ibm.com>
-Reported-by: Nayna Jain <nayna@linux.ibm.com>
-Closes: https://lore.kernel.org/all/7f8b8478-5cd8-4d97-bfd0-341fd5cf10f9@linux.ibm.com/
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Ethan Luna <trunixcodes@zohomail.com>
 ---
- security/keys/trusted-keys/Kconfig        | 10 +++++++
- security/keys/trusted-keys/trusted_tpm1.c | 36 +++++++++++------------
- 2 files changed, 27 insertions(+), 19 deletions(-)
 
-diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
-index 9e00482d886a..0e53bef1343d 100644
---- a/security/keys/trusted-keys/Kconfig
-+++ b/security/keys/trusted-keys/Kconfig
-@@ -1,6 +1,16 @@
- config HAVE_TRUSTED_KEYS
- 	bool
+V1 -> V2: Fixed block comment formatting consistently across all multi-line comments
+
+v1: https://lore.kernel.org/all/20260322193112.27010-1-trunixcodes@zohomail.com/
+
+ drivers/char/tpm/tpm_i2c_atmel.c | 34 +++++++++++++++++++++-----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_i2c_atmel.c b/drivers/char/tpm/tpm_i2c_atmel.c
+index 4f229656a8e2..c3cdc0d6e61c 100644
+--- a/drivers/char/tpm/tpm_i2c_atmel.c
++++ b/drivers/char/tpm/tpm_i2c_atmel.c
+@@ -31,9 +31,11 @@
  
-+config TRUSTED_KEYS_DEBUG
-+	bool "Debug trusted keys protocol"
-+	depends on HAVE_TRUSTED_KEYS
-+	default n
-+	help
-+	  Drivers that support debugging the protocol dump, can opt-in that
-+	  feature here. Protocol dump must only use DEBUG level output, as
-+	  sensitive data may pass by. In the kernel-command line traces can
-+	  be enabled via trusted.dyndbg='+p'.
-+
- config TRUSTED_KEYS_TPM
- 	bool "TPM-based trusted keys"
- 	depends on TCG_TPM >= TRUSTED_KEYS
-diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-index c865c97aa1b4..8fe889c7cdd1 100644
---- a/security/keys/trusted-keys/trusted_tpm1.c
-+++ b/security/keys/trusted-keys/trusted_tpm1.c
-@@ -46,38 +46,36 @@ enum {
- 	SRK_keytype = 4
+ struct priv_data {
+ 	size_t len;
+-	/* This is the amount we read on the first try. 25 was chosen to fit a
++	/* 
++	 * This is the amount we read on the first try. 25 was chosen to fit a
+ 	 * fair number of read responses in the buffer so a 2nd retry can be
+-	 * avoided in small message cases. */
++	 * avoided in small message cases.
++	 */
+ 	u8 buffer[sizeof(struct tpm_header) + 25];
  };
  
--#define TPM_DEBUG 0
--
--#if TPM_DEBUG
-+#ifdef CONFIG_TRUSTED_KEYS_DEBUG
- static inline void dump_options(struct trusted_key_options *o)
- {
--	pr_info("sealing key type %d\n", o->keytype);
--	pr_info("sealing key handle %0X\n", o->keyhandle);
--	pr_info("pcrlock %d\n", o->pcrlock);
--	pr_info("pcrinfo %d\n", o->pcrinfo_len);
--	print_hex_dump(KERN_INFO, "pcrinfo ", DUMP_PREFIX_NONE,
--		       16, 1, o->pcrinfo, o->pcrinfo_len, 0);
-+	pr_debug("sealing key type %d\n", o->keytype);
-+	pr_debug("sealing key handle %0X\n", o->keyhandle);
-+	pr_debug("pcrlock %d\n", o->pcrlock);
-+	pr_debug("pcrinfo %d\n", o->pcrinfo_len);
-+	print_hex_dump_debug("pcrinfo ", DUMP_PREFIX_NONE,
-+			     16, 1, o->pcrinfo, o->pcrinfo_len, 0);
- }
+@@ -58,7 +60,9 @@ static int i2c_atmel_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz,
+ 	if (status < 0)
+ 		return status;
  
- static inline void dump_sess(struct osapsess *s)
- {
--	print_hex_dump(KERN_INFO, "trusted-key: handle ", DUMP_PREFIX_NONE,
--		       16, 1, &s->handle, 4, 0);
--	pr_info("secret:\n");
--	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
--		       16, 1, &s->secret, SHA1_DIGEST_SIZE, 0);
--	pr_info("trusted-key: enonce:\n");
--	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
--		       16, 1, &s->enonce, SHA1_DIGEST_SIZE, 0);
-+	print_hex_dump_debug("trusted-key: handle ", DUMP_PREFIX_NONE,
-+			     16, 1, &s->handle, 4, 0);
-+	pr_debug("secret:\n");
-+	print_hex_dump_debug("", DUMP_PREFIX_NONE,
-+			     16, 1, &s->secret, SHA1_DIGEST_SIZE, 0);
-+	pr_debug("trusted-key: enonce:\n");
-+	print_hex_dump_debug("", DUMP_PREFIX_NONE,
-+			     16, 1, &s->enonce, SHA1_DIGEST_SIZE, 0);
- }
+-	/* The upper layer does not support incomplete sends. */
++	/*
++	 * The upper layer does not support incomplete sends.
++	 */
+ 	if (status != len)
+ 		return -E2BIG;
  
- static inline void dump_tpm_buf(unsigned char *buf)
- {
- 	int len;
+@@ -76,9 +80,11 @@ static int i2c_atmel_recv(struct tpm_chip *chip, u8 *buf, size_t count)
+ 	if (priv->len == 0)
+ 		return -EIO;
  
--	pr_info("\ntpm buffer\n");
-+	pr_debug("\ntpm buffer\n");
- 	len = LOAD32(buf, TPM_SIZE_OFFSET);
--	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1, buf, len, 0);
-+	print_hex_dump_debug("", DUMP_PREFIX_NONE, 16, 1, buf, len, 0);
+-	/* Get the message size from the message header, if we didn't get the
++	/* 
++	 * Get the message size from the message header, if we didn't get the
+ 	 * whole message in read_status then we need to re-read the
+-	 * message. */
++	 * message.
++	 */
+ 	expected_len = be32_to_cpu(hdr->length);
+ 	if (expected_len > count)
+ 		return -ENOMEM;
+@@ -111,15 +117,19 @@ static u8 i2c_atmel_read_status(struct tpm_chip *chip)
+ 	struct i2c_client *client = to_i2c_client(chip->dev.parent);
+ 	int rc;
+ 
+-	/* The TPM fails the I2C read until it is ready, so we do the entire
++	/* 
++	 * The TPM fails the I2C read until it is ready, so we do the entire
+ 	 * transfer here and buffer it locally. This way the common code can
+-	 * properly handle the timeouts. */
++	 * properly handle the timeouts.
++	 */
+ 	priv->len = 0;
+ 	memset(priv->buffer, 0, sizeof(priv->buffer));
+ 
+ 
+-	/* Once the TPM has completed the command the command remains readable
+-	 * until another command is issued. */
++	/* 
++	 * Once the TPM has completed the command the command remains readable
++	 * until another command is issued.
++	 */
+ 	rc = i2c_master_recv(client, priv->buffer, sizeof(priv->buffer));
+ 	dev_dbg(&chip->dev,
+ 		"%s: sts=%d", __func__, rc);
+@@ -172,9 +182,11 @@ static int i2c_atmel_probe(struct i2c_client *client)
+ 
+ 	dev_set_drvdata(&chip->dev, priv);
+ 
+-	/* There is no known way to probe for this device, and all version
++	/* 
++	 * There is no known way to probe for this device, and all version
+ 	 * information seems to be read via TPM commands. Thus we rely on the
+-	 * TPM startup process in the common code to detect the device. */
++	 * TPM startup process in the common code to detect the device.
++	 */
+ 
+ 	return tpm_chip_register(chip);
  }
- #else
- static inline void dump_options(struct trusted_key_options *o)
 -- 
-2.47.3
+2.53.0
 
 
