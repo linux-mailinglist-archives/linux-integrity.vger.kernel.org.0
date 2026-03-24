@@ -1,72 +1,72 @@
-Return-Path: <linux-integrity+bounces-9082-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9074-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MPH1LuYKw2nQnwQAu9opvQ
-	(envelope-from <linux-integrity+bounces-9082-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 23:06:30 +0100
+	id GJTsDDMKw2lKnwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9074-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 23:03:31 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A3D731D1D9
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 23:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F57431D162
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 23:03:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1AFA53092ACA
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 22:04:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 944713008896
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 22:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CDA923B612;
-	Tue, 24 Mar 2026 22:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A580C2C11D9;
+	Tue, 24 Mar 2026 22:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="K6NhXgbl"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Vig+4n95"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98C135295C
-	for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 22:04:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9F419343E
+	for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 22:03:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774389870; cv=none; b=AL4RpMs1u2P5v6iDhLMFBW00B+ySGkV71H2DgcBTJmPQlHU//KoNme1Ks9skcmJ0nkrq2szLbxJpYhhXq2/XU2yt5Hvtlc+fsAyr9WlLUSSH1kOBg6eaASg9whR2ftY91w7KaIiQkPxIQBP/pZnQrIdPHDohtrpFyFO5bvOvEl4=
+	t=1774389808; cv=none; b=WTj6lNYcWlLvFdeDPjOZgDv10RmTgmL+PdyW6qKD7EPcfrYNGtpiW5cmOXlhqioslqlSC8YBB0ju0TMnoB+WDoyJN95zSqBSp3jztUoQdUvRkgmKmjkGsjLxZ2ZJdnpQJHQ/Qe5wOD8/QltlkaMdfavLxHPAmSSqGvq/+cxsGNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774389870; c=relaxed/simple;
-	bh=mWv4o5rPlNjCC5EIZP/FmU7uQTDMEWM97rQMkAlPMq0=;
+	s=arc-20240116; t=1774389808; c=relaxed/simple;
+	bh=47M7NPi9nVmIrLmCwHsf4K6CjPEZQjyrgPIIu0rS9ig=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PWtHlfABz3NdhUh0K/lGuBigfGlAxX8JXsWlfssrEI3VrOCjVNIwIl4ZSn12gHlzWR1jXiXkjK2BWsTO6OcRwvNw4/mcczlgbuGWQaRL1Zx/pSF5xbMZfiBWg0FbnickPvacZwHiP7aylYiQSqOtWvEmolOrQlSjg+JkI0gBk9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=K6NhXgbl; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=bbEtw5nPZZo8lIHXyPv9MjB344BO6Erpz9AxUxxSRMIDzYZ3KikOgCdcYD33EwvRl7qv5tG8bU+BDjDTadaFhRNT7d9zItUk+lUHcP1UIDyaAHTcLLrCBWVKa75jmD5xGGRzZ2AUd6tbvbAqE6vhUTEUrCa3caeyBsirbRYn4YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Vig+4n95; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62OHNstR641818;
-	Tue, 24 Mar 2026 22:03:20 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62OI46JJ4120967;
+	Tue, 24 Mar 2026 22:03:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=AHlK4iyhlKvVaH/pn
-	vVgr9BNhaJaNelSwKBWaUsGS84=; b=K6NhXgblu17PfQkyd++g+43cSWdbExGLb
-	STAqo+RDMw5jKzzUy0qiPu7o59GKkb4CfbnirzCb2gHXR4Jr6lT2zo8cCRSHWLpe
-	ovETeGLJ5XkIfdMV3qXcKfzkoeLpD48PSIJHz85tuQgbhVC+cs0Ly6N3TAgo0Gws
-	pFlyMkXhCypMIHNkFCsU7o3liCFIrJLSU2BRMksKsBxZLwEyI2eFN4tkW1LK2kce
-	6KVXxOV8VN/evdDfd1dn5WS9huHy6KeSlk8q5bCrM1FlS7Vb373Hv0Rz9j79xNAe
-	tiewvwh9OZMRfhwTd3FM0VmmLAr5aPEGkVdYBeKLo5rEsRKy3N+zA==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d1kw9wwm3-1
+	:mime-version:references:subject:to; s=pp1; bh=Fk9YZPcVtowSDKzD/
+	rKM5tYQD51GpFXR5P3197tMgug=; b=Vig+4n95SGDQMrQAzUQ3aEmPpCbOJv09A
+	863aBOaCSDCLefvohiizO3yEQSEZ+avyIdmUYb05zYKO9gcgFhtW6ZhUcUDMl+sn
+	+dFU3eB9efG+w53PQr6SHe2kTJ5juke4D17GoGpdFLzRpa8gNGL0A0wMif2l2TXW
+	+6fO2d4Ra/OfYoMJdjbAtmBUoU+PJGLt15uBVmsoIAFpRNiQ7IRayvXrh9PNW4Pi
+	gxVJ9cgOkK1iKjS80n++z6bwJrqKS+dzwrA9ntc0EadLuN+ZPj6oaTxTR+Qb6vNF
+	ksoGVye+yGRz3zGdSLZJocuj/3SShcZuaUcLxUiv//ki6uj2bPj+A==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d1kw9wwm5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 24 Mar 2026 22:03:20 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62OIdaho005969;
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62OJcW28026681;
 	Tue, 24 Mar 2026 22:03:19 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d261ym59f-1
+Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4d275kuydj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Tue, 24 Mar 2026 22:03:19 +0000
 Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62OM3HQM23462436
+	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62OM3IY632244378
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
 	Tue, 24 Mar 2026 22:03:18 GMT
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E10FE58056;
-	Tue, 24 Mar 2026 22:03:17 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 51B835805A;
+	Tue, 24 Mar 2026 22:03:18 +0000 (GMT)
 Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 93A0358052;
-	Tue, 24 Mar 2026 22:03:17 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 04A7458052;
+	Tue, 24 Mar 2026 22:03:18 +0000 (GMT)
 Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
 	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
 	Tue, 24 Mar 2026 22:03:17 +0000 (GMT)
@@ -74,9 +74,9 @@ From: Stefan Berger <stefanb@linux.ibm.com>
 To: linux-integrity@vger.kernel.org
 Cc: zohar@linux.ibm.com, roberto.sassu@huawei.com,
         Stefan Berger <stefanb@linux.ibm.com>
-Subject: [ima-evm-utils: PATCH 1/8] Implement imaevm_create_sigv3 for creating V3 signatures
-Date: Tue, 24 Mar 2026 18:03:07 -0400
-Message-ID: <20260324220314.743709-2-stefanb@linux.ibm.com>
+Subject: [ima-evm-utils: PATCH 2/8] Implement support for IMA signatures V3 signing scheme
+Date: Tue, 24 Mar 2026 18:03:08 -0400
+Message-ID: <20260324220314.743709-3-stefanb@linux.ibm.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260324220314.743709-1-stefanb@linux.ibm.com>
 References: <20260324220314.743709-1-stefanb@linux.ibm.com>
@@ -88,20 +88,20 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uM5_f5boAHUB2_-a8NqyAH1tBFAkyMXT
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI0MDE2OCBTYWx0ZWRfXzwENrCyJaCNE
- PqmHvnxD0H5ViQDYXzUjuszoQcyksL5Y8qdtsbGQvFSc3rKwHpPmz1CRV6DiHYk2GaGb9FvpRjS
- pqt8ZR+rJNhUDZgbX4WDrevv6NFKTr29BjHnW+0R3pNIKj5KwC3KrxA2MocJg5n89yh378nxUHT
- fjNksB73QgIXgwpM6qbpBzEXkedHYwuOljr5WbP5coXe5rScJHsq3D4O/DFVutnwa4+k4FXJBZl
- LRVB+yWFOepkbkQQqZE6OxcIIOfsoQmg0KTAL/OpZE1n746/K03JFuz/ZuGM9EVvF13Zq+YLK8V
- 8QAlptqq33HjrjQjsPaLRyxp11kvgdNweyEp+EB8+EEre6MVAfI1HGtGtLMMBhlLrrTNPOH7hhL
- 90zJ/o39piEIopzNCp3PaaVA9QrvAxP5T6hL0bbbgiOvu8Eac6udzigYCQRNKq+ojYO6Y7hWuda
- D5sTbxv0dusrKDi04gg==
-X-Proofpoint-GUID: uM5_f5boAHUB2_-a8NqyAH1tBFAkyMXT
+X-Proofpoint-ORIG-GUID: 3JxTBSqeZcrAkZgnA-iOXjDpNWNUo2Ve
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI0MDE2OCBTYWx0ZWRfX4eaWATRWdfHf
+ oFWvgDxz/sSRnXVSGSEEbohqzI0b+Fe6oH57Md06pwwXxt4yh5fEMY4vb/0CiqvuNvOoAvR554s
+ fg7Bv48hbu5I+ZSFU2HOxZmmJv8I5w6OARvwahLFobs3eaLlwnoV5HHUliLW64REGKPat5ZxX34
+ m/XHQTY+4mg7JF6lPT8sLqQQrgZ6+69XpPTJreGa6a4mY0QLCEA889W93CEoQXOeyTqKfPYsF3o
+ 6wlb3zpje3Oi0PKSI11cHpCAbNkHnV9DB9VtDgoR8V+myco4oV+A7ymUESQN3ar1tBqC3x+blgw
+ MldIaGiNO9gHJTZyqy+Jt1jdN23k7pRaHNpfMjjdZrC7bt8QYFvjnuXsMZX0tGha1qVIrZff8SJ
+ kb2OQLnkJwo47i3X3BdXaXJG6k8pOSe78O/PvQIjstO/DcKtHfV+WCNgUlsi1B/JBjT9e4ViJhn
+ mHIS5auRDtOU+EIRPEw==
+X-Proofpoint-GUID: 3JxTBSqeZcrAkZgnA-iOXjDpNWNUo2Ve
 X-Authority-Analysis: v=2.4 cv=OsZCCi/t c=1 sm=1 tr=0 ts=69c30a28 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=J_aLqOt9Vw-xw-7SAykA:9
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=yFDnSj8cqcWKfcMObJcA:9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-03-24_03,2026-03-24_01,2025-10-01_01
@@ -120,12 +120,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9082-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9074-lists,linux-integrity=lfdr.de];
 	RCPT_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[stefanb@linux.ibm.com,linux-integrity@vger.kernel.org];
@@ -133,133 +133,153 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linux.ibm.com:mid];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 3A3D731D1D9
+X-Rspamd-Queue-Id: 9F57431D162
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Implement imaevm_create_sigv3 that creates v3 signatures. This function
-will now also allocate a buffer if the caller did not provide one.
-Further, it will write the full signature into the signature buffer,
-including the leading xattr type byte.
+Add support for creating IMA signatures with the V3 signing scheme.
+Introduce a global variable that states which signing scheme to
+use and for now set it to SIGNATURE_V2. Implement the SIGNATURE_V3
+case where necessary for IMA.
 
 Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 ---
- src/imaevm.h    |  7 +++++
- src/libimaevm.c | 68 ++++++++++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 72 insertions(+), 3 deletions(-)
+ src/evmctl.c | 87 ++++++++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 67 insertions(+), 20 deletions(-)
 
-diff --git a/src/imaevm.h b/src/imaevm.h
-index 3b720d5..5a8441b 100644
---- a/src/imaevm.h
-+++ b/src/imaevm.h
-@@ -282,4 +282,11 @@ int imaevm_hash_algo_from_sig(unsigned char *sig);
- const char *imaevm_hash_algo_by_id(int algo);
- int calc_hash_sigv3(enum evm_ima_xattr_type type, const char *algo, const unsigned char *in_hash, unsigned char *out_hash);
+diff --git a/src/evmctl.c b/src/evmctl.c
+index 7c940fa..8b44ee0 100644
+--- a/src/evmctl.c
++++ b/src/evmctl.c
+@@ -123,6 +123,13 @@ static bool hwtpm;
+ static char *g_hash_algo = DEFAULT_HASH_ALGO;
+ static char *g_keypass;
  
-+int imaevm_create_sigv3(const char *hash_algo, const unsigned char *hash, int size,
-+			const char *keyfile, const char *keypass,
-+			unsigned char **sig, size_t siglen, long sigflags,
-+			enum evm_ima_xattr_type xattr_type,
-+			const struct imaevm_ossl_access *access_info,
-+			uint32_t keyid);
++enum signature_version {
++	SIGNATURE_V2 = 2,
++	SIGNATURE_V3,
++};
 +
- #endif
-diff --git a/src/libimaevm.c b/src/libimaevm.c
-index d8d5dbc..7c78432 100644
---- a/src/libimaevm.c
-+++ b/src/libimaevm.c
-@@ -605,7 +605,7 @@ struct ima_file_id {
- int calc_hash_sigv3(enum evm_ima_xattr_type type, const char *algo,
- 		    const unsigned char *in_hash, unsigned char *out_hash)
++static enum signature_version g_signature_version = SIGNATURE_V2;
++
+ #define HMAC_FLAG_NO_UUID	0x0001
+ #define HMAC_FLAG_CAPS_SET	0x0002
+ 
+@@ -652,6 +659,7 @@ static int sign_ima(const char *file, char *hash_algo, const char *key)
  {
--	struct ima_file_id file_id = { .hash_type = IMA_VERITY_DIGSIG };
-+	struct ima_file_id file_id = { .hash_type = type };
- 	uint8_t *data = (uint8_t *) &file_id;
+ 	unsigned char hash[MAX_DIGEST_SIZE];
+ 	unsigned char sig[MAX_SIGNATURE_SIZE];
++	unsigned char *psig;
+ 	size_t len;
+ 	int err;
  
- 	const EVP_MD *md;
-@@ -622,8 +622,9 @@ int calc_hash_sigv3(enum evm_ima_xattr_type type, const char *algo,
- 	int hash_size;
- 	unsigned int unused;
+@@ -661,16 +669,35 @@ static int sign_ima(const char *file, char *hash_algo, const char *key)
+ 	len = (size_t)err;
+ 	assert(len <= sizeof(hash));
  
--	if (type != IMA_VERITY_DIGSIG) {
--		log_err("Only fsverity supports signature format v3 (sigv3)\n");
-+	if (type != IMA_VERITY_DIGSIG &&
-+	    type != EVM_IMA_XATTR_DIGSIG) {
-+		log_err("Only fsverity and IMA/EVM support signature format v3 (sigv3)\n");
- 		return -EINVAL;
- 	}
- 
-@@ -1449,6 +1450,67 @@ int imaevm_signhash(const char *hashalgo, const unsigned char *hash, int size,
- 			    access_info, keyid);
- }
- 
-+/*
-+ * Create a v3 signature given a file hash
-+ *
-+ * @hash_algo: The hash algorithm to use for hashing
-+ * @hash: The file hash
-+ * @size: The size of the file hash
-+ * @sig: A pointer to signature buffer pointer; if pointing to NULL, then
-+ *       this function will allocate a buffer large enough for the signature
-+ * @siglen: Size of the given signature buffer; if it is too small then
-+ *          an error will be returned
-+ * @sigflag: Flags related to the signature
-+ * @xattr_type: Type of xattr that will be written; needed for creating
-+ *              ima_file_id structure
-+ * @access_info: Needed in case an engine or provider is used
-+ * @keyid: The key id to use
-+ *
-+ * Note: This function behaves slightly different than older signature creation
-+ *       functions because it already writes the xattr type to offset 0 in the
-+ *       signature buffer.
-+ */
-+int imaevm_create_sigv3(const char *hash_algo, const unsigned char *hash, int size,
-+			const char *keyfile, const char *keypass,
-+			unsigned char **sig, size_t siglen, long sigflags,
-+			enum evm_ima_xattr_type xattr_type,
-+			const struct imaevm_ossl_access *access_info,
-+			uint32_t keyid)
-+{
-+	unsigned char sigv3_hash[MAX_DIGEST_SIZE];
-+	/* buffer capable of holding (more than) RSA-4096 signature; */
-+	unsigned char sigbuf[1024];
-+	int len, slen, err;
-+
-+	len = calc_hash_sigv3(xattr_type, hash_algo, hash, sigv3_hash);
-+	if (len < 0 || len == 1) {
-+		log_err("Failure to calculate v3 file hash\n");
-+		return len;
-+	}
-+	assert(len <= sizeof(sigv3_hash));
-+
-+	err = imaevm_signhash(hash_algo, sigv3_hash, len, keyfile, keypass,
-+			      &sigbuf[1], sigflags, access_info, keyid);
-+	/* err holds error or signature length */
-+	if (err < 0)
-+		return err;
-+	slen = 1 + err; /* will prepend xattr type */
-+
-+	if (!*sig) {
-+		*sig = malloc(slen);
-+		if (!*sig)
-+			return -1;
-+	} else if (siglen < slen) {
-+		/* provided buffer is too small */
+-	err = imaevm_signhash(hash_algo, hash, len, key, g_keypass,
+-			      sig + 1, sigflags, &access_info, imaevm_keyid);
+-	if (err <= 1)
+-		return err;
+-	len = (size_t)err;
+-	assert(len < sizeof(sig));
+-
+-	/* add header */
+-	len++;
+-	sig[0] = EVM_IMA_XATTR_DIGSIG;
++	switch (g_signature_version) {
++	case SIGNATURE_V3:
++		psig = sig;
++		err = imaevm_create_sigv3(hash_algo, hash, len, key, g_keypass,
++					  &psig, sizeof(sig), sigflags,
++					  EVM_IMA_XATTR_DIGSIG, &access_info,
++					  imaevm_keyid);
++		if (err <= 1)
++			return err;
++		len = (size_t)err;
++		assert(len <= sizeof(sig));
++		break;
++	case SIGNATURE_V2:
++		err = imaevm_signhash(hash_algo, hash, len, key, g_keypass,
++				      sig + 1, sigflags, &access_info,
++				      imaevm_keyid);
++		if (err <= 1)
++			return err;
++		len = (size_t)err;
++		assert(len < sizeof(sig));
++		/* add header */
++		len++;
++		sig[0] = EVM_IMA_XATTR_DIGSIG;
++		break;
++	default:
++		log_err("Internal error: Unsupported signature version: %d\n",
++			g_signature_version);
 +		return -1;
 +	}
-+
-+	sigbuf[0] = xattr_type;
-+	sigbuf[1] = DIGSIG_VERSION_3;
-+	memcpy(*sig, sigbuf, slen);
-+
-+	return slen;
-+}
  
- int sign_hash(const char *hashalgo, const unsigned char *hash, int size,
- 	      const char *keyfile, const char *keypass, unsigned char *sig)
+ 	if (sigdump || imaevm_params.verbose >= LOG_INFO)
+ 		imaevm_hexdump(sig, len);
+@@ -791,6 +818,7 @@ static int cmd_sign_hash(struct command *cmd)
+ 	size_t hashlen = 0;
+ 	int siglen;
+ 	char *line = NULL, *token, *hashp;
++	unsigned char *psig;
+ 	size_t line_len = 0;
+ 	const char *key;
+ 	char algo[7];	/* Current maximum fsverity hash algo name length */
+@@ -863,20 +891,39 @@ static int cmd_sign_hash(struct command *cmd)
+ 			assert(hashlen / 2 <= sizeof(hash));
+ 			hex2bin(hash, line, hashlen / 2);
+ 
+-			siglen = imaevm_signhash(g_hash_algo, hash,
+-						 hashlen / 2, key, g_keypass,
+-						 sig + 1, sigflags,
+-						 &access_info, imaevm_keyid);
+-			sig[0] = EVM_IMA_XATTR_DIGSIG;
++			switch (g_signature_version) {
++			case SIGNATURE_V3:
++				psig = sig;
++				siglen = imaevm_create_sigv3(g_hash_algo, hash,
++							     hashlen / 2, key, g_keypass,
++							     &psig, sizeof(sig), sigflags,
++							     EVM_IMA_XATTR_DIGSIG,
++							     &access_info, imaevm_keyid);
++				if (siglen <= 1)
++					return siglen;
++				assert(siglen <= (int)sizeof(sig));
++				break;
++			case SIGNATURE_V2:
++				siglen = imaevm_signhash(g_hash_algo, hash,
++							 hashlen / 2, key, g_keypass,
++							 sig + 1, sigflags,
++							 &access_info, imaevm_keyid);
++				if (siglen <= 1)
++					return siglen;
++				assert(siglen < (int)sizeof(sig));
++				siglen++;
++				sig[0] = EVM_IMA_XATTR_DIGSIG;
++				break;
++			default:
++				log_err("Internal error: Unsupported signature version: %d\n",
++					g_signature_version);
++				return -1;
++			}
+ 		}
+ 
+-		if (siglen <= 1)
+-			return siglen;
+-		assert(siglen < (int)sizeof(sig));
+-
+ 		fwrite(line, len, 1, stdout);
+ 		fprintf(stdout, " ");
+-		bin2hex(sig, siglen + 1, stdout);
++		bin2hex(sig, siglen, stdout);
+ 		fprintf(stdout, "\n");
+ 	}
+ 
 -- 
 2.53.0
 
