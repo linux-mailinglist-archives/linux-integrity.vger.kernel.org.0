@@ -1,100 +1,100 @@
-Return-Path: <linux-integrity+bounces-9063-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9064-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2KFXLozUwmllmgQAu9opvQ
-	(envelope-from <linux-integrity+bounces-9063-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 19:14:36 +0100
+	id uJcMCEvUwmmwmgQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9064-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 19:13:31 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A98B31A947
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 19:14:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90BD531A914
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 19:13:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5B72130A6908
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 18:13:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 25F4F306771E
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 18:13:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D3D38946B;
-	Tue, 24 Mar 2026 18:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68B738910A;
+	Tue, 24 Mar 2026 18:13:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WiesThDs";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nf7s45Cz"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SvKMqmbb";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="GXyWSQja"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F99729BDB1
-	for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 18:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9858E3358B9
+	for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 18:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774375983; cv=none; b=Zm5VbkW6g1UAcRRP5eKxBPagSE7h2lDFpY0j6entPMqFEvZqDqC8jSEB+ADtGxeYdVHprs6ZFz5+ukhZDlfkUZq3TlrVqaFajWrgtMdNnZeraj2sdwidiQFBehDXIZlL82MuAJbS1kWNQ3q4euGPiTzfFJQiBsIFM76BspsVPRU=
+	t=1774375984; cv=none; b=JqG5OmvzV3l1cGvvi+sHtOS6dFf/SfKFa8LNQv6gTI7fmUL8YkBwSIOjD/bIX7z63DSBTywDVTjo+WNmEsZzR6LadzbCveErR2+yOJg1B3WbP+p3Zi1mxev6770omrBYKmNcp8VZqoL21zpb7Dg54BF9lImRxZpfiypSTLNUEKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774375983; c=relaxed/simple;
-	bh=orXh+Es5W797mVKPf+s7K9KOo+YnHs2Q86rzO0qqpVY=;
+	s=arc-20240116; t=1774375984; c=relaxed/simple;
+	bh=hPL25OKm9bNXmRnz6cKeOMLxQeuKkk2o8t12Orj5iNI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fu2sVxx8FyviJHJx4V6xKQSEnmj6cyJP5ZE+YzZbAaCKLbSMo325w3DLte6YS9kXAB1PH/ti2NFDp9pieM1rxvMZcpyoJO7UyxjpqAl2tlfSKta0pL8kGDNVRswj2atuiMz4GwOXQXlTHw0OK4+rgd2Nil5Y/qNDTvb4eH1iAs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WiesThDs; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Nf7s45Cz; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=HXccd9Bd8lO9zpyb7+oi52pKdd2WfyVcMocj1YnTRqKr0gFJaoVSD5GxnWL4qrBSCx6rug0wAWYnGDVQC+Ko+D7AocdD1H1vRUc85rfuXzS2Edgl7CsGPFBdRaSQxi8DScfSb93r+OfStKotVeE/GoamJk8ZFAhsGaGNExE1i5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SvKMqmbb; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=GXyWSQja; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774375980;
+	s=mimecast20190719; t=1774375982;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=fxd0G1I4kWf+JoknGoSmowxDRTwU4glRvJ0760l4ojQ=;
-	b=WiesThDs+ekKUp0x5xuwjXIw9CCkOmqsjynfeO1bvx/gNG6j3qJ+2lCW0nZVUXWPsC0A1b
-	AHTr860KCQk/EAxSwcIL1q5k5ZjOmwUNGOZa+XF1F0hOnqPwi56a9Y37yV4cZaZdPt9yaw
-	PpsbBFiNfDNx1eOTYjZc7t32VveJlis=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=imwEJb99lBD32TauVrG1INXQ5z6pQWDRIPso/BjwfkI=;
+	b=SvKMqmbbCriXb/tARtOFq0XZlXN7CMdSef3+AFxozOHWaWHmveSjdpu3KHXS8lw4ajVoYx
+	7hyp8NXHHo9ue/AKRAzidJALyBm9BKW9ryk7F8lb4y35tCYx0qf6qiXo9ZEtV2LRuwI/RC
+	4LCK+6UPH4d1jVjnpLGa218u2FKon5c=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-627-rVZTb0EvNeeXkkCyKSsjPg-1; Tue, 24 Mar 2026 14:12:58 -0400
-X-MC-Unique: rVZTb0EvNeeXkkCyKSsjPg-1
-X-Mimecast-MFC-AGG-ID: rVZTb0EvNeeXkkCyKSsjPg_1774375978
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-c7423ba5342so5315284a12.0
-        for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 11:12:58 -0700 (PDT)
+ us-mta-592-2stY12caNzSeeHEu8H_KXw-1; Tue, 24 Mar 2026 14:13:01 -0400
+X-MC-Unique: 2stY12caNzSeeHEu8H_KXw-1
+X-Mimecast-MFC-AGG-ID: 2stY12caNzSeeHEu8H_KXw_1774375980
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8230d6d54a5so154764b3a.1
+        for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 11:13:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774375978; x=1774980778; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1774375980; x=1774980780; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fxd0G1I4kWf+JoknGoSmowxDRTwU4glRvJ0760l4ojQ=;
-        b=Nf7s45Cz/dxOgZ5TRLMzdayaJU2mwpgvN7Qb3kauNEHW6A3szDvKRyxLONY85ZqOAh
-         87FzJ2TUYZ53l9z76KpvHCCFPULHC28KOCWhDE5m/Lg/4VAfNa29gTOocxWBvjDZ+4m+
-         b9o17SPMSCiCXzaY/lJl0yl1LTeNi0Tbcb5fTlZ/NV0EDSfwKy+0LLt/F8btjqe414sT
-         o/hLK9op76TMPXROmMRWW3BTY008ByqtblmlnxV10bfvBem5bkpA0rCky3eCGX931XeM
-         H1u8PCf4Kx337L8jp4gMU255Ry74XA8KNzHOo5RyRCnHE8y6mglWCQeFjwFs81uLpCTD
-         XkWQ==
+        bh=imwEJb99lBD32TauVrG1INXQ5z6pQWDRIPso/BjwfkI=;
+        b=GXyWSQjaOiKIPiBmOP7/hSxhZIiu1GvuCa+CMvvbN0xOySN3uKhFqSdUK+Ft4sSeN6
+         0AaoD30aseDgPzeqQ2F9NCZTh88EOp247Sqd4JjOZ5dFRqmLIhTljnmfVqiAIor91jgS
+         W+FAjg0hl3Mmda0x30JM+TEOL+yqbDd6ZnWR2LZsx3RVwb2yeEgxYL1pAb5j0qL1oFaT
+         GNYq+MFEmvF3CX632SzgLK+0js6z1O8UzTsNTyxqbaeOoBmBrCcTToMIcKae4L4pJMPP
+         hMik7QwigcdkeiJnvYu4j2u9MOVoJx14tpPxqNA7KcKJ1dCl6pI6bRfPG3qIbfAlU9Kl
+         RP7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774375978; x=1774980778;
+        d=1e100.net; s=20251104; t=1774375980; x=1774980780;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=fxd0G1I4kWf+JoknGoSmowxDRTwU4glRvJ0760l4ojQ=;
-        b=P64GkfwwbsiZmGJKfEqtYfPrfaOC3/cgF2SMTTxHucETowKS13HAmwqg9BiRMmHXHL
-         Pqn11sIcAW0eQ0xAF6KV35u9xNCBgSHgU/pfTIMSktavL1n7kNAvEqOQQmNgSOWUSqZO
-         js80VQrROxQJ+Yp/42x3Uyrl0/IVIghaJ5dnL/RjG14W3hFfoUmuZRn+6nipJsW1KPe0
-         +UDY3Dn9HGqkxslMx/3/wNBdAvCbpDlM+3ZEeFr5RMhD+zHLtM3fMAA6lEEiG/qUA1d9
-         9XXj0O8iqPM38WdoMkLAZF5DoCTsSU3pjlkMqo3zj11dbVKiqGPpZkfkmxkPwUw92Mjm
-         WEEA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuQB07SYjA+tUbDmnl63yrkyrvVK9cY7Cqy0D7VZv/osHxXCAHPgHrBiMEM/7Guxl3xHK78hBXiBaB/ZQOjm0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+EMOAb2cwXYRZQOTQIDL9oCc7hh4bUssZUSBL19rPOzPkwI2H
-	s9DbTOjcGdk7jt6Gxb9mpdeetkPIIf/qDpzbKH0QwSIkEWyJ+U02IjnP9nCljh16C18C1//mK3F
-	9m3+KGBdZhEpLZ88/vh62yZ52FnScvZ3keJzB+XzvsEw1ukDzyRdBQS+en8ddP4WLzNEFAQ==
-X-Gm-Gg: ATEYQzxwNe4dQOF6mglmrLdULT15iqwnrHZ2Pyz16nT3/YbkyGATJIsV/CnCQtPSYq4
-	Z5Ih2V8iFjbpJncqa8WB34Eqh3Fj2pWytuejufcx7nAZqReWN2n0MIzIhK/LpG98bsteFAEcmei
-	q6NeGNXaaceFsTL/qLYjBrOS40xVM8/tLeSZcZf8XaaSuX9H8ekrkSP1DSTcWFj3h3tJMzikLs9
-	sI7oZij4+pGStAz72wwq6kev29M+yRkvPdMuq3uw0iaK7nXcvKvTzJ6tKmN1uF/3yXIXjZaxW4W
-	J1FvylZxGKCAXXskBwlpVeJf23yN6T47PIkUraWvYeRUoPafGSy2Ph3gC5NYApmeqSBOx9wmYAp
-	PsgC6kLFfXAsWoy58SRhxj2Rk5rK5Tlh2r163GG+Ax8B9fc/W/Iis7EvvhvzknQ==
-X-Received: by 2002:a05:6a20:158a:b0:38b:eadd:449a with SMTP id adf61e73a8af0-39c4ad52483mr738114637.38.1774375977801;
-        Tue, 24 Mar 2026 11:12:57 -0700 (PDT)
-X-Received: by 2002:a05:6a20:158a:b0:38b:eadd:449a with SMTP id adf61e73a8af0-39c4ad52483mr738086637.38.1774375977199;
-        Tue, 24 Mar 2026 11:12:57 -0700 (PDT)
+        bh=imwEJb99lBD32TauVrG1INXQ5z6pQWDRIPso/BjwfkI=;
+        b=EAXBHxkJlsJqJxRO3kCdV1eB/AUUbyw94GRknt3B9FeZmGA4+msFNPOVf4Tsdr+hrv
+         ZEBY/REhmmMwxvKavOJv0MdPcoLZ+82U0hYuhJ+vsWs5ag1H6istTeUexpad8C6GVN5D
+         ShMyKykqBXigq1tVqnmQ4Sg9CqTf2Q2U6cJObWTTeK0p9Nop47FbDWWV35lU3cgbHMu3
+         nEprAEC+z65ddTpQCuF0XXMN/Ml96bwAT8rPbiw+pWBASNHmu+Do4R1gPiWs3x7AyjC4
+         +ysqYM4nlNL/pxy0wmvHHb0K92s4gQ7AmG1CjXFKCEsrnbS+x0ZXnm1g8I1GKnedvETK
+         2D4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVXIdkApw4j63W7wmOP+XCfThPtr5GEdTMM3IYB0/BRawfmMopgqgaP+OWkAOVD5WwEwFrWP7BjjSklo7QKYRg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoG2ogCrN8JKPTAj5jx/yVjDoxRAPEmpiW8fVXPor0R2lR15uG
+	DoNN5oXPYnfWEIDQCQjuZ1W/4kZUCyq7h5yFiNAmGPPSLw+LPDfeVFGkxuvB3GC+TK4rpE6pgMg
+	dXUg7iEZ+O/G4kmD+NUG2Ms3TmajVze/2l2IznSNhBZ9SZOO0i4VXc4DQU8SMLiSmsloIog==
+X-Gm-Gg: ATEYQzzJna8D1oCmPOhY7gB3XZWNBGJp+GiUZnDGSjC9cvAXK4uUQuZVttDFqRuxC3x
+	DGtB8iCnZsKK5KbJ45vm9u1bJyEfRvUlWW3p3KrM4aCxS4gHrCbSKcpT8mWeOpsEAVkiKOE1j5V
+	RilLAjZKelMKtJ/kzZj1WkIDx5HfG7kYtPDTCOOrAqSLvYb9pW0YBDPjUYClh79pP+bDrDuc3ec
+	EjaV2RzP2M8aLYPQS5Je6YZFja9+m7T+t/ah2V21UJPK6rpkTN3cVQL8ujIK2S+KTbaNrNx28Mb
+	ipeGYjpbvD1F9XvdIoTQaigSfNIlH7u1Vivja6L4cG7Laanc3MEsnuscBErbey/ujPFyAnatYVT
+	rE5xFb2auvE36kszBvjuv5KfwPJYZrrU0mgtC+zBRnZDoIMJSt37IVP+YcGb6/w==
+X-Received: by 2002:a05:6a00:3497:b0:81f:c6d1:5608 with SMTP id d2e1a72fcca58-82c6d846a06mr610591b3a.1.1774375980200;
+        Tue, 24 Mar 2026 11:13:00 -0700 (PDT)
+X-Received: by 2002:a05:6a00:3497:b0:81f:c6d1:5608 with SMTP id d2e1a72fcca58-82c6d846a06mr610560b3a.1.1774375979655;
+        Tue, 24 Mar 2026 11:12:59 -0700 (PDT)
 Received: from fedora.armenon-thinkpadp16vgen1.bengluru.csb ([49.36.108.16])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0410b1bdsm16654229b3a.57.2026.03.24.11.12.54
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0410b1bdsm16654229b3a.57.2026.03.24.11.12.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 11:12:56 -0700 (PDT)
+        Tue, 24 Mar 2026 11:12:59 -0700 (PDT)
 From: Arun Menon <armenon@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: Jarkko Sakkinen <jarkko@kernel.org>,
@@ -102,9 +102,9 @@ Cc: Jarkko Sakkinen <jarkko@kernel.org>,
 	Peter Huewe <peterhuewe@gmx.de>,
 	Jason Gunthorpe <jgg@ziepe.ca>,
 	Arun Menon <armenon@redhat.com>
-Subject: [RFC v2 3/5] tpm_crb: Implement command and response chunking logic
-Date: Tue, 24 Mar 2026 23:42:42 +0530
-Message-ID: <20260324181244.17741-4-armenon@redhat.com>
+Subject: [RFC v2 4/5] tpm: Increase TPM_BUFSIZE to 8kB for chunking support
+Date: Tue, 24 Mar 2026 23:42:43 +0530
+Message-ID: <20260324181244.17741-5-armenon@redhat.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260324181244.17741-1-armenon@redhat.com>
 References: <20260324181244.17741-1-armenon@redhat.com>
@@ -121,18 +121,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
 	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,gmx.de,ziepe.ca,redhat.com];
-	TAGGED_FROM(0.00)[bounces-9063-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9064-lists,linux-integrity=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[armenon@redhat.com,linux-integrity@vger.kernel.org];
@@ -142,254 +142,35 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1A98B31A947
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 90BD531A914
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-With the introduction of support for Post Quantum Cryptography
-algorithms in TPM, the commands and responses will grow in size.
-Some TPMs have a physical hardware memory window (MMIO) that is
-smaller than the commands we need to send. Therefore this commit
-implements the core logic of sending/receiving data in chunks.
+The size of the command is checked against TPM_BUFSIZE early on before
+even sending it to the backend. We therefore need to increase the
+TPM_BUFSIZE to allow support for larger commands.
 
-Instead of sending the whole command at once, the driver now sends it in
-small chunks. After each chunk, it signals the TPM using a nextChunk
-signal, and waits for the TPM to consume the data. Once the final piece
-is delivered, the driver signals the TPM to begin execution by toggling
-the start invoke bit. We use the same logic in reverse to read large
-responses from the TPM.
-
-This allows the driver to handle large payloads even when the hardware
-interface has limited memory. This kernel-side support corresponds to
-the backend implementation in QEMU [1]. QEMU reassembles the chunks
-before passing them to the TPM emulator.
-
-[1] https://lore.kernel.org/qemu-devel/20260319135316.37412-1-armenon@redhat.com/
+For now, 8KB seems sufficient for ML-KEM and ML-DSA algorithms and it is
+also order-1 safe.
 
 Signed-off-by: Arun Menon <armenon@redhat.com>
 ---
- drivers/char/tpm/tpm_crb.c | 155 +++++++++++++++++++++++++++----------
- 1 file changed, 114 insertions(+), 41 deletions(-)
+ drivers/char/tpm/tpm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-index 922bcf7a69ad5..a97fc5e9927e3 100644
---- a/drivers/char/tpm/tpm_crb.c
-+++ b/drivers/char/tpm/tpm_crb.c
-@@ -104,11 +104,13 @@ struct crb_priv {
- 	u8 __iomem *cmd;
- 	u8 __iomem *rsp;
- 	u32 cmd_size;
-+	u32 rsp_size;
- 	u32 smc_func_id;
- 	u32 __iomem *pluton_start_addr;
- 	u32 __iomem *pluton_reply_addr;
- 	u8 ffa_flags;
- 	u8 ffa_attributes;
-+	bool chunking_supported;
- };
+diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+index 87d68ddf270a7..26c3765fbd732 100644
+--- a/drivers/char/tpm/tpm.h
++++ b/drivers/char/tpm/tpm.h
+@@ -33,7 +33,7 @@
+ #endif
  
- struct tpm2_crb_smc {
-@@ -368,38 +370,6 @@ static u8 crb_status(struct tpm_chip *chip)
- 	return sts;
- }
- 
--static int crb_recv(struct tpm_chip *chip, u8 *buf, size_t count)
--{
--	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
--	unsigned int expected;
--
--	/* A sanity check that the upper layer wants to get at least the header
--	 * as that is the minimum size for any TPM response.
--	 */
--	if (count < TPM_HEADER_SIZE)
--		return -EIO;
--
--	/* If this bit is set, according to the spec, the TPM is in
--	 * unrecoverable condition.
--	 */
--	if (ioread32(&priv->regs_t->ctrl_sts) & CRB_CTRL_STS_ERROR)
--		return -EIO;
--
--	/* Read the first 8 bytes in order to get the length of the response.
--	 * We read exactly a quad word in order to make sure that the remaining
--	 * reads will be aligned.
--	 */
--	memcpy_fromio(buf, priv->rsp, 8);
--
--	expected = be32_to_cpup((__be32 *)&buf[2]);
--	if (expected > count || expected < TPM_HEADER_SIZE)
--		return -EIO;
--
--	memcpy_fromio(&buf[8], &priv->rsp[8], expected - 8);
--
--	return expected;
--}
--
- static int crb_do_acpi_start(struct tpm_chip *chip)
- {
- 	union acpi_object *obj;
-@@ -474,6 +444,8 @@ static int crb_trigger_tpm(struct tpm_chip *chip, u32 start_cmd)
- static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
- {
- 	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
-+	size_t offset = 0;
-+	size_t chunk_size;
- 	int rc = 0;
- 
- 	/* Zero the cancel register so that the next command will not get
-@@ -481,7 +453,7 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
- 	 */
- 	iowrite32(0, &priv->regs_t->ctrl_cancel);
- 
--	if (len > priv->cmd_size) {
-+	if (len > priv->cmd_size && !priv->chunking_supported) {
- 		dev_err(&chip->dev, "invalid command count value %zd %d\n",
- 			len, priv->cmd_size);
- 		return -E2BIG;
-@@ -491,18 +463,108 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
- 	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
- 		__crb_cmd_ready(&chip->dev, priv, chip->locality);
- 
--	memcpy_toio(priv->cmd, buf, len);
-+	while (offset < len) {
-+		chunk_size = min_t(size_t, len - offset, priv->cmd_size);
- 
--	/* Make sure that cmd is populated before issuing start. */
--	wmb();
--
--	rc = crb_trigger_tpm(chip, CRB_START_INVOKE);
--	if (rc)
--		return rc;
-+		if (chunk_size == 0)
-+			break;
- 
-+		memcpy_toio(priv->cmd, buf + offset, chunk_size);
-+		offset += chunk_size;
-+
-+		/* Make sure that cmd is populated before issuing start. */
-+		wmb();
-+		if (offset < len) {
-+			rc = crb_trigger_tpm(chip, CRB_START_NEXT_CHUNK);
-+			if (rc)
-+				return rc;
-+			if (!crb_wait_for_reg_32(&priv->regs_t->ctrl_start,
-+			    CRB_START_NEXT_CHUNK, 0, TPM2_TIMEOUT_C)) {
-+				dev_err(&chip->dev,
-+					"Timeout waiting for backend to consume chunk\n");
-+				return -ETIME;
-+			}
-+		} else {
-+			rc = crb_trigger_tpm(chip, CRB_START_INVOKE);
-+			if (rc)
-+				return rc;
-+		}
-+	}
- 	return crb_try_pluton_doorbell(priv, false);
- }
- 
-+static int crb_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-+{
-+	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
-+	unsigned int expected;
-+	size_t offset = 0;
-+	size_t chunk_size;
-+	size_t first_read;
-+	int rc;
-+
-+	/* A sanity check that the upper layer wants to get at least the header
-+	 * as that is the minimum size for any TPM response.
-+	 */
-+	if (count < TPM_HEADER_SIZE)
-+		return -EIO;
-+
-+	/* If this bit is set, according to the spec, the TPM is in
-+	 * unrecoverable condition.
-+	 */
-+	if (ioread32(&priv->regs_t->ctrl_sts) & CRB_CTRL_STS_ERROR)
-+		return -EIO;
-+
-+	/* Read the first 8 bytes in order to get the length of the response.
-+	 * We read exactly a quad word in order to make sure that the remaining
-+	 * reads will be aligned.
-+	 */
-+	memcpy_fromio(buf, priv->rsp, 8);
-+
-+	expected = be32_to_cpup((__be32 *)&buf[2]);
-+	if (expected > count || expected < TPM_HEADER_SIZE)
-+		return -EIO;
-+
-+	/*
-+	 * Set chunk_size by comparing the size of the buffer that the upper layer has
-+	 * allocated (count) to the hardware tpm limit (priv->rsp_size).
-+	 * This is to prevent buffer overflow while writing to buf.
-+	 */
-+	chunk_size = min_t(size_t, count, priv->rsp_size);
-+	if (chunk_size < 8)
-+		return -EIO;
-+
-+	/*
-+	 * Compare the actual size of the response we found in the header to the chunk_size.
-+	 */
-+	first_read = min_t(size_t, expected, chunk_size);
-+
-+	memcpy_fromio(&buf[8], &priv->rsp[8], first_read - 8);
-+	offset = first_read;
-+
-+	while (offset < expected) {
-+		if (!priv->chunking_supported) {
-+			dev_err(&chip->dev, "Response larger than MMIO and chunking not supported\n");
-+			return -EIO;
-+		}
-+
-+		rc = crb_trigger_tpm(chip, CRB_START_NEXT_CHUNK);
-+		if (rc)
-+			return rc;
-+
-+		if (!crb_wait_for_reg_32(&priv->regs_t->ctrl_start,
-+					 CRB_START_NEXT_CHUNK, 0, TPM2_TIMEOUT_C)) {
-+			dev_err(&chip->dev, "Timeout waiting for backend response\n");
-+			return -ETIME;
-+		}
-+
-+		chunk_size = min_t(size_t, expected - offset, priv->rsp_size);
-+		memcpy_fromio(buf + offset, priv->rsp, chunk_size);
-+		offset += chunk_size;
-+	}
-+
-+	return expected;
-+}
-+
- static void crb_cancel(struct tpm_chip *chip)
- {
- 	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
-@@ -727,6 +789,15 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 		goto out;
- 	}
- 
-+	if (priv->regs_h) {
-+		u32 intf_id = ioread32((u32 __iomem *)&priv->regs_h->intf_id);
-+
-+		if (intf_id & CRB_INTF_CAP_CRB_CHUNK) {
-+			priv->chunking_supported = true;
-+			dev_info(dev, "CRB Chunking is supported by backend\n");
-+		}
-+	}
-+
- 	memcpy_fromio(&__rsp_pa, &priv->regs_t->ctrl_rsp_pa, 8);
- 	rsp_pa = le64_to_cpu(__rsp_pa);
- 	rsp_size = ioread32(&priv->regs_t->ctrl_rsp_size);
-@@ -764,8 +835,10 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
- 	priv->rsp = priv->cmd;
- 
- out:
--	if (!ret)
-+	if (!ret) {
- 		priv->cmd_size = cmd_size;
-+		priv->rsp_size = rsp_size;
-+	}
- 
- 	__crb_go_idle(dev, priv, 0);
+ #define TPM_MINOR		224	/* officially assigned */
+-#define TPM_BUFSIZE		4096
++#define TPM_BUFSIZE		8192
+ #define TPM_NUM_DEVICES		65536
+ #define TPM_RETRY		50
  
 -- 
 2.53.0
