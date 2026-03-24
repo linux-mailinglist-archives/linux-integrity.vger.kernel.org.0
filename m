@@ -1,175 +1,126 @@
-Return-Path: <linux-integrity+bounces-9045-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9047-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4BhcFGI+wmmCagQAu9opvQ
-	(envelope-from <linux-integrity+bounces-9045-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 08:33:54 +0100
+	id kLaWBC5qwmlScwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9047-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 11:40:46 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC73530406D
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 08:33:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5909C306940
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 11:40:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EEDA0308C818
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 07:18:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 85CED3024964
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 10:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9577D3D3331;
-	Tue, 24 Mar 2026 07:18:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9A731D375;
+	Tue, 24 Mar 2026 10:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tc0tOJbq";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="kKl7P/PE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnnNQ3qe"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695FD3B7776
-	for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 07:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403603E1CEA;
+	Tue, 24 Mar 2026 10:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774336712; cv=none; b=I/B1DQUv3dbwM3Qgz187VhDYcuzat6+GeuDUBjwAOYMorMf8Zanpmj3ZKOOolfqAvf/mmDnCh/SOUhnMQoqUCg45GNo8dZRqfr+RhnUyWPozqoRJB0xQoPfrZTlNrTRug9qnQQ8qMis/zAHDpNWRctAbWxdkM35pTjIMRr/42YQ=
+	t=1774348510; cv=none; b=AWXSVheslyxmoQ0gqIKSjOdAaCdNlNiag4Je1Sd6M7xwkHaiHElQS3qI0GmZDq+li3q3VdDxyqUxjbOzm5Wbvd6MHUwjzAjlOkchdpUY9kBkZDK7Dgp8VyHPYRFtLKspGzkVZdDDI9P7pU4zl/zUVPVR7Xoym3OzNW7siGoQKos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774336712; c=relaxed/simple;
-	bh=c0+CCyqLqsT7uXnMFtpyj6HXU7Tg8neMyPe+lwo9mkw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JKQRVHDP7i+uV/01yWxX0FA7lLQT4+wdL+tTg+qNJx09/rtiEFxK8QHYDfyZKST9Un6SdNut0qKQCq3iIOuoru60jxAEPhZuu1w6UayLbkP8ya5IdzGErANvkcgxaE/CzBqz8r0KGkE5VZYndvx1G0ShdneLR/L7H3KvN9ielkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tc0tOJbq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=kKl7P/PE; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1774336701;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jRDEOhjwb87Ldqy0HhU0WTQjTdVi/IKgvfuMA4qMFms=;
-	b=Tc0tOJbqOaLsrYdKATVHRHpTp7eVuEuyQUHsQRGWw/GHYxzShFc0tnoAkQ0QFSs/MM0Oxj
-	7psJRNou33cCqVAEigzWhMoDlsrfPDpQu35yLg7vSbp+35HNhLowcTT9ebH69HArKuxgim
-	xSpKxY2stfaK42gUaiQmtlrWil2RzJ4=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-22-a-RPlrgENzqRUINp3MavoQ-1; Tue, 24 Mar 2026 03:18:20 -0400
-X-MC-Unique: a-RPlrgENzqRUINp3MavoQ-1
-X-Mimecast-MFC-AGG-ID: a-RPlrgENzqRUINp3MavoQ_1774336699
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-82c661d6a0cso106438b3a.2
-        for <linux-integrity@vger.kernel.org>; Tue, 24 Mar 2026 00:18:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1774336699; x=1774941499; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jRDEOhjwb87Ldqy0HhU0WTQjTdVi/IKgvfuMA4qMFms=;
-        b=kKl7P/PE7exOqbbERAUrMa8XjizDi+LZoBKJb0fiAUCgkzVKyWpEN2brJik/WoG4rd
-         iUHg1mGuti4+55CdiO4+YIn5U6fynOQIi3e7/D3xczhUTG90lFTKT4T2Neogi3lGqeot
-         bOI68m5CKig+vudAsV8/6KJdV2+g7vRGwZ8GWXBF1KK5c8X+Ly6eKJqyY1i3HMx1u+8K
-         tWuZpa6joKRyFDtdskcXj77poOnFymP6kLNe9C95P7D5xDoSvYA4p1BqmmUf/MjOvKjI
-         21MZYbdPc9iPeFwIqHvE6yzArgLQdMiBX82ecRIJZRB/FM/GqimieT4PYBNR39sQGzAK
-         esmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774336699; x=1774941499;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jRDEOhjwb87Ldqy0HhU0WTQjTdVi/IKgvfuMA4qMFms=;
-        b=CZniDBucpjsDY6y431kQ/t1xMKLDBCQ20NTl9tgWsyIFexyLv41UdYqGZBiUW2CDc5
-         EQ/LXI65AqSeZ0Qwowd8GH3gX69mKrOjspwXrBZuZLaoQgNQOEaZ0rePgQoWC4IXusF6
-         aNOyeCiIQ94pZ3WTxzbmKtONLRP4/BUntlVMdvxEu8P2K3ZBtvP7az5waHme9wcHcJY9
-         aCtKBjnojY7kVeRWazJWACN4vKEgP+YsVceq9QDvXd5kD6qqkaJUSc1iMJOS7+89nYSv
-         k788ivDA8+7gqDoUnpgsq1N3cl3YZvVz3J93oZJFPAIjGa1IOP/7zWRbU4vZmc5HinyJ
-         tc9A==
-X-Gm-Message-State: AOJu0YxyjWvK2L7x+Pzu9Jlv/2trAYx5Tr+T2DvMm1aLhBgKYfdejhmj
-	g4GZ2ZWMv7f4WU7prLOzwgjC5dBQ7IX1pTtGcY3Ncn9vuY3gQJL0UwRY0cs1HvSGK2P247tRvKg
-	jUaOMshSrvKDOR1CcIvH14j5VzSEAlnEtq7dmQ85iNLNkG+aAmMio3LOi8qH2mhXUaVdP5u34SZ
-	bTqA==
-X-Gm-Gg: ATEYQzwm+AVH1+TDOIdJmZfUZh31PaSc//rm8qRs5A0SgwmbWXiJRx5TyNevDrC1nLj
-	BCybBgqtBCl2q78BLhFN2UpFJobhyaaj4daSs6OhHUi+lRZAA1TRouhKahqItklS+Uda+DvigZW
-	7ILXcqSIBLiAW/K0Jvi1RkUSmHwbd+QUfsOWZuRjJ0J5D+icRSjB9cu8mtzwR+/0vQ/e5Me+/Jp
-	zigOvSey3PzJJB7+ilpdcvzI5QwjdQ8Jahe1qVkuc9TBXDwbHdhwHASxXMXu/k+wRi1c8qc3IUS
-	yBfFxCtH/NbJI/74gqislZYL6J4d9/nyKUMwuUJ01wSpgS/jxhK07kvusysW5iO/laA0apTiJ4g
-	YmtShwylmpil/DTZIC+esxJb0lzrYFnAuCetqpxehtB72GJ3YfhYZskBlFQ+u6A==
-X-Received: by 2002:a05:6a00:1d13:b0:81c:717b:9d39 with SMTP id d2e1a72fcca58-82a8c3a5119mr13438039b3a.56.1774336699034;
-        Tue, 24 Mar 2026 00:18:19 -0700 (PDT)
-X-Received: by 2002:a05:6a00:1d13:b0:81c:717b:9d39 with SMTP id d2e1a72fcca58-82a8c3a5119mr13438016b3a.56.1774336698637;
-        Tue, 24 Mar 2026 00:18:18 -0700 (PDT)
-Received: from fedora.armenon-thinkpadp16vgen1.bengluru.csb ([49.36.106.26])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82b0409c681sm13597766b3a.37.2026.03.24.00.18.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2026 00:18:18 -0700 (PDT)
-From: Arun Menon <armenon@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-integrity@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Arun Menon <armenon@redhat.com>
-Subject: [RFC 4/4] tpm: Increase TPM_BUFSIZE to 64kB for chunking support
-Date: Tue, 24 Mar 2026 12:48:03 +0530
-Message-ID: <20260324071803.324774-5-armenon@redhat.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260324071803.324774-1-armenon@redhat.com>
-References: <20260324071803.324774-1-armenon@redhat.com>
+	s=arc-20240116; t=1774348510; c=relaxed/simple;
+	bh=ozLikLvinqIb2bQ42DgDWdNkICnKWw52pWepRkNHFkA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ae4CwYOL/MdIXjVaTSfgrNqeSw5WZhyEDuPUC7oKAXbSSChSP9xDLPZozzPvLEc6oSJhanVoL8L+zqqQj7O5h2dh4D8XqULYPxtdK1gJfICnqwo38IuDle/buN22BvBCPP5WSWjTQZc+/+gFky0VBfKelT9jAwfvKZ+XiHeBdJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnnNQ3qe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F90C19424;
+	Tue, 24 Mar 2026 10:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774348509;
+	bh=ozLikLvinqIb2bQ42DgDWdNkICnKWw52pWepRkNHFkA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BnnNQ3qeiL76pbHy8+Fe+UascEhQ2QZuk06i6byF7axDxpxXE65ts1CdK5GnmmIGN
+	 QOG296DavABcXeZ4wkg//XaTUQvVy+VxF1Ar8ASZ0PxGvR+i/DjBsD2EVu86DsHHH3
+	 20RJDmMDkKEVJByy9ITBCvBAvlDcgxV8uXM3/EtGIWg09PZVYAKqaRzPYuExyjuM8c
+	 LybbGJUHyF5NgeW50H7fwLo7iQo/dKzwmLTUgfYtpcMur7OfSH8TRSwjpUmy1Tdqvc
+	 642KVy1hwvW4ry5OjiojRzdCuIKrnKo9qqzLvw7Mqp+hJANvac6sn3aFp8zmvTqVd1
+	 oY+GFKFLgpK/Q==
+Date: Tue, 24 Mar 2026 12:35:05 +0200
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org, Srish Srinivasan <ssrish@linux.ibm.com>,
+	Nayna Jain <nayna@linux.ibm.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KEYS: trusted: Protocol debugging as a feature
+Message-ID: <acJo2cBe2pfDWWGc@kernel.org>
+References: <20260323090047.632499-1-jarkko@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.66 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260323090047.632499-1-jarkko@kernel.org>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,ziepe.ca,kernel.org,gmx.de,redhat.com];
-	TAGGED_FROM(0.00)[bounces-9045-lists,linux-integrity=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[armenon@redhat.com,linux-integrity@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-9047-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DC73530406D
+	TAGGED_RCPT(0.00)[linux-integrity];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5909C306940
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-- In tpm_common_write() the size of the command is checked against
-  TPM_BUFSIZE. We therefore need to increase the TPM_BUFSIZE to allow
-  support for larger commands.
+On Mon, Mar 23, 2026 at 11:00:46AM +0200, Jarkko Sakkinen wrote:
+> TPM_DEBUG is a non-standard way to specify a feature in Linux kernel.
+> Introduce CONFIG_TRUSTED_KEYS_DEBUG, and use it to replace TPM_DEBUG in
+> TPM 1.x trusted keys.
+> 
+> Given that protocol bus could contain sensitive data, harden the feature as
+> follows:
+> 
+> 1. In the  Kconfig description postulate that pr_debug() statements must be
+>    used.
+> 2. Use pr_debug() statements in TPM 1.x driver to print the protocol dump.
+> 
+> Traces can be enabled e.g., by providing trusted.dyndbg='+p' for the kernel
+> command-line.
+> 
+> Cc: Srish Srinivasan <ssrish@linux.ibm.com>
+> Reported-by: Nayna Jain <nayna@linux.ibm.com>
+> Closes: https://lore.kernel.org/all/7f8b8478-5cd8-4d97-bfd0-341fd5cf10f9@linux.ibm.com/
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
 
-Signed-off-by: Arun Menon <armenon@redhat.com>
----
- drivers/char/tpm/tpm.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm posting a v2 update with HAVE_* flag and a bit wider scope.
 
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 87d68ddf270a7..a6933eb075296 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -33,7 +33,7 @@
- #endif
- 
- #define TPM_MINOR		224	/* officially assigned */
--#define TPM_BUFSIZE		4096
-+#define TPM_BUFSIZE		65536
- #define TPM_NUM_DEVICES		65536
- #define TPM_RETRY		50
- 
--- 
-2.53.0
-
+BR, Jarkko
 
