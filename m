@@ -1,48 +1,48 @@
-Return-Path: <linux-integrity+bounces-9053-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9054-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kNRrNLhwwmmncwQAu9opvQ
-	(envelope-from <linux-integrity+bounces-9053-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 12:08:40 +0100
+	id 4GOJAAVywmmncwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9054-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 12:14:13 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E063307058
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 12:08:40 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0687B30718F
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 12:14:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C747430E56DD
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 11:01:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7106E30506F9
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 11:01:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9A13E8660;
-	Tue, 24 Mar 2026 11:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 445493E5EF0;
+	Tue, 24 Mar 2026 11:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KqOVcwLE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AR4+2lRE"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A803A393DD1;
-	Tue, 24 Mar 2026 11:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CD43DB63A;
+	Tue, 24 Mar 2026 11:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774350060; cv=none; b=lq4yJfBWJiKFMGvZ2gH6hkJFV2qZPjkx8Rf8Q0P4mpYRR0uEe2JczocqUUPXR2a9rMiE3rQWnMH5ELNF1I52Fp+dAbKXKhkNWObgCgHCMgijkacLtSgy7gGah1InVr6fG2XK5GtlWgwibhP/kXpR/kZgKQ+G/Mld9JUo1aG9+Nk=
+	t=1774350084; cv=none; b=oLNwda0+kNJJA3+37xJ/us5GUVeoVZsLhcmHB5qDsZajeEVoKW9BhLIQvLJiT5uxLwH+DwbaQbI0rWcDovMrhu2YYD2dCXgpbH2gotOofJtSYaByuBwDjvhAFNx++3AJqBMuXKWpOH+jXhcGsD8FQdco5h9hMkzS/Y5MVY7ek6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774350060; c=relaxed/simple;
+	s=arc-20240116; t=1774350084; c=relaxed/simple;
 	bh=YW9shs/L5EFC8ZMfP+jjcBW3dgrut5uF1OXxXMpXw+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XUSr8SZAfvyc+XB+89UyiWy7SI+UhO3I+Cq/IUpIQlCBSkmUPmMGp8M0PPvH+7l8Rl50NIJLM3zfT28UgXQ0C4e6sWm/AIjq7/Zu3kR66uB0aucV4q6OJx3fE7ME5+MVYDBb5JUt/b88M2cXyJw13mAujBsn8v1r/TMFLferqZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KqOVcwLE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4744C19424;
-	Tue, 24 Mar 2026 11:00:59 +0000 (UTC)
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a8o70ZPsGJ95pMcz41Xy/C/YcWhfv6IvXjbYpKjLb4yCzoDfIlZkZmcStwnaEIaRSbItjLS8KUB0QgBvrZthvERXHEMPmpilUCzEX5jeVCQeo+Q1RhTxrB5gxmkG000Bjn8vfZ5QjSLxPQJQxk3vFpyDlVuBi6wid08GvYOOxvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AR4+2lRE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86946C19424;
+	Tue, 24 Mar 2026 11:01:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774350060;
+	s=k20201202; t=1774350084;
 	bh=YW9shs/L5EFC8ZMfP+jjcBW3dgrut5uF1OXxXMpXw+Q=;
 	h=From:To:Cc:Subject:Date:From;
-	b=KqOVcwLE1O2TpeLqVRHOBPnhh2qBIFPckuTKvzb2PL9XGTEJcVJTvAFUR75yeOci9
-	 OdwLt1rKgAtRyKDdkgtOnaz+Yls/p23HFDJVR6AZ96gANC61900kBGX87hkEJZZKLx
-	 rYA7h7dO+JbzwIea7dO7RJbEhUX5oKZbWsl7SlFNj/AnrY4QxLGMqHywNLafu00ni8
-	 MV/ZWDPWPJKSS6RNnilULZEh8DOfbx9EJg+kAlHQdBT8tGL3J/BtiXRe8l/dewlYV0
-	 A5B8s9TdxTWTBGahANxir+Zj7KD9GA/4w8VeOIiAe/WeHIq7yzw5toDLqAO+hYiago
-	 bijwClDr/Nc7w==
+	b=AR4+2lRENpgr8BlbDgn+XXkhJMaBbhOJAQaJMKuzbMw41jYW8YffOvPSuHCnb2xzL
+	 dngPP0Ve1mZiXYaFXBI+p4NCbsmJlUq2hp8HmgljpZIanzPeKhG3httCHpfsA4tbim
+	 6L5TDBOVaDDLRhCYV2BjDrJ7q9Xizn4qMEqgwjFCXG8jvSqDP1WIteSlSBUdBlgXQM
+	 abicHlMF+dtCLNsRasykeCCZA2IUvEPKcVwbheBLpMgRn2vT6rPEiuWUd0TKVEQPsj
+	 meMCLjMtdDUy31Yqi+gaAXt2LpeT4uasAKo0JUDweTtNjT0wSaKWJ5z1rQ2c6X6JP1
+	 gzeJg2w+roOQg==
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: linux-integrity@vger.kernel.org
 Cc: keyrings@vger.kernel.org,
@@ -60,8 +60,8 @@ Cc: keyrings@vger.kernel.org,
 	linux-kernel@vger.kernel.org (open list),
 	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
 Subject: [PATCH v2] KEYS: trusted: Debugging as a feature
-Date: Tue, 24 Mar 2026 13:00:40 +0200
-Message-ID: <20260324110043.67248-1-jarkko@kernel.org>
+Date: Tue, 24 Mar 2026 13:01:17 +0200
+Message-ID: <20260324110118.67536-1-jarkko@kernel.org>
 X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -76,11 +76,11 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9053-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9054-lists,linux-integrity=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
@@ -94,9 +94,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 7E063307058
+X-Rspamd-Queue-Id: 0687B30718F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
