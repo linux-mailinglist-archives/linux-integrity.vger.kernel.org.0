@@ -1,347 +1,308 @@
-Return-Path: <linux-integrity+bounces-9051-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9052-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ePWHMt1swmmncwQAu9opvQ
-	(envelope-from <linux-integrity+bounces-9051-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 11:52:13 +0100
+	id kCHsIP9uwmmncwQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9052-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 12:01:19 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21F5A306C08
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 11:52:12 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DD59306EE4
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 12:01:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E2D8F301E94A
-	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 10:45:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 45E96303F401
+	for <lists+linux-integrity@lfdr.de>; Tue, 24 Mar 2026 11:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC2D3DF00F;
-	Tue, 24 Mar 2026 10:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965C33E95B6;
+	Tue, 24 Mar 2026 11:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jhZuFd9O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OCi4amT3"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8995D368263;
-	Tue, 24 Mar 2026 10:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EB13E928D;
+	Tue, 24 Mar 2026 11:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774349133; cv=none; b=WAJqLyoJVIhqvW70hhN/dS0rWgQWHb0J1OqrhV0dHkY6XkFuInivVxlYGgt8c5Kz/rvP38fGTMjjg8qXcGZov5w2eDSytZmnwCdkW4TsOIiL2gZTjEgEmFLciOvu+C6uPrJkLvDsebVblSskf7gB5cOS+XPdvXqSb6U2WMjeNe0=
+	t=1774350030; cv=none; b=jDh7dtV4F1+VqYZA4KgVG0/A1ztAnqbK+GdPxIb8PzNvQeCPEMHOX2N3dHO4sr8ynMmZbs4ijLRki9/UxMed90mwRw1osF4CaOxF6MiCEf2rYC5vJN32u14LfF24sTBBaxeOkJong//PoboWu1djGpEukNhDStncXroMQosZOKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774349133; c=relaxed/simple;
-	bh=ng3sQdylaGfpjHTfTm6TbbWmw/h++CAawgwfIWjmkuc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rYJqVdlPqHLwcXx2mqaHGUVPwAEZiwsTeJyojRWpWRHEMsMjF1Ih/I4ik07PAlFPFAwAhnb8swLpo99qCcnat+XCicz9ui+bouj1ri6rcc2Z2p+VaFIDchoIqZ1/d8R1khbql4fxyhDAxPQ/nPy6KV3vxWkYbwmLdu5n4bmfB5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jhZuFd9O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA592C19424;
-	Tue, 24 Mar 2026 10:45:32 +0000 (UTC)
+	s=arc-20240116; t=1774350030; c=relaxed/simple;
+	bh=YW9shs/L5EFC8ZMfP+jjcBW3dgrut5uF1OXxXMpXw+Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NMZOUPGM7bWVyO+Wp7fKvoT5aori6ygb9hcqdBJAkaJts08aalvMzVmikaKwcq0qzmcscBQBRiLriEqtAT05V2BNT/8L0TeF9Q/5A7PnyrgUBJQLCXgTt3CBs98CgQGxIbKqVlAeYA9lIU8BuSQyDyqDeMy2rMotJWaNY4KlQlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OCi4amT3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44216C19424;
+	Tue, 24 Mar 2026 11:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774349133;
-	bh=ng3sQdylaGfpjHTfTm6TbbWmw/h++CAawgwfIWjmkuc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jhZuFd9Ob9r7uEPpOx//gsx+DBicZQYrTolalDGduPdTJcO/6HpBM0eGtYNMrkXGV
-	 8gmsd1DH5lYaostm1g5ht5hjSEwgDXbSHZfr6M/tQHTtNrJLGuKkR8uBPO8QrCjp4e
-	 oKvFq+MoHnEM4pbdYjgRuvmHtcwJS3df/GSVmAvAgTPtnaxLKhz8Fh+R9LztQijAzo
-	 yLDMtOuWJLhGx2AX5mLpoJNPcDj0nTZtJc9Z5khNqmacsUSS4/mu6H/33ENiXXwy1U
-	 8aXj6pIBycRP5hfs5b/G0dokQcF3ObU6a9UXPfH7a51eQjU/NXvTv8qFUHoq8UDEZa
-	 90AYXPIg3qjww==
-Date: Tue, 24 Mar 2026 12:45:29 +0200
+	s=k20201202; t=1774350030;
+	bh=YW9shs/L5EFC8ZMfP+jjcBW3dgrut5uF1OXxXMpXw+Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OCi4amT3w5K346lNG+3nrIO4jXD8DXHJO8TFU7DO8zn7TsX4/uSfCvA7qoEwWLSqK
+	 vkTYSGWgSr+q9q495T9PuubMhvcnYUXlgXQRvyRXn4O03GkYz3o6G4Aq2g8oDuigdH
+	 GFm1aCNanm1Zqm9tqm2hnluqNgn3fz7FNlIaSdqOn7kRJDWeLSGHkgKXb82KKKnoGf
+	 9ChoOrW5bPav4XTOKrdmiYd7lLwIyfgdelPm4R22E1VwAfAoDbEDSP+ipf5U0b/6iQ
+	 liUOK4hQUWd5qHgKmDDkk6akAEYu/HqCEH/SfbqPwQeCp/KVaYxkiT/hXQddKwWUBt
+	 DbhpG7Ak1vHnQ==
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Arun Menon <armenon@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [RFC 3/4] tpm_crb: Implement command and response chunking logic
-Message-ID: <acJrSXwUMjh5Pt_8@kernel.org>
-References: <20260324071803.324774-1-armenon@redhat.com>
- <20260324071803.324774-4-armenon@redhat.com>
+To: linux-integrity@vger.kernel.org
+Cc: keyrings@vger.kernel.org,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Srish Srinivasan <ssrish@linux.ibm.com>,
+	Nayna Jain <nayna@linux.ibm.com>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Ahmad Fatoum <a.fatoum@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-security-module@vger.kernel.org (open list:SECURITY SUBSYSTEM)
+Subject: [PATCH v2] KEYS: trusted: Debugging as a feature
+Date: Tue, 24 Mar 2026 13:00:15 +0200
+Message-ID: <20260324110018.67081-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260324071803.324774-4-armenon@redhat.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,ziepe.ca,gmx.de];
-	TAGGED_FROM(0.00)[bounces-9051-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9052-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	NEURAL_HAM(-0.00)[-1.000];
+	RSPAMD_EMAILBL_FAIL(0.00)[jarkko.kernel.org:query timed out,ssrish.linux.ibm.com:query timed out,nayna.linux.ibm.com:query timed out];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 21F5A306C08
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6DD59306EE4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 24, 2026 at 12:48:02PM +0530, Arun Menon wrote:
-> Add support for sending and receiving TPM command data in chunks when
-> the payload exceeds the physical size of the hardware MMIO window.
-> 
-> This introduces the following changes:
-> 
-> - crb_map_io(): Checks the device interface capability to determine if
->   chunking is supported, setting the chunking_supported flag. It also
->   stores the hardware's maximum response buffer size in priv->rsp_size.
-> - crb_send(): Iteratively writes command chunks to the fixed priv->cmd
->   MMIO window. It signals the TPM backend to process intermediate chunks
->   using CRB_START_NEXT_CHUNK, and signals the final chunk to begin
->   execution using CRB_START_INVOKE.
-> - crb_recv(): Parses the expected response size from the initial TPM
->   header. It then iteratively reads chunks from the fixed priv->rsp
->   MMIO window into the destination buffer, advancing the buffer offset
->   until the complete response is retrieved.
-> 
-> Signed-off-by: Arun Menon <armenon@redhat.com>
+TPM_DEBUG, and other similar flags, are a non-standard way to specify a
+feature in Linux kernel.  Introduce CONFIG_TRUSTED_KEYS_DEBUG for
+trusted keys, and use it to replace these ad-hoc feature flags.
 
-This is also just description of wha this adds. I'd lessen the detail
-and write a description that describes motivation and logic of the
-change. It's a good test for author knowledge, as if you really get
-the topic you can explain its gist. In addition, it can be reflected
-to implementation (vs. the descriptions that are pseudocode in English)
+Given that trusted keys debug dumps can contain sensitive data, harden
+the feature as follows:
 
-Since this RFC and QEMU does not have the feature in release it is
-good to polish stuff like this.
+1. In the Kconfig description postulate that pr_debug() statements must be
+   used.
+2. Use pr_debug() statements in TPM 1.x driver to print the protocol dump.
 
-> ---
->  drivers/char/tpm/tpm_crb.c | 150 +++++++++++++++++++++++++++----------
->  1 file changed, 109 insertions(+), 41 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-> index 10128d078245c..fb63cc3737253 100644
-> --- a/drivers/char/tpm/tpm_crb.c
-> +++ b/drivers/char/tpm/tpm_crb.c
-> @@ -104,11 +104,13 @@ struct crb_priv {
->  	u8 __iomem *cmd;
->  	u8 __iomem *rsp;
->  	u32 cmd_size;
-> +	u32 rsp_size;
->  	u32 smc_func_id;
->  	u32 __iomem *pluton_start_addr;
->  	u32 __iomem *pluton_reply_addr;
->  	u8 ffa_flags;
->  	u8 ffa_attributes;
-> +	bool chunking_supported;
->  };
->  
->  struct tpm2_crb_smc {
-> @@ -368,38 +370,6 @@ static u8 crb_status(struct tpm_chip *chip)
->  	return sts;
->  }
->  
-> -static int crb_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-> -{
-> -	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
-> -	unsigned int expected;
-> -
-> -	/* A sanity check that the upper layer wants to get at least the header
-> -	 * as that is the minimum size for any TPM response.
-> -	 */
-> -	if (count < TPM_HEADER_SIZE)
-> -		return -EIO;
-> -
-> -	/* If this bit is set, according to the spec, the TPM is in
-> -	 * unrecoverable condition.
-> -	 */
-> -	if (ioread32(&priv->regs_t->ctrl_sts) & CRB_CTRL_STS_ERROR)
-> -		return -EIO;
-> -
-> -	/* Read the first 8 bytes in order to get the length of the response.
-> -	 * We read exactly a quad word in order to make sure that the remaining
-> -	 * reads will be aligned.
-> -	 */
-> -	memcpy_fromio(buf, priv->rsp, 8);
-> -
-> -	expected = be32_to_cpup((__be32 *)&buf[2]);
-> -	if (expected > count || expected < TPM_HEADER_SIZE)
-> -		return -EIO;
-> -
-> -	memcpy_fromio(&buf[8], &priv->rsp[8], expected - 8);
-> -
-> -	return expected;
-> -}
-> -
->  static int crb_do_acpi_start(struct tpm_chip *chip)
->  {
->  	union acpi_object *obj;
-> @@ -474,6 +444,8 @@ static int crb_trigger_tpm(struct tpm_chip *chip, u32 start_cmd)
->  static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
->  {
->  	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
-> +	size_t offset = 0;
-> +	size_t chunk_size;
->  	int rc = 0;
->  
->  	/* Zero the cancel register so that the next command will not get
-> @@ -481,7 +453,7 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
->  	 */
->  	iowrite32(0, &priv->regs_t->ctrl_cancel);
->  
-> -	if (len > priv->cmd_size) {
-> +	if (len > priv->cmd_size && !priv->chunking_supported) {
->  		dev_err(&chip->dev, "invalid command count value %zd %d\n",
->  			len, priv->cmd_size);
->  		return -E2BIG;
-> @@ -491,16 +463,101 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
->  	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_PLUTON)
->  		__crb_cmd_ready(&chip->dev, priv, chip->locality);
->  
-> -	memcpy_toio(priv->cmd, buf, len);
-> +	while (offset < len) {
-> +		chunk_size = min_t(size_t, len - offset, priv->cmd_size);
-> +
-> +		memcpy_toio(priv->cmd, buf + offset, chunk_size);
-> +		offset += chunk_size;
-> +
-> +		/* Make sure that cmd is populated before issuing start. */
-> +		wmb();
-> +		if (offset < len) {
-> +			rc = crb_trigger_tpm(chip, CRB_START_NEXT_CHUNK);
-> +			if (rc)
-> +				return rc;
-> +			if (!crb_wait_for_reg_32(&priv->regs_t->ctrl_start,
-> +			    CRB_START_NEXT_CHUNK, 0, TPM2_TIMEOUT_C)) {
-> +				dev_err(&chip->dev,
-> +					"Timeout waiting for backend to consume chunk\n");
-> +				return -ETIME;
-> +			}
-> +		} else {
-> +			rc = crb_trigger_tpm(chip, CRB_START_INVOKE);
-> +			if (rc)
-> +				return rc;
-> +		}
-> +	}
-> +	return crb_try_pluton_doorbell(priv, false);
-> +}
->  
-> -	/* Make sure that cmd is populated before issuing start. */
-> -	wmb();
-> +static int crb_recv(struct tpm_chip *chip, u8 *buf, size_t count)
-> +{
-> +	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
-> +	unsigned int expected;
-> +	size_t offset = 0;
-> +	size_t chunk_size;
-> +	size_t first_read;
-> +	int rc;
->  
-> -	rc = crb_trigger_tpm(chip, CRB_START_INVOKE);
-> -	if (rc)
-> -		return rc;
-> +	/* A sanity check that the upper layer wants to get at least the header
-> +	 * as that is the minimum size for any TPM response.
-> +	 */
-> +	if (count < TPM_HEADER_SIZE)
-> +		return -EIO;
->  
-> -	return crb_try_pluton_doorbell(priv, false);
-> +	/* If this bit is set, according to the spec, the TPM is in
-> +	 * unrecoverable condition.
-> +	 */
-> +	if (ioread32(&priv->regs_t->ctrl_sts) & CRB_CTRL_STS_ERROR)
-> +		return -EIO;
-> +
-> +	/* Read the first 8 bytes in order to get the length of the response.
-> +	 * We read exactly a quad word in order to make sure that the remaining
-> +	 * reads will be aligned.
-> +	 */
-> +	memcpy_fromio(buf, priv->rsp, 8);
-> +
-> +	expected = be32_to_cpup((__be32 *)&buf[2]);
-> +	if (expected > count || expected < TPM_HEADER_SIZE)
-> +		return -EIO;
-> +
-> +	/*
-> +	 * Set chunk_size by comparing the size of the buffer that the upper layer has
-> +	 * allocated (count) to the hardware tpm limit (priv->rsp_size).
-> +	 * This is to prevent buffer overflow while writing to buf.
-> +	 */
-> +	chunk_size = min_t(size_t, count, priv->rsp_size);
-> +
-> +	/*
-> +	 * Compare the actual size of the response we found in the header to the chunk_size.
-> +	 */
-> +	first_read = min_t(size_t, expected, chunk_size);
-> +
-> +	memcpy_fromio(&buf[8], &priv->rsp[8], first_read - 8);
-> +	offset = first_read;
-> +
-> +	while (offset < expected) {
-> +		if (!priv->chunking_supported) {
-> +			dev_err(&chip->dev, "Response larger than MMIO and chunking not supported\n");
-> +			return -EIO;
-> +		}
-> +
-> +		rc = crb_trigger_tpm(chip, CRB_START_NEXT_CHUNK);
-> +		if (rc)
-> +			return rc;
-> +
-> +		if (!crb_wait_for_reg_32(&priv->regs_t->ctrl_start,
-> +					 CRB_START_NEXT_CHUNK, 0, TPM2_TIMEOUT_C)) {
-> +			dev_err(&chip->dev, "Timeout waiting for backend response\n");
-> +			return -ETIME;
-> +		}
-> +
-> +		chunk_size = min_t(size_t, expected - offset, priv->rsp_size);
-> +		memcpy_fromio(buf + offset, priv->rsp, chunk_size);
-> +		offset += chunk_size;
-> +	}
-> +
-> +	return expected;
->  }
->  
->  static void crb_cancel(struct tpm_chip *chip)
-> @@ -727,6 +784,15 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
->  		goto out;
->  	}
->  
-> +	if (priv->regs_h) {
-> +		u32 intf_id = ioread32((u32 __iomem *)&priv->regs_h->intf_id);
-> +
-> +		if (intf_id & CRB_INTF_CAP_CRB_CHUNK) {
-> +			priv->chunking_supported = true;
-> +			dev_info(dev, "CRB Chunking is supported by backend\n");
-> +		}
-> +	}
-> +
->  	memcpy_fromio(&__rsp_pa, &priv->regs_t->ctrl_rsp_pa, 8);
->  	rsp_pa = le64_to_cpu(__rsp_pa);
->  	rsp_size = ioread32(&priv->regs_t->ctrl_rsp_size);
-> @@ -764,8 +830,10 @@ static int crb_map_io(struct acpi_device *device, struct crb_priv *priv,
->  	priv->rsp = priv->cmd;
->  
->  out:
-> -	if (!ret)
-> +	if (!ret) {
->  		priv->cmd_size = cmd_size;
-> +		priv->rsp_size = rsp_size;
-> +	}
->  
->  	__crb_go_idle(dev, priv, 0);
->  
-> -- 
-> 2.53.0
-> 
+Traces, when actually needed, can be easily enabled by providing
+trusted.dyndbg='+p' in the kernel command-line.
 
-BR, Jarkko
+Cc: Srish Srinivasan <ssrish@linux.ibm.com>
+Reported-by: Nayna Jain <nayna@linux.ibm.com>
+Closes: https://lore.kernel.org/all/7f8b8478-5cd8-4d97-bfd0-341fd5cf10f9@linux.ibm.com/
+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+---
+v2:
+- Implement for all trusted keys backends.
+- Add HAVE_TRUSTED_KEYS_DEBUG as it is a good practice despite full
+  coverage.
+---
+ include/keys/trusted-type.h               | 18 +++++-------
+ security/keys/trusted-keys/Kconfig        | 19 ++++++++++++
+ security/keys/trusted-keys/trusted_caam.c |  4 +--
+ security/keys/trusted-keys/trusted_tpm1.c | 36 +++++++++++------------
+ 4 files changed, 46 insertions(+), 31 deletions(-)
+
+diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
+index 03527162613f..620a1f890b6b 100644
+--- a/include/keys/trusted-type.h
++++ b/include/keys/trusted-type.h
+@@ -83,18 +83,16 @@ struct trusted_key_source {
+ 
+ extern struct key_type key_type_trusted;
+ 
+-#define TRUSTED_DEBUG 0
+-
+-#if TRUSTED_DEBUG
++#ifdef CONFIG_TRUSTED_KEYS_DEBUG
+ static inline void dump_payload(struct trusted_key_payload *p)
+ {
+-	pr_info("key_len %d\n", p->key_len);
+-	print_hex_dump(KERN_INFO, "key ", DUMP_PREFIX_NONE,
+-		       16, 1, p->key, p->key_len, 0);
+-	pr_info("bloblen %d\n", p->blob_len);
+-	print_hex_dump(KERN_INFO, "blob ", DUMP_PREFIX_NONE,
+-		       16, 1, p->blob, p->blob_len, 0);
+-	pr_info("migratable %d\n", p->migratable);
++	pr_debug("key_len %d\n", p->key_len);
++	print_hex_dump_debug("key ", DUMP_PREFIX_NONE,
++			     16, 1, p->key, p->key_len, 0);
++	pr_debug("bloblen %d\n", p->blob_len);
++	print_hex_dump_debug("blob ", DUMP_PREFIX_NONE,
++			     16, 1, p->blob, p->blob_len, 0);
++	pr_debug("migratable %d\n", p->migratable);
+ }
+ #else
+ static inline void dump_payload(struct trusted_key_payload *p)
+diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
+index 9e00482d886a..2ad9ba0e03f1 100644
+--- a/security/keys/trusted-keys/Kconfig
++++ b/security/keys/trusted-keys/Kconfig
+@@ -1,10 +1,25 @@
+ config HAVE_TRUSTED_KEYS
+ 	bool
+ 
++config HAVE_TRUSTED_KEYS_DEBUG
++	bool
++
++config TRUSTED_KEYS_DEBUG
++	bool "Debug trusted keys"
++	depends on HAVE_TRUSTED_KEYS_DEBUG
++	default n
++	help
++	  Trusted keys backends and core code that support debug dumps
++	  can opt-in that feature here. Dumps must only use DEBUG
++	  level output, as sensitive data may pass by. In the
++	  kernel-command line traces can be enabled via
++	  trusted.dyndbg='+p'.
++
+ config TRUSTED_KEYS_TPM
+ 	bool "TPM-based trusted keys"
+ 	depends on TCG_TPM >= TRUSTED_KEYS
+ 	default y
++	select HAVE_TRUSTED_KEYS_DEBUG
+ 	select CRYPTO_HASH_INFO
+ 	select CRYPTO_LIB_SHA1
+ 	select CRYPTO_LIB_UTILS
+@@ -23,6 +38,7 @@ config TRUSTED_KEYS_TEE
+ 	bool "TEE-based trusted keys"
+ 	depends on TEE >= TRUSTED_KEYS
+ 	default y
++	select HAVE_TRUSTED_KEYS_DEBUG
+ 	select HAVE_TRUSTED_KEYS
+ 	help
+ 	  Enable use of the Trusted Execution Environment (TEE) as trusted
+@@ -33,6 +49,7 @@ config TRUSTED_KEYS_CAAM
+ 	depends on CRYPTO_DEV_FSL_CAAM_JR >= TRUSTED_KEYS
+ 	select CRYPTO_DEV_FSL_CAAM_BLOB_GEN
+ 	default y
++	select HAVE_TRUSTED_KEYS_DEBUG
+ 	select HAVE_TRUSTED_KEYS
+ 	help
+ 	  Enable use of NXP's Cryptographic Accelerator and Assurance Module
+@@ -42,6 +59,7 @@ config TRUSTED_KEYS_DCP
+ 	bool "DCP-based trusted keys"
+ 	depends on CRYPTO_DEV_MXS_DCP >= TRUSTED_KEYS
+ 	default y
++	select HAVE_TRUSTED_KEYS_DEBUG
+ 	select HAVE_TRUSTED_KEYS
+ 	help
+ 	  Enable use of NXP's DCP (Data Co-Processor) as trusted key backend.
+@@ -50,6 +68,7 @@ config TRUSTED_KEYS_PKWM
+ 	bool "PKWM-based trusted keys"
+ 	depends on PSERIES_PLPKS >= TRUSTED_KEYS
+ 	default y
++	select HAVE_TRUSTED_KEYS_DEBUG
+ 	select HAVE_TRUSTED_KEYS
+ 	help
+ 	  Enable use of IBM PowerVM Key Wrapping Module (PKWM) as a trusted key backend.
+diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
+index 601943ce0d60..015cddc6b53c 100644
+--- a/security/keys/trusted-keys/trusted_caam.c
++++ b/security/keys/trusted-keys/trusted_caam.c
+@@ -28,10 +28,10 @@ static const match_table_t key_tokens = {
+ 	{opt_err, NULL}
+ };
+ 
+-#ifdef CAAM_DEBUG
++#ifdef CONFIG_TRUSTED_KEYS_DEBUG
+ static inline void dump_options(const struct caam_pkey_info *pkey_info)
+ {
+-	pr_info("key encryption algo %d\n", pkey_info->key_enc_algo);
++	pr_debug("key encryption algo %d\n", pkey_info->key_enc_algo);
+ }
+ #else
+ static inline void dump_options(const struct caam_pkey_info *pkey_info)
+diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
+index c865c97aa1b4..8fe889c7cdd1 100644
+--- a/security/keys/trusted-keys/trusted_tpm1.c
++++ b/security/keys/trusted-keys/trusted_tpm1.c
+@@ -46,38 +46,36 @@ enum {
+ 	SRK_keytype = 4
+ };
+ 
+-#define TPM_DEBUG 0
+-
+-#if TPM_DEBUG
++#ifdef CONFIG_TRUSTED_KEYS_DEBUG
+ static inline void dump_options(struct trusted_key_options *o)
+ {
+-	pr_info("sealing key type %d\n", o->keytype);
+-	pr_info("sealing key handle %0X\n", o->keyhandle);
+-	pr_info("pcrlock %d\n", o->pcrlock);
+-	pr_info("pcrinfo %d\n", o->pcrinfo_len);
+-	print_hex_dump(KERN_INFO, "pcrinfo ", DUMP_PREFIX_NONE,
+-		       16, 1, o->pcrinfo, o->pcrinfo_len, 0);
++	pr_debug("sealing key type %d\n", o->keytype);
++	pr_debug("sealing key handle %0X\n", o->keyhandle);
++	pr_debug("pcrlock %d\n", o->pcrlock);
++	pr_debug("pcrinfo %d\n", o->pcrinfo_len);
++	print_hex_dump_debug("pcrinfo ", DUMP_PREFIX_NONE,
++			     16, 1, o->pcrinfo, o->pcrinfo_len, 0);
+ }
+ 
+ static inline void dump_sess(struct osapsess *s)
+ {
+-	print_hex_dump(KERN_INFO, "trusted-key: handle ", DUMP_PREFIX_NONE,
+-		       16, 1, &s->handle, 4, 0);
+-	pr_info("secret:\n");
+-	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
+-		       16, 1, &s->secret, SHA1_DIGEST_SIZE, 0);
+-	pr_info("trusted-key: enonce:\n");
+-	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
+-		       16, 1, &s->enonce, SHA1_DIGEST_SIZE, 0);
++	print_hex_dump_debug("trusted-key: handle ", DUMP_PREFIX_NONE,
++			     16, 1, &s->handle, 4, 0);
++	pr_debug("secret:\n");
++	print_hex_dump_debug("", DUMP_PREFIX_NONE,
++			     16, 1, &s->secret, SHA1_DIGEST_SIZE, 0);
++	pr_debug("trusted-key: enonce:\n");
++	print_hex_dump_debug("", DUMP_PREFIX_NONE,
++			     16, 1, &s->enonce, SHA1_DIGEST_SIZE, 0);
+ }
+ 
+ static inline void dump_tpm_buf(unsigned char *buf)
+ {
+ 	int len;
+ 
+-	pr_info("\ntpm buffer\n");
++	pr_debug("\ntpm buffer\n");
+ 	len = LOAD32(buf, TPM_SIZE_OFFSET);
+-	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1, buf, len, 0);
++	print_hex_dump_debug("", DUMP_PREFIX_NONE, 16, 1, buf, len, 0);
+ }
+ #else
+ static inline void dump_options(struct trusted_key_options *o)
+-- 
+2.47.3
+
 
