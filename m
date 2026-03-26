@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-9093-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9094-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4BhWFTpuxWl1+AQAu9opvQ
-	(envelope-from <linux-integrity+bounces-9093-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2026 18:34:50 +0100
+	id oIP9H4VuxWl1+AQAu9opvQ
+	(envelope-from <linux-integrity+bounces-9094-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2026 18:36:05 +0100
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C58A33934A
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2026 18:34:50 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6902533937B
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2026 18:36:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B21C23077713
-	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2026 17:32:43 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8D21C3056CE1
+	for <lists+linux-integrity@lfdr.de>; Thu, 26 Mar 2026 17:33:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B1D1426690;
-	Thu, 26 Mar 2026 17:31:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84367426D38;
+	Thu, 26 Mar 2026 17:31:23 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6F2423A60;
-	Thu, 26 Mar 2026 17:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538D8423A7B;
+	Thu, 26 Mar 2026 17:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774546274; cv=none; b=s66i9vQz0Lqcl2ZqlQRwwVrmHyxyJ/aJ7Z1YwYcrwjwyDcOklA6iTnVFBfiis5/h5QUgeDaW/uZjuI/KF1GRT7aK/xBrOsAokqxhFBYNHnmVDVYbpyOgGDfcuNIbPB171rJ+PSLd2rv2PXuLnigZbLiQmzI/2NE5t38BZNRryuY=
+	t=1774546282; cv=none; b=XHppDZZLiMRkzfIAUpX5/2PonJ1NtoMW1Tp4xYX6r2p9V+sAHwFUqxObYEqrRcNSZjW1fe8KkkSM56fmdSUITCM/iw3b9Nse6dSggxjbFWKZYtGI6RjkvO0UWhtnkJqed1md4xfv9E2E38wsttVGEDc28+ptDjNEDrcxx7hg2MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774546274; c=relaxed/simple;
-	bh=eFIWqqy1wtC225lm99O/cnD1/2fRP8mqzqJR8Px3QK0=;
+	s=arc-20240116; t=1774546282; c=relaxed/simple;
+	bh=bBGnTuFjwr4aKleyp99+DjrixZO3wFuqCTblq2t4miw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oln76301pikBgQoLE6BAKIWqoVfzML5gcgKsV6DSUY7+krtkcEgXxxek0ZshuQhQk8oWA0QYT5NKGHKIXGkvWzl2yqTOfxBGqKX1GsXMNV9Sy9UWiNsNBSZbN+kAnTFqfXMqdVFUVHs5xxkPo49eXtOpo3YNkQwFeituhcSpO1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+	 MIME-Version; b=jqnW1RruqD0r8QbgpVV6nabOLARBPSD/6vG4SWmfC9KLws5Zs3bO+erWgOwXEscI0sDXbpWn/YByUq8DD4LK7G9QF74E/O38CpbAmdcISEbMvGGG9CMCVMdk0IsWZrmyq16v59bC7v6ZBjVK8I2NNlw9LwOFcsx4v0wziTpIetY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4fhW1M1WtHzpVwq;
-	Fri, 27 Mar 2026 01:27:19 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fhW1l28tmztKQg;
+	Fri, 27 Mar 2026 01:27:39 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 714974056B;
-	Fri, 27 Mar 2026 01:31:07 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id B5B9240569;
+	Fri, 27 Mar 2026 01:31:15 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwB3Yu84bcVppGUvAQ--.1881S5;
-	Thu, 26 Mar 2026 18:31:06 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwB3Yu84bcVppGUvAQ--.1881S6;
+	Thu, 26 Mar 2026 18:31:15 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	skhan@linuxfoundation.org,
@@ -58,9 +58,9 @@ Cc: linux-doc@vger.kernel.org,
 	chenste@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 03/13] ima: Introduce per binary measurements list type ima_num_entries counter
-Date: Thu, 26 Mar 2026 18:30:01 +0100
-Message-ID: <20260326173011.1191815-4-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v4 04/13] ima: Introduce per binary measurements list type binary_runtime_size value
+Date: Thu, 26 Mar 2026 18:30:02 +0100
+Message-ID: <20260326173011.1191815-5-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260326173011.1191815-1-roberto.sassu@huaweicloud.com>
 References: <20260326173011.1191815-1-roberto.sassu@huaweicloud.com>
@@ -71,31 +71,31 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwB3Yu84bcVppGUvAQ--.1881S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw1kZr4fKFy3CF45tF1kKrg_yoWrXF17pa
-	nIgF1UJr18XFy2krykCa47Aa9ag3yrKryUWw45W3say3ZrXr1UXFn8AF12kFn5Gr90yr1I
-	qwn0qw45Aa1vyrJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-	WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-	AKxVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-	F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-	07jSiihUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAEBGnEnSsT2QABsR
+X-CM-TRANSID:LxC2BwB3Yu84bcVppGUvAQ--.1881S6
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw15Xr1ftr4kGF1kGrWxWFg_yoW7CrWUpa
+	nxZF18tr4kXay7KFZ5GF97ZFWrW3yrXry7Jas8W3W09Fs7Ar1jqF15tryjkFW5G3s8t3W7
+	JrWqqr4fAanrt3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+	C2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+	7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
+	kKe7AKxVWrXVW3AwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+	6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
+	v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvE
+	c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+	AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
+	pf9x07jhXo7UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAEBGnEnSsT2QACsS
 X-Spamd-Result: default: False [1.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -105,7 +105,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9093-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9094-lists,linux-integrity=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -114,110 +114,151 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,huawei.com:email]
-X-Rspamd-Queue-Id: 2C58A33934A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huaweicloud.com:mid,huawei.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6902533937B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Make ima_num_entries as an array, to have separate counters per binary
+Make binary_runtime_size as an array, to have separate counters per binary
 measurements list type. Currently, define the BINARY type for the existing
 binary measurements list.
 
-No functional change: the BINARY type is equivalent to the value without
-the array.
+Introduce ima_update_binary_runtime_size() to facilitate updating a
+binary_runtime_size value with a given binary measurement list type.
+
+Also add the binary measurements list type parameter to
+ima_get_binary_runtime_size(), to retrieve the desired value. Retrieving
+the value is now done under the ima_extend_list_mutex, since there can be
+concurrent updates.
+
+No functional change (except for the mutex usage, that fixes the
+concurrency issue): the BINARY array element is equivalent to the old
+binary_runtime_size.
 
 Link: https://github.com/linux-integrity/linux/issues/1
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/integrity/ima/ima.h       | 9 ++++++++-
- security/integrity/ima/ima_fs.c    | 3 +--
- security/integrity/ima/ima_kexec.c | 2 +-
- security/integrity/ima/ima_queue.c | 7 +++++--
- 4 files changed, 15 insertions(+), 6 deletions(-)
+ security/integrity/ima/ima.h       |  2 +-
+ security/integrity/ima/ima_kexec.c |  5 ++--
+ security/integrity/ima/ima_queue.c | 40 +++++++++++++++++++++---------
+ 3 files changed, 32 insertions(+), 15 deletions(-)
 
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 9cdc4c5afd3b..199237e2d2e3 100644
+index 199237e2d2e3..97b7d6024b5d 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -28,6 +28,13 @@ enum ima_show_type { IMA_SHOW_BINARY, IMA_SHOW_BINARY_NO_FIELD_LEN,
- 		     IMA_SHOW_BINARY_OLD_STRING_FMT, IMA_SHOW_ASCII };
- enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
- 
-+/*
-+ * BINARY: current binary measurements list
-+ */
-+enum binary_lists {
-+	BINARY, BINARY__LAST
-+};
-+
- /* digest size for IMA, fits SHA1 or MD5 */
- #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
- #define IMA_EVENT_NAME_LEN_MAX	255
-@@ -324,7 +331,7 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
-  */
- extern spinlock_t ima_queue_lock;
- 
--extern atomic_long_t ima_num_entries;
-+extern atomic_long_t ima_num_entries[BINARY__LAST];
- extern atomic_long_t ima_num_violations;
- extern struct hlist_head __rcu *ima_htable;
- 
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index aaa460d70ff7..79b0f287c668 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -63,8 +63,7 @@ static ssize_t ima_show_measurements_count(struct file *filp,
- 					   char __user *buf,
- 					   size_t count, loff_t *ppos)
- {
--	return ima_show_counter(buf, count, ppos, &ima_num_entries);
--
-+	return ima_show_counter(buf, count, ppos, &ima_num_entries[BINARY]);
- }
- 
- static const struct file_operations ima_measurements_count_ops = {
+@@ -318,7 +318,7 @@ int ima_restore_measurement_entry(struct ima_template_entry *entry);
+ int ima_restore_measurement_list(loff_t bufsize, void *buf);
+ int ima_measurements_show(struct seq_file *m, void *v);
+ int __init ima_init_htable(void);
+-unsigned long ima_get_binary_runtime_size(void);
++unsigned long ima_get_binary_runtime_size(enum binary_lists binary_list);
+ int ima_init_template(void);
+ void ima_init_template_list(void);
+ int __init ima_init_digests(void);
 diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 5801649fbbef..40962dc0ca86 100644
+index 40962dc0ca86..44ebefbdcab0 100644
 --- a/security/integrity/ima/ima_kexec.c
 +++ b/security/integrity/ima/ima_kexec.c
-@@ -43,7 +43,7 @@ void ima_measure_kexec_event(const char *event_name)
+@@ -42,7 +42,7 @@ void ima_measure_kexec_event(const char *event_name)
+ 	long len;
  	int n;
  
- 	buf_size = ima_get_binary_runtime_size();
--	len = atomic_long_read(&ima_num_entries);
-+	len = atomic_long_read(&ima_num_entries[BINARY]);
+-	buf_size = ima_get_binary_runtime_size();
++	buf_size = ima_get_binary_runtime_size(BINARY);
+ 	len = atomic_long_read(&ima_num_entries[BINARY]);
  
  	n = scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
- 		      "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
+@@ -159,7 +159,8 @@ void ima_add_kexec_buffer(struct kimage *image)
+ 	else
+ 		extra_memory = CONFIG_IMA_KEXEC_EXTRA_MEMORY_KB * 1024;
+ 
+-	binary_runtime_size = ima_get_binary_runtime_size() + extra_memory;
++	binary_runtime_size = ima_get_binary_runtime_size(BINARY) +
++			      extra_memory;
+ 
+ 	if (binary_runtime_size >= ULONG_MAX - PAGE_SIZE)
+ 		kexec_segment_size = ULONG_MAX;
 diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 41f4941ceaad..952172a4905d 100644
+index 952172a4905d..b6d10dceb669 100644
 --- a/security/integrity/ima/ima_queue.c
 +++ b/security/integrity/ima/ima_queue.c
-@@ -33,7 +33,10 @@ static unsigned long binary_runtime_size = ULONG_MAX;
+@@ -27,9 +27,11 @@ static struct tpm_digest *digests;
+ 
+ LIST_HEAD(ima_measurements);	/* list of all measurements */
+ #ifdef CONFIG_IMA_KEXEC
+-static unsigned long binary_runtime_size;
++static unsigned long binary_runtime_size[BINARY__LAST];
+ #else
+-static unsigned long binary_runtime_size = ULONG_MAX;
++static unsigned long binary_runtime_size[BINARY__LAST] = {
++	[0 ... BINARY__LAST - 1] = ULONG_MAX
++};
  #endif
  
  /* num of stored measurements in the list */
--atomic_long_t ima_num_entries = ATOMIC_LONG_INIT(0);
-+atomic_long_t ima_num_entries[BINARY__LAST] = {
-+	[0 ... BINARY__LAST - 1] = ATOMIC_LONG_INIT(0)
-+};
+@@ -131,6 +133,20 @@ static int get_binary_runtime_size(struct ima_template_entry *entry)
+ 	return size;
+ }
+ 
++static void ima_update_binary_runtime_size(struct ima_template_entry *entry,
++					   enum binary_lists binary_list)
++{
++	int size;
 +
- /* num of violations in the list */
- atomic_long_t ima_num_violations = ATOMIC_LONG_INIT(0);
- 
-@@ -154,7 +157,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
- 	htable = rcu_dereference_protected(ima_htable,
- 				lockdep_is_held(&ima_extend_list_mutex));
- 
--	atomic_long_inc(&ima_num_entries);
-+	atomic_long_inc(&ima_num_entries[BINARY]);
- 	if (update_htable) {
- 		key = ima_hash_key(entry->digests[ima_hash_algo_idx].digest);
++	if (binary_runtime_size[binary_list] == ULONG_MAX)
++		return;
++
++	size = get_binary_runtime_size(entry);
++	binary_runtime_size[binary_list] =
++		(binary_runtime_size[binary_list] < ULONG_MAX - size) ?
++		binary_runtime_size[binary_list] + size : ULONG_MAX;
++}
++
+ /* ima_add_template_entry helper function:
+  * - Add template entry to the measurement list and hash table, for
+  *   all entries except those carried across kexec.
+@@ -163,13 +179,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
  		hlist_add_head_rcu(&qe->hnext, &htable[key]);
+ 	}
+ 
+-	if (binary_runtime_size != ULONG_MAX) {
+-		int size;
+-
+-		size = get_binary_runtime_size(entry);
+-		binary_runtime_size = (binary_runtime_size < ULONG_MAX - size) ?
+-		     binary_runtime_size + size : ULONG_MAX;
+-	}
++	ima_update_binary_runtime_size(entry, BINARY);
+ 	return 0;
+ }
+ 
+@@ -178,12 +188,18 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
+  * entire binary_runtime_measurement list, including the ima_kexec_hdr
+  * structure.
+  */
+-unsigned long ima_get_binary_runtime_size(void)
++unsigned long ima_get_binary_runtime_size(enum binary_lists binary_list)
+ {
+-	if (binary_runtime_size >= (ULONG_MAX - sizeof(struct ima_kexec_hdr)))
++	unsigned long val;
++
++	mutex_lock(&ima_extend_list_mutex);
++	val = binary_runtime_size[binary_list];
++	mutex_unlock(&ima_extend_list_mutex);
++
++	if (val >= (ULONG_MAX - sizeof(struct ima_kexec_hdr)))
+ 		return ULONG_MAX;
+ 	else
+-		return binary_runtime_size + sizeof(struct ima_kexec_hdr);
++		return val + sizeof(struct ima_kexec_hdr);
+ }
+ 
+ static int ima_pcr_extend(struct tpm_digest *digests_arg, int pcr)
 -- 
 2.43.0
 
