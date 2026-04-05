@@ -1,168 +1,161 @@
-Return-Path: <linux-integrity+bounces-9121-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9122-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGrpIHUv0mlFUAcAu9opvQ
-	(envelope-from <linux-integrity+bounces-9121-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 05 Apr 2026 11:46:29 +0200
+	id kJgWL3js0mlBcQcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9122-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 06 Apr 2026 01:12:56 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE2EE39E013
-	for <lists+linux-integrity@lfdr.de>; Sun, 05 Apr 2026 11:46:28 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F26C3A01BF
+	for <lists+linux-integrity@lfdr.de>; Mon, 06 Apr 2026 01:12:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 62AE430086EC
-	for <lists+linux-integrity@lfdr.de>; Sun,  5 Apr 2026 09:46:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 888E03007AC2
+	for <lists+linux-integrity@lfdr.de>; Sun,  5 Apr 2026 23:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83341B6D1A;
-	Sun,  5 Apr 2026 09:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AE9C3845A3;
+	Sun,  5 Apr 2026 23:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Bj9BepNA"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ATwzVdR+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B210D1F92E
-	for <linux-integrity@vger.kernel.org>; Sun,  5 Apr 2026 09:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E642B26B75B;
+	Sun,  5 Apr 2026 23:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775382386; cv=none; b=uObauQ0f6myAsmO4kX4yLCNcbZDTWhYYYKDILTl83MHV+hZHgPnu71GGe4BPuT52pXME4j1ODASeALqJ434tivo4v0EoPnkTuxGh43H+jeLkFRERXYa2QJT5ZileKTNo8+DpVa4s1DTtG+Rhe5jW00W3v+seHYDV5Cv/yQ+yeLM=
+	t=1775430770; cv=none; b=YmGmV/VBEhSs5i8XCZtPI9cMTMAluHWHYCfFOIAEVFPBSkiy8cn/WFcbSNRDSxM/tMIGDyBQGJDjQzEcwWnrdApyM9Z7+WDmSUmywd+sVqIyUS46KzwsU6gTm30x0JaZzA6JH1rNi9rKJJ3/VfkyPhy3arkynjDorXnM06hPe9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775382386; c=relaxed/simple;
-	bh=YzVK2g0iRHSCPN65dVWpouQkEsph4o/79GQ0dF/KqXY=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=d2sPd/9RY77SoK9GWc8EiN0Zgvlk1Ti6NNCrcSNxEgaoy4wvOHARek9FqV0GhzghOHg2yoeOLSlT9nJ9GKkg80qjriQVTRzttKTppiDJDKo7fHNMAX+2UdQxYjiWAm3fqFvzaGHqKH801seDykpiYcV4bw3hTTFdiPuuBcB12+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Bj9BepNA; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1775430770; c=relaxed/simple;
+	bh=xXl5ZKwPwjPyG+fChdAPLp1nJ01TKyy3tjcBjaeNgqk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n67qkEy2qd39Decw4Fd6M8wcdtzMYn3+fmxgimvMYNfqLYyOqpKiKQ/vGz0XWqRpH1Bcm5NXVo2ScUrTrmjHX/BE+A17HS7QLatZ/Mkc2eGYOAUpeIAdK63RR070opxbcb2xeP2nw4ZwC4BZZe07eYgb3MbdHCjfmNq1C76yw/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ATwzVdR+; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6351t9VQ1439413;
-	Sun, 5 Apr 2026 09:46:17 GMT
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 635KxgQ13589057;
+	Sun, 5 Apr 2026 23:12:34 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=/JrWBV
-	aBfwnHUd0q8ZmJAwO/eZQeN1XbPVDJZUvLDCo=; b=Bj9BepNA3RHd99ayCMmU6g
-	F2PBzDg7dpblJJ1t75e/olp3sD/MXOkeToVlK7ADpTa5YbnuOna088N0ZgtdYEnl
-	sTk6TauOWuyIA9mn8MNSRJiPDCqXyxAsST0apv6rNJe5cDaFHo7xf9f5J78gjidJ
-	zXGnB/IpehWYgPV2FyTrdYYI2UVp4wgwY6e9x/fXKQ3EtO1j8rzK+G/+tY1kPXol
-	RD80Ge21T5wBsAY9M7u3PfaGDjMEEsToKvM/kih1tWBpCn+dOMQoem6ig52gSXsd
-	aiGIyGMB/CpgSMD+zFoKLTKbBkrOCERVuG1WadcjCY7ZXUDuZN3PUKlllByuGFeg
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4datc2k6cx-1
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=ZhQiNzLb6ES8YivKFAR70nva5SkmipR8ttWBE3KlG
+	a0=; b=ATwzVdR+qCYViSKtsx2mLicwNexTTZEa9duVaj/YGhFNMsAiuVkZYjw/Q
+	T835nxlTVRfYYcKHR2AgZwnC1UVAnOkAIv/9ssj7biTWGgWur5/GKnYh1eGKbxe+
+	J9+LdqViI+LeDxh2UiaADKOHw60KV1zhglQId3Cechl3HMCerae/dvaHJ0h+lI0o
+	jvNlQZ3l/QWTG4hf+2/pCm6n7pmxwRE0OkQ8dLaE9XZ4OUNZSmhXLbr0cv3iqi0g
+	LHlveb0PcdJuFeoMNLuc+nnp27CjN2XuxNizoNMAe5kt9gFjP1eVCX3CLztuDPU3
+	CanSdtl3uVosrPOZR5ChMhSg3OuFQ==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dar2gcdnr-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 05 Apr 2026 09:46:16 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63594ve4020298;
-	Sun, 5 Apr 2026 09:46:15 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dbdyn8ys6-1
+	Sun, 05 Apr 2026 23:12:34 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 635MFfHu021334;
+	Sun, 5 Apr 2026 23:12:33 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dbdbyargy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 05 Apr 2026 09:46:15 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6359kEkZ30540342
+	Sun, 05 Apr 2026 23:12:33 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 635NCWWT30802472
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 5 Apr 2026 09:46:14 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 12E5E58056;
-	Sun,  5 Apr 2026 09:46:14 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ED5FB58052;
-	Sun,  5 Apr 2026 09:46:12 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.4.240])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Sun,  5 Apr 2026 09:46:12 +0000 (GMT)
-Message-ID: <d57329c163a9e1427206ae1ab60720d7ae7e07d8.camel@linux.ibm.com>
-Subject: Re: [PATCH 1/3] ima: Define asymmetric_verify_v3() to verify IMA
- sigv3 signatures
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-integrity@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20260330201336.GE4303@sol>
-References: <20260324203929.2475782-1-zohar@linux.ibm.com>
-	 <20260324203929.2475782-2-zohar@linux.ibm.com> <20260330201336.GE4303@sol>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 05 Apr 2026 05:46:11 -0400
+	Sun, 5 Apr 2026 23:12:32 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 25EDA5805B;
+	Sun,  5 Apr 2026 23:12:32 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 680F858059;
+	Sun,  5 Apr 2026 23:12:31 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Sun,  5 Apr 2026 23:12:31 +0000 (GMT)
+From: Stefan Berger <stefanb@linux.ibm.com>
+To: linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, zohar@linux.ibm.com,
+        roberto.sassu@huawei.com, ebiggers@kernel.org,
+        Stefan Berger <stefanb@linux.ibm.com>
+Subject: [PATCH 0/3] Add support for ML-DSA signature for EVM and IMA
+Date: Sun,  5 Apr 2026 19:12:21 -0400
+Message-ID: <20260405231224.4008298-1-stefanb@linux.ibm.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA1MDA5MyBTYWx0ZWRfX9GgOeHt1rQDv
- AgP+ecmUM49bWtBukUup04czkM01xy6etEm8SNyUhJ52AEbts4x7YnpmaiPau+eFAwlBHXS4Re8
- nvR9/ExE0TaFzQ7dqDddBtDgsDBVM38ywdpvb21H3kRk9nhO33CkOS7g0cqRh0Zy+L4tFTlfODj
- xGpUMbOUnhdV9gDaqrRLDaEVm3D75XlrHT/DR6Gy4NA0knA9FUn1pjJGWvqZqwLBPY/fI+l/Snw
- g4MPIRCChAQjE7LjW7qbQRR2Zf87YU11eEORa9ufnHyiNLHbj0hyBWzIt0LPs8DV2NS0KENG0aB
- tjNupyoS4jMXQ+hParhoRokyoxl0oEnJCZOkrQg452XDGmYtGce95Me2oVksVEFejqkDrRKNwbC
- AtKTY+8PN8gMJJonpMRqVrMljbM5cRKHogoj933PAc10xfaAiS8cfFwRNRlTPMaZHMoJ3Og49Cg
- HEoYFa+bIsGYGTfv+fQ==
-X-Proofpoint-GUID: YR3c2X_DNaOVaTy6Jtq3kzorsc7bkum2
-X-Proofpoint-ORIG-GUID: YR3c2X_DNaOVaTy6Jtq3kzorsc7bkum2
-X-Authority-Analysis: v=2.4 cv=HJvO14tv c=1 sm=1 tr=0 ts=69d22f68 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=KLiygr_y7qZakWKfXh0A:9
- a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-GUID: -JaDRlSmmcmS6v8N6ivBu5aXB5UwCZrU
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA1MDIzNyBTYWx0ZWRfX9HNTZ0d+V28s
+ Dmi79SuVYtO0kzTINh701IMdz3bijIjHix+eND09bWlesc5qjsYBP3DuuO7PQQwh8aWDqa07tGa
+ NON8UcWlgZqmei+VKuMu6j7YpIKj6GFo/gf/IE8rCPWMxpDmnP+EtF7vGITWwt7RD1SIwvPutjY
+ /AZL+IJbtEnclXsbPMKpFBJv5YQMNku0iE9XL3Y6BB+YbOdG+GaDVh0TBNieb6c0w9YDjZz5JdI
+ fOIY0FsV6E4ADFsupaq8Ke5vUsfMw6AuTfGTcxKe92cGJ9fzXmJZNvDn0iRtLcVQu6zZll5UNfQ
+ dND5gN+8IA+u64tzDbUvtFnphRxog61kC1IgqxJPBgjqItwCKdTAgaglKGFG9rvJZ8xX4CjQCsV
+ SRvsUThq0NKcRGEscF0IBxXCeChYmyGpgiiJDtA+3G5TOG6FieWVADaxJbMn0MjPx2yy07A8LTp
+ KSLDNzMWIFJaSaTdBSA==
+X-Authority-Analysis: v=2.4 cv=b+u/I9Gx c=1 sm=1 tr=0 ts=69d2ec62 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=Y2IxJ9c9Rs8Kov3niI8_:22 a=6z2kdCIDKq9zZarjRZwA:9 a=ZXulRonScM0A:10
+ a=zZCYzV9kfG8A:10
+X-Proofpoint-ORIG-GUID: -JaDRlSmmcmS6v8N6ivBu5aXB5UwCZrU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-05_03,2026-04-03_01,2025-10-01_01
+ definitions=2026-04-05_07,2026-04-03_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- malwarescore=0 spamscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 spamscore=0 priorityscore=1501 clxscore=1015
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604050093
-X-Spamd-Result: default: False [-2.16 / 15.00];
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604050237
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9122-lists,linux-integrity=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stefanb@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9121-lists,linux-integrity=lfdr.de];
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	NEURAL_HAM(-0.00)[-1.000];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: DE2EE39E013
+X-Rspamd-Queue-Id: 1F26C3A01BF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, 2026-03-30 at 13:13 -0700, Eric Biggers wrote:
-> On Tue, Mar 24, 2026 at 04:39:27PM -0400, Mimi Zohar wrote:
-> > + * IMA signature version 3 disambiguates the data that is signed by
-> > + * indirectly signing the hash of the ima_file_id structure data.
->=20
-> The right way to think about it is that it's the ima_file_id itself that
-> is being signed and verified, and taking the hash of it is only a
-> workaround for legacy algorithms that can only sign and verify hashes.
-> With modern algorithms like Ed25519 and ML-DSA that accept
-> arbitrary-length messages, that workaround won't be needed.
+Based on IMA sigv3 type of signatures, add support for ML-DSA signature
+for EVM and IMA. Use the existing ML-DSA hashless signing mode (pure mode).
 
-I'll keep that in mind.  As previously discussed, the hashes are being
-calculated for other purposes, like inclusion in the IMA measurement list a=
-nd
-the audit log.  Providing the potentially large, variable sized data so tha=
-t the
-crypto signing/verifying algorithm can recalculate the hash is superfluous.=
-=20
-Your recommendation of signing the ima_file_id works nicely.
+   Stefan
 
-thanks!
+Stefan Berger (3):
+  crypto: public_key: Remove check for valid hash_algo for ML-DSA keys
+  integrity: Refactor asymmetric_verify for reusability
+  integrity: Add support for sigv3 verification using ML-DSA keys
 
-Mimi
+ crypto/asymmetric_keys/public_key.c    |   5 -
+ security/integrity/digsig_asymmetric.c | 126 +++++++++++++++++++++----
+ 2 files changed, 107 insertions(+), 24 deletions(-)
+
+
+base-commit: 82bbd447199ff1441031d2eaf9afe041550cf525
+-- 
+2.53.0
+
 
