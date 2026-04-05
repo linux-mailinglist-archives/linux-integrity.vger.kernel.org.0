@@ -1,159 +1,168 @@
-Return-Path: <linux-integrity+bounces-9120-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9121-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IOApA/Oyzml+pQYAu9opvQ
-	(envelope-from <linux-integrity+bounces-9120-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 02 Apr 2026 20:18:27 +0200
+	id QGrpIHUv0mlFUAcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9121-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 05 Apr 2026 11:46:29 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E5F638D008
-	for <lists+linux-integrity@lfdr.de>; Thu, 02 Apr 2026 20:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE2EE39E013
+	for <lists+linux-integrity@lfdr.de>; Sun, 05 Apr 2026 11:46:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB72730440BF
-	for <lists+linux-integrity@lfdr.de>; Thu,  2 Apr 2026 18:12:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 62AE430086EC
+	for <lists+linux-integrity@lfdr.de>; Sun,  5 Apr 2026 09:46:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F289C374187;
-	Thu,  2 Apr 2026 18:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83341B6D1A;
+	Sun,  5 Apr 2026 09:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="PZiHFbl6"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Bj9BepNA"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.26.1.71])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B26373C07;
-	Thu,  2 Apr 2026 18:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.26.1.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B210D1F92E
+	for <linux-integrity@vger.kernel.org>; Sun,  5 Apr 2026 09:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775153525; cv=none; b=DYGOv8Tg3V933gvBu1E8+Pqx9e9Ki+EsEbytRCky+CvrENqaek9hSy3oMV4qQu7jSgoAP6XjAr+4PQkjiRgQaDXpnAM/5kFpEPqYPQnyLJeSlwuEPak0/YPUROhGdo35SyBp8a6p5YBwMAlBHNe7wFcirPx3jtjRHc7mSFjMzwI=
+	t=1775382386; cv=none; b=uObauQ0f6myAsmO4kX4yLCNcbZDTWhYYYKDILTl83MHV+hZHgPnu71GGe4BPuT52pXME4j1ODASeALqJ434tivo4v0EoPnkTuxGh43H+jeLkFRERXYa2QJT5ZileKTNo8+DpVa4s1DTtG+Rhe5jW00W3v+seHYDV5Cv/yQ+yeLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775153525; c=relaxed/simple;
-	bh=j5phvZtHnGC+rv5Ivu5FcvsJiXH6M7sRc5K8MdsGmz0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=U1SctGYTbmJe5IWmZMEjuCQMePDZI7+lPyBhpfbLARtp4DGC+PKqhst5D+qwtIP4upY4M7Ai1ENvt7wTy0Lv++Fy4/RwkKB+LF4uWr8W7qYi9DlqBOZhY7E8T/J68oD2plXCxSp4tVVmNLbY3Z3tOkvDttEULEGAdVHzmel0K3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=PZiHFbl6; arc=none smtp.client-ip=52.26.1.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1775153524; x=1806689524;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HPrgD0gFn9XH2K603ipb0GsV9ZsxI0ma86h25Xlg5cM=;
-  b=PZiHFbl6iWzMdIkRZFmVBgc47rb/DAcjFYGBDKMuQlbfEvqc7B08xynK
-   jXZ+Z0XxiixlCe1GSAW3SH6gmX8JJSPYBAu52la+Bw31YP5atxzCBzyoL
-   1cfGEU71XMzzXm4/pnF0uKXlPImaBU4smcuI4aObkxpKNMuNgQCpOzSqo
-   iFXAa8QjBlBLYJ+q3TE8GvqksKGf0uHml8yOv9ynlex+2Qc2dtcd2zaeY
-   ZlMA0D4C5HXLDpRfCerLWFG5gznc+PtpmmWYP39jwjZaQaG1ystdH/yp6
-   0wqJbgv38n4bdKBRvIngXWozomFzMH7bJYtfMWKKDHdSGe59sBICDd3Ka
-   A==;
-X-CSE-ConnectionGUID: aXHbrcVoSM+H8lbcyFTBCQ==
-X-CSE-MsgGUID: W6vXUdCWTbqHk8kxRxdVbQ==
-X-IronPort-AV: E=Sophos;i="6.23,156,1770595200"; 
-   d="scan'208";a="16441061"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2026 18:12:04 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:13607]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.38.193:2525] with esmtp (Farcaster)
- id a2cbbcfa-97c9-40a7-a7e3-6a8bc043a356; Thu, 2 Apr 2026 18:12:03 +0000 (UTC)
-X-Farcaster-Flow-ID: a2cbbcfa-97c9-40a7-a7e3-6a8bc043a356
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Thu, 2 Apr 2026 18:12:02 +0000
-Received: from dev-dsk-gunnarku-2c-36117f29.us-west-2.amazon.com
- (172.23.139.22) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Thu, 2 Apr 2026
- 18:12:02 +0000
-From: Gunnar Kudrjavets <gunnarku@amazon.com>
-To: <peterhuewe@gmx.de>, <jarkko@kernel.org>
-CC: <jgg@ziepe.ca>, <noodles@meta.com>, <linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Justinien Bouron <jbouron@amazon.com>
-Subject: [PATCH] tpm: Fix auth session leak in tpm2_get_random() error path
-Date: Thu, 2 Apr 2026 18:11:39 +0000
-Message-ID: <20260402181156.29396-1-gunnarku@amazon.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1775382386; c=relaxed/simple;
+	bh=YzVK2g0iRHSCPN65dVWpouQkEsph4o/79GQ0dF/KqXY=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=d2sPd/9RY77SoK9GWc8EiN0Zgvlk1Ti6NNCrcSNxEgaoy4wvOHARek9FqV0GhzghOHg2yoeOLSlT9nJ9GKkg80qjriQVTRzttKTppiDJDKo7fHNMAX+2UdQxYjiWAm3fqFvzaGHqKH801seDykpiYcV4bw3hTTFdiPuuBcB12+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Bj9BepNA; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6351t9VQ1439413;
+	Sun, 5 Apr 2026 09:46:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=/JrWBV
+	aBfwnHUd0q8ZmJAwO/eZQeN1XbPVDJZUvLDCo=; b=Bj9BepNA3RHd99ayCMmU6g
+	F2PBzDg7dpblJJ1t75e/olp3sD/MXOkeToVlK7ADpTa5YbnuOna088N0ZgtdYEnl
+	sTk6TauOWuyIA9mn8MNSRJiPDCqXyxAsST0apv6rNJe5cDaFHo7xf9f5J78gjidJ
+	zXGnB/IpehWYgPV2FyTrdYYI2UVp4wgwY6e9x/fXKQ3EtO1j8rzK+G/+tY1kPXol
+	RD80Ge21T5wBsAY9M7u3PfaGDjMEEsToKvM/kih1tWBpCn+dOMQoem6ig52gSXsd
+	aiGIyGMB/CpgSMD+zFoKLTKbBkrOCERVuG1WadcjCY7ZXUDuZN3PUKlllByuGFeg
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4datc2k6cx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 05 Apr 2026 09:46:16 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63594ve4020298;
+	Sun, 5 Apr 2026 09:46:15 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dbdyn8ys6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 05 Apr 2026 09:46:15 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6359kEkZ30540342
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 5 Apr 2026 09:46:14 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 12E5E58056;
+	Sun,  5 Apr 2026 09:46:14 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id ED5FB58052;
+	Sun,  5 Apr 2026 09:46:12 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.4.240])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Sun,  5 Apr 2026 09:46:12 +0000 (GMT)
+Message-ID: <d57329c163a9e1427206ae1ab60720d7ae7e07d8.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/3] ima: Define asymmetric_verify_v3() to verify IMA
+ sigv3 signatures
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-integrity@vger.kernel.org, Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20260330201336.GE4303@sol>
+References: <20260324203929.2475782-1-zohar@linux.ibm.com>
+	 <20260324203929.2475782-2-zohar@linux.ibm.com> <20260330201336.GE4303@sol>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 05 Apr 2026 05:46:11 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D045UWA003.ant.amazon.com (10.13.139.46) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-X-Spamd-Result: default: False [-7.66 / 15.00];
-	WHITELIST_DMARC(-7.00)[amazon.com:D:+];
-	MID_CONTAINS_FROM(1.00)[];
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDA1MDA5MyBTYWx0ZWRfX9GgOeHt1rQDv
+ AgP+ecmUM49bWtBukUup04czkM01xy6etEm8SNyUhJ52AEbts4x7YnpmaiPau+eFAwlBHXS4Re8
+ nvR9/ExE0TaFzQ7dqDddBtDgsDBVM38ywdpvb21H3kRk9nhO33CkOS7g0cqRh0Zy+L4tFTlfODj
+ xGpUMbOUnhdV9gDaqrRLDaEVm3D75XlrHT/DR6Gy4NA0knA9FUn1pjJGWvqZqwLBPY/fI+l/Snw
+ g4MPIRCChAQjE7LjW7qbQRR2Zf87YU11eEORa9ufnHyiNLHbj0hyBWzIt0LPs8DV2NS0KENG0aB
+ tjNupyoS4jMXQ+hParhoRokyoxl0oEnJCZOkrQg452XDGmYtGce95Me2oVksVEFejqkDrRKNwbC
+ AtKTY+8PN8gMJJonpMRqVrMljbM5cRKHogoj933PAc10xfaAiS8cfFwRNRlTPMaZHMoJ3Og49Cg
+ HEoYFa+bIsGYGTfv+fQ==
+X-Proofpoint-GUID: YR3c2X_DNaOVaTy6Jtq3kzorsc7bkum2
+X-Proofpoint-ORIG-GUID: YR3c2X_DNaOVaTy6Jtq3kzorsc7bkum2
+X-Authority-Analysis: v=2.4 cv=HJvO14tv c=1 sm=1 tr=0 ts=69d22f68 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=KLiygr_y7qZakWKfXh0A:9
+ a=QEXdDO2ut3YA:10 a=zZCYzV9kfG8A:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-05_03,2026-04-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
+ malwarescore=0 spamscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2604050093
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[amazon.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[amazon.com:s=amazoncorp2];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9120-lists,linux-integrity=lfdr.de];
-	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[gunnarku@amazon.com,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[amazon.com:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 8E5F638D008
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9121-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: DE2EE39E013
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-When tpm_buf_fill_hmac_session() fails inside the do-while loop in
-tpm2_get_random(), the function returns directly after destroying the
-buffer, without ending the auth session via tpm2_end_auth_session().
+On Mon, 2026-03-30 at 13:13 -0700, Eric Biggers wrote:
+> On Tue, Mar 24, 2026 at 04:39:27PM -0400, Mimi Zohar wrote:
+> > + * IMA signature version 3 disambiguates the data that is signed by
+> > + * indirectly signing the hash of the ima_file_id structure data.
+>=20
+> The right way to think about it is that it's the ima_file_id itself that
+> is being signed and verified, and taking the hash of it is only a
+> workaround for legacy algorithms that can only sign and verify hashes.
+> With modern algorithms like Ed25519 and ML-DSA that accept
+> arbitrary-length messages, that workaround won't be needed.
 
-This leaks the TPM auth session resource. All other error paths within
-the loop correctly reach the 'out' label which calls both
-tpm_buf_destroy() and tpm2_end_auth_session().
+I'll keep that in mind.  As previously discussed, the hashes are being
+calculated for other purposes, like inclusion in the IMA measurement list a=
+nd
+the audit log.  Providing the potentially large, variable sized data so tha=
+t the
+crypto signing/verifying algorithm can recalculate the hash is superfluous.=
+=20
+Your recommendation of signing the ima_file_id works nicely.
 
-Fix this by replacing the early return with a goto to the existing 'out'
-label, which already handles both cleanup operations. The redundant
-tpm_buf_destroy() call is removed since 'out' takes care of it.
+thanks!
 
-Fixes: 6e9722e9a7bf ("tpm2-sessions: Fix out of range indexing in name_size")
-Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
-Reviewed-by: Justinien Bouron <jbouron@amazon.com>
----
- drivers/char/tpm/tpm2-cmd.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
-index e00f668f8c84..b11e6fa8b740 100644
---- a/drivers/char/tpm/tpm2-cmd.c
-+++ b/drivers/char/tpm/tpm2-cmd.c
-@@ -295,10 +295,8 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
- 		}
- 		tpm_buf_append_u16(&buf, num_bytes);
- 		err = tpm_buf_fill_hmac_session(chip, &buf);
--		if (err) {
--			tpm_buf_destroy(&buf);
--			return err;
--		}
-+		if (err)
-+			goto out;
- 
- 		err = tpm_transmit_cmd(chip, &buf,
- 				       offsetof(struct tpm2_get_random_out,
-
-base-commit: 7f2a32c0e87814f0e7852b17fa9f10321f882c36
--- 
-2.47.3
-
+Mimi
 
