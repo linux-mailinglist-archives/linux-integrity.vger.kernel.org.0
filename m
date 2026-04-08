@@ -1,70 +1,59 @@
-Return-Path: <linux-integrity+bounces-9142-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9143-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CPqaNcAV1mnwAwgAu9opvQ
-	(envelope-from <linux-integrity+bounces-9142-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 08 Apr 2026 10:45:52 +0200
+	id 6JkIOTAZ1mkxBAgAu9opvQ
+	(envelope-from <linux-integrity+bounces-9143-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 08 Apr 2026 11:00:32 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E616F3B9491
-	for <lists+linux-integrity@lfdr.de>; Wed, 08 Apr 2026 10:45:51 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 075063B9863
+	for <lists+linux-integrity@lfdr.de>; Wed, 08 Apr 2026 11:00:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F2C93300D770
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Apr 2026 08:45:45 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6BECF3003491
+	for <lists+linux-integrity@lfdr.de>; Wed,  8 Apr 2026 09:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA163AB262;
-	Wed,  8 Apr 2026 08:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 395CD39E6FC;
+	Wed,  8 Apr 2026 09:00:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tBq+goUZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7DdA8z8"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF7E73AC0FE;
-	Wed,  8 Apr 2026 08:45:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C8C351C05;
+	Wed,  8 Apr 2026 09:00:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775637940; cv=none; b=dO44y9TXBZM5BeeRmra+D92npyXcMzAzVN49+SdyuV3Ub4i7Iscb+SQ0KBIhjKtJ5AauNk0FA9/rQPAD514oDeuEDSHTABU1ltLK8iZfOyi5H2LK6aTzzYwJxI2yrqHBPbYqfIFXPXGF8yBznHPoVQcY7Fp9qPS7EZIi1L9qjj8=
+	t=1775638809; cv=none; b=qnZxlpGYHqDx7haXHMhRw37U2mm7PswqTlAzGk3SM6yTeuh7DvXLy3ligvVNZcmwersCYAoWaCMN/UdFxmTxut+LtBqNMm8ByR0ZRNTRfJVdsewA9TkkJhEHwWFTi/aifsM69xmBLF71ZG+wZNkCGul0ElMRax7ECZRnvbTZpCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775637940; c=relaxed/simple;
-	bh=Di02Q8yecbqVyaGkl+vas50Umn2i2DlEdnDDo75n6l4=;
+	s=arc-20240116; t=1775638809; c=relaxed/simple;
+	bh=y/h9jzSlvrAXWw00saDusO19LxC0QhLxb3OJkuh0I8E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oZL/XqDdbuPrhKTkRSkhYpu1fnZ9m389Rztiv2aGv1h07gXNSxXxuXRDT9toQ7DkRhRn0J0B2zdi53Zm1ZxqcQpWP1KqpqdbSKEU4y43pIaXCTh768WwwlhGvt5IPE7C0qJ6LI1Kj32EVewaDIMsFZNAV+mgqc5AXzDsaPGm8RA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tBq+goUZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE355C19424;
-	Wed,  8 Apr 2026 08:45:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=VjHddwePYbbAamBsNgXAnzpfP3hvQByG6TdY0Gziim2+x7D201tkvvT+rqfmTh4gJRSguPcYHgbNX383hNsDXpuGI/kfp6KT9tOremJfhiCJIBdqeB7J7FCqxck7J1po236Cv8Osw56IGrd97MP96TsKqyLe49R5tS2hwpExJDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7DdA8z8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96887C19424;
+	Wed,  8 Apr 2026 09:00:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1775637939;
-	bh=Di02Q8yecbqVyaGkl+vas50Umn2i2DlEdnDDo75n6l4=;
+	s=k20201202; t=1775638809;
+	bh=y/h9jzSlvrAXWw00saDusO19LxC0QhLxb3OJkuh0I8E=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tBq+goUZ+a0yMJO9PYaIRo7GG5e2F0JvI3AjVbMlce1Pf2PuBhsV4e1VElxnn6AJS
-	 FFWbsNphDPm9Juzd6t2NhkvM192TpETr8USRF8TN9zGQO00CCgInDLwDhRMk/j9akq
-	 +De2Lj+lIFaJwvz9HD3yEY8FSJPnUztyFtGS3xjR7nT7JSMNPU1wMoEKQe2+eeDkvA
-	 rYCvggX0kgWcI536IDhycWl1n0g6fPhHQh4+XJaIlw+vDYN2oXx7r/D8dRF1m4if9q
-	 DVrE9jog2y7KOBKyjNe2269pnooGbAvktdUZmzLqoKBq7zZACGLJYYOj/2e06Ub6UF
-	 po/VPVwN8oj0Q==
-Date: Wed, 8 Apr 2026 11:45:35 +0300
+	b=i7DdA8z8LCGG6h94yDqopKUl87zh2eI+kj9ktlquu752CDH2PMTXuKxgDETOinNHi
+	 JXcR5I4UJhgcvIb3vjzDEjlq+gtw5U9CUxmxOSZG49D57VC1DZIijdgykt10m6I4KG
+	 pCfsqK/596nC3eWz2ZWDSdtpFk19ZqjN1wp4A2wom1/Jn1+JlJ5La9ZUQaa2lD/AQm
+	 md+6oefdhy9jPPvrCDukn/uIcoK7hLjePPtN3BXCyjzifcrAL0vJfI2Z6urYRFAfwU
+	 RYF9xZJSo556bbhNhqS8ipy1PHYn9esjMM+/P+snSXv+eF1Tzm75wOYqwlcmnSqUUz
+	 +HqF9WaO5N/+w==
+Date: Wed, 8 Apr 2026 12:00:05 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Alec Brown <alec.r.brown@oracle.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-	"peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-	"jarkko.sakkinen@iki.fi" <jarkko.sakkinen@iki.fi>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>,
-	Ross Philipson <ross.philipson@oracle.com>,
-	"dpsmith@apertussolutions.com" <dpsmith@apertussolutions.com>,
-	Daniel Kiper <daniel.kiper@oracle.com>,
-	Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-	"trenchboot-devel@googlegroups.com" <trenchboot-devel@googlegroups.com>,
-	"ardb@kernel.org" <ardb@kernel.org>
-Subject: Re: [PATCH 4/4] tpm: Move TPM common base definitions to the command
- header
-Message-ID: <adYVrzCqmVVRUxFb@kernel.org>
-References: <20260317160613.2899129-1-alec.r.brown@oracle.com>
- <20260317160613.2899129-5-alec.r.brown@oracle.com>
- <acDSwWnogOE31B76@kernel.org>
- <IA1PR10MB68309FDA0D5450AB2FC0B5BFBC56A@IA1PR10MB6830.namprd10.prod.outlook.com>
+To: Gunnar Kudrjavets <gunnarku@amazon.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, noodles@meta.com,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Justinien Bouron <jbouron@amazon.com>
+Subject: Re: [PATCH] tpm: Fix auth session leak in tpm2_get_random() error
+ path
+Message-ID: <adYZFcidEve-dpgb@kernel.org>
+References: <20260402181156.29396-1-gunnarku@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -73,268 +62,83 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <IA1PR10MB68309FDA0D5450AB2FC0B5BFBC56A@IA1PR10MB6830.namprd10.prod.outlook.com>
+In-Reply-To: <20260402181156.29396-1-gunnarku@amazon.com>
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmx.de,iki.fi,ziepe.ca,oracle.com,apertussolutions.com,googlegroups.com,kernel.org];
-	TAGGED_FROM(0.00)[bounces-9142-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,meta.com,vger.kernel.org,amazon.com];
+	TAGGED_FROM(0.00)[bounces-9143-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	MISSING_XM_UA(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,apertussolutions.com:email,oracle.com:email]
-X-Rspamd-Queue-Id: E616F3B9491
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 075063B9863
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Thu, Mar 26, 2026 at 07:54:36PM +0000, Alec Brown wrote:
-> On Mon, Mar 23, 2026 at 1:42 AM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > On Tue, Mar 17, 2026 at 04:03:35PM +0000, Alec Brown wrote:
-> > > From: Ross Philipson <ross.philipson@oracle.com>
-> > >
-> > > From: Ross Philipson <ross.philipson@oracle.com>
-> > >
-> > > These are top level definitions shared by both TPM 1 and 2 family
-> > > chips. This includes core definitions like TPM localities, common
-> > > crypto algorithm IDs, and the base TPM command header.
-> > >
-> > > Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
-> > > Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
-> > > Signed-off-by: Alec Brown <alec.r.brown@oracle.com>
-> > > ---
-> > >  include/linux/tpm.h         | 50 +--------------------
-> > >  include/linux/tpm_command.h | 89
-> > > +++++++++++++++++++++++++++++++++++++
-> > >  2 files changed, 90 insertions(+), 49 deletions(-)
-> > >
-> > > diff --git a/include/linux/tpm.h b/include/linux/tpm.h index
-> > > 92957452f7a7..a282b7045a24 100644
-> > > --- a/include/linux/tpm.h
-> > > +++ b/include/linux/tpm.h
-> > > @@ -27,49 +27,12 @@
-> > >
-> > >  #include "tpm_command.h"
-> > >
-> > > -#define TPM_DIGEST_SIZE 20	/* Max TPM v1.2 PCR size */
-> > > -
-> > > -#define TPM2_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
-> > > -#define TPM2_MAX_PCR_BANKS	8
-> > > -
-> > >  struct tpm_chip;
-> > >  struct trusted_key_payload;
-> > >  struct trusted_key_options;
-> > >  /* opaque structure, holds auth session parameters like the session
-> > > key */  struct tpm2_auth;
-> > >
-> > > -/* if you add a new hash to this, increment TPM_MAX_HASHES below */
-> > > -enum tpm_algorithms {
-> > > -	TPM_ALG_ERROR		= 0x0000,
-> > > -	TPM_ALG_SHA1		= 0x0004,
-> > > -	TPM_ALG_AES		= 0x0006,
-> > > -	TPM_ALG_KEYEDHASH	= 0x0008,
-> > > -	TPM_ALG_SHA256		= 0x000B,
-> > > -	TPM_ALG_SHA384		= 0x000C,
-> > > -	TPM_ALG_SHA512		= 0x000D,
-> > > -	TPM_ALG_NULL		= 0x0010,
-> > > -	TPM_ALG_SM3_256		= 0x0012,
-> > > -	TPM_ALG_ECC		= 0x0023,
-> > > -	TPM_ALG_CFB		= 0x0043,
-> > > -};
-> > > -
-> > > -/*
-> > > - * maximum number of hashing algorithms a TPM can have.  This is
-> > > - * basically a count of every hash in tpm_algorithms above
-> > > - */
-> > > -#define TPM_MAX_HASHES	5
-> > > -
-> > > -struct tpm_digest {
-> > > -	u16 alg_id;
-> > > -	u8 digest[TPM2_MAX_DIGEST_SIZE];
-> > > -} __packed;
-> > > -
-> > > -struct tpm_bank_info {
-> > > -	u16 alg_id;
-> > > -	u16 digest_size;
-> > > -	u16 crypto_id;
-> > > -};
-> > > -
-> > >  enum TPM_OPS_FLAGS {
-> > >  	TPM_OPS_AUTO_STARTUP = BIT(0),
-> > >  };
-> > > @@ -127,7 +90,7 @@ struct tpm_chip_seqops {
-> > >  	const struct seq_operations *seqops;  };
-> > >
-> > > -/* fixed define for the curve we use which is NIST_P256 */
-> > > +/* Fixed define for the curve we use which is NIST_P256 */
-> > >  #define EC_PT_SZ	32
-> > >
-> > >  /*
-> > > @@ -209,8 +172,6 @@ struct tpm_chip {
-> > >  #endif
-> > >  };
-> > >
-> > > -#define TPM_HEADER_SIZE		10
-> > > -
-> > >  static inline enum tpm2_mso_type tpm2_handle_mso(u32 handle)  {
-> > >  	return handle >> 24;
-> > > @@ -239,15 +200,6 @@ enum tpm_chip_flags {
-> > >
-> > >  #define to_tpm_chip(d) container_of(d, struct tpm_chip, dev)
-> > >
-> > > -struct tpm_header {
-> > > -	__be16 tag;
-> > > -	__be32 length;
-> > > -	union {
-> > > -		__be32 ordinal;
-> > > -		__be32 return_code;
-> > > -	};
-> > > -} __packed;
-> > > -
-> > >  enum tpm_buf_flags {
-> > >  	/* the capacity exceeded: */
-> > >  	TPM_BUF_OVERFLOW	= BIT(0),
-> > > diff --git a/include/linux/tpm_command.h b/include/linux/tpm_command.h
-> > > index ee76fcd5ecef..25a247254140 100644
-> > > --- a/include/linux/tpm_command.h
-> > > +++ b/include/linux/tpm_command.h
-> > > @@ -431,4 +431,93 @@ struct tpm2_context {
-> > >  	__be16 blob_size;
-> > >  } __packed;
-> > >
-> > > +/************************************************/
-> > > +/* TPM Common Defs                              */
-> > > +/************************************************/
-
-
-One nit I just noticed here: let's use kernel standard block comments.
-
-E.g.
-
-/*
- * Common definitions for TPM.
- */
-
-
-> > > +
-> > > +#define TPM_DIGEST_SIZE		20	/* Max TPM v1.2 PCR size */
-> > > +#define TPM_BUFSIZE		4096
-> > > +
-> > > +/*
-> > > + * SHA-512 is, as of today, the largest digest in the TCG algorithm repository.
-> > > + */
-> > > +#define TPM2_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
-> > > +
-> > > +/*
-> > > + * A TPM name digest i.e., TPMT_HA, is a concatenation of TPM_ALG_ID
-> > > +of the
-> > > + * name algorithm and hash of TPMT_PUBLIC.
-> > > + */
-> > > +#define TPM2_MAX_NAME_SIZE	(TPM2_MAX_DIGEST_SIZE + 2)
-> > > +
-> > > +/*
-> > > + * Fixed define for the size of a name.  This is actually HASHALG
-> > > +size
-> > > + * plus 2, so 32 for SHA256
-> > > + */
-> > > +#define TPM2_NULL_NAME_SIZE	34
-> > > +
-> > > +/*
-> > > + * The maximum number of PCR banks.
-> > > + */
-> > > +#define TPM2_MAX_PCR_BANKS	8
-> > > +
-> > > +/* If you add a new hash to this, increment TPM_MAX_HASHES below */
-> > > +enum tpm_algorithms {
-> > > +	TPM_ALG_ERROR		= 0x0000,
-> > > +	TPM_ALG_SHA1		= 0x0004,
-> > > +	TPM_ALG_AES		= 0x0006,
-> > > +	TPM_ALG_KEYEDHASH	= 0x0008,
-> > > +	TPM_ALG_SHA256		= 0x000B,
-> > > +	TPM_ALG_SHA384		= 0x000C,
-> > > +	TPM_ALG_SHA512		= 0x000D,
-> > > +	TPM_ALG_NULL		= 0x0010,
-> > > +	TPM_ALG_SM3_256		= 0x0012,
-> > > +	TPM_ALG_ECC		= 0x0023,
-> > > +	TPM_ALG_CFB		= 0x0043,
-> > > +};
-> > > +
-> > > +/*
-> > > + * The locality (0 - 4) for a TPM, as defined in section 3.2 of the
-> > > + * Client Platform Profile Specification.
-> > > + */
-> > > +enum tpm_localities {
-> > > +	TPM_LOCALITY_0		= 0, /* Static RTM */
-> > > +	TPM_LOCALITY_1		= 1, /* Dynamic OS */
-> > > +	TPM_LOCALITY_2		= 2, /* DRTM Environment */
-> > > +	TPM_LOCALITY_3		= 3, /* Aux Components */
-> > > +	TPM_LOCALITY_4		= 4, /* CPU DRTM Establishment */
-> > > +	TPM_MAX_LOCALITY	= TPM_LOCALITY_4
-> > > +};
-> > > +
-> > > +/*
-> > > + * Structure to represent active PCR algorithm banks usable by the
-> > > + * TPM chip.
-> > > + */
-> > > +struct tpm_bank_info {
-> > > +	u16 alg_id;
-> > > +	u16 digest_size;
-> > > +	u16 crypto_id;
-> > > +};
-> > > +
-> > > +/*
-> > > + * Maximum number of hashing algorithms a TPM can have.  This is
-> > > + * basically a count of every hash in tpm_algorithms above  */
-> > > +#define TPM_MAX_HASHES		5
-> > > +
-> > > +struct tpm_digest {
-> > > +	u16 alg_id;
-> > > +	u8 digest[TPM2_MAX_DIGEST_SIZE];
-> > > +} __packed;
-> > > +
-> > > +#define TPM_HEADER_SIZE		10
-> > > +
-> > > +struct tpm_header {
-> > > +	__be16 tag;
-> > > +	__be32 length;
-> > > +	union {
-> > > +		__be32 ordinal;
-> > > +		__be32 return_code;
-> > > +	};
-> > > +} __packed;
-> > > +
-> > >  #endif
-> > > --
-> > > 2.47.3
-> > >
-> > 
-> > Yep, all looks great and clean to me but exactly for that reason
-> > this needs to the truth serum :-)
-> > 
-> > BR, Jarkko
+On Thu, Apr 02, 2026 at 06:11:39PM +0000, Gunnar Kudrjavets wrote:
+> When tpm_buf_fill_hmac_session() fails inside the do-while loop in
+> tpm2_get_random(), the function returns directly after destroying the
+> buffer, without ending the auth session via tpm2_end_auth_session().
 > 
-> Thanks for taking a look! Glad to hear the patches are looking good!
+> This leaks the TPM auth session resource. All other error paths within
+> the loop correctly reach the 'out' label which calls both
+> tpm_buf_destroy() and tpm2_end_auth_session().
 > 
-> Alec Brown 
+> Fix this by replacing the early return with a goto to the existing 'out'
+> label, which already handles both cleanup operations. The redundant
+> tpm_buf_destroy() call is removed since 'out' takes care of it.
+> 
+> Fixes: 6e9722e9a7bf ("tpm2-sessions: Fix out of range indexing in name_size")
+> Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
+> Reviewed-by: Justinien Bouron <jbouron@amazon.com>
+> ---
+>  drivers/char/tpm/tpm2-cmd.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> index e00f668f8c84..b11e6fa8b740 100644
+> --- a/drivers/char/tpm/tpm2-cmd.c
+> +++ b/drivers/char/tpm/tpm2-cmd.c
+> @@ -295,10 +295,8 @@ int tpm2_get_random(struct tpm_chip *chip, u8 *dest, size_t max)
+>  		}
+>  		tpm_buf_append_u16(&buf, num_bytes);
+>  		err = tpm_buf_fill_hmac_session(chip, &buf);
+> -		if (err) {
+> -			tpm_buf_destroy(&buf);
+> -			return err;
+> -		}
+> +		if (err)
+> +			goto out;
+>  
+>  		err = tpm_transmit_cmd(chip, &buf,
+>  				       offsetof(struct tpm2_get_random_out,
+> 
+> base-commit: 7f2a32c0e87814f0e7852b17fa9f10321f882c36
+> -- 
+> 2.47.3
+> 
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 BR, Jarkko
 
