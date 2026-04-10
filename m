@@ -1,79 +1,78 @@
-Return-Path: <linux-integrity+bounces-9152-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9153-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uHdvKe7g12kVUQgAu9opvQ
-	(envelope-from <linux-integrity+bounces-9152-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 09 Apr 2026 19:25:02 +0200
+	id j/4sJE9Z2GlxcQgAu9opvQ
+	(envelope-from <linux-integrity+bounces-9153-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Apr 2026 03:58:39 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00E223CE15A
-	for <lists+linux-integrity@lfdr.de>; Thu, 09 Apr 2026 19:25:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAABD3D1428
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Apr 2026 03:58:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D5FA9301FD72
-	for <lists+linux-integrity@lfdr.de>; Thu,  9 Apr 2026 17:21:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3515A3008774
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Apr 2026 01:58:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347DD2E2EF9;
-	Thu,  9 Apr 2026 17:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0806831F99B;
+	Fri, 10 Apr 2026 01:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ay7P69eS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PQLwy4i3"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F038E2882BE;
-	Thu,  9 Apr 2026 17:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.42.203.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B1D31E85B;
+	Fri, 10 Apr 2026 01:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775755276; cv=none; b=ohCj8afVwlDjSk+3eS051+V7Th92X6yg90w6JizLQjgItL/pKEIpctZMkh4CvgQgLDvrUZvNRcN5UVoBj9S0bwt1OKkuSJ9ciunOR4RtFJU+ui03Nhzb4ZO82M06cvp9zy/x3a6UKNV3iRhUjbPpJkFlFLU7Fs5UeHFHhxpYi8E=
+	t=1775786303; cv=none; b=h+x8McajWnz/deXSrJIeuXdratF5NRdqb5OkLXfA48TkzVpYDkVAcUAA1ZH+UvnTA6rfISx9dUg9wDB9wOoGW/s1LtBxz7lUB3ahU4tA3YGCTA8tDK0KvNI+Hb/k5L/sb3UdXSDSH2wt1pt0zNryfyoD0I0Inl+5ebwiNOmOA0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775755276; c=relaxed/simple;
-	bh=5tG1EPi0VxoqW3reqQEG+XZqNRNDxOLXl03a722CBlE=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YVskeNbmVj2Fbu9K+kJroXgg/6ieR+1CMsQo5K7vci3kM5ZxvwE7R5bIKDiIxXTWlQiK6EKpcJSMi702vCmZ/q7npbfLBKUv6baUz5wmxV1HPCuJubm0FegYQUkpK5ONnV4vWEd+J0YqpIHmca86jHXGrFnNwvU/n2E0ettppk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ay7P69eS; arc=none smtp.client-ip=52.42.203.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1775755275; x=1807291275;
+	s=arc-20240116; t=1775786303; c=relaxed/simple;
+	bh=0Jexb/ZMubjHOzDcHUapO893VmlNg0yu95HrTu+JPRQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tCTb/nq+Nm4+apGJKmSegAOvbR8XL/5TINDHe8NsIUCjm3mM8Bk8inB3Siil8AKLhfF9w+1a6TMnYxIZlucIiL5jKIfR7wNJ+OreNsDmJngxtaMhslgKvnwKlbn+DSIQ9tlLvykljL6j8KlpyitYfh/bkSB5ecaHpq1L05Jf3HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PQLwy4i3; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1775786302; x=1807322302;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=FjHKaKQGEs72xcYsL6Jb1W0JgeM498XsI45jj3ZndfQ=;
-  b=ay7P69eS6RrYKeh/zl2M2lJy6dcUlbivbw+huSi+gp415gzR+dE0LWRV
-   m3UV7AMl/XeocEODZH1ux3VnOUzB0Y3S66zCKrenpwaMTRG/1NB1p4deY
-   3QoWGPEmzF6BE/t03OMjBXiRfkwuweN2JrBP1SvHpMtsIcJ5kk+BrQ007
-   pSy1RD3ErLrq18GPNVxnjV2mJoMvS+4PJp5LPz9t0w2i3A3uAAx0KDucg
-   t09lx2pEbM35Ed7P1HXz+QODBH7GbJk2h5FQ0JM6rnmFqdtX5xqkICGaJ
-   YipMzt8UeWUDfkZovr9AJbunQ7TI8s/cwoOh5IShMlKlCaiTn0AQaFMQy
-   w==;
-X-CSE-ConnectionGUID: DLafZoozQ3CNkuWiLb8Q3w==
-X-CSE-MsgGUID: J9n4cW5sTxCkfgNYSg1EjA==
-X-IronPort-AV: E=Sophos;i="6.23,170,1770595200"; 
-   d="scan'208";a="16950480"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2026 17:21:14 +0000
-Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.111:12962]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.1.88:2525] with esmtp (Farcaster)
- id 7d38fb97-8f97-46a7-a9dd-191a0b5236d8; Thu, 9 Apr 2026 17:21:14 +0000 (UTC)
-X-Farcaster-Flow-ID: 7d38fb97-8f97-46a7-a9dd-191a0b5236d8
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Thu, 9 Apr 2026 17:21:13 +0000
-Received: from dev-dsk-gunnarku-2c-36117f29.us-west-2.amazon.com
- (172.23.139.22) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Thu, 9 Apr 2026
- 17:21:13 +0000
-From: Gunnar Kudrjavets <gunnarku@amazon.com>
-To: <peterhuewe@gmx.de>, <jarkko@kernel.org>
-CC: <jgg@ziepe.ca>, <James.Bottomley@HansenPartnership.com>,
-	<ardb@kernel.org>, <linux-integrity@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Justinien Bouron <jbouron@amazon.com>
-Subject: [PATCH] tpm: Use kfree_sensitive() to free auth session in tpm_dev_release()
-Date: Thu, 9 Apr 2026 17:20:54 +0000
-Message-ID: <20260409172108.11600-1-gunnarku@amazon.com>
-X-Mailer: git-send-email 2.47.3
+  bh=0Jexb/ZMubjHOzDcHUapO893VmlNg0yu95HrTu+JPRQ=;
+  b=PQLwy4i3zHZeXLiHCJ46Eq//MMypBkaoWkMTRyhVB4/CIozCYIv4zcPO
+   m0uRwfi1VhZhgNifnI2agnHVyeV00Uuug8xXhMsZ582IWJxnH5onMNce4
+   Z8JHhJlij7rotpC46SITw91rpDeH48fEOzK2qREQ7dAhjqwbuukT9Ba6T
+   hpuZLdK20sH9cl9EaJhFCQ+Wy7wEHjAXO0F6BKQA8xkjb1bw2VAT1vbzV
+   ZYIyJ7kOKu2tNd7k9AOwROBYNxzzuwZjsmtcXySbPM+7HzG6itJ8Eu8Zg
+   yFAVjfbGIwmOiETUpssKZ2oPeD16/ncAcAfyCx8UQLPEEFX6SEBDg11sV
+   A==;
+X-CSE-ConnectionGUID: /Z8PIE2cSsmMrtXjcPgVtQ==
+X-CSE-MsgGUID: o+dRy1IaTtOytBF1AGJtiQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11754"; a="76923702"
+X-IronPort-AV: E=Sophos;i="6.23,170,1770624000"; 
+   d="scan'208";a="76923702"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2026 18:58:22 -0700
+X-CSE-ConnectionGUID: HomnxG9fTcemmYZ5NlmU5w==
+X-CSE-MsgGUID: uZKtv1DSRjOuQCMRDZohww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,170,1770624000"; 
+   d="scan'208";a="233963751"
+Received: from emr-371.sh.intel.com ([10.67.116.154])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2026 18:58:19 -0700
+From: "Baoli.Zhang" <baoli.zhang@linux.intel.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Serge Hallyn <serge@hallyn.com>
+Cc: "Baoli.Zhang" <baoli.zhang@linux.intel.com>,
+	"lili . li" <lili.li@intel.com>,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] tpm: restore timeout for key creation commands
+Date: Fri, 10 Apr 2026 09:49:39 +0800
+Message-ID: <20260410014940.3557934-1-baoli.zhang@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -81,77 +80,72 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-X-Spamd-Result: default: False [-7.66 / 15.00];
-	WHITELIST_DMARC(-7.00)[amazon.com:D:+];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[amazon.com,quarantine];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[amazon.com:s=amazoncorp2];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9152-lists,linux-integrity=lfdr.de];
-	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
+	TAGGED_FROM(0.00)[bounces-9153-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FREEMAIL_TO(0.00)[gmx.de,kernel.org,ziepe.ca,hallyn.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_NEQ_ENVFROM(0.00)[gunnarku@amazon.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[baoli.zhang@linux.intel.com,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[amazon.com:+];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 00E223CE15A
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-0.999];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: DAABD3D1428
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-tpm_dev_release() uses plain kfree() to free chip->auth, which contains
-sensitive cryptographic material including HMAC session keys, nonces,
-and passphrase data (struct tpm2_auth).
+After the per-command duration map was introduced, TPM2 key creation
+commands (`CREATE_PRIMARY`, `CREATE`, `CREATE_LOADED`) were limited to
+30 seconds.
 
-Every other code path that frees this structure uses kfree_sensitive()
-to zero the memory before releasing it: both tpm2_end_auth_session()
-and tpm_buf_check_hmac_response() do so. The tpm_dev_release() path
-is the only one that does not, leaving key material in freed slab
-memory until it is eventually overwritten.
+On some platforms this is not sufficient and key creation can time out.
+Commit 207696b17f38 ("tpm: use a map for tpm2_calc_ordinal_duration()")
+inadvertently reduced these command timeouts from 300 seconds to 30
+seconds. Restore them to 300 seconds to avoid spurious failures.
 
-Use kfree_sensitive() for consistency with the rest of the driver and
-to ensure session keys are scrubbed during device teardown.
+Fixes: 207696b17f38 ("tpm: use a map for tpm2_calc_ordinal_duration()")
 
-Fixes: 699e3efd6c64 ("tpm: Add HMAC session start and end functions")
-Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
-Reviewed-by: Justinien Bouron <jbouron@amazon.com>
+Signed-off-by: Baoli.Zhang <baoli.zhang@linux.intel.com>
+Co-developed-by: lili.li <lili.li@intel.com>
 ---
- drivers/char/tpm/tpm-chip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/char/tpm/tpm2-cmd.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index 082b910ddf0d..17d9d71774ec 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -247,7 +247,7 @@ static void tpm_dev_release(struct device *dev)
- 	kfree(chip->work_space.context_buf);
- 	kfree(chip->work_space.session_buf);
- #ifdef CONFIG_TCG_TPM2_HMAC
--	kfree(chip->auth);
-+	kfree_sensitive(chip->auth);
- #endif
- 	kfree(chip);
- }
-
-base-commit: 03e5553f5fb99cb47c315e167a604a9c69e6f724
+diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+index 3a77be7ebf4aa..430022f695f24 100644
+--- a/drivers/char/tpm/tpm2-cmd.c
++++ b/drivers/char/tpm/tpm2-cmd.c
+@@ -71,9 +71,9 @@ static const struct {
+ 	{TPM2_CC_HIERARCHY_CHANGE_AUTH, 2000},
+ 	{TPM2_CC_GET_CAPABILITY, 750},
+ 	{TPM2_CC_NV_READ, 2000},
+-	{TPM2_CC_CREATE_PRIMARY, 30000},
+-	{TPM2_CC_CREATE, 30000},
+-	{TPM2_CC_CREATE_LOADED, 30000},
++	{TPM2_CC_CREATE_PRIMARY, 300000},
++	{TPM2_CC_CREATE, 300000},
++	{TPM2_CC_CREATE_LOADED, 300000},
+ };
+ 
+ /**
 -- 
-2.47.3
+2.43.0
 
 
