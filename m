@@ -1,183 +1,154 @@
-Return-Path: <linux-integrity+bounces-9167-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9168-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CIauJ3bO3GmcWQkAu9opvQ
-	(envelope-from <linux-integrity+bounces-9167-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2026 13:07:34 +0200
+	id UBmlBVwO3WlsZQkAu9opvQ
+	(envelope-from <linux-integrity+bounces-9168-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2026 17:40:12 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9C483EB1A2
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2026 13:07:33 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E73C3EE155
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2026 17:40:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id EDEA5300BC6C
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2026 11:03:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 76B1230234EA
+	for <lists+linux-integrity@lfdr.de>; Mon, 13 Apr 2026 15:39:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632D430FF05;
-	Mon, 13 Apr 2026 11:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C46E33E122F;
+	Mon, 13 Apr 2026 15:39:41 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1543BAD8C
-	for <linux-integrity@vger.kernel.org>; Mon, 13 Apr 2026 11:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9663E122E;
+	Mon, 13 Apr 2026 15:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776078230; cv=none; b=FJ3dLvuRJ/rF7mfvK+YOw8pQTaGidUDJywfaPIgW8zng85NFu+b8BDo8NBqQAo791y4E3SzrSVs/eXXE+VghEvPT4eEvuIxJCSINRebH6JA6/ucItOMw6IsrEVxBHNZTjapGTqXcJQMabIL3Ax8t6Uxs7Cm+2xz0r0JGt9+ikBc=
+	t=1776094781; cv=none; b=GXJhixyPEni82bFYr2O2JQys5k5iGtr/PqJddOE843qoz0kNM25ll6wflYJKV32KqW3+bD3aLyAEu+5ZCh7PW+j2rQiYADYWtQW7j/dsZqO7Pn0y8SKHYCVnPP1NGHpPTUvFw4i2h0xIQlR6ZuzjSbg/8miO2sqopzJ2FfYty00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776078230; c=relaxed/simple;
-	bh=MeOutffsjD4+Sqt7uudqdDFUVeC0MMpC/NDFeB5xch8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BsH7pGMti1OgohBVCVapxHDOg44O12MRDjQj5riJL2G0VSIrzPeRODQ+e88tFqx6QUIyiQSxxIc6fniBgsQLDLwp3tDrdQ4BIsHYEvuxf0uC5+Oc1bcfnHTfbQD/Ne5Y2OvkFslBfwugCcdOEU7TemJeBq3UZo+sECSBoeNZrPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1wCF4n-0007q2-4q; Mon, 13 Apr 2026 13:03:33 +0200
-Message-ID: <20e9f021-f6b3-4e19-9e1b-93b1e00eb803@pengutronix.de>
-Date: Mon, 13 Apr 2026 13:03:30 +0200
+	s=arc-20240116; t=1776094781; c=relaxed/simple;
+	bh=KLHXMxmpNRD6wvf4gCGYsc4aoUyDu7HAGgr8qoNH8eU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bRI2sZdLUirq4tLfX080V96ITfaCs98SlHbNpQq54hJLcgVyCkXuqpaBR4ClvyqOCK8o/bRV0E1NYgtGKbMDHrDcXjgs8kbQLX861DEeWWzdjqzFRNF5g19bvjTGfwTG6ICWPuizqEUCzFqHKi+No+osVwJkaZK6bUtjOqaqXcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.196])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fvWFs5CDTztf5N;
+	Mon, 13 Apr 2026 23:16:17 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.47])
+	by mail.maildlp.com (Postfix) with ESMTP id E0FB84056C;
+	Mon, 13 Apr 2026 23:20:14 +0800 (CST)
+Received: from [10.204.63.22] (unknown [10.204.63.22])
+	by APP1 (Coremail) with SMTP id LxC2BwC3xN6mCd1pR5okAA--.31610S2;
+	Mon, 13 Apr 2026 16:20:14 +0100 (CET)
+Message-ID: <d95993e3d879bec4c9e3416906d409cca9c8ffeb.camel@huaweicloud.com>
+Subject: Re: [PATCH] evm: zero-initialize the evm_xattrs read buffer
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg
+	 <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, James Morris
+	 <jmorris@namei.org>, Serge Hallyn <serge@hallyn.com>, 
+	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Mon, 13 Apr 2026 17:20:04 +0200
+In-Reply-To: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
+References: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] trusted-keys: move pr_fmt out of trusted-type.h
-To: Marco Felsch <m.felsch@pengutronix.de>, Josh Snyder <josh@code406.com>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
- Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
- David Howells <dhowells@redhat.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
- "Serge E. Hallyn" <serge@hallyn.com>, David Gstir <david@sigma-star.at>,
- sigma star Kernel Team <upstream+dcp@sigma-star.at>,
- Srish Srinivasan <ssrish@linux.ibm.com>, Nayna Jain <nayna@linux.ibm.com>,
- Sumit Garg <sumit.garg@kernel.org>, linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260411-trusted-key-header-v1-1-407c2cd954db@code406.com>
- <cie3zqy5phlopdrxsxpniujwr6i3cpdkfrwjvth3a7ypwjx3ee@hqjl67jnfdch>
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Content-Language: en-US, de-DE, de-BE
-In-Reply-To: <cie3zqy5phlopdrxsxpniujwr6i3cpdkfrwjvth3a7ypwjx3ee@hqjl67jnfdch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-integrity@vger.kernel.org
+X-CM-TRANSID:LxC2BwC3xN6mCd1pR5okAA--.31610S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFW5Aw4UAr1fGw4kZF4kCrg_yoW8Jw4xpF
+	sxtayDtrn8XrykCF98AF1rua4rW3yYkryUGrsavw1vvF9IvryxXr92krWUur1rKrW0yw45
+	t3Wvyr1Yk3Z0qaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOB
+	MKDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgACBGnckwUOtQACse
 X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9167-lists,linux-integrity=lfdr.de];
-	DMARC_NA(0.00)[pengutronix.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[19];
+	FREEMAIL_CC(0.00)[gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9168-lists,linux-integrity=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DMARC_NA(0.00)[huaweicloud.com];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[a.fatoum@pengutronix.de,linux-integrity@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.999];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.983];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity,dcp];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[code406.com:email,pengutronix.de:mid,pengutronix.de:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E9C483EB1A2
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,huaweicloud.com:mid,iscas.ac.cn:email]
+X-Rspamd-Queue-Id: 8E73C3EE155
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi,
+On Tue, 2026-04-07 at 14:09 +0800, Pengpeng Hou wrote:
+> evm_read_xattrs() allocates size + 1 bytes, fills them from the list of
+> enabled xattrs and then passes strlen(temp) to simple_read_from_buffer().
+> When no configured xattrs are enabled, the fill loop stores nothing and
+> temp[0] remains uninitialized, so strlen() reads beyond initialized
+> memory.
+>=20
+> Use kzalloc() so the empty-list case stays a valid empty C string.
 
-On 4/13/26 1:01 PM, Marco Felsch wrote:
-> Hi Josh,
-> 
-> On 26-04-11, Josh Snyder wrote:
->> Defining pr_fmt in a widely-included header leaks the "trusted_key: "
->> prefix into every translation unit that transitively includes
->> <keys/trusted-type.h>. dm-crypt, for example, ends up printing
->>
->>     trusted_key: device-mapper: crypt: dm-10: INTEGRITY AEAD ERROR ...
->>
->> dm-crypt began including <keys/trusted-type.h> in commit 363880c4eb36
->> ("dm crypt: support using trusted keys"), which predates the pr_fmt
->> addition, so the regression has been live from the moment the header
->> gained its own pr_fmt definition.
->>
->> Move the pr_fmt definition into the trusted-keys source files that
->> actually want the prefix.
->>
->> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
->> Assisted-by: Claude:claude-opus-4-6
->> Signed-off-by: Josh Snyder <josh@code406.com>
->> ---
->>  include/keys/trusted-type.h               | 6 ------
->>  security/keys/trusted-keys/trusted_caam.c | 2 ++
->>  security/keys/trusted-keys/trusted_core.c | 2 ++
->>  security/keys/trusted-keys/trusted_dcp.c  | 2 ++
->>  security/keys/trusted-keys/trusted_pkwm.c | 2 ++
->>  security/keys/trusted-keys/trusted_tpm1.c | 2 ++
->>  security/keys/trusted-keys/trusted_tpm2.c | 2 ++
->>  7 files changed, 12 insertions(+), 6 deletions(-)
->>
->> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
->> index 03527162613f7..54da1f174aeab 100644
->> --- a/include/keys/trusted-type.h
->> +++ b/include/keys/trusted-type.h
->> @@ -11,12 +11,6 @@
->>  #include <linux/rcupdate.h>
->>  #include <linux/tpm.h>
->>  
->> -#ifdef pr_fmt
->> -#undef pr_fmt
->> -#endif
->> -
->> -#define pr_fmt(fmt) "trusted_key: " fmt
->> -
->>  #define MIN_KEY_SIZE			32
->>  #define MAX_KEY_SIZE			128
->>  #if IS_ENABLED(CONFIG_TRUSTED_KEYS_PKWM)
->> diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
->> index 601943ce0d60f..a31fd89c0e5c5 100644
->> --- a/security/keys/trusted-keys/trusted_caam.c
->> +++ b/security/keys/trusted-keys/trusted_caam.c
->> @@ -4,6 +4,8 @@
->>   * Copyright 2025 NXP
->>   */
->>  
->> +#define pr_fmt(fmt) "trusted_key: " fmt
-> 
-> Can we adapt this patch further to include the trusted-key type as well?
-> E.g. 'trusted_key-caam'.
+Please also add the Fixes: tag with the relevant commit.
 
-Agreed, if we move it into the individual files, we can use the occasion
-to make it a bit more descriptive.
+> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+> ---
+>  security/integrity/evm/evm_secfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/=
+evm_secfs.c
+> index acd840461902..03d376fa36c2 100644
+> --- a/security/integrity/evm/evm_secfs.c
+> +++ b/security/integrity/evm/evm_secfs.c
+> @@ -145,7 +145,7 @@ static ssize_t evm_read_xattrs(struct file *filp, cha=
+r __user *buf,
+>  		size +=3D strlen(xattr->name) + 1;
+>  	}
+> =20
+> -	temp =3D kmalloc(size + 1, GFP_KERNEL);
+> +	temp =3D kzalloc(size + 1, GFP_KERNEL);
 
-I would suggest "trusted_key: caam: ", so the prefix stays the same.
+Yes, or just set temp[size] to the terminator so that we don't waste
+computation. Can you also change sprintf() to snprintf()?
 
-Cheers,
-Ahmad
+Thanks
 
-> 
-> Regards,
->   Marco
-> 
+Roberto
 
--- 
-Pengutronix e.K.                  |                             |
-Steuerwalder Str. 21              | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany         | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686  | Fax:   +49-5121-206917-5555 |
+>  	if (!temp) {
+>  		mutex_unlock(&xattr_list_mutex);
+>  		return -ENOMEM;
 
 
