@@ -1,82 +1,59 @@
-Return-Path: <linux-integrity+bounces-9181-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9182-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WDwBMzqJ3mlXFgAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9181-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2026 20:36:42 +0200
+	id 4KWgJDnV3mnwIwAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9182-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 02:00:57 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1654F3FDBA2
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2026 20:36:41 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A8CB3FF2DE
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 02:00:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0F65F3032073
-	for <lists+linux-integrity@lfdr.de>; Tue, 14 Apr 2026 18:35:15 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 32E883022CB1
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 00:00:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEB3B3009E1;
-	Tue, 14 Apr 2026 18:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589D42DF152;
+	Wed, 15 Apr 2026 00:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iGD7seD3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQPjqHLI"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E4D31B101
-	for <linux-integrity@vger.kernel.org>; Tue, 14 Apr 2026 18:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360D02FF15B;
+	Wed, 15 Apr 2026 00:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776191713; cv=none; b=X9Yd87U5urzwzVxTRJLag/BkNfB8eWwOzJSymD0SPMAjZq0M4/m+HZ8g/a3E/9c2948zBtwxCmIb/nMd1ucS8acAGkxZG2BXgLU8Uy9pTvBeN2SeMTtV9KRcSwsaQfi0OWHQHQL8MtyTC2RbetvzgYtnZ0x8LrG6E0k4Ggx9Kt0=
+	t=1776211255; cv=none; b=UrmF9WDIYvBnkGEmvHNp3i//+lPwlFIIak63AC31DEXKKESOBJm7+mNwn91nZa8Xz1w38eBY9jGaap5uuF1PSnjVM4aKMnoajf1U3dUm9XLDDAH/v2Cx8O4VHRasfPWAATjejo24mXBzr3GeWZg0tgdG59DMFKVXCgBlJOsirZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776191713; c=relaxed/simple;
-	bh=jG3SJ2UDkFr172PJmfPN9RC1nSKIojbIeSYU8sEjGk0=;
+	s=arc-20240116; t=1776211255; c=relaxed/simple;
+	bh=J/DrcishR3iBNw3YdadLBYeJ6NA6pMrUvrXGVexs9Rs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P7cnQ6HNCv0GAbg+DOl4GKdT1jQgei+o3c+QRNrdL8uhgstH2mOLk1X9pq6MDqnA2NtYrrfw63R/K4Z4qmLFQZGhUSVvqjb5ApAvsB1l273TKH0oEihDTWPciFa1K19nbkT1sHjTBuwOn4x5R6Zm40FnB86EXBlv+pLHNUusLXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iGD7seD3; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1776191711;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=j8P4KyMBQD5XgNwu1KSgwH6g9MpC+vp4OJ5CZE90VEw=;
-	b=iGD7seD3071XP+1qFZ1HXFcHax+sNa7p0lLLr9EbGWv0FdPj9zgebcJgxI51brdqPnhOCV
-	jOXC1gf0jzUUEjQoAHIfj6EpN0cQqTiZ02Vwaggb3QaPWRu/VbFB3bZTPnBP45Zd88njzq
-	ovFDWiXvHLdEDDl952p3NJ2osueyYPk=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-102-yiMExI4WP2KzT4aM278hPA-1; Tue,
- 14 Apr 2026 14:35:07 -0400
-X-MC-Unique: yiMExI4WP2KzT4aM278hPA-1
-X-Mimecast-MFC-AGG-ID: yiMExI4WP2KzT4aM278hPA_1776191706
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A1A60195608D;
-	Tue, 14 Apr 2026 18:35:05 +0000 (UTC)
-Received: from bmarzins-01.fast.eng.rdu2.dc.redhat.com (bmarzins-01.fast.eng.rdu2.dc.redhat.com [10.6.23.12])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4F981180049F;
-	Tue, 14 Apr 2026 18:35:05 +0000 (UTC)
-Received: from bmarzins-01.fast.eng.rdu2.dc.redhat.com (localhost [127.0.0.1])
-	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.17.1) with ESMTPS id 63EIZ4D31945641
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 14 Apr 2026 14:35:04 -0400
-Received: (from bmarzins@localhost)
-	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.18.1/Submit) id 63EIZ3ts1945640;
-	Tue, 14 Apr 2026 14:35:03 -0400
-Date: Tue, 14 Apr 2026 14:35:03 -0400
-From: Benjamin Marzinski <bmarzins@redhat.com>
-To: Mike Snitzer <snitzer@kernel.org>
-Cc: Mikulas Patocka <mpatocka@redhat.com>, dm-devel@lists.linux.dev,
-        linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Subject: Re: [RFC PATCH 00/10] Fix dm-ima bugs
-Message-ID: <ad6I1yu6b26qRbEa@redhat.com>
-References: <20260414002244.1917447-1-bmarzins@redhat.com>
- <ad51kuxJuU84Amep@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PY1G1SRrvsbgLli4AphTMEgxnSyWQrYjcwZ4Jk+eRMDvKBcxKFJA2en3n7KCqvqWPWyRGE2LJiAQNgWB/ai1OpGgCClT0jIJK4iq9PqTPdlpIk9HlV7IUKjL6+PaikbnWSYzS2U/vI2OJjbDtzMznqiI74ou81YwWiK79lSC2tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQPjqHLI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1E28C19425;
+	Wed, 15 Apr 2026 00:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776211255;
+	bh=J/DrcishR3iBNw3YdadLBYeJ6NA6pMrUvrXGVexs9Rs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oQPjqHLIL7R+j1Lgwv7IQwfN5rtRAR7PuAy7xq8PBc9w33ri9wPpb0J8ID36V970/
+	 5agOyAG5NtLql9Og4XCEKdpLWWrBV25425f3IRzFDfAE07EgbP/cxkipaasgJZ2a5o
+	 XlsBJDzKBzl7MqUQTbNC27aAJWbT72PPAMLfLdDZEzR/tKTWf9PwOxptt+LiEvqoes
+	 XEy0CbFnVogYOQMDPqK/JcdN4g6abwwnCxLN9Q5oY65x3CxVCKfbNSLzCbtfTj4FCK
+	 jpaUEkS1PTHLsHCbk7aOptmspfPP7Q1WWmvx/3sty2bDeswtL2P3duEKRKnU4Ugof/
+	 mv8dzHfPVwo4A==
+Date: Wed, 15 Apr 2026 03:00:51 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Gunnar Kudrjavets <gunnarku@amazon.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, noodles@meta.com,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Justinien Bouron <jbouron@amazon.com>
+Subject: Re: [PATCH] tpm2-sessions: Fix missing tpm_buf_destroy() in
+ tpm2_read_public()
+Message-ID: <ad7VM66hswU2L4Hp@kernel.org>
+References: <20260408164359.24968-1-gunnarku@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -85,132 +62,95 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ad51kuxJuU84Amep@kernel.org>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <20260408164359.24968-1-gunnarku@amazon.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[redhat.com,lists.linux.dev,vger.kernel.org,linux.ibm.com,huawei.com,gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	TAGGED_FROM(0.00)[bounces-9181-lists,linux-integrity=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bmarzins@redhat.com,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,meta.com,vger.kernel.org,amazon.com];
+	TAGGED_FROM(0.00)[bounces-9182-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: 1654F3FDBA2
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2A8CB3FF2DE
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Apr 14, 2026 at 01:12:50PM -0400, Mike Snitzer wrote:
-> On Mon, Apr 13, 2026 at 08:22:34PM -0400, Benjamin Marzinski wrote:
-> > The dm-ima code does not guarantee that the dm_ima_measure_on_*
-> > functions will not be called at the same time. Since they modify and
-> > free shared memory, this can lead to Use-After-Free errors or garbage
-> > measurements. Further, they don't make sure that the state they measure
-> > corresponds to the actual device state. For instance if table_load()
-> > runs at the same time as do_resume() on a table swap,
-> > dm_ima_measure_on_device_resume() can end up thinking the wrong table is
-> > active. Or a concurrent dm_hash_rename() and a table swap, can end up
-> > with a the new active table still using the old name. This patchset
-> > makes sure the the dm-ima function are serialized and report the correct
-> > device state.
-> > 
-> > However, the code is still messier that in could be. This is because
-> > it duplicates the current measurement events and format. I would really
-> > like to know if that is necessary. Specifically, it currently measures
-> > the following dm device and table actions:
-> > 
-> > load
-> > clear
-> > rename
-> > resume
-> > remove
-> > 
-> > I don't see the benefit of reporting changes to the inactive table, or
-> > resumes where the device does not change state. From the user's point of
-> > view, the device is still the same after these events.  At the same
-> > time, it doesn't measure device creates if no table was loaded, so you
-> > can have situations where the the first measurement for a device is a
-> > rename or a remove. A more sensible set of actions to measure would be:
-> > 
-> > create
-> > table_swap
-> > rename
-> > remove
-> > 
-> > Also, the measurement format doesn't map well to how dm device's are
-> > actually set up, in a way that makes it harder for the code and records
-> > extraneous information. First, like I mentioned before, I don't see the
-> > benefit of measuring the inactive table. Second, the name, uuid, and
-> > major/minor numbers are properties of the device, not it's table (and dm
-> > devices can't have partitions, so the minor count will always be 1). I
-> > don't see a reason to store and occasinally log this information twice,
-> > if there is an active and incative table, and it forces extra
-> > coordination between the dm_ima_measure_on_* functions.
-> > 
-> > I'm wondering it we are stuck with the current events and format, now
-> > that this has been released? Or could we bump the version, and change
-> > what events we measure, and how we format the output?
-> > 
-> > Benjamin Marzinski (10):
-> >   dm-ima: remove dm_ima_reset_data()
-> >   dm-ima: remove broken last_target_measured logic
-> >   dm-ima: Remove status_flags from dm_ima_measure_on_table_load()
-> >   dm-ima: don't copy the active table to the inactive table
-> >   dm-ima: Fix UAF errors and measuring incorrect context
-> >   dm-ima: remove new_map from dm_ima_measure_on_device_clear
-> >   dm-ima: Fix issues with dm_ima_measure_on_device_rename
-> >   dm-ima: Handle race between rename and table swap
-> >   dm-ima: Fail more gracefully in dm_ima_measure_on_*
-> >   dm-ima: use active table's size if available
-> > 
-> >  drivers/md/dm-ima.c   | 506 +++++++++++++++++++-----------------------
-> >  drivers/md/dm-ima.h   |  67 ++++--
-> >  drivers/md/dm-ioctl.c | 146 +++++++++++-
-> >  drivers/md/dm.c       |   2 +-
-> >  4 files changed, 421 insertions(+), 300 deletions(-)
+On Wed, Apr 08, 2026 at 04:43:37PM +0000, Gunnar Kudrjavets wrote:
+> tpm2_read_public() calls tpm_buf_init() but fails to call
+> tpm_buf_destroy() on two exit paths, leaking a page allocation:
 > 
-> Pretty extensive changes needed here all things considered.
+> 1. When name_size() returns an error (unrecognized hash algorithm),
+>    the function returns directly without destroying the buffer.
 > 
-> SO I'm aware, who is using dm-ima?  I see that Tushar Sugandhi is no
-> longer at Microsoft and so he isn't cc'd on these changes.  I can
-> infer from Cc some potential users, but I just want to make sure this
-> code isn't just technical debt that we're having to carry in DM now?
-
-I don't actually know if anyone is. The issue is that the Use After Free
-crashes can happen as long as CONFIG_IMA is set, regardless of whether
-or not you have any IMA policy set.
-
-If we don't need to care, we could just serialize the
-dm_ima_measure_on_* functions to keep them from having concurrent access
-to shared memory, and let them keep reporting bogus data if there are
-races (or simply unfortunate orderings. load then rename then resume
-currently forgets the rename, even without a race) That's a much smaller
-change, and if they're currently good enough for any users, it won't
-make them any worse.
-
--Ben
-
+> 2. On the success path, the buffer is never destroyed before
+>    returning.
 > 
-> Thanks,
-> Mike
+> All other error paths in the function correctly call
+> tpm_buf_destroy() before returning.
+> 
+> Fix both by adding the missing tpm_buf_destroy() calls.
+> 
+> Fixes: bda1cbf73c6e ("tpm2-sessions: Fix tpm2_read_public range checks")
+> Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
+> Reviewed-by: Justinien Bouron <jbouron@amazon.com>
+> ---
+>  drivers/char/tpm/tpm2-sessions.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+> index 09df6353ef04..f7c6c043fef4 100644
+> --- a/drivers/char/tpm/tpm2-sessions.c
+> +++ b/drivers/char/tpm/tpm2-sessions.c
+> @@ -203,8 +203,10 @@ static int tpm2_read_public(struct tpm_chip *chip, u32 handle, void *name)
+>  	rc = tpm_buf_read_u16(&buf, &offset);
+>  	name_size_alg = name_size(&buf.data[offset]);
+>  
+> -	if (name_size_alg < 0)
+> +	if (name_size_alg < 0) {
+> +		tpm_buf_destroy(&buf);
+>  		return name_size_alg;
+> +	}
+>  
+>  	if (rc != name_size_alg) {
+>  		tpm_buf_destroy(&buf);
+> @@ -217,6 +219,7 @@ static int tpm2_read_public(struct tpm_chip *chip, u32 handle, void *name)
+>  	}
+>  
+>  	memcpy(name, &buf.data[offset], rc);
+> +	tpm_buf_destroy(&buf);
+>  	return name_size_alg;
+>  }
+>  #endif /* CONFIG_TCG_TPM2_HMAC */
+> 
+> base-commit: 03e5553f5fb99cb47c315e167a604a9c69e6f724
+> -- 
+> 2.47.3
+> 
 
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+Applied.
+
+BR, Jarkko
 
