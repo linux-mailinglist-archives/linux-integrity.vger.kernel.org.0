@@ -1,80 +1,83 @@
-Return-Path: <linux-integrity+bounces-9196-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9197-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eKCYNfq232lVYQAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9196-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 18:04:10 +0200
+	id 8EpjFv2232lVYQAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9197-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 18:04:13 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7295340633A
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 18:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 18ECE406341
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 18:04:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3A4DB30E1E9C
+	by tor.lore.kernel.org (Postfix) with ESMTP id 77E0330E32C1
 	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 16:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8033E3D88;
-	Wed, 15 Apr 2026 16:00:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 823E7331A41;
+	Wed, 15 Apr 2026 16:00:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="slYKzEKj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FGW74ukM"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D5B3B27C4
-	for <linux-integrity@vger.kernel.org>; Wed, 15 Apr 2026 16:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 472152F1FFC
+	for <linux-integrity@vger.kernel.org>; Wed, 15 Apr 2026 16:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776268813; cv=none; b=RKwGif7zAZazhP+vuYwuC5JOjwvxwHlM44nhZFCuhoeePhtLey+GkXXryGcEe5+tK1M40h8Jy1jA9X8mV+tm/Z++dvmBXgaAIjZKQP4faMduovWvDvwU4w2UVkzZ/vpeIXC2EpIYUjuAqQ7M24XxvScnm1ncLhz49VuLC9e7riY=
+	t=1776268822; cv=none; b=umgoR5BQnxIAfB2U4pwLPEqx9+KYnd9WutZufdoffCk6zeuaP7gfDeOrACINzvv7Mi68WJa62aOyo0GJnzPwdHnHCB0xuD+wiBCeQALzUDKY/ue+HjuXdcGeEr+pr/Cq97KAVi23ZC8NWiG+gTEQNbATqmY4sDDF6ZSyP1AmorI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776268813; c=relaxed/simple;
-	bh=zGjWY6RSLN0McBk1PVHgIRXzFklPLozRqfOhL3KVn28=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=J/r2/U9asNr+vjOsS6vSnN8sX0rbfxKY/wlaC71DmcU4Wcj6pefkSXLQaQhr2udvfxF+BdEf3wn5TvJPDxjij8M0TLseFqsPwLiZfWFTmcCbKKV8jQ4Np3IFVzYaAjTIIxFgoN8rpubBIl6HeTZtEvLfzgotTo9aRkpngHUzC7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jacqwong.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=slYKzEKj; arc=none smtp.client-ip=209.85.214.202
+	s=arc-20240116; t=1776268822; c=relaxed/simple;
+	bh=KAjYR0dCKl/Kn7Rr39vzxCm8S3IpfdR2yr9r8ru/wi4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=FnvjNDLTFkI4y/+BmbZCFnLC9vl+S+m51TJCcr1gC4RNR9I4bEHA3Q1FFCb1nQwBwDJ/qX9QbPnIY86m+UQFstywlA6uaJwgeR6DgRKt5G72K7dj4pO2a0HJiIxKYIKMjcSeVTy0TlGbRUEQxQGDm4bzv+gkDxVCgMAewZND+Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jacqwong.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FGW74ukM; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jacqwong.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2b2523e0299so175962905ad.3
-        for <linux-integrity@vger.kernel.org>; Wed, 15 Apr 2026 09:00:12 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-35da99b90f6so8666678a91.1
+        for <linux-integrity@vger.kernel.org>; Wed, 15 Apr 2026 09:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1776268812; x=1776873612; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IijrdPO4mSdFlRQuYha0rEsFCOp3Y0I2uG+ErkWzVAE=;
-        b=slYKzEKj/np45+PXdzL4MsCZb/kbXDFIisaIRg7d5K1cUGQYBxzQbIwgYa6RjuMivh
-         hJJJhdF2zcwuPSoKYQjTXxFsD7BNtA5+RIEz1zfiF+GF//Srik6cPvx+mqZ2y0slN7G6
-         7yKufhd4NQzKnSn0+85HASBQQYT8Z2GwNPKOS5CpwI9RTLdPuxPRdO4kh00NrdnbTuxI
-         /VqG+9HYwwg5rdEtCmsnxXzBq9UzfvurlJFRbn0Z8Stn9S39HUir8QPjSznwV0ugO2xN
-         28cp2j/3CQzzLTA8MfFC5GDYWdeAWdgoQrViUOzChfi4MzVgGbWVEyhD/u68F58iab9d
-         DJSw==
+        d=google.com; s=20251104; t=1776268821; x=1776873621; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AvUkmyHrF4RN47+3Dw34ntCqk7+kYPgu+lQVJWZSZNM=;
+        b=FGW74ukMjq50UzzdwXSVNAuy/JxSNfKOS1gB1uIqiqlcZrpyyIt2GZAwdTAtEz9dtf
+         weSKZTG0926Xaj8eAYeaX81shd/ahf08TKCQmR/P+PVEiJP2Cdlwo5lZCJIv9N3aBSF2
+         ET3ULB73hqI4pxOkQCCufulk2jXYkrxOFBr+61765PSSqe/PV9ESeIIQGBOPTUML9n9r
+         /46Rhf5a8QnL7dBYYKAO53j1riQRt7f6o6Hi/tlea4QvrB/1TNXqth042yMQ68I1ixq0
+         11JfK+GoWCNlS1CsOv4qFVVxQ/bNKHZ/HAfyEGbxGekpvdMWI2N4paugijbSXAbh/0BN
+         amqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776268812; x=1776873612;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IijrdPO4mSdFlRQuYha0rEsFCOp3Y0I2uG+ErkWzVAE=;
-        b=IW2ZvvAKSfxjd65+BGW+rOWLuRa3rW13nitlJQKDQB6E1yw5STP+QY/ee4NJgmpkgM
-         yKvWEQn8qFeM+ZD56C2Qb5oHDgL0kwDna+YnfgfYj8qhmbuT9OZAjuD1NNyIh1XNvaLr
-         Wis91sngeLBHJ5bYwMxphJiCWEr9giuzxv61EhVqX6i4UmOmqRaotdTlfIiIg6QKEC7/
-         +JC+dW6haBLKe/G98N5kB9u+W0fTqPJ4opLwjHDr9bKX8G7P1VXZ81dHpEY2kmvJBjox
-         VZaOnDLHBHUL0TaYB3iOf31ZjZONI5Fnh/Rdk/HnsINSe3ZbEsMk0AYvJD9xzvogIPTz
-         8s/A==
-X-Gm-Message-State: AOJu0YwnxABdRcJ7hrw0O83genGJe4p4fRzGdRe+obe2uR+SWnn3wZmj
-	+83wcYK1e/Y0zsxFrUoOppJuYnU3+T89EZiWnUvScFr32xZua36/3yYgwUChpCkK50w+vWOG9AG
-	JlUK5jQUvQ5rwY38Rze9ivRHmMyESsuUwC0U6peE3BKAX/nkhy5l4b4amrfo1y5W2yHqQ2xteI6
-	e9Ah7N4lIEpTJBNyRxx0/Ax4usoczZsy1CZJs02vCCje2Eyw47Pj44P1wOg6Q=
-X-Received: from plbmn8.prod.google.com ([2002:a17:903:a48:b0:2b2:4713:9ce4])
+        d=1e100.net; s=20251104; t=1776268821; x=1776873621;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AvUkmyHrF4RN47+3Dw34ntCqk7+kYPgu+lQVJWZSZNM=;
+        b=FVDqv2zPionzBskiBd5TEoH0NyDXFrf8YyZfMVpc1X38oDq2wIhNaFF9gP4y1JaYsu
+         sx5HYyXrUstTGh4IRoLBcpIP+xEWI5PM7grjBYFk/+hsrZjNML+q4+AxVQ2MvgrxtjtK
+         4H5k3y0n/1WNhfMKJiVcz/tOY2AoVWi2Odv8aD1zxVAmFzAonwbkvmgKiWV1CbfoVtKT
+         Ohx7HLo9rB9qa0f4D6/rTJTvAEMvsKaazspjoefP7HhEpuaXkBjZ4Eg/f2x5bG/S4ONj
+         pk63M9WeOVYX7iv+Hy7HLMbc2Ob6KXvbugWYTJS1Xqh4z6l6uSlkERuC/BexKpwy7UUD
+         piwQ==
+X-Gm-Message-State: AOJu0YxYg9E3vFPWf9QY0HhOwQPMqTuMclgeKE7ji2/yOiIsknmzLJGJ
+	aLtI7gFtyD0hTOx+BDySY77ybjvuDumAiXLO8YQXBMsfZ04RoSGNoN3leuRbEKY8PQhtd4+RA7a
+	Lvf/mPCHY4vXOwb0hZZLVawpuQIyJKuLmRW4qWdszKrKuYgsRtWyPiKxmqg44v3B08AujzDfO+k
+	P4jEdeMVtuj0b9LB453/2HGLQkpg6C/iMx6t0p5A3DW7Gsr7MUn5f/MtQ7BWw=
+X-Received: from pgar3.prod.google.com ([2002:a05:6a02:2e83:b0:c76:6641:8ea0])
  (user=jacqwong job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:4502:b0:2b2:53f5:4627 with SMTP id d9443c01a7336-2b2d5939409mr164552305ad.4.1776268811731;
- Wed, 15 Apr 2026 09:00:11 -0700 (PDT)
-Date: Wed, 15 Apr 2026 16:00:04 +0000
+ 2002:a05:6a21:33a0:b0:398:7796:ddb8 with SMTP id adf61e73a8af0-39fe40dbb56mr24504336637.60.1776268820184;
+ Wed, 15 Apr 2026 09:00:20 -0700 (PDT)
+Date: Wed, 15 Apr 2026 16:00:05 +0000
+In-Reply-To: <20260415160006.2275325-1-jacqwong@google.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260415160006.2275325-1-jacqwong@google.com>
 X-Mailer: git-send-email 2.54.0.rc0.605.g598a273b03-goog
-Message-ID: <20260415160006.2275325-1-jacqwong@google.com>
-Subject: [PATCH v3 0/2] tpm_tis: fix retry exhaustion and add logging
+Message-ID: <20260415160006.2275325-2-jacqwong@google.com>
+Subject: [PATCH v3 1/2] tpm: tpm_tis: add error logging for data transfer
 From: Jacqueline Wong <jacqwong@google.com>
 To: linux-integrity@vger.kernel.org
 Cc: jarkko@kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca, 
@@ -91,7 +94,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9196-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9197-lists,linux-integrity=lfdr.de];
 	FREEMAIL_CC(0.00)[kernel.org,gmx.de,ziepe.ca,google.com];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -104,54 +107,45 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[jacqwong@google.com,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[google.com:+];
 	RCPT_COUNT_SEVEN(0.00)[7];
-	NEURAL_HAM(-0.00)[-0.997];
+	NEURAL_HAM(-0.00)[-0.998];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	TO_DN_SOME(0.00)[];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7295340633A
+X-Rspamd-Queue-Id: 18ECE406341
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The Fix:
-- Patch 1: Adds error logs to identify the specific hardware status mismatch.
-- Patch 2: Stops execution immediately when retries are exhausted.
+Add logging to more easily determine reason for transmit failure
 
-v3 changes:
-- Improved code alignment to pass checkpatch --strict. 
+Fixes: 280db21e153d8 ("tpm_tis: Resend command to recover from data transfer errors")
+Signed-off-by: Jacqueline Wong <jacqwong@google.com>
+Signed-off-by: Jordan Hand <jhand@google.com>
+---
+ drivers/char/tpm/tpm_tis_core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-v2 changes:
-- Split logging and logic into separate patches.
-- Added retry count to the error message.
-- Included dmesg traces below.
-
-Testing:
-Dmesg traces obtained using error injection to simulate status register mismatches.
-
-Before:
-[  130.288751] tpm tpm0: Operation Timed out
-[  250.306070] tpm tpm0: Operation Timed out
-[  250.310173] tpm tpm0: A TPM error (-62) occurred attempting to determine the timeouts
-
-After:
-[   10.271547] tpm tpm0: TPM_STS_DATA_EXPECT should be unset. sts = 0x00000080
-...
-[   10.646283] tpm tpm0: TPM_STS_DATA_EXPECT should be unset. sts = 0x00000080
-[   10.653461] tpm tpm0: Exhausted 50 tpm_tis_send_data retries
-[   10.659304] tpm tpm0: tpm_try_transmit: send(): error -5
-[   10.665435] tpm tpm0: TPM_STS_DATA_EXPECT should be unset. sts = 0x00000080
-...
-[   11.037198] tpm tpm0: TPM_STS_DATA_EXPECT should be unset. sts = 0x00000080
-[   11.044441] tpm tpm0: Exhausted 50 tpm_tis_send_data retries
-[   11.050288] tpm tpm0: tpm_try_transmit: send(): error -5
-[   11.055723] tpm tpm0: A TPM error (-5) occurred attempting to determine the timeouts
-
-Jacqueline Wong (2):
-  tpm: tpm_tis: add error logging for data transfer
-  tpm: tpm_tis: stop transmit if retries are exhausted
-
- drivers/char/tpm/tpm_tis_core.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+index e2a1769081b1..acb91bf1e5f5 100644
+--- a/drivers/char/tpm/tpm_tis_core.c
++++ b/drivers/char/tpm/tpm_tis_core.c
+@@ -471,6 +471,8 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 		status = tpm_tis_status(chip);
+ 		if (!itpm && (status & TPM_STS_DATA_EXPECT) == 0) {
+ 			rc = -EIO;
++			dev_err(&chip->dev, "TPM_STS_DATA_EXPECT should be set. sts = 0x%08x\n",
++				status);
+ 			goto out_err;
+ 		}
+ 	}
+@@ -491,6 +493,8 @@ static int tpm_tis_send_data(struct tpm_chip *chip, const u8 *buf, size_t len)
+ 	status = tpm_tis_status(chip);
+ 	if (!itpm && (status & TPM_STS_DATA_EXPECT) != 0) {
+ 		rc = -EIO;
++		dev_err(&chip->dev, "TPM_STS_DATA_EXPECT should be unset. sts = 0x%08x\n",
++			status);
+ 		goto out_err;
+ 	}
+ 
 -- 
 2.54.0.rc0.605.g598a273b03-goog
 
