@@ -1,72 +1,61 @@
-Return-Path: <linux-integrity+bounces-9192-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9193-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +HZqCOL73mnqNAAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9192-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 04:45:54 +0200
+	id UD/fHaD83mlINQAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9193-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 04:49:04 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77F433FFD23
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 04:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C046B3FFD4B
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 04:49:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C5D21302677D
-	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 02:44:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 01BDB3031CDA
+	for <lists+linux-integrity@lfdr.de>; Wed, 15 Apr 2026 02:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C998427E049;
-	Wed, 15 Apr 2026 02:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4B530CD80;
+	Wed, 15 Apr 2026 02:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vHvwlvgs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zd66KtQ3"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A651823D7DF;
-	Wed, 15 Apr 2026 02:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA50F13AA2D;
+	Wed, 15 Apr 2026 02:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776221058; cv=none; b=pBMdOSzdxT7gQFV9+HWsRy52CQX3Nxgo2pckl8AJW4iQ5xMyABbvGPO3LxpBf9PG9fYMpLUZAhOm//V1tHEVbSulF/WTvohcAkL0/fO/u+7uqbHxcdCNbky7vnfGAacGHvJgiN1voMRH7GIAZh+QWhN566PFbZ2cBvieCcmE3GU=
+	t=1776221338; cv=none; b=Qm79A4seIiyDbSsFSn133/omSqCtiNtK6WOqGxhhoPXoA2lbuwNrJtDs7GtlrbVQeFBfFkkUyVJuxvLjAjVzQ/dZflzh2ZIE3TFDEiP07wQHDAVyw5YblJXICOwug8/WLyijM6rja0T4xdOrgIc8a5N5J7kzhiKNWHIRbbZDyxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776221058; c=relaxed/simple;
-	bh=LCxdmvv/5bYHf0cCYe/ogZ3si/GlHCL+nksBOIxuhuo=;
+	s=arc-20240116; t=1776221338; c=relaxed/simple;
+	bh=j4Natby971hfp9kCKWEBwp2f+7TlNoo25m/o+tMdqv8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OFTRlCQPl7/4Rn7aN5KP9hiOOG2ZFsFm66veBOTyBeNyxEGTys3EBrRhFmVhFpa8Z4WxpOEFstZzOkPg+pF4TQ3YOd8+U3sK1exKh3EwVSnBDgTwmNQH3s0DENEyhz5/q8fd/zhrv1tLD6ZifJVs9ES9LigMUD+qbsatb+47TVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vHvwlvgs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5D31C2BCB3;
-	Wed, 15 Apr 2026 02:44:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=gpGHYRBSqzpV6zBMtJYoViRSRnkOmEGZ0iniiJ6h/jbUWCoUnX5kVt22XInAGhwRoIlPykfnHcyySCzjKLxtRfFsSc39KtJaJfx6vMo3sV9+YsyWARu7IIB8wvgzlQhfIpUr4zI2FHfNC2BJO1Pm+ptuP0ablizGgJN9SFfvxq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zd66KtQ3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C323C2BCB3;
+	Wed, 15 Apr 2026 02:48:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776221058;
-	bh=LCxdmvv/5bYHf0cCYe/ogZ3si/GlHCL+nksBOIxuhuo=;
+	s=k20201202; t=1776221338;
+	bh=j4Natby971hfp9kCKWEBwp2f+7TlNoo25m/o+tMdqv8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vHvwlvgsKnLICoQjTAPxuoIR52CuPmPpaeMcnvT9IVLrP5nMuF9lJPMhuLrQy5Y89
-	 ejuPFb/iEHWSrte9EwP/6sU6uO+knwWFHqy8E+r8dI1x2AcJeCfqMt/keFSIAMgpu9
-	 eXGdoKT+t1LBxtxqrhi9Q9GfgZJgJsVaSVc4QFX1OD+Uj8nesqFm93PJLSNmE2y6r3
-	 Ob3L4G2a10jLzWOjqAS+8jdb95hVNX9KetOlOn9CTJMs5mbaG9Usz5NsoQA6YtmiPI
-	 FieKNxez+NefGA7uvN/FtqBGp0Zw+5+m+jWfQgrGxljsaXjjxB/XaG0q0UMX33FflR
-	 ZGRR2HfCoy1WQ==
-Date: Wed, 15 Apr 2026 05:44:14 +0300
+	b=Zd66KtQ33syVXjMYRQEWLsSMHegqGPjsTeY9Pabs39nU43uuw0olxJF5DC3hJbzyB
+	 AWMSFMjW96jvwQXWqS4D/SrZGyOb7xq9kYjoaa8D3/n3k+YQTB0rw5DyG9wSnKTajA
+	 Z9e1YpYQ7lHk3W8/cnq68kSWsWikqSi5WEW2BImNE7Vf7bN3EQslBjKe5ts0W6hmQS
+	 X67ldVoiywK/fpWb4OiBXTfWCMqgw2neHgXP04mvpU3Pw6SrGxyuaa9Km8lAxyLDL1
+	 VcXgLiAXK/zvDqYAOUeIdlh1FPR4p8TTw4s/IPFqvkOLDX9aXQkwf32iaOfPDQOf9i
+	 lfjiaWlZKCWXQ==
+Date: Wed, 15 Apr 2026 05:48:55 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc: Marco Felsch <m.felsch@pengutronix.de>, Josh Snyder <josh@code406.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	David Gstir <david@sigma-star.at>,
-	sigma star Kernel Team <upstream+dcp@sigma-star.at>,
-	Srish Srinivasan <ssrish@linux.ibm.com>,
-	Nayna Jain <nayna@linux.ibm.com>,
-	Sumit Garg <sumit.garg@kernel.org>,
-	linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] trusted-keys: move pr_fmt out of trusted-type.h
-Message-ID: <ad77fmcpBpz4sc91@kernel.org>
-References: <20260411-trusted-key-header-v1-1-407c2cd954db@code406.com>
- <cie3zqy5phlopdrxsxpniujwr6i3cpdkfrwjvth3a7ypwjx3ee@hqjl67jnfdch>
- <20e9f021-f6b3-4e19-9e1b-93b1e00eb803@pengutronix.de>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Arnd Bergmann <arnd@kernel.org>, Matthew Garrett <mjg59@google.com>,
+	Bartosz Szczepanek <bsz@semihalf.com>,
+	Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: aovid -Wunused-but-set-variable
+Message-ID: <ad78lwWVkWpoYXQr@kernel.org>
+References: <20240322132307.907203-1-arnd@kernel.org>
+ <adwroOsSnGrGi5OM@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -75,9 +64,8 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20e9f021-f6b3-4e19-9e1b-93b1e00eb803@pengutronix.de>
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+In-Reply-To: <adwroOsSnGrGi5OM@linux.dev>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
@@ -85,102 +73,84 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FREEMAIL_CC(0.00)[kernel.org,google.com,semihalf.com,arndb.de,gmx.de,ziepe.ca,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-9193-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9192-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity,dcp];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 77F433FFD23
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.dev:email,arndb.de:email]
+X-Rspamd-Queue-Id: C046B3FFD4B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Apr 13, 2026 at 01:03:30PM +0200, Ahmad Fatoum wrote:
-> Hi,
-> 
-> On 4/13/26 1:01 PM, Marco Felsch wrote:
-> > Hi Josh,
+On Mon, Apr 13, 2026 at 01:32:48AM +0200, Thorsten Blum wrote:
+> On Fri, Mar 22, 2024 at 02:22:48PM +0100, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
 > > 
-> > On 26-04-11, Josh Snyder wrote:
-> >> Defining pr_fmt in a widely-included header leaks the "trusted_key: "
-> >> prefix into every translation unit that transitively includes
-> >> <keys/trusted-type.h>. dm-crypt, for example, ends up printing
-> >>
-> >>     trusted_key: device-mapper: crypt: dm-10: INTEGRITY AEAD ERROR ...
-> >>
-> >> dm-crypt began including <keys/trusted-type.h> in commit 363880c4eb36
-> >> ("dm crypt: support using trusted keys"), which predates the pr_fmt
-> >> addition, so the regression has been live from the moment the header
-> >> gained its own pr_fmt definition.
-> >>
-> >> Move the pr_fmt definition into the trusted-keys source files that
-> >> actually want the prefix.
-> >>
-> >> Fixes: 5d0682be3189 ("KEYS: trusted: Add generic trusted keys framework")
-> >> Assisted-by: Claude:claude-opus-4-6
-> >> Signed-off-by: Josh Snyder <josh@code406.com>
-> >> ---
-> >>  include/keys/trusted-type.h               | 6 ------
-> >>  security/keys/trusted-keys/trusted_caam.c | 2 ++
-> >>  security/keys/trusted-keys/trusted_core.c | 2 ++
-> >>  security/keys/trusted-keys/trusted_dcp.c  | 2 ++
-> >>  security/keys/trusted-keys/trusted_pkwm.c | 2 ++
-> >>  security/keys/trusted-keys/trusted_tpm1.c | 2 ++
-> >>  security/keys/trusted-keys/trusted_tpm2.c | 2 ++
-> >>  7 files changed, 12 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-> >> index 03527162613f7..54da1f174aeab 100644
-> >> --- a/include/keys/trusted-type.h
-> >> +++ b/include/keys/trusted-type.h
-> >> @@ -11,12 +11,6 @@
-> >>  #include <linux/rcupdate.h>
-> >>  #include <linux/tpm.h>
-> >>  
-> >> -#ifdef pr_fmt
-> >> -#undef pr_fmt
-> >> -#endif
-> >> -
-> >> -#define pr_fmt(fmt) "trusted_key: " fmt
-> >> -
-> >>  #define MIN_KEY_SIZE			32
-> >>  #define MAX_KEY_SIZE			128
-> >>  #if IS_ENABLED(CONFIG_TRUSTED_KEYS_PKWM)
-> >> diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
-> >> index 601943ce0d60f..a31fd89c0e5c5 100644
-> >> --- a/security/keys/trusted-keys/trusted_caam.c
-> >> +++ b/security/keys/trusted-keys/trusted_caam.c
-> >> @@ -4,6 +4,8 @@
-> >>   * Copyright 2025 NXP
-> >>   */
-> >>  
-> >> +#define pr_fmt(fmt) "trusted_key: " fmt
+> > Outside of the EFI tpm code, the TPM_MEMREMAP()/TPM_MEMUNMAP functions are
+> > defined as trivial macros, leading to the mapping_size variable ending
+> > up unused:
 > > 
-> > Can we adapt this patch further to include the trusted-key type as well?
-> > E.g. 'trusted_key-caam'.
+> > In file included from drivers/char/tpm/tpm-sysfs.c:16:
+> > In file included from drivers/char/tpm/tpm.h:28:
+> > include/linux/tpm_eventlog.h:167:6: error: variable 'mapping_size' set but not used [-Werror,-Wunused-but-set-variable]
+> >   167 |         int mapping_size;
+> > 
+> > Turn the stubs into inline functions to avoid this warning.
+> > 
+> > Fixes: c46f3405692d ("tpm: Reserve the TPM final events table")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> > ---
+> >  include/linux/tpm_eventlog.h | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+> > index 7d68a5cc5881..6e5be15029fb 100644
+> > --- a/include/linux/tpm_eventlog.h
+> > +++ b/include/linux/tpm_eventlog.h
+> > @@ -131,11 +131,16 @@ struct tcg_algorithm_info {
+> >  };
+> >  
+> >  #ifndef TPM_MEMREMAP
+> > -#define TPM_MEMREMAP(start, size) NULL
+> > +static inline void *TPM_MEMREMAP(unsigned long start, size_t size)
+> > +{
+> > +	return NULL;
+> > +}
+> >  #endif
+> >  
+> >  #ifndef TPM_MEMUNMAP
+> > -#define TPM_MEMUNMAP(start, size) do{} while(0)
+> > +static inline void TPM_MEMUNMAP(void *mapping, size_t size)
+> > +{
+> > +}
+> >  #endif
+> >  
+> >  /**
 > 
-> Agreed, if we move it into the individual files, we can use the occasion
-> to make it a bit more descriptive.
+> I just stumbled upon the same problem and found this patch from 2024,
+> which still applies. I cc'ed the current maintainers - maybe someone can
+> pick this up? Thanks!
 > 
-> I would suggest "trusted_key: caam: ", so the prefix stays the same.
-> 
-> Cheers,
-> Ahmad
+> Reviewed-by: Thorsten Blum <thorsten.blum@linux.dev>
 
-+1
+Thanks.
+
+Arnd, I fixed typo in short summary and applied with that modification.
 
 BR, Jarkko
 
