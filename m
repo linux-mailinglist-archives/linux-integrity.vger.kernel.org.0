@@ -1,451 +1,373 @@
-Return-Path: <linux-integrity+bounces-9204-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9205-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aD1dAjBW4GmrfAAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9204-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2026 05:23:28 +0200
+	id CKo2OoGE4GmmiwAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9205-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2026 08:41:05 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFEB3409EA8
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2026 05:23:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6793140AB8D
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2026 08:41:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2D6083053D07
-	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2026 03:23:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 504813051A95
+	for <lists+linux-integrity@lfdr.de>; Thu, 16 Apr 2026 06:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6121A2D1303;
-	Thu, 16 Apr 2026 03:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D441523E334;
+	Thu, 16 Apr 2026 06:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Xo/eSRnR"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xYH65hDi";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="9qa8qG9Z";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xYH65hDi";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="9qa8qG9Z"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0B22D29C7;
-	Thu, 16 Apr 2026 03:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F93537AA78
+	for <linux-integrity@vger.kernel.org>; Thu, 16 Apr 2026 06:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776309804; cv=none; b=nODWWntGP1Zi+LXYrqYnXDFnD7NTpN+x8FnSWHDoGpBeMVatwSQDipVuo0kp+ixEGcme3fQvcZiUYp0t5TU4LmzKR/hFCDF+KO0/6ndzoLSKlp8+XlaZBOPQOcGRKchB0vV4IAHmjpO6qnWrgn/m1i6qj/+lEZzQR+ItawLnElU=
+	t=1776321657; cv=none; b=RuSLsK6+/EaYs+6yMLWdX4S5kkFJcAk694eIRErLKYkb58ZnyKXvEB/M4nglJLfp2JY99RDtrhQymc2L3NzKayNi2bd7zoXiK8X407ly8XyUTnVRqpmagTvdA4K7TIKZ1kN+d9Mq2qIcY9u/2oJd04phIZyofI4xbyWOHFEhwmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776309804; c=relaxed/simple;
-	bh=HlQX4Adau2R5onNZ4hQZ9wPsgjH+B/IhganZTtXcGdc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kO+AQBFEhOzaa71NDTBiUd8E8FpdOmalZxj3EAisw6/FO4Vg0smJwJgxVw4EbnIZVodJIFVRrA5UMa6itO1k90jZW/h1ap/ovCZCwhBSe/aSUpaM0O+TiEZxrZnKQfrvv9C4c7tSC14QKLmSXoFM5wrjtMU/i4LTZVwSFHVk61g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Xo/eSRnR; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63FGpUVH1804500;
-	Thu, 16 Apr 2026 03:16:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=qhmxM3
-	gr/wrpaVGlpBEOBItyUitHGshfPV2GbWA1xao=; b=Xo/eSRnR0LrfGOs7yMqPRm
-	c4vHxJ8T7Wu0sS0VE9Oy9GE0UJjsm4deG3d4CPEwqxqDTxgLBSVhyeq7Rx7nP2O5
-	RIoYah6RKcziF1j2+XXIDyuHYwHfmgY97ZIZg7eZGjv2y85KEbl5UtFkA9a/bwXf
-	86elMDDCyRRwJwZ0RP+9JbdZntXfM8wp6eYkqidRHNGcL4Cq5w7nmM+sNJeQg2SB
-	4GSKpLos2tsJ54Y7ppjiJJuNox3sKjMTh7I2nnvALcToGn7lQScVP/+TDxxXLnCT
-	9v6zLlnHWf938mo/uvE6HQwgaYICGYEGy9/sMCM7KW9uzXy02WwURMsJzsHrdpjg
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dh89kaq06-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Apr 2026 03:16:35 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 63G1ojII003594;
-	Thu, 16 Apr 2026 03:16:34 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dg1mnh4j5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Apr 2026 03:16:34 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63G3GXFu26149520
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 16 Apr 2026 03:16:33 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6758658095;
-	Thu, 16 Apr 2026 03:16:33 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C07655809C;
-	Thu, 16 Apr 2026 03:16:30 +0000 (GMT)
-Received: from [9.61.145.232] (unknown [9.61.145.232])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 16 Apr 2026 03:16:30 +0000 (GMT)
-Message-ID: <1569ac4b-a569-4c78-a415-7e9c189d9cb6@linux.ibm.com>
-Date: Wed, 15 Apr 2026 23:16:29 -0400
+	s=arc-20240116; t=1776321657; c=relaxed/simple;
+	bh=BE/fLCcI72ze6qSf4Rkziy2+fXkJoR4nLoQ2ep9SDtY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GlbmM7gCNlI54rFABTdRql10FUdr4he26/yKNZGbpeQmfYFR8TiATVXM+5gyTMTmP6tymQq14b9czHiCWbAAo0QNEGcrQnj3lFKqCXKiVAaw4eyBAJTXGQVprzerLa0uigCKjvNoaQLJ7xdz+5z6vkW5jtGz3sRBfG/SttKJ1UQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xYH65hDi; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=9qa8qG9Z; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xYH65hDi; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=9qa8qG9Z; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4772E6A7F7;
+	Thu, 16 Apr 2026 06:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776321653;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=97KMQYgYGWIO9duyys2Ah/Ybmz8Xl6FPxrL5DhN0Mkg=;
+	b=xYH65hDiSQvPzXVkiJFy6Ixe0DNyvTwRpZPkTxuAX1mUAd5xMCH1VmtGgkdWULVvhIYzeP
+	gdOeBgTSa51/UnEKfrf3GvR6+taMn7cltnm2Oc7oE6dKoAns/IapyT5HBgoPcpPMkp4wfU
+	KAQIO/y5QsACD1B9DO3lSuL3U8whCjA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776321653;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=97KMQYgYGWIO9duyys2Ah/Ybmz8Xl6FPxrL5DhN0Mkg=;
+	b=9qa8qG9ZPhiiglzlDJB1F6hPJNf/emh/qkUTHbWFsozb5aPmR5RzkO8ZlXsBHB9q/0/FQh
+	wxYY3LR/VI5XSuDA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776321653;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=97KMQYgYGWIO9duyys2Ah/Ybmz8Xl6FPxrL5DhN0Mkg=;
+	b=xYH65hDiSQvPzXVkiJFy6Ixe0DNyvTwRpZPkTxuAX1mUAd5xMCH1VmtGgkdWULVvhIYzeP
+	gdOeBgTSa51/UnEKfrf3GvR6+taMn7cltnm2Oc7oE6dKoAns/IapyT5HBgoPcpPMkp4wfU
+	KAQIO/y5QsACD1B9DO3lSuL3U8whCjA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776321653;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=97KMQYgYGWIO9duyys2Ah/Ybmz8Xl6FPxrL5DhN0Mkg=;
+	b=9qa8qG9ZPhiiglzlDJB1F6hPJNf/emh/qkUTHbWFsozb5aPmR5RzkO8ZlXsBHB9q/0/FQh
+	wxYY3LR/VI5XSuDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DC89E4BE0F;
+	Thu, 16 Apr 2026 06:40:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id R+tVNHSE4GnIQAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Thu, 16 Apr 2026 06:40:52 +0000
+Date: Thu, 16 Apr 2026 08:40:51 +0200
+From: Petr Vorel <pvorel@suse.cz>
+To: kernel test robot <oliver.sang@intel.com>
+Cc: =?iso-8859-2?Q?Micha=B3?= Grzelak <michal.grzelak@intel.com>,
+	lkp@intel.com, intel-gfx@lists.freedesktop.org,
+	Jani Nikula <jani.nikula@linux.intel.com>, oe-lkp@lists.linux.dev,
+	intel-xe@lists.freedesktop.org, ltp@lists.linux.it,
+	linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [LTP] [PATCH v1 15/16] drm/i915/bios: search for VBT #57 by
+ default
+Message-ID: <20260416064051.GA281695@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20260331183332.1773886-16-michal.grzelak@intel.com>
+ <202604150702.d409a2b6-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] KEYS: trusted: Debugging as a feature
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: Srish Srinivasan <ssrish@linux.ibm.com>, Jonathan Corbet
- <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ahmad Fatoum
- <a.fatoum@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Randy Dunlap
- <rdunlap@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Feng Tang <feng.tang@linux.alibaba.com>,
-        Dapeng Mi <dapeng1.mi@linux.intel.com>, Kees Cook <kees@kernel.org>,
-        Marco Elver <elver@google.com>, Li RongQing <lirongqing@baidu.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-References: <20260415111202.63888-1-jarkko@kernel.org>
-Content-Language: en-US
-From: Nayna Jain <nayna@linux.ibm.com>
-In-Reply-To: <20260415111202.63888-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: KQs0K3VmyIOiiaAotl8jIaQj_pgOcwaG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDE2MDAyNCBTYWx0ZWRfX7jdsV3hJl25F
- wgNI/yzuVOIDxGsHByiCGYlO+b2RZJiYQQHpXqtPnP2l/PXX9yaxCsiwgZtNpB5gsGXKUGX5CdJ
- DByWXWoK8un5jrBw3448Z3/hJ4E5W9sY+BWFzaOZ7eAXNB0p6p9YOLqykZG9ITrV8Z10whGoP8s
- WSwacaQHprnFlBCR/CiCw06JdzlgQDBdRhvWmu3zvgSxlWzZhinTfeSZgFRFkaNYOMDc5nqxd9X
- YTWOez6IA+uAC/VGSFbheIULWPtTEdMzVe5rAT/fJmVrOdDaPM90HTOjSECwPUu+8WOZJNekMv9
- nIOnGlo3NSR/rC/l3WU2vA7mbPp0aUxbXx9BH0gx0UDaLH969DhS6oslFnNJ7yuvbpClRjb8X2+
- tRhBSXnVha8xyp3hN0OqYajyHt59KYAtETvyhr6BUylbVFbBmPZuFIGJa/LKu92NfJeDBTMUvyT
- PWA9gC+e8U75129cgvw==
-X-Proofpoint-ORIG-GUID: au-3_HIjGvpReuOQLMWnpLP-U0wEWjrm
-X-Authority-Analysis: v=2.4 cv=W60IkxWk c=1 sm=1 tr=0 ts=69e05494 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=zzKBsTiU_qEVFVDPJAMA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-16_01,2026-04-13_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1011 priorityscore=1501 spamscore=0 bulkscore=0
- adultscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604070000 definitions=main-2604160024
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202604150702.d409a2b6-lkp@intel.com>
+X-Spam-Score: -3.50
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[30];
-	TAGGED_FROM(0.00)[bounces-9204-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN_FAIL(0.00)[1.2.3.5.c.f.2.1.0.0.0.0.0.0.0.0.7.a.0.0.1.0.0.e.9.0.c.3.0.0.6.2.asn6.rspamd.com:server fail];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	RCVD_COUNT_SEVEN(0.00)[11];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nayna@linux.ibm.com,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9205-lists,linux-integrity=lfdr.de];
+	ASN_FAIL(0.00)[1.2.3.5.c.f.2.1.0.0.0.0.0.0.0.0.b.d.0.0.1.0.0.e.a.0.c.3.0.0.6.2.asn6.rspamd.com:server fail];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DMARC_NA(0.00)[suse.cz];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[suse.cz:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[];
+	HAS_REPLYTO(0.00)[pvorel@suse.cz];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pvorel@suse.cz,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linux.ibm.com:mid]
-X-Rspamd-Queue-Id: DFEB3409EA8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,01.org:url]
+X-Rspamd-Queue-Id: 6793140AB8D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+Hi all,
 
-On 4/15/26 7:12 AM, Jarkko Sakkinen wrote:
-> TPM_DEBUG, and other similar flags, are a non-standard way to specify a
-> feature in Linux kernel. Introduce CONFIG_TRUSTED_KEYS_DEBUG for trusted
-> keys, and use it to replace these ad-hoc feature flags.
->
-> Given that trusted keys debug dumps can contain sensitive data, harden the
-> feature as follows:
->
-> 1. In the Kconfig description postulate that pr_debug() statements must be
->     used.
-> 2. Use pr_debug() statements in TPM 1.x driver to print the protocol dump.
-> 3. Require trusted.debug=1 on the kernel command line (default: 0) to
->     activate dumps at runtime, even when CONFIG_TRUSTED_KEYS_DEBUG=y.
->
-> Traces, when actually needed, can be easily enabled by providing
-> trusted.dyndbg='+p' and trusted.debug=1 in the kernel command-line.
+[ Cc Mimi and linux-integrity ]
+> Hello,
 
-Thanks for adding the documentation.
+> kernel test robot noticed "BUG:KASAN:slab-out-of-bounds_in_parse_vswing_preemph_snps" on:
 
-Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
+> commit: 07d1ee54da4966c1457602dc088a8a43b29254cb ("[PATCH v1 15/16] drm/i915/bios: search for VBT #57 by default")
+> url: https://github.com/intel-lab-lkp/linux/commits/Micha-Grzelak/drm-i915-lt-align-xe3plpd-with-VS-PE-Override-layout/20260401-092928
+> base: https://gitlab.freedesktop.org/drm/i915/kernel.git for-linux-next
+> patch link: https://lore.kernel.org/all/20260331183332.1773886-16-michal.grzelak@intel.com/
+> patch subject: [PATCH v1 15/16] drm/i915/bios: search for VBT #57 by default
 
->
-> Reported-by: Nayna Jain <nayna@linux.ibm.com>
-> Closes: https://lore.kernel.org/all/7f8b8478-5cd8-4d97-bfd0-341fd5cf10f9@linux.ibm.com/
-> Reviewed-by: Nayna Jain <nayna@linux.ibm.com>
-> Tested-by: Srish Srinivasan <ssrish@linux.ibm.com>
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> v4:
-> - Added kernel parameter documentation.t
-> - Added tags from Srishand and Nayna.
-> - Sanity check round. This version will be applied unless there is
->    something specific to address.
-> v3:
-> - Add kernel-command line option for enabling the traces.
-> - Add safety information to the Kconfig entry.
-> v2:
-> - Implement for all trusted keys backends.
-> - Add HAVE_TRUSTED_KEYS_DEBUG as it is a good practice despite full
->    coverage.
-> ---
->   .../admin-guide/kernel-parameters.txt         | 16 +++++++
->   include/keys/trusted-type.h                   | 21 +++++----
->   security/keys/trusted-keys/Kconfig            | 23 ++++++++++
->   security/keys/trusted-keys/trusted_caam.c     |  7 ++-
->   security/keys/trusted-keys/trusted_core.c     |  6 +++
->   security/keys/trusted-keys/trusted_tpm1.c     | 44 +++++++++++--------
->   6 files changed, 87 insertions(+), 30 deletions(-)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f2ce1f4975c1..f1515668c8ab 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -7917,6 +7917,22 @@ Kernel parameters
->   			first trust source as a backend which is initialized
->   			successfully during iteration.
->   
-> +	trusted.debug=	[KEYS]
-> +			Format: <bool>
-> +			Enable trusted keys debug traces at runtime when
-> +			CONFIG_TRUSTED_KEYS_DEBUG=y.
-> +
-> +			To make the traces visible after enabling the option,
-> +			use trusted.dyndbg='+p' as needed. By convention,
-> +			the subsystem uses pr_debug() for these traces.
-> +
-> +			SAFETY: The traces can leak sensitive data, so be
-> +			cautious before enabling this. They remain inactive
-> +			unless this parameter is set this option to  a true
-> +			value.
-> +
-> +			Default: false
-> +
->   	trusted.rng=	[KEYS]
->   			Format: <string>
->   			The RNG used to generate key material for trusted keys.
-> diff --git a/include/keys/trusted-type.h b/include/keys/trusted-type.h
-> index 03527162613f..9f9940482da4 100644
-> --- a/include/keys/trusted-type.h
-> +++ b/include/keys/trusted-type.h
-> @@ -83,18 +83,21 @@ struct trusted_key_source {
->   
->   extern struct key_type key_type_trusted;
->   
-> -#define TRUSTED_DEBUG 0
-> +#ifdef CONFIG_TRUSTED_KEYS_DEBUG
-> +extern bool trusted_debug;
->   
-> -#if TRUSTED_DEBUG
->   static inline void dump_payload(struct trusted_key_payload *p)
->   {
-> -	pr_info("key_len %d\n", p->key_len);
-> -	print_hex_dump(KERN_INFO, "key ", DUMP_PREFIX_NONE,
-> -		       16, 1, p->key, p->key_len, 0);
-> -	pr_info("bloblen %d\n", p->blob_len);
-> -	print_hex_dump(KERN_INFO, "blob ", DUMP_PREFIX_NONE,
-> -		       16, 1, p->blob, p->blob_len, 0);
-> -	pr_info("migratable %d\n", p->migratable);
-> +	if (!trusted_debug)
-> +		return;
-> +
-> +	pr_debug("key_len %d\n", p->key_len);
-> +	print_hex_dump_debug("key ", DUMP_PREFIX_NONE,
-> +			     16, 1, p->key, p->key_len, 0);
-> +	pr_debug("bloblen %d\n", p->blob_len);
-> +	print_hex_dump_debug("blob ", DUMP_PREFIX_NONE,
-> +			     16, 1, p->blob, p->blob_len, 0);
-> +	pr_debug("migratable %d\n", p->migratable);
->   }
->   #else
->   static inline void dump_payload(struct trusted_key_payload *p)
-> diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-keys/Kconfig
-> index 9e00482d886a..e5a4a53aeab2 100644
-> --- a/security/keys/trusted-keys/Kconfig
-> +++ b/security/keys/trusted-keys/Kconfig
-> @@ -1,10 +1,29 @@
->   config HAVE_TRUSTED_KEYS
->   	bool
->   
-> +config HAVE_TRUSTED_KEYS_DEBUG
-> +	bool
-> +
-> +config TRUSTED_KEYS_DEBUG
-> +	bool "Debug trusted keys"
-> +	depends on HAVE_TRUSTED_KEYS_DEBUG
-> +	default n
-> +	help
-> +	  Trusted key backends and core code that support debug traces can
-> +	  opt-in that feature here. Traces must only use debug level output, as
-> +	  sensitive data may pass by. In the kernel-command line traces can be
-> +	  enabled via trusted.dyndbg='+p'.
-> +
-> +	  SAFETY: Debug dumps are inactive at runtime until trusted.debug is set
-> +	  to a true value on the kernel command-line. Use at your utmost
-> +	  consideration when enabling this feature on a production build. The
-> +	  general advice is not to do this.
-> +
->   config TRUSTED_KEYS_TPM
->   	bool "TPM-based trusted keys"
->   	depends on TCG_TPM >= TRUSTED_KEYS
->   	default y
-> +	select HAVE_TRUSTED_KEYS_DEBUG
->   	select CRYPTO_HASH_INFO
->   	select CRYPTO_LIB_SHA1
->   	select CRYPTO_LIB_UTILS
-> @@ -23,6 +42,7 @@ config TRUSTED_KEYS_TEE
->   	bool "TEE-based trusted keys"
->   	depends on TEE >= TRUSTED_KEYS
->   	default y
-> +	select HAVE_TRUSTED_KEYS_DEBUG
->   	select HAVE_TRUSTED_KEYS
->   	help
->   	  Enable use of the Trusted Execution Environment (TEE) as trusted
-> @@ -33,6 +53,7 @@ config TRUSTED_KEYS_CAAM
->   	depends on CRYPTO_DEV_FSL_CAAM_JR >= TRUSTED_KEYS
->   	select CRYPTO_DEV_FSL_CAAM_BLOB_GEN
->   	default y
-> +	select HAVE_TRUSTED_KEYS_DEBUG
->   	select HAVE_TRUSTED_KEYS
->   	help
->   	  Enable use of NXP's Cryptographic Accelerator and Assurance Module
-> @@ -42,6 +63,7 @@ config TRUSTED_KEYS_DCP
->   	bool "DCP-based trusted keys"
->   	depends on CRYPTO_DEV_MXS_DCP >= TRUSTED_KEYS
->   	default y
-> +	select HAVE_TRUSTED_KEYS_DEBUG
->   	select HAVE_TRUSTED_KEYS
->   	help
->   	  Enable use of NXP's DCP (Data Co-Processor) as trusted key backend.
-> @@ -50,6 +72,7 @@ config TRUSTED_KEYS_PKWM
->   	bool "PKWM-based trusted keys"
->   	depends on PSERIES_PLPKS >= TRUSTED_KEYS
->   	default y
-> +	select HAVE_TRUSTED_KEYS_DEBUG
->   	select HAVE_TRUSTED_KEYS
->   	help
->   	  Enable use of IBM PowerVM Key Wrapping Module (PKWM) as a trusted key backend.
-> diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/trusted-keys/trusted_caam.c
-> index 601943ce0d60..6a33dbf2a7f5 100644
-> --- a/security/keys/trusted-keys/trusted_caam.c
-> +++ b/security/keys/trusted-keys/trusted_caam.c
-> @@ -28,10 +28,13 @@ static const match_table_t key_tokens = {
->   	{opt_err, NULL}
->   };
->   
-> -#ifdef CAAM_DEBUG
-> +#ifdef CONFIG_TRUSTED_KEYS_DEBUG
->   static inline void dump_options(const struct caam_pkey_info *pkey_info)
->   {
-> -	pr_info("key encryption algo %d\n", pkey_info->key_enc_algo);
-> +	if (!trusted_debug)
-> +		return;
-> +
-> +	pr_debug("key encryption algo %d\n", pkey_info->key_enc_algo);
->   }
->   #else
->   static inline void dump_options(const struct caam_pkey_info *pkey_info)
-> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/trusted-keys/trusted_core.c
-> index 0b142d941cd2..6aed17bee09d 100644
-> --- a/security/keys/trusted-keys/trusted_core.c
-> +++ b/security/keys/trusted-keys/trusted_core.c
-> @@ -31,6 +31,12 @@ static char *trusted_rng = "default";
->   module_param_named(rng, trusted_rng, charp, 0);
->   MODULE_PARM_DESC(rng, "Select trusted key RNG");
->   
-> +#ifdef CONFIG_TRUSTED_KEYS_DEBUG
-> +bool trusted_debug;
-> +module_param_named(debug, trusted_debug, bool, 0);
-> +MODULE_PARM_DESC(debug, "Enable trusted keys debug traces (default: 0)");
-> +#endif
-> +
->   static char *trusted_key_source;
->   module_param_named(source, trusted_key_source, charp, 0);
->   MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee, caam, dcp or pkwm)");
-> diff --git a/security/keys/trusted-keys/trusted_tpm1.c b/security/keys/trusted-keys/trusted_tpm1.c
-> index 6ea728f1eae6..13513819991e 100644
-> --- a/security/keys/trusted-keys/trusted_tpm1.c
-> +++ b/security/keys/trusted-keys/trusted_tpm1.c
-> @@ -46,38 +46,44 @@ enum {
->   	SRK_keytype = 4
->   };
->   
-> -#define TPM_DEBUG 0
-> -
-> -#if TPM_DEBUG
-> +#ifdef CONFIG_TRUSTED_KEYS_DEBUG
->   static inline void dump_options(struct trusted_key_options *o)
->   {
-> -	pr_info("sealing key type %d\n", o->keytype);
-> -	pr_info("sealing key handle %0X\n", o->keyhandle);
-> -	pr_info("pcrlock %d\n", o->pcrlock);
-> -	pr_info("pcrinfo %d\n", o->pcrinfo_len);
-> -	print_hex_dump(KERN_INFO, "pcrinfo ", DUMP_PREFIX_NONE,
-> -		       16, 1, o->pcrinfo, o->pcrinfo_len, 0);
-> +	if (!trusted_debug)
-> +		return;
-> +
-> +	pr_debug("sealing key type %d\n", o->keytype);
-> +	pr_debug("sealing key handle %0X\n", o->keyhandle);
-> +	pr_debug("pcrlock %d\n", o->pcrlock);
-> +	pr_debug("pcrinfo %d\n", o->pcrinfo_len);
-> +	print_hex_dump_debug("pcrinfo ", DUMP_PREFIX_NONE,
-> +			     16, 1, o->pcrinfo, o->pcrinfo_len, 0);
->   }
->   
->   static inline void dump_sess(struct osapsess *s)
->   {
-> -	print_hex_dump(KERN_INFO, "trusted-key: handle ", DUMP_PREFIX_NONE,
-> -		       16, 1, &s->handle, 4, 0);
-> -	pr_info("secret:\n");
-> -	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
-> -		       16, 1, &s->secret, SHA1_DIGEST_SIZE, 0);
-> -	pr_info("trusted-key: enonce:\n");
-> -	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE,
-> -		       16, 1, &s->enonce, SHA1_DIGEST_SIZE, 0);
-> +	if (!trusted_debug)
-> +		return;
-> +
-> +	print_hex_dump_debug("trusted-key: handle ", DUMP_PREFIX_NONE,
-> +			     16, 1, &s->handle, 4, 0);
-> +	pr_debug("secret:\n");
-> +	print_hex_dump_debug("", DUMP_PREFIX_NONE,
-> +			     16, 1, &s->secret, SHA1_DIGEST_SIZE, 0);
-> +	pr_debug("trusted-key: enonce:\n");
-> +	print_hex_dump_debug("", DUMP_PREFIX_NONE,
-> +			     16, 1, &s->enonce, SHA1_DIGEST_SIZE, 0);
->   }
->   
->   static inline void dump_tpm_buf(unsigned char *buf)
->   {
->   	int len;
->   
-> -	pr_info("\ntpm buffer\n");
-> +	if (!trusted_debug)
-> +		return;
-> +	pr_debug("\ntpm buffer\n");
->   	len = LOAD32(buf, TPM_SIZE_OFFSET);
-> -	print_hex_dump(KERN_INFO, "", DUMP_PREFIX_NONE, 16, 1, buf, len, 0);
-> +	print_hex_dump_debug("", DUMP_PREFIX_NONE, 16, 1, buf, len, 0);
->   }
->   #else
->   static inline void dump_options(struct trusted_key_options *o)
+> in testcase: ltp
+> version: 
+> with following parameters:
+
+> 	test: ima
+
+
+
+> config: x86_64-rhel-9.4-ltp
+> compiler: gcc-14
+> test machine: 22 threads 1 sockets Intel(R) Core(TM) Ultra 9 185H @ 4.5GHz (Meteor Lake) with 32G memory
+
+> (please refer to attached dmesg/kmsg for entire log/backtrace)
+
+
+
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <oliver.sang@intel.com>
+> | Closes: https://lore.kernel.org/oe-lkp/202604150702.d409a2b6-lkp@intel.com
+
+
+> The kernel config and materials to reproduce are available at:
+> https://download.01.org/0day-ci/archive/20260415/202604150702.d409a2b6-lkp@intel.com
+
+
+> kern  :err   : [   27.966990] [    T399] ==================================================================
+> kern  :err   : [   27.968126] [    T399] BUG: KASAN: slab-out-of-bounds in parse_vswing_preemph_snps+0x2dd/0x430 [i915]
+> kern  :err   : [   27.969712] [    T399] Read of size 4 at addr ffff8881eba2c49d by task (udev-worker)/399
+
+> kern  :err   : [   27.971135] [    T399] CPU: 4 UID: 0 PID: 399 Comm: (udev-worker) Tainted: G S                  7.0.0-rc4-01496-g07d1ee54da49 #1 PREEMPT(lazy) 
+> kern  :err   : [   27.971139] [    T399] Tainted: [S]=CPU_OUT_OF_SPEC
+> kern  :err   : [   27.971140] [    T399] Hardware name: ASUSTeK COMPUTER INC. NUC14RVS-B/NUC14RVSU9, BIOS RVMTL357.0047.2025.0108.1408 01/08/2025
+> kern  :err   : [   27.971142] [    T399] Call Trace:
+> kern  :err   : [   27.971144] [    T399]  <TASK>
+> kern  :err   : [   27.971145] [    T399]  dump_stack_lvl+0x47/0x70
+> kern  :err   : [   27.971152] [    T399]  print_address_description+0x88/0x320
+> kern  :err   : [   27.971156] [    T399]  ? parse_vswing_preemph_snps+0x2dd/0x430 [i915]
+> kern  :err   : [   27.971355] [    T399]  print_report+0x106/0x1f4
+> kern  :err   : [   27.971357] [    T399]  ? __virt_addr_valid+0xc4/0x230
+> kern  :err   : [   27.971360] [    T399]  ? parse_vswing_preemph_snps+0x2dd/0x430 [i915]
+> kern  :err   : [   27.971533] [    T399]  kasan_report+0xb5/0xf0
+> kern  :err   : [   27.971537] [    T399]  ? parse_vswing_preemph_snps+0x2dd/0x430 [i915]
+> kern  :err   : [   27.971704] [    T399]  parse_vswing_preemph_snps+0x2dd/0x430 [i915]
+> kern  :err   : [   27.971868] [    T399]  intel_bios_init+0xcc1/0x14b0 [i915]
+> kern  :err   : [   27.972042] [    T399]  ? drm_vblank_init+0x147/0x330 [drm]
+> kern  :err   : [   27.972105] [    T399]  intel_display_driver_probe_noirq+0x8d/0x870 [i915]
+> kern  :err   : [   27.972295] [    T399]  i915_driver_probe+0x209/0x9f0 [i915]
+> kern  :err   : [   27.972445] [    T399]  ? __pfx_mutex_lock+0x10/0x10
+> kern  :err   : [   27.972450] [    T399]  ? mutex_lock+0x91/0xf0
+> kern  :err   : [   27.972451] [    T399]  ? __pfx_i915_driver_probe+0x10/0x10 [i915]
+> kern  :err   : [   27.972597] [    T399]  ? drm_privacy_screen_get+0x2bf/0x370 [drm]
+> kern  :err   : [   27.972628] [    T399]  ? intel_display_driver_probe_defer+0x41/0x70 [i915]
+> kern  :err   : [   27.972814] [    T399]  ? i915_pci_probe+0x2ab/0x3b0 [i915]
+> kern  :err   : [   27.972963] [    T399]  ? __pfx_i915_pci_probe+0x10/0x10 [i915]
+> kern  :err   : [   27.973110] [    T399]  local_pci_probe+0xdb/0x1b0
+> kern  :err   : [   27.973114] [    T399]  pci_call_probe+0x153/0x4f0
+> kern  :err   : [   27.973116] [    T399]  ? __pfx_pci_call_probe+0x10/0x10
+> kern  :err   : [   27.973117] [    T399]  ? __pfx__raw_spin_lock+0x10/0x10
+> kern  :err   : [   27.973119] [    T399]  ? pci_assign_irq+0x80/0x2f0
+> kern  :err   : [   27.973121] [    T399]  ? pci_match_device+0x38d/0x6b0
+> kern  :err   : [   27.973123] [    T399]  ? kernfs_create_link+0x164/0x230
+> kern  :err   : [   27.973127] [    T399]  pci_device_probe+0x173/0x2f0
+> kern  :err   : [   27.973128] [    T399]  call_driver_probe+0x62/0x1f0
+> kern  :err   : [   27.973132] [    T399]  really_probe+0x197/0x770
+> kern  :err   : [   27.973134] [    T399]  __driver_probe_device+0x18c/0x3b0
+> kern  :err   : [   27.973137] [    T399]  driver_probe_device+0x4a/0x130
+> kern  :err   : [   27.973139] [    T399]  __driver_attach+0x18c/0x4f0
+> kern  :err   : [   27.973141] [    T399]  ? __pfx___driver_attach+0x10/0x10
+> kern  :err   : [   27.973143] [    T399]  bus_for_each_dev+0xef/0x170
+> kern  :err   : [   27.973145] [    T399]  ? kasan_unpoison+0x40/0x70
+> kern  :err   : [   27.973147] [    T399]  ? __pfx_bus_for_each_dev+0x10/0x10
+> kern  :err   : [   27.973149] [    T399]  ? __kasan_slab_alloc+0x2f/0x70
+> kern  :err   : [   27.973152] [    T399]  ? klist_add_tail+0x132/0x270
+> kern  :err   : [   27.973154] [    T399]  bus_add_driver+0x2a7/0x4f0
+> kern  :err   : [   27.973156] [    T399]  driver_register+0x1a1/0x370
+> kern  :err   : [   27.973158] [    T399]  i915_init+0x57/0x160 [i915]
+> kern  :err   : [   27.973307] [    T399]  ? __pfx_i915_init+0x10/0x10 [i915]
+> kern  :err   : [   27.973453] [    T399]  do_one_initcall+0x8d/0x3f0
+> kern  :err   : [   27.973455] [    T399]  ? __pfx_do_one_initcall+0x10/0x10
+> kern  :err   : [   27.973457] [    T399]  ? kasan_unpoison+0x3b/0x70
+> kern  :err   : [   27.973458] [    T399]  ? kasan_unpoison+0x40/0x70
+> kern  :err   : [   27.973460] [    T399]  do_init_module+0x281/0x830
+> kern  :err   : [   27.973463] [    T399]  ? __pfx_do_init_module+0x10/0x10
+> kern  :err   : [   27.973464] [    T399]  ? kfree+0x195/0x430
+> kern  :err   : [   27.973467] [    T399]  load_module+0x173d/0x2070
+> kern  :err   : [   27.973469] [    T399]  ? ima_post_read_file+0x18f/0x230
+
+I'm surprised, but indeed it's could be triggered by IMA.
+
+Looking at full dmesg [1] I'm surprised that this is triggered before tests are
+actually run and there is no IMA specific kernel command line parameter. That
+means that error is not related to any LTP test.
+
+Is it always reproducible or just a random glitch?
+
+ima_post_read_file() is a part of IMA core therefore issue might be not related
+to any config, but just FYI kernel config [2].
+
+Kind regards,
+Petr
+
+[1] https://download.01.org/0day-ci/archive/20260415/202604150702.d409a2b6-lkp@intel.com/kmsg.xz
+[2] https://download.01.org/0day-ci/archive/20260415/202604150702.d409a2b6-lkp@intel.com/config-7.0.0-rc4-01496-g07d1ee54da49
+
+> kern  :err   : [   27.973474] [    T399]  ? __pfx_load_module+0x10/0x10
+> kern  :err   : [   27.973476] [    T399]  ? security_kernel_post_read_file+0x35/0xf0
+> kern  :err   : [   27.973479] [    T399]  ? __pfx_kernel_read_file+0x10/0x10
+> kern  :err   : [   27.973483] [    T399]  ? __pfx_current_time+0x10/0x10
+> kern  :err   : [   27.973486] [    T399]  ? init_module_from_file+0x157/0x1b0
+> kern  :err   : [   27.973487] [    T399]  init_module_from_file+0x157/0x1b0
+> kern  :err   : [   27.973489] [    T399]  ? __pfx_init_module_from_file+0x10/0x10
+> kern  :err   : [   27.973491] [    T399]  ? touch_atime+0x1bc/0x4f0
+> kern  :err   : [   27.973493] [    T399]  ? _raw_spin_lock+0x80/0xf0
+> kern  :err   : [   27.973494] [    T399]  ? __pfx__raw_spin_lock+0x10/0x10
+> kern  :err   : [   27.973496] [    T399]  ? __pfx_filemap_read+0x10/0x10
+> kern  :err   : [   27.973498] [    T399]  ? do_sys_openat2+0xeb/0x170
+> kern  :err   : [   27.973501] [    T399]  idempotent_init_module+0x21c/0x770
+> kern  :err   : [   27.973503] [    T399]  ? __pfx_idempotent_init_module+0x10/0x10
+> kern  :err   : [   27.973505] [    T399]  ? fdget+0x54/0x3b0
+> kern  :err   : [   27.973506] [    T399]  ? security_capable+0x35/0xf0
+> kern  :err   : [   27.973509] [    T399]  __x64_sys_finit_module+0xca/0x170
+> kern  :err   : [   27.973511] [    T399]  do_syscall_64+0x108/0x5b0
+> kern  :err   : [   27.973513] [    T399]  ? vfs_read+0x3be/0x9b0
+> kern  :err   : [   27.973514] [    T399]  ? vfs_read+0x3be/0x9b0
+> kern  :err   : [   27.973516] [    T399]  ? __pfx_vfs_read+0x10/0x10
+> kern  :err   : [   27.973517] [    T399]  ? __pfx__raw_spin_lock+0x10/0x10
+> kern  :err   : [   27.973519] [    T399]  ? fdget+0x54/0x3b0
+> kern  :err   : [   27.973520] [    T399]  ? __pfx___seccomp_filter+0x10/0x10
+> kern  :err   : [   27.973523] [    T399]  ? __x64_sys_pread64+0x18d/0x1f0
+> kern  :err   : [   27.973525] [    T399]  ? __pfx___x64_sys_pread64+0x10/0x10
+> kern  :err   : [   27.973526] [    T399]  ? fdget+0x54/0x3b0
+> kern  :err   : [   27.973528] [    T399]  ? security_capable+0x35/0xf0
+> kern  :err   : [   27.973530] [    T399]  ? do_syscall_64+0x140/0x5b0
+> kern  :err   : [   27.973531] [    T399]  ? arch_exit_to_user_mode_prepare+0x9e/0xf0
+> kern  :err   : [   27.973533] [    T399]  ? do_syscall_64+0x140/0x5b0
+> kern  :err   : [   27.973534] [    T399]  ? __x64_sys_openat+0x104/0x1f0
+> kern  :err   : [   27.973536] [    T399]  ? __pfx___x64_sys_openat+0x10/0x10
+> kern  :err   : [   27.973538] [    T399]  ? do_syscall_64+0x140/0x5b0
+> kern  :err   : [   27.973540] [    T399]  ? do_syscall_64+0x140/0x5b0
+> kern  :err   : [   27.973541] [    T399]  ? irqentry_exit+0x76/0x4f0
+> kern  :err   : [   27.973544] [    T399]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> kern  :err   : [   27.973546] [    T399] RIP: 0033:0x7f3689aa8779
+> kern  :err   : [   27.973549] [    T399] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 67 76 0d 00 f7 d8 64 89 01 48
+> kern  :err   : [   27.973551] [    T399] RSP: 002b:00007ffca3326338 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+> kern  :err   : [   27.973555] [    T399] RAX: ffffffffffffffda RBX: 000055c94afdd3e0 RCX: 00007f3689aa8779
+> kern  :err   : [   27.973556] [    T399] RDX: 0000000000000000 RSI: 00007f36882ae44d RDI: 0000000000000053
+> kern  :err   : [   27.973557] [    T399] RBP: 0000000000000000 R08: 0000000000000000 R09: 000055c94af65b30
+> kern  :err   : [   27.973558] [    T399] R10: 0000000000000000 R11: 0000000000000246 R12: 00007f36882ae44d
+> kern  :err   : [   27.973559] [    T399] R13: 0000000000020000 R14: 000055c94afb65f0 R15: 0000000000000000
+> kern  :err   : [   27.973561] [    T399]  </TASK>
+
+> kern  :err   : [   28.051757] [    T399] Allocated by task 399:
+> kern  :warn  : [   28.052350] [    T399]  kasan_save_stack+0x1e/0x70
+> kern  :warn  : [   28.053001] [    T399]  kasan_save_track+0x10/0x30
+> kern  :warn  : [   28.053646] [    T399]  __kasan_kmalloc+0x8b/0xb0
+> kern  :warn  : [   28.054278] [    T399]  __kmalloc_noprof+0x1d8/0x5f0
+> kern  :warn  : [   28.054944] [    T399]  init_bdb_block+0x128/0xc30 [i915]
+> kern  :warn  : [   28.055915] [    T399]  intel_bios_init+0x4de/0x14b0 [i915]
+> kern  :warn  : [   28.056854] [    T399]  intel_display_driver_probe_noirq+0x8d/0x870 [i915]
+> kern  :warn  : [   28.057984] [    T399]  i915_driver_probe+0x209/0x9f0 [i915]
+> kern  :warn  : [   28.058917] [    T399]  local_pci_probe+0xdb/0x1b0
+> kern  :warn  : [   28.059565] [    T399]  pci_call_probe+0x153/0x4f0
+> kern  :warn  : [   28.060210] [    T399]  pci_device_probe+0x173/0x2f0
+> kern  :warn  : [   28.060878] [    T399]  call_driver_probe+0x62/0x1f0
+> kern  :warn  : [   28.061547] [    T399]  really_probe+0x197/0x770
+> kern  :warn  : [   28.062168] [    T399]  __driver_probe_device+0x18c/0x3b0
+> kern  :warn  : [   28.062894] [    T399]  driver_probe_device+0x4a/0x130
+> kern  :warn  : [   28.063587] [    T399]  __driver_attach+0x18c/0x4f0
+> kern  :warn  : [   28.064243] [    T399]  bus_for_each_dev+0xef/0x170
+> kern  :warn  : [   28.064898] [    T399]  bus_add_driver+0x2a7/0x4f0
+> kern  :warn  : [   28.065543] [    T399]  driver_register+0x1a1/0x370
+> kern  :warn  : [   28.066202] [    T399]  i915_init+0x57/0x160 [i915]
+> kern  :warn  : [   28.067030] [    T399]  do_one_initcall+0x8d/0x3f0
+> kern  :warn  : [   28.067677] [    T399]  do_init_module+0x281/0x830
+> kern  :warn  : [   28.068320] [    T399]  load_module+0x173d/0x2070
+> kern  :warn  : [   28.068951] [    T399]  init_module_from_file+0x157/0x1b0
+> kern  :warn  : [   28.069678] [    T399]  idempotent_init_module+0x21c/0x770
+> kern  :warn  : [   28.070417] [    T399]  __x64_sys_finit_module+0xca/0x170
+> kern  :warn  : [   28.071143] [    T399]  do_syscall_64+0x108/0x5b0
+> kern  :warn  : [   28.071777] [    T399]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+> kern  :err   : [   28.072915] [    T399] The buggy address belongs to the object at ffff8881eba2c000
+>                                           which belongs to the cache kmalloc-2k of size 2048
+> kern  :err   : [   28.074832] [    T399] The buggy address is located 0 bytes to the right of
+>                                           allocated 1181-byte region [ffff8881eba2c000, ffff8881eba2c49d)
+
+> kern  :err   : [   28.077135] [    T399] The buggy address belongs to the physical page:
+> kern  :warn  : [   28.078017] [    T399] page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1eba28
+> kern  :warn  : [   28.079226] [    T399] head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+> kern  :warn  : [   28.080389] [    T399] flags: 0x17ffffc0000040(head|node=0|zone=2|lastcpupid=0x1fffff)
+> kern  :warn  : [   28.081460] [    T399] page_type: f5(slab)
+> kern  :warn  : [   28.082008] [    T399] raw: 0017ffffc0000040 ffff888100042f00 dead000000000100 dead000000000122
+> kern  :warn  : [   28.083180] [    T399] raw: 0000000000000000 0000000800080008 00000000f5000000 0000000000000000
+> kern  :warn  : [   28.084355] [    T399] head: 0017ffffc0000040 ffff888100042f00 dead000000000100 dead000000000122
+> kern  :warn  : [   28.085541] [    T399] head: 0000000000000000 0000000800080008 00000000f5000000 0000000000000000
+> kern  :warn  : [   28.086725] [    T399] head: 0017ffffc0000003 ffffea0007ae8a01 00000000ffffffff 00000000ffffffff
+> kern  :warn  : [   28.087909] [    T399] head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
+> kern  :warn  : [   28.089093] [    T399] page dumped because: kasan: bad access detected
+
+> kern  :err   : [   28.090297] [    T399] Memory state around the buggy address:
+> kern  :err   : [   28.091073] [    T399]  ffff8881eba2c380: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> kern  :err   : [   28.092175] [    T399]  ffff8881eba2c400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> kern  :err   : [   28.093276] [    T399] >ffff8881eba2c480: 00 00 00 05 fc fc fc fc fc fc fc fc fc fc fc fc
+> kern  :err   : [   28.094376] [    T399]                             ^
+> kern  :err   : [   28.095041] [    T399]  ffff8881eba2c500: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> kern  :err   : [   28.096145] [    T399]  ffff8881eba2c580: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> kern  :err   : [   28.097247] [    T399] ==================================================================
+> kern  :warn  : [   28.098668] [    T399] Disabling lock debugging due to kernel taint
 
