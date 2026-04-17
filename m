@@ -1,163 +1,211 @@
-Return-Path: <linux-integrity+bounces-9215-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9219-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eAAIDIzH4WllyAAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9215-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 07:39:24 +0200
+	id +AohLL9p4mnk5gAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9219-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 19:11:27 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92C81417241
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 07:39:23 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CE9441D6F4
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 19:11:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CF8EB31AE3CC
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 05:26:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2EEA030488EC
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 17:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB8C36D513;
-	Fri, 17 Apr 2026 05:26:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1832F12D4;
+	Fri, 17 Apr 2026 17:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="p8f9HgC8";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="xpC/kqsu";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="p8f9HgC8";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="xpC/kqsu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625FF36CDEF;
-	Fri, 17 Apr 2026 05:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F16D396D19
+	for <linux-integrity@vger.kernel.org>; Fri, 17 Apr 2026 17:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776403593; cv=none; b=Kh8Sqvkpfj5wIDRzOoXi9pJtEEdYjPKgG0WifXiFggKglj6c8qL0QaOaj82+N5vAU1GxI8m5zvw7NZ7Mt5KRuJz8YXTFs9LwRungX709E8FajmbXOhK/8PH4NGzjcMMhdWvMs9BivY2MbQts/xRrjT6SQhAMLY8nMLs9uRfFT0c=
+	t=1776445879; cv=none; b=ACnizYMDDaftMnUCTBIy/EnwfPsFlqwiqNn2HWtaiVZRMxxbz3L07jPAb+dt7gzU/qeTnFX9S7NTJtBOduMdtxGooM8MQFezS0BGu0kD4iSersoze/wmJZCUJxg5lJ8k9eLv5jdzDQKhks6XxNcumV21EQk0IrWIWPSs0QqDK10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776403593; c=relaxed/simple;
-	bh=xG508dr5BJFMsH4r4rWRLUThGgCTgTt4gAPmAf7gydg=;
-	h=From:Date:Message-ID:To:Cc:In-Reply-To:References:Subject; b=UeclxMW+wm3W6XRhMk2c1lo7///KJolkHKlIjkvbw85kxjwpCinvybX9dL3VDMveTn4bqa0ya81O+jxQ6S0IucUMcxpZKU4M7dZBVPJVP0lsPRUrHAPEQlO4o+ahKyq1xSHjko5zX0ePsan0PKArc3TZtANyTakfxu8rD+PjhYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from 0006-evm-v2.eml (unknown [111.196.245.116])
-	by APP-03 (Coremail) with SMTP id rQCowAD3F997xOFpEThZDg--.34327S2;
-	Fri, 17 Apr 2026 13:26:19 +0800 (CST)
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Date: Fri, 17 Apr 2026 20:44:00 +0800
-Message-ID: <20260417223004.1-evm-xattrs-v2-pengpeng@iscas.ac.cn>
-To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>
-Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, Serge Hallyn <serge@hallyn.com>, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, pengpeng@iscas.ac.cn
-In-Reply-To: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
-References: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
-Subject: [PATCH v2] evm: terminate and bound the evm_xattrs read buffer
-X-CM-TRANSID:rQCowAD3F997xOFpEThZDg--.34327S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF4DJr1xXFWkZF4fJFWxXrb_yoW8ZFWrpF
-	ZxKa4Dtrn5ZrykGrWUJ3W7u3s5G395WF4UGrZ3Gw12yanIqrWSqF95CFyrWr95XrW0yw1a
-	q3s09rnI9F15X3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
-	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xv
-	wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4
-	x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-	64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r
-	4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I
-	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
-	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRC9aBDUUUU
-X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
+	s=arc-20240116; t=1776445879; c=relaxed/simple;
+	bh=ZyMhTsWwE7IZG+Kam+18WESVlcVVKY9Ew0nT3qa71Iw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KcIeYjShwsCMllOR6ZY0HqQEhwuBFBFRd/lGUv56fipsOxT+XbLF0lMFNjqj9XjD7P+mZ6PrQdAK+Ti1qG3Zzd6ZB1ot/iXUrwcingwSv/j/pXWu+YBgxEmXsr4OO+oxzd6BQted7lVhRLeqfoXAYFz1H0Cp4gNGHXQwDbkUT4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=p8f9HgC8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=xpC/kqsu; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=p8f9HgC8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=xpC/kqsu; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 3B0596A9CD;
+	Fri, 17 Apr 2026 17:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776445866;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
+	b=p8f9HgC81RqnGM4durgZx3xfS4BOkcEkxseOTwAdLLv3T5iUFg+alC5QLwazifO2qYMvyZ
+	9NMDXV3nZW4dz2svQgotp1+E3heJ8pENfVcs+XYKpxZIiKX7ftYWqAKG/MagbhGWIvTb3S
+	9xSw9wniFDqH5J5SWrwuNjpPAq15+DY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776445866;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
+	b=xpC/kqsu09Mh0R9uSJUz2I83Sy/6JwlEUoGqu5nmmrOkJp0YpXCkeQagMjbGw54q+Fjid/
+	YcD+YEMHDw6JvXCw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1776445866;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
+	b=p8f9HgC81RqnGM4durgZx3xfS4BOkcEkxseOTwAdLLv3T5iUFg+alC5QLwazifO2qYMvyZ
+	9NMDXV3nZW4dz2svQgotp1+E3heJ8pENfVcs+XYKpxZIiKX7ftYWqAKG/MagbhGWIvTb3S
+	9xSw9wniFDqH5J5SWrwuNjpPAq15+DY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1776445866;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
+	b=xpC/kqsu09Mh0R9uSJUz2I83Sy/6JwlEUoGqu5nmmrOkJp0YpXCkeQagMjbGw54q+Fjid/
+	YcD+YEMHDw6JvXCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BF5EC593AE;
+	Fri, 17 Apr 2026 17:11:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 0EDgLKlp4mn4RAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Fri, 17 Apr 2026 17:11:05 +0000
+Date: Fri, 17 Apr 2026 19:11:04 +0200
+From: Petr Vorel <pvorel@suse.cz>
+To: =?iso-8859-2?Q?Micha=B3?= Grzelak <michal.grzelak@intel.com>
+Cc: Oliver Sang <oliver.sang@intel.com>, lkp@intel.com,
+	intel-gfx@lists.freedesktop.org,
+	Jani Nikula <jani.nikula@linux.intel.com>, oe-lkp@lists.linux.dev,
+	intel-xe@lists.freedesktop.org, ltp@lists.linux.it,
+	linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
+Subject: Re: [LTP] [PATCH v1 15/16] drm/i915/bios: search for VBT #57 by
+ default
+Message-ID: <20260417171104.GB426937@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20260331183332.1773886-16-michal.grzelak@intel.com>
+ <202604150702.d409a2b6-lkp@intel.com>
+ <20260416064051.GA281695@pevik>
+ <aeCShTeoW+lmHjHF@xsang-OptiPlex-9020>
+ <2df6f595-da57-0668-951c-657c5c876333@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-X-Spamd-Result: default: False [5.54 / 15.00];
-	DATE_IN_FUTURE(4.00)[7];
-	SUSPICIOUS_RECIPS(1.50)[];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2df6f595-da57-0668-951c-657c5c876333@intel.com>
+X-Spam-Score: -3.50
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9215-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	GREYLIST(0.00)[pass,body];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	FREEMAIL_CC(0.00)[gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,iscas.ac.cn];
-	RCVD_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9219-lists,linux-integrity=lfdr.de];
+	DKIM_TRACE(0.00)[suse.cz:+];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DMARC_NA(0.00)[suse.cz];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.986];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	R_DKIM_NA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.cz:dkim,suse.cz:replyto];
+	HAS_REPLYTO(0.00)[pvorel@suse.cz];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pvorel@suse.cz,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:mid,iscas.ac.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 92C81417241
+	REPLYTO_EQ_FROM(0.00)[]
+X-Rspamd-Queue-Id: 5CE9441D6F4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-evm_read_xattrs() allocates size + 1 bytes, fills them from the list of
-enabled xattrs, and then passes strlen(temp) to
-simple_read_from_buffer(). When no configured xattrs are enabled, the
-fill loop stores nothing and temp[0] remains uninitialized, so strlen()
-reads beyond initialized memory.
+Hi Micha³, all,
 
-Explicitly terminate the buffer after allocation, use snprintf() for
-each formatted line, and pass the accumulated length to
-simple_read_from_buffer().
+> Hi Petr & Oliver,
 
-Fixes: fa516b66a1bf ("EVM: Allow runtime modification of the set of verified xattrs")
-Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
----
-Changes since v1:
-- add the Fixes tag
-- replace sprintf() with snprintf()
-- explicitly terminate the buffer instead of switching to kzalloc()
+> > in our tests, it's quite persistent and clean on parent:
 
- security/integrity/evm/evm_secfs.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+> I haven't reproduced it myself, but this issue seems somewhat related
+> with issue observed earlier by CI [1]. I would expect it to not be a
+> random glitch but a true bug related to the series.
 
-diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
-index acd840461902..b7882a4ce9d0 100644
---- a/security/integrity/evm/evm_secfs.c
-+++ b/security/integrity/evm/evm_secfs.c
-@@ -127,8 +127,8 @@ static ssize_t evm_read_xattrs(struct file *filp, char __user *buf,
- 			       size_t count, loff_t *ppos)
- {
- 	char *temp;
--	int offset = 0;
--	ssize_t rc, size = 0;
-+	size_t offset = 0, size = 0;
-+	ssize_t rc;
- 	struct xattr_list *xattr;
- 
- 	if (*ppos != 0)
-@@ -150,17 +150,18 @@ static ssize_t evm_read_xattrs(struct file *filp, char __user *buf,
- 		mutex_unlock(&xattr_list_mutex);
- 		return -ENOMEM;
- 	}
-+	temp[size] = '\0';
- 
- 	list_for_each_entry(xattr, &evm_config_xattrnames, list) {
- 		if (!xattr->enabled)
- 			continue;
- 
--		sprintf(temp + offset, "%s\n", xattr->name);
--		offset += strlen(xattr->name) + 1;
-+		offset += snprintf(temp + offset, size + 1 - offset, "%s\n",
-+				   xattr->name);
- 	}
- 
- 	mutex_unlock(&xattr_list_mutex);
--	rc = simple_read_from_buffer(buf, count, ppos, temp, strlen(temp));
-+	rc = simple_read_from_buffer(buf, count, ppos, temp, offset);
- 
- 	kfree(temp);
- 
--- 
-2.50.1 (Apple Git-155)
+> In previous versions of the series, during parsing there was a
+> unfortunate snippet of:
 
+> +	const u32 *tables = block->tables;
+> +	size_t offset = 0;
+> +	size_t row_width;
+> +	const u32 *vals;
+> +
+> +	row_width = block->num_columns * sizeof(*tables);
+> +
+> +	for (int idx = 0; idx < block->num_tables; idx++) {
+> +		for (int row = 0; row < num_rows; row++) {
+> +			vals = &tables[offset];
+> [...]
+> +			offset += row_width;
+> +		}
+> +	}
+
+> Which caused hopping by 4 times more bytes than it should, because the
+> sizeof() wasn't meant to be there. Since parsing takes place at module
+> load, looks like it could be the issue. This seems especially convincing
+> given that report is from parse_vswing_preemph_snps(). I have to also
+> admit that it would be consistent with review comment from Sashiko [2].
+
+> Lastly, sadly due to poorly split commits, 15th patch from v1 turned on
+> whole VBT #57 searching. This probably caused bisect to point at 15th
+> patch instead of pointing at patch adding parsing code, which would
+> clearly show that patch/es introduce/s the bug.
+
+> Anyways, now the bug should be fixed in v2 [3].
+
+Micha³, thanks a lot for pointing pointing this out.
+
+Kind regards,
+Petr
+
+> [1] https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_164196v1/fi-hsw-4770/dmesg0.txt
+> [2] https://sashiko.dev/#/patchset/20260331183332.1773886-1-michal.grzelak%40intel.com?part=5
+> [3] https://lore.kernel.org/intel-gfx/20260415234639.3577774-21-michal.grzelak@intel.com/
+
+> BR,
+> Micha³
 
