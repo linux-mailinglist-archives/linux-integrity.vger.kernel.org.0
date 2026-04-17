@@ -1,211 +1,157 @@
-Return-Path: <linux-integrity+bounces-9219-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9220-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +AohLL9p4mnk5gAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9219-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 19:11:27 +0200
+	id wELAALd04mnh6AAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9220-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 19:58:15 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CE9441D6F4
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 19:11:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B16441DBC2
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 19:58:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2EEA030488EC
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 17:11:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B071330056C4
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 17:58:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1832F12D4;
-	Fri, 17 Apr 2026 17:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B512430CD82;
+	Fri, 17 Apr 2026 17:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="p8f9HgC8";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="xpC/kqsu";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="p8f9HgC8";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="xpC/kqsu"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="sU2B9iWd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F16D396D19
-	for <linux-integrity@vger.kernel.org>; Fri, 17 Apr 2026 17:11:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B03F2D0614;
+	Fri, 17 Apr 2026 17:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776445879; cv=none; b=ACnizYMDDaftMnUCTBIy/EnwfPsFlqwiqNn2HWtaiVZRMxxbz3L07jPAb+dt7gzU/qeTnFX9S7NTJtBOduMdtxGooM8MQFezS0BGu0kD4iSersoze/wmJZCUJxg5lJ8k9eLv5jdzDQKhks6XxNcumV21EQk0IrWIWPSs0QqDK10=
+	t=1776448687; cv=none; b=bNJwh3JsIMeLZq3dy4D7mTtAKE8kRXHe563cGWO8dP4ZxqBN7T6JPm6LCvAw6shc0/tXjygOuFyfN7grCoPDMoINcsjkifQYJNXbRYstrjHehDiZHMzi8InY+nIT5f4UoDPZ9wPdjwhdqG3wpwEo+ev/khVVhWP9h/gdJqZZshI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776445879; c=relaxed/simple;
-	bh=ZyMhTsWwE7IZG+Kam+18WESVlcVVKY9Ew0nT3qa71Iw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KcIeYjShwsCMllOR6ZY0HqQEhwuBFBFRd/lGUv56fipsOxT+XbLF0lMFNjqj9XjD7P+mZ6PrQdAK+Ti1qG3Zzd6ZB1ot/iXUrwcingwSv/j/pXWu+YBgxEmXsr4OO+oxzd6BQted7lVhRLeqfoXAYFz1H0Cp4gNGHXQwDbkUT4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=p8f9HgC8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=xpC/kqsu; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=p8f9HgC8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=xpC/kqsu; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3B0596A9CD;
-	Fri, 17 Apr 2026 17:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1776445866;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
-	b=p8f9HgC81RqnGM4durgZx3xfS4BOkcEkxseOTwAdLLv3T5iUFg+alC5QLwazifO2qYMvyZ
-	9NMDXV3nZW4dz2svQgotp1+E3heJ8pENfVcs+XYKpxZIiKX7ftYWqAKG/MagbhGWIvTb3S
-	9xSw9wniFDqH5J5SWrwuNjpPAq15+DY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1776445866;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
-	b=xpC/kqsu09Mh0R9uSJUz2I83Sy/6JwlEUoGqu5nmmrOkJp0YpXCkeQagMjbGw54q+Fjid/
-	YcD+YEMHDw6JvXCw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1776445866;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
-	b=p8f9HgC81RqnGM4durgZx3xfS4BOkcEkxseOTwAdLLv3T5iUFg+alC5QLwazifO2qYMvyZ
-	9NMDXV3nZW4dz2svQgotp1+E3heJ8pENfVcs+XYKpxZIiKX7ftYWqAKG/MagbhGWIvTb3S
-	9xSw9wniFDqH5J5SWrwuNjpPAq15+DY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1776445866;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZoNpbTJG3FA+Y6/ojdio+/PmnI+Bl2TOJlXEMWDNRPc=;
-	b=xpC/kqsu09Mh0R9uSJUz2I83Sy/6JwlEUoGqu5nmmrOkJp0YpXCkeQagMjbGw54q+Fjid/
-	YcD+YEMHDw6JvXCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BF5EC593AE;
-	Fri, 17 Apr 2026 17:11:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0EDgLKlp4mn4RAAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Fri, 17 Apr 2026 17:11:05 +0000
-Date: Fri, 17 Apr 2026 19:11:04 +0200
-From: Petr Vorel <pvorel@suse.cz>
-To: =?iso-8859-2?Q?Micha=B3?= Grzelak <michal.grzelak@intel.com>
-Cc: Oliver Sang <oliver.sang@intel.com>, lkp@intel.com,
-	intel-gfx@lists.freedesktop.org,
-	Jani Nikula <jani.nikula@linux.intel.com>, oe-lkp@lists.linux.dev,
-	intel-xe@lists.freedesktop.org, ltp@lists.linux.it,
-	linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>
-Subject: Re: [LTP] [PATCH v1 15/16] drm/i915/bios: search for VBT #57 by
- default
-Message-ID: <20260417171104.GB426937@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20260331183332.1773886-16-michal.grzelak@intel.com>
- <202604150702.d409a2b6-lkp@intel.com>
- <20260416064051.GA281695@pevik>
- <aeCShTeoW+lmHjHF@xsang-OptiPlex-9020>
- <2df6f595-da57-0668-951c-657c5c876333@intel.com>
+	s=arc-20240116; t=1776448687; c=relaxed/simple;
+	bh=tsQy6qMxsa5wjMUuqspAU/D38Z+x2rhzlE1+ZI76oYs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=AIvRU2rGlxaivy46WXgCXsPtU2aogFu0ocXnx8ZjQ/EKiPiXq/E3xXJoLG6bJJZPDsN0YEkPe8AfJ9xcAtceCqaTuNGjWM7NmwMQjjjJEI+cXvlojMTd0KRX+TyxEpXg6Wv4xzYUfxO8pIuzZQvoXNSNgT/KarUKteL7rXfLsa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=sU2B9iWd; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19B381D70;
+	Fri, 17 Apr 2026 10:57:59 -0700 (PDT)
+Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 673183F7D8;
+	Fri, 17 Apr 2026 10:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1776448684; bh=tsQy6qMxsa5wjMUuqspAU/D38Z+x2rhzlE1+ZI76oYs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sU2B9iWdqNy2qZpmdMvrPLtnrYEgCQBpmBdwpnWijSItJl8tytKgc0Jql+QiSx43R
+	 zaEjGkUxmpc4kFClz0FjWLjiaBsf06MeWnkNvOGcDCypTryA+GZ5bx9w8Ys/Oexc8C
+	 C3l5LnRs2B6aw1babPLRKbfONNLltApGHEBC5a5Q=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev
+Cc: paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	zohar@linux.ibm.com,
+	roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	peterhuewe@gmx.de,
+	jarkko@kernel.org,
+	jgg@ziepe.ca,
+	sudeep.holla@kernel.org,
+	maz@kernel.org,
+	oupton@kernel.org,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [RFC PATCH 0/4] fix FF-A call failed with pKVM when ff-a driver is built-in
+Date: Fri, 17 Apr 2026 18:57:55 +0100
+Message-Id: <20260417175759.3191279-1-yeoreum.yun@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2df6f595-da57-0668-951c-657c5c876333@intel.com>
-X-Spam-Score: -3.50
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9219-lists,linux-integrity=lfdr.de];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	TO_DN_SOME(0.00)[];
-	DMARC_NA(0.00)[suse.cz];
+	RCPT_COUNT_TWELVE(0.00)[24];
+	FREEMAIL_CC(0.00)[paul-moore.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,gmx.de,kernel.org,ziepe.ca,arm.com];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9220-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.cz:dkim,suse.cz:replyto];
-	HAS_REPLYTO(0.00)[pvorel@suse.cz];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pvorel@suse.cz,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[arm.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	REPLYTO_EQ_FROM(0.00)[]
-X-Rspamd-Queue-Id: 5CE9441D6F4
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7B16441DBC2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Micha³, all,
+commit 0e0546eabcd6 ("firmware: arm_ffa: Change initcall level of ffa_init() to rootfs_initcall")
+changed the initcall level of ffa_init() to rootfs_initcall to address
+an issue where IMA could not properly recognize the TPM device
+when FF-A driver is built as built-in.
 
-> Hi Petr & Oliver,
+However, this introduces another problem: pKVM fails to handle FF-A calls
+because it cannot trap the FFA_VERSION call invoked by ffa_init().
 
-> > in our tests, it's quite persistent and clean on parent:
+To ensure the TPM device is recognized when present in the system,
+it is preferable to invoke ima_init() at a later stage.
+Deferred probing is resolved by deferred_probe_initcall(),
+which runs at the late_initcall level.
+Therefore, introduce an LSM initcall at late_initcall_sync and
+move ima_init() to this level.
 
-> I haven't reproduced it myself, but this issue seems somewhat related
-> with issue observed earlier by CI [1]. I would expect it to not be a
-> random glitch but a true bug related to the series.
+With this change, revert the initcall level of ffa_init() back to
+device_initcall. Additionally, to handle the case where ffa_init() runs
+before kvm_init(), check whether pKVM has been initialized during ffa_init().
+If not, defer initialization to prevent failures of FF-A calls
+due to the inability to trap FFA_VERSION and FFA_RXTX_MAP in pKVM.
 
-> In previous versions of the series, during parsing there was a
-> unfortunate snippet of:
+This patch is based on v7.0
 
-> +	const u32 *tables = block->tables;
-> +	size_t offset = 0;
-> +	size_t row_width;
-> +	const u32 *vals;
-> +
-> +	row_width = block->num_columns * sizeof(*tables);
-> +
-> +	for (int idx = 0; idx < block->num_tables; idx++) {
-> +		for (int row = 0; row < num_rows; row++) {
-> +			vals = &tables[offset];
-> [...]
-> +			offset += row_width;
-> +		}
-> +	}
+Yeoreum Yun (4):
+  security: ima: move ima_init into late_initcall_sync
+  tpm: tpm_crb_ffa: revert defered_probed when tpm_crb_ffa is built-in
+  firmware: arm_ffa: revert ffa_init() initcall level to device_initcall
+  firmware: arm_ffa: check pkvm initailised when initailise ffa driver
 
-> Which caused hopping by 4 times more bytes than it should, because the
-> sizeof() wasn't meant to be there. Since parsing takes place at module
-> load, looks like it could be the issue. This seems especially convincing
-> given that report is from parse_vswing_preemph_snps(). I have to also
-> admit that it would be consistent with review comment from Sashiko [2].
+ arch/arm64/kvm/arm.c              |  1 +
+ drivers/char/tpm/tpm_crb_ffa.c    | 18 +++---------------
+ drivers/firmware/arm_ffa/driver.c | 14 +++++++++++++-
+ include/linux/lsm_hooks.h         |  2 ++
+ security/integrity/ima/ima_main.c |  2 +-
+ security/lsm_init.c               | 13 +++++++++++--
+ 6 files changed, 31 insertions(+), 19 deletions(-)
 
-> Lastly, sadly due to poorly split commits, 15th patch from v1 turned on
-> whole VBT #57 searching. This probably caused bisect to point at 15th
-> patch instead of pointing at patch adding parsing code, which would
-> clearly show that patch/es introduce/s the bug.
 
-> Anyways, now the bug should be fixed in v2 [3].
+base-commit: 028ef9c96e96197026887c0f092424679298aae8
+--
+LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
-Micha³, thanks a lot for pointing pointing this out.
-
-Kind regards,
-Petr
-
-> [1] https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_164196v1/fi-hsw-4770/dmesg0.txt
-> [2] https://sashiko.dev/#/patchset/20260331183332.1773886-1-michal.grzelak%40intel.com?part=5
-> [3] https://lore.kernel.org/intel-gfx/20260415234639.3577774-21-michal.grzelak@intel.com/
-
-> BR,
-> Micha³
 
