@@ -1,113 +1,196 @@
-Return-Path: <linux-integrity+bounces-9214-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9217-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2Ob2HO6j4Wl1wAAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9214-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 05:07:26 +0200
+	id CBwrJLj04Wmv0AAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9217-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 10:52:08 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE1B741671E
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 05:07:25 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28D85418F84
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 10:52:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D88D2306CD18
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 03:06:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 77E713093014
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 08:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F246834EF03;
-	Fri, 17 Apr 2026 03:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654A13AEF3A;
+	Fri, 17 Apr 2026 08:50:02 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692C5265621;
-	Fri, 17 Apr 2026 03:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AA9389E09;
+	Fri, 17 Apr 2026 08:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776395214; cv=none; b=Wget3tp9Qf4YwPPHdaCQYA1iUzUy1cgVU4054JJpk6cofdE+Bpar8leV0+XXjpMZ7rolOYe7bPktzOQ48k8hxGKR/q8F47w+ff8Dzh8ICj/2bqmNwVtIZYu79ZNqwJjuwBTije8IYkAqhKGocv0tHkvCnLp8mgDbuzEk2ZDBNHs=
+	t=1776415802; cv=none; b=iWTG526zVGve7Wqr8Hg/hQViAQtFeqN1qCiPnxzBGsfdYk5AyyssUtU9bssexYWPX1qx7dvj2EbagWa8TtRAfLC+dQS2t+EzR/suFIxGiiNHJy32QNGpMn60qV54RFA091zYFvGcN3hTppYUdqbAAF5PlZKTAzZjEhL6nBaTDv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776395214; c=relaxed/simple;
-	bh=/1SxhRBxYMAL3pjerId2Ah2s3M9DRq2tcCYGomDLNYI=;
-	h=From:Date:Message-ID:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UupRSxxxhYYkEpv9v8Pi3ggdjwF0DuYmwYWzRxhAak43OtW0XgqB7GpDeMP/hTUgWCmVnqt7ToWZIKat0YxW7ZUbplhTnU/GJckbGm87PHZSzkqLToZiKoLxw/dBMuQhOUhqMDOZMq7YJTir/1FY2PZhflFjKq4gY61U+aoUnFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from 0004-evm-xattrs-reply.eml (unknown [111.196.245.116])
-	by APP-03 (Coremail) with SMTP id rQCowACHnNPBo+FpSrhVDg--.50365S2;
-	Fri, 17 Apr 2026 11:06:41 +0800 (CST)
-From: Pengpeng Hou <pengpeng@iscas.ac.cn>
-Date: Fri, 17 Apr 2026 11:06:41 +0800
-Message-ID: <20260417190004.4-evm-xattrs-reply-pengpeng@iscas.ac.cn>
-To: Roberto Sassu <roberto.sassu@huawei.com>
-Cc: Mimi Zohar <zohar@linux.ibm.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, Serge Hallyn <serge@hallyn.com>, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, pengpeng@iscas.ac.cn
-Subject: Re: [PATCH] evm: zero-initialize the evm_xattrs read buffer
-In-Reply-To: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
-References: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
+	s=arc-20240116; t=1776415802; c=relaxed/simple;
+	bh=azlK2AIJx/EJ1A+6D8LEEyLd4U7VcVCD5tRCpDB7cdQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HbrGyuxCJ4ganV8pMVJVTf611zoKlQjTmI3Vl+q41QHdF4AjxqEitvN8/maVSW7JRgLnvcX+or/gJoLt95wrX4EZ1sCtGuyo9R3gMyOFpUjBg0t6CHicFojIFL5yLQ/1czUPVT4A0qTnd+ujovtlSHq8e6WO18W/N0R6S6WTzHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.224.196])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4fxnz7661GzpVB2;
+	Fri, 17 Apr 2026 16:26:27 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id E9C534056D;
+	Fri, 17 Apr 2026 16:30:42 +0800 (CST)
+Received: from [10.221.98.196] (unknown [10.221.98.196])
+	by APP2 (Coremail) with SMTP id GxC2BwBnHfqq7+FpUHpeAA--.33559S2;
+	Fri, 17 Apr 2026 09:30:42 +0100 (CET)
+Message-ID: <b28a714c-aabe-49f3-a8ab-274feff34d85@huaweicloud.com>
+Date: Fri, 17 Apr 2026 10:30:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowACHnNPBo+FpSrhVDg--.50365S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY97AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-	6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-	kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8I
-	cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87
-	Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
-	zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx
-	8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwAC
-	I402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCF54CYxVCY1x0262kKe7AKxV
-	WUtVW8ZwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUp6wZUUUUU=
-X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
-X-Spamd-Result: default: False [1.04 / 15.00];
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] evm: terminate and bound the evm_xattrs read buffer
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>,
+ James Morris <jmorris@namei.org>, Serge Hallyn <serge@hallyn.com>,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
+ <20260417223004.1-evm-xattrs-v2-pengpeng@iscas.ac.cn>
+Content-Language: en-US
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <20260417223004.1-evm-xattrs-v2-pengpeng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:GxC2BwBnHfqq7+FpUHpeAA--.33559S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFykWFWrAryrKry8AF4kXrb_yoW5Jr4xpF
+	Zxta4Dtrn5XryDKFW3J3W7uas3G395GFyUGr4fG3W2ya9Iqr92gFykKa45uFyfJrW0yr45
+	t3s0vFnI93W5X3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBGnh2QYCbQAAs4
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9214-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,iscas.ac.cn];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_DKIM_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9217-lists,linux-integrity=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DMARC_NA(0.00)[huaweicloud.com];
+	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: DE1B741671E
+	NEURAL_HAM(-0.00)[-0.995];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	R_DKIM_NA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huaweicloud.com:mid,iscas.ac.cn:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 28D85418F84
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Roberto,
+On 4/17/2026 2:44 PM, Pengpeng Hou wrote:
+> evm_read_xattrs() allocates size + 1 bytes, fills them from the list of
+> enabled xattrs, and then passes strlen(temp) to
+> simple_read_from_buffer(). When no configured xattrs are enabled, the
+> fill loop stores nothing and temp[0] remains uninitialized, so strlen()
+> reads beyond initialized memory.
+> 
+> Explicitly terminate the buffer after allocation, use snprintf() for
+> each formatted line, and pass the accumulated length to
 
-Thanks, I'll respin this.
+pass the accumulate length (without risk of truncation) to ...
 
-I'll add the `Fixes:` tag, switch the formatting site to `snprintf()`,
-and rework the empty-list handling so it does not depend on `kzalloc()`
-for the terminator.
+> simple_read_from_buffer().
+> 
+> Fixes: fa516b66a1bf ("EVM: Allow runtime modification of the set of verified xattrs")
+> Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
+> ---
+> Changes since v1:
+> - add the Fixes tag
+> - replace sprintf() with snprintf()
+> - explicitly terminate the buffer instead of switching to kzalloc()
+> 
+>   security/integrity/evm/evm_secfs.c | 11 ++++++-----
+>   1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
+> index acd840461902..b7882a4ce9d0 100644
+> --- a/security/integrity/evm/evm_secfs.c
+> +++ b/security/integrity/evm/evm_secfs.c
+> @@ -127,8 +127,8 @@ static ssize_t evm_read_xattrs(struct file *filp, char __user *buf,
+>   			       size_t count, loff_t *ppos)
+>   {
+>   	char *temp;
+> -	int offset = 0;
+> -	ssize_t rc, size = 0;
+> +	size_t offset = 0, size = 0;
+> +	ssize_t rc;
+>   	struct xattr_list *xattr;
+>   
+>   	if (*ppos != 0)
+> @@ -150,17 +150,18 @@ static ssize_t evm_read_xattrs(struct file *filp, char __user *buf,
+>   		mutex_unlock(&xattr_list_mutex);
+>   		return -ENOMEM;
+>   	}
 
-Thanks,
-Pengpeng
+Please add a newline here.
 
+> +	temp[size] = '\0';
+>   
+>   	list_for_each_entry(xattr, &evm_config_xattrnames, list) {
+>   		if (!xattr->enabled)
+>   			continue;
+>   
+> -		sprintf(temp + offset, "%s\n", xattr->name);
+> -		offset += strlen(xattr->name) + 1;
+
+Also a comment like:
+
+/*
+  * No truncation possible: size is computed over the same
+  * enabled xattrs under xattr_list_mutex, so offset never exceeds size.
+  */
+
+to motivate why it is fine to increment offset without checking.
+
+Thanks
+
+Roberto
+
+> +		offset += snprintf(temp + offset, size + 1 - offset, "%s\n",
+> +				   xattr->name);
+>   	}
+>   
+>   	mutex_unlock(&xattr_list_mutex);
+> -	rc = simple_read_from_buffer(buf, count, ppos, temp, strlen(temp));
+> +	rc = simple_read_from_buffer(buf, count, ppos, temp, offset);
+>   
+>   	kfree(temp);
+>   
 
 
