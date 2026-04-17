@@ -1,132 +1,163 @@
-Return-Path: <linux-integrity+bounces-9218-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9215-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AHQmLu4S4mnZ1QAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9218-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 13:01:02 +0200
+	id eAAIDIzH4WllyAAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9215-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 07:39:24 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0FD041A972
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 13:01:01 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92C81417241
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 07:39:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D5C5302C6C9
-	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 10:56:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CF8EB31AE3CC
+	for <lists+linux-integrity@lfdr.de>; Fri, 17 Apr 2026 05:26:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12353AF665;
-	Fri, 17 Apr 2026 10:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vHT4thAX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB8C36D513;
+	Fri, 17 Apr 2026 05:26:33 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E3437F735;
-	Fri, 17 Apr 2026 10:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625FF36CDEF;
+	Fri, 17 Apr 2026 05:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776423374; cv=none; b=pXXdcNv9nxe6l9xdMAtoDAGSBUw7SrHotiIno0bxf24bKZ8ObCZi+Tp4LnGMv6HOVxuFSIad26Ut3wr5yfDyjzuwj1r/H8N4eWLxcIOvkHOUDQPJDgdzUB4f+3QHRh+Ri9cKUsj8iHFxhO8YBqBxCumcjjTTGt3QCEu/6DqHX7w=
+	t=1776403593; cv=none; b=Kh8Sqvkpfj5wIDRzOoXi9pJtEEdYjPKgG0WifXiFggKglj6c8qL0QaOaj82+N5vAU1GxI8m5zvw7NZ7Mt5KRuJz8YXTFs9LwRungX709E8FajmbXOhK/8PH4NGzjcMMhdWvMs9BivY2MbQts/xRrjT6SQhAMLY8nMLs9uRfFT0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776423374; c=relaxed/simple;
-	bh=7nIwZJu0KWJx2c4GKsk/4PsqGln6X/8+2jKrFrwhE54=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NWhxV/wTnmNExEg+1ufuw0eBa339rDTrzssEq4KXdav+ohd9G9ZrYZlmmvaAqPPCS3UhIORMIrFYXfddyXPSI5EE8BZXAr8dc73GvdFSyjPHo9LKYt/7203BTd7nhpregmJ5ibIKUBaxlox85CV4io1UGGDhaV4xt6CmKtXK/hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vHT4thAX; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1776423371;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/FWc3BcjPbbJqhHHVOwLcGT+XwhPk5923LWzYZYudl0=;
-	b=vHT4thAXETffEMKsmTFH2lJPgrNru1zq5FX6fLpfcc7PI0bWwZTE3c4TeQRdU2cgS1ljw5
-	ubXGulEfZ4uMP0wXWUI54hX0T6zTeyqPlQHwhhSu1slUUqFf+prMv3UJldpNyJd/LQV7ti
-	Gqy/HjAeQTAfqwCPX2c8cfSXe9TnQdY=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] tpm: eventlog: remove unused structs tcg_algorithm_{size,info}
-Date: Fri, 17 Apr 2026 12:55:17 +0200
-Message-ID: <20260417105516.552735-3-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1776403593; c=relaxed/simple;
+	bh=xG508dr5BJFMsH4r4rWRLUThGgCTgTt4gAPmAf7gydg=;
+	h=From:Date:Message-ID:To:Cc:In-Reply-To:References:Subject; b=UeclxMW+wm3W6XRhMk2c1lo7///KJolkHKlIjkvbw85kxjwpCinvybX9dL3VDMveTn4bqa0ya81O+jxQ6S0IucUMcxpZKU4M7dZBVPJVP0lsPRUrHAPEQlO4o+ahKyq1xSHjko5zX0ePsan0PKArc3TZtANyTakfxu8rD+PjhYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from 0006-evm-v2.eml (unknown [111.196.245.116])
+	by APP-03 (Coremail) with SMTP id rQCowAD3F997xOFpEThZDg--.34327S2;
+	Fri, 17 Apr 2026 13:26:19 +0800 (CST)
+From: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Date: Fri, 17 Apr 2026 20:44:00 +0800
+Message-ID: <20260417223004.1-evm-xattrs-v2-pengpeng@iscas.ac.cn>
+To: Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>
+Cc: Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, Serge Hallyn <serge@hallyn.com>, linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, pengpeng@iscas.ac.cn
+In-Reply-To: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
+References: <20260407153002.2-evm-xattrs-pengpeng@iscas.ac.cn>
+Subject: [PATCH v2] evm: terminate and bound the evm_xattrs read buffer
+X-CM-TRANSID:rQCowAD3F997xOFpEThZDg--.34327S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF4DJr1xXFWkZF4fJFWxXrb_yoW8ZFWrpF
+	ZxKa4Dtrn5ZrykGrWUJ3W7u3s5G395WF4UGrZ3Gw12yanIqrWSqF95CFyrWr95XrW0yw1a
+	q3s09rnI9F15X3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUB214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+	0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xv
+	wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4
+	x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+	64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r
+	4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I
+	648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2
+	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
+	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0x
+	vE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
+	42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6x
+	kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRC9aBDUUUU
+X-CM-SenderInfo: pshqw1xhqjqxpvfd2hldfou0/
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=932; i=thorsten.blum@linux.dev; h=from:subject; bh=7nIwZJu0KWJx2c4GKsk/4PsqGln6X/8+2jKrFrwhE54=; b=owGbwMvMwCUWt7pQ4caZUj3G02pJDJmPBKfkMaycutx4+6cPM6fsuSo0d7WT6CJ2y4V5DBlqa Ub8DyxDO0pZGMS4GGTFFFkezPoxw7e0pnKTScROmDmsTCBDGLg4BWAiJjqMDA3P04L/yOzO+MlT GFG+6VpZqix/7NQW3fX/dHskz25iYWX4w/MiePcTrY1nq7suiZzuU2/+Fc0kXrR1/Y5rfGnMAg0 LWQE=
-X-Developer-Key: i=thorsten.blum@linux.dev; a=openpgp; fpr=1D60735E8AEF3BE473B69D84733678FD8DFEEAD4
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [5.54 / 15.00];
+	DATE_IN_FUTURE(4.00)[7];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9218-lists,linux-integrity=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmx.de,kernel.org,ziepe.ca];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thorsten.blum@linux.dev,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[linux.dev:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9215-lists,linux-integrity=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	GREYLIST(0.00)[pass,body];
+	DMARC_NA(0.00)[iscas.ac.cn];
+	FREEMAIL_CC(0.00)[gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,iscas.ac.cn];
+	RCVD_COUNT_THREE(0.00)[4];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,linux.dev:dkim,linux.dev:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C0FD041A972
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pengpeng@iscas.ac.cn,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.986];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	R_DKIM_NA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:mid,iscas.ac.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 92C81417241
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Remove the unused structs tcg_algorithm_size and tcg_algorithm_info.
+evm_read_xattrs() allocates size + 1 bytes, fills them from the list of
+enabled xattrs, and then passes strlen(temp) to
+simple_read_from_buffer(). When no configured xattrs are enabled, the
+fill loop stores nothing and temp[0] remains uninitialized, so strlen()
+reads beyond initialized memory.
 
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+Explicitly terminate the buffer after allocation, use snprintf() for
+each formatted line, and pass the accumulated length to
+simple_read_from_buffer().
+
+Fixes: fa516b66a1bf ("EVM: Allow runtime modification of the set of verified xattrs")
+Signed-off-by: Pengpeng Hou <pengpeng@iscas.ac.cn>
 ---
- include/linux/tpm_eventlog.h | 16 ----------------
- 1 file changed, 16 deletions(-)
+Changes since v1:
+- add the Fixes tag
+- replace sprintf() with snprintf()
+- explicitly terminate the buffer instead of switching to kzalloc()
 
-diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
-index aff8ea2fa98e..615bd0af5173 100644
---- a/include/linux/tpm_eventlog.h
-+++ b/include/linux/tpm_eventlog.h
-@@ -114,22 +114,6 @@ struct tcg_pcr_event2_head {
- 	struct tpm_digest digests[];
- } __packed;
- 
--struct tcg_algorithm_size {
--	u16 algorithm_id;
--	u16 algorithm_size;
--};
--
--struct tcg_algorithm_info {
--	u8 signature[16];
--	u32 platform_class;
--	u8 spec_version_minor;
--	u8 spec_version_major;
--	u8 spec_errata;
--	u8 uintn_size;
--	u32 number_of_algorithms;
--	struct tcg_algorithm_size digest_sizes[];
--};
--
- #ifndef TPM_MEMREMAP
- static inline void *TPM_MEMREMAP(unsigned long start, size_t size)
+ security/integrity/evm/evm_secfs.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/security/integrity/evm/evm_secfs.c b/security/integrity/evm/evm_secfs.c
+index acd840461902..b7882a4ce9d0 100644
+--- a/security/integrity/evm/evm_secfs.c
++++ b/security/integrity/evm/evm_secfs.c
+@@ -127,8 +127,8 @@ static ssize_t evm_read_xattrs(struct file *filp, char __user *buf,
+ 			       size_t count, loff_t *ppos)
  {
+ 	char *temp;
+-	int offset = 0;
+-	ssize_t rc, size = 0;
++	size_t offset = 0, size = 0;
++	ssize_t rc;
+ 	struct xattr_list *xattr;
+ 
+ 	if (*ppos != 0)
+@@ -150,17 +150,18 @@ static ssize_t evm_read_xattrs(struct file *filp, char __user *buf,
+ 		mutex_unlock(&xattr_list_mutex);
+ 		return -ENOMEM;
+ 	}
++	temp[size] = '\0';
+ 
+ 	list_for_each_entry(xattr, &evm_config_xattrnames, list) {
+ 		if (!xattr->enabled)
+ 			continue;
+ 
+-		sprintf(temp + offset, "%s\n", xattr->name);
+-		offset += strlen(xattr->name) + 1;
++		offset += snprintf(temp + offset, size + 1 - offset, "%s\n",
++				   xattr->name);
+ 	}
+ 
+ 	mutex_unlock(&xattr_list_mutex);
+-	rc = simple_read_from_buffer(buf, count, ppos, temp, strlen(temp));
++	rc = simple_read_from_buffer(buf, count, ppos, temp, offset);
+ 
+ 	kfree(temp);
+ 
+-- 
+2.50.1 (Apple Git-155)
+
 
