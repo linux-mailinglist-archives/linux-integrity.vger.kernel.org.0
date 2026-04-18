@@ -1,196 +1,188 @@
-Return-Path: <linux-integrity+bounces-9228-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9229-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UYeADC9O42n0EgEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9228-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 Apr 2026 11:26:07 +0200
+	id +N5eFUJe42nQFwEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9229-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 18 Apr 2026 12:34:42 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7996C4208E2
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 Apr 2026 11:26:06 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD7DF420AE6
+	for <lists+linux-integrity@lfdr.de>; Sat, 18 Apr 2026 12:34:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9D3143024947
-	for <lists+linux-integrity@lfdr.de>; Sat, 18 Apr 2026 09:24:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2A06730164B9
+	for <lists+linux-integrity@lfdr.de>; Sat, 18 Apr 2026 10:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87F9332610;
-	Sat, 18 Apr 2026 09:24:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902F8317165;
+	Sat, 18 Apr 2026 10:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psaqB+Py"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="JKK5K+Om"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DB532FA2B;
-	Sat, 18 Apr 2026 09:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D74D31326B;
+	Sat, 18 Apr 2026 10:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776504248; cv=none; b=S7wG1Akj02JavqdARcAaAB4zHsWHtfAof0yXryaC+QszmadJogQ0ABEQD6J+70yhFi9aQq2eO2mgJChFwNgfAS3dP6XT3XkuzQeP9wnFZVdPchcE+n7dBs+t9Z9G1L7XVCLTuTCSeL4YFCl3QMMORoX/OQgmS4QWPhMWB32J/vc=
+	t=1776508479; cv=none; b=qGG0iuN9jO3+7i/00GJm5s3iHZMrJQvm2vGoXmdDwDnpqw39Mn+UsRF4nqCClf42Cysx7C7G/qWytifsUCpPQ2fcE6AB3Trdwz1nq5t6hkXbgjNDVibM3rn8ngmHIHj+u9TfIFFXS8/PDeRp82w774c53h8Lj+4+6owlslhh7XA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776504248; c=relaxed/simple;
-	bh=0ov1NsdSXTwZuP0OYLxLpWWdS0BPSYlf16OkCz2Chuo=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sOVVX7arzxbMU17sH+jciscpafAWwt/sWtGi6B1lp/1RFb3pziL12J+Ea9aojiGU24Jciup1GiTLcx4yoYIIATlCHvUzj69CCOg3Ew5MQD+3oWxr1FZa6pZ2Cac5CB8+VRX0ilFAAFyohf+A1eY9ofQcqcupasuU3D8HnqpHnts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=psaqB+Py; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA38C19424;
-	Sat, 18 Apr 2026 09:24:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776504248;
-	bh=0ov1NsdSXTwZuP0OYLxLpWWdS0BPSYlf16OkCz2Chuo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=psaqB+PyHoKTjVFVeG1nWNLU/sIFLD+gwKXR0ZkpnwTxxDwvh7ea2whG6uFskH68m
-	 xX1SlgQtWzY4vHCHRKEuGDpYZ+MWqlGn46DAvyRaKZvUuwZphTshFDZIvywN8XhVtu
-	 mfxR1hp2QOdnDjjjQMt2eSZuODCbzU8y5iROWtz4D0eBx462YMAtsp1nd/1Bh6sJq2
-	 JAGi19lsreaard3IcKPmuHzuVjc0fzd5xfPypjSZMupd8Q3iIAgS0JZbuPYLbJZkk8
-	 toAWTtRD2kuh0LJKYQ6rnJo7LODmjg4f+HkC4TEMNrIEKBPw8XjoeCbsDbx0ZU6PiR
-	 Eur4BRYWDQLFw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wE1uH-0000000CeR1-1NIO;
-	Sat, 18 Apr 2026 09:24:05 +0000
-Date: Sat, 18 Apr 2026 10:24:04 +0100
-Message-ID: <87se8sbozv.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1776508479; c=relaxed/simple;
+	bh=Ciycx8QqHb67sqchL+YA+/lrYPi38l87mnERhghqxMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vs5lJTh4VKfWm8ZLsWrTkbBfPoXwu58cEFpJP0Oa7dWcors8Gz8fayEYvgc0KatvauKBlT0VgPQAPYpBafglzaOYGVeE+Bi4Nmz3Yc6Ep0HdfpZvOoerHjIi/Lj67vMFue2St6xus+NV/wL9y9vMtIr4w+hIi4Ol5COnfnxDLqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=JKK5K+Om; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C5A601764;
+	Sat, 18 Apr 2026 03:34:29 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C27643F7D8;
+	Sat, 18 Apr 2026 03:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1776508475; bh=Ciycx8QqHb67sqchL+YA+/lrYPi38l87mnERhghqxMs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JKK5K+OmEERf3Ey1f9imniEVj3Xa2H4WCBBD0cVwO/iRQ6G1M1uI03ZJaaDRNbCP2
+	 2QWiZECceul4y+JU1g5Jm+oLecljKqseZJpgPCKktH2oemMRsQWUFqaKqXnNEpzjBQ
+	 e8jdnRcY1c4a2J1f5NY2s5/CXyCqNGfk9zY9/IS4=
+Date: Sat, 18 Apr 2026 11:34:30 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	zohar@linux.ibm.com,
-	roberto.sassu@huawei.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	peterhuewe@gmx.de,
-	jarkko@kernel.org,
-	jgg@ziepe.ca,
-	sudeep.holla@kernel.org,
-	oupton@kernel.org,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org
-Subject: Re: [RFC PATCH 4/4] firmware: arm_ffa: check pkvm initailised when initailise ffa driver
-In-Reply-To: <20260417175759.3191279-5-yeoreum.yun@arm.com>
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+	zohar@linux.ibm.com, roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+	peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+	sudeep.holla@kernel.org, oupton@kernel.org, joey.gouly@arm.com,
+	suzuki.poulose@arm.com, yuzenghui@huawei.com,
+	catalin.marinas@arm.com, will@kernel.org
+Subject: Re: [RFC PATCH 4/4] firmware: arm_ffa: check pkvm initailised when
+ initailise ffa driver
+Message-ID: <aeNeNjfO7i128TIP@e129823.arm.com>
 References: <20260417175759.3191279-1-yeoreum.yun@arm.com>
-	<20260417175759.3191279-5-yeoreum.yun@arm.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+ <20260417175759.3191279-5-yeoreum.yun@arm.com>
+ <87se8sbozv.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: yeoreum.yun@arm.com, linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, sudeep.holla@kernel.org, oupton@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spamd-Result: default: False [0.34 / 15.00];
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87se8sbozv.wl-maz@kernel.org>
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
 	FREEMAIL_CC(0.00)[vger.kernel.org,lists.infradead.org,lists.linux.dev,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,gmx.de,kernel.org,ziepe.ca,arm.com];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9228-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9229-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[arm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[maz@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:email]
-X-Rspamd-Queue-Id: 7996C4208E2
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:dkim,arm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,e129823.arm.com:mid]
+X-Rspamd-Queue-Id: BD7DF420AE6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, 17 Apr 2026 18:57:59 +0100,
-Yeoreum Yun <yeoreum.yun@arm.com> wrote:
-> 
-> When pKVM is enabled, the FF-A driver must be initialized after pKVM.
-> Otherwise, pKVM cannot negotiate the FF-A version or
-> obtain RX/TX buffer information, leading to failures in FF-A calls.
-> 
-> During FF-A driver initialization, check whether pKVM has been initialized.
-> If not, defer probing of the FF-A driver.
-> 
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
->  arch/arm64/kvm/arm.c              |  1 +
->  drivers/firmware/arm_ffa/driver.c | 12 ++++++++++++
->  2 files changed, 13 insertions(+)
-> 
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 410ffd41fd73..0f517b1c05cd 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -119,6 +119,7 @@ bool is_kvm_arm_initialised(void)
->  {
->  	return kvm_arm_initialised;
->  }
-> +EXPORT_SYMBOL(is_kvm_arm_initialised);
+Hi Marc,
 
-EXPORT_SYMBOL_GPL(), please.
+> On Fri, 17 Apr 2026 18:57:59 +0100,
+> Yeoreum Yun <yeoreum.yun@arm.com> wrote:
+> >
+> > When pKVM is enabled, the FF-A driver must be initialized after pKVM.
+> > Otherwise, pKVM cannot negotiate the FF-A version or
+> > obtain RX/TX buffer information, leading to failures in FF-A calls.
+> >
+> > During FF-A driver initialization, check whether pKVM has been initialized.
+> > If not, defer probing of the FF-A driver.
+> >
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > ---
+> >  arch/arm64/kvm/arm.c              |  1 +
+> >  drivers/firmware/arm_ffa/driver.c | 12 ++++++++++++
+> >  2 files changed, 13 insertions(+)
+> >
+> > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > index 410ffd41fd73..0f517b1c05cd 100644
+> > --- a/arch/arm64/kvm/arm.c
+> > +++ b/arch/arm64/kvm/arm.c
+> > @@ -119,6 +119,7 @@ bool is_kvm_arm_initialised(void)
+> >  {
+> >  	return kvm_arm_initialised;
+> >  }
+> > +EXPORT_SYMBOL(is_kvm_arm_initialised);
+>
+> EXPORT_SYMBOL_GPL(), please.
 
-> 
->  int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu)
->  {
-> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index 02c76ac1570b..2647d6554afd 100644
-> --- a/drivers/firmware/arm_ffa/driver.c
-> +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -42,6 +42,8 @@
->  #include <linux/uuid.h>
->  #include <linux/xarray.h>
-> 
-> +#include <asm/virt.h>
-> +
->  #include "common.h"
-> 
->  #define FFA_DRIVER_VERSION	FFA_VERSION_1_2
-> @@ -2035,6 +2037,16 @@ static int __init ffa_init(void)
->  	u32 buf_sz;
->  	size_t rxtx_bufsz = SZ_4K;
-> 
-> +	/*
-> +	 * When pKVM is enabled, the FF-A driver must be initialized
-> +	 * after pKVM initialization. Otherwise, pKVM cannot negotiate
-> +	 * the FF-A version or obtain RX/TX buffer information,
-> +	 * which leads to failures in FF-A calls.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_KVM) && is_protected_kvm_enabled() &&
-> +	    !is_kvm_arm_initialised())
-> +		return -EPROBE_DEFER;
-> +
+Okay.
 
-That's still fundamentally wrong: pkvm is not ready until
-finalize_pkvm() has finished, and that's not indicated by
-is_kvm_arm_initialised().
+>
+> >
+> >  int kvm_arch_vcpu_should_kick(struct kvm_vcpu *vcpu)
+> >  {
+> > diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> > index 02c76ac1570b..2647d6554afd 100644
+> > --- a/drivers/firmware/arm_ffa/driver.c
+> > +++ b/drivers/firmware/arm_ffa/driver.c
+> > @@ -42,6 +42,8 @@
+> >  #include <linux/uuid.h>
+> >  #include <linux/xarray.h>
+> >
+> > +#include <asm/virt.h>
+> > +
+> >  #include "common.h"
+> >
+> >  #define FFA_DRIVER_VERSION	FFA_VERSION_1_2
+> > @@ -2035,6 +2037,16 @@ static int __init ffa_init(void)
+> >  	u32 buf_sz;
+> >  	size_t rxtx_bufsz = SZ_4K;
+> >
+> > +	/*
+> > +	 * When pKVM is enabled, the FF-A driver must be initialized
+> > +	 * after pKVM initialization. Otherwise, pKVM cannot negotiate
+> > +	 * the FF-A version or obtain RX/TX buffer information,
+> > +	 * which leads to failures in FF-A calls.
+> > +	 */
+> > +	if (IS_ENABLED(CONFIG_KVM) && is_protected_kvm_enabled() &&
+> > +	    !is_kvm_arm_initialised())
+> > +		return -EPROBE_DEFER;
+> > +
+>
+> That's still fundamentally wrong: pkvm is not ready until
+> finalize_pkvm() has finished, and that's not indicated by
+> is_kvm_arm_initialised().
 
-	M.
+Thanks. I miss the TSC bit set in here.
+IMHO, I'd like to make an new state check function --
+is_pkvm_arm_initialised() so that ff-a driver to know whether
+pkvm is initialised.
 
--- 
-Jazz isn't dead. It just smells funny.
+or any other suggestion?
+
+Thanks.
+
+--
+Sincerely,
+Yeoreum Yun
 
