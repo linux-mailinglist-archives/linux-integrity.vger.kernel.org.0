@@ -1,164 +1,123 @@
-Return-Path: <linux-integrity+bounces-9238-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9239-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ELoGL6BO5WmVgwEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9238-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 23:52:32 +0200
+	id uGxuJq9O5WmVgwEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9239-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 23:52:47 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23526425998
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 23:52:32 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1399E4259A9
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 23:52:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2FC8E300B471
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 21:52:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 07DD83008898
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 21:52:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF6E2D3725;
-	Sun, 19 Apr 2026 21:52:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 283182E1EF4;
+	Sun, 19 Apr 2026 21:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MXJRmn3L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJ2qq5Jp"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698074400
-	for <linux-integrity@vger.kernel.org>; Sun, 19 Apr 2026 21:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028704400;
+	Sun, 19 Apr 2026 21:52:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776635548; cv=none; b=jTVGnVito9NjuCChuQE5geJ6UcwxM/BrYZmDgOlSNeebBExkFT7KN4NUIZ7THx2uzcQJpUqtwZ9wVmdVS2IlZXEFYKEslLNz+hkYYjVTFSGvecwbTqWfPuossUOrXSOOB652JlWV0yCXZYjqqdSc1RwVxZZdTbF2otb9Zl5qLoc=
+	t=1776635565; cv=none; b=ODYywF+kEKK+G/y9FmuDa1oBKeA7f56knMd7YzlQ9Wv4yoIbsZx7IJ2tbb99XO6ZVnZsN82mO8DfOfOscn2WDr5vY5WOTfCrMhT0vYqzHrbCZOhMghRbS6EX/tNnWr8M+UARi9SvxiPhnOXVSO9taigu5K2inacj7l1qqbfXD54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776635548; c=relaxed/simple;
-	bh=CELBaovFracc44SNoSxFbtNzebiD4I6r4kbORD96oiY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FtyFEKuTX/8qjuWMx6/anwruypmmuz3wPbMQc7Ck6a9MH4NezzUDZtMBjcrk9mEVA3bANmZbnz6bUOq+90CHJ/LZpr74kwrllLuVhREtrLcU5H0zAOAUcepqjdBo4b54XymxSh7rAPMLKrfA5cXHtuXtNrLsUpiICkDBpDSoo1I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MXJRmn3L; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b8f97c626aaso374340266b.2
-        for <linux-integrity@vger.kernel.org>; Sun, 19 Apr 2026 14:52:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1776635545; x=1777240345; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VD5DcV46JWd7qyXcKhw0Tc1Gqb7giDqKcHIzejffB5E=;
-        b=MXJRmn3LzoFuVkGZa64KscT7UV4R0mvicfcl+7AmJX6XWbcez4St0exE02g3fp/+VO
-         fMWJg6GV9NhpQGkIlNhmzjVfLvidd1zOpI3W9iwwJmunpfCQFcgyll1994y9xi3FrRSc
-         3FH4D7UZ3psyZD7dO+6IUi/zkxlFh//Bw/ZPU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776635545; x=1777240345;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VD5DcV46JWd7qyXcKhw0Tc1Gqb7giDqKcHIzejffB5E=;
-        b=gLH8XzQOBzZVnuq+P1jlKGLOo9noQD/kR/PIM4BLePeV0k/CzpxUBCnigyRjhdsikR
-         K5M70JAsWexk8ECWKPF6w/l2JHr8p60rCruXROlIHJu8DslS/1WuLnAntiGOu9+5+tMA
-         EErAxloMIp8ycMTRNOwFWbDpkfVAnN+AK26PfTzm7H6C0VVV+5wvy4cMrHgoetOgGP40
-         qvu277WcmT2ATeVfBFQgDIzVz2qa7GyfzlFC15i7nchy0ViNuKn6XQI3scAKc57rwj41
-         63BDiIz9IRnnWJ5JT/bRrFZEhhpoVsQp7rlwaW0mKEjPD8ei+GIwNJcKdQbTjHlFtnWG
-         PDYA==
-X-Forwarded-Encrypted: i=1; AFNElJ/xDuFX13Evr4vPJ/ekDAvFlwMjqJP1twz8Prt0MYL52JpQ35DxY//aqXELd6/AxwcIWLHlFbzN/p1wfZ3PZCs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYoYRkKNY57XdttcCzNYm8NS2OOoKOuV2rjUj3BJyoEXhnYdSp
-	HdX0xSa2E9h4ScK+awj8ED5wYqjwUNNZrS83UlVr8zr+N6hb6DuHNi8XSmezBP/skdSHHdKCF4e
-	oYRdcMTg=
-X-Gm-Gg: AeBDieteMpBIF6zQW4dbWAo+CSadBecyj69I+l7yo3SBVanUbbiKZ6t7jXnK2Twm8J1
-	OTCc0f40X/oNV6QwFpWKlwd1tYMa4V4NCbm9ayG1evq2b04AVI5rOe/PdW5q1NMUovJxBZFE5x0
-	yVG7mWLwLHdf1XytRA0uiu4QCZB2iAXfcNfPTLGLxLfygw5K+nnfIa/sx09d8MZft8CIxkVEowX
-	kLeODpbZhQcGO4BX61I0+MvekTGqh+wpxp2K2iVuRiD5vrlkmsO8druapP90aMXLEh7FU51aVSW
-	7CSEs9Ykz1AdGimCPo8EY2EDJ0Vg3nvvE2fVK4zlvEpDstT6nVrtDh4Z5ao3vPoWwA8tp/ojG8b
-	Ar539OousVPwBouKYVEt8bPGoa253nKa6ZfDzeraA8Cyy7oV0SWCUF4+/QB1orh7pKQzEc2eAX/
-	dJku1yiW7Cy+u1KH3bn7Si+YUx0McOdNSD0ZFZ+KRFowjx5hiYhs9Lm3By0jYzP1EsJMnCsM2o3
-	kx5DYRhHbg=
-X-Received: by 2002:a17:907:961b:b0:b9d:33b5:6ba1 with SMTP id a640c23a62f3a-ba41c1b6fbdmr490788766b.15.1776635545443;
-        Sun, 19 Apr 2026 14:52:25 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ba454d1bf61sm284033566b.40.2026.04.19.14.52.24
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Apr 2026 14:52:25 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6714fa8b955so4364722a12.0
-        for <linux-integrity@vger.kernel.org>; Sun, 19 Apr 2026 14:52:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ86BCPrKQ3SifRePtZYSd5Hf9gtyn56Yi2fFvfkYzBa6sSERF+KYdfgnnhXpcHYS+jIT5R4LGBVcU3taMW0ljs=@vger.kernel.org
-X-Received: by 2002:a05:6402:50c7:b0:674:bf55:6f40 with SMTP id
- 4fb4d7f45d1cf-674bf557015mr1186535a12.26.1776635544304; Sun, 19 Apr 2026
- 14:52:24 -0700 (PDT)
+	s=arc-20240116; t=1776635565; c=relaxed/simple;
+	bh=UFOElHvnY8LDWSkGy6GCIIqhsHPqlmKW6sITTLH33gM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LAKByoTUuA3I7I6DPprcbOLYcibZRt2X/g5uIlmERhCp87+FQjeMSpTHi4Ykh+R8BplaEzMgiTOy+lEW1HLvCCZOOImj8VIwsO9YZ7hmw+aReSb6uPphXWJ09hoI/7687r2J1UewBmvw6apinCuiHnDW+IxIQIGPRr2qRlv3iXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJ2qq5Jp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E4E9C2BCAF;
+	Sun, 19 Apr 2026 21:52:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776635564;
+	bh=UFOElHvnY8LDWSkGy6GCIIqhsHPqlmKW6sITTLH33gM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iJ2qq5JpBYM13vW0Jh1bz/4QZZ1yUWRRvVKGeRpBk1m2bDptDOrgvv9ibS64QQf4T
+	 vHq7k9EF3Bx1hTO+iDDeRNysg9h9Ug9CXWKsn93fG1igcgHg8CWZFNhSEiba56wtwv
+	 RpyRAyEUYUxFshfO1wK9cT//+ppI04oB9maTGUTmGrIt9R/NuG1QLtJBEqjuArICyB
+	 5f+RuUF4TrztuyEb5Rec6decvGG9N2GmnzWBYoT+ycdSvbdvohUmFvNGL3j5P7yiBc
+	 97CBip6rYP98PPaxwkTbPX4mCO/eaBrOplN7NNIPrbqiDS0ixpYtxdocp6DsQN3fFU
+	 /ZzS4NRe+WgZw==
+Date: Mon, 20 Apr 2026 00:52:41 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] TPM DEVICE DRIVER: tpmdd-next-7.1-rc1
+Message-ID: <aeVOqT605cwcFtnu@kernel.org>
+References: <aeTM2CO_mlNYViFU@kernel.org>
+ <CAHk-=wiPWCUHsNvzKep7z4VGaL-Brx6Zmh7Efn28WWTPbwn5dA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aeTLzOgblMZRnDvF@kernel.org> <CAHk-=whjUfVy22QCcsCS2h8AkJVpQBjHyVW4_hKXpUxHn9S65w@mail.gmail.com>
- <aeVLPLa8JDLIEgDR@kernel.org>
-In-Reply-To: <aeVLPLa8JDLIEgDR@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 19 Apr 2026 14:52:06 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjaGOBCsRpEhmPLcsuK6ggiaaeyz0rT6x3Zv7DMK7JNHA@mail.gmail.com>
-X-Gm-Features: AQROBzCPZsvrw8UMZDVeqzWPc0XV4E0MHK0xN9XYvfTxGZMeyn0Y4OGkvbg9Y3I
-Message-ID: <CAHk-=wjaGOBCsRpEhmPLcsuK6ggiaaeyz0rT6x3Zv7DMK7JNHA@mail.gmail.com>
-Subject: Re: [GIT PULL] KEYS: keys-next-7.1-rc1
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org, 
-	linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiPWCUHsNvzKep7z4VGaL-Brx6Zmh7Efn28WWTPbwn5dA@mail.gmail.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[linux-foundation.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9238-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,redhat.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-9239-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[linux-foundation.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linux-foundation.org:+];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[torvalds@linux-foundation.org,linux-integrity@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 23526425998
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 1399E4259A9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, 19 Apr 2026 at 14:38, Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> I tested both PRs for the same baseline with two separate buildroot builds of
+On Sun, Apr 19, 2026 at 08:40:36AM -0700, Linus Torvalds wrote:
+> On Sun, 19 Apr 2026 at 05:38, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > This pull request contains accumulated bug fixes for TPM driver.
+> 
+> This is all very recent, not all of it has been in linux-next at all,
+> and stuff that appears to have been there has been rebased.
+> 
+> Why?
+> 
+>             Linus
 
-You threw away any and all testing that had been done by anybody else
-in linux-next.
+Responded for both in keys PR but why it came so late has a QA story
+behind it.
 
-And you rebased things on top of a random commit-of-the-day during the
-merge window, when things are possibly unstable due to all the *other*
-churn going on.
+I created this week a uefi bootable buildroot target (I have tpm in the
+gpios) for RPi 400 and tried to get first QA round with it but I run
+into some systemd issues.
 
-In other words, you did *EVERYTHING* that you shouldn't be doing, and
-that the documentation tells you not to do.
+The upside (and the goal for doing that) is that for future releases I
+will bare-metal testing on aarch64 for all commits that pass through.
+Should have just given up on that for the time being earlier...
 
-The WHOLE POINT of being in linux-next and being ready when the merge
-window opens is gone. All for apparently nothing.
+BR, Jarkko
 
-Those stable cc tags do not add *any* value, since you could just have
-cc'd stable later instead.
-
-I'm not pulling this. You need to stop doing this pointless churn, and
-read the docs on rebasing. See
-
-   Documentation/maintainer/rebasing-and-merging.rst
-
-about how you are *not* supposed to randomly just rebase, and
-_particularly_ not rebase on top of some random state during the merge
-window.
-
-          Linus
 
