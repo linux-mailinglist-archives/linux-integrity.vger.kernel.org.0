@@ -1,140 +1,122 @@
-Return-Path: <linux-integrity+bounces-9236-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9237-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gC/gJDH45GnPcgEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9236-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 17:43:45 +0200
+	id eKQPKUdL5WmuggEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9237-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 23:38:15 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF38C424845
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 17:43:44 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id A896942592D
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 23:38:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 783FF300E5C4
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 15:43:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D682B3003728
+	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 21:38:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C4A815B0EC;
-	Sun, 19 Apr 2026 15:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C3C2C11DE;
+	Sun, 19 Apr 2026 21:38:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HRsg4CDL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lVP8gQJH"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868CF1A6834
-	for <linux-integrity@vger.kernel.org>; Sun, 19 Apr 2026 15:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF27C9443;
+	Sun, 19 Apr 2026 21:38:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776613422; cv=none; b=hEv5/+ihw9gNKqFm8O/CNjH0i9G69F4f8TzryFNW3GMxzGk0kYIIrIvseDC+n5jhHE8Od/egP7nUvZTEWu11/gWZz5Giw3s/zn8FNEBLZVBdOHgzfp+1ddPSeuh6XbQpIAZ4r7p/mxrjUg3EJG6/IPkzp2cJmNRZ8lV/3zlBskk=
+	t=1776634688; cv=none; b=YgGjzTU8SMSrsFaTPAGXxchrDI6qSJBb7Xq/64IT9JlBS1GtBevIRatu51x2zYHFnafZAMgKBFmnbNKP8U5H8Bt7sMcvKtMWVyQTiCxNdNHevGNMDa5SzAGnMgV0immajW8s20xLpMY805qXnVKjBoObvLLmlqIvGPRTc1QwBWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776613422; c=relaxed/simple;
-	bh=ghZiPcVncZXyb4N9ERFqMStHV3mzq4Bshv+I6uXEDpw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZoLfWqc6WkpmW7MOQN16ZG73shV6lvSEUiM8wwEihD8Hry93Zr1CzlU2kSpxlEcQB9plT8OZhAolBcVcrXmEbYuHseBFzTirmWxZ1FoNACTBU0JHcrqU+UQLpDYrBsNvJKv7zFcGb/vk8ipvkEIp7i57xjvi8pwCX9Avazcn7Q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HRsg4CDL; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ba67b332bbaso86723766b.0
-        for <linux-integrity@vger.kernel.org>; Sun, 19 Apr 2026 08:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1776613419; x=1777218219; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=w/oRXVFRurK/1hSlacPxQ2tT4pqKl2JDBMWth3dthQ0=;
-        b=HRsg4CDLm3mP0NGDPZhlNxBReCoEhI+zOKV/G/UDTyqLB7/FbBMbUaVwyC8Fopzmel
-         oEu36wmUC0AmkNoQUvQEHaWFndnT/VyHzCdgOHDaCSmtGnE3BJtdRMqPUKN7K90i6ibw
-         8hqCPkhMGs/GdaGEMqfKFq7vCRLzPXQGf+HzQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776613419; x=1777218219;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w/oRXVFRurK/1hSlacPxQ2tT4pqKl2JDBMWth3dthQ0=;
-        b=VjdDvAKwlFnjFMwTNjv4GILWyaE4+T+VvgFu3nk5eoXm+45WUHf/u4i3V1CtbA8ynU
-         D6h5rdDjcooeNfSE8YZRQ+XN1QxxBpxd8A1L5V/3OKWnBmi74uYE/UF7EXoIIrOEQ7JH
-         tq6D4zJEImL4h9NUcAorj3TV0Me7bZfrL0SIe/AthbmRzTQvE/sKfc3NSiQU7TY5yqsV
-         +rSTjadiikmVOEKLN45SqKYHDnpP5nAcR2BtgmPVR3czKuADrNhXtd2kzRMk9THGokvP
-         gmZNuce92C70axvl5rr5nE1sUHSXorYN6NuLRh0JdqdTD+UZeSJekgn06rIJfJ46UPSp
-         2Apg==
-X-Forwarded-Encrypted: i=1; AFNElJ+wVsvXvpAlmTPgHOyq+NVsQFK3NGNMz3ALQwfJxjYMvGGBzU9m2y5k//al2wXP6Sv3TUNDe9CiRbK+NYz63yI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcVOxMafY/SF3oDqTuxwX9NvVTrFmc4VSk7VqWjIxsA+DCgL7b
-	FJJk6Q1CherGMaqX5vVc74wytEDr/euTAE3k9orEindRBmSEZ3NggWH5jXGE0WrOQTQBwo2erR/
-	lcBJDH7M=
-X-Gm-Gg: AeBDieuGtHI/E4/4Dyr5oxvVUy2oZtCvq28xbUWMgZ9KKAGqN2Z0eD9gQnG7mo5j2yJ
-	qmAGRbG6K7TUfQ/LC9qni4V/rETiltAgIx3NFcoOunWZdds6fepACF6CQo6BIB+JVA04pGkMKPY
-	uAJXT2D1Dv+ogmQ6EjRGVgpQDNukT1ao+Rj6Egjlra2IxObJfiQKa1gIqahntmxNAwbwyycjrGZ
-	JXFuoLf6Xt6pkhWV2FLdmlmpPPqSZTiuW4BA8gfLydUqdfgSoMJIAQJfS64hNSiSt9suIEmSvED
-	FC+mz3ZA+euFrwikzXV0tl0XbZcxhrft1O6lwiA1wSS32Tw6QhXugr6q6RNpmfcXDQS1kiwn/nD
-	8dodLCaQwiFP2XRo9q3sJEN9khqUYmPLuUzHjwZELC1SNEZCZ7ldtJW03WSKG5lVETFQeHeoeBN
-	1tTX2c/uLxJ2X9M5/Zw8x7O9QzPjm8qoUTinWsE+SD2kpK0EBYE/eOg5NIsleqQZoPC4JYAugac
-	o7yUzDDb9c=
-X-Received: by 2002:a17:907:6a16:b0:b9c:2c55:3384 with SMTP id a640c23a62f3a-ba41adf9231mr501600366b.31.1776613418570;
-        Sun, 19 Apr 2026 08:43:38 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ba455533b79sm259443566b.54.2026.04.19.08.43.38
-        for <linux-integrity@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Apr 2026 08:43:38 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6634bb959a2so3019203a12.1
-        for <linux-integrity@vger.kernel.org>; Sun, 19 Apr 2026 08:43:38 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AFNElJ90rMlzhsU8qUP3e/hfNuhXwweROZhnWVXTYWzmU3TpjvNH0Yce4tAkwT1nWncNjfZ/Q0eo3HrQHKHa1sQyGTg=@vger.kernel.org
-X-Received: by 2002:a05:6402:280f:b0:672:6419:8c23 with SMTP id
- 4fb4d7f45d1cf-672bfdc3813mr4829148a12.14.1776613417846; Sun, 19 Apr 2026
- 08:43:37 -0700 (PDT)
+	s=arc-20240116; t=1776634688; c=relaxed/simple;
+	bh=lphXXtf4rMOiVev+LwdAu2WmAPwNIvseLtw00SxPHCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EuBckS9DR1bwED+86NOMfa6FS40tv0EnDgDtdHzsfSNdpBoguuSFUiQ+9hl877kfTd6URn6XtGx2HrEsU2AwAVCQbU1idasu90vQ7ZyXuvaijh6SFjyFC6rw5BpT57RvgiEDX41bMRPWeG/HlfcNiHf4LxbgSuOR2nqWKzVQlcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lVP8gQJH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05608C2BCAF;
+	Sun, 19 Apr 2026 21:38:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1776634688;
+	bh=lphXXtf4rMOiVev+LwdAu2WmAPwNIvseLtw00SxPHCI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lVP8gQJHvizrBx8LmgjPdJ5pwWotbewZSMzFkiLFrHz+cLlJTGa37zv+UwqI7en2Y
+	 bdyd0ejq/+KV0ucd7jajMtCGMSu8b3dIJB6FJ/dxyBcJkIAZmTEYchY5ZesCU2CNgN
+	 S5mqtZkiC9LfJSpbGV9bigOcU6d86R11UyfaOTKkLu9oPyTaRtiiUlBg36NIzNBMPF
+	 i1zEco6APh2rBfHEPcr95RtLSMgWsaGGLmUoexa9MdHWj3AbKNMgNkujtBLMUjACuS
+	 weQpCvo7kC1/luE1TOLzeQLXT8qsJDB21Xf9OOaLnuoBs5o+Z1CdYU21qnWxE3VGo7
+	 NrMx0vbhJ/ejw==
+Date: Mon, 20 Apr 2026 00:38:04 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: David Howells <dhowells@redhat.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
+	linux-integrity@vger.kernel.org
+Subject: Re: [GIT PULL] KEYS: keys-next-7.1-rc1
+Message-ID: <aeVLPLa8JDLIEgDR@kernel.org>
+References: <aeTLzOgblMZRnDvF@kernel.org>
+ <CAHk-=whjUfVy22QCcsCS2h8AkJVpQBjHyVW4_hKXpUxHn9S65w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aeTLzOgblMZRnDvF@kernel.org>
-In-Reply-To: <aeTLzOgblMZRnDvF@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 19 Apr 2026 08:43:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whjUfVy22QCcsCS2h8AkJVpQBjHyVW4_hKXpUxHn9S65w@mail.gmail.com>
-X-Gm-Features: AQROBzD-MuYoon2JCfj2oa26fofPfJsB3Yf3SnKXc5ssgIBczbMthS2Y7Dg_eHo
-Message-ID: <CAHk-=whjUfVy22QCcsCS2h8AkJVpQBjHyVW4_hKXpUxHn9S65w@mail.gmail.com>
-Subject: Re: [GIT PULL] KEYS: keys-next-7.1-rc1
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: David Howells <dhowells@redhat.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	"David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org, 
-	linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whjUfVy22QCcsCS2h8AkJVpQBjHyVW4_hKXpUxHn9S65w@mail.gmail.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[linux-foundation.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9236-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9237-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[linux-foundation.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linux-foundation.org:+];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[torvalds@linux-foundation.org,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-integrity];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux-foundation.org:dkim,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: CF38C424845
+	RCPT_COUNT_FIVE(0.00)[6]
+X-Rspamd-Queue-Id: A896942592D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-This too appears to have been rebased just minutes before sending the email
+On Sun, Apr 19, 2026 at 08:43:20AM -0700, Linus Torvalds wrote:
+> This too appears to have been rebased just minutes before sending the email
+> 
+> No.
+> 
+> That counts as "zero testing" when you don't even explain why it happened.
+> 
+>                 Linus
 
-No.
 
-That counts as "zero testing" when you don't even explain why it happened.
+I tested both PRs for the same baseline with two separate buildroot builds of
 
-                Linus
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git
+
+The only last minute changes after testing I can recall were updating
+stable cc tags for TPM patches.
+
+For the last minute patches I applied from Jacqueline I've tested their
+earlier version, and the patches I applied were just addressing
+checkpatch.pl --strict issues.
+
+Granted not very explained so I get where you're coming from. So how to
+move forward?
+
+BR, Jarkko
 
