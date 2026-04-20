@@ -1,62 +1,71 @@
-Return-Path: <linux-integrity+bounces-9240-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9241-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2NrgIJJS5WnmhAEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9240-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Apr 2026 00:09:22 +0200
+	id mDm1D/Hq5WnxpAEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9241-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Apr 2026 10:59:29 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21A86425A0C
-	for <lists+linux-integrity@lfdr.de>; Mon, 20 Apr 2026 00:09:22 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBF16428977
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Apr 2026 10:59:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B86BB302A2DE
-	for <lists+linux-integrity@lfdr.de>; Sun, 19 Apr 2026 22:08:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AF7EC304A9E7
+	for <lists+linux-integrity@lfdr.de>; Mon, 20 Apr 2026 08:55:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FC723112B7;
-	Sun, 19 Apr 2026 22:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E04B038B7D5;
+	Mon, 20 Apr 2026 08:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BP8Abvn9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aMYjgzS6"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C85628469F;
-	Sun, 19 Apr 2026 22:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A6B388393;
+	Mon, 20 Apr 2026 08:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776636529; cv=none; b=EsnhbhO4KwrSYryW4ZD2yH7z0rF7oHM3NCXICUhPa4wQubbP1SV3gDP/EbiCbe/CINAzGODTjKmOksVsXOtWfMWz40RvCFODzVxlqtIV/524OwbAFSssn41UTCYXpIBwtzD9l+YAm4epo3XsBslq+tSQvQOXF55rqJtq4nM0AC8=
+	t=1776675316; cv=none; b=qPCmrlOl5DWKkshQPmk1sIpXjorjfo10RZXFKlRMHgedpKsASE+aNGrVfx/QXTTMGkz/2+KChdfLPFu5RU3gxxLbuBdHjJUdLxfJ7wWDhSwZhaefYwd6aJyVehzVeexbh0wH8Z38os6ut3XJjgCQY9bsL9wXTqpcyyt2UnF72w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776636529; c=relaxed/simple;
-	bh=wStAdO7mfEx4FH3qgv15bmA6U5wIK3h8L2nlKjb+EM0=;
+	s=arc-20240116; t=1776675316; c=relaxed/simple;
+	bh=O5qEzAlW1XZCYge9c/pa7CeB6wV9ZdCNQTkECJw9vIM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Spya0fitNIpFJrKBSiAU2PvnVz4QRIiJy4anm8VZGKtUWtdtj8/aMXKKwNiXM4Bsy09kw1ubeH93e5M+w9f/eIuBzm7+aWEgFA6XSyt7xIELwX4zp4JYT3SBJK5EQdjP5Wcjz2/ouHV4fuQQr2FRfse7NZr6cZNFAG6hcDD6lYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BP8Abvn9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6CDBC2BCAF;
-	Sun, 19 Apr 2026 22:08:48 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=k52haAFAozx/vFQ0IKcMrC9OohOKiNOqZlfpaK4S3jnhDoO3FO7b3cbfZfFoWYOAr/4XfMJ5lM/z6MGA5eB9npBWxbsi8QlLSPYS3+4xfaLmE3DLAenpQaAglMuI7uk4nXHB8uHMmWrHO9ly/7QgQwtNuJB75dmwTi4cgYCX+qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aMYjgzS6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3136CC19425;
+	Mon, 20 Apr 2026 08:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1776636529;
-	bh=wStAdO7mfEx4FH3qgv15bmA6U5wIK3h8L2nlKjb+EM0=;
+	s=k20201202; t=1776675316;
+	bh=O5qEzAlW1XZCYge9c/pa7CeB6wV9ZdCNQTkECJw9vIM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BP8Abvn9pgBsjSRLy4QOGLHYh5r5/tpadgJ05Gl9WjucdQ/zGUXFUl6VU8l5IxXzs
-	 5FSXjPazwWAg3+mAFWaj33FPsIWwGuEJQDnYcM2NnPiHKxHuDMQje/vwAC7BLotqMU
-	 HDgbMvyyiPE9AKb6E3YtZydrE9ReK0TZOVAzQz/HVf9U9A1nIW2/aGf0rw9CiGkK5V
-	 gY40cHLW+BowmbxHVxygThCFfWev3vgIh57pGMl+atZ9f7IwQlmhcoOSbsdMG8I2I7
-	 wrECDl+4c1Al4B5h1xt+Tlu4jczXlpjApraspiLsQpQkbx4bFYHSZRCD+UIXh7Ius7
-	 ZHtlzaDU+xsuw==
-Date: Mon, 20 Apr 2026 01:08:45 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org
-Subject: Re: [GIT PULL] KEYS: keys-next-7.1-rc1
-Message-ID: <aeVSbVIFaCDRXf7C@kernel.org>
-References: <aeTLzOgblMZRnDvF@kernel.org>
- <CAHk-=whjUfVy22QCcsCS2h8AkJVpQBjHyVW4_hKXpUxHn9S65w@mail.gmail.com>
- <aeVLPLa8JDLIEgDR@kernel.org>
- <CAHk-=wjaGOBCsRpEhmPLcsuK6ggiaaeyz0rT6x3Zv7DMK7JNHA@mail.gmail.com>
+	b=aMYjgzS6ZqypodZLc5FGiz/NHxqDQXP5Kez4CJHNExX767+MBxlUDZlzqmsvKpWh5
+	 YdhE4rJTK+WFMAWQTPYRQXXB2C0/8c1NvRLwZezaY5LP/oLF2X3qb3gXOb4o72zqoy
+	 T46CAHEkGLlMZzkTu2vqLEvlB4w1evnQUZl3b9Eu6vkXVlOFRyd+NwnjuCwXhPz+Qa
+	 sTWm7gYGy4AAFx7MftHJX38DTdx1xjm+Zs8f1cY85PeyBfAfCTbyAqTLFCRqUVWe2t
+	 xROkg/I/FRv7jow6EHFweKn+OVy+1GN7dHDsc0OqJGM2B7YGS7i266au38JBxvDI9u
+	 bbMWic9XHg+Nw==
+Date: Mon, 20 Apr 2026 09:55:09 +0100
+From: Will Deacon <will@kernel.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+	zohar@linux.ibm.com, roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+	peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+	sudeep.holla@kernel.org, oupton@kernel.org, joey.gouly@arm.com,
+	suzuki.poulose@arm.com, yuzenghui@huawei.com,
+	catalin.marinas@arm.com
+Subject: Re: [RFC PATCH 4/4] firmware: arm_ffa: check pkvm initailised when
+ initailise ffa driver
+Message-ID: <aeXp7WSqpXNytNPG@willie-the-truck>
+References: <20260417175759.3191279-1-yeoreum.yun@arm.com>
+ <20260417175759.3191279-5-yeoreum.yun@arm.com>
+ <87se8sbozv.wl-maz@kernel.org>
+ <aeNeNjfO7i128TIP@e129823.arm.com>
+ <87pl3vb5bm.wl-maz@kernel.org>
+ <aeS4rAeVQ0yJIPYw@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -65,81 +74,93 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wjaGOBCsRpEhmPLcsuK6ggiaaeyz0rT6x3Zv7DMK7JNHA@mail.gmail.com>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <aeS4rAeVQ0yJIPYw@e129823.arm.com>
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-9241-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9240-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,lists.infradead.org,lists.linux.dev,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,gmx.de,ziepe.ca,arm.com];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[will@kernel.org,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 21A86425A0C
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arm.com:email]
+X-Rspamd-Queue-Id: DBF16428977
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, Apr 19, 2026 at 02:52:06PM -0700, Linus Torvalds wrote:
-> On Sun, 19 Apr 2026 at 14:38, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+On Sun, Apr 19, 2026 at 12:12:44PM +0100, Yeoreum Yun wrote:
+> Hi Marc,
+> 
+> > On Sat, 18 Apr 2026 11:34:30 +0100,
+> > Yeoreum Yun <yeoreum.yun@arm.com> wrote:
+> > >
+> > > > > @@ -2035,6 +2037,16 @@ static int __init ffa_init(void)
+> > > > >  	u32 buf_sz;
+> > > > >  	size_t rxtx_bufsz = SZ_4K;
+> > > > >
+> > > > > +	/*
+> > > > > +	 * When pKVM is enabled, the FF-A driver must be initialized
+> > > > > +	 * after pKVM initialization. Otherwise, pKVM cannot negotiate
+> > > > > +	 * the FF-A version or obtain RX/TX buffer information,
+> > > > > +	 * which leads to failures in FF-A calls.
+> > > > > +	 */
+> > > > > +	if (IS_ENABLED(CONFIG_KVM) && is_protected_kvm_enabled() &&
+> > > > > +	    !is_kvm_arm_initialised())
+> > > > > +		return -EPROBE_DEFER;
+> > > > > +
+> > > >
+> > > > That's still fundamentally wrong: pkvm is not ready until
+> > > > finalize_pkvm() has finished, and that's not indicated by
+> > > > is_kvm_arm_initialised().
+> > >
+> > > Thanks. I miss the TSC bit set in here.
 > >
-> > I tested both PRs for the same baseline with two separate buildroot builds of
+> > That's the least of the problems. None of the infrastructure is in
+> > place at this stage...
+> >
+> > > IMHO, I'd like to make an new state check function --
+> > > is_pkvm_arm_initialised() so that ff-a driver to know whether
+> > > pkvm is initialised.
+> >
+> > Doesn't sound great, TBH.
+> >
+> > > or any other suggestion?
+> >
+> > Instead of adding more esoteric predicates, I'd rather you build on an
+> > existing infrastructure. You have a dependency on KVM, use something
+> > that is designed to enforce dependencies. Device links spring to mind
+> > as something designed for that.
+> >
+> > Can you look into enabling this for KVM? If that's possible, then it
+> > should be easy enough to delay the actual KVM registration after pKVM
+> > is finalised.
 > 
-> You threw away any and all testing that had been done by anybody else
-> in linux-next.
-> 
-> And you rebased things on top of a random commit-of-the-day during the
-> merge window, when things are possibly unstable due to all the *other*
-> churn going on.
-> 
-> In other words, you did *EVERYTHING* that you shouldn't be doing, and
-> that the documentation tells you not to do.
-> 
-> The WHOLE POINT of being in linux-next and being ready when the merge
-> window opens is gone. All for apparently nothing.
-> 
-> Those stable cc tags do not add *any* value, since you could just have
-> cc'd stable later instead.
-> 
-> I'm not pulling this. You need to stop doing this pointless churn, and
-> read the docs on rebasing. See
-> 
->    Documentation/maintainer/rebasing-and-merging.rst
-> 
-> about how you are *not* supposed to randomly just rebase, and
-> _particularly_ not rebase on top of some random state during the merge
-> window.
+> or what about some event notifier? Just like:
 
-"A frequent cause of merge-window trouble is when Linus is presented with a
-patch series that has clearly been reparented, often to a random commit,
-shortly before the pull request was sent.  The chances of such a series
-having been adequately tested are relatively low - as are the chances of
-the pull request being acted upon."
+This seems a bit over-engineered to me. Why don't you just split the
+FF-A initialisation into two steps: an early part which does the version
+negotiation and then a later part which can fit in with whatever
+dependencies you have on the TPM?
 
-OK, point digested.
-
-I can update 'next' to contain only fixes from these PRs, and hold on up
-til doing PR for -rc2 (as corrective step).
-
-> 
->           Linus
-
-BR, Jarkko
+Will
 
