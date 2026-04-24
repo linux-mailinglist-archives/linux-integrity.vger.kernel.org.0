@@ -1,50 +1,50 @@
-Return-Path: <linux-integrity+bounces-9323-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9324-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cNi5AgGW62m7OgAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9323-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 18:10:41 +0200
+	id mO8eMRuW62m7OgAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9324-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 18:11:07 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 750774612C8
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 18:10:40 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2728B4612DF
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 18:11:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 66DB3300F95A
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 16:10:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A13C43009CD7
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 16:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97F83DC4D0;
-	Fri, 24 Apr 2026 16:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 815F63DCDA8;
+	Fri, 24 Apr 2026 16:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DsBCw9fG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7Dj4YbN"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EFE2BD587;
-	Fri, 24 Apr 2026 16:10:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E6113DCDA1;
+	Fri, 24 Apr 2026 16:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777047008; cv=none; b=R/PUPY6x4YGpycCg3qFnYnXYdGHVJAf8f1zAPo+hYCzC/B2DxKfx/vgoKonAv6ivbIFrUxEH8azR2i3XSSHj9xbdG2k1rHKqKuL8xvrU9iWusRN6z4iATZDYMEJyPNEasNQp8lafLkCnmSFeFPuHwyapikz186SVl8fIBwKrW88=
+	t=1777047063; cv=none; b=oAtH/oWnvsloj6HIxgtgFyKrwZ7/u0L0jYY9YJzvxuEghdrbymUMdZvw/3qGQ4qqrPWt+pJt2IsPUI5S8/kmYalN02qnYlNNNc9xUCGAm86AwK6qygsnqR+/x/YO2EvzThroX52azGMROyEPGXRkwrAmsPUJUkFSqy5SvRfjgQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777047008; c=relaxed/simple;
-	bh=601cB8DvX/sMTRCeJ5tft8T4kzWVDphwpc5xreOjr9I=;
+	s=arc-20240116; t=1777047063; c=relaxed/simple;
+	bh=Zsy6Ff45uWrYNi6Q5JvPcxoWdNhp3W2xNL5lDQCZHzc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jSy6zrO4EB7Vdx49EkJAtKnb1GOdf5p5Dsk78tH9vGCmTiG7v2NNRF6r3d8Vef+U5ySb3i/r8WmfsuXgiabwJwQrEbmIH2spp7TrwK10qEKYqjAHBoPtKBB30RZsHEM5R89k/OBs9TwUdtb3t+CGjt3avCoEXe0xeG6J0WVf3nA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DsBCw9fG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C24BC19425;
-	Fri, 24 Apr 2026 16:10:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hOx3sCfWqFXyKLBApqT7wh0ex8JHx1I8W+y5m3z/7NP3zHrN21u7gI4eMHVv8sJfzpFfIC2gvcf/KnT5YOZ5Ca8OgAq4MyxyQLcaHbxiKj+0c+HWXqetPS3prtbCZzjYbh5mdzBzjlZjaVaAybOk3fgo5fHrHU3z/V1uzqcZT44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7Dj4YbN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36900C19425;
+	Fri, 24 Apr 2026 16:10:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1777047008;
-	bh=601cB8DvX/sMTRCeJ5tft8T4kzWVDphwpc5xreOjr9I=;
+	s=k20201202; t=1777047062;
+	bh=Zsy6Ff45uWrYNi6Q5JvPcxoWdNhp3W2xNL5lDQCZHzc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DsBCw9fGL1lmy/570MGacEaj15Tz/tgkHAXOraXAYkcMp2w+JuZoUieEKUtLqW/dV
-	 tbDagWYVY+V62iqzgPbaZwDMQpq0+CLo2JYjB15VbrTObhUog+M9DOcduFKuGlv2Y/
-	 TECFbW1JYp/MPpLa74OSrHGOdA0/B6jMXqPfOK0sx1gayM/heDHRjmi8qePhbodUKB
-	 BzAO7roHWGKtb0PDIe3V8cKwEEm3FZeVPMn9AR7IISsj8Fgwn8yZlYYBK2wDORm0hH
-	 3th9ZftEFWpFALlVq95YOgNzHvQ2XpiqFpaM02AAQob0z73jRtd0fkO9AidHx2de0+
-	 m9iGCqd1BxDVA==
-Date: Fri, 24 Apr 2026 17:09:59 +0100
+	b=X7Dj4YbNufgdQqfaeuBWv0WereEUAnEZ89rXk8uKzti/uEqb+9t4Y2f9G/42UCoAV
+	 4OqLUN5rOrUHyxsiY3z6xQIZBWd9HFJSwV/lYWpKj2NUs1RCi1zvWpmqLC2mO4+Pv4
+	 7tA7HMLIplN+kUuGWZmmKuB0x9lSJQWA3E9UF0spHiqvwwkkutlaCf30sNUfKAnW2Q
+	 DhqS7B3Sqj8qorgLKoBuI7AW1m/cM1s4foXowSM/uZmOEnqiTmzqTQSCHGX9sVCq6S
+	 bDdTpkyOowjF0at4J9ZjwCsT8w6HP/xmY8NAfWiBCzSnrIDAvdQ+nKeTgUVTW8GEJW
+	 YZtfmnuj33uGQ==
+Date: Fri, 24 Apr 2026 17:10:54 +0100
 From: Sudeep Holla <sudeep.holla@kernel.org>
 To: Jonathan McDowell <noodles@earth.li>
 Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -58,11 +58,11 @@ Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
 	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
 	catalin.marinas@arm.com, will@kernel.org, noodles@meta.com,
 	sebastianene@google.com, Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: Re: [RFC PATCH v3 4/4] Revert "firmware: arm_ffa: Change initcall
- level of ffa_init() to rootfs_initcall"
-Message-ID: <20260424-pompous-eagle-of-poetry-e6dfe7@sudeepholla>
+Subject: Re: [RFC PATCH v3 3/4] Revert "tpm: tpm_crb_ffa: try to probe
+ tpm_crb_ffa when it's built-in"
+Message-ID: <20260424-agile-falcon-of-honor-4b23ab@sudeepholla>
 References: <cover.1777036497.git.noodles@meta.com>
- <2e7b4dc552b45ddf14cc43bc449cbebb4ade0027.1777036497.git.noodles@meta.com>
+ <f8d6dcbeb5bf2d4316989d05dcaae20225774d51.1777036497.git.noodles@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -71,8 +71,8 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2e7b4dc552b45ddf14cc43bc449cbebb4ade0027.1777036497.git.noodles@meta.com>
-X-Rspamd-Queue-Id: 750774612C8
+In-Reply-To: <f8d6dcbeb5bf2d4316989d05dcaae20225774d51.1777036497.git.noodles@meta.com>
+X-Rspamd-Queue-Id: 2728B4612DF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
@@ -81,11 +81,11 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9323-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9324-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -100,22 +100,21 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[sudeep.holla@kernel.org,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arm.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 
-On Fri, Apr 24, 2026 at 02:24:42PM +0100, Jonathan McDowell wrote:
+On Fri, Apr 24, 2026 at 02:24:30PM +0100, Jonathan McDowell wrote:
 > From: Yeoreum Yun <yeoreum.yun@arm.com>
 > 
-> This reverts commit 0e0546eabcd6c19765a8dbf5b5db3723e7b0ea75, which was
-> added to address ordering issues with the IMA LSM initialisation where
-> the TPM would not be fully ready by the time IMA wanted it. This has
-> been resolved within IMA by retrying setup during late_initcall_sync if
-> the TPM is not available at first.
+> This reverts commit 746d9e9f62a6e8ba0eba2b83fc61cfe7fa8797ce.
+> 
+> Now that IMA will retry in the late_initcall_sync level if the TPM is
+> not available at first, this change is no longer required.
 > 
 
-Reviewed-by: Sudeep Holla <sudeep.holla@kernel.org>
+Acked-by: Sudeep Holla <sudeep.holla@kernel.org>
 
 -- 
 Regards,
