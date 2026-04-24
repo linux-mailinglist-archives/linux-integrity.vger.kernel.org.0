@@ -1,37 +1,37 @@
-Return-Path: <linux-integrity+bounces-9321-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9322-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +N4QIihv62mFMwAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9321-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 15:24:56 +0200
+	id SB8RN6Nv62mMMwAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9322-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 15:26:59 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 188C145EF72
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 15:24:56 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9087545EFE2
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 15:26:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 34319300D0DD
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 13:24:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1B13E302429B
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 13:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8913D6494;
-	Fri, 24 Apr 2026 13:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648FA3D6494;
+	Fri, 24 Apr 2026 13:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="HuVLe4A1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=earth.li header.i=@earth.li header.b="fVdQo7DL"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from the.earth.li (the.earth.li [93.93.131.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA533CAE84;
-	Fri, 24 Apr 2026 13:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2B73D34B7;
+	Fri, 24 Apr 2026 13:24:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.93.131.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777037074; cv=none; b=Go8dzyYuhNQGgXZb0BLMgSJKrTwfOUi/VpeIDaevXaIehbVEMpdOWjwCLyF/MGobmrLvvPHwS/q0H0zZMvBhsOl/wNrEHUdfuGVpprHi1k3idYNmbAv/tb8YUbr9x6IeRlFIIAY/VSiIMekJu1NyCIanDQzoAIKb5+ZdAWe7WDM=
+	t=1777037085; cv=none; b=ZaFjU5Ep7ivjA34gdyEd6He3CJ1kMdgTBdZO+SH3Ko3C2XurOT5REg27oUlCF7ogMLopSCugKjAiCF+tHXqfJfjvLASahAMwC4UMseuHwH99iCqVQ9AkfVLwZ0wJ3ifWgz/bdCBOEnReyAZyspvyoo5whbHvfm8yJuzSRCqeQ0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777037074; c=relaxed/simple;
-	bh=6Y7kEvWLblX9b7Lo29A/5VKlmbFvHRCAoteZiBjYeAs=;
+	s=arc-20240116; t=1777037085; c=relaxed/simple;
+	bh=cxYa9iowJWVapjxFQbjiCF+rrArexlK4NdNqtnwE7Vs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RJlVINET7q9XKXKbCKPtWwWGaDZFOXx/1IWOQLONPm1w64vOF3BavdhVQyVMt8yLaPWihGK7Et4jxYj/6JeRSY2VYBy0le4yiXQ35L2Jkb/+tXs91c3BwToqiM625gfn/dVrUWzGSG28QHVXGi3USfDzTm7jzuytRRxM66WOveQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=HuVLe4A1; arc=none smtp.client-ip=93.93.131.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=XeIoQ3kuJyAtsMDtXd1MR4jyEM50gnPu4W0w5TCgcRFuI/LGWavk+rcaIgtJZyx7VnGy5A6TQKJabp7I/dJT2nk9XI5kHvE0RDg3QNcV+vHL4mzpE5v7L+XRBTt5qDJC7Sd/DJOex5VOpg3Low8wL68idKdcBIvkYX+EilX2Nt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li; spf=pass smtp.mailfrom=earth.li; dkim=pass (2048-bit key) header.d=earth.li header.i=@earth.li header.b=fVdQo7DL; arc=none smtp.client-ip=93.93.131.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=earth.li
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=earth.li
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
@@ -40,17 +40,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=MTLm+QnMa8LZcV3xohAT9xRe8rojyymgVoomkTLpaYs=; b=HuVLe4A1izdqdUfXiweSvrcwPM
-	EZ7E77UWtaAyAGfUmxIohCyfZk9j3YvbBoN7i/7An0T/HXDJVaSal3VdDiCww4SUs3Z/tpRyPIXWA
-	4fAFlbl+wPkJJdsucxLKh6G1uKDvLkzeDzIAjjw6ppq8XtgA341v+aoXiD2aHVge/oAJ2UeemaL9R
-	Ygs79IRXUITnpHvcULJWMtfdWe4NF1wEMB6mZzadJKwRLoBdqDFoFINyaHaQM3T+Txal5gx7GtOmX
-	E/s/VjcrCynf9yIPqsy66m5m79JTRAE9nIlaGankZ+OXBbf8NOWi5mIZ4zAeWpzR9THZdnaqt/Gp9
-	aNMqR0DQ==;
+	bh=NdNIwlr6EYICEoRxPpG8gr4dUMgZUbywrW3X2KQCWS4=; b=fVdQo7DLwhvnr8LSwWr0AJgZ9n
+	NnI+PRLs1iSPv/FGWFsYSEao3/izs4kRQtMLdis1TKFt50zUAyE5xICfYJCmwGHpsFveq00Dt2TX3
+	m+4ESjKmlE39lccShEg1XoCAMafp69xOHODZMqgaIHad4Ch38lGOPwqQ8EMM9bmswkbiH8M+H1Riw
+	Cv3u+USuE2tB5zISVKWmGR6r7S/Kh2M3FU7P/XGy5e4d23IYEN9oN9cb6WB1VFYt18/kyLF5d44aw
+	EgKFVBNGuc17CJh1a0xMJFcEsngOtw3oscgmmNwsaj5B1462QWjcg810U42GBfLEZ2NFdFnrRlQe6
+	wN5EgjpA==;
 Received: from noodles by the.earth.li with local (Exim 4.98.2)
 	(envelope-from <noodles@earth.li>)
-	id 1wGGWF-0000000555f-02gD;
-	Fri, 24 Apr 2026 14:24:31 +0100
-Date: Fri, 24 Apr 2026 14:24:30 +0100
+	id 1wGGWQ-0000000556r-0aRd;
+	Fri, 24 Apr 2026 14:24:42 +0100
+Date: Fri, 24 Apr 2026 14:24:42 +0100
 From: Jonathan McDowell <noodles@earth.li>
 To: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
@@ -63,9 +63,9 @@ Cc: paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
 	suzuki.poulose@arm.com, yuzenghui@huawei.com,
 	catalin.marinas@arm.com, will@kernel.org, noodles@meta.com,
 	sebastianene@google.com, Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH v3 3/4] Revert "tpm: tpm_crb_ffa: try to probe
- tpm_crb_ffa when it's built-in"
-Message-ID: <f8d6dcbeb5bf2d4316989d05dcaae20225774d51.1777036497.git.noodles@meta.com>
+Subject: [RFC PATCH v3 4/4] Revert "firmware: arm_ffa: Change initcall level
+ of ffa_init() to rootfs_initcall"
+Message-ID: <2e7b4dc552b45ddf14cc43bc449cbebb4ade0027.1777036497.git.noodles@meta.com>
 References: <cover.1777036497.git.noodles@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -76,18 +76,18 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1777036497.git.noodles@meta.com>
-X-Rspamd-Queue-Id: 188C145EF72
+X-Rspamd-Queue-Id: 9087545EFE2
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	R_DKIM_REJECT(1.00)[earth.li:s=the];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9321-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9322-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[earth.li];
 	RCVD_COUNT_THREE(0.00)[4];
@@ -97,78 +97,43 @@ X-Spamd-Result: default: False [1.04 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[earth.li:-];
-	NEURAL_HAM(-0.00)[-0.988];
+	NEURAL_HAM(-0.00)[-0.987];
 	FROM_NEQ_ENVFROM(0.00)[noodles@earth.li,linux-integrity@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
 	FREEMAIL_CC(0.00)[paul-moore.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,kernel.org,ziepe.ca,arm.com,meta.com,google.com];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,meta.com:mid,meta.com:email,arm.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,meta.com:mid,meta.com:email,arm.com:email]
 
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 
-This reverts commit 746d9e9f62a6e8ba0eba2b83fc61cfe7fa8797ce.
-
-Now that IMA will retry in the late_initcall_sync level if the TPM is
-not available at first, this change is no longer required.
+This reverts commit 0e0546eabcd6c19765a8dbf5b5db3723e7b0ea75, which was
+added to address ordering issues with the IMA LSM initialisation where
+the TPM would not be fully ready by the time IMA wanted it. This has
+been resolved within IMA by retrying setup during late_initcall_sync if
+the TPM is not available at first.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 Signed-off-by: Jonathan McDowell <noodles@meta.com>
 ---
- drivers/char/tpm/tpm_crb_ffa.c | 19 +++----------------
- 1 file changed, 3 insertions(+), 16 deletions(-)
+ drivers/firmware/arm_ffa/driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-index 99f1c1e5644b..05f19c0ebf82 100644
---- a/drivers/char/tpm/tpm_crb_ffa.c
-+++ b/drivers/char/tpm/tpm_crb_ffa.c
-@@ -123,7 +123,6 @@ struct tpm_crb_ffa {
- };
- 
- static struct tpm_crb_ffa *tpm_crb_ffa;
--static struct ffa_driver tpm_crb_ffa_driver;
- 
- static int tpm_crb_ffa_to_linux_errno(int errno)
- {
-@@ -177,23 +176,13 @@ static int tpm_crb_ffa_to_linux_errno(int errno)
-  */
- int tpm_crb_ffa_init(void)
- {
--	int ret = 0;
--
--	if (!IS_MODULE(CONFIG_TCG_ARM_CRB_FFA)) {
--		ret = ffa_register(&tpm_crb_ffa_driver);
--		if (ret) {
--			tpm_crb_ffa = ERR_PTR(-ENODEV);
--			return ret;
--		}
--	}
--
- 	if (!tpm_crb_ffa)
--		ret = -ENOENT;
-+		return -ENOENT;
- 
- 	if (IS_ERR_VALUE(tpm_crb_ffa))
--		ret = -ENODEV;
-+		return -ENODEV;
- 
--	return ret;
-+	return 0;
+diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+index f2f94d4d533e..01547c5c0e38 100644
+--- a/drivers/firmware/arm_ffa/driver.c
++++ b/drivers/firmware/arm_ffa/driver.c
+@@ -2106,7 +2106,7 @@ static int __init ffa_init(void)
+ 	kfree(drv_info);
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
+-rootfs_initcall(ffa_init);
++module_init(ffa_init);
  
-@@ -405,9 +394,7 @@ static struct ffa_driver tpm_crb_ffa_driver = {
- 	.id_table = tpm_crb_ffa_device_id,
- };
- 
--#ifdef MODULE
- module_ffa_driver(tpm_crb_ffa_driver);
--#endif
- 
- MODULE_AUTHOR("Arm");
- MODULE_DESCRIPTION("TPM CRB FFA driver");
+ static void __exit ffa_exit(void)
+ {
 -- 
 2.53.0
 
