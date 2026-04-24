@@ -1,198 +1,218 @@
-Return-Path: <linux-integrity+bounces-9327-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9328-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id hgoIHOXR62lERwAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9327-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 22:26:13 +0200
+	id 4L0sDZjY62lISAAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9328-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 22:54:48 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09F304632F0
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 22:26:12 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EB5F46359F
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 22:54:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2DEFE300615E
-	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 20:26:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 905E030086F0
+	for <lists+linux-integrity@lfdr.de>; Fri, 24 Apr 2026 20:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A054A37E2F9;
-	Fri, 24 Apr 2026 20:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691643FB7DC;
+	Fri, 24 Apr 2026 20:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eURssOLp"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RoJXI2eR"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53416347BDC;
-	Fri, 24 Apr 2026 20:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2363E4C7E;
+	Fri, 24 Apr 2026 20:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777062370; cv=none; b=BImDjcZl7p4H2wVQG46MdOD7VNTZ+N59a1LUnV1zXRAaLjYZ8roRQoL2F47KJ6HCr6aZFRDjgjR3BCBK96k9KXIIBSivxAw2YoEJtU01uQC7cvmBUMv1I1H7Nyw0prZ+8LKfuqagnIKuZLM5/dI4TlAw2W3V6z9A4+jX9c19D4Q=
+	t=1777064054; cv=none; b=NL0bvA6gMRN5Eehppy7uDTT88VsNfNUjP81KxglWfpfCZWtnOdH3zuQAve3lJc6PUqOSsn8dxWSpSgIIf7Qs8Kn+AhhEpIqAl9HWabeQioshAbhEQUIyOSyN5XoY5/KDT1xcsZlqtEn3ZQ5WyjCh32bE4V4zU7soIYjq0L9+Gao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777062370; c=relaxed/simple;
-	bh=Koj4CUktlogAnNVhJjluP/UK0I95wXh5VIxD3ENSAyo=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=VGoKfs9WYnHnegYt4F+JZMf2wN4jDFzS5/u/i/gFhJ4L07q7AFhKTvEZvtb8zhZzgBC7RyPHZT20yUl64aQ0N1ADsMwZlvwPleQjYihjC56tyeZMbaZUkUn5Vo1A1xNkQsFH7i0lYAjFu76rcRtZaflo7//XjnpN1bFyIDDUpTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eURssOLp; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1777064054; c=relaxed/simple;
+	bh=lIKeU+Qy0EadWyDhE2p4BIH/6J1iOl8VLiE8n9n4u/4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uANRRiJjw2b/SPKXkxCeny3yJpyHwo6tcRb+zSd83yGQDIpcoc3VBkRwyCVb7ZrP5Kt4j21RpPWjx7ddQfQOFngZ6UVakdSpXdCmPBCbTjd4PgjmQzMjWsHKb9YSW9V/hUFyccD/aALoYte3dx/mwkJlLschOYvupHePT0eU47M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RoJXI2eR; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63OK2d6f3657864;
-	Fri, 24 Apr 2026 20:25:35 GMT
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63OBP1Qs3514984;
+	Fri, 24 Apr 2026 20:54:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=qlBu7T
-	NKzfpXasOOTL0wruUdS0hFrUoHwLMc6Celeck=; b=eURssOLpdkBlItoz8asJrY
-	yJ/U89jyh5uOcODsiIObYY2XdX/9DWggtc0eiovDLm9vHeKUzAV0mQn6ticaa+ou
-	MdDzsIPf17Qpp0VdKksledynFUt3NElFO320AO2rnS1b2qgcm8qdStfPJhLh5uB+
-	qu+WMY+ClH5YfiAWmxyLdmd1o7QLJ69uF73nO7vNDSnZZi5C2ElEsLG9sJ2bklI5
-	x6s43KUwN4DqHAk+GPSRRO5LdUlkc/EX04jgTanfUPfrWfMFSMPOUHrT7CwQ8DOI
-	Pi9s9anAmdwJFLy7zOC2eDqbCRkT8zqvULxA11syTD+SISh4flXywUd0MtmxOMIw
+	:message-id:mime-version:references:subject:to; s=pp1; bh=GQEmqb
+	ENEJuPwnv49ba5Tw1tG9osvqD3RYmWyVy8RDY=; b=RoJXI2eR/Nis/W9ZHO9KRK
+	re5N22FdRGrQyrRnAtwJxCzPuJRTSiJaErAJPzMf4PAkxmHZyaS1KIUYjAHjCc7I
+	2hWu0s13kD8zOeJrBTD9XQymiVL23AmF7LUaMJdeJsuHX0TG6yTEQU2822Wo2g24
+	/gXogRD0QL7EdGpYL0wBc5brnKPftaZmQyQF2ENoAaE1x+POH3JE4YJNKbtiYJ73
+	uPzf07v7Q4RHG5jBfJTST4Vvaxy9lVOStfV+PpEU55irm+Ypc6mmXvBlV7Jy/ck2
+	+jwqNyX3cAOOO+ZrTp4akxJzYENff2PS4sO7ntCXT9ZoK/kpgalRs/JEdwq/gF9g
 	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dpeu7xt00-1
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dpeu2fwhe-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Apr 2026 20:25:34 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63OKKHhC001937;
-	Fri, 24 Apr 2026 20:25:34 GMT
-Received: from smtprelay04.dal12v.mail.ibm.com ([172.16.1.6])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4dpjkycd2n-1
+	Fri, 24 Apr 2026 20:54:06 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63OKoZrM021377;
+	Fri, 24 Apr 2026 20:54:05 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dpjky4fkc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Apr 2026 20:25:34 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63OKPXjv27656892
+	Fri, 24 Apr 2026 20:54:05 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63OKs50m24511002
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 24 Apr 2026 20:25:33 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 75C4558055;
-	Fri, 24 Apr 2026 20:25:33 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A465E58043;
-	Fri, 24 Apr 2026 20:25:31 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.11.225])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 24 Apr 2026 20:25:31 +0000 (GMT)
-Message-ID: <43ff6ca37df45ed53061dad46e9d31a5118e5714.camel@linux.ibm.com>
-Subject: Re: [RFC PATCH v3 2/4] security: ima: call ima_init() again at
- late_initcall_sync for defered TPM
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Jonathan McDowell <noodles@earth.li>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvmarm@lists.linux.dev
-Cc: paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, jarkko@kernel.org, jgg@ziepe.ca,
-        sudeep.holla@kernel.org, maz@kernel.org, oupton@kernel.org,
-        joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-        catalin.marinas@arm.com, will@kernel.org, noodles@meta.com,
-        sebastianene@google.com, Yeoreum Yun <yeoreum.yun@arm.com>
-In-Reply-To: <5552c20c6d6d2ae3bbb6b35124af5d98d2f79163.1777036497.git.noodles@meta.com>
-References: <cover.1777036497.git.noodles@meta.com>
-	 <5552c20c6d6d2ae3bbb6b35124af5d98d2f79163.1777036497.git.noodles@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 24 Apr 2026 16:25:31 -0400
+	Fri, 24 Apr 2026 20:54:05 GMT
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EE42F58055;
+	Fri, 24 Apr 2026 20:54:04 +0000 (GMT)
+Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4747758059;
+	Fri, 24 Apr 2026 20:54:04 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 24 Apr 2026 20:54:04 +0000 (GMT)
+Message-ID: <7fa63e8a-1ffb-4dcd-af01-0811768ecda9@linux.ibm.com>
+Date: Fri, 24 Apr 2026 16:54:03 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 0/4] tpm_crb: Add command and response buffer chunking
+ support
+To: Arun Menon <armenon@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+References: <20260324071803.324774-1-armenon@redhat.com>
+ <acJqVjZ7eSxOpSL5@kernel.org> <acKGZ33ItHvMkQ_5@fedora>
+ <adYTLq0qgWpA1kIS@kernel.org> <aen3zxxedDXlekRb@fedora>
+Content-Language: en-US
+From: Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <aen3zxxedDXlekRb@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: bIZjqaR-Z68OsHDjoYn96_ZIv_N3PmeO
-X-Authority-Analysis: v=2.4 cv=Ksp9H2WN c=1 sm=1 tr=0 ts=69ebd1bf cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI0MDIwMyBTYWx0ZWRfXyxow3KZrz6Xw
+ 7Rj1ESrJweyghEGAGThn8czGOZn4aT6A7vX0UH4/neigYXJ6ahB8q5pIrvdLUsIxXmaG0mq8Xt+
+ BZ9nSdc4szSxDT82F8vVewXZvlCs2yDo2JOLxoU6rsgsh6a98ETAXCgSzhGPiLub0sQae+e/s8+
+ fRDPJ1ATcbjX26v/c2lKfKeHnahzN8aSUSY+E5h115VOERMxfTR1vf1xDwlFFiWpREw8aW4wkZ8
+ qaXd4pLpECTUrPwBdJFQgi5hfaZvXD/pleP2MaTrvg1zEyEU9WE75AnX33zPU9y0oShRFu10Eai
+ aVBs0yBYZFN9XEqq7E/l0995ujNNs5q+3z6vhVVF9Ne5zTLlgRebrJalAKWCVu8bpy1k9RN3V3l
+ EJ5dnpGQKdT5OSwhBz+5UU+upE4GksJSyURRJXUHzgkyn+EVNs/rHcEvZVMGhEL7YZcVqRSooZ3
+ sU893FC3Gfl1qWeUuww==
+X-Proofpoint-ORIG-GUID: a1y3ARGhd4OHwwFP-pjZWww6jlI_hLJH
+X-Proofpoint-GUID: S73xGG5TUqSJc33m3DAJioMQ60sOva6P
+X-Authority-Analysis: v=2.4 cv=XMUAjwhE c=1 sm=1 tr=0 ts=69ebd86f cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=i188C8hGdHaRUZsAyrEA:9
- a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10 a=zZCYzV9kfG8A:10
-X-Proofpoint-GUID: e8gVjJiNmvZd8ESYrbBmAUwz6zsi2-VM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI0MDE5OCBTYWx0ZWRfX4ZLpxJGMkFFq
- gmVmSQI97B7WqDu8cBd0ZQKiq0rs4XhnQkHQ8RCV6lO+cUmLTGrhbirIvRtlisb+25lSnbJOwKl
- RLLEt6KG46mTYH0U4Jjwg4RnTEXH4+3zMSdZigcF36LQtBSAPFwOvOEoZMulgG5CaDQ4CBomq1e
- TpUDpGe4wEIAmU1TiIWQiB1hSU9XvLUCvGwQQ8atT5lMlb85k8RI41cLowGSR8lGo6A143TDo1h
- QngrhJeH7YDT1k7OdwEzCPDfBE1x5xGlIFHX3prrmlZAv0/V5UgvmMi7KCaj3T12Nac+I7to1JY
- T59kIDws1gcyW0peoBR8WaMXePLI5/QJis8m4jldhSoRtyJqUwsYQXJFB0SpUfe/34zhm6vG7q1
- 5PXOMFNbu2f2XYBKkhw3kEbLs6mYemYSVqzZZngWt8J6T8qy1lwo+LHDwnwgQTWFpW6de4xqrhq
- 3fhfbe/zeyCE3G7msGg==
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=xt6ew7UTAAAA:8
+ a=VwQbUJbxAAAA:8 a=20KFwNOVAAAA:8 a=NEAV23lmAAAA:8 a=ciYI8vHzxm8BiOPmu2cA:9
+ a=QEXdDO2ut3YA:10 a=tn93DeGZTgJ6DdWMtdD4:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-04-24_03,2026-04-21_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 impostorscore=0 malwarescore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 adultscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 clxscore=1015 priorityscore=1501 impostorscore=0 bulkscore=0
+ spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604240198
-X-Rspamd-Queue-Id: 09F304632F0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604240203
+X-Rspamd-Queue-Id: 8EB5F46359F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9327-lists,linux-integrity=lfdr.de];
-	FREEMAIL_CC(0.00)[paul-moore.com,namei.org,hallyn.com,huawei.com,gmail.com,oracle.com,kernel.org,ziepe.ca,arm.com,meta.com,google.com];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,ziepe.ca,gmx.de];
+	TAGGED_FROM(0.00)[bounces-9328-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[stefanb@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	HAS_WP_URI(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
 	RCVD_COUNT_SEVEN(0.00)[11]
 
-Thanks, Jonathan!
-
-On Fri, 2026-04-24 at 14:24 +0100, Jonathan McDowell wrote:
-> -static int __init init_ima(void)
-> +static int __init init_ima(bool late)
-> =C2=A0{
-> =C2=A0	int error;
-> =C2=A0
-> @@ -1247,10 +1247,26 @@ static int __init init_ima(void)
-> =C2=A0		return 0;
-> =C2=A0	}
-> =C2=A0
-> +	/*
-> +	 * If we found the TPM during our first attempt, or we know there's no
-> +	 * TPM, nothing further to do
-> +	 */
-
-Perhaps it's just me, but the comment wording is a bit off.  Could I change=
- it
-to: If we either found the TPM or knew there's no TPM during our first atte=
-mpt,
-nothing futher to do.
-
-Otherwise the patch looks good.
-
-Mimi
 
 
-> +	if (late && (ima_tpm_chip || !IS_ENABLED(CONFIG_TCG_TPM)))
-> +		return 0;
-> +
-> +	ima_tpm_chip =3D tpm_default_chip();
-> +	if (!ima_tpm_chip && !late && IS_ENABLED(CONFIG_TCG_TPM)) {
-> +		pr_debug("TPM not available, will try later\n");
-> +		return -EPROBE_DEFER;
-> +	}
-> +
-> +	if (!ima_tpm_chip)
-> +		pr_info("No TPM chip found, activating TPM-bypass!\n");
-> +
+On 4/23/26 6:43 AM, Arun Menon wrote:
+> On Wed, Apr 08, 2026 at 11:34:54AM +0300, Jarkko Sakkinen wrote:
+>> On Tue, Mar 24, 2026 at 06:11:11PM +0530, Arun Menon wrote:
+>>> Hi Jarkko,
+>>>
+>>> On Tue, Mar 24, 2026 at 12:41:26PM +0200, Jarkko Sakkinen wrote:
+>>>> On Tue, Mar 24, 2026 at 12:47:59PM +0530, Arun Menon wrote:
+>>>>> The new version of TCG TPM v185 (currently under review [1]) supports
+>>>>> sending data/commands in chunks for the CRB (Command Response Buffer)
+>>>>> interface. This is in line with the initiative to support PQC algorithms.
+>>>>>
+>>>>> This series implements the logic to send and receive larger TPM
+>>>>> cmd/rsp between the linux guest and the TPM backend in chunks.
+>>>>> Currently, the TPM CRB driver is limited by the physical size of the
+>>>>> MMIO window. When userspace attempts to send a payload that exceeds this
+>>>>> size, the driver rejects it.
+>>>>>
+>>>>> This series introduces chunking support. The driver now checks the CRB
+>>>>> interface capability for CRB_INTF_CAP_CRB_CHUNK. If supported by the
+>>>>> backend, the driver will slice oversized commands into MMIO-sized
+>>>>> chunks, signalling the backend via CRB_START_NEXT_CHUNK, and finalizing
+>>>>> with CRB_START_INVOKE. Responses are also read back in a similar chunked
+>>>>> manner.
+>>>>>
+>>>>> If the backend does not support chunking, the driver retains its legacy
+>>>>> behaviour and enforces the standard size limits.
+>>>>>
+>>>>> This feature also requires the QEMU to interpret the data in chunks and
+>>>>> forward it to the TPM backend and subsequently dispatch the TPM response
+>>>>> in chunks back to the linux guest. This is implemented in [2]
+>>>>>
+>>>>> [1] https://trustedcomputinggroup.org/wp-content/uploads/PC-Client-Specific-Platform-TPM-Profile-for-TPM-2p0-v1p07_rc1_121225.pdf
+>>>>> [2] https://lore.kernel.org/qemu-devel/20260319135316.37412-1-armenon@redhat.com/
+>>>>>
+>>>>> Arun Menon (4):
+>>>>>    tpm_crb: Add definition of TPM CRB chunking fields
+>>>>>    tpm_crb: Add new wrapper function to invoke start method
+>>>>>    tpm_crb: Implement command and response chunking logic
+>>>>>    tpm: Increase TPM_BUFSIZE to 64kB for chunking support
+
+64kb? I am only increasing the TPM buffer to 8kb. More does not seem to 
+be necessary.
+
+>>>>>
+>>>>>   drivers/char/tpm/tpm.h     |   2 +-
+>>>>>   drivers/char/tpm/tpm_crb.c | 194 ++++++++++++++++++++++++++-----------
+>>>>>   2 files changed, 137 insertions(+), 59 deletions(-)
+>>>>>
+>>>>> -- 
+>>>>> 2.53.0
+>>>>>
+>>>>
+>>>> When QEMU has the feature available?
+>>>
+>>> The QEMU patches are in review at the moment,
+>>> here is the link: https://lore.kernel.org/qemu-devel/20260319135316.37412-1-armenon@redhat.com/
+>>> Hoping to have them merged soon.
+>>
+>> Right, and additional question: what about swtpm?
+
+I am waiting for https://github.com/trustedComputingGroup/tpm to show 
+rev185 with PQC support so that I can merge my patches based on 'their' 
+PQC support into the public libtpms repo.
+
 
