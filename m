@@ -1,205 +1,270 @@
-Return-Path: <linux-integrity+bounces-9343-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9344-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qAZTDeZl72kIBAEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9343-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 15:34:30 +0200
+	id D/7NGJBn72lZBAEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9344-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 15:41:36 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96702473818
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 15:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A5D314739D4
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 15:41:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1B34A301BC14
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 13:30:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8DFD0303B732
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 13:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF0A3CAE80;
-	Mon, 27 Apr 2026 13:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hAI8jo04"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DEC3C8732;
+	Mon, 27 Apr 2026 13:36:21 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f79.google.com (mail-oo1-f79.google.com [209.85.161.79])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE453CAE73
-	for <linux-integrity@vger.kernel.org>; Mon, 27 Apr 2026 13:30:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FFD3B2FF4
+	for <linux-integrity@vger.kernel.org>; Mon, 27 Apr 2026 13:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.79
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777296630; cv=none; b=A1s8rooIiqPV1XlPI/JCsTOTcZqLQF2zOupTxk/K6YQuGecCezupGq2bABQds4ZghRBBIhV5UNwXkvSr//ZF0dazH7XiT/cw8qLx4u2c8vqscep3oVMU+Ccfvufzlwgjo+OF5B9K2pgSKjlOdrmKV+Sar9B4hf8F6flxTrDmSUQ=
+	t=1777296981; cv=none; b=AjFi7QYYHm86/sgBlHN9f2+HBF17XLUe4po1no94bQdymqwYfGwcV+RgE7t/FPAeh0grpo2vBuhJl5LBEGxyAuIk19OfQ2ZC7ebJZoxR3Ma6+mKYN359A5uRlu6kD+RMFRgBFumf/IY8AkgISPRnIDGNipTs7w6Adhi8AlW4wug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777296630; c=relaxed/simple;
-	bh=BTBEUZDydT3nLn3Kv2CZTUjHem8IGhBjxyXsIyMnSNU=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=qWJC+2NR1Wd8mVzQ0E4bK4pdyOLcYCmTX3ROhA9RcFtE2zejm9HbvDKVljaPztlkVfQ5wn8hz6bPQi20N9wc1Z86p7w2zb6aMr7u5zulWS3NMP4Te0VCgf/CYejMFumw/v42UtweEGTu40wCjajMZrVIw8AKMLKTtRjNQlJ7hQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hAI8jo04; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63QLE4hH2581734;
-	Mon, 27 Apr 2026 13:30:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=37nNG6
-	cH/McLftwMS4n3+C6x02UtYPh7a/apJj9vKUA=; b=hAI8jo04xwczR9NHDNk0SK
-	V75Lv2cku5IvYLLCi2z5zLLL2HJzyGZd9Y3MrXtRw9GeJOcMkuUSjkjY48m8WfRe
-	SpSoAyw/XW9vf8ecDrRbRP2lHYEwqKyQl/9fYeHLjK1DKAckGCBNJ7qzK5iFG32Q
-	PInUWjV3oEAKxrD6LbOCFtb4Ca9a+8+oC+lUNj0RlhNgAZCLb5NQSFDQmDpE/l24
-	/yLIy67SoMCEbs2RTqpymekyGSQzkdCIh5nYSv3mTBPOgQ8zoYi29jt3kYwwdN9L
-	KugrKuHec5rGcfL0Rk/rW1yn1Li9+3eyRVAmoVZGVWH/S5bSX08xySAGQ4wcIttw
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drn8v7qgu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Apr 2026 13:30:22 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 63RDNlh4031956;
-	Mon, 27 Apr 2026 13:30:21 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dsa5g5634-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Apr 2026 13:30:21 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 63RDULm319202604
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Apr 2026 13:30:21 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EB3F258052;
-	Mon, 27 Apr 2026 13:30:20 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 896385805A;
-	Mon, 27 Apr 2026 13:30:20 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.24.30])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 27 Apr 2026 13:30:20 +0000 (GMT)
-Message-ID: <4a6cec5383a6df072e7cf14ef885ac9b08952455.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/3] ima: add regular file data hash support for sigv3
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Kamlesh Kumar <kamlesh0hrs@gmail.com>
-Cc: ebiggers@kernel.org, linux-integrity@vger.kernel.org,
-        stefanb@linux.ibm.com, Kamlesh Kumar <kam@juniper.net>
-In-Reply-To: <20260427125743.35245-1-kam@juniper.net>
-References: <20260324203929.2475782-1-zohar@linux.ibm.com>
-	 <20260427125743.35245-1-kam@juniper.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 27 Apr 2026 09:30:20 -0400
+	s=arc-20240116; t=1777296981; c=relaxed/simple;
+	bh=3cjlvtbiCMKUvQ4+pzEFrkcpMtN8DT/M0MP7m9f3Pr8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=KbeB5coUUs/38snNoXXKGPYoLokb5qHAenGROEO4mvFsVyX5B6EExG9TFgAoIq41qUpa/XdsIBqELX6JtrBDp5M+R7HBi+/NZi9dnwfa4xtFZVnPiWl+2YLADjjLQOPJf8IsEfvYiSouWTY1QmAiENVvDKz+1ymFjr2DQVkACuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.79
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f79.google.com with SMTP id 006d021491bc7-694885643e1so13958420eaf.3
+        for <linux-integrity@vger.kernel.org>; Mon, 27 Apr 2026 06:36:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777296979; x=1777901779;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W79VFKdnwYOpztsFD9PwpcmbDBrcIAHQaWyCw4ftoJE=;
+        b=YP3mjVqcfRBZ1TEUI4fA/Si1xwTGNwQVH1tXA6ZM1yiIdVzc/HudYbZanef63XMkfx
+         zy4yxCJS4sD3YeFXcKmECCkTmgsOxqvmjzhosgOCa8+qztG+bpAEZiyY79hbqLAvhCdT
+         UXMhrM+XKvTeYzoQgKRMVTvpPBCvDVCA8rWrV2sB8onom13onFxP3hKPorAQb/O3xJqW
+         lbgbiyhKlqIzTKV/U39J6YqKnEmDP65o1GIQ8+LyCkB8C08afnfDP2010bfxlVV32Vn1
+         wcHrO73v4gGXSn83/6UMFtHgv3FfqYJZ1zJLOEbPEELRoQrBBzA3Gp/Rn8UdTqJYYy3N
+         nXKQ==
+X-Forwarded-Encrypted: i=1; AFNElJ9mQ2yTWe8c0FiGJ6IoSnh0tlTOeA4HTlQJrKMiA2Bh+UGcGBao1Yx9cQ7pydoqU1sKQZhlJ6kazmqwz+hgITg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB8jq7dzjD5T1pHkRUuu9B2JT1kjzum/ZsfghnXupXWDpamBGE
+	5PY0omtfVXjQX93js9MmrbqKeYlBlw0PbEHwUiTeO430ckAqCDb12KETv6TXsFvT4j9DuD6NrtY
+	tZiUJoAbkK+l8iPJjVxrAogOJgEyx6zwIDIWH00vKTrau+CxXcc+fOUftoZY=
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=CIIamxrD c=1 sm=1 tr=0 ts=69ef64ee cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=A5OVakUREuEA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=OUXY8nFuAAAA:8 a=QSkmVZop8svUlP5Agb8A:9 a=QEXdDO2ut3YA:10
- a=cAcMbU7R10T-QSRYIcO_:22
-X-Proofpoint-ORIG-GUID: jLJtZn6JyIH0B7fuD0oB0ZdzbT6nCSSX
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI3MDE0MSBTYWx0ZWRfXwpGzjbN0Bbg8
- rywVbEQTU/OEYZQfnPkVCvBaisc8UvA1JlSasCFokJ5OMvxeKIlWG/ld2XzKLfBxSmypEbzQID9
- tioF0klgjOxXg4b0pB6zNY/VLZyRp2v8zQGkdvIzBy3tkpXjvGZcLEndwk8YNLFFvq0XGHdC0Po
- BFznjdwR86C1TcsL/vLa0bz2kv9eD9aofeHEdetSr7VBs2/JeRNUMnhFHW1L95r4bs27epudMyT
- NkHDcFvdIWJUhMTZPfGyGtuA4FD2e4TCQGFvbfLHwB3XxzwBy4NBMB5nZdS9zha1A7Nse43JUKg
- 0oQaSj9BmnyjWhh8s/yzKCFM3Lde9XhbTMyMqXTe7YX8dBhTVJrCEOx63m4sEhOfT48S+buxUYy
- i3dqnjHJd4cb2DaltT/mUx+HbaUj0xhSafWYGP2Z8FngIFggIQJCz+QCn/uIaRkYVbSgOr08Sul
- yiKIlG7efdwuH6bEXSw==
-X-Proofpoint-GUID: SB5KlBAlLLkojYb4XvzxxcqhDDshCr_X
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-04-27_04,2026-04-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 malwarescore=0 suspectscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 clxscore=1011 bulkscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
- definitions=main-2604270141
-X-Rspamd-Queue-Id: 96702473818
+X-Received: by 2002:a05:6820:2d05:b0:696:32ad:e894 with SMTP id
+ 006d021491bc7-69632adee68mr4842540eaf.23.1777296979353; Mon, 27 Apr 2026
+ 06:36:19 -0700 (PDT)
+Date: Mon, 27 Apr 2026 06:36:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69ef6653.050a0220.1d2f3.0000.GAE@google.com>
+Subject: [syzbot] [integrity?] [lsm?] WARNING: bad unlock balance in __filemap_add_folio
+From: syzbot <syzbot+914bc925a90b7e137017@syzkaller.appspotmail.com>
+To: dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org, 
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, paul@paul-moore.com, 
+	roberto.sassu@huawei.com, serge@hallyn.com, syzkaller-bugs@googlegroups.com, 
+	zohar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Rspamd-Queue-Id: A5D314739D4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [1.14 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=80b28e8d6ef9384a];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.ibm.com:mid];
-	TAGGED_FROM(0.00)[bounces-9343-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,oracle.com,namei.org,vger.kernel.org,paul-moore.com,huawei.com,hallyn.com,googlegroups.com,linux.ibm.com];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9344-lists,linux-integrity=lfdr.de,914bc925a90b7e137017];
+	RCVD_COUNT_THREE(0.00)[4];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,googlegroups.com:email,storage.googleapis.com:url,goo.gl:url];
+	REDIRECTOR_URL(0.00)[goo.gl];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCVD_COUNT_SEVEN(0.00)[11]
+	RCPT_COUNT_SEVEN(0.00)[11];
+	SUBJECT_HAS_QUESTION(0.00)[]
 
-On Mon, 2026-04-27 at 18:27 +0530, Kamlesh Kumar wrote:
-> On 3/24/26 4:39 PM, Mimi Zohar wrote:
-> > IMA signature version 3 (sigv3) support was introduced to avoid file
-> > signature ambiguity. Instead of directly signing a raw fs-verity hash,
-> > IMA signs the hash of ima_file_id structure, containing the type of
-> > signature, the hash algorithm, and the hash.
-> >=20
-> > Pure ML-DSA calculates and signs the hash directly rather than a
-> > pre-hashed digest. To avoid ML-DSA having to re-calculate the file data
-> > hash, Eric Biggers suggested signing the smaller ima_file_id structure.
-> >=20
-> > This patch set adds the sigv3 support for regular file data hashes. A
-> > subsequent patch set will add the ML-DSA support.
-> >=20
-> > Mimi Zohar (3):
-> >    ima: Define asymmetric_verify_v3() to verify IMA sigv3 signatures
-> >    ima: add regular file data hash signature version 3 support
-> >    ima: add support to require IMA sigv3 signatures
-> >=20
-> >   Documentation/ABI/testing/ima_policy   | 10 ++--
-> >   security/integrity/digsig.c            |  8 +--
-> >   security/integrity/digsig_asymmetric.c | 58 +++++++++++++++++++++
-> >   security/integrity/evm/evm_main.c      |  3 +-
-> >   security/integrity/ima/ima.h           |  1 +
-> >   security/integrity/ima/ima_appraise.c  | 72 ++++++++-----------------=
--
-> >   security/integrity/ima/ima_policy.c    | 22 ++++----
-> >   security/integrity/integrity.h         | 14 ++++-
-> >   8 files changed, 115 insertions(+), 73 deletions(-)
-> >=20
-> > --
-> > 2.53.0
-> >=20
->=20
-> I have tested this series along with Stefan's ML-DSA patches [1] and an
-> additional fix [2] for ima_get_hash_algo().
-> With all patches applied, I am able to successfully sign files with
-> ML-DSA-65 and verify IMA sigv3 signatures during appraisal.
->=20
-> [1] https://lore.kernel.org/linux-integrity/20260405231224.4008298-1-stef=
-anb@linux.ibm.com/
-> [2] https://lore.kernel.org/linux-integrity/20260424110751.5637-1-kam@jun=
-iper.net/
->=20
-> Tested-by: Kamlesh Kumar <kam@juniper.net>
+Hello,
 
-Thanks, Kamlesh!
+syzbot found the following issue on:
 
-I'd appreciate re-testing with the v3 version now queued in next-integrity-
-testing
-https://lore.kernel.org/linux-integrity/20260416154039.1648083-1-stefanb@li=
-nux.ibm.com
-?
+HEAD commit:    2e6803928193 Merge tag 'tracefs-v7.1-2' of git://git.kerne..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=117dff16580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=80b28e8d6ef9384a
+dashboard link: https://syzkaller.appspot.com/bug?extid=914bc925a90b7e137017
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
 
-Mimi
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/690094a31275/disk-2e680392.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7d17ea4e1f81/vmlinux-2e680392.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c1478f49f523/bzImage-2e680392.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+914bc925a90b7e137017@syzkaller.appspotmail.com
+
+cgroup: Unknown subsys name 'cpuset'
+cgroup: Unknown subsys name 'rlimit'
+=====================================
+WARNING: bad unlock balance detected!
+syzkaller #0 Not tainted
+-------------------------------------
+syz-executor/5795 is trying to release lock (rcu_read_lock) at:
+[<ffffffff8b2f32cf>] rcu_lock_release include/linux/rcupdate.h:310 [inline]
+[<ffffffff8b2f32cf>] rcu_read_unlock include/linux/rcupdate.h:869 [inline]
+[<ffffffff8b2f32cf>] rt_spin_unlock+0x14f/0x200 kernel/locking/spinlock_rt.c:82
+but there are no more locks to release!
+
+other info that might help us debug this:
+2 locks held by syz-executor/5795:
+ #0: ffff888035e50f58 (&ima_iint_mutex_key[depth]){+.+.}-{4:4}, at: process_measurement+0x7fd/0x1c90 security/integrity/ima/ima_main.c:319
+ #1: ffff8880434dc100 (mapping.invalidate_lock#2){++++}-{4:4}, at: filemap_invalidate_lock_shared include/linux/fs.h:1094 [inline]
+ #1: ffff8880434dc100 (mapping.invalidate_lock#2){++++}-{4:4}, at: do_page_cache_ra mm/readahead.c:333 [inline]
+ #1: ffff8880434dc100 (mapping.invalidate_lock#2){++++}-{4:4}, at: page_cache_ra_order+0x2a5/0x490 mm/readahead.c:538
+
+stack backtrace:
+CPU: 1 UID: 0 PID: 5795 Comm: syz-executor Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_unlock_imbalance_bug+0xdc/0xf0 kernel/locking/lockdep.c:5298
+ __lock_release kernel/locking/lockdep.c:5537 [inline]
+ lock_release+0x248/0x3c0 kernel/locking/lockdep.c:5889
+ rcu_lock_release include/linux/rcupdate.h:310 [inline]
+ rcu_read_unlock include/linux/rcupdate.h:869 [inline]
+ rt_spin_unlock+0x15b/0x200 kernel/locking/spinlock_rt.c:82
+ spin_unlock_irq include/linux/spinlock_rt.h:122 [inline]
+ __filemap_add_folio+0xc85/0x1200 mm/filemap.c:931
+ filemap_add_folio+0x2de/0x610 mm/filemap.c:967
+ page_cache_ra_unbounded+0x407/0x980 mm/readahead.c:282
+ do_page_cache_ra mm/readahead.c:334 [inline]
+ page_cache_ra_order+0x2b5/0x490 mm/readahead.c:538
+ filemap_readahead mm/filemap.c:2664 [inline]
+ filemap_get_pages+0x832/0x1e70 mm/filemap.c:2710
+ filemap_read+0x44a/0x1240 mm/filemap.c:2806
+ __kernel_read+0x50d/0x9c0 fs/read_write.c:532
+ integrity_kernel_read+0x89/0xd0 security/integrity/iint.c:28
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:222 [inline]
+ ima_calc_file_hash+0x452/0x870 security/integrity/ima/ima_crypto.c:280
+ ima_collect_measurement+0x523/0x9d0 security/integrity/ima/ima_api.c:300
+ process_measurement+0x12d9/0x1c90 security/integrity/ima/ima_main.c:425
+ ima_file_check+0xe1/0x130 security/integrity/ima/ima_main.c:685
+ security_file_post_open+0xb3/0x260 security/security.c:2755
+ do_open fs/namei.c:4701 [inline]
+ path_openat+0x2e88/0x38a0 fs/namei.c:4858
+ do_file_open+0x23e/0x4a0 fs/namei.c:4887
+ file_open_name+0x162/0x1c0 fs/open.c:1322
+ __do_sys_swapon mm/swapfile.c:3467 [inline]
+ __se_sys_swapon+0x856/0x2010 mm/swapfile.c:3432
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x15f/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f884264c7d7
+Code: 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a7 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe6306a658 EFLAGS: 00000246 ORIG_RAX: 00000000000000a7
+RAX: ffffffffffffffda RBX: 0000000000000008 RCX: 00007f884264c7d7
+RDX: 0000000000000000 RSI: 0000000000008000 RDI: 00007f88426e2e5b
+RBP: 00007f88426e2e5b R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000008 R11: 0000000000000246 R12: 00007f88428963e0
+R13: 00007f88426fdd26 R14: 0000000000200000 R15: 00007f88428963a0
+ </TASK>
+------------[ cut here ]------------
+rrln < 0 || rrln > RCU_NEST_PMAX
+WARNING: kernel/rcu/tree_plugin.h:443 at __rcu_read_unlock+0x79/0xe0 kernel/rcu/tree_plugin.h:443, CPU#1: syz-executor/5795
+Modules linked in:
+CPU: 1 UID: 0 PID: 5795 Comm: syz-executor Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/18/2026
+RIP: 0010:__rcu_read_unlock+0x79/0xe0 kernel/rcu/tree_plugin.h:443
+Code: 75 66 41 83 3e 00 75 27 43 0f b6 04 3c 84 c0 75 41 8b 03 3d 00 00 00 40 73 0f 5b 41 5c 41 5d 41 5e 41 5f c3 cc cc cc cc cc 90 <0f> 0b 90 eb eb e8 6d 00 00 00 eb d2 89 d9 80 e1 07 80 c1 03 38 c1
+RSP: 0018:ffffc900046e6418 EFLAGS: 00010286
+RAX: 00000000ffffffff RBX: ffff888039e82384 RCX: 0000000000000046
+RDX: 0000000000000000 RSI: ffffffff8d8986dc RDI: ffff888039e81ec0
+RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: fffffbfff1bcaacc R12: 1ffff110073d0470
+R13: ffff888039e81ec0 R14: ffff8880b893c610 R15: dffffc0000000000
+FS:  000055555b61b540(0000) GS:ffff8881261fb000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fec05db0e9c CR3: 0000000042cbe000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ rcu_read_unlock include/linux/rcupdate.h:871 [inline]
+ rt_spin_unlock+0x160/0x200 kernel/locking/spinlock_rt.c:82
+ spin_unlock_irq include/linux/spinlock_rt.h:122 [inline]
+ __filemap_add_folio+0xc85/0x1200 mm/filemap.c:931
+ filemap_add_folio+0x2de/0x610 mm/filemap.c:967
+ page_cache_ra_unbounded+0x407/0x980 mm/readahead.c:282
+ do_page_cache_ra mm/readahead.c:334 [inline]
+ page_cache_ra_order+0x2b5/0x490 mm/readahead.c:538
+ filemap_readahead mm/filemap.c:2664 [inline]
+ filemap_get_pages+0x832/0x1e70 mm/filemap.c:2710
+ filemap_read+0x44a/0x1240 mm/filemap.c:2806
+ __kernel_read+0x50d/0x9c0 fs/read_write.c:532
+ integrity_kernel_read+0x89/0xd0 security/integrity/iint.c:28
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:222 [inline]
+ ima_calc_file_hash+0x452/0x870 security/integrity/ima/ima_crypto.c:280
+ ima_collect_measurement+0x523/0x9d0 security/integrity/ima/ima_api.c:300
+ process_measurement+0x12d9/0x1c90 security/integrity/ima/ima_main.c:425
+ ima_file_check+0xe1/0x130 security/integrity/ima/ima_main.c:685
+ security_file_post_open+0xb3/0x260 security/security.c:2755
+ do_open fs/namei.c:4701 [inline]
+ path_openat+0x2e88/0x38a0 fs/namei.c:4858
+ do_file_open+0x23e/0x4a0 fs/namei.c:4887
+ file_open_name+0x162/0x1c0 fs/open.c:1322
+ __do_sys_swapon mm/swapfile.c:3467 [inline]
+ __se_sys_swapon+0x856/0x2010 mm/swapfile.c:3432
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x15f/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f884264c7d7
+Code: 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a7 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe6306a658 EFLAGS: 00000246 ORIG_RAX: 00000000000000a7
+RAX: ffffffffffffffda RBX: 0000000000000008 RCX: 00007f884264c7d7
+RDX: 0000000000000000 RSI: 0000000000008000 RDI: 00007f88426e2e5b
+RBP: 00007f88426e2e5b R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000008 R11: 0000000000000246 R12: 00007f88428963e0
+R13: 00007f88426fdd26 R14: 0000000000200000 R15: 00007f88428963a0
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
