@@ -1,152 +1,140 @@
-Return-Path: <linux-integrity+bounces-9347-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9348-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QA8rHD+872mLFQEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9347-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 21:42:55 +0200
+	id eKVmF4/M72knGAEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9348-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 22:52:31 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C069F479722
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 21:42:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6BA047A518
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 22:52:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BDE68301FC83
-	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 19:42:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 86E8E306B9FA
+	for <lists+linux-integrity@lfdr.de>; Mon, 27 Apr 2026 20:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07FB125AA;
-	Mon, 27 Apr 2026 19:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bj2FmjLh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4390938F62F;
+	Mon, 27 Apr 2026 20:50:20 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D4B285CA2
-	for <linux-integrity@vger.kernel.org>; Mon, 27 Apr 2026 19:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1B3D38E100;
+	Mon, 27 Apr 2026 20:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777318971; cv=none; b=kUFHvklxHnJ+EBwEOZ224IlhiL9SPUVJB3h6AnQpsCTvxVOKN2xTfFzcS44xgP0ZKYP6oMrz9nOMpFs+HDpmMzhmTYTyuHNEC0QN+g11WqmVmyVtqddNoGwkyNdDApVOOHJBGjKh1hdBcaOYLy7KzT1zzkkKPFDg41o+3NVsE5k=
+	t=1777323019; cv=none; b=HJ1Vu3UtIznL5R8rSF72313ge+eSnNgqvnVzWbTCyCLpIN9maDZU5IXqgIL+Ng3j7UL8MA5xgHwrxvoJaMwZrDHYf44wCV3PQ9QLvptCDf8a/s9ZKet3Zjy6wGtO0WTCb37EuR9PVgmpYafK38US+m1fIiOIU2CWQky4LsCFqyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777318971; c=relaxed/simple;
-	bh=8C4x7vxUOOlQr8sDYVkiRViYRsHDFk8NOhZROPC7a3Y=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=UnGsHwwknJN+hJWVdg8qY86kwihc0Bsw7bm794qsJLH4EheTsh5GmUCw+gQK9Hz2myGrzfq4y7R+7o+yyMQwqVAfBPOAGWwkIw0KWqUHIcDBVp0pqU4YLLfIvG7gbefzK00lTAwpNL4Iey9VkKdL4D9yLcGceLlQ2dJOslvS59o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bj2FmjLh; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1777318969;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=thRMuDd+G1UhyHlG+VcSH87KRUvT6lfoxtzBUqqH42M=;
-	b=bj2FmjLhPERylZYaEgR2qqC0xASrsidXnF5tJindeSHNj/llM4OW7SmNin/DjRITtyiP/B
-	5NIosCSetR/8IX7KUN7WNYCjkSU7RATj7e+Ir2tyT9P1G3UIwtMcTjMYTJuLrN3mM7S0XN
-	E0bBeuxJZzfkC+tgV9QrO2w6xZMMytE=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-468-x9JmcEjNMUODkqwL8Cqm1A-1; Mon,
- 27 Apr 2026 15:42:43 -0400
-X-MC-Unique: x9JmcEjNMUODkqwL8Cqm1A-1
-X-Mimecast-MFC-AGG-ID: x9JmcEjNMUODkqwL8Cqm1A_1777318962
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	s=arc-20240116; t=1777323019; c=relaxed/simple;
+	bh=W2I5YdPFvukKgWgaKuJxye5XvNygFFBeDBRT4mDXiGM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G6WFiREsARTALQz91x7Xtk2VbVHv4M8pJBKaHdDr6TO1k7JwPqdUUwd0igHQzrv0vZZB4cPK9G4x9+p7CyxskFN7OtRg7IXCI5DnaYHqq0v6mBGIX4yVe9y9YzNligluHETJguUM8EqswXe0nru66/o/EgkYwwJoQvXCGf6hUrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.192] (unknown [95.90.240.217])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BF5761956050;
-	Mon, 27 Apr 2026 19:42:41 +0000 (UTC)
-Received: from [10.44.34.100] (unknown [10.44.34.100])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D332319560AB;
-	Mon, 27 Apr 2026 19:42:39 +0000 (UTC)
-Date: Mon, 27 Apr 2026 21:42:37 +0200 (CEST)
-From: Mikulas Patocka <mpatocka@redhat.com>
-To: Benjamin Marzinski <bmarzins@redhat.com>
-cc: Mike Snitzer <snitzer@kernel.org>, dm-devel@lists.linux.dev, 
-    linux-integrity@vger.kernel.org, Mimi Zohar <zohar@linux.ibm.com>, 
-    Roberto Sassu <roberto.sassu@huawei.com>, 
-    Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
-Subject: Re: [PATCH 05/10] dm-ima: Fix UAF errors and measuring incorrect
- context
-In-Reply-To: <75a6b1cf-9f0d-8fc2-57d5-f6dee4913c65@redhat.com>
-Message-ID: <a137657f-64e7-6796-33db-51b200b87fa5@redhat.com>
-References: <20260414002244.1917447-1-bmarzins@redhat.com> <20260414002244.1917447-6-bmarzins@redhat.com> <75a6b1cf-9f0d-8fc2-57d5-f6dee4913c65@redhat.com>
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 1D20C4C1513243;
+	Mon, 27 Apr 2026 22:49:53 +0200 (CEST)
+Message-ID: <e71c6d95-6c83-4fb4-8cd5-f66067fb68c5@molgen.mpg.de>
+Date: Mon, 27 Apr 2026 22:49:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-X-Rspamd-Queue-Id: C069F479722
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tpm: Remove dead NULL check in tpm2_flush_space()
+To: Gunnar Kudrjavets <gunnarku@amazon.com>
+Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, noodles@meta.com,
+ linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Justinien Bouron <jbouron@amazon.com>
+References: <20260427163238.20230-1-gunnarku@amazon.com>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20260427163238.20230-1-gunnarku@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: B6BA047A518
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,lists.linux.dev,vger.kernel.org,linux.ibm.com,huawei.com,gmail.com];
-	TAGGED_FROM(0.00)[bounces-9347-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9348-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_CC(0.00)[gmx.de,kernel.org,ziepe.ca,meta.com,vger.kernel.org,amazon.com];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DMARC_NA(0.00)[mpg.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mpatocka@redhat.com,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-0.972];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[pmenzel@molgen.mpg.de,linux-integrity@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	R_DKIM_NA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,sashiko.dev:url,molgen.mpg.de:mid]
+
+Dear Gunnar,
 
 
+Thank you for your patch.
 
-On Mon, 27 Apr 2026, Mikulas Patocka wrote:
+Am 27.04.26 um 18:32 schrieb Gunnar Kudrjavets:
+> The 'space' pointer in tpm2_flush_space() is assigned from
+> &chip->work_space, which is the address of an embedded struct member
+> within struct tpm_chip. This address can never be NULL, making the
+> NULL check dead code. The new code follows the existing pattern
+> established by the other callers in tpm2-space.c which also assign
+> from &chip->work_space without a NULL check. Remove the dead code
+> to avoid confusion.
+> 
+> Fixes: e3aaebcbb7c6 ("tpm: Clean up TPM space after command failure")
+> Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
+> Assisted-by: Kiro:claude-opus-4.6
+> Reviewed-by: Justinien Bouron <jbouron@amazon.com>
+> ---
+>   drivers/char/tpm/tpm2-space.c | 3 ---
+>   1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> index 60354cd53b5c..1eec72eb8208 100644
+> --- a/drivers/char/tpm/tpm2-space.c
+> +++ b/drivers/char/tpm/tpm2-space.c
+> @@ -169,9 +169,6 @@ void tpm2_flush_space(struct tpm_chip *chip)
+>   	struct tpm_space *space = &chip->work_space;
+>   	int i;
+>   
+> -	if (!space)
+> -		return;
+> -
+>   	for (i = 0; i < ARRAY_SIZE(space->context_tbl); i++)
+>   		if (space->context_tbl[i] && ~space->context_tbl[i])
+>   			tpm2_flush_context(chip, space->context_tbl[i]);
 
-> Hi
-> 
-> 
-> On Mon, 13 Apr 2026, Benjamin Marzinski wrote:
-> 
-> > +	smp_mb__before_atomic();
-> > +	atomic_inc(&ima->measure_idx);
-> > +	wake_up_all(&ima->ima_wq);
-> 
-> There should be smp_mb__after_atomic() after atomic_inc() and before 
-> wake_up_all(). Otherwise, the increment of atomic_inc could be moved 
-> inside the wait queue spinlock in wake_up_all and executed after the wait 
-> queue is checked for being empty.
-> 
-> Generally, the atomic variables and barriers are very hard to get right, 
-> this is not performance-critical code that would justify the 
-> complications, so I suggest to use a normal spinlock instead.
-> 
-> You can use something like:
-> 	spin_lock_irq(&ima->ima_wq.lock);
-> 	ima->measure_idx++;
-> 	wake_up_all_locked(&ima->ima_wq);
-> 	spin_unlock_irq(&ima->ima_wq.lock);
-> 
-> --- this would be obviously safe and easy to verify.
-> 
-> Mikulas
+gemini/gemini-3.1-pro-preview made a comment [1]. No idea, if it’s valid.
 
-BTW. you can see "&ic->endio_wait.lock" in drivers/md/dm-integrity.c for 
-an example, how to use this pattern.
 
-Mikulas
+Kind regards,
 
+Paul
+
+
+[1]: 
+https://sashiko.dev/#/patchset/20260427163238.20230-1-gunnarku%40amazon.com
 
