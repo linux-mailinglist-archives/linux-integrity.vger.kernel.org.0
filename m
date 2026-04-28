@@ -1,119 +1,165 @@
-Return-Path: <linux-integrity+bounces-9352-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9353-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6FCiEFJR8GlNRgEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9352-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 08:18:58 +0200
+	id 2PUxMpa/8GnSYAEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9353-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 16:09:26 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9370C47DFF1
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 08:18:57 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF41486937
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 16:09:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3CDAE3006B69
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 06:18:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 01BB53344643
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 13:32:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CEF734252B;
-	Tue, 28 Apr 2026 06:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C55B123C50A;
+	Tue, 28 Apr 2026 13:21:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="pdhUfWsd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4572DECBF;
-	Tue, 28 Apr 2026 06:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D84D91B3B19;
+	Tue, 28 Apr 2026 13:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777357113; cv=none; b=K9RPOf7k5xMSioFCaRDMNsXyioIh/6rzMb71H4p/w5LJKWO+GqvJHQEjrv/yly2hpnRWQWAM4Goij8737Crq5Ep9TwBSGBLybP78qHLoB6i5TjjtU7QiRhBa4oSIRGeY6w5fT1x3HS/c9zX/ORio/RG74kXSP7O2aMObDEKVXt0=
+	t=1777382489; cv=none; b=EM3gB5NU/SuTwR+J7vBfHQLNxVqQ6K32kMxNOhijE7zWxRIaz7haSkM/tBkeoISEyzgnIiH8Xn2ci8rQwGx82DGUAzQddJu3yCWdCfBsKre5C05AZNU5TFTeJS4MEhBbp9LRVQJ3hoJdK8YGmIUwAktpBC/QjjXIOkkxWM54gO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777357113; c=relaxed/simple;
-	bh=xJU4vo65EGseIH0qqrDnikeHZGDDnlFm0j7v9BynM5Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c8SPbbalnI//uC0c2/cQlsuHDUJTIEKFsjeD85seLpCyWqE6Z06edmyVKYpyWsuhLzkP62Lp6pR/X+SM436Jo7MbyMcxzYGnRooETPVPXgUxDlu8pWYlIrKn9DyXvLK+kVQzRoyaD+cj7scc1N+qq78N+8k9Tp1FTn+K3dYVEco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.192] (ip5f5af76e.dynamic.kabel-deutschland.de [95.90.247.110])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 322FD4C4430D2F;
-	Tue, 28 Apr 2026 08:18:10 +0200 (CEST)
-Message-ID: <531b82e9-46c6-485d-95e1-018a3e9fc1b6@molgen.mpg.de>
-Date: Tue, 28 Apr 2026 08:18:09 +0200
+	s=arc-20240116; t=1777382489; c=relaxed/simple;
+	bh=bsvWlDxYnAplPFAgfU//71QRl4oKYiApqcT8JyjzfgE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jcX2plEHErok5CmLfmG9+w0DUE+VyNrx2BpcHW9PANdqxKlJA/HpAeoHUJUWo6cdN0CEwX/UewuiZ44OdMwDnrz0JtAil6zVgA/cFfWzeT4j7JwiKW2O/QZRfMkys6siSo4QktX7dRaXZ3WfQK+Y9FHeLVhIKMPgSMKiPFCDV+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=pdhUfWsd; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 830982BCB;
+	Tue, 28 Apr 2026 06:21:21 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DADBE3F62B;
+	Tue, 28 Apr 2026 06:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1777382487; bh=bsvWlDxYnAplPFAgfU//71QRl4oKYiApqcT8JyjzfgE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pdhUfWsdmeN3C7bkilDKrPemnn+Oq83RRdC0jvgk7oqYcB095DXFCXxYuWkk0UNEX
+	 fIpcey6sslxOGabc6XfGzmecVE2summH/DK2QVGNggJHiRT0Sc7B2RNU7tnq4Eh50E
+	 BfHAUUmAgFezutGPVgqHQ6FZ1hjcTqgpvtFQwlmg=
+Date: Tue, 28 Apr 2026 14:21:20 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huawei.com,
+	Jonathan McDowell <noodles@earth.li>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	jmorris@namei.org, serge@hallyn.com, dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com, jarkko@kernel.org, jgg@ziepe.ca,
+	sudeep.holla@kernel.org, maz@kernel.org, oupton@kernel.org,
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+	catalin.marinas@arm.com, will@kernel.org, noodles@meta.com,
+	sebastianene@google.com
+Subject: Re: [RFC PATCH v2 1/4] security: ima: call ima_init() again at
+ late_initcall_sync for defered TPM
+Message-ID: <afC0UPfGhNTsXnyi@e129823.arm.com>
+References: <aephL3MzYoqFGaT5@e129823.arm.com>
+ <CAHC9VhRQWHEWQ5NzOPiu8jtYv6UsRm8WVS4fd74AbkOcAd4y_g@mail.gmail.com>
+ <aesGU8a3mbVzvteH@e129823.arm.com>
+ <CAHC9VhSaT_quKYnpFjAfqvL07JNbWMgM6c4pB9F46NHawX3DCA@mail.gmail.com>
+ <014cf39aa8d6a0bcfa1a95c069675977ac67b843.camel@linux.ibm.com>
+ <CAHC9VhTW3=RJ8L91RWXYYA9tFjfSXGN-DMEEwdiD6big9H57Ew@mail.gmail.com>
+ <1f78fc75b2e95239973612a4b6c4cc782960b7ac.camel@linux.ibm.com>
+ <CAHC9VhS4JmPmCJrYTdbjxb3TO-uK6cB3Zij-ef=wswGce2BGzg@mail.gmail.com>
+ <1e51c2fd090e5ceb07b1d09e50650c70fd3ccdb1.camel@linux.ibm.com>
+ <CAHC9VhS_WgwhW_NDO91LoTeSzdieGqbwqnwPq8KpavH1_Lwi7g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tpm: Remove dead NULL check in tpm2_flush_space()
-To: Gunnar Kudrjavets <gunnarku@amazon.com>
-Cc: peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca, noodles@meta.com,
- linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
- jbouron@amazon.com
-References: <e71c6d95-6c83-4fb4-8cd5-f66067fb68c5@molgen.mpg.de>
- <20260427225722.17878-1-gunnarku@amazon.com>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20260427225722.17878-1-gunnarku@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9370C47DFF1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhS_WgwhW_NDO91LoTeSzdieGqbwqnwPq8KpavH1_Lwi7g@mail.gmail.com>
+X-Rspamd-Queue-Id: 4BF41486937
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmx.de,kernel.org,ziepe.ca,meta.com,vger.kernel.org,amazon.com];
+	FREEMAIL_CC(0.00)[linux.ibm.com,huawei.com,earth.li,vger.kernel.org,lists.infradead.org,lists.linux.dev,namei.org,hallyn.com,gmail.com,oracle.com,kernel.org,ziepe.ca,arm.com,meta.com,google.com];
+	TAGGED_FROM(0.00)[bounces-9353-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9352-lists,linux-integrity=lfdr.de];
-	DMARC_NA(0.00)[mpg.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[arm.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[pmenzel@molgen.mpg.de,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-0.986];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	R_DKIM_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[molgen.mpg.de:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arm.com:dkim,e129823.arm.com:mid]
 
-Dear Gunnar,
+Hi Paul,
 
+> On Fri, Apr 24, 2026 at 6:49 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > On Fri, 2026-04-24 at 18:10 -0400, Paul Moore wrote:
+> > > (I'm assuming you meant initcall and not syscall above, but if you're
+> > > talking about something else, please let me know.)
+> > >
+> > > Saying that you aren't comfortable moving IMA initialization to
+> > > late-sync is inconsistent with allowing IMA initialization to be
+> > > deferred to late-sync.  Either it is okay to initialize IMA in
+> > > late-sync or it isn't.  You must pick one.
+> >
+> > Yes, we're discussing late_initcall and late_initcall_sync.
+> >
+> > I prefer to look at it as being pragmatic. I'd rather err on the side of caution
+> > and not move the syscall to late_initcall_sync, than move it.
+>
+> If you were truly erring on the side of caution you wouldn't allow
+> late-sync initialization without knowing if it was safe or not.
+> Determine whether IMA initialization is safe at late-sync.  If it is
+> safe, move the init to late-sync; if not, keep it at late and figure
+> out another mechanism to sync with the TPM availability.  If needed,
+> you could probably use the LSM notifier to enable the TPM driver to
+> signal when it is up and running.
 
-Am 28.04.26 um 00:57 schrieb Gunnar Kudrjavets:
-> On Sun, Apr 27, 2026 at 10:49 PM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
->> gemini/gemini-3.1-pro-preview made a comment [1]. No idea, if it's valid.
-> 
-> Thanks for forwarding, Paul. AFAICS, the comment is a false positive.
-> 
-> My theory is that Gemini conflates two different variables named
-> 'space':
-> 
-> 1. The 'space' parameter passed to tpm_dev_transmit(). This *can* be
->     NULL (it is NULL for /dev/tpm0 clients).
-> 
-> 2. The local 'space' variable inside tpm2_flush_space(). This is
->     assigned from &chip->work_space and can *never* be NULL.
-> 
-> The removed NULL check was testing case (2), not case (1).
+I don't think LSM notifier wouldn't be good since it a one time
+notification for initailisation and it wouldn't tell properly
+whehter TPM isn't present in system or present unless functions
+ima_init() are rewritten to discern the "TPM deferred" and
+"TPM doesn't exist" in the system (e.x) boot-aggregate log creation.
 
-Thank you for quickly looking into this. Sorry for the noise.
+One question, though.
+In the end, for systems where the TPM has already been probed by late_initcall(),
+init_ima() continues to be called at late_initcall(), while the above approach
+is introduced for systems where the TPM is not properly initialized by that point.
 
+If init_ima(), which used to be called at late_initcall(),
+were instead called at late_initcall_sync(), could this break system integration?
+In my view, both late_initcall and late_initcall_sync run during the do_basic_setup() phase,
+so it doesn’t seem like this would cause tampering or affect things like the creation of the boot-aggregate log.
 
-Kind regards,
+Is there any particular reason why init_ima() must be called specifically at late_initcall()?
 
-Paul
+Thanks.
+
+--
+Sincerely,
+Yeoreum Yun
 
