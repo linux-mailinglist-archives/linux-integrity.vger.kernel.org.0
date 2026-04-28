@@ -1,123 +1,119 @@
-Return-Path: <linux-integrity+bounces-9350-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9351-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MOhlJ+cN8GnTNgEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9350-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 03:31:19 +0200
+	id GI0OCxkO8GnTNgEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9351-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 03:32:09 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F8BF47C63A
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 03:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 966BE47C650
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 03:32:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 59419301EC76
-	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 01:31:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 32E3E301E7D4
+	for <lists+linux-integrity@lfdr.de>; Tue, 28 Apr 2026 01:32:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 381671FDA61;
-	Tue, 28 Apr 2026 01:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0715923D2B1;
+	Tue, 28 Apr 2026 01:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Jshz+lx4"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GR/9PU2h"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B545C1A6816
-	for <linux-integrity@vger.kernel.org>; Tue, 28 Apr 2026 01:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1DDA1A6817
+	for <linux-integrity@vger.kernel.org>; Tue, 28 Apr 2026 01:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777339874; cv=pass; b=POga1xrv7XzFRHdlH9mTSW/igZlLyjLW09aOUV7vKQHHIjNLo6iCcWU3U/Y6o17DXf8X9U0C737o1mGoJT/yEmAdMclaTOVc7oF4v3RcDUJKAukGMitNMiPBDKvZd7Lu6+PohfFPbPr6n1n/IYpIE5CXsM25cS82DeNZZBjNFMg=
+	t=1777339925; cv=pass; b=TRv2bwAk6XSOu9D9YGhZbb1J5TjgAu4sZ/MHyR+SyBzBgcpsCmX+HhfzCdK7J5ITHIhL8RHIc9ACEw8rNUtjFJWYcCJcxxSwSgwR0NZMCM4bv9ux/He6gEUoKhq8Ng3nixp84bLPx8+TAfCH1wB6eRtgljqaWbJ6eImcO5vmdgg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777339874; c=relaxed/simple;
-	bh=4LjWAlj5OfE6nPz04HGOSDf6N9TOZWCWJub84K9Shb4=;
+	s=arc-20240116; t=1777339925; c=relaxed/simple;
+	bh=Lp0NVo10PoigQtDjm/3ukLN/BhlWLdcFx2DFRGXFAn8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nLld++xSdQvH5S5TlsjYP/qtpislMNm0AURdXZPHW3c1gMf7VFDAey4vwY8K4mGfslFcdEUP2fSMU+Rh6R6MgDeoB0CL/PihmhrGtJmU7jVlHdc8nnDbiv/tIs8Hk25UzHHS4Vtl5lKr08fz/wLIgV4TzduV7Mes+ilcUtLBy2M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Jshz+lx4; arc=pass smtp.client-ip=209.85.214.176
+	 To:Cc:Content-Type; b=cWhfo2oZRZ3Sa+L4j8lsobUjnQZ+vS8WehZsK+91CDZP0fah9ugmS+6+Y7eXC1YZrd6ec18NV6lXH6udLQpvanIi93zln8gQmfTge6eoNn5P2xjD5osRa8M9J4qiOR8OaX1fX/wYaQ6qMahAEHB4Jzgwgqqr+oJL900IQ7ymQ5g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GR/9PU2h; arc=pass smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2b788a98557so53887125ad.2
-        for <linux-integrity@vger.kernel.org>; Mon, 27 Apr 2026 18:31:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777339872; cv=none;
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-35dac556bb2so6312940a91.1
+        for <linux-integrity@vger.kernel.org>; Mon, 27 Apr 2026 18:32:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777339924; cv=none;
         d=google.com; s=arc-20240605;
-        b=FPOV5hsTyGecEJc0c1+OSyj4X4wGrGSDrIP+4e24Tk9yeRdDFkJ+FnZMQOKni4XMrD
-         eV8OQPF7eCCucrk2/EdNJArsimHHGm2Z0AZLJoXLbTOz7N5Uj5a4qrjF54RyR9WZR2aI
-         6GqsB279t5O62cRVz7D6j7XID5C/WmwV7durDn9v6ACO45Th8/znJu0Vd4Ejzxc7sOgz
-         WC2XaROFAw9aABbnSyJzHEEw2CIarjakr2C/QCU+aW69A25tCDNXLSxS2txG6YjIFlxY
-         52cMUGhp1Wt7n/lHvT2fAe3Ic4d0fTsQHLzSVQwPPlIhTIAyrXFzPjNvXCCRtV/rd8MS
-         eN3w==
+        b=NC+N74QEjwVi7mI1WZwwFcJbolrEwFxQ1tZVVgUekB7W9I1KEUGgRplL0pxewMUxkb
+         QjVjpNUxCPK1/EGF9Nzre77384TNwIx2mjCdZ9+0RSpF0RCTRPQodK2ae0AG1Qk9g4/Y
+         TeloCC7ocw6kBoc8ztenPdBwAsFi8U8ZoKzhdAIEW3xizkpp5famtHAoJHMCIRyTmRMV
+         pPwi8mFq5qVxOBz4IOGPllgpzwTnvTFtGRjn3ewcsA8jRr31oV0NMLIJ6RpAlNxwqBGD
+         MatQBe9YKcKProqDsRE4bGd1JrDr1OEz8u4McMi7HJJ5IuQCCVsG9HqH2+GS7INjsu+e
+         bolQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=HVDB/J4GDc58D/rJhBbvpxXUYt1f3iejtI1opWBv6+Y=;
-        fh=oL0RhAF0eyNRERze3zr2DJ35Ieody1KDbAUkaAPOT7s=;
-        b=KiU6blIf4N/S5p66Z3JhQ1AprQaQoAMHHeQgS9xLz+6jOqsdQDowkEv/F+bGzMQp8j
-         tPJ9nQNrrUbMBnl5GYxV8qvOWxM3HCXDIqJhX1NuLcsPBk+OfeAHtlcZ6XVFqpdF70+x
-         /xAcs6cGDKGRoT4TvdVngry2EVsWazeeqFm61RKiwnuRZoeliLeJmgr6H3q3gKNEsg1J
-         KL6zG/5ama/DuvStGvbdiNCMHXAPnfwquW4Rnmc8lEb3y0tTxZ28Px/H8Z9bwpIs3xHH
-         TdlLPsid0JejKkZicpQn5B+nyv7NLQPqj027pAU4r/l8KEzSu74jMVHRlsjd5rG9i6Jd
-         BH9w==;
+        bh=dkNNLielDoU+waGJTxz6K7Cs44v4hc05yCRBP0rYkY4=;
+        fh=LoRXSKakYU3DLxKrTbqxja2NaHEzVNopGTdCJiTBN2w=;
+        b=j3f6dMHTa788YTkRHVhnFzc0Mr0yDAV54pWC4f5Bf0OVc9FNiPFhNhQr6p5MYipBVU
+         sXpx9D990EocghhGyK4MMqIq/bhtVr5lGwcQ5/sRCPMSrWQBRfkCgROoRkhbXNUAIwsy
+         Z8U/fYWIEMoNSDmlz8j6JSfHaaOOF3M04b1hS0eR4yCcFmRP0SAHOPztN90K1JawV0kN
+         tHkl4njyjou/38HNrOnN5T+KMV4lZnTsiqMfe77FDdsqf/CrTpl8C95IXa7jpAw8ZNd+
+         Y/rHZZbfqgpv1T/qFUJop0Isf32LylY8YKrSGEACDKYZw33XieXUD3HEt+alqlT4Lvep
+         fQ9Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1777339872; x=1777944672; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1777339924; x=1777944724; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HVDB/J4GDc58D/rJhBbvpxXUYt1f3iejtI1opWBv6+Y=;
-        b=Jshz+lx4V6ToxrGPKq5mfuy6KD4lr2wru9VyoQgBQb7JRcPMdXlWKbvz06kOJQOD2f
-         hwpjUS0olBK3xC5Egm4efbPD9fRY5T+DVLvCH3RZR7GEnlj+oej4WIj+nBLEHNw6A598
-         7JJqLEw/0PGyYGRztUTiE23EhZl+TXDheZ6I/uosHB0WB7ElOXARF2xmiRFxcsEU5/b3
-         13g+LCMEIN+RMdRxFW6Q2AX+prm/ulYcYzrJ6ZQKukdfpPGxLnBYuKXzfzogEgmExGoZ
-         zvw0RW27eGJ17R1pvo5HX/LlzTrGtLCVJMFm7IcPvfvAPZeSstw/hPgD4jNgprmWLB27
-         9UxA==
+        bh=dkNNLielDoU+waGJTxz6K7Cs44v4hc05yCRBP0rYkY4=;
+        b=GR/9PU2hhLx7g3YzIBrG4dXdPJ9kH1+PdVHWPcybSq41wCBOSQgKX+B6TC7siDjUs8
+         8yep/jjPuYI1kjVeOIHFVuPlHkYJ4hEStOL90y/NmkWNcYMpxg4G8yInBnSxRIC6HaGj
+         s8/H+9s72GWv7uctwp9XITxII7teYKxg16TVi8k0Oa7UznZn98mRSEGPn44pI1mCqhvW
+         TYCe58xMm/2WjorpSqF1ecvRxzA+hQ1ezff1fl6plFq1aMYHiQX8laF5TBF6FVtg56Wt
+         vKjoj77yLGZ0XLiHOjOX/7Uh47jotdGgKn4omjXWXDg23cmmr54TyzXKI7PF5govEX4+
+         tCXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777339872; x=1777944672;
+        d=1e100.net; s=20251104; t=1777339924; x=1777944724;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=HVDB/J4GDc58D/rJhBbvpxXUYt1f3iejtI1opWBv6+Y=;
-        b=otBIZTm8I/9oleU2Do3C8sQu3633lDt6W+YRin89/e4jl06q7F9l0/bJGl7HQvARL+
-         ofDxN50euEiRK9mLRN0OZc5o8ghpBm0XlhJim4D1Jiuf1xdsd3mR1fRl/AWijmLx8f/y
-         YJDXK7J8SwHVygCjfO6BKvtDmnO3FDdyzkXVu8hrq7pZIe6uKgE8bp0Zk9fr5/R9QMgg
-         kPFyx0rXdvKlTtIwTN13GCpkYCZyNLsUTQrNiQ7Ny9/CwgyftxT9NwqyezZsWC4Z9NxY
-         TLGmxzQ0Kw0WRbirLrREKSbaBjdT1SpgEgPil8yS5ovD1unJJTboBN/4Kw0jHTEZX8jN
-         EAOw==
-X-Forwarded-Encrypted: i=1; AFNElJ97mcCgI10xLcA90ipPHO4s1qDCEe7Z1A8+yoxIhONqqhdTS1YbRAai3oQES/0lMFNpfydx/kK7k1eDJJaW/JA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVk30MUD6+lNpBgubrwDTsc6fi3QcG2yPQWVKkrpHpZpkAGhU1
-	tB2c78kSDE1qOKABoDEOSqolB7Ki0tqARy74DgqZpFHwxiV19pay6GsnlsDQBIzLSELIc9hrNCm
-	+YOBsQeXlgXRDJK5vjwTyzYQubjci9Jr6XeSplAOS
-X-Gm-Gg: AeBDieux0ovQet8NHrV+ygLkCb9cT0aWO8Hz6QtKIOLdtTRWDZmr77aKPSRs1UmzP2L
-	mSr5IYI2JCVvDHtiMu0Zbmv/pYzqnK7FQydfmVszt2Ze8jexr9kIc+uabDa8+PqnFn3Z3v4Ifsp
-	pQbTaDHRqVqdkaGl0oMnjhUTh5u4IPJYfAb6LBLHVUlhJGi5wryVkcy/sD11lrtjcVljiPOZQD9
-	MwMNlzsiKhExHo1Dp8/uFf5iA9AlscF/oPp8sJN/72hXXFahY37Chc6uJpSH38F8vLFQxodVtdO
-	imj0c+fhfwZAVgBf9Q==
-X-Received: by 2002:a17:902:ef52:b0:2b7:88d8:efee with SMTP id
- d9443c01a7336-2b97c479823mr8581955ad.28.1777339871992; Mon, 27 Apr 2026
- 18:31:11 -0700 (PDT)
+        bh=dkNNLielDoU+waGJTxz6K7Cs44v4hc05yCRBP0rYkY4=;
+        b=FWG6yR2fNbzTQefHFT/3axe+xwC0EsiKDfjM+E4fzTf5AWZvlf0XldujiFoZz/fwPI
+         s1r4KTOyzYYkILbHjqi5mRe0IdWdMFmEZun/vZKQaB+/OhJEnPG4CL+8sh99kKHiEasI
+         EL+wmL7FrgpttJGJMx0le9V25So+IFfTiv60LHwDnymy9osXd/No5WKnaft8/R3L2cpR
+         KTTBEQyuKY3u0PPnuxvu+5CCqidtN042HtylLuuVg/d6VlfapMmla7M8tjw+FXL81l6l
+         Y0BMZMPkB6B+l7366a7ulFj5gwoq2ZWZprJep/DP1t/3msmd08yxtd1RTSgbT945sQGE
+         tJ8A==
+X-Forwarded-Encrypted: i=1; AFNElJ+eT3Inb8UT9Tw8skeLIasNbS6vMwW3LhqyL6mZH1yzeqkjtEOwS48PrZG80+3LtObv6EJzuke4EfBN+YrDxSo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUbCrTh5RjLpGxDeMifeg6ifXDDPDtMy9g12ih4bVhUrZ6aeCK
+	OB7qPII4OdRwr36H8hx8wJJO8uSFd7Mx5/kTR6f7XblV+eq+8EradcPqQg0WkDc5D2Wx3Chmf6y
+	33skOf5wW9+J0M0+QJASYvJ2YkKsj9utFSHh1MYpi
+X-Gm-Gg: AeBDievTeJgXpVrtRZi8Uc94pMHkxTAGRzkpLRQBZsHfOw6cOKsGi0lsxwe9UkxrrTT
+	lH4EqS94Sf8oOF+eBTbqP19Rgx0PdOnwO6d0UbfXERJM3csljM0BDB2rGUp/Fk5XLVpJJWyE3if
+	/LDMfH5E7cYa+H9e/fjPpOv0T/9SvASefhPrU0MD0UbhaZfhuR2Uyr+hgXCIY7UtRohj3YmW7Xa
+	rMuXbVn5rcKs7WdwTqZsDVj0V/dUNuz5OLNB6G/wqykcslTKUfbKeABSEbwagjM7o7mpUWQCCbn
+	jASo8M3XDFVXkdr6dg==
+X-Received: by 2002:a17:90b:52cc:b0:35f:b714:e516 with SMTP id
+ 98e67ed59e1d1-3649202f6b2mr1031930a91.16.1777339924049; Mon, 27 Apr 2026
+ 18:32:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aeoAlVEwzRUPrlVe@e129823.arm.com> <aeoRxWPyOHGJd+Jh@e129823.arm.com>
- <aeoWO2Cwo04YYu2l@earth.li> <bd908e28298d968740d03c97bc7e441de188b7b4.camel@linux.ibm.com>
+References: <bd908e28298d968740d03c97bc7e441de188b7b4.camel@linux.ibm.com>
  <aeokwrC86WI7uT+K@e129823.arm.com> <aeomlp3I0eVE5mce@earth.li>
  <aeotq8nPVu4wvEx5@e129823.arm.com> <e4e242ae5533d5762a3647186a178764881bf9ff.camel@linux.ibm.com>
  <aephL3MzYoqFGaT5@e129823.arm.com> <CAHC9VhRQWHEWQ5NzOPiu8jtYv6UsRm8WVS4fd74AbkOcAd4y_g@mail.gmail.com>
  <aesGU8a3mbVzvteH@e129823.arm.com> <CAHC9VhSaT_quKYnpFjAfqvL07JNbWMgM6c4pB9F46NHawX3DCA@mail.gmail.com>
- <014cf39aa8d6a0bcfa1a95c069675977ac67b843.camel@linux.ibm.com>
- <CAHC9VhTW3=RJ8L91RWXYYA9tFjfSXGN-DMEEwdiD6big9H57Ew@mail.gmail.com>
- <1f78fc75b2e95239973612a4b6c4cc782960b7ac.camel@linux.ibm.com>
- <CAHC9VhS4JmPmCJrYTdbjxb3TO-uK6cB3Zij-ef=wswGce2BGzg@mail.gmail.com> <1e51c2fd090e5ceb07b1d09e50650c70fd3ccdb1.camel@linux.ibm.com>
-In-Reply-To: <1e51c2fd090e5ceb07b1d09e50650c70fd3ccdb1.camel@linux.ibm.com>
+ <014cf39aa8d6a0bcfa1a95c069675977ac67b843.camel@linux.ibm.com> <aexIwJpno3iPIdRD@e129823.arm.com>
+In-Reply-To: <aexIwJpno3iPIdRD@e129823.arm.com>
 From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 27 Apr 2026 21:31:00 -0400
-X-Gm-Features: AVHnY4KFlOUWIpfP4Gb0UYo42YH7fwp4lG0sflhn6Go0itDdLXH-l_OT6jI63ko
-Message-ID: <CAHC9VhS_WgwhW_NDO91LoTeSzdieGqbwqnwPq8KpavH1_Lwi7g@mail.gmail.com>
+Date: Mon, 27 Apr 2026 21:31:51 -0400
+X-Gm-Features: AVHnY4JvmD_vpNd2uBimzy27N58OmiHGYAhJK_BGt8LuvH5xnPjA0AMhCSfE4Tk
+Message-ID: <CAHC9VhRT1v3mM9CFvz7Dh5Zrv_MF3vgBk+BZ=q8wOMkPB6O6Fw@mail.gmail.com>
 Subject: Re: [RFC PATCH v2 1/4] security: ima: call ima_init() again at
  late_initcall_sync for defered TPM
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, roberto.sassu@huawei.com, 
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: Mimi Zohar <zohar@linux.ibm.com>, roberto.sassu@huawei.com, 
 	Jonathan McDowell <noodles@earth.li>, linux-security-module@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
@@ -129,7 +125,7 @@ Cc: Yeoreum Yun <yeoreum.yun@arm.com>, roberto.sassu@huawei.com,
 	sebastianene@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 1F8BF47C63A
+X-Rspamd-Queue-Id: 966BE47C650
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
@@ -142,13 +138,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9350-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9351-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[25];
-	FREEMAIL_CC(0.00)[arm.com,huawei.com,earth.li,vger.kernel.org,lists.infradead.org,lists.linux.dev,namei.org,hallyn.com,gmail.com,oracle.com,kernel.org,ziepe.ca,meta.com,google.com];
+	FREEMAIL_CC(0.00)[linux.ibm.com,huawei.com,earth.li,vger.kernel.org,lists.infradead.org,lists.linux.dev,namei.org,hallyn.com,gmail.com,oracle.com,kernel.org,ziepe.ca,arm.com,meta.com,google.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -158,32 +154,30 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid,paul-moore.com:dkim,paul-moore.com:url,arm.com:email]
 
-On Fri, Apr 24, 2026 at 6:49=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Fri, 2026-04-24 at 18:10 -0400, Paul Moore wrote:
-> > (I'm assuming you meant initcall and not syscall above, but if you're
-> > talking about something else, please let me know.)
+On Sat, Apr 25, 2026 at 12:53=E2=80=AFAM Yeoreum Yun <yeoreum.yun@arm.com> =
+wrote:
+> > > I understand the need to ensure that the TPM is available, but if it
+> > > isn't safe to wait to initialize IMA at late_initcall_sync() then it
+> > > would seem like this is a bad option and we need another mechanism to
+> > > synchronize IMA with TPM devices.  If it is safe to initalize IMA in
+> > > late_initcall_sync(), just do that and be done with it.
 > >
-> > Saying that you aren't comfortable moving IMA initialization to
-> > late-sync is inconsistent with allowing IMA initialization to be
-> > deferred to late-sync.  Either it is okay to initialize IMA in
-> > late-sync or it isn't.  You must pick one.
+> > Within the same initcall level there is no way of ordering the initiali=
+zation.
+> > Yeorum attempted to address the ordering issue in commit 0e0546eabcd6
+> > ("firmware: arm_ffa: Change initcall level of ffa_init() to rootfs_init=
+call"),
+> > which is being reverted in this patch set.
+> >
+> > Ordering within an initcall level needs to be fixed, but for now retryi=
+ng at
+> > late_initcall_sync works for some, hopefully most, cases.
 >
-> Yes, we're discussing late_initcall and late_initcall_sync.
->
-> I prefer to look at it as being pragmatic. I'd rather err on the side of =
-caution
-> and not move the syscall to late_initcall_sync, than move it.
+> Ordering within an initcall level is not good idea.
 
-If you were truly erring on the side of caution you wouldn't allow
-late-sync initialization without knowing if it was safe or not.
-Determine whether IMA initialization is safe at late-sync.  If it is
-safe, move the init to late-sync; if not, keep it at late and figure
-out another mechanism to sync with the TPM availability.  If needed,
-you could probably use the LSM notifier to enable the TPM driver to
-signal when it is up and running.
+Agreed.  That's why we have the different initcall levels.
 
 --=20
 paul-moore.com
