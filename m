@@ -1,37 +1,37 @@
-Return-Path: <linux-integrity+bounces-9376-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9377-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QGCvI3Ro8mkBqwEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9376-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 22:22:12 +0200
+	id kKJoKHVo8mkBqwEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9377-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 22:22:13 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA70A49A155
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 22:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C1F549A15C
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 22:22:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C3345301983E
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 20:21:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 65705302BB84
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 20:21:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 970743932C6;
-	Wed, 29 Apr 2026 20:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFBD391E55;
+	Wed, 29 Apr 2026 20:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dABPu2Dx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WrZZokgZ"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A91C379EFF
-	for <linux-integrity@vger.kernel.org>; Wed, 29 Apr 2026 20:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E22439280C
+	for <linux-integrity@vger.kernel.org>; Wed, 29 Apr 2026 20:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777494078; cv=none; b=jegCwF8S3UAogAzxz5Zl0u9WB6VKEIb5Y/L/hq72+noQ6Q4HbMXQtXJRUIW2uJHU6NN9v41Kp4lfA47uiH2JYRuDS551aueIML4ZbiWs0+poNlULtiRjw5+jfWNzDXxxKcBfd//KLpX5xCFDyTZeQeSkAVbfXZST7VyiP4aee2Q=
+	t=1777494079; cv=none; b=QzHs56UH9kUPx0T/kVQSO/p6fzVgsx6r0Dw0Jb24UzihjgYz9w3yDJJ5RM7y8qArFBdGlpDxkw3Mym/HL33oSLApW0W745HL2lfyVkBRmX7Eiwjno6u+3Q6XHw064m3lnC+Oc+UXb5XvD44RTcgCQv3JCMh/06QLfNqAA/eem2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777494078; c=relaxed/simple;
-	bh=LGXCPK0WIeb96A3NC8ZkfX/nGxwdjBOpBz9Knpay8YQ=;
+	s=arc-20240116; t=1777494079; c=relaxed/simple;
+	bh=jWFjd5Wdi3AOccT9GTdXOGJaQvG2/ZYt2cK4IJQxg9s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CjKEzEJUF1Z6Pv4/ogMvEeFfMKp5x6K6/dgBtovxINi4XcByIUhqXnKaJqSamwTOQx8j+cxLLQWpqSwqkwiuSpPlSvPVlbIDiip/Jkinbcm/f6Mzx7DkYPmU40i0wPQTHib88B0/t+LctU+Dauk9vt5fXcZ9+GNQAFNmOMHfyIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dABPu2Dx; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=rz4FxPqIQCsWJi3R5k0HwYPatpeVrzhJMaA0F9y0viP3pdXoV5GI5wnNcU/9nU5uvRD/zXEPX/AU7dtkiKrHSZHXSnu9rwiDvObFeJzYUjeLWQyeHNzK0SB10byXx2Q6PgZtUeq76Koa/zTAWX8DQPiIylR2AxxIamwmcYtMY+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WrZZokgZ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
@@ -40,32 +40,32 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YFqV/KOxxVZt5oI9jDOVr4WGcOcSzlwNUFUrpU5i+XY=;
-	b=dABPu2DxlPxQwa+GTPUAshxBFEYG4DwBLvrr1lCt6Ba6cYgAXKhj1B2sQhS3XSBYUVT2c+
-	AlB7eo0tlr3IAgmY/QNNWZV6Sp/56+rFw09Cp25BbmIletFBJ6CQHM8H1ke6KtDLtZEzF2
-	AhR3kVxjk4axBBf+5KE4qNa05G+1DPI=
+	bh=jYkLh9bC9ifBjvBZ7J6NOmEIfBfQMxuwlkqale5umV0=;
+	b=WrZZokgZgkM8nEdBTjdtGwmQ3ZJqonViGsstdaIz3/AjGrIctWEUpViKz3ddlm+42wxoOR
+	FFekfBx8wttcSJV3uE4cgplkVapU0Q8nm7pNevnasiJJFja2Kc6Os8uB23gh/Mcz1JbhMi
+	Ja5XACnJcajy8axDTY+OjtzqTbVOf7E=
 Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-60-pfTWDh4VPGuhfXM09aApsw-1; Wed,
- 29 Apr 2026 16:21:12 -0400
-X-MC-Unique: pfTWDh4VPGuhfXM09aApsw-1
-X-Mimecast-MFC-AGG-ID: pfTWDh4VPGuhfXM09aApsw_1777494071
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-64-0wy6pmwmPk-oMqnOd8Z4ag-1; Wed,
+ 29 Apr 2026 16:21:13 -0400
+X-MC-Unique: 0wy6pmwmPk-oMqnOd8Z4ag-1
+X-Mimecast-MFC-AGG-ID: 0wy6pmwmPk-oMqnOd8Z4ag_1777494071
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 50CF31800345;
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6B80F1800367;
 	Wed, 29 Apr 2026 20:21:11 +0000 (UTC)
 Received: from bmarzins-01.fast.eng.rdu2.dc.redhat.com (bmarzins-01.fast.eng.rdu2.dc.redhat.com [10.6.23.12])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B7132180045E;
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 045F61955D87;
 	Wed, 29 Apr 2026 20:21:10 +0000 (UTC)
 Received: from bmarzins-01.fast.eng.rdu2.dc.redhat.com (localhost [127.0.0.1])
-	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.17.1) with ESMTPS id 63TKL9RE2823288
+	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.17.1) with ESMTPS id 63TKL99C2823292
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 29 Apr 2026 16:21:09 -0400
+	Wed, 29 Apr 2026 16:21:10 -0400
 Received: (from bmarzins@localhost)
-	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.18.1/Submit) id 63TKL9fv2823287;
+	by bmarzins-01.fast.eng.rdu2.dc.redhat.com (8.18.1/8.18.1/Submit) id 63TKL9wC2823291;
 	Wed, 29 Apr 2026 16:21:09 -0400
 From: Benjamin Marzinski <bmarzins@redhat.com>
 To: Mikulas Patocka <mpatocka@redhat.com>, Mike Snitzer <snitzer@kernel.org>
@@ -75,9 +75,9 @@ Cc: dm-devel@lists.linux.dev, linux-integrity@vger.kernel.org,
         Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
         Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
         steven chen <chenste@linux.microsoft.com>
-Subject: [PATCH v2 02/10] dm-ima: remove broken last_target_measured logic
-Date: Wed, 29 Apr 2026 16:21:00 -0400
-Message-ID: <20260429202108.2823261-3-bmarzins@redhat.com>
+Subject: [PATCH v2 03/10] dm-ima: Remove status_flags from dm_ima_measure_on_table_load()
+Date: Wed, 29 Apr 2026 16:21:01 -0400
+Message-ID: <20260429202108.2823261-4-bmarzins@redhat.com>
 In-Reply-To: <20260429202108.2823261-1-bmarzins@redhat.com>
 References: <20260429202108.2823261-1-bmarzins@redhat.com>
 Precedence: bulk
@@ -87,8 +87,8 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-X-Rspamd-Queue-Id: EA70A49A155
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-Rspamd-Queue-Id: 4C1F549A15C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
@@ -105,7 +105,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	FREEMAIL_CC(0.00)[lists.linux.dev,vger.kernel.org,redhat.com,linux.ibm.com,huawei.com,gmail.com,linux.microsoft.com];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9376-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9377-lists,linux-integrity=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[redhat.com:+];
 	MISSING_XM_UA(0.00)[];
@@ -120,75 +120,74 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[8]
 
-When it ran out of space for adding more targets to the ima_buf,
-dm_ima_measure_on_table_load() would measure the dm device early, and
-then add the rest of the targets and measure it again.
-last_target_measured was intended to flag the last target measured so
-that the device wouldn't get remeasured, if no new targets were added
-after the early measurement. But the way to code works, the dm device
-will never be measured early unless there is another target to add to
-the ima_buf.  Instead, if there is only one more target to add, that
-target was getting added to the ima_buf, but it wasn't getting
-remeasured, because last_target_measured was set. Since
-dm_ima_measure_on_table_load() only measures a device early when there
-are more targets to add, the final measurement must always happen, and
-last_target_measured is unneeded.
+There is no status flag that is is used for STATUSTYPE_IMA type
+status() calls, and STATUSTYPE_IMA itself is not a valid
+status flag.
 
 Signed-off-by: Benjamin Marzinski <bmarzins@redhat.com>
 ---
- drivers/md/dm-ima.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+ drivers/md/dm-ima.c   | 4 ++--
+ drivers/md/dm-ima.h   | 4 ++--
+ drivers/md/dm-ioctl.c | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/md/dm-ima.c b/drivers/md/dm-ima.c
-index a639bb0fe6c3..209221fa8bc5 100644
+index 209221fa8bc5..8b84b676cad4 100644
 --- a/drivers/md/dm-ima.c
 +++ b/drivers/md/dm-ima.c
-@@ -167,7 +167,6 @@ void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_fl
+@@ -162,7 +162,7 @@ static int dm_ima_alloc_and_copy_capacity_str(struct mapped_device *md, char **c
+ /*
+  * Build up the IMA data for each target, and finally measure.
+  */
+-void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_flags)
++void dm_ima_measure_on_table_load(struct dm_table *table)
+ {
  	size_t device_data_buf_len, target_metadata_buf_len, target_data_buf_len, l = 0;
  	char *target_metadata_buf = NULL, *target_data_buf = NULL, *digest_buf = NULL;
- 	char *ima_buf = NULL, *device_data_buf = NULL;
--	int last_target_measured = -1;
- 	status_type_t type = STATUSTYPE_IMA;
- 	size_t cur_total_buf_len = 0;
- 	unsigned int num_targets, i;
-@@ -205,8 +204,6 @@ void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_fl
- 	for (i = 0; i < num_targets; i++) {
- 		struct dm_target *ti = dm_table_get_target(table, i);
- 
--		last_target_measured = 0;
--
- 		/*
- 		 * First retrieve the target metadata.
+@@ -217,7 +217,7 @@ void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_fl
+ 		 * Then retrieve the actual target data.
  		 */
-@@ -256,14 +253,6 @@ void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_fl
+ 		if (ti->type->status)
+-			ti->type->status(ti, type, status_flags, target_data_buf,
++			ti->type->status(ti, type, 0, target_data_buf,
+ 					 DM_IMA_TARGET_DATA_BUF_LEN);
+ 		else
+ 			target_data_buf[0] = '\0';
+diff --git a/drivers/md/dm-ima.h b/drivers/md/dm-ima.h
+index b0b166aa2283..c0548492bef0 100644
+--- a/drivers/md/dm-ima.h
++++ b/drivers/md/dm-ima.h
+@@ -54,7 +54,7 @@ struct dm_ima_measurements {
+ 	struct dm_ima_device_table_metadata inactive_table;
+ };
  
- 			memcpy(ima_buf + l, device_data_buf, device_data_buf_len);
- 			l += device_data_buf_len;
--
--			/*
--			 * If this iteration of the for loop turns out to be the last target
--			 * in the table, dm_ima_measure_data("dm_table_load", ...) doesn't need
--			 * to be called again, just the hash needs to be finalized.
--			 * "last_target_measured" tracks this state.
--			 */
--			last_target_measured = 1;
- 		}
+-void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_flags);
++void dm_ima_measure_on_table_load(struct dm_table *table);
+ void dm_ima_measure_on_device_resume(struct mapped_device *md, bool swap);
+ void dm_ima_measure_on_device_remove(struct mapped_device *md, bool remove_all);
+ void dm_ima_measure_on_table_clear(struct mapped_device *md, bool new_map);
+@@ -62,7 +62,7 @@ void dm_ima_measure_on_device_rename(struct mapped_device *md);
  
- 		/*
-@@ -277,11 +266,8 @@ void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_fl
- 		l += target_data_buf_len;
- 	}
+ #else
  
--	if (!last_target_measured) {
--		dm_ima_measure_data(table_load_event_name, ima_buf, l, noio);
--
--		sha256_update(&hash_ctx, (const u8 *)ima_buf, l);
--	}
-+	dm_ima_measure_data(table_load_event_name, ima_buf, l, noio);
-+	sha256_update(&hash_ctx, (const u8 *)ima_buf, l);
+-static inline void dm_ima_measure_on_table_load(struct dm_table *table, unsigned int status_flags) {}
++static inline void dm_ima_measure_on_table_load(struct dm_table *table) {}
+ static inline void dm_ima_measure_on_device_resume(struct mapped_device *md, bool swap) {}
+ static inline void dm_ima_measure_on_device_remove(struct mapped_device *md, bool remove_all) {}
+ static inline void dm_ima_measure_on_table_clear(struct mapped_device *md, bool new_map) {}
+diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+index a529174c94cf..074a3c71297e 100644
+--- a/drivers/md/dm-ioctl.c
++++ b/drivers/md/dm-ioctl.c
+@@ -1552,7 +1552,7 @@ static int table_load(struct file *filp, struct dm_ioctl *param, size_t param_si
+ 	if (r)
+ 		goto err_unlock_md_type;
  
- 	/*
- 	 * Finalize the table hash, and store it in table->md->ima.inactive_table.hash,
+-	dm_ima_measure_on_table_load(t, STATUSTYPE_IMA);
++	dm_ima_measure_on_table_load(t);
+ 
+ 	immutable_target_type = dm_get_immutable_target_type(md);
+ 	if (immutable_target_type &&
 -- 
 2.53.0
 
