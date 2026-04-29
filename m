@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-9365-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9366-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kELSGUUt8mlvogEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9365-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:09:41 +0200
+	id qBIhFUws8mlvogEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9366-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:05:32 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7BE2497814
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:09:36 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB7849771D
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:05:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0BACB30427E8
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 16:04:41 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D4CD23006D44
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 16:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8F637C115;
-	Wed, 29 Apr 2026 16:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21721385512;
+	Wed, 29 Apr 2026 16:04:47 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A282701C4;
-	Wed, 29 Apr 2026 16:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417CA3290DB;
+	Wed, 29 Apr 2026 16:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777478680; cv=none; b=DMG5J9QV56q5YpYSZE/ALQspeKzo+C12HxCRP55bqpDFGj6RdIO9bZUOYcq6frlfKZrZUwMpgSTgn+98itxe0g8ccFJAHjtq0YBdgILPuRAGo2N6mvN3/6fWibWc3q8Vv6JgSYrBRUwmEl+t+2zaEnIHBgk8pE2p1zhz7uO/dr0=
+	t=1777478687; cv=none; b=n1nvH6sldN9EvdVAX5x7IyiQ7sZAW9D8GPlq3ZUYpabDB7x/ixThTpMszfBm1Rf+F3NnyuNDsXt5nhhcz4HNvAf5ntSgAnFpz0yJvmdpjA7tOwy2cNlUpTRraVM1ao4SBYdUZlfNZoUm+RweMVQHKdC5MA2VgBXmUYL3SMzD6m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777478680; c=relaxed/simple;
-	bh=EOZOjyjMg6/Fn5W/fcIBelXq1e2DV8pmyX8Hk++1dSw=;
+	s=arc-20240116; t=1777478687; c=relaxed/simple;
+	bh=XrG5Rzjw97/k4hs9NuHnDSP9PLebkbtARyW+dgXrZZk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Flu8DOZRNSEN0oU0UfROhM6vFaGBSgNrJpcv8DfQi22qxjT471Qrf+IvNel/oTzAfw17GWuTZBaJFKCU+JCS6abGVnJjpY97VeNGM78C1sHYUyuIxp2Nan534l5zSRjwzfRM/2z6KWwzSnpowrri6I6uVrOW8lKdkIuhhXzDvsg=
+	 MIME-Version; b=nz0HfiBdQFfO4AvF57BPoNEsox+WGVJRprnGR/IHwqjwh2qFF7Bmrkfbie9lFc+pSIjUZ9R6TxRwIfQCNZ9OYgR3OJZ+622J65Dd4+NibJXMKHA/ITO6gLzuM+ZVHaorQupZw6LSc//yEsq048YhJqTxcjk7C6tnSjSLxWwU7gs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4g5MT06dnqz1HCcG;
-	Thu, 30 Apr 2026 00:00:04 +0800 (CST)
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4g5MT85GmNz1HC7j;
+	Thu, 30 Apr 2026 00:00:12 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id C1F0940565;
-	Thu, 30 Apr 2026 00:04:35 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 93EF04056B;
+	Thu, 30 Apr 2026 00:04:43 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBHPmrYK_JpRQ1BAA--.12298S8;
-	Wed, 29 Apr 2026 17:04:35 +0100 (CET)
+	by APP2 (Coremail) with SMTP id GxC2BwBHPmrYK_JpRQ1BAA--.12298S9;
+	Wed, 29 Apr 2026 17:04:43 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	skhan@linuxfoundation.org,
@@ -58,9 +58,9 @@ Cc: linux-doc@vger.kernel.org,
 	chenste@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v5 06/13] ima: Mediate open/release method of the measurements list
-Date: Wed, 29 Apr 2026 18:03:12 +0200
-Message-ID: <20260429160319.4162918-7-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v5 07/13] ima: Use snprintf() in create_securityfs_measurement_lists
+Date: Wed, 29 Apr 2026 18:03:13 +0200
+Message-ID: <20260429160319.4162918-8-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
 References: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
@@ -71,10 +71,10 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwBHPmrYK_JpRQ1BAA--.12298S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxur1kCFW7ZFy5CFyDJryUAwb_yoWrCr43pa
-	93C3yrCr1kJrWfWFn7Ga47Zr4F9a4rKa15Wr4DJa4fAF1rJr9F9F4Yyr12kFs8tryrGr18
-	Xw4qqr45uas0yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:GxC2BwBHPmrYK_JpRQ1BAA--.12298S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFy5XFWDWw1rtF1kWr4rXwb_yoW8tF48pa
+	ySgF18Crs5J3yxKFn3K3Z7uaySk3yagF1UW3yvg3WkAFn3XrWFkr4vkr1jkr95Kr10yFy8
+	XrsFqF13C3Z0yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -89,8 +89,8 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxur1kCFW7ZFy5CFyDJryUAwb_yoWrCr43pa
 	c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
 	AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
 	pf9x07UZTmfUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBGnx6jEGFgAAsH
-X-Rspamd-Queue-Id: E7BE2497814
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBGnx6jgGHAAAsH
+X-Rspamd-Queue-Id: 9CB7849771D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.54 / 15.00];
@@ -98,19 +98,19 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9365-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9366-lists,linux-integrity=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[huaweicloud.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[lwn.net,linuxfoundation.org,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_SPAM(0.00)[0.879];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	NEURAL_SPAM(0.00)[0.845];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -119,149 +119,61 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huaweicloud.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huawei.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huaweicloud.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,huawei.com:email]
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce the ima_measure_users counter, to implement a semaphore-like
-locking scheme where the binary and ASCII measurements list interfaces can
-be concurrently open by multiple readers, or alternatively by a single
-writer.
+Use the more secure snprintf() function (accepting the buffer size) in
+create_securityfs_measurement_lists().
 
-A semaphore cannot be used because the kernel cannot return to user space
-with a lock held.
-
-Introduce the ima_measure_lock() and ima_measure_unlock() primitives, to
-respectively lock/unlock the interfaces (safely with the ima_measure_users
-counter, without holding a lock).
-
-Finally, introduce _ima_measurements_open() to lock the interface before
-seq_open(), and call it from ima_measurements_open() and
-ima_ascii_measurements_open(). And, introduce ima_measurements_release(),
-to unlock the interface.
-
-Require CAP_SYS_ADMIN if the interface is opened for write (not possible
-for the current measurements interfaces, since they only have read
-permission).
-
-No functional changes: multiple readers are allowed as before.
+No functional change: sprintf() and snprintf() have the same behavior.
 
 Link: https://github.com/linux-integrity/linux/issues/1
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/integrity/ima/ima_fs.c | 71 +++++++++++++++++++++++++++++++--
- 1 file changed, 67 insertions(+), 4 deletions(-)
+ security/integrity/ima/ima_fs.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
 diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 9a8dba14d82a..68edea7139d5 100644
+index 68edea7139d5..7709a4576322 100644
 --- a/security/integrity/ima/ima_fs.c
 +++ b/security/integrity/ima/ima_fs.c
-@@ -25,6 +25,8 @@
- #include "ima.h"
+@@ -472,11 +472,13 @@ static int __init create_securityfs_measurement_lists(void)
+ 		struct dentry *dentry;
  
- static DEFINE_MUTEX(ima_write_mutex);
-+static DEFINE_MUTEX(ima_measure_mutex);
-+static long ima_measure_users;
+ 		if (algo == HASH_ALGO__LAST)
+-			sprintf(file_name, "ascii_runtime_measurements_tpm_alg_%x",
+-				ima_tpm_chip->allocated_banks[i].alg_id);
++			snprintf(file_name, sizeof(file_name),
++				 "ascii_runtime_measurements_tpm_alg_%x",
++				 ima_tpm_chip->allocated_banks[i].alg_id);
+ 		else
+-			sprintf(file_name, "ascii_runtime_measurements_%s",
+-				hash_algo_name[algo]);
++			snprintf(file_name, sizeof(file_name),
++				 "ascii_runtime_measurements_%s",
++				 hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_ascii_measurements_ops);
+@@ -484,11 +486,13 @@ static int __init create_securityfs_measurement_lists(void)
+ 			return PTR_ERR(dentry);
  
- bool ima_canonical_fmt;
- static int __init default_canonical_fmt_setup(char *str)
-@@ -209,16 +211,76 @@ static const struct seq_operations ima_measurments_seqops = {
- 	.show = ima_measurements_show
- };
- 
-+static int ima_measure_lock(bool write)
-+{
-+	mutex_lock(&ima_measure_mutex);
-+	if ((write && ima_measure_users != 0) ||
-+	    (!write && ima_measure_users < 0)) {
-+		mutex_unlock(&ima_measure_mutex);
-+		return -EBUSY;
-+	}
-+
-+	if (write)
-+		ima_measure_users--;
-+	else
-+		ima_measure_users++;
-+	mutex_unlock(&ima_measure_mutex);
-+	return 0;
-+}
-+
-+static void ima_measure_unlock(bool write)
-+{
-+	mutex_lock(&ima_measure_mutex);
-+	if (write)
-+		ima_measure_users++;
-+	else
-+		ima_measure_users--;
-+	mutex_unlock(&ima_measure_mutex);
-+}
-+
-+static int _ima_measurements_open(struct inode *inode, struct file *file,
-+				  const struct seq_operations *seq_ops)
-+{
-+	bool write = (file->f_mode & FMODE_WRITE);
-+	int ret;
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	ret = ima_measure_lock(write);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = seq_open(file, seq_ops);
-+	if (ret < 0)
-+		ima_measure_unlock(write);
-+
-+	return ret;
-+}
-+
- static int ima_measurements_open(struct inode *inode, struct file *file)
- {
--	return seq_open(file, &ima_measurments_seqops);
-+	return _ima_measurements_open(inode, file, &ima_measurments_seqops);
-+}
-+
-+static int ima_measurements_release(struct inode *inode, struct file *file)
-+{
-+	bool write = (file->f_mode & FMODE_WRITE);
-+	int ret;
-+
-+	/* seq_release() always returns zero. */
-+	ret = seq_release(inode, file);
-+
-+	ima_measure_unlock(write);
-+
-+	return ret;
- }
- 
- static const struct file_operations ima_measurements_ops = {
- 	.open = ima_measurements_open,
- 	.read = seq_read,
- 	.llseek = seq_lseek,
--	.release = seq_release,
-+	.release = ima_measurements_release,
- };
- 
- void ima_print_digest(struct seq_file *m, u8 *digest, u32 size)
-@@ -283,14 +345,15 @@ static const struct seq_operations ima_ascii_measurements_seqops = {
- 
- static int ima_ascii_measurements_open(struct inode *inode, struct file *file)
- {
--	return seq_open(file, &ima_ascii_measurements_seqops);
-+	return _ima_measurements_open(inode, file,
-+				      &ima_ascii_measurements_seqops);
- }
- 
- static const struct file_operations ima_ascii_measurements_ops = {
- 	.open = ima_ascii_measurements_open,
- 	.read = seq_read,
- 	.llseek = seq_lseek,
--	.release = seq_release,
-+	.release = ima_measurements_release,
- };
- 
- static ssize_t ima_read_policy(char *path)
+ 		if (algo == HASH_ALGO__LAST)
+-			sprintf(file_name, "binary_runtime_measurements_tpm_alg_%x",
+-				ima_tpm_chip->allocated_banks[i].alg_id);
++			snprintf(file_name, sizeof(file_name),
++				 "binary_runtime_measurements_tpm_alg_%x",
++				 ima_tpm_chip->allocated_banks[i].alg_id);
+ 		else
+-			sprintf(file_name, "binary_runtime_measurements_%s",
+-				hash_algo_name[algo]);
++			snprintf(file_name, sizeof(file_name),
++				 "binary_runtime_measurements_%s",
++				 hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_measurements_ops);
 -- 
 2.43.0
 
