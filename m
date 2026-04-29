@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-9361-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9362-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mLbwGoQs8mlvogEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9361-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:06:28 +0200
+	id oF1dGMAs8mlvogEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9362-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:07:28 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED7BC49774B
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:06:23 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D53B8497792
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 18:07:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 831BB30053FD
-	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 16:04:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7C0453038159
+	for <lists+linux-integrity@lfdr.de>; Wed, 29 Apr 2026 16:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8F9435836B;
-	Wed, 29 Apr 2026 16:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B073D329C66;
+	Wed, 29 Apr 2026 16:04:17 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325DD35F16B;
-	Wed, 29 Apr 2026 16:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C5D12EDD69;
+	Wed, 29 Apr 2026 16:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777478648; cv=none; b=UmQ4BlWA49IfNX5KrGba+wCfkNrMXvzxm4vg3NNIazXcxBbq0f3Kkdf3jvMlUARZ+buYL6l8LO/VBoTkz3vt9QWLp8cRb+eMYUa8ZDoGU/HI9qlkeHJOK4IbBfsEZ+qPZy/k3mFNF4dEw7h7dLW/bmhcwRyTkd5eUs1kz1LX/GA=
+	t=1777478657; cv=none; b=XJMmtzYQnPCwomVlOXWI07K6+xKXF8igroiJ2qCfh4CXGJWMYRyWeiIizs3dMrgWCsOTH1Yb50+2749F63L7D17EgmKe5yfEzMhHf9VKOP6xr8X9oyvvEHTCATbdTmtDk4WBOARIzlxNcAH/RTxZhhAMX3rmIIwKGkCYmhnUYh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777478648; c=relaxed/simple;
-	bh=cCNeHP2K3DZ5eB7CnBGBoxVYnTk8psBYGKvKXknOr8E=;
+	s=arc-20240116; t=1777478657; c=relaxed/simple;
+	bh=EgU6d1CRqpfGMSXnoMt82OSRaXdG6fZk7N274hWxYkg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=furkPZCxKzpN/uDFxEeHOlLlr0tCbJw3fZqo0wZ/n/16wJL9VUe6A0X34Zu7NQKRELi/EIjsR1ZoIDWzwHzZBtDTFuRwtwsYiscop24n0EZGS8tcnEkqWQ1LI2KH9iO82Y789xXWX43dY6hwW/JeffXtoXtdpAIkEEADKbn+hF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+	 MIME-Version; b=s3UbtL4xtZdWxO+080z17QErpjR6OkaCEPc6sDX7DL6X1M6N7PZdSfkdROaDqI5SWELyLUqTexldRHYpbz1IyKhivl3l56/YdS44BOjH70W+ObZyye/vt8HGU0F2eGRJAC76268Ow0iBk8NndXDHUnqe8GJAl7Ak9mpHU9JDdTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.224.235])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4g5MSh50VBzvQm1;
-	Wed, 29 Apr 2026 23:59:48 +0800 (CST)
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4g5MSZ19qmzpTqm;
+	Wed, 29 Apr 2026 23:59:42 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 8BFEA40560;
-	Thu, 30 Apr 2026 00:04:04 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 5CC864056A;
+	Thu, 30 Apr 2026 00:04:12 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBHPmrYK_JpRQ1BAA--.12298S4;
-	Wed, 29 Apr 2026 17:04:03 +0100 (CET)
+	by APP2 (Coremail) with SMTP id GxC2BwBHPmrYK_JpRQ1BAA--.12298S5;
+	Wed, 29 Apr 2026 17:04:11 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	skhan@linuxfoundation.org,
@@ -58,9 +58,9 @@ Cc: linux-doc@vger.kernel.org,
 	chenste@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v5 02/13] ima: Replace static htable queue with dynamically allocated array
-Date: Wed, 29 Apr 2026 18:03:08 +0200
-Message-ID: <20260429160319.4162918-3-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v5 03/13] ima: Introduce per binary measurements list type ima_num_entries counter
+Date: Wed, 29 Apr 2026 18:03:09 +0200
+Message-ID: <20260429160319.4162918-4-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
 References: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
@@ -71,26 +71,26 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwBHPmrYK_JpRQ1BAA--.12298S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xw1fuw45Kr1fCr4rKryxGrg_yoWxWF4Dpa
-	9rWFy7Kr4UAFWxKr97Ja93Kr4fur4vgryUG398G3sYy3W3Ar1Igr1fGFy2vF98ArZ5J3WS
-	qr4jq3Z8AwsYyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+X-CM-TRANSID:GxC2BwBHPmrYK_JpRQ1BAA--.12298S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxGw1kZr4fKFy3CF4rAF47Jwb_yoWrXF17pa
+	nIgF1UJr18XFy2krykCa47Aa9Yg3yrKryUW3y5Wwnay3ZxXr1UXFn8AF12kFn5Gr90yr1I
+	qwn0qw45Aa1vyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
 	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-	JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxV
-	WUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UCZXrU
-	UUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBGnx6jEGFAAAsF
-X-Rspamd-Queue-Id: ED7BC49774B
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU14x
+	RDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBGnx6jgGGwAAsA
+X-Rspamd-Queue-Id: D53B8497792
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.54 / 15.00];
@@ -98,19 +98,19 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9361-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9362-lists,linux-integrity=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[huaweicloud.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[lwn.net,linuxfoundation.org,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_SPAM(0.00)[0.880];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_SPAM(0.00)[0.878];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -119,176 +119,105 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huaweicloud.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huawei.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huaweicloud.com:mid,huawei.com:email]
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-The IMA hash table is a fixed-size array of hlist_head buckets:
+Make ima_num_entries as an array, to have separate counters per binary
+measurements list type. Currently, define the BINARY type for the existing
+binary measurements list.
 
-    struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE];
-
-IMA_MEASURE_HTABLE_SIZE is (1 << IMA_HASH_BITS) = 1024 buckets, each a
-struct hlist_head (one pointer, 8 bytes on 64-bit). That is 8 KiB allocated
-in BSS for every kernel, regardless of whether IMA is ever used, and
-regardless of how many measurements are actually made.
-
-Replace the fixed-size array with a RCU-protected pointer to a dynamically
-allocated array that is initialized in ima_init_htable(), which is called
-from ima_init() during early boot. ima_init_htable() calls the static
-function ima_alloc_replace_htable() which, other than initializing the hash
-table the first time, can also hot-swap the existing hash table with a
-blank one.
-
-The allocation in ima_alloc_replace_htable() uses kcalloc() so the buckets
-are zero-initialised (equivalent to HLIST_HEAD_INIT { .first = NULL }).
-Callers of ima_alloc_replace_htable() must call synchronize_rcu() and free
-the returned hash table.
-
-Finally, access the hash table with rcu_dereference() in
-ima_lookup_digest_entry() (reader side) and with
-rcu_dereference_protected() in ima_add_digest_entry() (writer side).
-
-No functional change: bucket count, hash function, and all locking remain
-identical.
+No functional change: the BINARY type is equivalent to the value without
+the array.
 
 Link: https://github.com/linux-integrity/linux/issues/1
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/integrity/ima/ima.h       |  3 +-
- security/integrity/ima/ima_init.c  |  5 ++++
- security/integrity/ima/ima_queue.c | 48 ++++++++++++++++++++++++++----
- 3 files changed, 50 insertions(+), 6 deletions(-)
+ security/integrity/ima/ima.h       | 9 ++++++++-
+ security/integrity/ima/ima_fs.c    | 3 +--
+ security/integrity/ima/ima_kexec.c | 2 +-
+ security/integrity/ima/ima_queue.c | 7 +++++--
+ 4 files changed, 15 insertions(+), 6 deletions(-)
 
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 51a8a582df56..94bf890628e5 100644
+index 94bf890628e5..b417c9d792d8 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -311,6 +311,7 @@ bool ima_template_has_modsig(const struct ima_template_desc *ima_template);
- int ima_restore_measurement_entry(struct ima_template_entry *entry);
- int ima_restore_measurement_list(loff_t bufsize, void *buf);
- int ima_measurements_show(struct seq_file *m, void *v);
-+int __init ima_init_htable(void);
- unsigned long ima_get_binary_runtime_size(void);
- int ima_init_template(void);
- void ima_init_template_list(void);
-@@ -326,7 +327,7 @@ extern spinlock_t ima_queue_lock;
+@@ -28,6 +28,13 @@ enum ima_show_type { IMA_SHOW_BINARY, IMA_SHOW_BINARY_NO_FIELD_LEN,
+ 		     IMA_SHOW_BINARY_OLD_STRING_FMT, IMA_SHOW_ASCII };
+ enum tpm_pcrs { TPM_PCR0 = 0, TPM_PCR8 = 8, TPM_PCR10 = 10 };
  
- extern atomic_long_t ima_num_entries;
++/*
++ * BINARY: current binary measurements list
++ */
++enum binary_lists {
++	BINARY, BINARY__LAST
++};
++
+ /* digest size for IMA, fits SHA1 or MD5 */
+ #define IMA_DIGEST_SIZE		SHA1_DIGEST_SIZE
+ #define IMA_EVENT_NAME_LEN_MAX	255
+@@ -325,7 +332,7 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
+  */
+ extern spinlock_t ima_queue_lock;
+ 
+-extern atomic_long_t ima_num_entries;
++extern atomic_long_t ima_num_entries[BINARY__LAST];
  extern atomic_long_t ima_num_violations;
--extern struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE];
-+extern struct hlist_head __rcu *ima_htable;
+ extern struct hlist_head __rcu *ima_htable;
  
- static inline unsigned int ima_hash_key(u8 *digest)
+diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
+index aaa460d70ff7..79b0f287c668 100644
+--- a/security/integrity/ima/ima_fs.c
++++ b/security/integrity/ima/ima_fs.c
+@@ -63,8 +63,7 @@ static ssize_t ima_show_measurements_count(struct file *filp,
+ 					   char __user *buf,
+ 					   size_t count, loff_t *ppos)
  {
-diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
-index a2f34f2d8ad7..7e0aa09a12e6 100644
---- a/security/integrity/ima/ima_init.c
-+++ b/security/integrity/ima/ima_init.c
-@@ -140,6 +140,11 @@ int __init ima_init(void)
- 	rc = ima_init_digests();
- 	if (rc != 0)
- 		return rc;
-+
-+	rc = ima_init_htable();
-+	if (rc != 0)
-+		return rc;
-+
- 	rc = ima_add_boot_aggregate();	/* boot aggregate must be first entry */
- 	if (rc != 0)
- 		return rc;
+-	return ima_show_counter(buf, count, ppos, &ima_num_entries);
+-
++	return ima_show_counter(buf, count, ppos, &ima_num_entries[BINARY]);
+ }
+ 
+ static const struct file_operations ima_measurements_count_ops = {
+diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
+index 5801649fbbef..40962dc0ca86 100644
+--- a/security/integrity/ima/ima_kexec.c
++++ b/security/integrity/ima/ima_kexec.c
+@@ -43,7 +43,7 @@ void ima_measure_kexec_event(const char *event_name)
+ 	int n;
+ 
+ 	buf_size = ima_get_binary_runtime_size();
+-	len = atomic_long_read(&ima_num_entries);
++	len = atomic_long_read(&ima_num_entries[BINARY]);
+ 
+ 	n = scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
+ 		      "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
 diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 1f6515f7d015..41f4941ceaad 100644
+index 41f4941ceaad..952172a4905d 100644
 --- a/security/integrity/ima/ima_queue.c
 +++ b/security/integrity/ima/ima_queue.c
-@@ -38,9 +38,7 @@ atomic_long_t ima_num_entries = ATOMIC_LONG_INIT(0);
+@@ -33,7 +33,10 @@ static unsigned long binary_runtime_size = ULONG_MAX;
+ #endif
+ 
+ /* num of stored measurements in the list */
+-atomic_long_t ima_num_entries = ATOMIC_LONG_INIT(0);
++atomic_long_t ima_num_entries[BINARY__LAST] = {
++	[0 ... BINARY__LAST - 1] = ATOMIC_LONG_INIT(0)
++};
++
+ /* num of violations in the list */
  atomic_long_t ima_num_violations = ATOMIC_LONG_INIT(0);
  
- /* key: inode (before secure-hashing a file) */
--struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE] = {
--	[0 ... IMA_MEASURE_HTABLE_SIZE - 1] = HLIST_HEAD_INIT
--};
-+struct hlist_head __rcu *ima_htable;
+@@ -154,7 +157,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
+ 	htable = rcu_dereference_protected(ima_htable,
+ 				lockdep_is_held(&ima_extend_list_mutex));
  
- /* mutex protects atomicity of extending measurement list
-  * and extending the TPM PCR aggregate. Since tpm_extend can take
-@@ -54,17 +52,53 @@ static DEFINE_MUTEX(ima_extend_list_mutex);
-  */
- static bool ima_measurements_suspended;
- 
-+/* Callers must call synchronize_rcu() and free the hash table. */
-+static struct hlist_head *ima_alloc_replace_htable(void)
-+{
-+	struct hlist_head *old_htable, *new_htable;
-+
-+	/* Initializing to zeros is equivalent to call HLIST_HEAD_INIT. */
-+	new_htable = kcalloc(IMA_MEASURE_HTABLE_SIZE, sizeof(struct hlist_head),
-+			     GFP_KERNEL);
-+	if (!new_htable)
-+		return ERR_PTR(-ENOMEM);
-+
-+	old_htable = rcu_replace_pointer(ima_htable, new_htable,
-+				lockdep_is_held(&ima_extend_list_mutex));
-+
-+	return old_htable;
-+}
-+
-+int __init ima_init_htable(void)
-+{
-+	struct hlist_head *old_htable;
-+
-+	mutex_lock(&ima_extend_list_mutex);
-+	old_htable = ima_alloc_replace_htable();
-+	mutex_unlock(&ima_extend_list_mutex);
-+
-+	if (IS_ERR(old_htable))
-+		return PTR_ERR(old_htable);
-+
-+	/* Synchronize_rcu() and kfree() not necessary, only for robustness. */
-+	synchronize_rcu();
-+	kfree(old_htable);
-+	return 0;
-+}
-+
- /* lookup up the digest value in the hash table, and return the entry */
- static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
- 						       int pcr)
- {
- 	struct ima_queue_entry *qe, *ret = NULL;
-+	struct hlist_head *htable;
- 	unsigned int key;
- 	int rc;
- 
- 	key = ima_hash_key(digest_value);
- 	rcu_read_lock();
--	hlist_for_each_entry_rcu(qe, &ima_htable[key], hnext) {
-+	htable = rcu_dereference(ima_htable);
-+	hlist_for_each_entry_rcu(qe, &htable[key], hnext) {
- 		rc = memcmp(qe->entry->digests[ima_hash_algo_idx].digest,
- 			    digest_value, hash_digest_size[ima_hash_algo]);
- 		if ((rc == 0) && (qe->entry->pcr == pcr)) {
-@@ -104,6 +138,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
- 				bool update_htable)
- {
- 	struct ima_queue_entry *qe;
-+	struct hlist_head *htable;
- 	unsigned int key;
- 
- 	qe = kmalloc_obj(*qe);
-@@ -116,10 +151,13 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
- 	INIT_LIST_HEAD(&qe->later);
- 	list_add_tail_rcu(&qe->later, &ima_measurements);
- 
-+	htable = rcu_dereference_protected(ima_htable,
-+				lockdep_is_held(&ima_extend_list_mutex));
-+
- 	atomic_long_inc(&ima_num_entries);
+-	atomic_long_inc(&ima_num_entries);
++	atomic_long_inc(&ima_num_entries[BINARY]);
  	if (update_htable) {
  		key = ima_hash_key(entry->digests[ima_hash_algo_idx].digest);
--		hlist_add_head_rcu(&qe->hnext, &ima_htable[key]);
-+		hlist_add_head_rcu(&qe->hnext, &htable[key]);
- 	}
- 
- 	if (binary_runtime_size != ULONG_MAX) {
+ 		hlist_add_head_rcu(&qe->hnext, &htable[key]);
 -- 
 2.43.0
 
