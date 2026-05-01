@@ -1,150 +1,167 @@
-Return-Path: <linux-integrity+bounces-9396-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9397-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 3GLvMN8Q9GnG+AEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9396-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 04:33:03 +0200
+	id MG/QHMCR9GmRCQIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9397-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 13:42:56 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D02244A9D17
-	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 04:33:02 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF1694AC1B6
+	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 13:42:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4011C301B165
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2026 02:33:01 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A391330166C0
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2026 11:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD73340DFBD;
-	Fri,  1 May 2026 02:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A223939AC;
+	Fri,  1 May 2026 11:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="EBxEQ34T"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cMekvySi"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D244E40DFB6
-	for <linux-integrity@vger.kernel.org>; Fri,  1 May 2026 02:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777602778; cv=pass; b=NwY0dIOomJfhNVBM0VntI2rp5XEkK3Ll1JWbqNxvsS7ADpMqusWiEJtK6RnqtuvJcdZydQxWJp84tBvipXKzAz3Abj7CiJj+8j5yzDH+nm0u4Aa6Z04Jvv2jxOCcOZV6uEaiEpOjdqD6Zi4mcf7BJlvj5u08U5q3LgPbmCf4Pmk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777602778; c=relaxed/simple;
-	bh=2nV5xI55GZNPGgHxu11iGGf4DVqzNlton0KtJrkbBYY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=irCNIVldArgDSnjAHE4CynFsfREoV5F2k5sJkyrTQCOSwrH5fwKfkULl9A3J4k3sigNYamLUfolYNlRIBJw7WuoCNCuyzA4UnVxNyWIfOxOSEJXyu/AtXAhY+ApfZOZHVX7kSLUdDNF1ESqbhk9OqIvQnFwcd4i05uTAI/w8JIQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=EBxEQ34T; arc=pass smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-67389cf78b0so2974175a12.2
-        for <linux-integrity@vger.kernel.org>; Thu, 30 Apr 2026 19:32:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777602775; cv=none;
-        d=google.com; s=arc-20240605;
-        b=h07JFTqJMyoa8bPqwCNRz/ANs2XlffrWcuqYWkisu7O9XW0x1lXqSKmS7WwCv8vVYc
-         prZF1GZ44wvjZnwoivbeky4Gg+dmxSS0UYssdI7C2/qJB2co00wvTQ4KTKOLyqoj6rMR
-         Qr47vR2SlyskDd5AJKP75/BgdL1xkYTdxnoLaW8uqiEXaxqse8SIVsO4ho6ZiKqcpD9B
-         JUHmKuLJMCAN1sYPz4R1JOs7RPKh5IJwhc18dgzzFrQK71PvQTz/WmcKfODdX8NaILfV
-         bRDSIEWN8iz6oSOBOmCx8itW3hRPkVckBB24nwbDU1dORq3I1X248Sn1XXrEmN73b/hU
-         NpOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=2nV5xI55GZNPGgHxu11iGGf4DVqzNlton0KtJrkbBYY=;
-        fh=dpn88ZNWaMQTrtAGjdBlstMALomhgni5nSm38VcTk0w=;
-        b=WOwAJE5ldJE9NyQeSK2B+AEbANaYVtSRXwg5uwUx7K+BuC9ysEbb+UXXPn7GRAgosJ
-         o1eKQMeWVBZ+yr6j4Ve0XIww47fIFCb+GF1buX4nk4ZwFrVFd/cUgx0x4AwfcIa6SZKq
-         bE4pXQYd6nKWDFPkWnkiFtTvv/3d3Q6hM0S8i18dnBrG05fCW76CZovzfPSzPlv3SPRC
-         vAucnkwJsnwHtywqIrrIJjbyEBM2vU3DA21gy1e+6aqpbwpeiDyVMgi1l8yZkP85crjz
-         XvAwE0eXrKD6PNTsoNowjP9YBqJEvKx24UMKgoN+5ZutUr1rArYd0fmnef4n1Xd1IBr+
-         x9dQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1777602775; x=1778207575; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nV5xI55GZNPGgHxu11iGGf4DVqzNlton0KtJrkbBYY=;
-        b=EBxEQ34TZyMlSvECXm0nY0oR8LO3xCKrqY72wDSH2vRaSxaGO+q+J3RyK2hvcSuWDV
-         Hy2FC8rSH2TPto5mCJNXa0EIAAnKJH1b06OHTQwD53rpot1NKkj8/Bh+bW2mn64bSoK2
-         Og7wi+cbI1236bQ0m0jZU0vk9QKkG5HK3Wh5ue4amHFJGXkpqLsKQcfoGt3nMgxPy3/b
-         4OtfdsaSXIqL1R91KZldfDgGf4vdJ/WHhzQfrcbRuZ9szNn+pYb/SnTHWcRBHwG3+Cg/
-         QYDeh8qdwkoz/jDe5iHU1kP+KNdr5G3n+1KdvvFHWtk3zAJ2OkZYqL2mHvqXsq8kqxfV
-         jK1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777602775; x=1778207575;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2nV5xI55GZNPGgHxu11iGGf4DVqzNlton0KtJrkbBYY=;
-        b=U7G4UqFCmSk9/bBsBp6VJ1sMzHbghxM6N2rxVqlf4qz+QECyZHxqibyl3xBLyY8ZN9
-         q541GSb59kKl5Qfe8ss1RgEVUdBCmvmSUe2AkCIayIvAllkzfCwOgBFEbYmiruBnkme6
-         pts+gDlZb+6z5w3Tw+XfoMYsH1SNxWfIVsodFYqrxqwnQxx5EkugswGNKyDXVLZiqI97
-         JT2oOMbopkNY7EnzH3Bl6sfBdlgvJPiZi1pns7FxT2DSsDl38rfR+R7eh01eU1F7n15U
-         VGJQxibN98qaAm5BkwgjWTExNxeimK28+Mc4sKFWQ+V1YGBq4y3Cn+TrRbfaEi/eVCo2
-         0eJw==
-X-Forwarded-Encrypted: i=1; AFNElJ+h4V/UCo5j5G5WSUNA5NdBAtI6VzZOCtY6RVr048G75gg08XPztheRGRT6dW2eneUbRRStWFruJt6PJ816ZDw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws4KkqAyi3g3uxvG0+OznGRJk6pZluQtJ1Vn02v9FiWGZKgZVs
-	Dzb6zUWmXvjjGmGAd1CkpBvpA5McVg2qe/eRYWdz2duFxvIoJbWv2zaXYZLH2gAAutND2ll82Ws
-	RIODc81NBN/2LNyvGCnONnDmSrsR3aTV/N0/P7rEaqxvU+Gz3i8RXyQ==
-X-Gm-Gg: AeBDiesF7G3e4CVOZrP41bXfk3gREdZZPvo8FdjIgNx3oZQ/xSHVPdJ5jgacoCDvoPi
-	VMClNBbrHuu7mlpLv68YzJqf+FfSNfE/RNYBb5mG2Vb5c3sjOra0qVeNgoX+0yQN4mqfPEWBe1A
-	Z4TChRYorSdkASA2mttRvqECW5grZl/8bO2LQrfNgWNWyz7VNjVhFXZsbVh32gG0p9e42RNXxcS
-	KrCEGhi1TqQCeO5TLMMw/SyFZ6RExFs5kOXHyJT+e+csI8sHS5rgEMQwqub+dLiYOac7Irt+SkC
-	rW8wOZMuWjzmfxEDN8kaMTegQuzKitv7ttEze67/n3Omyld3K3x/
-X-Received: by 2002:a17:907:7b8b:b0:bab:1839:cc61 with SMTP id
- a640c23a62f3a-bbb788b06c7mr290359066b.40.1777602775198; Thu, 30 Apr 2026
- 19:32:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC309363C74
+	for <linux-integrity@vger.kernel.org>; Fri,  1 May 2026 11:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777635774; cv=none; b=S8Uj8IqsQi0ibUbYpEpt4MMXaE4TAutUPkE8RsO2K7SEONcbUyfd3Rpg4c6wdO7lbRs+VRvQ9AWO4K6gvKTN+fUXCRqhcwyEo8XNLnOo+FQp9tM65AfoXWUm4ub9kVnhfnYQY1JG6AWDT2mQwD/hjfF47VFlofsHjBXEnLb9ID4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777635774; c=relaxed/simple;
+	bh=rAevRXBhAGu6iiKc1Umw0D6JxGBUzsZGpz16I/v5rqE=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=SblQy2+3WVQy2m6rU3n5PNSZKb9FlhFn4nZGtwakO4TWbbKf5pgHfcLtSgFJSs9AKrRmkldT23vQdIV0e32xn0tV4KTAgm2yfQXr1F47B9Dcei5cwHrZamUZnHxgN1lwxETQ/9CTvIRpp4ZOtVLSmp4/m0Uv+JF6N7LcqilGiiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cMekvySi; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6413wMF02815240;
+	Fri, 1 May 2026 11:42:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=r3ucsX
+	irgRLeBDCflv54aOIzDDRrswSY57MADTLRAcQ=; b=cMekvySiWf3TADNxgSUW/4
+	6SWYhjU3tvvbgQXQXkfyxpvKESjAioFbfuiVF+KqtKOf8g4mJHrhbeLZ8wtFO/+M
+	8MfFEjV4//5CSzD7GuwYEdwsfvdVWlIBmSV+NJ+rsN9Vr1b8sHrkStO7pA+Kop6C
+	SedJ1h+QLwPbKG/PIVwFqT1UlgZA38aIEzXlVDHSS2ArwXSg78G1fabXZWHD61Th
+	E8UZ3ltalcHAoivtSXWGYxRXB7pu0VrnFhTEMZBSPOl3yljXp9Z2lOW80fm6HUbP
+	bhYjS7glAwRLre+M+ALNAxTN1dAUucleWsK2E8iNHyPmMRSc1XhsK3QVVZBkem0Q
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4drn8vtcym-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 May 2026 11:42:50 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 641Bd92l032064;
+	Fri, 1 May 2026 11:42:50 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dsamyq0yc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 01 May 2026 11:42:50 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 641BgnFB28181086
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 1 May 2026 11:42:49 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6F1B458050;
+	Fri,  1 May 2026 11:42:49 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A97E458045;
+	Fri,  1 May 2026 11:42:48 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.102.184])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  1 May 2026 11:42:48 +0000 (GMT)
+Message-ID: <4cbd1b20680e2dceba8870f62f2081c333113192.camel@linux.ibm.com>
+Subject: Re: IMA: Avoid redundant rehashing on stacked filesystems backed
+ by structurally immutable filesystems
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Sahil Gupta <s.gupta@arista.com>
+Cc: Danny Hu <dannyhu@arista.com>, linux-integrity@vger.kernel.org,
+        Julien
+ Gomes <julien@arista.com>, Pierre De Abreu <pierre@arista.com>,
+        Kunal
+ Bharathi	 <kbharathi@arista.com>
+In-Reply-To: <CABEuK14__XuRO2KOd3w+qx5_nw4iB2yPcF2R68a09A4hcJkyFw@mail.gmail.com>
+References: 
+	<CAFn2k5DJNv5SDsx_-odHd3sB0Fw7r8FqhO8fWdXrraZn_vbpDw@mail.gmail.com>
+	 <2b3c93a69e70b6fdf637bf9fb921d5e737a79e8e.camel@linux.ibm.com>
+	 <CABEuK14__XuRO2KOd3w+qx5_nw4iB2yPcF2R68a09A4hcJkyFw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 01 May 2026 07:42:48 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAFn2k5DJNv5SDsx_-odHd3sB0Fw7r8FqhO8fWdXrraZn_vbpDw@mail.gmail.com>
- <2b3c93a69e70b6fdf637bf9fb921d5e737a79e8e.camel@linux.ibm.com>
-In-Reply-To: <2b3c93a69e70b6fdf637bf9fb921d5e737a79e8e.camel@linux.ibm.com>
-From: Sahil Gupta <s.gupta@arista.com>
-Date: Thu, 30 Apr 2026 21:32:44 -0500
-X-Gm-Features: AVHnY4KiltXNe09eAfSM8PEJe5yZLMT5DNfDPvdW19MiC8SQp8Ys17-qFgy8PQU
-Message-ID: <CABEuK14__XuRO2KOd3w+qx5_nw4iB2yPcF2R68a09A4hcJkyFw@mail.gmail.com>
-Subject: Re: IMA: Avoid redundant rehashing on stacked filesystems backed by
- structurally immutable filesystems
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Danny Hu <dannyhu@arista.com>, linux-integrity@vger.kernel.org, 
-	Julien Gomes <julien@arista.com>, Pierre De Abreu <pierre@arista.com>, 
-	Kunal Bharathi <kbharathi@arista.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: D02244A9D17
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=CIIamxrD c=1 sm=1 tr=0 ts=69f491ba cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=wBI2lREWRg8QwSjPO5kA:9
+ a=QEXdDO2ut3YA:10 a=ZXulRonScM0A:10
+X-Proofpoint-ORIG-GUID: 8pWmfFeTnCrCyT5zEyIhXmQNfCv0FhET
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTAxMDEwOCBTYWx0ZWRfX2jxmm1MFG7YG
+ 0CPBfXiPyC5VmtvhcuE5ujtrSVpCkC3SfUrNUyMOJRJyqWnjGAZq9A7AuLixwOHQug52G4pWK8D
+ Irl9czhNowgZIlwLaGIFJcd98oUvsE3bN0KkaXbkaUPQyB7q9+5CxOo/GsxMJPFM7IC5rgpFwO8
+ sWgwWsExirp1liRlMXdR4BAoN/BjxZ8lEA+BNQCWrJqa8XLkjOBvfkZ0EwceGqKNyXG4A4eZxqJ
+ X0YYgRIPrduZ/u4V3ebN7Xc+5220DllABy2SPFfaDerjMBaIJCmLJob3+Bw8py75Asm4Zo1iLJI
+ Vh+IFtRXjaBkeb1TSfM0e36OV9kldiM/EO5BaJvIVPFlQFzGihJBYkN7muElHhPXbMi2eKmSn2s
+ 5wLGpJZG5cX0oNxVjkAeLRYV7DpcH1QIOUXqMukB5CyF8cX3fS/MbcQUBWgO4alkEsVZyo4F0JP
+ fx6tCacffb8IdVALMGw==
+X-Proofpoint-GUID: 8pWmfFeTnCrCyT5zEyIhXmQNfCv0FhET
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-01_03,2026-04-30_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2605010108
+X-Rspamd-Queue-Id: DF1694AC1B6
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[arista.com,reject];
-	R_DKIM_ALLOW(-0.20)[arista.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9396-lists,linux-integrity=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9397-lists,linux-integrity=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[s.gupta@arista.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[arista.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid];
 	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,arista.com:dkim]
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	PRECEDENCE_BULK(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCVD_COUNT_SEVEN(0.00)[11]
 
-> Have you considered using IS_RDONLY(real_inode)?
+On Thu, 2026-04-30 at 21:32 -0500, Sahil Gupta wrote:
+> > Have you considered using IS_RDONLY(real_inode)?
+>=20
+> OOC are ima caches invalidated on fs reconfigure? If that is the case,
+> then IS_RDONLY ought to do the trick.
 
-OOC are ima caches invalidated on fs reconfigure? If that is the case,
-then IS_RDONLY ought to do the trick.
+Per-inode IMA integrity status (iint) is now stored directly in the inode's=
+ LSM
+security blob rather than in a red-black tree cache.  By "fs reconfiguratio=
+n",
+do you mean remounting the filesystem?  If so, the iint stored in the LSM
+security blob should be freed when the filesystem is unmounted.
 
-Sahil
+Mimi
 
