@@ -1,97 +1,99 @@
-Return-Path: <linux-integrity+bounces-9398-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9399-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6BdhEpLO9GkYFQIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9398-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 18:02:26 +0200
+	id oKihFfbR9GkYFQIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9399-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 18:16:54 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81E1B4ADDFE
-	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 18:02:25 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 877654AE083
+	for <lists+linux-integrity@lfdr.de>; Fri, 01 May 2026 18:16:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2A77D30075F4
-	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2026 16:02:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E235A301CFF8
+	for <lists+linux-integrity@lfdr.de>; Fri,  1 May 2026 16:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC9EE3D9DD4;
-	Fri,  1 May 2026 16:02:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE503DDDA3;
+	Fri,  1 May 2026 16:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="GBkQlG3z"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="jNqR/Qpr"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846A53DDDCA
-	for <linux-integrity@vger.kernel.org>; Fri,  1 May 2026 16:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF023FADF6
+	for <linux-integrity@vger.kernel.org>; Fri,  1 May 2026 16:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777651343; cv=pass; b=S80QKYDUFrOJDNsjB5n4nMZ6DSOh17nCxerzARyMsJU3b45EwQNlBRVXNctM8gBlBLrfc3lkSnDw/L/UWaGUkV5tj8Symz+pAS0es74oc0Vwt7Nghq+4WiUhRf3jEv/Zemxef56SdzwhxmitSgK39roC07AX2TQyERXw/92jq/c=
+	t=1777652196; cv=pass; b=gYEN7QGEniyZmRMmu2i1slic6CUIwQf77Pqt8pCLc2I16RRvzvvpgR7fIo3EkoejyFxv8yB1upiV+yUNwlobBPVJjSzY2M1KGshYLZp30R2JYN/D7ulHCCw5Og3W8f0Xfq7rIIx36kQccezWrqZDevt1fNrK/Z2ZOZyKaQyALIQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777651343; c=relaxed/simple;
-	bh=u+7aMpeIjawRKyYJTPaSJImwdjq6o2bGlpmgyjkEGiA=;
+	s=arc-20240116; t=1777652196; c=relaxed/simple;
+	bh=pwga7VdIBErnIYUdnTOFkDQP85+mp56HPlNPUK6p5Z8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CgppP+QbyfUKyQsgEzlQpvQa2BWB047VwIEEnGUxrWcavRY+zLcECBqVw/lFUHZgLFZVBVJWhdfje72yoa+DUUTdT9BRolapboJ4HfCx5l1KLCpKBbn3Y08xAcWoj3sCo4qAg6c5ToW11D2/06WtuDidctEmIgK/0eJPFVz8C/o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=GBkQlG3z; arc=pass smtp.client-ip=209.85.167.52
+	 To:Cc:Content-Type; b=L8Pt5Uq/mAPgpO/4XgzR1HeS6YMyFLSeZHhmR/+wBw92GJOHYfm8B/TANlwZPp5SAP5UloaXDdog/5XkRXkRIETuCfC/J7ineJtN3MQyALZuFUW0oE3VznSlPShKcHSBC/DTQhV+VtjstG1ebL5jIBWZAbsuXJnREzfu2EzbgOw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com; spf=pass smtp.mailfrom=arista.com; dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b=jNqR/Qpr; arc=pass smtp.client-ip=209.85.210.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5a40cfab24dso2214337e87.2
-        for <linux-integrity@vger.kernel.org>; Fri, 01 May 2026 09:02:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1777651340; cv=none;
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7d4c383f2fcso1905598a34.0
+        for <linux-integrity@vger.kernel.org>; Fri, 01 May 2026 09:16:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777652185; cv=none;
         d=google.com; s=arc-20240605;
-        b=CJeuUimYbKOsI4phANAu/z4qe8fVfs86JiSFiX8pvdauC382MT/mySS75VXJg5YLjY
-         6eSpN9oRc6ffqHsx7JUg1sAzq7QcPLnCFDJY9UnBInx66a0LLEmjshLR41Ybj6uxI3DQ
-         Bw9r/ypxMK4OFBQlAn3OFDFQYPC2Ldu3IpNuN5jJJatcMF97jXvAM+t8ioooE0WGgSgo
-         A36sSs66fZMnv1j4hVjSSMU3WpF7f9zYq0ZkDhZMw8e5S076RNuTvCKFVRneq0pIR8uX
-         guF+yA9Rcycg5uAiaU3er6sNoSPulvFJ/JIJDL0TVITNnbWcjMdNHDaTIZkRizgCIGtw
-         kgSQ==
+        b=BKo7un+4qgwmwmSiX32PgslVtVDZhx2+hYhV7gf9zrGRhOuClcFOjrMAyE+Jm6j0DA
+         ylyDGGtAe1yWUCMd9bX2ILXBsfnQ0oZ6mEa+0fzZuPRmUcjorJNVpcpyTnKo1+BURJ9a
+         FwPbd6Ln6AqF5mYF1Tfh84q7EWyjS+Kblt/sOEN1f6hVy5SkE3xP+Q2a20lfUxEVeiBa
+         R45M4C+TATlEU3GjLwJJM2OszBMJ8eRhfHZYFjAKyIyGhtQy/ZSL/01CxrKacxpHbNo0
+         iLO+zr4vBIdkhcLJaXHPAEaged4Ap21c0jTR6zed0n5KgXPSVufpXq/J63JODdQMArwx
+         cI5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=u+7aMpeIjawRKyYJTPaSJImwdjq6o2bGlpmgyjkEGiA=;
-        fh=/gvalNN1ft4hlc/CzcUfPBT+MfBxeqOZl5okSsjAyrc=;
-        b=gBHSSCwrafuku+GXRYMm6ngW570/86jcNWXfyFrW+dCwr/WPHPv8wLZu/zE4WELZ8w
-         udF/BEHslH6NitC6yzAASTEMvKfsXE13BtZED86ut114YgyZg4uAtQi63UedYQdLoKFU
-         c/bZ/oCZOETO/T30+hWw6efryvQq8VlARry+y6hIMQpeyxT2gTc9iZtTCfJ7P1M6sMQJ
-         C3/RA3uxviHrmK54xDEPY7j1TF2pIYgdV3WIlPtd1ZXFF7rV9iuhctKVIgusEFykd9US
-         dIO9vZ0ApnZNe5/qb5qx3b8WOYRxkKVJEufA5vrmsilSEdVD8NtYqmLzU0ez9dNS3tFz
-         dT5g==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=B1FeZHGyJmif/tIXl0vI5887q4wWknazi7fMw4ZUhN4=;
+        fh=kl7jtRvHKlgvqrdhII0sKNip4BvTsOreaNFj3co8li0=;
+        b=WSXXm/IY6gZAPnJ5GgoMgz1DsJb/oHnwXHx6mmcnbJPaGt1FhY5Av1Cd3feiET2yu7
+         vxIL5gMg3lem0H3GlNUnOngijp4KvGLGz2YJO4MLBloztMpQqm1SVQ5yDI6+BRTjh5C8
+         VUQe3nfzpNTmTxxUCEiJ3liIZWqzA9Z32Aa4ygwjmBmyT7RoJRb+SXZdoO9KpybePUxz
+         Lm5ROyP7cYdTlqK7zpXfMxicUrzvdaF43vtF9ZD4D/qpBztrmtbWoprAF8PnaVaZMxj8
+         TQZ1okvmWDYJafaarc/n9wYKo4pP58Lv2gdZGmBPGXXkgU9/Hsqb6NluFDtpHpZCPktX
+         Wi2g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1777651340; x=1778256140; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u+7aMpeIjawRKyYJTPaSJImwdjq6o2bGlpmgyjkEGiA=;
-        b=GBkQlG3zeO8YBTSl2kZ1EiEyB5RlO775PMTTdy5I2n0fEsjjrhhLAvvMCRdY5WB3RG
-         mS2HgkVj2irnVNnBatQDJ/ENo2YpMjHH58qparYGnxk7lL9yi9bdyKOtdLz5ba8B68k8
-         QRHnk/8wfS/sfr2U1b5+7sGYYOmMmJaTwNsX5RSbXnHsQl+BhdANUG+1BwJxClwmSEZ/
-         CCxzzfqhF6CcjjFxyflpYps8Htoz85GPd7Xn8IMmhP4FnDILDv4W8NSe0gsXqScZafX1
-         6rOYE7jXm0y4XXln6HHHSH7p+7lRudFWauoZ3bzJVV8opN9qucHwLQc49L8fZ4SMRIHy
-         METw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777651340; x=1778256140;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=arista.com; s=google; t=1777652185; x=1778256985; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u+7aMpeIjawRKyYJTPaSJImwdjq6o2bGlpmgyjkEGiA=;
-        b=eAtqzDCEkGTAVE6mNo/rrLRnK2M1j4WFvtA3s29AeMPrQaMbA5kE06kU91rieQnp30
-         cDnwfBVEKX0LqsRlnIS/V0VPgNRu3z2pxB7Ogw4OyFyGW92068pvNjzSqNIS7lw1Mnp9
-         1A8pwAmS/Xc/MrhK3NKXrSV2DjuX0nOxTrRliFH3BB6UgCCNBqlx8+5SFrOsK/HmgWBJ
-         nT733qWUc9qNH690FLUmNzcp9ecTPAEgoxYsPI+2WEq2rZJ8dYSorQU3FjuKF5GyEfrI
-         7CfR9MwFUkJYFO6H5tZ9XW2zGV8npLISEiK2Kebsq9SEeNaE4d7mh05lFnwtPwwxkXrP
-         tR6A==
-X-Forwarded-Encrypted: i=1; AFNElJ8Zh9V+u/lCDAd6E94xBeiQrJXyWlgJZ1iqKXm8fsKs8+9uEJTIwdVtl2RwkuGjOz0aJ5G3wGJ+7eV6jJmX1G0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/N3ZAeyeOVmn9YpOUpWmDKeBfepV2+imreM+1AT1hR40DM029
-	Y094W+R/SPJG/JENOxy69koOnEKmYByV8mHm69BqafBq1aGHEei8qvmz807MHa7l0fZtkOpiShg
-	UVyJ+o6nvxK+LjXj6ugFoLpRGbqACSLWjLjw0Rfk4
-X-Gm-Gg: AeBDievor1X8l/qwRZOZSuaVUR+W4wYbNV2EStVX4kfs4dE7yHJUqGHPmXL65G7VBG1
-	i4i2rxsmuxKUxocaqOKovzWNXGWmCwUppQv60x1mKEaPmuyHBn8a2GWLf07NhbE60nLTbydTwX7
-	8OGJcRHQvsO8a+dSz9eCp+n+MM5TxmHIlxgYyTqdZMmOf2bSYzlqNeWG4qPSawS6BLviGJWwkBR
-	NIrilOs1kEXgLNcejcLOirc5dUVRtotPdpfP9M0mTH8QVQE5vq9/buTQfR0lyn2XKQWZKPWnrc5
-	r/PQoVzryUKTzulM6m55GdpGHHYutYZOjkGLUTPO/aovjU9CyDp5
-X-Received: by 2002:a05:6512:1256:b0:5a1:3400:f937 with SMTP id
- 2adb3069b0e04-5a8522b130cmr2717842e87.7.1777651339641; Fri, 01 May 2026
- 09:02:19 -0700 (PDT)
+        bh=B1FeZHGyJmif/tIXl0vI5887q4wWknazi7fMw4ZUhN4=;
+        b=jNqR/Qprx6i+wH2Ni4+pTUOgh3IqvgIY8Isc0CbYrkXSrrEQMhVSX0JiHQq7giczO4
+         Ym30ihOjAMmRCXzMZqQD/410wa+ucFyr3hdK3BwXtdfj0rsiBI0EnoLXtLrB9OvNz9Se
+         +oON01qRpwj7jRgVNZS3ukC3orYKUYO0C8tQmvV3kIY9KV3CYWmMEudxbqX+Dn26g0CI
+         GPXP7AIK4IaEEDAu7HwHwstMnRMPcXlGDV2GLBkph2Fy53oQyxtcVLyuWxiVgxHmzys/
+         XAnXGO55NkWaSyLykG0MO0QVU+CKVjSH3N8obIGg01ccrYlbsM1/IbhS+e909y+lH9xW
+         oOLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777652185; x=1778256985;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=B1FeZHGyJmif/tIXl0vI5887q4wWknazi7fMw4ZUhN4=;
+        b=q30F9NvPYz0y9LbW+uV9j9n2uagoz6grhfC4Cg8HP/DwzIw9xmMc7+1XOT1ReYsYYF
+         H7kxRW5L444NIxocNwEz55jc49sc3UKpxwVRpIGJdO0hUGvcyZyG//kYZK/RKV4SkAx/
+         ij5h+GC1r6Q7ANrIozdlTGS/bNPzM+Uu0aFdKHJxe6N5H/dFVOniLE7vLpKAFXkMaE6U
+         3jfgfkUEwDOB8wGN/C3dDmeD/LjdHRMPrsHPVAoqCzL8YCG/39NdnIVCxBHrxkaBO+6O
+         AMMAdMD21hRR1Ga2/F8m9hmF9P+Nojov2MqiiwfVK3E9SUh0rFsySBwTOldJQG3RTLI5
+         tbiw==
+X-Forwarded-Encrypted: i=1; AFNElJ+e/j1s2jNod8hXXQcDVNpbu2X9shOxIQOn8KH4h6pWo33xUbJAoMiS13QFfESqvRDc6IqYiuGkmA3aUNAzjXs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywj7Re3voaTBiP6EQszpomSnz9bm0aiOJkj8ky+SFVDfUiwf5YW
+	xQ4r2WJ4b2AX//v8Orh8qAIMEicnyPqvo1xPwOG7Sdydba8xambleQVQGDAV6QsFBQ9A+1FjLqt
+	JbEPkcztJcpwAJ6AwkW9Xj2gpMJVrrP2DqkIC9CoO
+X-Gm-Gg: AeBDiesbOS9Lrp4JEexZ4Q37HUTh6M/4f6SJQx1E1td62FXKm9hkxKspwlWsbmxP0wP
+	aN9BiAl6KeUuBlRqYII7wW/I6N41t4RiLZ3mWMM7FIKEX7SeQ+bnqNQ1brGRWarKAscHB0ATXiR
+	MXUYunS7/2NNtA+Ta9QWxRM6c66E0bJB8wW7MnPOXidIDrOTMlWZsrZ4GLzUjKdFiU4FI4aeIi1
+	qvT9AXxe3fbjqSXcI1y2/AlwkAxAG0q68fw/WRPS2LpbHpQAtsFCwy1ZPr1RiA3a/etxPG53Mz+
+	61sVaIY9EUKIX6tEXm2K03VgGGE/deGf9bctvjmlXjaGixw3CBpMb03hiOaSmHEbd+kd2UO8VeV
+	BhGkGG5c=
+X-Received: by 2002:a05:6830:6604:b0:7dc:cba3:e8f2 with SMTP id
+ 46e09a7af769-7dee13fd085mr107809a34.19.1777652185362; Fri, 01 May 2026
+ 09:16:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -102,31 +104,32 @@ References: <CAFn2k5DJNv5SDsx_-odHd3sB0Fw7r8FqhO8fWdXrraZn_vbpDw@mail.gmail.com>
  <2b3c93a69e70b6fdf637bf9fb921d5e737a79e8e.camel@linux.ibm.com>
  <CABEuK14__XuRO2KOd3w+qx5_nw4iB2yPcF2R68a09A4hcJkyFw@mail.gmail.com> <4cbd1b20680e2dceba8870f62f2081c333113192.camel@linux.ibm.com>
 In-Reply-To: <4cbd1b20680e2dceba8870f62f2081c333113192.camel@linux.ibm.com>
-From: Sahil Gupta <s.gupta@arista.com>
-Date: Fri, 1 May 2026 11:02:06 -0500
-X-Gm-Features: AVHnY4KDJxIk51Cz9oANz2NzNJmHlBBQ7VknO1NUbFcr8Eq7Ralfs9o_LsbtOo8
-Message-ID: <CABEuK16D7RB71JTSxCjO3jFY70+yNugdjM+foJFnzMgsCH7tcQ@mail.gmail.com>
+From: Danny Hu <dannyhu@arista.com>
+Date: Fri, 1 May 2026 09:16:14 -0700
+X-Gm-Features: AVHnY4LxHMOXX41xK71xIT8mPQSOUOjFqUDkAszp7510GRLKOV-RpHXamGr_b1Y
+Message-ID: <CAFn2k5BciHURkQS9p-vZ70GP==1S_4GmoE=sMhA+WQXOA8nfoA@mail.gmail.com>
 Subject: Re: IMA: Avoid redundant rehashing on stacked filesystems backed by
  structurally immutable filesystems
 To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Danny Hu <dannyhu@arista.com>, linux-integrity@vger.kernel.org, 
+Cc: Sahil Gupta <s.gupta@arista.com>, linux-integrity@vger.kernel.org, 
 	Julien Gomes <julien@arista.com>, Pierre De Abreu <pierre@arista.com>, 
 	Kunal Bharathi <kbharathi@arista.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 81E1B4ADDFE
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 877654AE083
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[arista.com,reject];
 	R_DKIM_ALLOW(-0.20)[arista.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9398-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9399-lists,linux-integrity=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -134,21 +137,36 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[s.gupta@arista.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[dannyhu@arista.com,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[arista.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arista.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arista.com:dkim,mail.gmail.com:mid]
 
-> By "fs reconfiguration", do you mean remounting the filesystem? If so, the iint stored in the LSM security blob should be freed when the filesystem is unmounted.
+On Fri, May 1, 2026 at 4:42=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.com> wro=
+te:
+>
+> On Thu, 2026-04-30 at 21:32 -0500, Sahil Gupta wrote:
+> > > Have you considered using IS_RDONLY(real_inode)?
+> >
+> > OOC are ima caches invalidated on fs reconfigure? If that is the case,
+> > then IS_RDONLY ought to do the trick.
+>
+> Per-inode IMA integrity status (iint) is now stored directly in the inode=
+'s LSM
+> security blob rather than in a red-black tree cache.  By "fs reconfigurat=
+ion",
+> do you mean remounting the filesystem?  If so, the iint stored in the LSM
+> security blob should be freed when the filesystem is unmounted.
+>
 
-I'm a visitor to VFS code, but from what I surmise, a remount doesn't
-seem to be equivalent to an unmount + a subsequent mount. It's clear
-to me that an explicit unmount would eventually call evict_inodes() ->
-... -> security_inode_free(), but I don't trace such a path when
-remounting it.
-
-Sahil
+We considered using IS_RDONLY(), but the concern involved the remount
+path rather than an explicit unmount and subsequent mount. From my
+understanding, userspace can toggle the read only flag using "mount -o
+remount,rw" without freeing the inodes from memory. A malicious user
+could then exploit this by caching the appraisal result, modifying the
+file, remounting fs as read-only, and then IMA would trust the cached
+appraisal result.
 
