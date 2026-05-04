@@ -1,297 +1,393 @@
-Return-Path: <linux-integrity+bounces-9414-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9415-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mJlENL7E+GlQ0gIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9414-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 04 May 2026 18:09:34 +0200
+	id 8Fg9FaH++GlS4AIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9415-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 04 May 2026 22:16:33 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35A9E4C1302
-	for <lists+linux-integrity@lfdr.de>; Mon, 04 May 2026 18:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B85494C3754
+	for <lists+linux-integrity@lfdr.de>; Mon, 04 May 2026 22:16:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5AF5B301B918
-	for <lists+linux-integrity@lfdr.de>; Mon,  4 May 2026 16:05:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0DD083013D66
+	for <lists+linux-integrity@lfdr.de>; Mon,  4 May 2026 20:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24E93DEAED;
-	Mon,  4 May 2026 16:05:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516103090C6;
+	Mon,  4 May 2026 20:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="AR1TitMf"
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="KOuuH2po"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94AE37883D
-	for <linux-integrity@vger.kernel.org>; Mon,  4 May 2026 16:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777910740; cv=none; b=bLdZ0T+be858ezewdo3VA6kujh/61YgdTQexKTgVkTtEXRaNnKraK4dZIj9AMUi012Lelzv33LYV72Hux7/XCUQtqVusmCLzDOPG1g2gNBDXuwi9YXty2N7U8AEW1AxAC4seRRid+PD/TtTJQmnuz6zxbTicAq23dxWYD61sS7w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777910740; c=relaxed/simple;
-	bh=wThVEhDgSbCnQM85Le2LRc0qrdkqcfV+fEMFRwjnpbM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E+BAEYlIk3CzF9jT8LdCoNWPJXl1IY2178cDKRZI/PXRAYFNCjQ1r0L9TrrSGncDVjw8zzh9ckRiyHRc0Y31PiwRAXF+HQXrGrHNKGyU0HQr18DyMTbr+k9Pym5tmUK/xqEhsEmsX5ncL5NamsJGfmPHuJuOG15DpsfYKQ5VNk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=AR1TitMf; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1777910726; x=1778515526; i=wahrenst@gmx.net;
-	bh=wThVEhDgSbCnQM85Le2LRc0qrdkqcfV+fEMFRwjnpbM=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=AR1TitMf2fH+ii5SpE/iFG1MPHUzS8Epgibt9cUr+VQslyAH8k7u2bSmMruZ12fb
-	 aVPeTgjLXYMjoB9a4YhtHG64gzXv2OKG8UPkfn7Y7mLX1pi0R2JL6hfdjAY7QI8k3
-	 nn/BU/1hvpjHpU2xBBNsxEpJBG5JlYN54Kk6fjlIwa/nLMLjNHBIK08ReNmNCFj+i
-	 h3SEDxim5SukQ85Zjf8np1QX9NtQ7NR87FovYcM/e9ZMv//OuKq8ZMN/auUMsxQRl
-	 kky4E2m6Y1XPFtl3q3u3SZN8nHSJMNRQQ9EmBbTTnK6nmzAO1I1ibyp+sYVF2WAn8
-	 ppATna2n8ZU4vPjFnA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJE2D-1w0tTh2llz-00U14Z; Mon, 04
- May 2026 18:05:26 +0200
-Message-ID: <6964bec7-3dbb-453b-89ef-9b990217a8b9@gmx.net>
-Date: Mon, 4 May 2026 18:05:25 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915723009CB
+	for <linux-integrity@vger.kernel.org>; Mon,  4 May 2026 20:14:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777925674; cv=pass; b=eHupAPIWBOD6hX0sgBfnuNtmtVUm7hOUSWIecSlWX7H+S/Hhc0QC4CO6MLRHW8DFe0MhMUvNjShyq0GLbILd2McujLyFAuO8YUtyYPZkwioaaGVsup00o3KS/7vL1sc292ozDv1RbCwdPmJCtk95h/wSpAvcNLxMawp0JosKbt8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777925674; c=relaxed/simple;
+	bh=EUvJ9obLHOrc/VdLy0f/NpAYvu5fY/mSXWQhaybFraA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LYy2w9w3uFkY5Ueu3KtMus6Z4x1A5FV1jPzTDJbgzxMbR0FOjo/1Gi7rLbu3V6rnimWJzyoM241EujNTi76zG0v8m5Dji3Q3/Y6MNswoiSrJBPDX8lA9pvx1a0RmkNEybdWYwk3PCtvQjxA+Ko8Fq5elaMPBDtb+dl3IoVWph8M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=KOuuH2po; arc=pass smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c80227b1f6cso560045a12.1
+        for <linux-integrity@vger.kernel.org>; Mon, 04 May 2026 13:14:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1777925672; cv=none;
+        d=google.com; s=arc-20240605;
+        b=L0uzrF2856OFCxs//TTJHSEm38rT/ArOm0a3iQWyP4AwZThe7kTPBjLIx/TSuCNpTH
+         Fw780IfdwgKPyJzuqf+XbCZW7SZe8WC2MeydHLaSHJzqUveZsPz2oYO+1HWE1LXABk13
+         HqX8q7yiODHXc0c2b7kBTdeJuKCnJHOjGZICo5eWY54wYudLhbh+/pmq3Kh0lCZsMRGU
+         qG81HTjSYIKsL2nu0RKsAIvniWTvPUjuvjSvJF95K1dSt+i4hDIOE5bKm/jteu02HaWF
+         sYz/qjQbNItgNh+G4mO03l5qd9aPZA8f8UT1FJkByDQb9dnSko7LbFTO9jm/UEslBI7Y
+         0eDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Q3hSbRXPUjpKlP0OUaWzuKOPeS3ICzNcvwmTq3T3NAQ=;
+        fh=8OMBZkANZzXQ9eZ5uVLdN0yhz03434+L+JahMOVaE8Q=;
+        b=TUmsS6gataPzUKCvRcD0sMjZaNBl2eYnB9mEEooKv7pRzRPWgZVuCIs0Z1gYl3gbOn
+         I4PVMEhFSsC4G9CJOkSIEGTGeDX2CQPLdyXSE00B9Lvnst95TGxCkipAzK6xicaWXWHh
+         AE3kbB9uAkcwfngBaG5zjF2vNCQQq1yFEy1rr7pkAvLV4fA/41lXTHGVIEKkYlclfSY/
+         z7Aj5skS/jgk1i36tr5G6dKuEUTCnQt8NCFYQzHBBuqSQvBWbnf4bAxif3lZdNnLvwX+
+         5AQ4tzAACq67CWKArVEPKMKe2ugQ98/wqOCde0sCmqBncR0iTJOTIWsPZgjb2yAC1WAo
+         01zA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1777925672; x=1778530472; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q3hSbRXPUjpKlP0OUaWzuKOPeS3ICzNcvwmTq3T3NAQ=;
+        b=KOuuH2poO+/mmqRSZdvJkGzQgZ4HEYgOqNOXOfB2tmtrstfeZzRZ7zmRqdPCNHWbub
+         0oSKqnp04NjD4y216VGzVroXJZ9OZr+wUDoy8MnEsEEnwspjuc6fkU6om3HP9snYTBdr
+         nKovV9bYdKltJYulkFGG/smrvEMkHdFjH8y+VnO+UvBRHUrascI3l0OlKiDY+d2yp93/
+         o2P7JHJatW0szduBib9UcA/VIhZpk1vuZShmriCvJ4fvCbdx9QVg9bqZRkj20U1R9e92
+         BUH9zLrvg+2ot+3w0iXJVIn9hrJjUz7xPqcOI47Yl+DGMuGNW5+h8cj2c3u+SSHP7+A5
+         ewaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777925672; x=1778530472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Q3hSbRXPUjpKlP0OUaWzuKOPeS3ICzNcvwmTq3T3NAQ=;
+        b=NhYYFVDHo4YqrQl3hA1fPGBoBFI9HuereNuGfrwXkzg3bXKwmmKXhjL/RWAncbnY+7
+         X886VYplhCqscQP9tGxd+yyMUW/fVsHJoL8K3OH/z9XU4OfjHJcAIRb6wOEvl78Nta5h
+         IYLhS40Ggc95wVztdD9yQrFx8CcQopnu3FpkyWiRlBV6VA1j5wnbacstto2+pfLTGrZL
+         kuXfIU7SliMwV+A86NvJwpmp7nowlxfM+dmDsJQ4Q0ZHyo/8lYtJMcRRMDD2iYHUVQhF
+         WMJzR3t+UvSiz077J+dn3ZaR4qygcW37XyunDeuA3SeqpR+OOVwoyCzN2336UB5ydd+Y
+         a7tw==
+X-Forwarded-Encrypted: i=1; AFNElJ/N0GGIiqe7fINw3V8xMIt5YwALjRfTlrGKNKRlwKayv6RNRkrVh32WGfDchZSMbJu9dpH68HenrGcnLFzuyqA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYH3fHO3mZP+olG0r41ey2CYY8DfJlxk9mu6BhPdRD8+Ibzd3/
+	o46XIvR5rklxaCfhIjzu35uNe++LHR60Bmk6/uu0rr8TefZMdGewbB36Lwca5/jVGue7r33v+2q
+	zmFOt3R8Avjk7/MITwTjxa4mjKoXGg3+RPFlg/W1l
+X-Gm-Gg: AeBDiet8Fcp1kPs0x+RnzQwn51d+d+crTs3QyDXkitgL14LoZri7hbzNGsBeb4GVOi7
+	D3F7iY8g95Ygd5x34vL4wiQCwIxmDkdtuTUV2hA59KFa/f9RW+Lw8yu1P0dZGu7hO5w9yL5w3Ul
+	5CbNR91hULQ6r6Z30lCG5RThWITRhLmwXqo3IDdTcuMQk5Hpd5wJ+eHpSpKNv5+FZCCKIs8TTcb
+	2JoQop+HtqEKnxKpIk/iJElcC6i/wuFctN59WluNyJXOFXbZ8JlbbvTWzmFuIql+n7gzh0lmxG3
+	fpGYyv/n8dSoABKxwQ==
+X-Received: by 2002:a05:6a20:4324:b0:39b:f12e:d53 with SMTP id
+ adf61e73a8af0-3a7f1a9cc09mr11311079637.18.1777925671622; Mon, 04 May 2026
+ 13:14:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: tpm: spi: do not call blocking ops when !TASK_RUNNING; during
- shutdown
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
- linux-arm-kernel@lists.infradead.org, linux-integrity@vger.kernel.org,
- kernel@pengutronix.de, Frank Li <Frank.Li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- "imx@lists.linux.dev" <imx@lists.linux.dev>
-References: <e7974d35-0d50-4742-8747-822f28915e00@gmx.net>
- <afiiUdFv7p0fuK-5@kernel.org>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-Autocrypt: addr=wahrenst@gmx.net; keydata=
- xjMEZ1dOJBYJKwYBBAHaRw8BAQdA7H2MMG3q8FV7kAPko5vOAeaa4UA1I0hMgga1j5iYTTvN
- IFN0ZWZhbiBXYWhyZW4gPHdhaHJlbnN0QGdteC5uZXQ+wo8EExYIADcWIQT3FXg+ApsOhPDN
- NNFuwvLLwiAwigUCZ1dOJAUJB4TOAAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEG7C8svCIDCK
- JQ4BAP4Y9uuHAxbAhHSQf6UZ+hl5BDznsZVBJvH8cZe2dSZ6AQCNgoc1Lxw1tvPscuC1Jd1C
- TZomrGfQI47OiiJ3vGktBc44BGdXTiQSCisGAQQBl1UBBQEBB0B5M0B2E2XxySUQhU6emMYx
- f5QR/BrEK0hs3bLT6Hb9WgMBCAfCfgQYFggAJhYhBPcVeD4Cmw6E8M000W7C8svCIDCKBQJn
- V04kBQkHhM4AAhsMAAoJEG7C8svCIDCKJxoA/i+kqD5bphZEucrJHw77ujnOQbiKY2rLb0pE
- aHMQoiECAQDVbj827W1Yai/0XEABIr8Ci6a+/qZ8Vz6MZzL5GJosAA==
-In-Reply-To: <afiiUdFv7p0fuK-5@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20260503211835.16103-1-dwindsor@gmail.com> <20260503211835.16103-2-dwindsor@gmail.com>
+In-Reply-To: <20260503211835.16103-2-dwindsor@gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 4 May 2026 16:14:19 -0400
+X-Gm-Features: AVHnY4JwbbxWaxO92zQ0YDwE9Y67k5IjHq4HKHTHEoo89ilJEakV5ErxNF9_k_c
+Message-ID: <CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
+ inode labeling
+To: David Windsor <dwindsor@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Song Liu <song@kernel.org>, Jan Kara <jack@suse.cz>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:062LCKQxtmUhtLKSyuTqX2f5CI8ASU3824mUzYxCGO/ePHjJ2Q4
- P/th2jR57VtMzThmmPKM2orPQdRiDwi8RcB0VDEKuO94QwZrcuJ4v9CJkng5xFwkuKZjwek
- TlRWDrSA42ASXC7looRUg4EeO5CmwR/ifl/14LXHp9gYWMiIgp5Y01037f4VkCX6eENkK+B
- P9EKmhK3BNQOzb1uNengw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:+bOXf5rZ1K4=;TrI3gB53qPTIc+XUpxlXb+62bcP
- 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
- ffhwm8oYBYPadyMwY/RMQlwMBqQ=
-X-Rspamd-Queue-Id: 35A9E4C1302
+X-Rspamd-Queue-Id: B85494C3754
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmx.net,quarantine];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmx.net:s=s31663417];
+	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-9415-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9414-lists,linux-integrity=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	SUBJECT_HAS_EXCLAIM(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FREEMAIL_FROM(0.00)[gmx.net];
-	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,lists.infradead.org,vger.kernel.org,pengutronix.de,nxp.com,lists.linux.dev];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[31];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[paul-moore.com:+];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wahrenst@gmx.net,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmx.net:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,kernel.org,iogearbox.net,gmail.com,google.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,schaufler-ca.com,suse.cz,linux.dev,oracle.com,redhat.com,vger.kernel.org];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	MISSING_XM_UA(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,paul-moore.com:dkim,paul-moore.com:url]
 
-Am 04.05.26 um 15:42 schrieb Jarkko Sakkinen:
-> Hi Stefan,
+On Sun, May 3, 2026 at 5:18=E2=80=AFPM David Windsor <dwindsor@gmail.com> w=
+rote:
 >
-> On Mon, Apr 20, 2026 at 12:25:21PM +0200, Stefan Wahren wrote:
->> Hi,
->> we use a custom i.MX93 board, which based on Phytec Phycore i.MX93 with=
- a
->> TPM connected via SPI. If I enable CONFIG_DEBUG_ATOMIC_SLEEP=3Dy in our=
- kernel
->> config with mainline kernel 6.18.23 and reboot our board, I will get th=
-e
->> following warning:
-> Please provide results with the latest mainline kernel.
+> Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomically set
+> xattrs via the inode_init_security hook using lsm_get_xattr_slot().
 >
-Here you are
+> The inode_init_security hook previously took the xattr array and count
+> as two separate output parameters (struct xattr *xattrs, int
+> *xattr_count), which BPF programs cannot write to. Pass the xattr state
+> as a single context object (struct lsm_xattr_ctx) instead, and have
+> bpf_init_inode_xattr() take that context directly. Update the existing
+> in-tree callers of inode_init_security to take and forward the new
+> lsm_xattr_ctx.
+>
+> Because we rely on the hook-specific ctx layout, the kfunc is
+> restricted to lsm/inode_init_security. Restrict the xattr names that
+> may be set via this kfunc to the bpf.* namespace.
+>
+> Suggested-by: Song Liu <song@kernel.org>
+> Signed-off-by: David Windsor <dwindsor@gmail.com>
+> ---
+>  fs/bpf_fs_kfuncs.c                | 106 +++++++++++++++++++++++++++++-
+>  include/linux/bpf_lsm.h           |   3 +
+>  include/linux/evm.h               |   9 +--
+>  include/linux/lsm_hook_defs.h     |   4 +-
+>  include/linux/lsm_hooks.h         |  16 ++---
+>  include/linux/security.h          |   5 ++
+>  kernel/bpf/bpf_lsm.c              |   1 +
+>  security/bpf/hooks.c              |   1 +
+>  security/integrity/evm/evm_main.c |   8 ++-
+>  security/security.c               |   7 +-
+>  security/selinux/hooks.c          |   4 +-
+>  security/smack/smack_lsm.c        |  13 ++--
+>  12 files changed, 147 insertions(+), 30 deletions(-)
 
-[=C2=A0 =C2=A069.085410] do not call blocking ops when !TASK_RUNNING; stat=
-e=3D1 set=20
-at [<0000000090f4020f>] prepare_to_wait_event+0x54/0x14c
-[=C2=A0 =C2=A069.097076] WARNING: kernel/sched/core.c:9086 at=20
-__might_sleep+0x74/0x7c, CPU#0: systemd-shutdow/1
-[=C2=A0 =C2=A069.106026] Modules linked in: flexcan can_dev rtc_rv3028 mse=
-102x=20
-phy_can_transceiver fuse autofs4
-[=C2=A0 =C2=A069.114991] CPU: 0 UID: 0 PID: 1 Comm: systemd-shutdow Not ta=
-inted=20
-7.1.0-rc2-00005-g6d35786de281-dirty #45 PREEMPT
-[=C2=A0 =C2=A069.125405] Hardware name: chargebyte Charge SOM Evaluation K=
-it (DT)
-[=C2=A0 =C2=A069.131741] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -=
-SSBS=20
-BTYPE=3D--)
-[=C2=A0 =C2=A069.138690] pc : __might_sleep+0x74/0x7c
-[=C2=A0 =C2=A069.142608] lr : __might_sleep+0x74/0x7c
-[=C2=A0 =C2=A069.146525] sp : ffff800081b7b710
-[=C2=A0 =C2=A069.149827] x29: ffff800081b7b710 x28: 0000000000000080 x27:=
-=20
-ffff000002cafe80
-[=C2=A0 =C2=A069.156951] x26: ffff800081965000 x25: 0000000000000018 x24:=
-=20
-0000000000000000
-[=C2=A0 =C2=A069.164075] x23: ffff800081b7b8f7 x22: 0000000000000000 x21:=
-=20
-0000000000000080
-[=C2=A0 =C2=A069.171199] x20: 000000000000013c x19: ffff8000813e2880 x18:=
-=20
-0000000000000000
-[=C2=A0 =C2=A069.178323] x17: 003fffffffffffff x16: 000000000017d600 x15:=
-=20
-ffff00003fda1a00
-[=C2=A0 =C2=A069.185447] x14: ffff000000132c00 x13: 00000000000002ce x12:=
-=20
-0000000000000000
-[=C2=A0 =C2=A069.192571] x11: 00000000000000c0 x10: 00000000000009e0 x9 :=
-=20
-ffff800081b7b580
-[=C2=A0 =C2=A069.199695] x8 : ffff0000001335c0 x7 : ffff00003fda1280 x6 :=
-=20
-0000000000000000
-[=C2=A0 =C2=A069.206819] x5 : 000000001fffffff x4 : 0000000000000001 x3 :=
-=20
-0000000000000010
-[=C2=A0 =C2=A069.213943] x2 : 0000000000000000 x1 : 0000000000000000 x0 :=
-=20
-ffff000000132b80
-[=C2=A0 =C2=A069.221068] Call trace:
-[=C2=A0 =C2=A069.223503]=C2=A0 __might_sleep+0x74/0x7c (P)
-[=C2=A0 =C2=A069.227420]=C2=A0 mutex_lock+0x24/0x80
-[=C2=A0 =C2=A069.230731]=C2=A0 spi_bus_lock+0x20/0x50
-[=C2=A0 =C2=A069.234214]=C2=A0 tpm_tis_spi_transfer_full+0x70/0x2c4
-[=C2=A0 =C2=A069.238912]=C2=A0 tpm_tis_spi_read_bytes+0x3c/0x48
-[=C2=A0 =C2=A069.243263]=C2=A0 tpm_tis_status+0x58/0xf8
-[=C2=A0 =C2=A069.246920]=C2=A0 wait_for_tpm_stat_cond+0x30/0x90
-[=C2=A0 =C2=A069.251271]=C2=A0 wait_for_tpm_stat+0x1cc/0x2e0
-[=C2=A0 =C2=A069.255361]=C2=A0 tpm_tis_send_data+0xdc/0x35c
-[=C2=A0 =C2=A069.259365]=C2=A0 tpm_tis_send_main+0x74/0x18c
-[=C2=A0 =C2=A069.263369]=C2=A0 tpm_tis_send+0xd4/0x13c
-[=C2=A0 =C2=A069.266940]=C2=A0 tpm_transmit+0xc4/0x3c4
-[=C2=A0 =C2=A069.270511]=C2=A0 tpm_transmit_cmd+0x38/0xd4
-[=C2=A0 =C2=A069.274341]=C2=A0 tpm2_shutdown+0x6c/0xa4
-[=C2=A0 =C2=A069.277912]=C2=A0 tpm_class_shutdown+0x60/0x88
-[=C2=A0 =C2=A069.281916]=C2=A0 device_shutdown+0x130/0x258
-[=C2=A0 =C2=A069.285833]=C2=A0 kernel_restart+0x44/0xa4
-[=C2=A0 =C2=A069.289491]=C2=A0 __do_sys_reboot+0x114/0x244
-[=C2=A0 =C2=A069.293408]=C2=A0 __arm64_sys_reboot+0x24/0x30
-[=C2=A0 =C2=A069.297412]=C2=A0 invoke_syscall+0x54/0x10c
-[=C2=A0 =C2=A069.301156]=C2=A0 el0_svc_common.constprop.0+0x40/0xe0
-[=C2=A0 =C2=A069.305853]=C2=A0 do_el0_svc+0x1c/0x28
-[=C2=A0 =C2=A069.309164]=C2=A0 el0_svc+0x38/0x138
-[=C2=A0 =C2=A069.312301]=C2=A0 el0t_64_sync_handler+0xa0/0xe4
-[=C2=A0 =C2=A069.316478]=C2=A0 el0t_64_sync+0x198/0x19c
+Comments below ...
+
+> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+> index 9d27be058494..193accc00796 100644
+> --- a/fs/bpf_fs_kfuncs.c
+> +++ b/fs/bpf_fs_kfuncs.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/fsnotify.h>
+>  #include <linux/file.h>
+>  #include <linux/kernfs.h>
+> +#include <linux/lsm_hooks.h>
+>  #include <linux/mm.h>
+>  #include <linux/xattr.h>
+>
+> @@ -353,6 +354,97 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup =
+*cgroup, const char *name__s
+>  }
+>  #endif /* CONFIG_CGROUPS */
+>
+> +static int bpf_xattrs_used(const struct lsm_xattr_ctx *ctx)
+> +{
+> +       const size_t prefix_len =3D sizeof(XATTR_BPF_LSM_SUFFIX) - 1;
+> +       int i, n =3D 0;
+> +
+> +       for (i =3D 0; i < *ctx->xattr_count; i++) {
+> +               const char *name =3D ctx->xattrs[i].name;
+> +
+> +               if (name && !strncmp(name, XATTR_BPF_LSM_SUFFIX, prefix_l=
+en))
+> +                       n++;
+> +       }
+> +       return n;
+> +}
+> +
+> +static int __bpf_init_inode_xattr(struct lsm_xattr_ctx *xattr_ctx,
+> +                                 const char *name__str,
+> +                                 const struct bpf_dynptr *value_p)
+> +{
+> +       struct bpf_dynptr_kern *value_ptr =3D (struct bpf_dynptr_kern *)v=
+alue_p;
+> +       size_t name_len;
+> +       void *xattr_value;
+> +       struct xattr *xattr;
+> +       struct xattr *xattrs;
+> +       int *xattr_count;
+> +       const void *value;
+> +       u32 value_len;
+> +
+> +       if (!xattr_ctx || !name__str)
+> +               return -EINVAL;
+> +
+> +       xattrs =3D xattr_ctx->xattrs;
+> +       xattr_count =3D xattr_ctx->xattr_count;
+> +       if (!xattrs || !xattr_count)
+> +               return -EINVAL;
+> +       if (bpf_xattrs_used(xattr_ctx) >=3D BPF_LSM_INODE_INIT_XATTRS)
+> +               return -ENOSPC;
+> +
+> +       name_len =3D strlen(name__str);
+> +       if (name_len =3D=3D 0 || name_len > XATTR_NAME_MAX)
+> +               return -EINVAL;
+> +       if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
+> +                   sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
+> +               return -EPERM;
+> +
+> +       value_len =3D __bpf_dynptr_size(value_ptr);
+> +       if (value_len =3D=3D 0 || value_len > XATTR_SIZE_MAX)
+> +               return -EINVAL;
+> +
+> +       value =3D __bpf_dynptr_data(value_ptr, value_len);
+> +       if (!value)
+> +               return -EINVAL;
+> +
+> +       /* Combine xattr value + name into one allocation. */
+> +       xattr_value =3D kmalloc(value_len + name_len + 1, GFP_KERNEL);
+> +       if (!xattr_value)
+> +               return -ENOMEM;
+> +
+> +       memcpy(xattr_value, value, value_len);
+> +       memcpy(xattr_value + value_len, name__str, name_len);
+> +       ((char *)xattr_value)[value_len + name_len] =3D '\0';
+> +
+> +       xattr =3D lsm_get_xattr_slot(xattr_ctx);
+> +       if (!xattr) {
+> +               kfree(xattr_value);
+> +               return -ENOSPC;
+> +       }
+> +
+> +       xattr->value =3D xattr_value;
+> +       xattr->name =3D (const char *)xattr_value + value_len;
+> +       xattr->value_len =3D value_len;
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * bpf_init_inode_xattr - set an xattr on a new inode from inode_init_se=
+curity
+> + * @xattr_ctx: inode_init_security xattr state from the hook context
+> + * @name__str: xattr name (e.g., "bpf.file_label")
+> + * @value_p: dynptr containing the xattr value
+> + *
+> + * Only callable from lsm/inode_init_security programs.
+> + *
+> + * Return: 0 on success, negative error on failure.
+> + */
+> +__bpf_kfunc int bpf_init_inode_xattr(struct lsm_xattr_ctx *xattr_ctx,
+> +                                    const char *name__str,
+> +                                    const struct bpf_dynptr *value_p)
+> +{
+> +       return __bpf_init_inode_xattr(xattr_ctx, name__str, value_p);
+> +}
+> +
+>  __bpf_kfunc_end_defs();
+>
+>  BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
+> @@ -363,13 +455,25 @@ BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPAB=
+LE)
+>  BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE)
+>  BTF_ID_FLAGS(func, bpf_set_dentry_xattr, KF_SLEEPABLE)
+>  BTF_ID_FLAGS(func, bpf_remove_dentry_xattr, KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, bpf_init_inode_xattr, KF_SLEEPABLE)
+>  BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+>
+> +BTF_ID_LIST(bpf_lsm_inode_init_security_btf_ids)
+> +BTF_ID(func, bpf_lsm_inode_init_security)
+> +
+> +BTF_ID_LIST(bpf_init_inode_xattr_btf_ids)
+> +BTF_ID(func, bpf_init_inode_xattr)
+> +
+>  static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_i=
+d)
+>  {
+>         if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
+> -           prog->type =3D=3D BPF_PROG_TYPE_LSM)
+> +           prog->type =3D=3D BPF_PROG_TYPE_LSM) {
+> +               /* bpf_init_inode_xattr only attaches to inode_init_secur=
+ity. */
+> +               if (kfunc_id =3D=3D bpf_init_inode_xattr_btf_ids[0] &&
+> +                   prog->aux->attach_btf_id !=3D bpf_lsm_inode_init_secu=
+rity_btf_ids[0])
+> +                       return -EACCES;
+>                 return 0;
+> +       }
+>         return -EACCES;
+>  }
+
+Perhaps I'm simply not seeing it, but is there a check to ensure that
+there is only one BPF LSM calling into security_inode_init_security()
+at any given time?  With the BPF LSM only reserving a single xattr
+slot, multiple loaded BPF LSM programs providing
+security_inode_init_security() callbacks will be a problem.
+
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index 41d7367cf403..a2fc72e63ada 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -68,6 +68,11 @@ struct watch;
+>  struct watch_notification;
+>  struct lsm_ctx;
+>
+> +struct lsm_xattr_ctx {
+> +       struct xattr *xattrs;
+> +       int *xattr_count;
+> +};
+
+I'd prefer this to be simply "struct lsm_xattrs" as "ctx" is an
+overloaded term in the LSM space.
+
+> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> index 97801966bf32..dca81a22bf83 100644
+> --- a/security/selinux/hooks.c
+> +++ b/security/selinux/hooks.c
+> @@ -2962,11 +2962,11 @@ static int selinux_dentry_create_files_as(struct =
+dentry *dentry, int mode,
+>
+>  static int selinux_inode_init_security(struct inode *inode, struct inode=
+ *dir,
+>                                        const struct qstr *qstr,
+> -                                      struct xattr *xattrs, int *xattr_c=
+ount)
+> +                                      struct lsm_xattr_ctx *xattr_ctx)
+>  {
+>         const struct cred_security_struct *crsec =3D selinux_cred(current=
+_cred());
+>         struct superblock_security_struct *sbsec;
+> -       struct xattr *xattr =3D lsm_get_xattr_slot(xattrs, xattr_count);
+> +       struct xattr *xattr =3D lsm_get_xattr_slot(xattr_ctx);
+>         u32 newsid, clen;
+>         u16 newsclass;
+>         int rc;
+
+In case you didn't see it, your fix for the above lsm_get_xattr_slot()
+usage is now in Linus' tree.  It's a trivial bit of merge fuzz, but
+you might want to rebase your next revision.
+
+--=20
+paul-moore.com
 
