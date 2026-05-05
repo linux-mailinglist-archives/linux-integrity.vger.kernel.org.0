@@ -1,49 +1,49 @@
-Return-Path: <linux-integrity+bounces-9428-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9432-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oPXLOcWz+Wly/QIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9428-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:09:25 +0200
+	id MCTZJ7K0+WnUAwMAu9opvQ
+	(envelope-from <linux-integrity+bounces-9432-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:13:22 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE0CA4C93CA
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:09:24 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 450024C955A
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:13:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DA294303ABE5
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:06:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EF750306410F
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:06:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4483F6617;
-	Tue,  5 May 2026 09:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A35133F9F44;
+	Tue,  5 May 2026 09:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="g4Fknziw"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="FOhks3pk"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D287A3F23AC;
-	Tue,  5 May 2026 09:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975183F54B4;
+	Tue,  5 May 2026 09:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777971938; cv=none; b=J6MqegxN8j8Rmhz6fKyHHufbfiKepKrlNEHcftpafD1uR7aCtwAnxE3BAk6SOWu1n9TAZ3OKkxuabgRRPUaqzpbDgOVVadv69PJ5Znvg/sUNixmqLawqO/qHo6K1w0o784RGja7Y1LbokFkoxmQ83W5b7i0YZ40kbK6E6c2HnwU=
+	t=1777971939; cv=none; b=Fg7BbY92plYF8YvEuj5eNm6rwUovd1N0aqpkMj5nkYVYW+8HxM2IiK/Tvf05RcPL/6TUhirrqC0E+Y3NiUsuRDNciVGMCf5meBO+/18s6HTXiVkuVAjkl9uXksjveWUarD49/5BhY2U3ZmSiQ+MvoojeXCOis9/fIgMbRyoj1/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777971938; c=relaxed/simple;
-	bh=QGuEjahQSX5KIR3mv9uZyKkgUGxQh5zTTSgnqh/jiis=;
+	s=arc-20240116; t=1777971939; c=relaxed/simple;
+	bh=iI+v2zM5qx20jDnDNLqjiaP4ZCALKgVYw8ssU51phr8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=W++OowcSZUHbL1lw8VJlgFOPCXjl2Mfpu9x7GKuvRORTaFqCnOywFDMm6n5G/+ViLFG9hzqzDMHcGvM3L5JIoDLSfL9uOp1qkBkEqdYUxeKT3ksRI9YKcqOIXnnRPJLvgANQR0U48rghIZQPGx7SA+0alhzJak5POIxzjS5zwAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=g4Fknziw; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=HppMHtLByaBdw0rnciLsLoyrkXBvhQiW0KeQQQ6Rwpi//zUsTkDlc9mwwP5DsFZb3s79unR7qMSBwdtqz//U2AJ0Vt07m/l7sj8Nw4kAvO/RWTXSZ6cNNDcoSZeTC0uCfhbLClZ5gmJwfRYEEErhDMS7rmQTKBTIbX+hFEjHeNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=FOhks3pk; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1777971923;
-	bh=QGuEjahQSX5KIR3mv9uZyKkgUGxQh5zTTSgnqh/jiis=;
+	bh=iI+v2zM5qx20jDnDNLqjiaP4ZCALKgVYw8ssU51phr8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=g4Fknziwd96fLN+TTNQAV/fMHOhd/dIN0idNYLfwkjvob2sS26e2GZhdQjmJKGBg2
-	 1Wuj9kttFMh09utr0/SaRmtgS+EoGk8Ji0s7efvwWTViHA7Eic1XoFHkeNankvLZGH
-	 d2Dvf/IQdZzsPGC4AF+nGave4W25BM2Rl2cxHXow=
+	b=FOhks3pkSuAan068u2UrzFyi9JQsEDgIjv34ZSsFVHJqVSf+M9lMkHDLbcwRwXefN
+	 Kr4mPvuQzzcb89VMnTHnol7YQJlmZ5JPIrnRSymUvGG61NYOoRb0UE6homXaCCq5YY
+	 nSuxvKf2aVU1eaBfgL7NkhG2PzPNeJuB2f42nHeI=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 05 May 2026 11:05:09 +0200
-Subject: [PATCH v5 05/14] module: Make mod_verify_sig() static
+Date: Tue, 05 May 2026 11:05:10 +0200
+Subject: [PATCH v5 06/14] module: Switch load_info::len to size_t
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260505-module-hashes-v5-5-e174a5a49fce@weissschuh.net>
+Message-Id: <20260505-module-hashes-v5-6-e174a5a49fce@weissschuh.net>
 References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 In-Reply-To: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -92,26 +92,26 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  debian-kernel@lists.debian.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971921; l=1372;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971921; l=1545;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=QGuEjahQSX5KIR3mv9uZyKkgUGxQh5zTTSgnqh/jiis=;
- b=YPbhooCs8Z4p5xzEA8Bou2VKPPahpzMZhKoMk8D4SPl0woEZ2hjUdTCq/NfLfVDVlfTISZ3Ax
- 2PKz7Hagg7xC31UJ4xI2NezkX4xUOqNSMisfL91GfGeptv87RApuP5L
+ bh=iI+v2zM5qx20jDnDNLqjiaP4ZCALKgVYw8ssU51phr8=;
+ b=nKBC+C6HVlaqqDqx1TU0YJ08KliDEuzosprDqqk3GExyuaX84HA5wt2KjHAaFNjSCBBzGKVKB
+ tB2qsXnAO4LCSyyikeSwSVZHyHpzisots6OnVJBH4YtPeVK30OntV0b
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Rspamd-Queue-Id: EE0CA4C93CA
+X-Rspamd-Queue-Id: 450024C955A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9428-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9432-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	FREEMAIL_TO(0.00)[kernel.org,iogearbox.net,gmail.com,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr];
@@ -128,45 +128,49 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[atomlin.com:email,weissschuh.net:email,weissschuh.net:dkim,weissschuh.net:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,weissschuh.net:email,weissschuh.net:dkim,weissschuh.net:mid]
 
-It is not used outside of signing.c.
+Switching the types will make some later changes cleaner.
+size_t is also the semantically correct type for this field.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Aaron Tomlin <atomlin@atomlin.com>
+As both 'size_t' and 'unsigned long' are always the same size, this
+should be risk-free.
+
 Reviewed-by: Nicolas Schier <nsc@kernel.org>
-Reviewed-by: Eric Biggers <ebiggers@kernel.org>
+Acked-by: Nicolas Schier <nsc@kernel.org>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/module/internal.h | 1 -
- kernel/module/signing.c  | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ kernel/module/internal.h | 2 +-
+ kernel/module/main.c     | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/module/internal.h b/kernel/module/internal.h
-index 061161cc79d9..071999743341 100644
+index 071999743341..006ada7d4e6e 100644
 --- a/kernel/module/internal.h
 +++ b/kernel/module/internal.h
-@@ -117,7 +117,6 @@ struct module_use {
- 	struct module *source, *target;
- };
- 
--int mod_verify_sig(const void *mod, struct load_info *info);
- int try_to_force_load(struct module *mod, const char *reason);
- bool find_symbol(struct find_symbol_arg *fsa);
- struct module *find_module_all(const char *name, size_t len, bool even_unformed);
-diff --git a/kernel/module/signing.c b/kernel/module/signing.c
-index 4a5e4eef250d..69d4b1758540 100644
---- a/kernel/module/signing.c
-+++ b/kernel/module/signing.c
-@@ -40,7 +40,7 @@ void set_module_sig_enforced(void)
- /*
-  * Verify the signature on a module.
-  */
--int mod_verify_sig(const void *mod, struct load_info *info)
-+static int mod_verify_sig(const void *mod, struct load_info *info)
+@@ -64,7 +64,7 @@ struct load_info {
+ 	/* pointer to module in temporary copy, freed at end of load_module() */
+ 	struct module *mod;
+ 	Elf_Ehdr *hdr;
+-	unsigned long len;
++	size_t len;
+ 	Elf_Shdr *sechdrs;
+ 	char *secstrings, *strtab;
+ 	unsigned long symoffs, stroffs, init_typeoffs, core_typeoffs;
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index 46dd8d25a605..17a352198016 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1898,7 +1898,7 @@ static int validate_section_offset(const struct load_info *info, Elf_Shdr *shdr)
+ static int elf_validity_ehdr(const struct load_info *info)
  {
- 	struct module_signature ms;
- 	size_t sig_len, modlen = info->len;
+ 	if (info->len < sizeof(*(info->hdr))) {
+-		pr_err("Invalid ELF header len %lu\n", info->len);
++		pr_err("Invalid ELF header len %zu\n", info->len);
+ 		return -ENOEXEC;
+ 	}
+ 	if (memcmp(info->hdr->e_ident, ELFMAG, SELFMAG) != 0) {
 
 -- 
 2.54.0
