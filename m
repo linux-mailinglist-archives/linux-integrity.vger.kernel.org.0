@@ -1,50 +1,49 @@
-Return-Path: <linux-integrity+bounces-9429-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9425-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id aNU2J4Wz+Wly/QIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9429-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:08:21 +0200
+	id 8L7LOYaz+Wly/QIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9425-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:08:22 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FABF4C9314
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:08:21 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C5A4C931D
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:08:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E02363012209
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:06:33 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 027B6301B72D
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:06:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C183F7895;
-	Tue,  5 May 2026 09:05:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E593F20F5;
+	Tue,  5 May 2026 09:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hceqxvCT"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="KeHzGoIR"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17673F23AB;
-	Tue,  5 May 2026 09:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EB030E82C;
+	Tue,  5 May 2026 09:05:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777971938; cv=none; b=lJymORWA76gYuoUWSBzZQvpwN+m6XfPxNPqX9fl/6pwHPCHiieuywTn7CrqkL6w5JlefTTVGBw8E5xAY/CmwIWAMVFfv+2ObULbyD0kVxjWaw0T1pu0kR53vGMwwL2n0MiMFr4nJLOIqJYYmArhQMkJR/M5LFaDNp2vqtfmWhLU=
+	t=1777971936; cv=none; b=KA9cefpWX/JmAWAUaUNoOyz5bpifuTjrEfyHZetNgAx6BNWwa7Hi/ZSMHTaAG14oKWdvyfEoyV+dLtzUdtYy/T4Xj/yV+rNSsp/MZmpRGUoRJjZQs40GF7je+s1N3jd9UoYkZp60e2UVnSq+Tvbb+2BWpox45Q/LbajhfGvX2Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777971938; c=relaxed/simple;
-	bh=1JdBqz41kTdRxXQtXD0WlucfGsBSnYlrVmslcdqa4/k=;
+	s=arc-20240116; t=1777971936; c=relaxed/simple;
+	bh=urNb3wCpvLUEWBOX/KRz/AvKSgOExMhmzt3qzgx4rLs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hQrZ6OnsipCLAiUfffRi5xTokgobi+8TRhd3RffoTSbZqorPocTAqNjNi0L4yGRY62dA99uOuwVfqedrOaB22K4JL6MQTuN3VJyzR3T9ujcy4P32RNqW1C8xBvOFeFVfPFiZUZY3a6AdU0fr0UbbHxtkLpZ1IG+fenlp6kj1lzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hceqxvCT; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=q94nE2CJMCykccrAWxQIaSLJmTVrK6HXH9gd99hSpRSlnd1R6DHQ0d1MxEfIJQQx2e/X3ccEKJ1TYTGI58Y8dV203NsvR234OdtMaatbi2bkjjL/yq1FqmkJfZSwpGy3SjSZbeplYzM+j4hG5FTGghdUaqnQA67YhGQuuSXtG6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=KeHzGoIR; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1777971922;
-	bh=1JdBqz41kTdRxXQtXD0WlucfGsBSnYlrVmslcdqa4/k=;
+	bh=urNb3wCpvLUEWBOX/KRz/AvKSgOExMhmzt3qzgx4rLs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=hceqxvCTo7KzWPy3qLEp6+Bf8ZLZsXvy9Zdi17IfdrJ0f7TtrU2P7gxEPnWLeumex
-	 YcmnSqR2uXoMuRhMxwSZ/jHMOlGhFAqnIGNWeOcXQN9fmNIASNprFED4nuw7rfhNxz
-	 xPFd59w5ZXs8KO9qdxlAksPv3su3ooAfWyNHfXFo=
+	b=KeHzGoIRklkebRwSn23SbznclRtjezjvd5d7dG6KMuDXtXD0JgHO4jI11/IEp/6TT
+	 tj1bQriT3fPSO7EMQEFkPRv7qxmuo5y+6DIKg5nGmOTkh47yk8cRSGSNjbO58uIARW
+	 aQQQ8rdk48+qNmbOyW6+LhDqdsqh1R62+FcknhqA=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 05 May 2026 11:05:06 +0200
-Subject: [PATCH v5 02/14] lockdown: Make the relationship to MODULE_SIG a
- dependency
+Date: Tue, 05 May 2026 11:05:07 +0200
+Subject: [PATCH v5 03/14] kbuild: rename the strip_relocs command
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260505-module-hashes-v5-2-e174a5a49fce@weissschuh.net>
+Message-Id: <20260505-module-hashes-v5-3-e174a5a49fce@weissschuh.net>
 References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 In-Reply-To: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -93,26 +92,26 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  debian-kernel@lists.debian.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971921; l=908;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971921; l=1526;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=1JdBqz41kTdRxXQtXD0WlucfGsBSnYlrVmslcdqa4/k=;
- b=6atGlLLix4ALQ4Bm6XKscxGhFEfh5z+AYZle3axHq87vuO7rZdULGTT3XcROp3hep0FNMg2ml
- BENbqsRYpM3AKU121Q88x4JPeqLslbXSclc7rRA4Sctqz9h73F4bHRn
+ bh=urNb3wCpvLUEWBOX/KRz/AvKSgOExMhmzt3qzgx4rLs=;
+ b=zO4+a83ARZh91UdHs8c/zFFH5RWsYxSMyvtjjkwAZh87tyFNn/XXyYS4Ur+mm7rbCt/arjCT/
+ XQJfLzxEaBjBWLAWIx91HgeLuKwV16KxbtUDUGkyZZG34V7Riun6CDM
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Rspamd-Queue-Id: 3FABF4C9314
+X-Rspamd-Queue-Id: 13C5A4C931D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9429-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9425-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	FREEMAIL_TO(0.00)[kernel.org,iogearbox.net,gmail.com,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr];
@@ -129,34 +128,41 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[weissschuh.net:email,weissschuh.net:dkim,weissschuh.net:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,paul-moore.com:email]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,weissschuh.net:email,weissschuh.net:dkim,weissschuh.net:mid]
 
-The new hash-based module integrity checking will also be able to
-satisfy the requirements of lockdown.
-Such an alternative is not representable with "select", so use
-"depends on" instead.
+This command is doing more than just stripping relocations.
+With the introduction of CONFIG_MODULE_HASHES it will do even more.
 
-Acked-by: Paul Moore <paul@paul-moore.com>
-Reviewed-by: Nicolas Schier <nsc@kernel.org>
+Use a more generic name for the variable.
+
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- security/lockdown/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ scripts/Makefile.vmlinux | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/security/lockdown/Kconfig b/security/lockdown/Kconfig
-index e84ddf484010..155959205b8e 100644
---- a/security/lockdown/Kconfig
-+++ b/security/lockdown/Kconfig
-@@ -1,7 +1,7 @@
- config SECURITY_LOCKDOWN_LSM
- 	bool "Basic module for enforcing kernel lockdown"
- 	depends on SECURITY
--	select MODULE_SIG if MODULES
-+	depends on !MODULES || MODULE_SIG
- 	help
- 	  Build support for an LSM that enforces a coarse kernel lockdown
- 	  behaviour.
+diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+index fcae1e432d9a..6cc661e5292b 100644
+--- a/scripts/Makefile.vmlinux
++++ b/scripts/Makefile.vmlinux
+@@ -91,13 +91,13 @@ remove-symbols := -w --strip-unneeded-symbol='__mod_device_table__*'
+ 
+ # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
+ # it is necessary to remove the PT_LOAD flag from the segment.
+-quiet_cmd_strip_relocs = OBJCOPY $@
+-      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
+-                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
++quiet_cmd_objcopy_vmlinux = OBJCOPY $@
++      cmd_objcopy_vmlinux = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
++                            $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
+ 
+ targets += vmlinux
+ vmlinux: vmlinux.unstripped FORCE
+-	$(call if_changed,strip_relocs)
++	$(call if_changed,objcopy_vmlinux)
+ 
+ # modules.builtin.modinfo
+ # ---------------------------------------------------------------------------
 
 -- 
 2.54.0
