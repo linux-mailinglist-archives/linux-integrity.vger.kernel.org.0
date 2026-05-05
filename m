@@ -1,151 +1,195 @@
-Return-Path: <linux-integrity+bounces-9442-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9443-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oJ5PHL3A+WlADAMAu9opvQ
-	(envelope-from <linux-integrity+bounces-9442-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 12:04:45 +0200
+	id WDDlN//M+WlHEQMAu9opvQ
+	(envelope-from <linux-integrity+bounces-9443-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 12:57:03 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D5024CA664
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 12:04:45 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8257B4CBFA9
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 12:57:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 202C6309D593
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:56:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CB8573078A0B
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 10:45:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA07C342526;
-	Tue,  5 May 2026 09:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E5B37F72B;
+	Tue,  5 May 2026 10:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="FXdmqVg0"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="dTV46SUX"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E1C342523;
-	Tue,  5 May 2026 09:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BFC933D4F8;
+	Tue,  5 May 2026 10:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777974867; cv=none; b=dPWPl9LyPu9vlzFtH3eGfzx5/fkw/Mf0LxlzitYlJxKjzwqlsLy/b6wWxc0h/kZ1SyIBC1aYD9ioUOYdKUxlVG5XCRsa54Vzd6eI7MQs1pMSQDJFf8FiHh7Jzog1+g4lG9ik7je44dg4bZmllLcD+TW/OV1L7gWoNLgdadeEAtQ=
+	t=1777977907; cv=none; b=COq+b8WTb3EnGQP6RtofX9WLgbZuLTJPZO7XpFvMJe8WmgbDuyl6uw/UVzsOR0XdJUFeF4dHii34+VhQ85Eovz7aiccNsGZpsWQszbwDiEVW73E6TllO3dogmtGoG7nUUqHyZ22H6RUK7YusYewSN+B09Ucy8/JRn7tnoNq1WGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777974867; c=relaxed/simple;
-	bh=4nvhu4KAJ7LtpMJY0gVvOuCsbzZGn/1A4ku8YNtiEaI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=I/lALe1HHE0XM+AfR4doPI+clVC8knmddNyfjMZFL6cEroW7+S2BggBNp7umY4ImQkoJf6j3lQeN9tNHEPsn4qmR5aXq+etBucavNwXvaSI1hqR1/ly2HDDp08fXv8TXuECMXftF7+o+R5glhKT1NDpSgT4sKigK07MIIRQaTkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=FXdmqVg0; arc=none smtp.client-ip=217.140.110.172
+	s=arc-20240116; t=1777977907; c=relaxed/simple;
+	bh=nXnH+ukVWHiFgFzkGEuGRS3UZnP6EPJC93zYaHByI9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hBiS/UKAVhdQaEfILf/+6j/8Swcw629oxTTnQRu0WIP9GSULEuQuCSg1fx3bThrGldB3OlXC2I5HuhTy7IGVXClo8lCM2jkGFFZlgm0YULmdrs8F+OmBdI91U2wmGvK3lKcRH6ukhbzfK69XFI/e7nTRPZvlj9dpFv+LvK7Tmrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=dTV46SUX; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 730B02936;
-	Tue,  5 May 2026 02:54:20 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 69B913F836;
-	Tue,  5 May 2026 02:54:22 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6DE2B293B;
+	Tue,  5 May 2026 03:44:59 -0700 (PDT)
+Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C217D3F763;
+	Tue,  5 May 2026 03:45:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1777974865; bh=4nvhu4KAJ7LtpMJY0gVvOuCsbzZGn/1A4ku8YNtiEaI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FXdmqVg0kNK0cAin2OYhyQqWd8VwTfkngKBLCMskRN2gyzf3RJ+xeiof/NVsfvkT8
-	 ZNqhtZTJU1kx5Cmk56yDdgmon5C+VSHFrDes2B19O9lBz+CrHalxT5FH/MUZdSvtLp
-	 07d8SFQSfMTNWwDEnF2EgLYSwOxuOhf/xgNu50oY=
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev
-Cc: jarkko@kernel.org,
-	zohar@linux.ibm.com,
-	roberto.sassu@huawei.com,
-	dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	maz@kernel.org,
-	oupton@kernel.org,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	sudeep.holla@kernel.org,
-	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [RFC PATCH 3/3] security: integrity: call load_uefi_certs() at late_initcall_sync
-Date: Tue,  5 May 2026 10:54:09 +0100
-Message-Id: <20260505095409.1948371-4-yeoreum.yun@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260505095409.1948371-1-yeoreum.yun@arm.com>
-References: <20260505095409.1948371-1-yeoreum.yun@arm.com>
+	t=1777977904; bh=nXnH+ukVWHiFgFzkGEuGRS3UZnP6EPJC93zYaHByI9k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=dTV46SUXHzARKB78y1+A9QR0ngcUGXfCnANsGKX4rYYv26v4ipV6zAg1oJhyzy2vg
+	 To+WmwyY7GDYttqUYc5PIxwHqzgiS2/JNVABQa8IvnaLEH/COx86dTQEBZMpkG4tuf
+	 4LGiN/y9ifQugZWcXHlwY5Ki9Mrp0D8keTFwCKbE=
+Message-ID: <8942c12e-6315-493e-98c5-d55f4e6341f4@arm.com>
+Date: Tue, 5 May 2026 11:45:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Thunderbird Daily
+Subject: Re: [RFC PATCH 0/3] initalise ff-a after finalising pKVM
+To: Yeoreum Yun <yeoreum.yun@arm.com>, linux-integrity@vger.kernel.org,
+ keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev
+Cc: jarkko@kernel.org, zohar@linux.ibm.com, roberto.sassu@huawei.com,
+ dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, paul@paul-moore.com,
+ jmorris@namei.org, serge@hallyn.com, maz@kernel.org, oupton@kernel.org,
+ joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ catalin.marinas@arm.com, will@kernel.org, sudeep.holla@kernel.org
+References: <20260505095409.1948371-1-yeoreum.yun@arm.com>
+Content-Language: en-US
+From: Ben Horgan <ben.horgan@arm.com>
+In-Reply-To: <20260505095409.1948371-1-yeoreum.yun@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 1D5024CA664
+X-Rspamd-Queue-Id: 8257B4CBFA9
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.65 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,arm.com];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	XM_UA_NO_VERSION(0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9442-lists,linux-integrity=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	TAGGED_FROM(0.00)[bounces-9443-lists,linux-integrity=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,arm.com];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[arm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ben.horgan@arm.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[arm.com:+];
+	NEURAL_HAM(-0.00)[-0.997];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	NEURAL_HAM(-0.00)[-0.996];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arm.com:email,arm.com:dkim,arm.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:dkim,arm.com:mid]
 
-In the arm64 pKVM environment, all FF-A requests fail until the FF-A
-driver is initialized, as the FF-A version is not negotiated with the
-hypervisor beforehand.
+Hi Levi,
 
-When FF-A is built-in and pKVM is enabled, pKVM
-finalises its initialization at the device_initcall_sync level,
-while the FF-A driver is initialized later at the late_initcall stage
-via deferred probe.
+On 5/5/26 10:54, Yeoreum Yun wrote:
+> This patch is split out from the patchset [0] --
+> fix FF-A call failure with pKVM when the FF-A driver is built-in,
+> specifically the IMA-related part.
+> 
+> When pKVM is enabled, the FF-A driver must be initialised after pKVM.
+> Otherwise, pKVM cannot negotiate the FF-A version or obtain the RX/TX
+> buffer information, leading to failures in FF-A calls.
+> 
+> Currently, pKVM initialisation completes at device_initcall_sync,
+> while ffa_init() runs at the device_initcall level.
+> 
+> So far, linker deployes kvm_arm_init() before ffa_init(), and SMCs can
+> still be trapped even before finalise_pkvm() is invoked.
+> As a result, this issue has not been observed.
+> 
+> However, relying on above stuff is fragile.
+> Therefore, when pKVM is enabled, the FF-A infrastructure should be
+> initialised only after pKVM initialisation has been fully finalised.
+> 
+> To achieve this, introduce an ffa_root_dev ("arm-ffa") and
+> a corresponding driver to defer initialisation of the FF-A infrastructure
+> until pKVM initialisation is complete, and to defer probing of all FF-A devices until then
+> when pKVM is enabled.
+> 
+> This patch is based on v7.1-rc2
+> 
+> Question:
+> 
+> FF-A initialisation can occur at late_initcall. Because it may be deferred,
+> some FF-A requests cannot be serviced at that stage.
+> A typical example is the EFI runtime variable service using DIRECT_MSG_REQ.
+> 
+> Depending on the platform, the EFI runtime variable service runs with StandaloneMm
+> and uses FF-A DIRECT_REQ. However, when pKVM is enabled, FF-A initialisation
+> may be deferred to late_initcall. In this case, load_uefi_certs()
+> can fail if it is invoked before the FF-A driver is initialised
+> via deferred_probe_initcall().
+> 
+> Moving load_uefi_certs() to late_initcall_sync, as in the third patch,
+> seems not to have any problem since late_initcall and
+> late_initcall_sync are both of do_basic_setup() and it's before loading
+> init process. However, it is still unclear whether
+> it would be better to allow DIRECT_MSG_REQ in kvm_host_ffa_handler()
 
-When the EFI variable service runs with StandaloneMm, it uses
-FFA_DIRECT_MSG to access EFI variables. As a result,
-load_uefi_certs() always fails in this environment.
+The spec doesn't allow this. Looking at DEN0077A 1.2 REL0:
 
-To address this issue, defer load_uefi_certs() to the
-late_initcall_sync level.
+Section 13.2.2 says:
 
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
----
- security/integrity/platform_certs/load_uefi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+"If they are compatible, it enables them to determine which Framework functionalities can be used. Hence, negotiation of
+the version must happen before an invocation of any other FF-A ABI."
 
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integrity/platform_certs/load_uefi.c
-index c0d6948446c3..cc2b879df5b6 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -235,4 +235,4 @@ static int __init load_uefi_certs(void)
- 
- 	return rc;
- }
--late_initcall(load_uefi_certs);
-+late_initcall_sync(load_uefi_certs);
--- 
-LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+and a bit further down
+
+"Once the caller invokes any FF-A ABI other than FFA_VERSION, the version negotiation phase is complete."
+
+I would have thought that an SP would only go into the waiting state once the version negotiation is done.
+
+Thanks,
+
+Ben
+
+> even before FF-A version negotiation since handler’s purpose seems to hook
+> certain memory operations, and DIRECT_MSG_REQ has been available
+> since FF-A specification v1.0.
+> 
+> Any feedback or alternative suggestions would be appreciated!
+> 
+> Link: https://lore.kernel.org/all/20260422162449.1814615-1-yeoreum.yun@arm.com/ [0]
+> 
+> Yeoreum Yun (3):
+>   arm64: KVM: defer kvm_init() to finalise_pkvm() when pKVM is enabled
+>   firmware: arm_ffa: initialise ff-a after finalising pKVM
+>     initialisation
+>   security: integrity: call load_uefi_certs() at late_initcall_sync
+> 
+>  arch/arm64/kvm/arm.c                          |   8 +-
+>  arch/arm64/kvm/pkvm.c                         |  15 ++-
+>  drivers/firmware/arm_ffa/bus.c                | 125 +++++++++++++++++-
+>  drivers/firmware/arm_ffa/common.h             |  13 +-
+>  drivers/firmware/arm_ffa/driver.c             |  21 ++-
+>  drivers/firmware/arm_ffa/smccc.c              |   2 +-
+>  security/integrity/platform_certs/load_uefi.c |   2 +-
+>  7 files changed, 166 insertions(+), 20 deletions(-)
+> 
+> 
+> base-commit: 7fd2df204f342fc17d1a0bfcd474b24232fb0f32
 
 
