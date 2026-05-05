@@ -1,49 +1,49 @@
-Return-Path: <linux-integrity+bounces-9425-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9427-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8L7LOYaz+Wly/QIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9425-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:08:22 +0200
+	id CEjtOle0+Wly/QIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9427-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:11:51 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13C5A4C931D
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:08:22 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99BA34C94CC
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 027B6301B72D
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:06:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 195183046EB0
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:06:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E593F20F5;
-	Tue,  5 May 2026 09:05:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC4A3F65F5;
+	Tue,  5 May 2026 09:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="KeHzGoIR"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ONiJCd1X"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EB030E82C;
-	Tue,  5 May 2026 09:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D152E3F23A2;
+	Tue,  5 May 2026 09:05:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777971936; cv=none; b=KA9cefpWX/JmAWAUaUNoOyz5bpifuTjrEfyHZetNgAx6BNWwa7Hi/ZSMHTaAG14oKWdvyfEoyV+dLtzUdtYy/T4Xj/yV+rNSsp/MZmpRGUoRJjZQs40GF7je+s1N3jd9UoYkZp60e2UVnSq+Tvbb+2BWpox45Q/LbajhfGvX2Wg=
+	t=1777971938; cv=none; b=ffvDxKeLPL2fmdZQX7+GG6W/CnZaUAwtL5LjlCqlkbpRIl7DL03AQYsajNmfcX3n5mZYm9I3GHPF4fmsbq9HNfcTlTjSowc1hhNKtVyNoNEGuK/EKPCm+ncw/wvY77euulvJ8IUdaYqbv2Gx0IZY+6PirJodVqqm0OW0N2p+ejY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777971936; c=relaxed/simple;
-	bh=urNb3wCpvLUEWBOX/KRz/AvKSgOExMhmzt3qzgx4rLs=;
+	s=arc-20240116; t=1777971938; c=relaxed/simple;
+	bh=XIA5YFBwc6Ej9VZmFF9JGp6ZBIHakQDs8PjcS5hpne4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=q94nE2CJMCykccrAWxQIaSLJmTVrK6HXH9gd99hSpRSlnd1R6DHQ0d1MxEfIJQQx2e/X3ccEKJ1TYTGI58Y8dV203NsvR234OdtMaatbi2bkjjL/yq1FqmkJfZSwpGy3SjSZbeplYzM+j4hG5FTGghdUaqnQA67YhGQuuSXtG6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=KeHzGoIR; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=qnr9kF+Uc6uKI8CESSNsreVtad7VNfKspHv3gy13BPa0/LW78gtAGzIwMmHNlKiSF53Pnjn4sQ/yZH0PobsMbst/EzuEP9bOC1A+kV1aHltprgck40UwElqZ8bM7bvmQE35d39r+/N2NhvCBwclkF8zIkrqoJj6sLrDxaK0DvO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ONiJCd1X; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1777971922;
-	bh=urNb3wCpvLUEWBOX/KRz/AvKSgOExMhmzt3qzgx4rLs=;
+	bh=XIA5YFBwc6Ej9VZmFF9JGp6ZBIHakQDs8PjcS5hpne4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KeHzGoIRklkebRwSn23SbznclRtjezjvd5d7dG6KMuDXtXD0JgHO4jI11/IEp/6TT
-	 tj1bQriT3fPSO7EMQEFkPRv7qxmuo5y+6DIKg5nGmOTkh47yk8cRSGSNjbO58uIARW
-	 aQQQ8rdk48+qNmbOyW6+LhDqdsqh1R62+FcknhqA=
+	b=ONiJCd1Xjufi3qfX4PXYJk52Ans3Ce5JZoXSHJpZRM9GcvQ4b9Mv9AZkVK3SSkBDb
+	 uU34oNf0ltXz9UDGVNxNmTfz5eGAMR8ag9Kkbs+QXSzZwgehn2cJbjY0WL19iK1chP
+	 f9RRPhi1y40plE2CjJKV+XStQYmpjxANqKYPwWBQ=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 05 May 2026 11:05:07 +0200
-Subject: [PATCH v5 03/14] kbuild: rename the strip_relocs command
+Date: Tue, 05 May 2026 11:05:08 +0200
+Subject: [PATCH v5 04/14] module: Drop pointless debugging message
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260505-module-hashes-v5-3-e174a5a49fce@weissschuh.net>
+Message-Id: <20260505-module-hashes-v5-4-e174a5a49fce@weissschuh.net>
 References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 In-Reply-To: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -92,26 +92,26 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
  debian-kernel@lists.debian.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971921; l=1526;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971921; l=660;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=urNb3wCpvLUEWBOX/KRz/AvKSgOExMhmzt3qzgx4rLs=;
- b=zO4+a83ARZh91UdHs8c/zFFH5RWsYxSMyvtjjkwAZh87tyFNn/XXyYS4Ur+mm7rbCt/arjCT/
- XQJfLzxEaBjBWLAWIx91HgeLuKwV16KxbtUDUGkyZZG34V7Riun6CDM
+ bh=XIA5YFBwc6Ej9VZmFF9JGp6ZBIHakQDs8PjcS5hpne4=;
+ b=Ee+VM+f9ivEIue9ulRLTnR7A7RxGy6esDrOUiYWXgYjcohrPW0vgCLL+otaNguQ4yU33rNoC0
+ E/xUSCAFfC8Dq68rIFE+RjjVdNuj1MSQsJK7czkKKBhaEAT8wIUs2W8
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Rspamd-Queue-Id: 13C5A4C931D
+X-Rspamd-Queue-Id: 99BA34C94CC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9425-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9427-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	FREEMAIL_TO(0.00)[kernel.org,iogearbox.net,gmail.com,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr];
@@ -128,41 +128,32 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,weissschuh.net:email,weissschuh.net:dkim,weissschuh.net:mid]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,weissschuh.net:email,weissschuh.net:dkim,weissschuh.net:mid]
 
-This command is doing more than just stripping relocations.
-With the introduction of CONFIG_MODULE_HASHES it will do even more.
+This is the only instance of pr_devel() in the whole module subsystem
+and essentially useless.
 
-Use a more generic name for the variable.
+Drop it.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- scripts/Makefile.vmlinux | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ kernel/module/signing.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index fcae1e432d9a..6cc661e5292b 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -91,13 +91,13 @@ remove-symbols := -w --strip-unneeded-symbol='__mod_device_table__*'
+diff --git a/kernel/module/signing.c b/kernel/module/signing.c
+index 590ba29c85ab..4a5e4eef250d 100644
+--- a/kernel/module/signing.c
++++ b/kernel/module/signing.c
+@@ -46,8 +46,6 @@ int mod_verify_sig(const void *mod, struct load_info *info)
+ 	size_t sig_len, modlen = info->len;
+ 	int ret;
  
- # To avoid warnings: "empty loadable segment detected at ..." from GNU objcopy,
- # it is necessary to remove the PT_LOAD flag from the segment.
--quiet_cmd_strip_relocs = OBJCOPY $@
--      cmd_strip_relocs = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
--                         $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
-+quiet_cmd_objcopy_vmlinux = OBJCOPY $@
-+      cmd_objcopy_vmlinux = $(OBJCOPY) $(patsubst %,--set-section-flags %=noload,$(remove-section-y)) $< $@; \
-+                            $(OBJCOPY) $(addprefix --remove-section=,$(remove-section-y)) $(remove-symbols) $@
+-	pr_devel("==>%s(,%zu)\n", __func__, modlen);
+-
+ 	if (modlen <= sizeof(ms))
+ 		return -EBADMSG;
  
- targets += vmlinux
- vmlinux: vmlinux.unstripped FORCE
--	$(call if_changed,strip_relocs)
-+	$(call if_changed,objcopy_vmlinux)
- 
- # modules.builtin.modinfo
- # ---------------------------------------------------------------------------
 
 -- 
 2.54.0
