@@ -1,235 +1,185 @@
-Return-Path: <linux-integrity+bounces-9434-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9439-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MJHtMqyz+Wld/AIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9434-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:09:00 +0200
+	id EANrBDrB+WngDAMAu9opvQ
+	(envelope-from <linux-integrity+bounces-9439-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 12:06:50 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93CEB4C938F
-	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 11:09:00 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 192094CA8B0
+	for <lists+linux-integrity@lfdr.de>; Tue, 05 May 2026 12:06:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A0F78301AA6D
-	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:06:52 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 10E853047E50
+	for <lists+linux-integrity@lfdr.de>; Tue,  5 May 2026 09:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEDBF3FA5DD;
-	Tue,  5 May 2026 09:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13AFA339719;
+	Tue,  5 May 2026 09:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="bQ5agIzB"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OroYeXVb"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705AF3E5EE6;
-	Tue,  5 May 2026 09:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B40A3368B7;
+	Tue,  5 May 2026 09:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777971939; cv=none; b=tocO4Qttnx/kyOl10VN3a+ir4Qi0HzlVHOUoHqk8jTqzKKR9aDTqLqCS6hoEZZxbutRMxSdIqtd1KpEer2hq2vRg9besY1Hrbr/QopeyNu15/VVertytlp7VHLvZj3KY6qD39U2yVu8QdtdcDx4d4LsDXvuQSv9DBaDfu+V4obA=
+	t=1777974858; cv=none; b=l+qHfsJlvmiuE4J50K9thkVa5rBl3eP5YYI4u0yicHjERmLbcCZSoz3ha4+midn9Gyaj4k0k8+kIRpR9zDUxPI9H4+6+ogdAh4DA58BYZAKKaGjpnWR9Wmm0dT27+/bH0qnUjQX936vAiQlMasFVfuGZ1AG4UrPEcNpJz4qcjg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777971939; c=relaxed/simple;
-	bh=elZqxqWASNPH02Zi8B2qimxrAyck+wx1GcCTAUaTf68=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pmqikKnc16AHEZ3vKNg1uI3EGlgC7xvoICcq0kSpOvver2JQ0aEo6Nvqm2vkqudeyN/mkwjGlil6D0tOzkmUffNSz+x7ilRO6k7kKQ+Ik90vinTEToR6TeUvs1mazg4ORtyj570Qqn3T7FVoXy0bad0umgAnWmUuXJnpYMaATC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=bQ5agIzB; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1777971923;
-	bh=elZqxqWASNPH02Zi8B2qimxrAyck+wx1GcCTAUaTf68=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=bQ5agIzBPRuFL7JWUhX7aDRNPbRhYiMMw3NdQA1wwclDcc9afVYMsG/75i/WNqhAA
-	 hijo/UrDsuQnHCYS7acn94RhzsDs7Y51FfF3ckZNMmNlu5Jpy4KPF9/PiukPGcZcfg
-	 X9HSI5nDm5v9ZQqJggt0rWkhUIJPYhzeHojeyMw8=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 05 May 2026 11:05:18 +0200
-Subject: [PATCH v5 14/14] kbuild: make CONFIG_MODULE_HASHES compatible with
- module stripping
+	s=arc-20240116; t=1777974858; c=relaxed/simple;
+	bh=mZATz5adCxjq+rKLQMa6TL0ztfFjDih5jW0Ffnpg7tA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=bCG33MyR7ueNxSWPzcvR28YeKDTw28bJn9c2htIP0XoQgyH4ASINdn1ORynLqoosogwEmucNcxmDPTIkchrPpeIgT7vlzRySCA4AYA3ZLFlvZczoFw2XYXBy4pdmKZQ5ZdTsXKY2Tuypm0phqpDXcr6VJ58UZGkumJOPdO2BQPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OroYeXVb; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84CCD2936;
+	Tue,  5 May 2026 02:54:09 -0700 (PDT)
+Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8439C3F836;
+	Tue,  5 May 2026 02:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1777974854; bh=mZATz5adCxjq+rKLQMa6TL0ztfFjDih5jW0Ffnpg7tA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OroYeXVbEYXngvWHaW/fKZK/iVp506G7ITZsUT5skzUb/lyh16bF4bNuXqK2hsAk4
+	 KHLBmCmRAo8EyvVyzaTbJ96xJ8EXSV+onS6Gun44JBV9cfTfanJdk/xIyQ/g9mRhv3
+	 0U5EXk7QZoh+tZoy9yfqywFgFvYyeXEhIxggEoJ0=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev
+Cc: jarkko@kernel.org,
+	zohar@linux.ibm.com,
+	roberto.sassu@huawei.com,
+	dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com,
+	paul@paul-moore.com,
+	jmorris@namei.org,
+	serge@hallyn.com,
+	maz@kernel.org,
+	oupton@kernel.org,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	sudeep.holla@kernel.org,
+	Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [RFC PATCH 0/3] initalise ff-a after finalising pKVM
+Date: Tue,  5 May 2026 10:54:06 +0100
+Message-Id: <20260505095409.1948371-1-yeoreum.yun@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260505-module-hashes-v5-14-e174a5a49fce@weissschuh.net>
-References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
-In-Reply-To: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>, 
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
- Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
- Roberto Sassu <roberto.sassu@huawei.com>, 
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
- Eric Snowberg <eric.snowberg@oracle.com>, 
- Nicolas Schier <nicolas.schier@linux.dev>, 
- Daniel Gomez <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>, 
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>, 
- Xiu Jianfeng <xiujianfeng@huawei.com>, 
- Christophe Leroy <chleroy@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- bpf@vger.kernel.org, 
- =?utf-8?q?Fabian_Gr=C3=BCnbichler?= <f.gruenbichler@proxmox.com>, 
- Arnout Engelen <arnout@bzzt.net>, Mattia Rizzolo <mattia@mapreri.org>, 
- kpcyrd <kpcyrd@archlinux.org>, Christian Heusel <christian@heusel.eu>, 
- =?utf-8?q?C=C3=A2ju_Mihai-Drosi?= <mcaju95@gmail.com>, 
- Eric Biggers <ebiggers@kernel.org>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org, 
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org, 
- debian-kernel@lists.debian.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1777971921; l=3316;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=elZqxqWASNPH02Zi8B2qimxrAyck+wx1GcCTAUaTf68=;
- b=VL/y6lxcfMaVVCAqnHqBHAsMZQRoRMAJFmErw+a7YjNMWb7GcK//q6XoNoKQXYhMyaE3gwwLJ
- is6WW72xVPJDMy3Dd1T+JiFrphn8xBMZBZ2NTjggWulGxg5uKuR6cHw
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Rspamd-Queue-Id: 93CEB4C938F
+X-Rspamd-Queue-Id: 192094CA8B0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[weissschuh.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[weissschuh.net:s=mail];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9434-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	FREEMAIL_TO(0.00)[kernel.org,iogearbox.net,gmail.com,arndb.de,suse.com,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr];
-	FREEMAIL_CC(0.00)[linux.dev,kernel.org,vger.kernel.org,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,gmail.com,linutronix.de,lists.ozlabs.org,lists.debian.org,weissschuh.net];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,huawei.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com,arm.com];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9439-lists,linux-integrity=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[54];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linux@weissschuh.net,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[weissschuh.net:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[arm.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,weissschuh.net:email,weissschuh.net:dkim,weissschuh.net:mid]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:dkim,arm.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 
-CONFIG_MODULE_HASHES needs to process the modules at build time in the
-exact form they will be loaded at runtime. If the modules are stripped
-afterwards they will not be loadable anymore.
+This patch is split out from the patchset [0] --
+fix FF-A call failure with pKVM when the FF-A driver is built-in,
+specifically the IMA-related part.
 
-Also evaluate INSTALL_MOD_STRIP at build time and build the hashes based
-on modules stripped this way.
+When pKVM is enabled, the FF-A driver must be initialised after pKVM.
+Otherwise, pKVM cannot negotiate the FF-A version or obtain the RX/TX
+buffer information, leading to failures in FF-A calls.
 
-If users specify inconsistent values of INSTALL_MOD_STRIP between build
-and installation time, an error is reported.
+Currently, pKVM initialisation completes at device_initcall_sync,
+while ffa_init() runs at the device_initcall level.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- .gitignore                | 1 +
- kernel/module/Kconfig     | 5 +++++
- scripts/Makefile.modfinal | 9 +++++++++
- scripts/Makefile.modinst  | 4 ++--
- scripts/Makefile.vmlinux  | 2 +-
- 5 files changed, 18 insertions(+), 3 deletions(-)
+So far, linker deployes kvm_arm_init() before ffa_init(), and SMCs can
+still be trapped even before finalise_pkvm() is invoked.
+As a result, this issue has not been observed.
 
-diff --git a/.gitignore b/.gitignore
-index 78cf799401e6..6ce10623c5a3 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -30,6 +30,7 @@
- *.gz
- *.i
- *.ko
-+*.ko.stripped
- *.lex.c
- *.ll
- *.lst
-diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-index acbbda58e7c8..48be498a4452 100644
---- a/kernel/module/Kconfig
-+++ b/kernel/module/Kconfig
-@@ -423,6 +423,11 @@ config MODULE_HASHES
- 
- 	  Also see the warning in MODULE_SIG about stripping modules.
- 
-+# To validate the consistency of INSTALL_MOD_STRIP for MODULE_HASHES
-+config MODULE_INSTALL_STRIP
-+	string
-+	default "$(INSTALL_MOD_STRIP)"
-+
- config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
- 	bool "Allow loading of modules with missing namespace imports"
- 	help
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 44a382689a5a..9924a7bb73c5 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -64,7 +64,16 @@ ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- endif
- 	+$(call cmd,check_tracepoint)
- 
-+%.ko.stripped: %.ko $(wildcard include/config/MODULE_INSTALL_STRIP)
-+	$(call cmd,install_mod)
-+	$(call cmd,strip_mod)
-+
-+ifneq ($(CONFIG_MODULE_INSTALL_STRIP),)
-+modules.order: $(modules:%.o=%.ko.stripped)
-+endif
-+
- targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o) .module-common.o
-+targets += $(modules:%.o=%.ko.stripped)
- 
- # Update modules.order when a module is (re-)built.
- # Allow using it as target dependency.
-diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-index b95f613e23c8..fd1fb89bb0bd 100644
---- a/scripts/Makefile.modinst
-+++ b/scripts/Makefile.modinst
-@@ -68,8 +68,8 @@ __modinst: $(install-y)
- 
- ifdef CONFIG_MODULE_HASHES
- ifeq ($(KBUILD_EXTMOD),)
--ifdef INSTALL_MOD_STRIP
--$(error CONFIG_MODULE_HASHES and INSTALL_MOD_STRIP are mutually exclusive)
-+ifneq ($(INSTALL_MOD_STRIP),$(CONFIG_MODULE_INSTALL_STRIP))
-+$(error Inconsistent values for INSTALL_MOD_STRIP between build and installation)
- endif
- endif
- endif
-diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-index a0332c06bde1..a2d170241a2f 100644
---- a/scripts/Makefile.vmlinux
-+++ b/scripts/Makefile.vmlinux
-@@ -86,7 +86,7 @@ modules.order: vmlinux.unstripped FORCE
- 	$(Q)$(MAKE) -f $(srctree)/Makefile modules
- 
- quiet_cmd_modules_merkle_tree = MERKLE  $@
--      cmd_modules_merkle_tree = $< $@ .ko
-+      cmd_modules_merkle_tree = $< $@ $(if $(CONFIG_MODULE_INSTALL_STRIP),.ko.stripped,.ko)
- 
- targets += .tmp_module_hashes.c
- .tmp_module_hashes.c: $(objtree)/scripts/modules-merkle-tree modules.order FORCE
+However, relying on above stuff is fragile.
+Therefore, when pKVM is enabled, the FF-A infrastructure should be
+initialised only after pKVM initialisation has been fully finalised.
 
+To achieve this, introduce an ffa_root_dev ("arm-ffa") and
+a corresponding driver to defer initialisation of the FF-A infrastructure
+until pKVM initialisation is complete, and to defer probing of all FF-A devices until then
+when pKVM is enabled.
+
+This patch is based on v7.1-rc2
+
+Question:
+
+FF-A initialisation can occur at late_initcall. Because it may be deferred,
+some FF-A requests cannot be serviced at that stage.
+A typical example is the EFI runtime variable service using DIRECT_MSG_REQ.
+
+Depending on the platform, the EFI runtime variable service runs with StandaloneMm
+and uses FF-A DIRECT_REQ. However, when pKVM is enabled, FF-A initialisation
+may be deferred to late_initcall. In this case, load_uefi_certs()
+can fail if it is invoked before the FF-A driver is initialised
+via deferred_probe_initcall().
+
+Moving load_uefi_certs() to late_initcall_sync, as in the third patch,
+seems not to have any problem since late_initcall and
+late_initcall_sync are both of do_basic_setup() and it's before loading
+init process. However, it is still unclear whether
+it would be better to allow DIRECT_MSG_REQ in kvm_host_ffa_handler()
+even before FF-A version negotiation since handler’s purpose seems to hook
+certain memory operations, and DIRECT_MSG_REQ has been available
+since FF-A specification v1.0.
+
+Any feedback or alternative suggestions would be appreciated!
+
+Link: https://lore.kernel.org/all/20260422162449.1814615-1-yeoreum.yun@arm.com/ [0]
+
+Yeoreum Yun (3):
+  arm64: KVM: defer kvm_init() to finalise_pkvm() when pKVM is enabled
+  firmware: arm_ffa: initialise ff-a after finalising pKVM
+    initialisation
+  security: integrity: call load_uefi_certs() at late_initcall_sync
+
+ arch/arm64/kvm/arm.c                          |   8 +-
+ arch/arm64/kvm/pkvm.c                         |  15 ++-
+ drivers/firmware/arm_ffa/bus.c                | 125 +++++++++++++++++-
+ drivers/firmware/arm_ffa/common.h             |  13 +-
+ drivers/firmware/arm_ffa/driver.c             |  21 ++-
+ drivers/firmware/arm_ffa/smccc.c              |   2 +-
+ security/integrity/platform_certs/load_uefi.c |   2 +-
+ 7 files changed, 166 insertions(+), 20 deletions(-)
+
+
+base-commit: 7fd2df204f342fc17d1a0bfcd474b24232fb0f32
 -- 
-2.54.0
+LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
 
