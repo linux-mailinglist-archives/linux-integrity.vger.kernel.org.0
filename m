@@ -1,223 +1,338 @@
-Return-Path: <linux-integrity+bounces-9476-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9477-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eOUUFYtP/GlOOAAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9476-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 07 May 2026 10:38:35 +0200
+	id AJwxMoJ3/Gm3QQAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9477-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 07 May 2026 13:29:06 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE37D4E4F37
-	for <lists+linux-integrity@lfdr.de>; Thu, 07 May 2026 10:38:34 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6250C4E7779
+	for <lists+linux-integrity@lfdr.de>; Thu, 07 May 2026 13:29:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 764FB30733C5
-	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2026 08:30:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 33CB33005ABB
+	for <lists+linux-integrity@lfdr.de>; Thu,  7 May 2026 11:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C697436F43F;
-	Thu,  7 May 2026 08:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CD33CF689;
+	Thu,  7 May 2026 11:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ng8dZr8E"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27B4377EC1;
-	Thu,  7 May 2026 08:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBDF392C2F;
+	Thu,  7 May 2026 11:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778142631; cv=none; b=Fxlw9dHa3MSa+tClEj70x1Op3v/uBr+kJmZja0Njhn05dW384TNYk9KVFkVpdLPLfQytJcYFbZnCtHazT0+vjptUnWWWYUND7zjPtls4bFnB8KvdzNCwUX4K1LhKyVeNkJifLPZFCUboU8YkcEfHdoRjflVehK//Ceny0jX4fXs=
+	t=1778153343; cv=none; b=ZzTKk4DRDpJ51Cu2Lm4AhjG7OYCjMxJa8oxa2/4pv0+BUCs0JlTj76+Xx8brkacHPfnPjD+7uXI4/yV5+d/mFiq7Ghvk+McvCxnMuPCO3kJovTd0F5OmFnHpEoX6pRvxh6D7/Ff375bJlpPwtimJUvCz/p2Q/yw6kUqxT5w4oEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778142631; c=relaxed/simple;
-	bh=9JH+JKtOUYC88OvLe5TjJNgR65xA2MidNnhXMXVbBdg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Vrnlbvi5CpDOkInzmd4yQ3mNCtdum4Xe4Ie4ucUoYuyp4GiUxRKR5BrmmcV4aeddZe65b6wDim3a4DIb5++TrCzHGFom/OGMaVzFnihLP7WgVwZ5b8+xBvUF+FPdRqjEg1OoD4V6ILV+x+qqg5sWlyYYN1StBWWPYj9EjlZchnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.235])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gB4Zs6zYbz1HCMn;
-	Thu,  7 May 2026 16:06:29 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id B69604056F;
-	Thu,  7 May 2026 16:11:10 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXiKIPSfxptCa3AA--.10670S2;
-	Thu, 07 May 2026 09:11:10 +0100 (CET)
-Message-ID: <8c99263d8e63100e0b5e6c8cf739f7f6e7e79f6b.camel@huaweicloud.com>
+	s=arc-20240116; t=1778153343; c=relaxed/simple;
+	bh=nGA1jUerZV3y40/0q9kaQLkoVBe3FK2FfI3hyQ+vEJ4=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=m4ttSdfSnr1T9LbfHx3HWR8CXuU3c1vdwFsrQsBucqTO+LjV+A/GGHn1YvBN2GtWdPEx8Viv9zq2oJOikpNghODPgFyXKlAFLGFwf/ExNVe+7VXDPBIJYPcVaffX/UTSVl6oeIsg303R2XulTeWO6nw9c4AKmhwts+XMstTM5AY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ng8dZr8E; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 647AQE1F3051620;
+	Thu, 7 May 2026 11:28:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=1rlDQY
+	w7cv0ilTz+AWWvNw0iVjn8vWRsaBeV41ImE9s=; b=Ng8dZr8EbSke0d7/2ju/kA
+	PbwE36y2UILnrlnao3S1s6Np3Bgqn9Am7k57UsMaAiYSKAlp5i59ixePAAuPHJ4Q
+	V5uHN4yCZ1vxrJvMx6QsWc4TACjFCkNzF0/3dMdTN9MXyE3YmzjnReAEkLq2Xik/
+	4YkVUGTWkaOXvzZ9BKJ55aFUQCm5mJh58uicWuxjQ96ShyMWQaAWvzK6htORH8Mu
+	AfK6+R7Qwg3r7JJmzwYCDTEfKoReAtXY2s1rhIIqXirtFvYaL4SgxWiUD+S1Trq+
+	J1zCI3EQe+JxfEMrrIv1RdVqGFXgoSArrhxT2cHMtWdOjb5WxCxqaXPHTwq80AFQ
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4dw9xxvx9s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 May 2026 11:28:30 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 647BOZpJ001373;
+	Thu, 7 May 2026 11:28:29 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4dwwtgjtqf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 07 May 2026 11:28:29 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 647BSSdg23396904
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 7 May 2026 11:28:29 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8E9CF5806B;
+	Thu,  7 May 2026 11:28:28 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1426E58068;
+	Thu,  7 May 2026 11:28:27 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.42.43])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  7 May 2026 11:28:26 +0000 (GMT)
+Message-ID: <f19081f1eda19d6d1ae133d8ec93e779ab1a25e5.camel@linux.ibm.com>
 Subject: Re: [PATCH] ima: debugging late_initcall_sync measurements
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, Jonathan McDowell <noodles@earth.li>,
-  linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-integrity@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, jmorris@namei.org, serge@hallyn.com, 
- roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com,  jarkko@kernel.org, jgg@ziepe.ca,
- sudeep.holla@kernel.org, maz@kernel.org,  oupton@kernel.org,
- joey.gouly@arm.com, suzuki.poulose@arm.com,  yuzenghui@huawei.com,
- catalin.marinas@arm.com, will@kernel.org, noodles@meta.com, 
- sebastianene@google.com
-Date: Thu, 07 May 2026 10:10:52 +0200
-In-Reply-To: <461ec995935e2b42a8414f6f87063ff2557bbfb4.camel@linux.ibm.com>
-References: <cover.1777036497.git.noodles@meta.com>
-	 <7734099f5e7fda5480bca016a9e6707983325fbd.camel@linux.ibm.com>
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: David Safford <david.safford@gmail.com>,
+        Jonathan McDowell	
+ <noodles@earth.li>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.linux.dev, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, jarkko@kernel.org, jgg@ziepe.ca,
+        sudeep.holla@kernel.org, maz@kernel.org, oupton@kernel.org,
+        joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, noodles@meta.com,
+        sebastianene@google.com
+In-Reply-To: <afwoDgaJxmKwOhXp@e129823.arm.com>
+References: <7734099f5e7fda5480bca016a9e6707983325fbd.camel@linux.ibm.com>
 	 <afMlgstqahnZg68h@e129823.arm.com>
 	 <9f188536f09a2db30877d6bfbb84aeaf2565cccf.camel@linux.ibm.com>
-	 <CAHC9VhRsnmPp2KmQAns5uq5qXX5EF2xQQzyfTgrPi4O9AXyPpg@mail.gmail.com>
-	 <ba4bf28314b679474a6a8da6298e548e54b3754c.camel@linux.ibm.com>
-	 <CAHC9VhRE2kRr1fdDf6xgQgpSrtvqtP8Vy9LVGJhDZFUbzLKGmQ@mail.gmail.com>
-	 <ff28c6dcb60c357c752724927addaa8c4fd3bf2c.camel@linux.ibm.com>
-	 <CAHC9VhQY2TMkTvQq9P8oZteQWQSr7qq2utOuH+pdVx+8jWLBCw@mail.gmail.com>
-	 <a9412fe10e70ce95dd70556ace19368bec5c188c.camel@linux.ibm.com>
-	 <CAHC9VhRUgNA=Sj=jhD=zOt8R80Q+FQj+H0nYSy-FAujTL3EKPA@mail.gmail.com>
-	 <5debff82dc758d9c91223e4f1f5b9e39a3fcd4f5.camel@linux.ibm.com>
-	 <19dfb0e2730.2843.85c95baa4474aabc7814e68940a78392@paul-moore.com>
-	 <461ec995935e2b42a8414f6f87063ff2557bbfb4.camel@linux.ibm.com>
+	 <CAGWfHUW+AX0Hpuw5Vr5iTSaJKQJ+O_4nWWmU1UR8Z_3XFctHZg@mail.gmail.com>
+	 <202f90682fe47bb5fb9b08f8678ae00981b5290b.camel@linux.ibm.com>
+	 <201b9172ac47c6766443c1f2343cab3548f33c29.camel@linux.ibm.com>
+	 <afrXmRiq7XvSe6yN@e129823.arm.com>
+	 <9ff4853a8e9932b3a1424f2a6c3347f1723fb5f4.camel@linux.ibm.com>
+	 <aftIuPwNeuzc9nY1@e129823.arm.com>
+	 <9d1af933ef218b159762884357d127e3644dfe2c.camel@linux.ibm.com>
+	 <afwoDgaJxmKwOhXp@e129823.arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+Date: Thu, 07 May 2026 07:28:26 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDXiKIPSfxptCa3AA--.10670S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF18Kw4kArWDAr17tFy8AFb_yoW5tFWfpa
-	y7W3WIkrWktFW8Aws2qw18WryIy3s3GayUXr15Kry5ArnYkr9Y9FsxtrWFka97C3ykt3WY
-	qF1jqay2kw1DAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIF
-	4iUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAGBGn7JLIKAwAAsN
-X-Rspamd-Queue-Id: CE37D4E4F37
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTA3MDExMCBTYWx0ZWRfX9fxTkH41FDWO
+ mIv+blPNxohl0rvg8pTueylSSG7rH9aAKdhPOS1DpEsUnathLGBYF82wdv6casEiRfOMXoG8VET
+ 2ZcvIGabXYwhRCqT5gEILEFOGijXAxJVjlDRQaji5PFWoIA8OABPUlR4TKHKRxP2sv/jYCktP11
+ 1kxN3Q7UVHsxNcoC0wrCx9sAnbMi+cXI30P/s6oigw9fMMAa+9A6QTJVHLF6nPf2hvX0MUGYOtq
+ G2+bnav2vi0w9xxK21z1Ka0+ZRm1BY+GmskomDIViiy/VYSCZ1g46fEl0diTx52d3ZA5/Dghxc2
+ tJ9ApjbVjB7FIXdqPOQGwdoAbG2ockYvXfIgnZjB5bBMiTXHNm1G9YfTPuIah2svj6lGBl3LUf0
+ tlJwpBEFSOvpVKYRIz0r26Djs5eUDWwQpaM3TZED+Kyt3YOUXO/r5rpDUdDppK9EzJYqPrHkYUg
+ IhSz09OVXv8LnNNtcQQ==
+X-Proofpoint-ORIG-GUID: FTTbaUxi0YcWvoSsOhvFnq2z7BTRjtqd
+X-Proofpoint-GUID: E3P48sRX5K5Q0eceYE6oOZtSMWS67YJ-
+X-Authority-Analysis: v=2.4 cv=ctWrVV4i c=1 sm=1 tr=0 ts=69fc775f cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=M39c8p6LazeeYzGZYw8A:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-05-06_02,2026-05-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 spamscore=0 malwarescore=0 phishscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2604200000
+ definitions=main-2605070110
+X-Rspamd-Queue-Id: 6250C4E7779
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[arm.com,earth.li,vger.kernel.org,lists.infradead.org,lists.linux.dev,namei.org,hallyn.com,huawei.com,gmail.com,oracle.com,kernel.org,ziepe.ca,meta.com,google.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9476-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[huaweicloud.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
 	RCPT_COUNT_TWELVE(0.00)[26];
-	RCVD_COUNT_FIVE(0.00)[6];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.978];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9477-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[gmail.com,earth.li,vger.kernel.org,lists.infradead.org,lists.linux.dev,paul-moore.com,namei.org,hallyn.com,huawei.com,oracle.com,kernel.org,ziepe.ca,arm.com,meta.com,google.com];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-integrity];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[]
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Action: no action
 
-On Wed, 2026-05-06 at 22:25 -0400, Mimi Zohar wrote:
-> On Tue, 2026-05-05 at 22:11 -0400, Paul Moore wrote:
-> > On May 5, 2026 9:57:23 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > > On Tue, 2026-05-05 at 18:55 -0400, Paul Moore wrote:
-> > > > On Tue, May 5, 2026 at 5:05=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.=
-com> wrote:
-> > > > > On Mon, 2026-05-04 at 16:51 -0400, Paul Moore wrote:
-> > > > > > On Mon, May 4, 2026 at 8:03=E2=80=AFAM Mimi Zohar <zohar@linux.=
-ibm.com> wrote:
-> > > > > > > On Sun, 2026-05-03 at 12:46 -0400, Paul Moore wrote:
-> > > > > > > > Regardless, assuming you always want IMA to leverage a TPMs=
- when they
-> > > > > > > > exist, your reply suggests that using an initcall based IMA=
- init
-> > > > > > > > scheme, even a late-sync initcall, may not be sufficient be=
-cause
-> > > > > > > > deferred TPM initialization could happen later, yes?
-> > > > > > >=20
-> > > > > > > Well yeah.  The TPM could be configured as a module, but that=
- scenario is=20
-> > > > > > > not of
-> > > > > > > interest.  That's way too late.  The case being addressed in =
-this patch set is
-> > > > > > > when the TPM driver tries to initialize at device_initcall, r=
-eturns
-> > > > > > > EPROBE_DEFER, and is retried at deferred_probe_initcall (late=
-_initcall).  Since
-> > > > > > > ordering within an initcall is not supported, this patch atte=
-mpts to initialize
-> > > > > > > IMA at late_initcall and similarly retries, in this case, at=
-=20
-> > > > > > > late_initcall_sync.
-> > > > > >=20
-> > > > > > Okay, so from a TPM initialization perspective you are satisfie=
-d with
-> > > > > > a late-sync IMA initialization, yes?
-> > > > >=20
-> > > > > No. On some architectures moving IMA initialization from the late=
-_initcall to
-> > > > > late_initcall_sync does not miss any measurement records. However=
-, as=20
-> > > > > previously
-> > > > > mentioned, Linux running in a PowerVM LPAR the move would drop ~3=
-0 measurement
-> > > > > records[1].  So no, only if the TPM is not initialized by late_in=
-itcall, should
-> > > > > IMA retry at late_initcall_sync.
-> > > >=20
-> > > > What do you do in the PowerVM LPAR when the TPM is not avaiable at
-> > > > late initcall and you have to defer IMA initialization until
-> > > > late-sync?
-> > >=20
-> > > Your question is hypothetical ...
-> >=20
-> > <heavy eye roll>
-> >=20
-> > > ... as the TPM isn't deferred, so IMA doesn't go into
-> > > TPM-bypass mode.  Testing on a PowerVM LPAR demonstrated that it skip=
-s ~30
-> > > measurement list records.  So moving the initcall to late_initcall_sy=
-nc would
-> > > cause a regression.
-> >=20
-> > Let me rephrase to make the question clear - how do you plan to handle =
-a=20
-> > system where you lose measurements by waiting until late-sync, but the =
-TPM=20
-> > is not available at the late initcall.
+On Thu, 2026-05-07 at 06:50 +0100, Yeoreum Yun wrote:
+> Hi Mimi,
 >=20
-> There have been suggestions to queue the IMA measurements, but that goes =
-against
-> the "measure before use" principle. The solution is not to defer IMA
-> initialization for all systems, but to differentiate the boot_aggregate r=
-ecord
-> (boot_aggregate vs. boot_aggregate_late) based on when the TPM becomes av=
-ailable
-> relative to IMA's initcall.  IMA's job is simply to collect and provide t=
-he
-> measurement list.  Based on the attestation service policy, the attestati=
-on
-> service will decide whether a measurement list containing boot_aggregate_=
-late is
-> acceptable.
+> > On Wed, 2026-05-06 at 14:57 +0100, Yeoreum Yun wrote:
+> > > > > > On both Z and PowerVM, there are ~30 measurements between boot_=
+aggregate and
+> > > > > > boot_aggregate_late.  For example, on PowerVM:
+> > > > > >=20
+> > > > > > # grep -n boot_aggregate
+> > > > > > /sys/kernel/security/integrity/ima/ascii_runtime_measurements
+> > > > > >=20
+> > > > > > 1:10 f60a05d7354fb34aabc02965216abd3428ea52bb ima-sig
+> > > > > > sha256:9887dd089ee19a6517bca10580b02c1bb9aa6cd86c157b6ead8a1c04=
+03f348d5
+> > > > > > boot_aggregate=20
+> > > > > > 31:10 e2592b0d61da6300d3db447b143897a9792231ea ima-sig
+> > > > > > sha256:9887dd089ee19a6517bca10580b02c1bb9aa6cd86c157b6ead8a1c04=
+03f348d5
+> > > > > > boot_aggregate_late
+> > > > > >=20
+> > > > > > It would be interesting to the results from a Raspberry Pi 5 as=
+ well,
+> > > > > > with/without a TPM.
+> > > > >=20
+> > > > > Honestly, I find this result hard to accept.
+> > > > >=20
+> > > > > This effectively means that there is code invoking IMA measuremen=
+t during late_initcall().
+> > > > > It also implies that if, in the future, a late_initcall is added =
+that performs
+> > > > > an IMA measurement before IMA initialization has occurred accodin=
+g to order by linker,
+> > > > > that measurement could be missed.
+> > > >=20
+> > > > Exactly.  The results are simply from booting with the builtin "tcb=
+" and
+> > > > "critical_data" policies.
+> > > >=20
+> > > > $ sudo grubby --args=3D"ima_policy=3D\"tcb|critical_data\"" --updat=
+e-kernel
+> > > > /boot/vmlinuz-${SUFFIX}
+> > >=20
+> > > Thanks. but I still wonder what meaasurements there are between
+> > > boot_aggregate and boot_aggregate_late.
+> > > Might be there would be key measurements if it takes more than
+> > > 5 mins before generating boot_aggregate_late but this seems rare.
+> > >=20
+> > > If you don't mind, would you share the contents of the log between
+> > > boot_aggregate and boot_aggregate_late?
+> > > since I only get a kernel_version in my environment.
+> >=20
+> >      1	10 f60a05d7354fb34aabc02965216abd3428ea52bb ima-sig
+> > sha256:9887dd089ee19a6517bca10580b02c1bb9aa6cd86c157b6ead8a1c0403f348d5
+> > boot_aggregate=20
+> >      2	10 49ab61dd97ea2f759edcb6c6a3387ac67f0aa576 ima-buf
+> > sha256:0c907aab3261194f16b0c2a422a82f145bc9b9ecb8fdb633fa43e3e5379f0af2
+> > kernel_version 372e312e302d7263312b
+> >      3	10 92c40bfd65512d5224cddb9fb64fef0d72e1c182 ima-sig
+> > sha256:412bae0d0e85a99971d6eda198dd2fed3c2959715e8a17a4caddc7bc605bdeeb
+> > /usr/bin/kmod=20
+> >      4	10 a18f997e1e82d0ef416f93683966d7dda875d71c ima-sig
+> > sha256:0050fcc672e03cfdc3a50c771ca9f5219478e5538980a26fd4484620712d8163
+> > /usr/lib64/ld64.so.2=20
+> >      5	10 88f343618caeeed92ed8281d627f4565b0499d66 ima-sig
+> > sha256:a0e83c084d8c227f1150a8cd94eece61f62bc1da30f98d1cf57ca7db241a9c45
+> > /etc/ld.so.cache=20
+> >      6	10 e047868f01908eb95aa180693291decab82bb6be ima-sig
+> > sha256:42ebf9cc684419de4d8a1d624102716d88fbcf957f47e50a9a08e38b338023ac
+> > /usr/lib64/libzstd.so.1.5.5=20
+> >      7	10 da069bc6a44d454510a76c69d3a54c3b238ae27e ima-sig
+> > sha256:9b7c788e75c16c8827062016cf15826e43661c4b5b56813ea07ff2635bea2710
+> > /usr/lib64/liblzma.so.5.6.2=20
+> >      8	10 7ade414e736e7b449cda5ec5e0277b99548e89c6 ima-sig
+> > sha256:d899452e8e6369e436ba1a565833d6dcf0d09c35e40ffc0979cf4de2bdb8f421
+> > /usr/lib64/libz.so.1.3.1.zlib-ng=20
+> >      9	10 9a9da8326f36237a47d6ed21bdffd0e1ff855e2a ima-sig
+> > sha256:a848f396db7ad135f851b5e9aeb32f4a3ef1439c7913b9b95ab1cda69251f6ad
+> > /usr/lib64/libcrypto.so.3.5.1=20
+> >     10	10 3201d27cd4028f02fc9088ec33e2d0ceb72d2c5b ima-sig
+> > sha256:e52dcd1850555c08d60fefe56694c1179b4eaa5796db0907606552ece8e1bab1
+> > /usr/lib64/libgcc_s-14-20250617.so.1=20
+> >     11	10 3b4c6f13e52ca060b290709f737b1ff66564226f ima-sig
+> > sha256:f2a900a5b980b289dc028dd3caab16b1b0ad037f2e875546bb3197d23ff241f0
+> > /usr/lib64/glibc-hwcaps/power10/libc.so.6=20
+> >     12	10 b23b616cbd3c9dc4c5743d121c1c5a702b461a9c ima-sig
+> > sha256:5a682022beeea9ee7f36a70f0465942bf32e9675d3f45355088e148787e02175
+> > /usr/lib/modprobe.d/dist-alsa.conf=20
+> >     13	10 aec07fad18697f295d7e06796fc8dfd3b472f9c3 ima-sig
+> > sha256:067d949bab3bb085d0936031881ff73b2ab39f34b9a90cbd01396d1987ff6658
+> > /usr/lib/modprobe.d/dist-blacklist.conf=20
+> >     14	10 c402c56b66e65914148efd6e3cf0b1d616daabe6 ima-sig
+> > sha256:120a02e9b88ba74949224eca7385825e39880f5687f739ade07d94ee22ffe325
+> > /etc/modprobe.d/firewalld-sysctls.conf=20
+> >     15	10 e358ca12bd58e1ce4845e299e1aea8b81edf86f9 ima-sig
+> > sha256:fa27abcd357a16ee1254ba38d1225b7f0724036c07ce3d0e83b29eb72d97c419
+> > /etc/modprobe.d/l2tp_eth-blacklist.conf=20
+> >     16	10 4b036d41435d7df3a72b38880f5fe231904b7b66 ima-sig
+> > sha256:ecf5f948bfbfb726879a910b3174d139c8af6b1745c88dcc1e4a1cf532c02299
+> > /etc/modprobe.d/l2tp_ip-blacklist.conf=20
+> >     17	10 9c53a7a48c1b5218417c4f25c4a34c09a9f39830 ima-sig
+> > sha256:f76c4ac232d5e96c57961a9f10194703b4df6d119530046f0b23eee70bfcb089
+> > /etc/modprobe.d/l2tp_ip6-blacklist.conf=20
+> >     18	10 6c41d7b7d251c400b7e0ba76f7b386a746e8f4ec ima-sig
+> > sha256:5cbc958f893a599ef19437014696dd7b112cf9af6a4348830177f8a8f78aa1b3
+> > /etc/modprobe.d/l2tp_netlink-blacklist.conf=20
+> >     19	10 f37ef48faef5bc51e29d47531726af0bd0654655 ima-sig
+> > sha256:7a3d63acb49e4a69b482f26624761b5778fbd6b77be8a3f36926b379b5f965ed
+> > /etc/modprobe.d/l2tp_ppp-blacklist.conf=20
+> >     20	10 82ef59779acdfd6e9b35521bfa09e6ba86fd6174 ima-sig
+> > sha256:6a8f2009d87deba7a2de46e3d0c46b114fe388d188b00b9a382fc2156aabb676
+> > /usr/lib/modules/7.1.0-rc1+/modules.softdep=20
+> >     21	10 6ae994e33a6313ab4535da90f5cb6c3beaec7b86 ima-sig
+> > sha256:268695dbf23bd0170ec9a95b10e8d596205fd7436617d10101907171bf004b7c
+> > /etc/modprobe.d/sctp-blacklist.conf=20
+> >     22	10 b2c238ae66b03f56191d9955a5ad0f3110bb7e2b ima-sig
+> > sha256:64a8ebb0a1fd712a9aeb7aa0f0ad0b72d3277034c8bfa3b66ab063e201d6527e
+> > /etc/modprobe.d/sctp_diag-blacklist.conf=20
+> >     23	10 c0443f2d3c078959ae86276df23abe172234a55d ima-sig
+> > sha256:e5a3958cbd3684b63f3cada6604469cc56f727b106d5524daf5aefa6935a48ce
+> > /usr/lib/modprobe.d/systemd.conf=20
+> >     24	10 5c46e012bc7fffc3256b166282a7eaa4bea5fa33 ima-sig
+> > sha256:6560abcdd2cdb41e1d0fe73052298d612920d5bccb4a3a7c82bc73895128e760
+> > /etc/modprobe.d/tipc_diag-blacklist.conf=20
+> >     25	10 d5fb1836364732fbc4f87aa7d2c984cf30bdbfd3 ima-sig
+> > sha256:358703c09ac2d2c653e11bbc7c65d378c8496e87ca47307f86c36b0b29640598
+> > /etc/modprobe.d/tuned.conf=20
+> >     26	10 a85107163729f696f316d46c0bf3f65f713ba972 ima-sig
+> > sha256:7410bb4cec56892e8b0010c5c8b72be532784ccf0240aa0677c5be085a530f65
+> > /usr/lib/modules/7.1.0-rc1+/modules.dep.bin=20
+> >     27	10 80eb261ffb2cc3528d90c33b1c624f657a045867 ima-sig
+> > sha256:856e0f083226f8b4fb7d1d71447fb841dae18ea9a50ea6d8505a206167288e1d
+> > /usr/lib/modules/7.1.0-rc1+/modules.alias.bin=20
+> >     28	10 6af2d661da470d7a1c9909ddbc074d3d265eb1d7 ima-sig
+> > sha256:4853ca200598c52970c380fda99484068e7db4961a4f94faac6abcfbbd52d150
+> > /usr/lib/modules/7.1.0-rc1+/modules.symbols.bin=20
+> >     29	10 6f9cd405bd57d925baae6ae66c273c61c90b3bc8 ima-sig
+> > sha256:193d1e1004848f7d391877507b69a7953e1f94ddbe70eb0e2cf6dc45fce7cd6a
+> > /usr/lib/modules/7.1.0-rc1+/modules.builtin.alias.bin=20
+> >     30	10 4e20b980bf3a825a866be0c46033ed654df4aeba ima-sig
+> > sha256:3a0e3c56d51ba98258ff13f93f82c837de22f4b707d24678f82893babf4d77ea
+> > /usr/lib/modules/7.1.0-rc1+/modules.builtin.bin=20
+> >     31	10 e2592b0d61da6300d3db447b143897a9792231ea ima-sig
+> > sha256:9887dd089ee19a6517bca10580b02c1bb9aa6cd86c157b6ead8a1c0403f348d5
+> > boot_aggregate_late=20
+> >     32	10 81830cd3d799e006698258dc1b11fe29a56eeef5 ima-sig
+> > sha256:d1651dc50bb5b92c1badcab9aa4dbbca40cb704cdc707d1c536b41d7b1aa465e
+> > /usr/lib/systemd/systemd=20
+>=20
+> Hmm... Theses measurements seems to happen while populating
+> initramfs which triggers file_post_open as async
+> (and I see the RAMFS seems not part of DONT_MEASURE in IMA).
+>=20
+> If you don't mind, Could you check whether this measurements still
+> happen with initramfs_async=3D0?
+>=20
+> If this measurements aren't generated with above option,
+> there is a question whether let IMA measure initramfs which can be
+> measured or not depending on boot option or timing (some file measurement=
+s
+> could be lost all when do_populate_rootfs() executes concurrently while
+> running late_initcall).
 
-Agreed on no violation of the measure and load principle.
+There's no difference when adding the "initramfs_async=3D0" boot command li=
+ne
+argument. The measurement list between boot_aggregate and boot_aggregate_la=
+te is
+exactly the same.
 
-But also the two boot_aggregate solution does not work. If there are
-measurements before boot_aggregate_late, they can corrupt the system
-without noticing, and the corrupted system would emit the
-boot_aggregate measurement (non-late) to pass verification.
-
-Roberto
-
+Mimi
 
