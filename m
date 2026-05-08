@@ -1,60 +1,60 @@
-Return-Path: <linux-integrity+bounces-9495-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9496-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iGklL4su/mmvngAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9495-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 08 May 2026 20:42:19 +0200
+	id CMWQC08v/mmvngAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9496-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 08 May 2026 20:45:35 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EAF74FAB60
-	for <lists+linux-integrity@lfdr.de>; Fri, 08 May 2026 20:42:18 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19ACE4FABF0
+	for <lists+linux-integrity@lfdr.de>; Fri, 08 May 2026 20:45:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6744A3008C0E
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2026 18:42:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id CE8BF300AD4E
+	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2026 18:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A70D03ECBD9;
-	Fri,  8 May 2026 18:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE31376BE2;
+	Fri,  8 May 2026 18:45:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ljqHJYSw"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="uTmdZouw"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180AC3DCD9F;
-	Fri,  8 May 2026 18:42:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D683644BD;
+	Fri,  8 May 2026 18:45:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778265735; cv=none; b=XTSrzIE03Ngf05/9h/VQCxt8xB9qL+odji3lOP3FneFPmiopk4JEta8i3zD0p62ywdejY6NSC6QyzUhW0PXo9Qcpyy3uWnupbBUN6iD0k2MvPgHVhSi2Af5SVkN3eeQrJTIa3R1nm23uIs1tOT62f8NKVp0pKMwEewppnmv282M=
+	t=1778265925; cv=none; b=okkfJlVTizWB22JnaTIzquowgNCy9qg5tj11xYICZfMlfL9q8MHTGp52RtAv4ZrQeKZ1ZFN4I3IIZAb+RrLxn4Uj+i62POFSBfX88NEwvdS7/Pfvus5W70Cj7/sxlSRepkDBgXbR/8oLyl9UNmyPKrI76n2jg1R4zoPL9NgQXnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778265735; c=relaxed/simple;
-	bh=2R0fPqfrjruSXC8XwdopLbeaSYMX4IVp2H58vn6VBkc=;
+	s=arc-20240116; t=1778265925; c=relaxed/simple;
+	bh=Um9WPFqN7H2ySkHiR2sGQgTz8RH4w81WnNll++kO0KE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GEkkpnFG8vaqF7zfB8slqgWgTcqVWB2321rrHwEHfYXBoSYX7eJ3IUXO1zjCE4iBs24hsF0FIATOAT0owXJ6IuK17meTBStHATYun1bfAek1xNU2D60ePOR2Wh8OmaJN01JKrVHfXI4U9UX7JSaZE8wE8aGU0Gy4+9cbNFZDZtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ljqHJYSw; arc=none smtp.client-ip=217.140.110.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=FZpWgF9hwlo6Q/MsZ34uk7sNnTQM0HIq/UMkkeOT2CQffhQNjOwp4zvFZEqpCWYTET8XXdQUPiK/K3QN9/6RN877mlsIdUllF6S9AsIXKB3S5DwB2Y1Dg3gGrOimT4kjhEL0PXZTUO+hKR0zZ6QgYbg1DGkGXY3gry7IpurwOTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=uTmdZouw; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 253951682;
-	Fri,  8 May 2026 11:42:08 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E21E35C8;
+	Fri,  8 May 2026 11:45:17 -0700 (PDT)
 Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 423B93F763;
-	Fri,  8 May 2026 11:42:12 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CDF5D3F763;
+	Fri,  8 May 2026 11:45:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1778265733; bh=2R0fPqfrjruSXC8XwdopLbeaSYMX4IVp2H58vn6VBkc=;
+	t=1778265922; bh=Um9WPFqN7H2ySkHiR2sGQgTz8RH4w81WnNll++kO0KE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ljqHJYSwdfOAM9rsQ3vQWOk0Wfhf5MM+bUcBFdFcJy6Q1x3r87sztE2yx/X9kQUC9
-	 HX0JUX7MXxXpnL6rx2HVsMpRrbFBHtZj7EOMvygfG+UtEr0VozxhWkA7iGbCPg+j3r
-	 cBTr5HIPEBgl/ANtHs2AGesYPhri1sRhgzoWcWHA=
-Date: Fri, 8 May 2026 19:42:09 +0100
+	b=uTmdZouwo9E6t00HxpLFDySDpfjnNQYivZlR7bZalwSAXnoqbqYhjPvhASnVaTCdp
+	 c/ZkWgRYxg9hxDM47Ti/paOahAhtcGINq//R1N/fEcFhDwNnLr/2NNnQ2ZM37aqDxo
+	 o07keQreCRyqmvemlEU1mqlyhUq0Bs/VVc178Upg=
+Date: Fri, 8 May 2026 19:45:19 +0100
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: Sudeep Holla <sudeep.holla@kernel.org>
 Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-integrity@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH 3/4] firmware: arm_ffa: Set the core device as FF-A
- device parent
-Message-ID: <af4ugdkfaO3m2Ile@e129823.arm.com>
+Subject: Re: [PATCH 4/4] firmware: arm_ffa: Defer probe until pKVM is
+ initialized
+Message-ID: <af4vPxsKXpJlX8Ds@e129823.arm.com>
 References: <20260508-b4-ffa_plat_dev-v1-0-c5a30f8cf7b8@kernel.org>
- <20260508-b4-ffa_plat_dev-v1-3-c5a30f8cf7b8@kernel.org>
+ <20260508-b4-ffa_plat_dev-v1-4-c5a30f8cf7b8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -63,13 +63,13 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260508-b4-ffa_plat_dev-v1-3-c5a30f8cf7b8@kernel.org>
-X-Rspamd-Queue-Id: 5EAF74FAB60
+In-Reply-To: <20260508-b4-ffa_plat_dev-v1-4-c5a30f8cf7b8@kernel.org>
+X-Rspamd-Queue-Id: 19ACE4FABF0
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -77,7 +77,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	DKIM_TRACE(0.00)[arm.com:+];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9495-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9496-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
@@ -87,99 +87,59 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,arm.com:email,arm.com:dkim,e129823.arm.com:mid,buf.id:url]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[e129823.arm.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,arm.com:email,arm.com:dkim]
 X-Rspamd-Action: no action
 
-LGTM.
+Look good to me.
 
 Reviewed-by: Yeoreum Yun <yeoreum.yun@arm.com>
 
-> Pass a parent device into ffa_device_register() and use the synthetic
-> arm-ffa platform device as the parent for each registered FF-A device.
+> When protected KVM is enabled, the kernel includes a pKVM FF-A proxy
+> that sits in front of the normal FF-A driver. The proxy has to perform
+> its own FF-A version negotiation and setup first, so that it can mediate
+> subsequent FF-A traffic correctly.
 > 
-> This keeps the enumerated FF-A partition devices anchored below the FF-A
-> core device in the driver model, matching the platform-driver conversion
-> of the core transport.
+> Defer FF-A core probing until pKVM has completed initialization. This
+> keeps the normal driver from negotiating the FF-A version or performing
+> other transport setup before the pKVM proxy is ready, and lets the
+> driver model retry probing once the protected KVM state required by the
+> FF-A transport is available.
 > 
 > Suggested-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > Signed-off-by: Sudeep Holla <sudeep.holla@kernel.org>
 > ---
->  drivers/firmware/arm_ffa/bus.c    | 3 ++-
->  drivers/firmware/arm_ffa/driver.c | 5 +++--
->  include/linux/arm_ffa.h           | 4 ++--
->  3 files changed, 7 insertions(+), 5 deletions(-)
+>  drivers/firmware/arm_ffa/driver.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/drivers/firmware/arm_ffa/bus.c b/drivers/firmware/arm_ffa/bus.c
-> index 9576862d89c4..e05fe0b6049c 100644
-> --- a/drivers/firmware/arm_ffa/bus.c
-> +++ b/drivers/firmware/arm_ffa/bus.c
-> @@ -190,7 +190,7 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev)
->  
->  struct ffa_device *
->  ffa_device_register(const struct ffa_partition_info *part_info,
-> -		    const struct ffa_ops *ops)
-> +		    const struct ffa_ops *ops, struct device *parent)
->  {
->  	int id, ret;
->  	struct device *dev;
-> @@ -210,6 +210,7 @@ ffa_device_register(const struct ffa_partition_info *part_info,
->  	}
->  
->  	dev = &ffa_dev->dev;
-> +	dev->parent = parent;
->  	dev->bus = &ffa_bus_type;
->  	dev->release = ffa_release_device;
->  	dev->dma_mask = &dev->coherent_dma_mask;
 > diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index 97ecdb5dac09..e9d7dc71c06d 100644
+> index e9d7dc71c06d..1fba064c2aba 100644
 > --- a/drivers/firmware/arm_ffa/driver.c
 > +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -1688,7 +1688,7 @@ static int ffa_setup_host_partition(int vm_id)
->  	int ret;
+> @@ -43,6 +43,8 @@
+>  #include <linux/uuid.h>
+>  #include <linux/xarray.h>
 >  
->  	buf.id = vm_id;
-> -	ffa_dev = ffa_device_register(&buf, &ffa_drv_ops);
-> +	ffa_dev = ffa_device_register(&buf, &ffa_drv_ops, &ffa_pdev->dev);
->  	if (!ffa_dev) {
->  		pr_err("%s: failed to register host partition ID 0x%x\n",
->  		       __func__, vm_id);
-> @@ -1758,7 +1758,8 @@ static int ffa_setup_partitions(void)
->  		 * provides UUID here for each partition as part of the
->  		 * discovery API and the same is passed.
->  		 */
-> -		ffa_dev = ffa_device_register(tpbuf, &ffa_drv_ops);
-> +		ffa_dev = ffa_device_register(tpbuf, &ffa_drv_ops,
-> +					      &ffa_pdev->dev);
->  		if (!ffa_dev) {
->  			pr_err("%s: failed to register partition ID 0x%x\n",
->  			       __func__, tpbuf->id);
-> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-> index 81e603839c4a..17eca3dfc59e 100644
-> --- a/include/linux/arm_ffa.h
-> +++ b/include/linux/arm_ffa.h
-> @@ -173,7 +173,7 @@ struct ffa_partition_info;
->  #if IS_REACHABLE(CONFIG_ARM_FFA_TRANSPORT)
->  struct ffa_device *
->  ffa_device_register(const struct ffa_partition_info *part_info,
-> -		    const struct ffa_ops *ops);
-> +		    const struct ffa_ops *ops, struct device *parent);
->  void ffa_device_unregister(struct ffa_device *ffa_dev);
->  int ffa_driver_register(struct ffa_driver *driver, struct module *owner,
->  			const char *mod_name);
-> @@ -184,7 +184,7 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev);
->  #else
->  static inline struct ffa_device *
->  ffa_device_register(const struct ffa_partition_info *part_info,
-> -		    const struct ffa_ops *ops)
-> +		    const struct ffa_ops *ops, struct device *parent)
->  {
->  	return NULL;
->  }
+> +#include <asm/virt.h>
+> +
+>  #include "common.h"
+>  
+>  #define FFA_DRIVER_VERSION	FFA_VERSION_1_2
+> @@ -2039,6 +2041,10 @@ static int ffa_probe(struct platform_device *pdev)
+>  	u32 buf_sz;
+>  	size_t rxtx_bufsz = SZ_4K;
+>  
+> +	if (IS_BUILTIN(CONFIG_ARM_FFA_TRANSPORT) &&
+> +	    is_protected_kvm_enabled() && !is_pkvm_initialized())
+> +		return -EPROBE_DEFER;
+> +
+>  	ret = ffa_transport_init(&invoke_ffa_fn);
+>  	if (ret)
+>  		return ret;
 > 
 > -- 
 > 2.43.0
