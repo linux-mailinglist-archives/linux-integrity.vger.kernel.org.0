@@ -1,60 +1,58 @@
-Return-Path: <linux-integrity+bounces-9496-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9497-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CMWQC08v/mmvngAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9496-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 08 May 2026 20:45:35 +0200
+	id EvKjOVAa/2lz2QAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9497-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 09 May 2026 13:28:16 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19ACE4FABF0
-	for <lists+linux-integrity@lfdr.de>; Fri, 08 May 2026 20:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB23D4FF793
+	for <lists+linux-integrity@lfdr.de>; Sat, 09 May 2026 13:28:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id CE8BF300AD4E
-	for <lists+linux-integrity@lfdr.de>; Fri,  8 May 2026 18:45:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E585730055EF
+	for <lists+linux-integrity@lfdr.de>; Sat,  9 May 2026 11:28:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EE31376BE2;
-	Fri,  8 May 2026 18:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F0DE33F5B2;
+	Sat,  9 May 2026 11:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="uTmdZouw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHdCgwP9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76D683644BD;
-	Fri,  8 May 2026 18:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB4A23D2A4;
+	Sat,  9 May 2026 11:28:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778265925; cv=none; b=okkfJlVTizWB22JnaTIzquowgNCy9qg5tj11xYICZfMlfL9q8MHTGp52RtAv4ZrQeKZ1ZFN4I3IIZAb+RrLxn4Uj+i62POFSBfX88NEwvdS7/Pfvus5W70Cj7/sxlSRepkDBgXbR/8oLyl9UNmyPKrI76n2jg1R4zoPL9NgQXnI=
+	t=1778326089; cv=none; b=dIwkORpRmne5+pe3An4H24x11bSwxDhQdi6yYPlp4CGyPrYAjfFimZd5DNumc8YY8nz6ZEh86q7EXpN9jxtE+dcaVVEP35EA5GpuyaqprcL+EvmEFyHsAkPfFUWjR/1WBhpFHOj2/1mmK3Zlg62YVFRHRUaruA+DM2F8RATA+v4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778265925; c=relaxed/simple;
-	bh=Um9WPFqN7H2ySkHiR2sGQgTz8RH4w81WnNll++kO0KE=;
+	s=arc-20240116; t=1778326089; c=relaxed/simple;
+	bh=jvyvfEdpWAp1SaDBw3/zHXckcaEbqIogZKzdz5mqfic=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FZpWgF9hwlo6Q/MsZ34uk7sNnTQM0HIq/UMkkeOT2CQffhQNjOwp4zvFZEqpCWYTET8XXdQUPiK/K3QN9/6RN877mlsIdUllF6S9AsIXKB3S5DwB2Y1Dg3gGrOimT4kjhEL0PXZTUO+hKR0zZ6QgYbg1DGkGXY3gry7IpurwOTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=uTmdZouw; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E21E35C8;
-	Fri,  8 May 2026 11:45:17 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CDF5D3F763;
-	Fri,  8 May 2026 11:45:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1778265922; bh=Um9WPFqN7H2ySkHiR2sGQgTz8RH4w81WnNll++kO0KE=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=YovIVUHnYpNiG/EVGp3R60wrAlrx9+R742foEMRxpT0wIuQe7Z1rnoW+awZ1SpcGGVL7AJ65CyCJEvzuQrnL1NZE3qluB4CzegwqZynMpFJDgsdKAOQGGE9vkI0DQS8yL0G9snQ4fSGCmqgbi+WlT9MaijObsuxBclshOfe3p1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHdCgwP9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93E2CC2BCB2;
+	Sat,  9 May 2026 11:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778326088;
+	bh=jvyvfEdpWAp1SaDBw3/zHXckcaEbqIogZKzdz5mqfic=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uTmdZouwo9E6t00HxpLFDySDpfjnNQYivZlR7bZalwSAXnoqbqYhjPvhASnVaTCdp
-	 c/ZkWgRYxg9hxDM47Ti/paOahAhtcGINq//R1N/fEcFhDwNnLr/2NNnQ2ZM37aqDxo
-	 o07keQreCRyqmvemlEU1mqlyhUq0Bs/VVc178Upg=
-Date: Fri, 8 May 2026 19:45:19 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Sudeep Holla <sudeep.holla@kernel.org>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH 4/4] firmware: arm_ffa: Defer probe until pKVM is
- initialized
-Message-ID: <af4vPxsKXpJlX8Ds@e129823.arm.com>
-References: <20260508-b4-ffa_plat_dev-v1-0-c5a30f8cf7b8@kernel.org>
- <20260508-b4-ffa_plat_dev-v1-4-c5a30f8cf7b8@kernel.org>
+	b=VHdCgwP93anw56yZRBqRXMvTUNgBxLEAKq5MimZk1Ti8sq8y3Ehxsq6gvbx6bfq1Y
+	 F9K6zXo3ySDjJSwqBbfGBGgY8DisvZ0pVigbAyi9/9NPK3Xdk1C7cZnX+6IoOnZ4pw
+	 1AkSDMvzwIFJRIUewYIBdIHo0LCUmtv6O85VEFnLhhvugrP9XGWJpzOzFsmaovLuvH
+	 je5JNqEWi3aPgxhqqynEh/Fhkt/cN9p6LhQ80r06XVdDvGJ3kHaWXTwIDYTHbmig5Z
+	 QUj8YDLfrM2cEa75UGo3qJTK82sfvIgW8aFDt4tK+whckDqaEoXoPcLsxcAtAmLZ71
+	 B8h2pcEunFznA==
+Date: Sat, 9 May 2026 14:28:04 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Gunnar Kudrjavets <gunnarku@amazon.com>
+Cc: peterhuewe@gmx.de, jgg@ziepe.ca, noodles@meta.com,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Justinien Bouron <jbouron@amazon.com>
+Subject: Re: [PATCH] tpm: Remove dead NULL check in tpm2_flush_space()
+Message-ID: <af8aRHUDDho2orTW@kernel.org>
+References: <20260427163238.20230-1-gunnarku@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -63,89 +61,83 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260508-b4-ffa_plat_dev-v1-4-c5a30f8cf7b8@kernel.org>
-X-Rspamd-Queue-Id: 19ACE4FABF0
+In-Reply-To: <20260427163238.20230-1-gunnarku@amazon.com>
+X-Rspamd-Queue-Id: BB23D4FF793
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
-	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[arm.com:+];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,meta.com,vger.kernel.org,amazon.com];
+	TAGGED_FROM(0.00)[bounces-9497-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9496-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[e129823.arm.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,arm.com:email,arm.com:dkim]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Look good to me.
-
-Reviewed-by: Yeoreum Yun <yeoreum.yun@arm.com>
-
-> When protected KVM is enabled, the kernel includes a pKVM FF-A proxy
-> that sits in front of the normal FF-A driver. The proxy has to perform
-> its own FF-A version negotiation and setup first, so that it can mediate
-> subsequent FF-A traffic correctly.
+On Mon, Apr 27, 2026 at 04:32:26PM +0000, Gunnar Kudrjavets wrote:
+> The 'space' pointer in tpm2_flush_space() is assigned from
+> &chip->work_space, which is the address of an embedded struct member
+> within struct tpm_chip. This address can never be NULL, making the
+> NULL check dead code. The new code follows the existing pattern
+> established by the other callers in tpm2-space.c which also assign
+> from &chip->work_space without a NULL check. Remove the dead code
+> to avoid confusion.
 > 
-> Defer FF-A core probing until pKVM has completed initialization. This
-> keeps the normal driver from negotiating the FF-A version or performing
-> other transport setup before the pKVM proxy is ready, and lets the
-> driver model retry probing once the protected KVM state required by the
-> FF-A transport is available.
-> 
-> Suggested-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> Signed-off-by: Sudeep Holla <sudeep.holla@kernel.org>
+> Fixes: e3aaebcbb7c6 ("tpm: Clean up TPM space after command failure")
+> Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
+> Assisted-by: Kiro:claude-opus-4.6
+
+Just for sake of understanding:
+
+What is "kiro" and is assisted-by the tag supposed to be used here?
+
+> Reviewed-by: Justinien Bouron <jbouron@amazon.com>
 > ---
->  drivers/firmware/arm_ffa/driver.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/char/tpm/tpm2-space.c | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index e9d7dc71c06d..1fba064c2aba 100644
-> --- a/drivers/firmware/arm_ffa/driver.c
-> +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -43,6 +43,8 @@
->  #include <linux/uuid.h>
->  #include <linux/xarray.h>
+> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> index 60354cd53b5c..1eec72eb8208 100644
+> --- a/drivers/char/tpm/tpm2-space.c
+> +++ b/drivers/char/tpm/tpm2-space.c
+> @@ -169,9 +169,6 @@ void tpm2_flush_space(struct tpm_chip *chip)
+>  	struct tpm_space *space = &chip->work_space;
+>  	int i;
 >  
-> +#include <asm/virt.h>
-> +
->  #include "common.h"
->  
->  #define FFA_DRIVER_VERSION	FFA_VERSION_1_2
-> @@ -2039,6 +2041,10 @@ static int ffa_probe(struct platform_device *pdev)
->  	u32 buf_sz;
->  	size_t rxtx_bufsz = SZ_4K;
->  
-> +	if (IS_BUILTIN(CONFIG_ARM_FFA_TRANSPORT) &&
-> +	    is_protected_kvm_enabled() && !is_pkvm_initialized())
-> +		return -EPROBE_DEFER;
-> +
->  	ret = ffa_transport_init(&invoke_ffa_fn);
->  	if (ret)
->  		return ret;
+> -	if (!space)
+> -		return;
+> -
+>  	for (i = 0; i < ARRAY_SIZE(space->context_tbl); i++)
+>  		if (space->context_tbl[i] && ~space->context_tbl[i])
+>  			tpm2_flush_context(chip, space->context_tbl[i]);
 > 
+> base-commit: 949692da7211572fac419b2986b6abc0cd1aeb76
 > -- 
-> 2.43.0
+> 2.47.3
 > 
 
--- 
-Sincerely,
-Yeoreum Yun
+It's all good otherwise, just need clarification as we are learning
+how to deal with these patches :-)
+
+BR, Jarkko
 
