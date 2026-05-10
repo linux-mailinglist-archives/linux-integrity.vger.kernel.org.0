@@ -1,170 +1,152 @@
-Return-Path: <linux-integrity+bounces-9515-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9516-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eP8zHWu8AGpGMAEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9515-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 19:12:11 +0200
+	id EoIhDfLNAGqdMwEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9516-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 20:26:58 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC276505587
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 19:12:10 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65FAE5059DB
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 20:26:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 08BE0300638F
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 17:12:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0FF24300AB05
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 18:26:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07035388E72;
-	Sun, 10 May 2026 17:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C98630648C;
+	Sun, 10 May 2026 18:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="dqDIUKGq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tG4nD/4d"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.35.192.45])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A713B27FC;
-	Sun, 10 May 2026 17:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.35.192.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179FC3043CE;
+	Sun, 10 May 2026 18:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778433127; cv=none; b=I1wopcm9cW5SNM4tvH7dOHf1D7xdlrFdSNFCmb+CFWlhMMlaqYc8M8HVU7JiV1D7uPnJxi7HWOlmBklgYaxv5WLbmxu+6ABdIwFury+eDlq4+AnOgtHlvb2Ll3wXdvZjMG7+LG70w9oY2nAQtF91DBOnTmhayVlqhE2CIK8XYa8=
+	t=1778437613; cv=none; b=bfXM6b/gYabcU5JvRumtAldkCJMkKIvWuCbdINhAkXdw5xag1OPMTdvuJg5TSsZQqXaEaRbd++ytjHOWm+Yybn52hr3LM0fkvrCT/oUDSc1T7w51V9k+/lQAHugOQmqXSrDA0YJpkRn7m7EOPJz0+H5VGoJxu47arXJR4WOHraA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778433127; c=relaxed/simple;
-	bh=AUH17FvoK6dWFJ+g16BI10LOlzZJOR3K8M/1lGCyOcM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ADKlfOzYiokdhI8Yw0wmPQXgj78QpHBzZdwCu/2gs8zi8Jdb/OGwjNgJkU+vj6hgZUJ/IwujHu5SKBAdzJiPwFbCAhAWpwloW/Jh8REXjEGJAaCeabYvWxZwAiUeXg6sfPvhArPeAUWZqyQ1bIVoakhB3qdJPxdqPG07FrIQsbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=dqDIUKGq; arc=none smtp.client-ip=52.35.192.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1778433126; x=1809969126;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZJknJJaSGB7gCArGDDao150Uo9ZuK5Qdfc6e5IiDpW8=;
-  b=dqDIUKGqFfc+XGuNb163p/NcDnSCFYm5jGyMv6FPO+eYqy0BWt/GEMJ4
-   68WodF4nVSQzEvsKDKIf9CH303UanCOTXjUbGz5aJD4jNq+p6ZJlaKvT6
-   UlJUcGBfta9NF3e0VsEIdnRYWZmWfErCElXt4qSQQzDTCsWxB2nfpaweq
-   YYN3GuXQi6rwlWoudPupdwOrXI7bj/t0g02DAnL4K5chXfBUmuyGXe8va
-   DoxecysGqwFzaq4I8tD8Ktju6PQ8YqwClGr+eOX7Ifnd1U9MvmNYucT8I
-   Z9uQ1ao1s5W0p/mBN5skgKxPpG7oMRUTxrR1XwsPwQPgO8YCGJh0Sn6In
-   w==;
-X-CSE-ConnectionGUID: K+Nw5BT2SsKGxdLY5drJEA==
-X-CSE-MsgGUID: 2yWRH6l4Q82v7bl7gL5kVw==
-X-IronPort-AV: E=Sophos;i="6.23,227,1770595200"; 
-   d="scan'208";a="19076162"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-011.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2026 17:12:06 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.178:18148]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.4.227:2525] with esmtp (Farcaster)
- id 55a5fa4a-ef8a-41b8-ae38-f0a52c70cadc; Sun, 10 May 2026 17:12:05 +0000 (UTC)
-X-Farcaster-Flow-ID: 55a5fa4a-ef8a-41b8-ae38-f0a52c70cadc
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37;
- Sun, 10 May 2026 17:12:03 +0000
-Received: from dev-dsk-gunnarku-2c-36117f29.us-west-2.amazon.com
- (172.23.139.22) by EX19D001UWA001.ant.amazon.com (10.13.138.214) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.37; Sun, 10 May 2026
- 17:12:02 +0000
-From: Gunnar Kudrjavets <gunnarku@amazon.com>
-To: <jarkko@kernel.org>
-CC: <gunnarku@amazon.com>, <jbouron@amazon.com>, <jgg@ziepe.ca>,
-	<linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<mhijaz@amazon.com>, <noodles@meta.com>, <peterhuewe@gmx.de>
-Subject: [PATCH v2] tpm: Initialize name_size_alg for non-NULL name in tpm_buf_append_name()
-Date: Sun, 10 May 2026 17:11:27 +0000
-Message-ID: <20260510171152.4607-1-gunnarku@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <af_imAiZEQ7WEe5W@kernel.org>
+	s=arc-20240116; t=1778437613; c=relaxed/simple;
+	bh=fJXpb9VxOpGJKGl3l+TydjT48tPKce6RiGttdzrEimw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kZzu2f5U2+jLefJi5HJCINPlqPwRWIfxOPTC3rpuM87QQmHz4g/wsuwmvBH1cWvkNluTe+jdLOumX2q+kKH+rx9BFXg6zQ9SPbiz9BojNcujaC9c8GKLPjWchssMU/krSSJBJhXDS3pXYnhe6sAWdV82y02KDw7PgCLFDoFKKss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tG4nD/4d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50FB9C2BCB8;
+	Sun, 10 May 2026 18:26:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778437612;
+	bh=fJXpb9VxOpGJKGl3l+TydjT48tPKce6RiGttdzrEimw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tG4nD/4dQDBT/SghgYZ04DMSupFh5YnVS1vd+BmdEvxhA92MfFjY6jrKl06FbPGOv
+	 xdN0BccFww/PwONgml+G10rGLl7/SG+44uykp+I+JVU99aqmdUldgfZ6LfPC1h9yLA
+	 PQr+Nq7uT4OyIWophwlxlp2H3OkrTvVaK8lzByTNconHjjUBFkC3Mwdc6skVivt8kx
+	 vw0ThUTaShmjNWgYV3IpUWH7B0faV5JmRzl7fJ67X/9KUGIM/tAwDwh8qThx6I6HwX
+	 xp8fNQzWHGX4D5rLeMxiR2DN7TrxA+lDIoYn6a/hfqUO0BZUL1f2PRr+Yd1Zp6Vi66
+	 ruhk1QwP8J7Gg==
+Date: Sun, 10 May 2026 21:26:48 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Gunnar Kudrjavets <gunnarku@amazon.com>
+Cc: jbouron@amazon.com, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org, mhijaz@amazon.com, noodles@meta.com,
+	peterhuewe@gmx.de
+Subject: Re: [PATCH v2] tpm: Initialize name_size_alg for non-NULL name in
+ tpm_buf_append_name()
+Message-ID: <agDN6EbJWXoSB63e@kernel.org>
 References: <af_imAiZEQ7WEe5W@kernel.org>
+ <20260510171152.4607-1-gunnarku@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D039UWB004.ant.amazon.com (10.13.138.57) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-X-Rspamd-Queue-Id: CC276505587
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260510171152.4607-1-gunnarku@amazon.com>
+X-Rspamd-Queue-Id: 65FAE5059DB
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-7.66 / 15.00];
-	WHITELIST_DMARC(-7.00)[amazon.com:D:+];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[amazon.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[amazon.com:s=amazoncorp2];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
 	FREEMAIL_CC(0.00)[amazon.com,ziepe.ca,vger.kernel.org,meta.com,gmx.de];
-	FROM_NEQ_ENVFROM(0.00)[gunnarku@amazon.com,linux-integrity@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9515-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[amazon.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	TO_DN_NONE(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9516-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-tpm_buf_append_name() supports callers passing a pre-computed name
-for handles. When name is non-NULL, the code skips the
-tpm2_read_public() path but leaves name_size_alg uninitialized
-before it is used as the memcpy size argument.
+On Sun, May 10, 2026 at 05:11:27PM +0000, Gunnar Kudrjavets wrote:
+> tpm_buf_append_name() supports callers passing a pre-computed name
+> for handles. When name is non-NULL, the code skips the
+> tpm2_read_public() path but leaves name_size_alg uninitialized
+> before it is used as the memcpy size argument.
+> 
+> No current in-tree caller passes a non-NULL name, but future use
+> cases such as name caching would exercise this path. Initialize
+> name_size_alg by calling name_size() on the caller-provided name,
+> sharing the error check and assignment with the existing
+> tpm2_read_public() path. This prevents unmasking a latent bug when
+> the non-NULL name path is eventually used.
+> 
+> Assisted-by: Kiro:claude-opus-4.6
+> Reviewed-by: Justinien Bouron <jbouron@amazon.com>
+> Reviewed-by: Muhammad Hammad Ijaz <mhijaz@amazon.com>
+> Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
+> ---
+>  drivers/char/tpm/tpm2-sessions.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+> index c4da6fde748f..795cd99dc6fe 100644
+> --- a/drivers/char/tpm/tpm2-sessions.c
+> +++ b/drivers/char/tpm/tpm2-sessions.c
+> @@ -285,11 +285,14 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
+>  	    mso == TPM2_MSO_NVRAM) {
+>  		if (!name) {
+>  			ret = tpm2_read_public(chip, handle, auth->name[slot]);
+> -			if (ret < 0)
+> -				goto err;
+> -
+> -			name_size_alg = ret;
+> +		} else {
+> +			ret = name_size(name);
+>  		}
+> +
+> +		if (ret < 0)
+> +			goto err;
+> +
+> +		name_size_alg = ret;
+>  	} else {
+>  		if (name) {
+>  			dev_err(&chip->dev, "handle 0x%08x does not use a name\n",
+> 
+> base-commit: 44bd97559c26bb4d7abac09d29e58a4152d88567
+> --
+> 2.47.3
+> 
 
-No current in-tree caller passes a non-NULL name, but future use
-cases such as name caching would exercise this path. Initialize
-name_size_alg by calling name_size() on the caller-provided name,
-sharing the error check and assignment with the existing
-tpm2_read_public() path. This prevents unmasking a latent bug when
-the non-NULL name path is eventually used.
+Thank you. Applied.
 
-Assisted-by: Kiro:claude-opus-4.6
-Reviewed-by: Justinien Bouron <jbouron@amazon.com>
-Reviewed-by: Muhammad Hammad Ijaz <mhijaz@amazon.com>
-Signed-off-by: Gunnar Kudrjavets <gunnarku@amazon.com>
----
- drivers/char/tpm/tpm2-sessions.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
-index c4da6fde748f..795cd99dc6fe 100644
---- a/drivers/char/tpm/tpm2-sessions.c
-+++ b/drivers/char/tpm/tpm2-sessions.c
-@@ -285,11 +285,14 @@ int tpm_buf_append_name(struct tpm_chip *chip, struct tpm_buf *buf,
- 	    mso == TPM2_MSO_NVRAM) {
- 		if (!name) {
- 			ret = tpm2_read_public(chip, handle, auth->name[slot]);
--			if (ret < 0)
--				goto err;
--
--			name_size_alg = ret;
-+		} else {
-+			ret = name_size(name);
- 		}
-+
-+		if (ret < 0)
-+			goto err;
-+
-+		name_size_alg = ret;
- 	} else {
- 		if (name) {
- 			dev_err(&chip->dev, "handle 0x%08x does not use a name\n",
-
-base-commit: 44bd97559c26bb4d7abac09d29e58a4152d88567
---
-2.47.3
-
+BR, Jarkko
 
