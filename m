@@ -1,325 +1,227 @@
-Return-Path: <linux-integrity+bounces-9517-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9518-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4L+nMMPtAGpUOgEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9517-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 22:42:43 +0200
+	id 0EMwIInuAGptOgEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9518-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 22:46:01 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29F015064C1
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 22:42:43 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3A8A506523
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 22:46:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7DBA83004C3E
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 20:42:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 32A24300C5A1
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 20:45:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8580932E151;
-	Sun, 10 May 2026 20:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25AE2314A6F;
+	Sun, 10 May 2026 20:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="PmU/sFH2"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="lLePA2ms"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013006.outbound.protection.outlook.com [52.101.83.6])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9934225A642;
-	Sun, 10 May 2026 20:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.6
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778445758; cv=fail; b=ej5/9Kikj0Dex64ERteMCFZD8PciRjKjLGsIhH3qQ3JWsuaieWZFdEuCdnHEa8lrXkB9qeNaD/pLbEm2BAtVYL/uiS2TlpdSxxcGgilT3evSsCsye2GsQgKpfLFDlhisdzighDITKdgSHdHM2fDjPsjqOdpjuPHbexly/P+IAKA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778445758; c=relaxed/simple;
-	bh=E0hZXsMBWxhfWtjIRzYNGAyWjCK8gG6ymJO1xQSdx7c=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=t8vVAGI2WNDjPwVxMYwl1VNDHF8kfmjs1Qoelb4HikJ+Ukikha/wFR3cZRNMyQK/4y0QsbLdTeMND00NTRxDPl96sPT1aJ/b8jJI+US3tATdtZ08jmN+WbuXaYgOl4uKkfs++L6PpdDnf0TPNQ5QBu9JwSePh16IBHOJ7fL+D1U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=PmU/sFH2; arc=fail smtp.client-ip=52.101.83.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KKoIXTFHiWMruCKtXJZc6LbAw+yP3PqQfjZTGE7EqDlQlHU+Mb7+uiv7e/RCwJlmZ/cj0/2l4EF3bESJf6hCVYvZZY0D9L1lfg2tsMoonK+7/DtIScJn57UlrImTWJp76Iq8d0hReLCgbQlWs0o+ehxcdMEhexGc4C1nwVsXNKpH+C1ZCysyX12Es0HwuMMdEd0RXv7vhdbLzK7q6id2s2ZGPvJXDD3ijaFIMU6QcGVEIWQPu1JoOKUZ6eo2cIqCDz7MsdKo3m63otUWCehBOmr3dSzquGiRuoIyLYu0lnas5O+HmTGJakFHfMNqTbB2B4CUGWqRUIbN47VminovVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l/SrZ/F2Ug/ECFt2Z5AQp7dBg1BRSFk5EpmMDNxPEIY=;
- b=VMPQm8KIjL9jVVil/5zy8fNSgAnuarQkBM0FuKL2DuPlrz1Byx/S7JwRcNSpkcn/ZiseFr9vYkOJD4SucRuZ3FH6hL8sW+R13o0nrxE8eRqE7DhwpMpbLplTXGnUi4J9S7pBhShlvPtVl195SI3Cp/xzxlkXphbwYyUgXvrILtjOpN5EA4gX1C0Hc5ENpB0/erImUOWH9Y1l4tIc+ooq8I9loybmv5EZeXLdMyDPSMPLpcQm/vtgvfVhd+wqaj7v5JA/QFrWyrQDDttEs0KIKcehPnEbDspgUmv5gIMgrcAa5CjHKAGYzlxwNa1flDBX/9ij9SDQivzyEJjZHQIWqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l/SrZ/F2Ug/ECFt2Z5AQp7dBg1BRSFk5EpmMDNxPEIY=;
- b=PmU/sFH2S2mNYFiTyYntelwDmC9J8fFEIyX8f03oSoLnY+R4CaOxeBZpj2YOjJDli+ZngY4Vl0577f0ot7klOYraZK3I6CFdU6hL/0nVzfQpxjDddP8vE6hLK7zIgLf6+5A7eN9yze4OdMXTOPWLob2s5qAF9tVM75w4FyUuwjAa1c9E4/vNw3219/00KdSYcZKmcpnW87QYvOxq6C6/Hcli3ro6nFpeKzhHdtSHiPczDdWVkCI/nfzDShHdNUQUQBDoClGB2xwvAL2LOYIq8EjzgkEu4oNa+Rdv5TotjOb8kO3Gv0b5x/3aBr47WfeuzU+pEUcx5H3EUrN7BZfKFw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by GV1PR10MB6146.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:99::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9891.21; Sun, 10 May
- 2026 20:42:31 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::be9f:e8ca:ee9:83e1]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::be9f:e8ca:ee9:83e1%3]) with mapi id 15.20.9891.021; Sun, 10 May 2026
- 20:42:31 +0000
-Message-ID: <2d00dd26-9190-4e25-bda2-b2ac9bcd5180@siemens.com>
-Date: Sun, 10 May 2026 22:42:27 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] hwrng: tpm: Do not enable by default
-To: Jarkko Sakkinen <jarkko@kernel.org>,
- "Niedermayr, BENEDIKT" <benedikt.niedermayr@siemens.com>
-Cc: Peter Huewe <peterhuewe@gmx.de>,
- "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Jens Wiklander <jens.wiklander@linaro.org>,
- OP-TEE TrustedFirmware <op-tee@lists.trustedfirmware.org>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- "Bauer, Sven" <svenbauer@siemens.com>,
- "Zeschg, Thomas" <thomas.zeschg@siemens.com>,
- "Gylstorff, Quirin" <quirin.gylstorff@siemens.com>
-References: <bbc41534-a2d9-42dc-ac8a-ff8a0b4fd41f@siemens.com>
- <aP_NN3HwO4Hp0-9T@kernel.org>
- <96df7b4d-cf1b-471d-9b4b-8741a80fbcc3@siemens.com>
- <af9QQah4QN5VD-4P@kernel.org>
-From: Jan Kiszka <jan.kiszka@siemens.com>
-Content-Language: en-US
-Autocrypt: addr=jan.kiszka@siemens.com; keydata=
- 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
-In-Reply-To: <af9QQah4QN5VD-4P@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0009.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a::19) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2270B2836A0;
+	Sun, 10 May 2026 20:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778445957; cv=none; b=nDi1mJh7Y5qh+q4mlX78zvapA7Ed6whScDw8bo8t92lSN9ugWI12x3lur5dvGxMVxm2LPerfUMmDo3qMPr4YdVhLjZX64WKGzKoqZCr2y5L6o+i3qIxW9nLLy7Ng+K05u0Z+EX++xXBHy1yBUxkIc4UsehBhrcuelFySAWQR6O8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778445957; c=relaxed/simple;
+	bh=NmVs1pS/HxOIFX28NvsDmf5NQ9YSnkHMBC3QkZiYJLc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mfQm4ORcYL0zzjXEsSQpVLDTWuHqioqFozTLDFHGy0gQOt0z+DW4WH8VldFQxRKMxubfgI+rws92LQz1EIzXia+fhFZ04eeN4bQpEyMO06q0w0ueY4TPwD7qYl1Fw2RjuZmUYjgFwg+dpxyczS/nooiQePV/5Gvz2lHBLsfcq2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=lLePA2ms; arc=none smtp.client-ip=212.227.15.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1778445953; x=1779050753; i=wahrenst@gmx.net;
+	bh=a4r1WClzOddhY4ba+V89G/IejE6LjiifDjv0Dyou0w0=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=lLePA2msUzdV1jNG4GVrN9lsgiqJ9PKvyKytlWxxgfwy0CFnAgkoYWF0qgBgbq8a
+	 htCaGKHO+GZHdOnmDhPG18sTuDjK1Nnu/wjbNaD+TzuT1TLzuM6o9w2A3Y0U9Y9TI
+	 /w1QEMkfWV7Odpyr2wpNMkyP7ui4KglQihGHDY28jRCuI/X99NLPdAmRXtRhcJEB8
+	 1idrSrGDjgb+3MGQS1mHjweLQl2B3cINfw7nzeZcUqAlZJiJNrsqVfuKMYrLWwzEE
+	 9oslx/DSKuogl6eWoXJ9Gk2F0f1wfFujFPU56+CCglpVlBwAPZM+rPh/h+JBXs/eU
+	 QMacLPS6l4qRE00hNg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4zAs-1xMczd0r4O-00rB2R; Sun, 10
+ May 2026 22:45:53 +0200
+Message-ID: <033c013e-8b32-4459-9dc9-255232d1d2d7@gmx.net>
+Date: Sun, 10 May 2026 22:45:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|GV1PR10MB6146:EE_
-X-MS-Office365-Filtering-Correlation-Id: 79426654-cfdd-4ddc-54ee-08deaed4a803
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|1800799024|18002099003|22082099003|55112099003|56012099003|3023799003;
-X-Microsoft-Antispam-Message-Info:
-	l2r3xX9T8IWs+nq3LDhFvyp1ln/WVdz2JT4Z0DHU6/pBPkF/ZcXHaaoxaBl1BQXoeQWN0UY6tlsSaE6L5mu+bL9C9yWfPIeIfaCjojPSrwoAX4KJXQCuUvGRa2nWkpgGxtXy5DA6MOc04ZZqkGtJ+gy3HvohCs/S4Da9vKu1dTjYav02PAbH91Wfciaj67ccdAIP8gt0moX3Nex5Jjv6hcHtF6hQfS7AZZ42w7/00TByv6BCLamr7u9pWPoDIEZtr2FE01YlrymUreadqLeRqEU/oLHPFKYGT7/fD5pCdsSEeFDx1j1P4gq67t+pqlZuDomgtz5Pi93W09xrAjW0w6DGp8dfm3X8gAeLqN+sRyYQAlwFNe2WBon49KdRWZ661lF0sgvfPTCxdTaWiyu9JcaN+7IUBhL3vxOWSc0EexiQHYYu2AdSog7UJI5hTr3Tf41aisXIvOnHZfNe3CFlv4GxtEERQAUaDNskjoXx5y/8xQNVdei2mkhSVtfEysoM21kgu87pjnTDnaLvwPqkSyoUu0SDs4L65OygLJMQs2Aa2wtJ91+Ae4kLUOUykJkW3hPfZ/DlU9l75qFiU/nQrt95Gr3mA7MQ+LvGaRnP8qVO8jhHjjeV//7ETf2vLgPkn81yjXY6FvWgeWuUxEBHKw==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(18002099003)(22082099003)(55112099003)(56012099003)(3023799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MEVSbVRla3FobEJkM0NyZkpRQkZmQ05lYkFSZlQ5dUJkb1RQaTBwYzZtQjJv?=
- =?utf-8?B?VVdhRjBXQXlSRU1pci9kNGNoaEp6cEk4Nlo3d2VOZzZQQ1hROTU0N1B1QXpx?=
- =?utf-8?B?VFRYYXZtUUtIUEY0NHEycVlISHAxeWZoUUdNdGR0SUt3VWVBYWtZdzZramQ0?=
- =?utf-8?B?b2llRGRCUWtUWjRUU2tSUlRmd21rOUtOMUpBYWxqSGtFbFZveXV5UFBCSyti?=
- =?utf-8?B?UlFyNmUwY3JDRkRkY3F5Vll6eFI0VHRVdk1IbVdFUVpPOHhmRFNxUXFoU0Q4?=
- =?utf-8?B?ZjBwQXBxVE5kRHZzVUNNM0tuL2t4ZCsrRTRoT3c3MUxkNVB1UGt4YksweFE4?=
- =?utf-8?B?TURjeEJMV3licW1zd2h4NTY2S1dKdW1UdS9oRzl4L0Y5c2x3QzVJUXFBNU90?=
- =?utf-8?B?SGNJVFdtSmtaQ1NoM0VVcnZhVTh2STZyTjVBRWhpVXR5d1FLRmgyN0tqeTB0?=
- =?utf-8?B?cmRKWlVLZTEvUjRsSlBBTXl4cEh5N1BBbmFzTDJtaDc2eTlyS1htSjU4QWdn?=
- =?utf-8?B?QWpDNjlvUkVwd3Q5bnhkcHhuUndoZURYbXlUcXRtTHh4RlVJNnFmTlpzN2Jx?=
- =?utf-8?B?NDhsNUFXRDBQcy81a3ZHUW5LMGNWV1NGRm5SUkE0Q3NLc0U0cHNsWHc5c095?=
- =?utf-8?B?aGp2QUFIWGFFS2JERzlzWmhQdHY0b2oxTWhFQ05RWDIwekh5cFJUVTdBQ290?=
- =?utf-8?B?UFVwaXF3elljMm95UDBSbTFsaWNPdHpNNE5vcnU3c0psaXBSQnp1VzBzT25i?=
- =?utf-8?B?Tkp6NEtacjFDZjh0dWhGK3VjRWpURlRwRlFhRnBoVkxiNWkxSW5YWk9oeXhF?=
- =?utf-8?B?N2tpZXNTclFFdkJMcWpxYUhhOTlZMFZmdDF4UVhEUzVWWGV0aDRzR3RmTTdU?=
- =?utf-8?B?MjAwRXh3RlRzRmFQN0VEVElBTnlTdldCb0IrYURab09EUEhYK2FBQitiTXdZ?=
- =?utf-8?B?TkMxNHJFclVWaDR6Y1RZQVE4cHoyV0Q4Q1RyMzk1L2pac0Z2NTZ0bEFSRzdr?=
- =?utf-8?B?TUFsaGx0aXNwU3UwTnhPYnFFMndRWEdreklQbDZrRGZTTWlzcjZ3SUxtTEww?=
- =?utf-8?B?dXo1NTJDZXR3WGx3SVVpdTFER2xhajVmWWo3SEl2NCtuVGtLSHlGYTQzVXBr?=
- =?utf-8?B?R3JYMStvc2VZVFBHMGYvZDF6VEVvc2RTcVFEaXFnaW5Ebmo2TVN3d0ZuT3ZM?=
- =?utf-8?B?VU1WQ2cwUXVKVXpZWUxGVmU4ZkwxOFQ5Y2JVOEE5OU43eXVGa2dPMmFERzBE?=
- =?utf-8?B?VGZtZ2UxdVByUllBZzFLM0J0QTBUTHZLd0MzT0RUSlVTdkRyU3pCbFlCeTdw?=
- =?utf-8?B?ZFpzSHRUUnd0bllGTDZzcDlzd1AzZzJDOVNFTjlCM0lWcW1wNnZaN1lhVlc2?=
- =?utf-8?B?MTR3L3kyMjR6bWpSVVFwWi9lTk1PUnJkZE45S0tZUDBpNDJaTUI5MVBTc0hW?=
- =?utf-8?B?VHIrZENib0tuUDkzM3haQTd1VFZVUUJsdzlaUTEvRjV4Yk5qWDRjQ0ZDM3JF?=
- =?utf-8?B?bGZZcjVnUHZWVEdHQmRJckRURXU0VGszTjQ1WVJ5OVhGQVBFOGEwUkVUSEFT?=
- =?utf-8?B?aFE1QWlXaFVvdXV6ZVlJQlkvMDUrMVRGNWlCeUVOSFlpZXlOWHdCZ3pHS1l1?=
- =?utf-8?B?Y2tVeDlvOVhTa25YM1lkQjNYZDNQTy8zSkVTdWVZUERlTnJPZUVSL1pES09B?=
- =?utf-8?B?VkFGTnNzSndub2dPdm5OMngxWi9GaFZkWityWjYyMFJMRXpYcjFtZm1uREJ3?=
- =?utf-8?B?YkxOVGs5ZjVkaFVxNURhdW5sNFM5RVRQRFhOa2d6bEYrUDgyVW12bkt4S3I4?=
- =?utf-8?B?bkE2YVppQUJoS0taL3NFeXUrU2tJK0ZpQmpqeFpNZXFHUkZVdzQ2UmpKWmUw?=
- =?utf-8?B?NnJ0NWR4cysrQ2NKYXBQUm15MEozRXk1dW04UHJIb2RwdVBFWWRGN20rSjAr?=
- =?utf-8?B?SzFpZC9nYjFTTFd1RTlJMWVqTkJWTzNHMGQyWWpSWDBOL0M1ZlJWR1JyaTd4?=
- =?utf-8?B?alZldEwwTktsa1VXYXZ5cTc0d0JYeXFFQjNZb0x6THZhYllmZEN3TkhRR2dO?=
- =?utf-8?B?V042d3hoamtvQklNSFNsc3hlU0kyUXZoYW84d1AxaVBSdlI5OEZRZXJJNGFN?=
- =?utf-8?B?NDhoUXRYcGRreWI1a0hKR0Z2Z2lzOW5wYXdCakp0L25qcTBpNlBmbDNrY3Vu?=
- =?utf-8?B?N3JRREFEY2kyUmZ3bmNMMDBDUTVUVDl0dGQ4UHJKWWNNdUlpdnRQL3I0WG5j?=
- =?utf-8?B?WWs2YTlxK0tkNUlMaGJiaGF3ZUY1Q3I3eDRWUldCdnlEbkg4bVQzV05xUVpK?=
- =?utf-8?B?UC9ZSWhGL0Jad2dnbWdnb2ZRZ0hxcnRybzQxOEU4WFdqc2kycEpJdz09?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 79426654-cfdd-4ddc-54ee-08deaed4a803
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2026 20:42:30.9993
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5qw6WJUSVukcMJOIqae0djdBKQtdMW80jQgFwaG5bhneSRBPgcJ7H5661ghNa+LaqNNLjoLdDGYJmfbj0AH+Jw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR10MB6146
-X-Rspamd-Queue-Id: 29F015064C1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tpm: tpm_tis_spi: Use wait_woken() in wait_for_tmp_stat()
+To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
+Cc: stable@vger.kernel.org, Linus Walleij <linusw@kernel.org>,
+ Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+ linux-kernel@vger.kernel.org
+References: <20260509185108.2681198-1-jarkko@kernel.org>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+Autocrypt: addr=wahrenst@gmx.net; keydata=
+ xjMEZ1dOJBYJKwYBBAHaRw8BAQdA7H2MMG3q8FV7kAPko5vOAeaa4UA1I0hMgga1j5iYTTvN
+ IFN0ZWZhbiBXYWhyZW4gPHdhaHJlbnN0QGdteC5uZXQ+wo8EExYIADcWIQT3FXg+ApsOhPDN
+ NNFuwvLLwiAwigUCZ1dOJAUJB4TOAAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEG7C8svCIDCK
+ JQ4BAP4Y9uuHAxbAhHSQf6UZ+hl5BDznsZVBJvH8cZe2dSZ6AQCNgoc1Lxw1tvPscuC1Jd1C
+ TZomrGfQI47OiiJ3vGktBc44BGdXTiQSCisGAQQBl1UBBQEBB0B5M0B2E2XxySUQhU6emMYx
+ f5QR/BrEK0hs3bLT6Hb9WgMBCAfCfgQYFggAJhYhBPcVeD4Cmw6E8M000W7C8svCIDCKBQJn
+ V04kBQkHhM4AAhsMAAoJEG7C8svCIDCKJxoA/i+kqD5bphZEucrJHw77ujnOQbiKY2rLb0pE
+ aHMQoiECAQDVbj827W1Yai/0XEABIr8Ci6a+/qZ8Vz6MZzL5GJosAA==
+In-Reply-To: <20260509185108.2681198-1-jarkko@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:W0tqTbrT/2O2OOSWQWDxVpIs287Z9lZKvNfCR/umvbO33EpaYbj
+ 7xlNa9NKzkhRrUnSCi3CnLBB+dFTAl4n2Hbtbm53fXRBN8uduZG37liFNxulw1hPU0hJhGW
+ /AoYm0G/Nq2Cndkf9nhal0F6A/kXSx0ew864IqESAKdBcxoO7vUNSLoG9X/w7U8Qk1TBN+G
+ Zp2UVSpV1eOpOp6OwrqQA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:PNDKVst7Yvo=;fuPUnI1x9hoDq0+IyVySrUcu/gM
+ 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
+ 0pg5re3VnAFfpzMMawaVWtWxsheIuifCO39g=
+X-Rspamd-Queue-Id: D3A8A506523
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[siemens.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
-	R_DKIM_ALLOW(-0.20)[siemens.com:s=selector2];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmx.net,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmx.net:s=s31663417];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmx.de,vger.kernel.org,linaro.org,lists.trustedfirmware.org,siemens.com];
-	TAGGED_FROM(0.00)[bounces-9517-lists,linux-integrity=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[siemens.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jan.kiszka@siemens.com,linux-integrity@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-9518-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmx.de,ziepe.ca];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmx.net:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FREEMAIL_FROM(0.00)[gmx.net];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[wahrenst@gmx.net,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	HAS_WP_URI(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,siemens.com:email,siemens.com:mid,siemens.com:dkim,trustedcomputinggroup.org:url]
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On 09.05.26 17:18, Jarkko Sakkinen wrote:
-> On Wed, Apr 29, 2026 at 02:33:20PM +0000, Niedermayr, BENEDIKT wrote:
->> On 10/27/25 20:51, Jarkko Sakkinen wrote:
->>> On Tue, Oct 21, 2025 at 02:46:15PM +0200, Jan Kiszka wrote:
->>>> From: Jan Kiszka <jan.kiszka@siemens.com>
->>>>
->>>> As seen with optee_ftpm, which uses ms-tpm-20-ref [1], a TPM may write
->>>> the current time epoch to its NV storage every 4 seconds if there are
->>>> commands sent to it. The 60 seconds periodic update of the entropy pool
->>>> that the hwrng kthread does triggers this, causing about 4 writes per
->>>> requests. Makes 2 millions per year for a 24/7 device, and that is a lot
->>>> for its backing NV storage.
->>>>
->>>> It is therefore better to make the user intentionally enable this,
->>>> providing a chance to read the warning.
->>>>
->>>> [1] https://github.com/Microsoft/ms-tpm-20-ref
->>>>
->>>> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
->>>
->>> Looking at DRBG_* from [1] I don't see anything you describe. If OPTEE
->>> writes NVRAM,  then the implementation is broken.
->>>
->>> Also AFAIK, it is pre-seeded per power cycle. There's nothing that even
->>> distantly relates on using NVRAM.
->>>
->>> [1] https://trustedcomputinggroup.org/wp-content/uploads/TPM-2.0-1.83-Part-4-Supporting-Routines-Code.pdf
->>
->> Hi all,
->>
->> we recently also stumbled over this issue which led me here to this 
->> thread and maybe adding our observations helps to clarify things here a 
->> bit (hopefully) or at least augments the information related to firmware 
->> TPM based implementation based on ms-tpm-20-ref.
->>
->> Based on the optee_ftpm repo, as Jan already described, which currently 
->> references commit 98b60a44aba7 of [1] suffers this exact issue because 
->> of the NV_CLOCK_UPDATE_INTERVAL [2] which is set to "12" and issues a 
->> write for each command after ~4 seconds have passed.
->>
->> This config has been changed to "22" (on current master branch [3]) 
->> which is the allowed maximum when following the TPM spec (chapter 36.3.2 
->> in [4]) which leads to round about 70 minutes, but optee_ftpm didn't 
->> move ahead to this commit, yet.
->> This config exists for being able to adapt the write cycles to the 
->> specific wear conditions of the hardware.
->>
->> Moreover the ms-tpm-20-ref repo seems to not be maintained anymore and 
->> one should rather switch to [6].
->>
->> So there are currently firmware TPM implementations out there that lead 
->> to these frequent writes.
-> 
-> Really this would need a product and official bug bulletin for it to
-> even consider a workaround. Speculation does not count.
-> 
+Am 09.05.26 um 20:51 schrieb Jarkko Sakkinen:
+> wait_event_interruptible_timeout() evaluates its condition after setting
+> the current task state to TASK_INTERRUPTIBLE.
+>
+> With CONFIG_DEBUG_ATOMIC_SLEEP this triggers a warning when the IRQ wait
+> path is used:
+>
+>      tpm_tis_status()
+>        tpm_tis_spi_read_bytes()
+>          tpm_tis_spi_transfer_full()
+>            spi_bus_lock()
+>              mutex_lock()
+>
+> Address this with the following measures:
+>
+> 1. Call wait_tpm_stat_cond() only while tasking is running.
+> 2. Use wait_woken() to wait for changes.
+>
+> Cc: stable@vger.kernel.org # v4.19+
+> Cc: Linus Walleij <linusw@kernel.org>
+> Reported-by: Stefan Wahren <wahrenst@gmx.net>
+> Closes: https://lore.kernel.org/linux-integrity/6964bec7-3dbb-453b-89ef-9b990217a8b9@gmx.net/
+> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver")
+> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+>
+The issue isn't reproducible anymore. Thanks
 
-The key point Benedikt tries to make here is that the TPM 2 spec forces
-any vendor to do something about persisting the last seen time at least
-every 70 min. If they didn't do that, then they would violate the space
-- arguably a bug. But, correct, it does not tell us anything about how
-this happens in a random firmware TPM implementation.
-
->>
->> AFAIK since the tpm-20-ref implementation basically only supports a file 
->> on disk or RAM backing storage, the optee_ftpm repo [5] provides it's 
->> own _plat_NV* implementations that replace the default ones and finally 
->> call OP-TEE's TEE_* secure storage API, which then routes to whatever 
->> backend OP-TEE is configured with (REE-FS or RPMB) – In our case the RPMB.
->>
->> Because there are currently implementations out there (e.g. start using 
->> optee_ftpm) it may make sense to add this information to the kernel 
->> config's help text at least?
-> 
-> Your first forum to report such issues is the TPM vendor.
-
-I would still not recommend anyone relying on a firmware TPM to turn on
-CONFIG_HW_RANDOM_TPM if there are viable alternatives. In case of the
-open source stack with optee_os + optee_ftpm, we know that at least one
-exists: CONFIG_HW_RANDOM_OPTEE.
-
-So, if there is no good place to document this in the kernel, maybe it
-is worth to document it in optee_ftpm instead.
-
-Jan
-
--- 
-Siemens AG, Foundational Technologies
-Linux Expert Center
+Tested-by: Stefan Wahren <wahrenst@gmx.net>
 
