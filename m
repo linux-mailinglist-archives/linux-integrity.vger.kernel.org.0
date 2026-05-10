@@ -1,227 +1,228 @@
-Return-Path: <linux-integrity+bounces-9518-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9519-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0EMwIInuAGptOgEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9518-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 22:46:01 +0200
+	id WCedJBT3AGoFPAEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9519-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 23:22:28 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A8A506523
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 22:46:00 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A16B050670E
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 23:22:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 32A24300C5A1
-	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 20:45:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 37B373001CF8
+	for <lists+linux-integrity@lfdr.de>; Sun, 10 May 2026 21:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25AE2314A6F;
-	Sun, 10 May 2026 20:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC90033DEC0;
+	Sun, 10 May 2026 21:22:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="lLePA2ms"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PDqLHOwd"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2270B2836A0;
-	Sun, 10 May 2026 20:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A350C2DAFCB;
+	Sun, 10 May 2026 21:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778445957; cv=none; b=nDi1mJh7Y5qh+q4mlX78zvapA7Ed6whScDw8bo8t92lSN9ugWI12x3lur5dvGxMVxm2LPerfUMmDo3qMPr4YdVhLjZX64WKGzKoqZCr2y5L6o+i3qIxW9nLLy7Ng+K05u0Z+EX++xXBHy1yBUxkIc4UsehBhrcuelFySAWQR6O8=
+	t=1778448142; cv=none; b=n0/qxwJGUXZytptONiMsrKAB0yZNfS0d1XVFk/Cpd72ES1JgOq1797YmTzXkXOFaaoLQdXYQZ/sBPi0K3mOLgkOG06VROENCTF6R5KYBgJreCc0gVlFLaeH9hl2smqPBAIXUmUF8HS7GheO97A90TCq8IsYYj2QXz7X3yylp94s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778445957; c=relaxed/simple;
-	bh=NmVs1pS/HxOIFX28NvsDmf5NQ9YSnkHMBC3QkZiYJLc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mfQm4ORcYL0zzjXEsSQpVLDTWuHqioqFozTLDFHGy0gQOt0z+DW4WH8VldFQxRKMxubfgI+rws92LQz1EIzXia+fhFZ04eeN4bQpEyMO06q0w0ueY4TPwD7qYl1Fw2RjuZmUYjgFwg+dpxyczS/nooiQePV/5Gvz2lHBLsfcq2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=lLePA2ms; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1778445953; x=1779050753; i=wahrenst@gmx.net;
-	bh=a4r1WClzOddhY4ba+V89G/IejE6LjiifDjv0Dyou0w0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=lLePA2msUzdV1jNG4GVrN9lsgiqJ9PKvyKytlWxxgfwy0CFnAgkoYWF0qgBgbq8a
-	 htCaGKHO+GZHdOnmDhPG18sTuDjK1Nnu/wjbNaD+TzuT1TLzuM6o9w2A3Y0U9Y9TI
-	 /w1QEMkfWV7Odpyr2wpNMkyP7ui4KglQihGHDY28jRCuI/X99NLPdAmRXtRhcJEB8
-	 1idrSrGDjgb+3MGQS1mHjweLQl2B3cINfw7nzeZcUqAlZJiJNrsqVfuKMYrLWwzEE
-	 9oslx/DSKuogl6eWoXJ9Gk2F0f1wfFujFPU56+CCglpVlBwAPZM+rPh/h+JBXs/eU
-	 QMacLPS6l4qRE00hNg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4zAs-1xMczd0r4O-00rB2R; Sun, 10
- May 2026 22:45:53 +0200
-Message-ID: <033c013e-8b32-4459-9dc9-255232d1d2d7@gmx.net>
-Date: Sun, 10 May 2026 22:45:52 +0200
+	s=arc-20240116; t=1778448142; c=relaxed/simple;
+	bh=Etw09K4c4jgIYgmvTDI47MxrR7HyAX/8xJ/w2oTn5f0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=T5QNsXSnEd6G41L20BbptjFXo0eYW6ZIQal5VWbMYBEdxiJdHYqf2kjvdUU3Bda4KLxIArkp1Wj8VHpH/hkOX+lSWR0vdO+N03w2AAw8hbXsYdw6yGjNlC9C28WgcQz8dHvGz31B9iYeGqsgirQFwuZEtNUE//CoC7JQn69Uwxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PDqLHOwd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3842C2BCB8;
+	Sun, 10 May 2026 21:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778448142;
+	bh=Etw09K4c4jgIYgmvTDI47MxrR7HyAX/8xJ/w2oTn5f0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=PDqLHOwdYzB2nels2qlTva38HBD2Zz3uSnDWDuPXHLhc8+v/8650r7hjgwZbEjM1i
+	 UPPi9yv3uakWTX8LKRVLtAEAZ4RWOEJvaLgAkUtsa/y/JHxiGqz2EQNNsjxMT6JbRn
+	 +WeP3wCIIT+3b5dXyeEhLoqUwOP1e/nNtP5lsdEfQ3NYuUpRSKJrMzdHzjrnQtur/q
+	 2pVGN6nqZb9jM94oy4sVuybis237hOaCbtwART8TYekGD5AGgR96m4MHHH8OT168SY
+	 wwaiwzmymH72nSs3HEa3YnX+KQ4PBPWOvEF0ov9/L6U4S/Y7/za8c0S4HYSuMD7nJH
+	 0G5Yitvk5NR4A==
+Content-Type: multipart/mixed; boundary="===============7312132321681857088=="
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tpm: tpm_tis_spi: Use wait_woken() in wait_for_tmp_stat()
-To: Jarkko Sakkinen <jarkko@kernel.org>, linux-integrity@vger.kernel.org
-Cc: stable@vger.kernel.org, Linus Walleij <linusw@kernel.org>,
- Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
- linux-kernel@vger.kernel.org
-References: <20260509185108.2681198-1-jarkko@kernel.org>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-Autocrypt: addr=wahrenst@gmx.net; keydata=
- xjMEZ1dOJBYJKwYBBAHaRw8BAQdA7H2MMG3q8FV7kAPko5vOAeaa4UA1I0hMgga1j5iYTTvN
- IFN0ZWZhbiBXYWhyZW4gPHdhaHJlbnN0QGdteC5uZXQ+wo8EExYIADcWIQT3FXg+ApsOhPDN
- NNFuwvLLwiAwigUCZ1dOJAUJB4TOAAIbAwQLCQgHBRUICQoLBRYCAwEAAAoJEG7C8svCIDCK
- JQ4BAP4Y9uuHAxbAhHSQf6UZ+hl5BDznsZVBJvH8cZe2dSZ6AQCNgoc1Lxw1tvPscuC1Jd1C
- TZomrGfQI47OiiJ3vGktBc44BGdXTiQSCisGAQQBl1UBBQEBB0B5M0B2E2XxySUQhU6emMYx
- f5QR/BrEK0hs3bLT6Hb9WgMBCAfCfgQYFggAJhYhBPcVeD4Cmw6E8M000W7C8svCIDCKBQJn
- V04kBQkHhM4AAhsMAAoJEG7C8svCIDCKJxoA/i+kqD5bphZEucrJHw77ujnOQbiKY2rLb0pE
- aHMQoiECAQDVbj827W1Yai/0XEABIr8Ci6a+/qZ8Vz6MZzL5GJosAA==
-In-Reply-To: <20260509185108.2681198-1-jarkko@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:W0tqTbrT/2O2OOSWQWDxVpIs287Z9lZKvNfCR/umvbO33EpaYbj
- 7xlNa9NKzkhRrUnSCi3CnLBB+dFTAl4n2Hbtbm53fXRBN8uduZG37liFNxulw1hPU0hJhGW
- /AoYm0G/Nq2Cndkf9nhal0F6A/kXSx0ew864IqESAKdBcxoO7vUNSLoG9X/w7U8Qk1TBN+G
- Zp2UVSpV1eOpOp6OwrqQA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:PNDKVst7Yvo=;fuPUnI1x9hoDq0+IyVySrUcu/gM
- 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
- 0pg5re3VnAFfpzMMawaVWtWxsheIuifCO39g=
-X-Rspamd-Queue-Id: D3A8A506523
+Message-Id: <47fc3e52ae9aa9e81ea220235cc62bdc0a3bf01696ad40e3a2f020851c048507@mail.kernel.org>
+In-Reply-To: <20260503211835.16103-2-dwindsor@gmail.com>
+References: <20260503211835.16103-2-dwindsor@gmail.com>
+Subject: Re: [PATCH v2 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic inode labeling
+From: bot+bpf-ci@kernel.org
+To: dwindsor@gmail.com,viro@zeniv.linux.org.uk,brauner@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,kpsingh@kernel.org,mattbobrowski@google.com,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,zohar@linux.ibm.com,roberto.sassu@huawei.com,dmitry.kasatkin@gmail.com,stephen.smalley.work@gmail.com,casey@schaufler-ca.com
+Cc: song@kernel.org,jack@suse.cz,john.fastabend@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,jolsa@kernel.org,eric.snowberg@oracle.com,omosnace@redhat.com,linux-fsdevel@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,linux-integrity@vger.kernel.org,selinux@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun, 10 May 2026 21:22:21 +0000 (UTC)
+X-Rspamd-Queue-Id: A16B050670E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	CTYPE_MIXED_BOGUS(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmx.net,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmx.net:s=s31663417];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
+	MIME_GOOD(-0.10)[multipart/mixed,text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9518-lists,linux-integrity=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmx.de,ziepe.ca];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9519-lists,linux-integrity=lfdr.de,bpf-ci];
+	FREEMAIL_CC(0.00)[kernel.org,suse.cz,gmail.com,linux.dev,oracle.com,redhat.com,vger.kernel.org,iogearbox.net,meta.com];
+	FROM_NEQ_ENVFROM(0.00)[bot@kernel.org,linux-integrity@vger.kernel.org];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+];
 	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[gmx.net:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FREEMAIL_FROM(0.00)[gmx.net];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,zeniv.linux.org.uk,kernel.org,iogearbox.net,google.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,schaufler-ca.com];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NO_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	NEURAL_HAM(-0.00)[-0.999];
+	TO_DN_NONE(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wahrenst@gmx.net,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	TAGGED_RCPT(0.00)[linux-integrity];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-Am 09.05.26 um 20:51 schrieb Jarkko Sakkinen:
-> wait_event_interruptible_timeout() evaluates its condition after setting
-> the current task state to TASK_INTERRUPTIBLE.
->
-> With CONFIG_DEBUG_ATOMIC_SLEEP this triggers a warning when the IRQ wait
-> path is used:
->
->      tpm_tis_status()
->        tpm_tis_spi_read_bytes()
->          tpm_tis_spi_transfer_full()
->            spi_bus_lock()
->              mutex_lock()
->
-> Address this with the following measures:
->
-> 1. Call wait_tpm_stat_cond() only while tasking is running.
-> 2. Use wait_woken() to wait for changes.
->
-> Cc: stable@vger.kernel.org # v4.19+
-> Cc: Linus Walleij <linusw@kernel.org>
-> Reported-by: Stefan Wahren <wahrenst@gmx.net>
-> Closes: https://lore.kernel.org/linux-integrity/6964bec7-3dbb-453b-89ef-9b990217a8b9@gmx.net/
-> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver")
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-The issue isn't reproducible anymore. Thanks
+--===============7312132321681857088==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Tested-by: Stefan Wahren <wahrenst@gmx.net>
+> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+> index e4e51a1d0de2..38b1b54d14c6 100644
+> --- a/fs/bpf_fs_kfuncs.c
+> +++ b/fs/bpf_fs_kfuncs.c
+
+[ ... ]
+
+> @@ -353,6 +354,97 @@ __bpf_kfunc int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__s
+>  }
+>  #endif /* CONFIG_CGROUPS */
+>
+> +static int bpf_xattrs_used(const struct lsm_xattr_ctx *ctx)
+> +{
+> +	const size_t prefix_len = sizeof(XATTR_BPF_LSM_SUFFIX) - 1;
+> +	int i, n = 0;
+> +
+> +	for (i = 0; i < *ctx->xattr_count; i++) {
+> +		const char *name = ctx->xattrs[i].name;
+> +
+> +		if (name && !strncmp(name, XATTR_BPF_LSM_SUFFIX, prefix_len))
+> +			n++;
+> +	}
+> +	return n;
+> +}
+> +
+> +static int __bpf_init_inode_xattr(struct lsm_xattr_ctx *xattr_ctx,
+> +				  const char *name__str,
+> +				  const struct bpf_dynptr *value_p)
+> +{
+> +	struct bpf_dynptr_kern *value_ptr = (struct bpf_dynptr_kern *)value_p;
+> +	size_t name_len;
+> +	void *xattr_value;
+> +	struct xattr *xattr;
+> +	struct xattr *xattrs;
+> +	int *xattr_count;
+> +	const void *value;
+> +	u32 value_len;
+> +
+> +	if (!xattr_ctx || !name__str)
+> +		return -EINVAL;
+> +
+> +	xattrs = xattr_ctx->xattrs;
+> +	xattr_count = xattr_ctx->xattr_count;
+> +	if (!xattrs || !xattr_count)
+> +		return -EINVAL;
+> +	if (bpf_xattrs_used(xattr_ctx) >= BPF_LSM_INODE_INIT_XATTRS)
+> +		return -ENOSPC;
+
+With only 1 xattr slot reserved (BPF_LSM_INODE_INIT_XATTRS = 1), can
+multiple BPF LSM programs coexist safely? Paul Moore raised this concern
+in v2, noting that with the BPF LSM only reserving a single xattr slot,
+multiple loaded BPF LSM programs providing security_inode_init_security()
+callbacks will be a problem.
+
+Song Liu acknowledged this issue and noted that even a single BPF LSM
+function may call the kfunc multiple times, which is also problematic.
+He suggested increasing the default and introducing a realloc mechanism
+for the worst case scenario.
+
+The check at this point returns -ENOSPC if the slot is already used, but
+is there proper coordination between multiple BPF programs to prevent
+slot conflicts?
+
+Reference: https://lore.kernel.org/bpf/CAHC9VhSy5K5nQTtFUE4BScy1Ur61v7eZW067vTcUYDQeJb13Bw@mail.gmail.com/
+
+> +
+> +	name_len = strlen(name__str);
+> +	if (name_len == 0 || name_len > XATTR_NAME_MAX)
+> +		return -EINVAL;
+> +	if (strncmp(name__str, XATTR_BPF_LSM_SUFFIX,
+> +		    sizeof(XATTR_BPF_LSM_SUFFIX) - 1))
+> +		return -EPERM;
+> +
+> +	value_len = __bpf_dynptr_size(value_ptr);
+> +	if (value_len == 0 || value_len > XATTR_SIZE_MAX)
+> +		return -EINVAL;
+> +
+> +	value = __bpf_dynptr_data(value_ptr, value_len);
+> +	if (!value)
+> +		return -EINVAL;
+> +
+> +	/* Combine xattr value + name into one allocation. */
+> +	xattr_value = kmalloc(value_len + name_len + 1, GFP_KERNEL);
+> +	if (!xattr_value)
+> +		return -ENOMEM;
+> +
+> +	memcpy(xattr_value, value, value_len);
+> +	memcpy(xattr_value + value_len, name__str, name_len);
+> +	((char *)xattr_value)[value_len + name_len] = '\0';
+> +
+> +	xattr = lsm_get_xattr_slot(xattr_ctx);
+> +	if (!xattr) {
+> +		kfree(xattr_value);
+> +		return -ENOSPC;
+> +	}
+> +
+> +	xattr->value = xattr_value;
+> +	xattr->name = (const char *)xattr_value + value_len;
+> +	xattr->value_len = value_len;
+> +
+> +	return 0;
+> +}
+
+[ ... ]
+
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index 643809cc78c3..b97a3d79529d 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -19,6 +19,9 @@
+>  #include <linux/lsm_hook_defs.h>
+>  #undef LSM_HOOK
+>
+> +/* max bpf xattrs per inode */
+> +#define BPF_LSM_INODE_INIT_XATTRS 1
+> +
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/25639388555
+--===============7312132321681857088==--
 
