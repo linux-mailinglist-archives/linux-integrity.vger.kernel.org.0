@@ -1,142 +1,227 @@
-Return-Path: <linux-integrity+bounces-9521-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9522-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ODKXJimUAWrsegEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9521-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2026 10:32:41 +0200
+	id aNFaL/AZAmognwEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9522-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2026 20:03:28 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 233F850A248
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2026 10:32:41 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68954514059
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2026 20:03:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6EA0B305AF05
-	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2026 08:10:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E61E31BC210
+	for <lists+linux-integrity@lfdr.de>; Mon, 11 May 2026 17:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5529E3B9D97;
-	Mon, 11 May 2026 08:10:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CDC844D015;
+	Mon, 11 May 2026 17:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOYRckNB"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="qPr3GfIA"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7253AF667
-	for <linux-integrity@vger.kernel.org>; Mon, 11 May 2026 08:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6CB3423A6B;
+	Mon, 11 May 2026 17:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778487037; cv=none; b=EeWCf3ycOedJaSqYf+l1z8dY7v0NprpHAgMw50bC4iwF+sK1fUzNQdiUla29UPYl486L5X0/v3RrFPPSgfQiGn5aOOdflhAI1EJuMgTcEHqyrjlS0diybGFnWdGgYobefHuSo2WYnsE5AfF7t5bPh7+I+cfZhSdepOs4yTRLGsM=
+	t=1778520568; cv=none; b=VSqGk/CMLnM09sLdfKkAI7t13p690q0HTI1BRh7eNTlKU3xXXa2ez6dATCvniVSoojcPqXicBzL1jYOD+O7RzGPay7TJOSV5VEOiBLwvRuY/1cPZfSWX6nd89tlyscjjbVDgnqCizWJhCLtrzc/x4cU3u5xpAvMdAozUBTPgMIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778487037; c=relaxed/simple;
-	bh=b2Hf8nyIP6xq6oi9O82jXi7fy4vY12OyVdOny1brLIU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KpFgBd1MPcN62ZSJEZB8mbvQXVU5SvF1BJE6kYcV/8hKx/EkAhrgo4ci+vfdvC1fIZ2VcZJfJhSj9LMIoI6a27wMwbpjsEWsy3lCEZE8ULCav6UbXBGZRB/ypFE3UOf1cQMekc2v+6I70ygZSnJN9d+lIMQGWoP3jdTQLJk/Z6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOYRckNB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D68C2BCF5
-	for <linux-integrity@vger.kernel.org>; Mon, 11 May 2026 08:10:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778487035;
-	bh=b2Hf8nyIP6xq6oi9O82jXi7fy4vY12OyVdOny1brLIU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YOYRckNBww0hsW0JWq+QzMZRlXfqdF8qBcDJXiuAjzc6v2Tl4c0fygPcGbhRtvTTW
-	 IFCBeLbvDTEQNUqo5EPJk6qcR0mTkhA4mmy7LWcwTm2d3ve4hL1bQ/0K0qVkGVKWcH
-	 MD5plE50yF1zvGR+B0cO/yO6a0cLAThh5JsRQwYQjUNozD388yxWrxS2C5R9jXtmKL
-	 LHH/95Vhy6zdKJMpx0Z4UVUEy6JMFCXDj01cNq9VUdmPxju26mqN3INRyiVoJkUaAO
-	 o79OQPLOD+Gx802la0eF4RCPnbft3D/j+HMJgc3VdZmyclBKC+hTX86CWI+fw/0//+
-	 aY8fEkmK16pLg==
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5a742b8b72eso3938013e87.1
-        for <linux-integrity@vger.kernel.org>; Mon, 11 May 2026 01:10:34 -0700 (PDT)
-X-Gm-Message-State: AOJu0YxdDdIdW4P5/nGkmyATBRC2WGieli0vIctYUVzg8HcvdKiikwtB
-	UrU1JS62yiA4zdAvY7L+v95brerD+yTw0OQXnVA7qG2+ikY972M268c/Sn1r2FS9jKrsg8eQA/h
-	ZR+q/oBpdSzhxoBsBQw6yXeWhyQgmm1M=
-X-Received: by 2002:a05:6512:3989:b0:5a8:891f:388 with SMTP id
- 2adb3069b0e04-5a8b709d36fmr2065976e87.29.1778487033305; Mon, 11 May 2026
- 01:10:33 -0700 (PDT)
+	s=arc-20240116; t=1778520568; c=relaxed/simple;
+	bh=yMWBpNUT5aNuw3V9XIZoorQgUxmjks1iackgkJ/snl8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BDXc7WUA/UWNvGzD8L2LbaZlpW51BJjm2JvKWkox+j9flsln4yphfFkP1PJDw+SDb7BNaMutvC/Ag51NpFEi7Du1/iv8x+9BOqxneXdxPYMansWERtYpk7WgxHVfijx6rgkFUsqWsXtFXlCLw6hcqeB8/kyjPBJfuZBQm+/SAAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=qPr3GfIA; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.2.212.4] (unknown [131.107.8.4])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 0EC9B20B7166;
+	Mon, 11 May 2026 10:29:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0EC9B20B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1778520564;
+	bh=EY/LhrL3JM0ElRC6pWR4zlZABquSUEPTVPGME7ilfAE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qPr3GfIAExhTrBx+vW6z04VEtwuHufnzKC2Cuobqhgi+jXK8B5WJn5U/8AuY4IuR1
+	 gctDJYqvaGxDiuM3sdUmiMnyj8eQav91qWB47p3T2RM2WYl1MYeUYAcqhOAWOjKQ64
+	 3wnHZX/hx0hhTM8+aGFGvVBJXMR24gFYj+iX5v54=
+Message-ID: <aaed52cf-26e1-4c40-812d-3788024ce5b5@linux.microsoft.com>
+Date: Mon, 11 May 2026 10:29:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260509185108.2681198-1-jarkko@kernel.org>
-In-Reply-To: <20260509185108.2681198-1-jarkko@kernel.org>
-From: Linus Walleij <linusw@kernel.org>
-Date: Mon, 11 May 2026 10:10:21 +0200
-X-Gmail-Original-Message-ID: <CAD++jLke5Net94=JUCJAyn5YxMx0raCWTUx+Nk6hKhcXxfU-kw@mail.gmail.com>
-X-Gm-Features: AVHnY4KCktiDIjkKY1XWWWRgXjTjZN7hq0huZFtBQUeQG6bYGoySbiCtgkgk8wA
-Message-ID: <CAD++jLke5Net94=JUCJAyn5YxMx0raCWTUx+Nk6hKhcXxfU-kw@mail.gmail.com>
-Subject: Re: [PATCH] tpm: tpm_tis_spi: Use wait_woken() in wait_for_tmp_stat()
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-integrity@vger.kernel.org, stable@vger.kernel.org, 
-	Stefan Wahren <wahrenst@gmx.net>, Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 233F850A248
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 00/13] ima: Introduce staging mechanism
+To: steven chen <chenste@linux.microsoft.com>,
+ Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+ skhan@linuxfoundation.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+ eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+ serge@hallyn.com
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+ gregorylumen@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
+References: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
+ <99c30be6-8b0f-486a-890c-cf74c5930726@linux.microsoft.com>
+Content-Language: en-US
+From: Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+In-Reply-To: <99c30be6-8b0f-486a-890c-cf74c5930726@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 68954514059
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
+	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmx.net,gmx.de,ziepe.ca];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9521-lists,linux-integrity=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9522-lists,linux-integrity=lfdr.de];
+	FREEMAIL_TO(0.00)[linux.microsoft.com,huaweicloud.com,lwn.net,linuxfoundation.org,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-integrity@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_SEVEN(0.00)[7];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nramas@linux.microsoft.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.microsoft.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid]
+	TAGGED_RCPT(0.00)[linux-integrity];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.microsoft.com:mid,linux.microsoft.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Action: no action
 
-On Sat, May 9, 2026 at 8:51=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org> =
-wrote:
 
-> wait_event_interruptible_timeout() evaluates its condition after setting
-> the current task state to TASK_INTERRUPTIBLE.
->
-> With CONFIG_DEBUG_ATOMIC_SLEEP this triggers a warning when the IRQ wait
-> path is used:
->
->     tpm_tis_status()
->       tpm_tis_spi_read_bytes()
->         tpm_tis_spi_transfer_full()
->           spi_bus_lock()
->             mutex_lock()
->
-> Address this with the following measures:
->
-> 1. Call wait_tpm_stat_cond() only while tasking is running.
-> 2. Use wait_woken() to wait for changes.
->
-> Cc: stable@vger.kernel.org # v4.19+
-> Cc: Linus Walleij <linusw@kernel.org>
-> Reported-by: Stefan Wahren <wahrenst@gmx.net>
-> Closes: https://lore.kernel.org/linux-integrity/6964bec7-3dbb-453b-89ef-9=
-b990217a8b9@gmx.net/
-> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver")
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> ---
-> Linus' change only unmasked a pre-existing bug but it is the change
-> realizes it in tpm_tis_spi.
+On 5/7/2026 9:47 AM, steven chen wrote:
+>>
+>> Usage
+>> =====
+>>
+>> The IMA staging mechanism can be enabled from the kernel configuration
+>> with the CONFIG_IMA_STAGING option.
+>>
+>> If it is enabled, IMA duplicates the current measurements interfaces
+>> (both binary and ASCII), by adding the _staged file suffix. Both the
+>> original and the staging interfaces gain the write permission for the
+>> root user and group, but require the process to have CAP_SYS_ADMIN set.
+>>
+>> The staging mechanism supports two flavors.
+>>
+>> Staging with prompt
+>> ~~~~~~~~~~~~~~~~~~~
+>>
+>> The current measurements list is moved to a temporary staging area, and
+>> staged measurements are deleted upon confirmation.
+>>
+>> This staging process is achieved with the following steps.
+>>
+>>    1.  echo A > <original interface>: the user requests IMA to stage the
+>>        entire measurements list;
+>>    2.  cat <_staged interface>: the user reads the staged measurements;
+>>    3.  echo D > <_staged interface>: the user requests IMA to delete
+>>        staged measurements.
+>>
+>> Staging and deleting
+>> ~~~~~~~~~~~~~~~~~~~~
+>>
+>> N measurements are staged to a temporary staging area, and immediately
+>> deleted without further confirmation.
+>>
+>> This staging process is achieved with the following steps.
+>>
+>>    1.  cat <original interface>: the user reads the current measurements
+>>        list and determines what the value N for staging should be;
+>>    2.  echo N > <original interface>: the user requests IMA to delete N
+>>        measurements from the current measurements list.
+> 
+> This submission proposes two ways for log trimming:
+> 
+> *Flavor 1:* Staging with prompt
+> *Flavor 2:* stage and delete N
+> 
+> Functionally, both approaches address the same problem, but *Favour 2 
+> *is the
+> stronger design and should be preferred. There is no good reason to keep 
+> *Flavor 1.*
+> 
+>  From a kernel implementation perspective, *Flavor 2 *is more efficient 
+> because it
+> minimizes the time spent holding the list lock (can’t be shorter). It 
+> also substantially
+> reduces the amount of kernel-side logic, removing nearly half of the 
+> code required
+> by the alternative approach.
+> 
+>  From a user-space perspective, *Flavor 2 *results in a much cleaner 
+> model. It avoids
+> the need to track and reconcile both old and staged lists in user space 
+> as well as
+> two lists (cur and staged) in the kernel space, which simplifies log 
+> trimming logic
+> and reduces maintenance overhead. In addition, it preserves the existing 
+> external
+> behavior by not exposing any staged list to user space.
+> 
+> Overall, *Flavor 2 *provides the same functional result with lower 
+> kernel complexity,
+> shorter kernel list lock hold time, and a simpler user-space interface. 
+> For those
+> reasons, it is the preferable approach and *Favour 1* does not appear to 
+> offer sufficient
+> justification to keep both implementations.
+> 
+> Steven
 
-Took me a while to understand this but looks right to me!
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+Roberto, Mimi:
 
-Yours,
-Linus Walleij
+I want to add on to the point Steven has brought up.
+
+With "Stage and Delete N" approach, we have the following sequence of 
+tasks for trimming the IMA log:
+
+	1. User mode locks the IMA measurement list through the "write interface".
+		a. While this prevents any other user mode process from updating the 
+IMA log, kernel can still add new IMA events to the measurement log
+	2. User mode reads the TPM Quote and the IMA measurement events and 
+sends it to the remote attestation service
+	3. Once the remote service has successfully processed the IMA events, 
+the user mode determines the number of IMA events "N" to be removed from 
+the measurement list maintained in the kernel
+	4. User mode provides the value "N" to the kernel
+	5. Kernel now determines the point at which to snap the IMA measurement 
+list using "N" - without holding a lock
+	6. Then, the kernel lock is held and the list is snapped at the point 
+determined in the previous step thus keeping the kernel lock time to the 
+minimum.
+	7. Now, user mode removes the "write" lock on the IMA measurement list
+
+With the above, we believe "Stage and Delete N" alone is sufficient to 
+trim IMA log.
+
+  -lakshmi
+
+>>   .../admin-guide/kernel-parameters.txt         |   4 +
+>>   Documentation/security/IMA-staging.rst        | 163 +++++++++
+>>   Documentation/security/index.rst              |   1 +
+>>   MAINTAINERS                                   |   2 +
+>>   security/integrity/ima/Kconfig                |  16 +
+>>   security/integrity/ima/ima.h                  |  32 +-
+>>   security/integrity/ima/ima_api.c              |   2 +-
+>>   security/integrity/ima/ima_fs.c               | 315 ++++++++++++++++--
+>>   security/integrity/ima/ima_init.c             |   5 +
+>>   security/integrity/ima/ima_kexec.c            |  53 ++-
+>>   security/integrity/ima/ima_queue.c            | 283 ++++++++++++++--
+>>   11 files changed, 803 insertions(+), 73 deletions(-)
+>>   create mode 100644 Documentation/security/IMA-staging.rst
+>>
+
 
