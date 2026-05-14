@@ -1,109 +1,76 @@
-Return-Path: <linux-integrity+bounces-9529-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9530-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eGWmHBJcBGqiHQIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9529-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2026 13:10:10 +0200
+	id wIbXHU3DBWpMbAIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9530-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2026 14:42:53 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD17B531EBA
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2026 13:10:09 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D577541CF3
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2026 14:42:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B0F31300D603
-	for <lists+linux-integrity@lfdr.de>; Wed, 13 May 2026 11:09:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 03D96301063A
+	for <lists+linux-integrity@lfdr.de>; Thu, 14 May 2026 12:42:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 542EC3859CC;
-	Wed, 13 May 2026 11:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E963C13EF;
+	Thu, 14 May 2026 12:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z5iTIbm5";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="nenFu8bx"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="YLD8FxWG"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE8733E9C29
-	for <linux-integrity@vger.kernel.org>; Wed, 13 May 2026 11:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7FB3B9D98;
+	Thu, 14 May 2026 12:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778670576; cv=none; b=F8iPCo58WxAtg/kn9bK6+b2tj8+fyrAFY+DLeQzE4JjMv7tq2ADqPqDixw/oNfJcgY2bLpXjLqIUEAq3pTpbScOc7OZ/2+z1+Chv9PrurUKNhK/dZeWS9OCKNoXL2OF3s4LV8y7/fymtsN8Z2EeGtuDuu1ShwaTFQE2f/y506/M=
+	t=1778762571; cv=none; b=ifgNyYMPUAOGuqvdOCk0we4KaqXAG6RRvh52jTe5pMzL7sDXljGBZuIjn0wJas4vKqOkp1gjXivV1j52pTyrAzijdOtzNiZSNQLvCFBFPloi5ucfSJ0Pn/s9W6exhqU5viIZ39mL3HdcbT+NS28gN5FoUkECtMlcZQrSNf+Wd2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778670576; c=relaxed/simple;
-	bh=VxZrVHvvMTsJO+0g5aFCaePGNp5xIFjPpLQeQ27rCeE=;
+	s=arc-20240116; t=1778762571; c=relaxed/simple;
+	bh=CSZGuhEMgcVv+yjLSc1VRGD3BlRDfXMIcohRaOGnXhU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jfNobJLP5YC9RbsotiaWrosZRaB1aL0PikyVVFfFzHwOYyKoxzWh5M+GbjkWlz9M9NMFCNBptJxbsMMz7hQvcHc4ng35ToENjjZlk/hWC3+K731qFudP79Rq+fzzO266aLvnHF8wYlEsvKHu6UP0FpE5CD9VIQpCccGnIW/Y6dE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z5iTIbm5; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=nenFu8bx; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1778670574;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/RlJfaQI3WYwGNvwR+AOHY2/jIgelfdXHLs6DnIAFBw=;
-	b=Z5iTIbm5bKUUIEjRJ4JmkZGFP5LtcPKGUbICWxR7OJcnYb42FoFcHE7vJ1aamFZMsenyW3
-	3TuC8H7OP8KxoT5/EFwWa7JXGgDd09RucmwT2NXsSYNgvc3OXecntC3LkfyYuChs0Q2D9Q
-	NB8Wzcn7+ssy6N5+ay0BY8sWQn8jXIM=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-175-vzXSENZhNJSE28lZVVCZIQ-1; Wed, 13 May 2026 07:09:32 -0400
-X-MC-Unique: vzXSENZhNJSE28lZVVCZIQ-1
-X-Mimecast-MFC-AGG-ID: vzXSENZhNJSE28lZVVCZIQ_1778670572
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-36641bb3d97so4110107a91.3
-        for <linux-integrity@vger.kernel.org>; Wed, 13 May 2026 04:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1778670572; x=1779275372; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/RlJfaQI3WYwGNvwR+AOHY2/jIgelfdXHLs6DnIAFBw=;
-        b=nenFu8bxSZCxTXd1fp0cVgXYP33nQqHPbt6r6rih5bedss2xp6RMWQGq8jeZTLSTP4
-         5CDfPS2nHt3+eiIPjzoCzQfVI9BWkxwHdiYx00ld60vwphTP35bZlAC76TiX8BR4BbXQ
-         Ys1xQdac0HtZ6T9Mm/r2d0MtFeQmFsE8sMZCltxs4epfK/HWNRVbWfkJpIuu7YJsM3s8
-         yaFGrn1Xvzngay32RRIl13yKPc1u0rcRxpllv5SnqG/50gq9VtOk02YdJh6mT5VYpWVv
-         UI8tw73Gs2Zl8lD081KtQI8EH/9Ug7u5FJnbnyrA8SSWV6Hg8AN3mcIKAAuEh7hprU47
-         FCmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778670572; x=1779275372;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/RlJfaQI3WYwGNvwR+AOHY2/jIgelfdXHLs6DnIAFBw=;
-        b=qxu3JcBfnrvHW+kCITDot8HpK4k8WhOTztX63MArQnqyUufaB9nTZrO228/n2NbnsH
-         3qRrCqqoeydSdqMjQOAuh3dQtAvNtLNO5yv76SVuAxckvYIKA13lJx4xIEMEWxhjUZEb
-         y7cKB4yIXaJEn8sRGX6DCjHlMbRL4VHHGK3k/XNRbDsMJmr6Xmb1xrLQbU7pmdOzdCny
-         BgQoCufCuuu8u85K+NimKHXYfkAZ0UCVZGCV1qOTTX/OQWw7HO5ZHdH1JdIalsYcEml2
-         o9uWqbItlBNt5OXkTjT5XA06e/6c8fcfx41xneK7J1y3QOmFwdXsq0n7l+TFVW5tECCW
-         en3Q==
-X-Forwarded-Encrypted: i=1; AFNElJ+fa9S+DhcHgLuJj973ibk6Xjue7XfYFt9806I9M/TWv+Nnh4gYbt+2ACmnUA+5D3uv+lH6nmbx3NR26pwqWQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytiUX1DKmEa/6IOr/Ro+vl5RzkEx703hUTdYGTdVJNbeKwt7RD
-	nVkqMhiTYFd2X5Gh9u2uZRjpL6OneJrhOJ+ox7dHxrnDx1W/I/VRUGlJdDabvmjSgCbWc23Tklk
-	SjtJnM2VgaJ3+iIiUHVQ+qTOCA7jntII4sMQB1gY8Ohkr8mDmeocw8D+AXeqmQwAbz3H5tQ==
-X-Gm-Gg: Acq92OFw/l0uJYUTBDoqw7B7b2TrbgzGtPoIt4QlNcWpB5mNCIBcXg51HaHhnD6D5v1
-	2jvbaeVKT9se3+R10+DJnxFWNUQ2w+IBRWBALVno+FPGn14fdyYw1odYoD7LC0aEb8XyezBbLzs
-	KKe90FN4HnuC64RadTx4lez2d3aOr9+xs3QAMhHM96yO8caJiyRi2JdEV6kG19utKoDAFp3+8Qy
-	03VTxSPicLaZsClgz+L1wFS8f+oV+yzePeev2+9SCMEZhs10vhIpjss6I3IsPFsvn/IjzP3fo3J
-	tuxwnMlAgnJIY6MKW+jyRgnB7xe23cVWpSsodQn9aFkSuec6vn17lvwLsVpvbFQz0xNKRuFdeK1
-	Iy5X4sq5CYawa
-X-Received: by 2002:a17:90b:51ca:b0:366:3df3:fe45 with SMTP id 98e67ed59e1d1-368f3e43e84mr3063210a91.19.1778670571674;
-        Wed, 13 May 2026 04:09:31 -0700 (PDT)
-X-Received: by 2002:a17:90b:51ca:b0:366:3df3:fe45 with SMTP id 98e67ed59e1d1-368f3e43e84mr3063186a91.19.1778670571226;
-        Wed, 13 May 2026 04:09:31 -0700 (PDT)
-Received: from fedora ([49.36.106.210])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-368edf4d95bsm3806341a91.6.2026.05.13.04.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2026 04:09:31 -0700 (PDT)
-Date: Wed, 13 May 2026 16:39:24 +0530
-From: Arun Menon <armenon@redhat.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [RFC v2 4/5] tpm: Increase TPM_BUFSIZE to 8kB for chunking
- support
-Message-ID: <agRb5FClggBcNvGe@fedora>
-References: <20260324181244.17741-1-armenon@redhat.com>
- <20260324181244.17741-5-armenon@redhat.com>
- <af9KnU90yMf8MxnQ@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=d6V/+anddmB21EX8HgH8WscNssjFu06XcOcnjrF2mHoX68qMyiOolXh0tH4hlq00vVDJ37z5B4/uVb2zWgFXQT85MViaOzWguKNYzPuAIpCa0xM0tlcAYL9jHgxoJ0M9ITPgHt+NjmJbP4gqOOczHjkKImGFMjCVRBcVUSec20M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=YLD8FxWG; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 78EB8244B;
+	Thu, 14 May 2026 05:42:42 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A1A283F7B4;
+	Thu, 14 May 2026 05:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1778762567; bh=CSZGuhEMgcVv+yjLSc1VRGD3BlRDfXMIcohRaOGnXhU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YLD8FxWG6lmZaF+56qA4ExHRj6gmec4W4Jy6zLkG6oqEGkL02iZdRMKmMRRZjCR0U
+	 xVNyfG7Hlzpevqw0I2XS7WY265pckgOkpMzxKPGXjvD5U9THwi517swXo7gmN3Lc01
+	 lO/Kf4a3JDrJykgmj9Ar3XiURm1HGddmuTvrsPkk=
+Date: Thu, 14 May 2026 13:42:42 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Mimi Zohar <zohar@linux.ibm.com>
+Cc: David Safford <david.safford@gmail.com>,
+	Jonathan McDowell <noodles@earth.li>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com, jarkko@kernel.org, jgg@ziepe.ca,
+	sudeep.holla@kernel.org, maz@kernel.org, oupton@kernel.org,
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+	catalin.marinas@arm.com, will@kernel.org, noodles@meta.com,
+	sebastianene@google.com
+Subject: Re: [PATCH] ima: debugging late_initcall_sync measurements
+Message-ID: <agXDQhREKIpN7mKX@e129823.arm.com>
+References: <aftIuPwNeuzc9nY1@e129823.arm.com>
+ <9d1af933ef218b159762884357d127e3644dfe2c.camel@linux.ibm.com>
+ <afwoDgaJxmKwOhXp@e129823.arm.com>
+ <f19081f1eda19d6d1ae133d8ec93e779ab1a25e5.camel@linux.ibm.com>
+ <afyIbW5cljh5ZvTL@e129823.arm.com>
+ <afzwJn+5r15jFxrB@e129823.arm.com>
+ <77ad49cca1acf707f4152ed3e2066b2f24c90c16.camel@linux.ibm.com>
+ <af2nhZyyNaP7LM3w@e129823.arm.com>
+ <2b3782398cc17ce9d355490a0c42ebce9120a9ae.camel@linux.ibm.com>
+ <af3oFfdSMUglZVHa@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -112,80 +79,160 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af9KnU90yMf8MxnQ@kernel.org>
-X-Rspamd-Queue-Id: CD17B531EBA
+In-Reply-To: <af3oFfdSMUglZVHa@e129823.arm.com>
+X-Rspamd-Queue-Id: 1D577541CF3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9529-lists,linux-integrity=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmx.de,ziepe.ca];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[gmail.com,earth.li,vger.kernel.org,lists.infradead.org,lists.linux.dev,paul-moore.com,namei.org,hallyn.com,huawei.com,oracle.com,kernel.org,ziepe.ca,arm.com,meta.com,google.com];
+	TAGGED_FROM(0.00)[bounces-9530-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[26];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[arm.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[armenon@redhat.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,e129823.arm.com:mid]
 X-Rspamd-Action: no action
 
-On Sat, May 09, 2026 at 05:54:21PM +0300, Jarkko Sakkinen wrote:
-> On Tue, Mar 24, 2026 at 11:42:43PM +0530, Arun Menon wrote:
-> > The size of the command is checked against TPM_BUFSIZE early on before
-> > even sending it to the backend. We therefore need to increase the
-> > TPM_BUFSIZE to allow support for larger commands.
+Hi Mimi,
+> > On Fri, 2026-05-08 at 10:06 +0100, Yeoreum Yun wrote:
 > > 
-> > For now, 8KB seems sufficient for ML-KEM and ML-DSA algorithms and it is
-> > also order-1 safe.
+> > > > The kernel selftests caused the measurements between late_initcall and
+> > > > late_initcall_sync.  After disabling all of the kernel selftests, there weren't
+> > > > any measurements. Re-enabling the FIPS selftests on PowerVM LPAR resulted in
+> > > > measurements.  (I didn't try re-enabling any of the other selftests.)
+> > > > 
+> > > > CONFIG_FIPS_SIGNATURE_SELFTEST=y
+> > > > CONFIG_FIPS_SIGNATURE_SELFTEST_RSA=y
+> > > > CONFIG_FIPS_SIGNATURE_SELFTEST_ECDSA=y
+> > > 
+> > > Thanks for shraring this ;)
+> > > 
+> > > I found the reason for those mesaurements. Those come from the
+> > > request_module() and usermode-thread generates them while handling module
+> > > loading request for crypto-x962(ecdsa-nist-p256).
+> > > Since it's not a real kernel module,
+> > > I confirmed file measurements between late_initcall and
+> > > late_initcall_sync are gone for modeprobe with below change:
+> > > 
+> > > @@ -1246,9 +1250,14 @@ EXPORT_SYMBOL_GPL(ima_measure_critical_data);
+> > >   */
+> > >  static int ima_kernel_module_request(char *kmod_name)
+> > >  {
+> > >         if (strncmp(kmod_name, "crypto-pkcs1(rsa,", 17) == 0)
+> > >                 return -EINVAL;
+> > > 
+> > > +       if (IS_BUILTIN(CONFIG_CRYPTO_ECDSA) &&
+> > > +           (strncmp(kmod_name, "crypto-x962(ecdsa", 17) == 0))
+> > > +               return -EINVAL;
+> > > +
+> > >         return 0;
+> > >  }
+> > > 
+> > >  Though this is the only request_module() call between
+> > >  late_initcall and late_initcall_sync, but I also confirmed there're
+> > >  request_modules() call before ima initalisation before "late_initcall":
+> > > 
+> > > /*
+> > >  * NOTE: kmod_name is printed on ima_kernel_module_request()
+> > >  */
+> > > 
+> > > // This is called from module_init(stm_core_init) -> device_initcall()
+> > > // which is in driver/hwtracing/stm/core.c (built-in)
+> > > [    1.421986] ima: kmod_name: stm_p_basic
+> > > ...
+> > > [    1.444900] ima: kmod_name: crypto-pkcs1(rsa,sha512)
+> > > [    1.444903] ima: kmod_name: crypto-pkcs1(rsa,sha512)-all
+> > > ...
+> > > [    1.452029] ima: kmod_name: crypto-cbc(aes)
+> > > [    1.465321] ima: kmod_name: crypto-cbc(aes)-all
+> > > ...
+> > > [    1.467845] Key type encrypted registered
+> > > [    1.467848] AppArmor: AppArmor sha256 policy hashing enabled
+> > > 
+> > >  // IMA is initailised at late_initcall level.
+> > > [    1.467850] ima: [init_ima_late:1336]
+> > > 
+> > > If IMA should care request_module() from kernel before IMA init,
+> > > I think there is no way to solve except queuing those events
+> > > (kernel_load_data/kernel_load_post_data and open for module binary etc.)
+> > > though it breaks "measure before use" principle since IMA couldn't
+> > > measure at that time.
+> > > 
+> > > But if you don't care about those things -- some events happend before
+> > > IMA init, I think your suggestion -- controlling the init time of ima_init()
+> > > via a Kconfig option is good and ignoring some usermodehelper request
+> > > including request_module() before IMA initialisation upto user by that option.
 > > 
-> > Signed-off-by: Arun Menon <armenon@redhat.com>
-> > ---
-> >  drivers/char/tpm/tpm.h | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-> > index 87d68ddf270a7..26c3765fbd732 100644
-> > --- a/drivers/char/tpm/tpm.h
-> > +++ b/drivers/char/tpm/tpm.h
-> > @@ -33,7 +33,7 @@
-> >  #endif
-> >  
-> >  #define TPM_MINOR		224	/* officially assigned */
-> > -#define TPM_BUFSIZE		4096
-> > +#define TPM_BUFSIZE		8192
-> >  #define TPM_NUM_DEVICES		65536
-> >  #define TPM_RETRY		50
-> >  
-> > -- 
-> > 2.53.0
-> > 
+> > Thank you for the complete analysis.  The early measurements before the TPM is
+> > initialized is a problem that needs to be addressed.  As to whether the solution
+> > will require queueing is yet to be determined. (Roberto has some thoughts on
+> > addressing it.) This discussion makes it clear that simply delaying IMA
+> > initialization by moving it from late_initcall to late_initcall_sync could miss
+> > measurements.  That said, exposing it as an opt-in Kconfig for those who accept
+> > the risk is a sensible pragmatic compromise.
 > 
-> Shouldn't this prepend previous patch?
-
-yes, I am going to put this and the i2c patch before the chunking logic.
-Thanks.
-
+> I think once we address ealry measurements before intialising TPM,
+> It doesn't matter when IMA is initialissed since they're considered as
+> ealry measurements anyway.
 > 
-> BR, Jarkko
-> 
+> BTW, I'm not sure whether we should take pragmatic compromise first to
+> support deferred TPM initialisation or solving it together via solution
+> of ealry measurements (whatever it is) in now.
 
-Regards,
-Arun Menon
+I wonder what's going on for discussion to resolve these problem:
+  1) measurement event (via file operation)  before IMA initialisation.
+  2) deferred TPM device initailisation and IMA.
 
+Might someone could think it wouldn't be a problem since initrd is
+measuared in PCR9 by boot loader (e.x) grub, but it still has a problem
+for the case uses root= boot option where it doesn't use initrd
+but use specified block dev with a filesystem.
+
+I think soluation would be determined whether IMA neglects the
+measurement event before its initialisation or not in current state:
+
+  a) Case for neglecting measurement event before IMA initailisation.
+
+    In this case, As you suggeested, IMA initialisation should be
+    determined by build config whether it initialises at late_initcall
+    or late_initcall_sync so that make user can choice upto their
+    platform.
+
+  b) Case for considering measurement event event before IMA
+     initialisation.
+
+    I couldn't image any other solution except queuing those event
+    and extend them after generating boot_aggregate log and if those
+    event can be queued, it wouldn't a problem to move IMA initialisation
+    to late_initcall_sync.
+
+But you mention there are some thoughts from Roberto, might there was
+some discussion with him. If you don't mind, would you let me know
+how the discussion is going on and your thought to fix this all?
+
+Thanks!
+
+-- 
+Sincerely,
+Yeoreum Yun
 
