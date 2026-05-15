@@ -1,81 +1,81 @@
-Return-Path: <linux-integrity+bounces-9564-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9565-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OG4EKCOPB2oe8wIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9564-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:24:51 +0200
+	id iNT5IbOQB2oW9AIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9565-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:31:31 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4101F557FDD
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:24:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 257C255827C
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:31:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 571493033199
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 21:18:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5E639305046B
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 21:18:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B623405849;
-	Fri, 15 May 2026 21:15:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C096D405871;
+	Fri, 15 May 2026 21:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HmB9JnH5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jrq5kVMS"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70643F1667
-	for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 21:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A934405858
+	for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 21:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778879738; cv=none; b=fq/k060vDGQo+nHy/YT5daXs09tCdgESjAArni/S3mPHe/+67dNlUP0biyuUPo22kUq/Tz37p4LmunyebSuWqhLg7AkHCOdHsfHbr3edwr0Ni5CKm5oG62Z4mUDvXI0jXfFiHq8zksxVyro4bubzz+28O4Mpar4i0cjgoNRn6AY=
+	t=1778879742; cv=none; b=G5sS2Cz4AA9tPLXojXcwpQFdhdlSQLQ1d37b5FY66z9HYsMqgClKQ5ApRXOokSB56U/UBGYjqMAQWL7O+SJw5RTswOfz0cLACd5QMNnNtM3t+iJzJrnFsK9S4YyWrDCE84u3naZZJDKHQVo/ir9yDwU5BdvgseG42RLJ8Ff58AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778879738; c=relaxed/simple;
-	bh=rNdJJ8YVhFpY/mOFackrLIoznhga5VyceHpT+Iq/eqk=;
+	s=arc-20240116; t=1778879742; c=relaxed/simple;
+	bh=KrBKqiI/11SRfq8AI/RjyJMaBvonJMkTwc8/qeUOIjc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HR+gNlBTfCLA42+TkcHAErvrG6Mi/dxs1zBC51OU6UW1D+sJLAgZb/qfiYUeLbr9klb5FTkVd8ei+Cep6ELVTYYxeLbzBnF0MkmUw1wXRipRr5R2ra/eKzz6MgAZ0XYpTOX6mWH4VPNkdOnxPcC3nzMvnYx+sLmvJ58Rd8uF5N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HmB9JnH5; arc=none smtp.client-ip=74.125.82.178
+	 MIME-Version; b=XPV+B1x94600LBAYE9Z4SRIoGOJhfGOS5QaCT8Za2lh4UhDF8xlOBS3nPJw+mard/7PhLImE7VXyB7rVPWG5bdQQVyqpMnVRqA21vXYdWugmphOEmZKvJa+qpqzjcM91EzScP/MKjwTsSL8cnESVqOJdvgMM+mObJxVcfxOPf9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jrq5kVMS; arc=none smtp.client-ip=74.125.82.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2f0d3e07e30so1354424eec.0
-        for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 14:15:35 -0700 (PDT)
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-2f7ca62a3c4so297391eec.0
+        for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 14:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778879735; x=1779484535; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778879738; x=1779484538; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ViurL0csUM0y6zC2/BziEDI+4nTSab4FjJtc7RqXPgw=;
-        b=HmB9JnH5XAg7V69IaDFpgbuA/suif2QUJJW+6W5xc3WvGjHRvnpxz6EBZNyt6/0rSt
-         z8dbwurgr0wGbbh8vM+u4VwTc+aH0Wzch5Y6SW9yq4fCQQKTqhwwvrsjhBdWWaIZZsMB
-         RlNTf+6rl3a1J+G0LRUcq+nPijGBBczTHqFUZltsOM0wM6Vvzp6wuvVirFzQC7J0SRzM
-         jQj2mG1quOE0vJkdGgm5U2dqWncdxcoWrFVoYCrnlakxfIQBWBTbBD9Krl9GDyavLAY8
-         GFmcx7UXo1o7oLtVH0WxHrkxXd4B5NFwdnAf5jXzygs8ufHHiOGnD0gK2w8CijzHsquj
-         spYQ==
+        bh=R8y+5pcm0AAt3l5YBSo5Gboi+epX/2lV4aopgke6Vsw=;
+        b=Jrq5kVMSd1V9O4AIppqVhYfKhtnbdWnFeo/1dKkcGAuycFmh+rGJJ//w2pWlhhrS8f
+         Xe3bvW9tBo2qQ222SGjaYdLIeCVwFp2kcDahfXDiqcVJAAh7a5ijNygi9w6sXpuXu2Ud
+         qmha19P7QSagIHDrQg2FIHrH5mYtzIeDPGj0UEK64w1imrdd9dQgVNJtNYtJHzgWxdUP
+         nvtFEad6FQVci7Oi0BKhV4PEGomhlK1kL9FipN6UF14jLlB8Y26WZ7joIpy7zYMkasWj
+         RU5FuT3jtO1NMe+U+RLGElzA1Cx+n7Ke7nAtuXCjVLpYpbeWD/Hfj/dDPHtJuIlT/H5n
+         uZmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778879735; x=1779484535;
+        d=1e100.net; s=20251104; t=1778879738; x=1779484538;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ViurL0csUM0y6zC2/BziEDI+4nTSab4FjJtc7RqXPgw=;
-        b=Hy/sq1bvb4/DOCA1siXQr1HVqT4dwBAs4LaAGG2SYUpBNmGQUc8yi0GL2qxxpIDHVC
-         xkfb6uzOvEmHvwmsNo73L0f6RY74jpXNVcRSr3laqANU3W8pIhNt6LlbGbdFTpUchwvX
-         AfPMymhZRAe2v7TJN+p5pPZct/qcjX1jN2d/0MndVtdBVPwwN/gttjeBAYjl8N2Zgb/+
-         CmrcPLoK2hnf0oi7R/BDUps0L+cHbhTqFJ07bqgl3IT2vhfQRTgqr+84Jx/3U1FD19rL
-         2Yz74y0pu6aFDauAc/pqGjoHYZgWKfHXBWPf2kVekzUtqfrwextFTvt0Z+gNypTbXTSX
-         wLiA==
-X-Forwarded-Encrypted: i=1; AFNElJ8vkBqkr4NUs3G34JCESYTBWoijvgNsAypJ2m04oo635J4W/zZoJtilLKBuuF2JS7jq4MBgCkvnI/XZ4P+WkJc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywx3Q0XVNgnv9qW9lKSHErW7QF8FeLBARHCDLGUJSuaCzhkTxAX
-	3lpwCV7TPE1sLcl3pFvcWLwykHKT8BUE18+LL3vJE+2wmjddUh0W39xf
-X-Gm-Gg: Acq92OGlf0HIvFoYVNRyz6aCkN/SK+WvHBh45KQ/PGSmdcMAvDJS5ypSqUkfL2rUW8M
-	lzZomokywt5aH5kUCcUNdP8kxuz82GQvpo8z+cUHQIZmoJeJs2ZQSpbFklGd/CqzY6nUI4yFC2k
-	Vp7W/6OKaE1zyW9vbBWiLUPCl10/qk3z7cfQoRKcAjbGMGl0gSaG7H3pT06HL6iWyCaToMml4ah
-	/HZRr0YpU5dFbgerGeFsjwR90s6GI5YMStto2Cz1F4LdDrs8RcN1uSIOGDiNKvUlWCjMtrEOUwR
-	W5cSKDE8jGIkwnGNxugx+8uFvk/CfEM/6TrUwzsiIbDFKKw/acrCHGFYvQj2iftlo93IXho431T
-	a5iJLsTMRbyYNvEQWzDz73k+HFtuanijfYeXHcIdzpq7vDv9S0jAw9cQyctMEsE/VQitdDySUTj
-	8Fcv63OkNhYhGP/dYXjKa6XktxQYOtctLCaAoPV/GeDg==
-X-Received: by 2002:a05:7300:510:b0:2c1:7b61:8731 with SMTP id 5a478bee46e88-303982be4d0mr3180070eec.10.1778879734916;
-        Fri, 15 May 2026 14:15:34 -0700 (PDT)
+        bh=R8y+5pcm0AAt3l5YBSo5Gboi+epX/2lV4aopgke6Vsw=;
+        b=atAXOJaiWy3M634ZbNRLBjkfKSSJ497dUba0XAS5vi/DYFm+urz7iY3qS1VFgeAWcJ
+         k9JK3HP9C0Ku94DBnKnqY2nFwujUhAezzx1J8E6GLYNxKokMAPZZwtUfBP0kcNiM/KkE
+         yPO7k2ADU7Nb+Pw3Jt9g2J9+TUgVqkSOSunCWU7ISjNIUEwTLAnsGmBFvIz1unU6ybJ4
+         ZWVwMzWReT3tj1WL1X8ZMnAtI/sSb0m/DCf+Y00ZPopB8dSRLc6Og1YPaGcDOYfSZGKW
+         YIoLlMayIeI/IHOrbQHczKGkswtXKyxhWgBsW5FQljTCIno53wmqDrh2sHibW4YR/yvo
+         8C+w==
+X-Forwarded-Encrypted: i=1; AFNElJ+vr/vjUyodTtEEc/JYo/RtpEiHHXv+Tl9D/+GxHg5i+oKhZZZgEM3EoJl0SB5p7rcyLcZosA4UzD3QET9FxLI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLT0o3krbTBFQQ7kY0GzIYWNG0CrmCPUMGv8BWoL0GCFePfMp3
+	zra1OLmTo2QdvPFq7IYB+TdTbWfheWp8pHLc+ghOnRCqVWE0jzc/wlQ9
+X-Gm-Gg: Acq92OGLlm3xhVowefG0OocAmTZae4TOXME7xaB5km+Q8PRIaTxYvL+rkJKsdOcmnvC
+	xhCf0Z7eder9zRzp/J3hCHtnSAyK7JUHvtPmX/EJPLrEuxjyCJYhOBghPRdEXTDMLJP96tVchqt
+	IYgFlnvG/pEAEXLkQbMs/MtYIwGy7xJGBkdCNHOCkjSCYKtfjsRH2KgjVjEXoAMnbCJpB8hxNiw
+	pXF+tW35TPE03LBDM8STS+QL9w6xuNPgv2LI8wx8QZFy3nzqSBAYDIYa2B7Q4G6/eWM3JLSGpoc
+	vLNiKZBqR88b2dQMp688wD3CkEWGfhz/fLNLlL0Z4x4lbQ+PJda4+VgFNn1+eUc24kYG/ioisTj
+	RKuSw4ZdMkK+fh4Stkxzte9xEqum9u4d6rmRudsuOCFUHViRw0LyLjgvp+cnCHrzEG49xBmrwPn
+	2E9rmlBySFDMfA/MX8chPJx1GVX2IUNkQ=
+X-Received: by 2002:a05:7300:e7a2:b0:2dd:5641:f01 with SMTP id 5a478bee46e88-303986ab2a1mr2521759eec.28.1778879737961;
+        Fri, 15 May 2026 14:15:37 -0700 (PDT)
 Received: from mimas.lan ([2603:8000:df01:38f7:a6bb:6dff:fecf:e71a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302944ffb85sm8214358eec.7.2026.05.15.14.15.33
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30294500a97sm9157996eec.9.2026.05.15.14.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 14:15:34 -0700 (PDT)
+        Fri, 15 May 2026 14:15:37 -0700 (PDT)
 From: Ross Philipson <ross.philipson@gmail.com>
 To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
@@ -110,9 +110,9 @@ Cc: ross.philipson@gmail.com,
 	daniel.kiper@oracle.com,
 	andrew.cooper3@citrix.com,
 	trenchboot-devel@googlegroups.com
-Subject: [PATCH v16 29/38] x86/tpm: Early startup TPM PCR extending driver
-Date: Fri, 15 May 2026 14:14:01 -0700
-Message-ID: <20260515211410.31440-30-ross.philipson@gmail.com>
+Subject: [PATCH v16 30/38] x86/slaunch: Add MLE header and Secure Launch entrypoint to the core kernel
+Date: Fri, 15 May 2026 14:14:02 -0700
+Message-ID: <20260515211410.31440-31-ross.philipson@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260515211410.31440-1-ross.philipson@gmail.com>
 References: <20260515211410.31440-1-ross.philipson@gmail.com>
@@ -123,20 +123,20 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4101F557FDD
+X-Rspamd-Queue-Id: 257C255827C
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9564-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9565-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -153,692 +153,1071 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[trustedcomputinggroup.org:url,apertussolutions.com:email,oracle.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,apertussolutions.com:email]
 X-Rspamd-Action: no action
 
-Introduce a driver that can interact minimally with the TPM. This
-allows the Secure Launch startup code to extend measurement values
-into the TPM's DRTM PCR banks early in the launch process.
+The Measured Launch Environment (MLE) header is an Intel TXT specific
+structure that is used by the Intel ACM and Secure Launch implementation
+to determine the location and attributes of the secure kernel being
+launched.
 
-The driver implementation only currently supports basic initialization
-and PCR extend commands. An extend command can be sent to both TPM 2.0 or
-1.2 chip but only the TIS/FIFO interface is currently supported. The TCG
-specs for these interface can be found here:
+Also introduce the sl_stub.S code to create a 32-bit Secure Launch entry
+point into the core kernel and expose it via an MLE header. This is the
+entry point for starting a Secure Launch kernel, handling the
+post-launch CPU states and validating the environment.
 
-https://trustedcomputinggroup.org/resource/pc-client-work-group-pc-client-specific-tpm-interface-specification-tis/
-https://trustedcomputinggroup.org/resource/tpm-2-0-mobile-command-response-buffer-interface-specification/
-
-Note this TPM driver implementation relies as much as possible on
-existing mainline kernel TPM code.
-
+Co-developed-by: Ard Biesheuvel <ardb@kernel.org>
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Co-developed-by: Daniel P. Smith <dpsmith@apertussolutions.com>
 Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
-Co-developed-by: Alec Brown <alec.r.brown@oracle.com>
-Signed-off-by: Alec Brown <alec.r.brown@oracle.com>
 Signed-off-by: Ross Philipson <ross.philipson@gmail.com>
 ---
- arch/x86/boot/startup/Makefile  |   1 +
- arch/x86/boot/startup/exports.h |   7 +
- arch/x86/boot/startup/tpm.h     |  47 +++
- arch/x86/boot/startup/tpm_drv.c | 567 ++++++++++++++++++++++++++++++++
- 4 files changed, 622 insertions(+)
- create mode 100644 arch/x86/boot/startup/tpm.h
- create mode 100644 arch/x86/boot/startup/tpm_drv.c
+ arch/x86/boot/compressed/Makefile     |   2 +-
+ arch/x86/boot/compressed/misc.c       |   4 +
+ arch/x86/boot/startup/Makefile        |   1 +
+ arch/x86/boot/startup/sl_main.c       |  28 +
+ arch/x86/include/asm/boot.h           |   4 +
+ arch/x86/include/uapi/asm/bootparam.h |   1 +
+ arch/x86/kernel/Makefile              |   1 +
+ arch/x86/kernel/asm-offsets.c         |  22 +
+ arch/x86/kernel/sl_stub.S             | 847 ++++++++++++++++++++++++++
+ arch/x86/kernel/vmlinux.lds.S         |   5 +
+ arch/x86/tools/relocs.c               |   1 +
+ 11 files changed, 915 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/boot/startup/sl_main.c
+ create mode 100644 arch/x86/kernel/sl_stub.S
 
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index b8b2b7bea1d3..8b2e234d18cb 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -76,7 +76,7 @@ LDFLAGS_vmlinux += -T
+ hostprogs	:= mkpiggy
+ HOST_EXTRACFLAGS += -I$(srctree)/tools/include
+ 
+-sed-voffset := -e 's/^\([0-9a-fA-F]*\) [ABbCDGRSTtVW] \(_text\|__start_rodata\|_sinittext\|__inittext_end\|__bss_start\|_end\)$$/\#define VO_\2 _AC(0x\1,UL)/p'
++sed-voffset := -e 's/^\([0-9a-fA-F]*\) [ABbCDGRSTtVW] \(_text\|__start_rodata\|_sinittext\|mle_header\|__inittext_end\|__bss_start\|_end\)$$/\#define VO_\2 _AC(0x\1,UL)/p'
+ 
+ quiet_cmd_voffset = VOFFSET $@
+       cmd_voffset = $(NM) $< | sed -n $(sed-voffset) > $@
+diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+index 0f41ca0e52c0..e3b5177bfa6f 100644
+--- a/arch/x86/boot/compressed/misc.c
++++ b/arch/x86/boot/compressed/misc.c
+@@ -336,6 +336,10 @@ const unsigned long kernel_inittext_offset = VO__sinittext - VO__text;
+ const unsigned long kernel_inittext_size = VO___inittext_end - VO__sinittext;
+ const unsigned long kernel_total_size = VO__end - VO__text;
+ 
++#ifdef CONFIG_SECURE_LAUNCH
++const unsigned long mle_header_offset = VO_mle_header - VO__text;
++#endif
++
+ static u8 boot_heap[BOOT_HEAP_SIZE] __aligned(4);
+ 
+ extern unsigned char input_data[];
 diff --git a/arch/x86/boot/startup/Makefile b/arch/x86/boot/startup/Makefile
-index 527cba7e4560..ecf86ce5ebf7 100644
+index ecf86ce5ebf7..c4b150a0253b 100644
 --- a/arch/x86/boot/startup/Makefile
 +++ b/arch/x86/boot/startup/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_AMD_MEM_ENCRYPT)	+= sme.o sev-startup.o
- slaunch-objs			+= lib-sha1.o
+@@ -25,6 +25,7 @@ slaunch-objs			+= lib-sha1.o
  slaunch-objs			+= lib-sha256.o
  slaunch-objs			+= lib-sha512.o
-+slaunch-objs			+= tpm_drv.o
+ slaunch-objs			+= tpm_drv.o
++slaunch-objs			+= sl_main.o
  obj-$(CONFIG_SECURE_LAUNCH)	+= $(slaunch-objs)
  
  pi-objs				:= $(patsubst %.o,$(obj)/%.o,$(obj-y))
-diff --git a/arch/x86/boot/startup/exports.h b/arch/x86/boot/startup/exports.h
-index 01d2363dc445..4b82ddbd62a8 100644
---- a/arch/x86/boot/startup/exports.h
-+++ b/arch/x86/boot/startup/exports.h
-@@ -12,3 +12,10 @@ PROVIDE(snp_cpuid			= __pi_snp_cpuid);
- PROVIDE(snp_cpuid_get_table		= __pi_snp_cpuid_get_table);
- PROVIDE(svsm_issue_call			= __pi_svsm_issue_call);
- PROVIDE(svsm_process_result_codes	= __pi_svsm_process_result_codes);
-+
-+#ifdef CONFIG_SECURE_LAUNCH
-+__pi_bcmp				= bcmp;
-+__pi_memcmp				= memcmp;
-+__pi_strlen				= strlen;
-+__pi___WARN_trap			= __WARN_trap;
-+#endif
-diff --git a/arch/x86/boot/startup/tpm.h b/arch/x86/boot/startup/tpm.h
+diff --git a/arch/x86/boot/startup/sl_main.c b/arch/x86/boot/startup/sl_main.c
 new file mode 100644
-index 000000000000..1a11396b68c6
+index 000000000000..1982cfb461dd
 --- /dev/null
-+++ b/arch/x86/boot/startup/tpm.h
-@@ -0,0 +1,47 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
++++ b/arch/x86/boot/startup/sl_main.c
+@@ -0,0 +1,28 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * TPM early extend header file.
++ * Secure Launch early measurement and validation routines.
 + *
-+ * Copyright (c) 2026 Apertus Solutions, LLC
 + * Copyright (c) 2026, Oracle and/or its affiliates.
++ * Copyright (c) 2026 Apertus Solutions, LLC
 + */
 +
-+#ifndef BOOT_COMPRESSED_TPM_H
-+#define BOOT_COMPRESSED_TPM_H
-+
-+enum early_tis_defaults {
-+	TPM_TIMEOUT		= 5, /* ms */
-+	TIS_DURATION		= 120000, /* 120 secs in ms */
-+};
-+
-+enum tpm_family {
-+	TPM_FAMILY_INVALID	= 0,
-+	TPM_FAMILY_12		= 1,
-+	TPM_FAMILY_20		= 2
-+};
-+
-+struct tpm_chip {
-+	enum tpm_family family;
-+	u64 baseaddr;
-+	int locality;
-+	int did;
-+	int vid;
-+
-+	/* in ms */
-+	ktime_t timeout_a;
-+	ktime_t timeout_b;
-+	ktime_t timeout_c;
-+	ktime_t timeout_d;
-+};
-+
-+bool tpm_tis_check_locality(struct tpm_chip *chip, int loc);
-+void tpm_tis_release_locality(struct tpm_chip *chip);
-+int tpm_tis_request_locality(struct tpm_chip *chip, int loc);
-+void tpm_tis_disable_interrupts(struct tpm_chip *chip);
-+int tpm1_pcr_extend(struct tpm_chip *chip, u32 pcr_idx, const u8 *hash);
-+int tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
-+		    struct tpm_digest *digests, u32 digest_count);
-+int early_tpm_init(struct tpm_chip *chip, u64 baseaddr);
-+int early_tpm_fini(struct tpm_chip *chip);
-+
-+#endif /* BOOT_COMPRESSED_TPM_H */
-diff --git a/arch/x86/boot/startup/tpm_drv.c b/arch/x86/boot/startup/tpm_drv.c
-new file mode 100644
-index 000000000000..99971b06f768
---- /dev/null
-+++ b/arch/x86/boot/startup/tpm_drv.c
-@@ -0,0 +1,567 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Based of the original tpm_tis.c implementation as found in the
-+ * Linux 2.6 code base.
-+ *
-+ * Copyright (C) 2005, 2006 IBM Corporation
-+ *
-+ * Authors:
-+ * Leendert van Doorn <leendert@watson.ibm.com>
-+ * Kylene Hall <kjhall@us.ibm.com>
-+ */
-+
-+#include <crypto/sha2.h>
-+#include <asm/io.h>
-+
-+#include <linux/tpm_command.h>
-+#include <linux/tpm_ptp.h>
-+#include <linux/tpm_buf.h>
++#include <asm/msr.h>
++#include <asm/mtrr.h>
++#include <asm/processor-flags.h>
++#include <asm/asm-offsets.h>
++#include <asm/bootparam.h>
++#include <asm/shared/msr.h>
++#include <linux/efi.h>
++#include <linux/slr_table.h>
++#include <linux/slaunch.h>
 +
 +#include "tpm.h"
 +
-+static u8 tpm_buf_page[PAGE_SIZE];
++u32 sl_cpu_type __initdata;
++u32 sl_mle_start __initdata;
++
++void sl_main(void *bootparams);
++
++asmlinkage __visible __init void sl_main(void *bootparams)
++{
++}
+diff --git a/arch/x86/include/asm/boot.h b/arch/x86/include/asm/boot.h
+index f7b67cb73915..84e87e0d3d82 100644
+--- a/arch/x86/include/asm/boot.h
++++ b/arch/x86/include/asm/boot.h
+@@ -86,6 +86,10 @@ extern const unsigned long kernel_inittext_offset;
+ extern const unsigned long kernel_inittext_size;
+ extern const unsigned long kernel_total_size;
+ 
++#ifdef CONFIG_SECURE_LAUNCH
++extern const unsigned long mle_header_offset;
++#endif
++
+ unsigned long decompress_kernel(unsigned char *outbuf, unsigned long virt_addr,
+ 				void (*error)(char *x));
+ 
+diff --git a/arch/x86/include/uapi/asm/bootparam.h b/arch/x86/include/uapi/asm/bootparam.h
+index dafbf581c515..8155fa899f50 100644
+--- a/arch/x86/include/uapi/asm/bootparam.h
++++ b/arch/x86/include/uapi/asm/bootparam.h
+@@ -12,6 +12,7 @@
+ /* loadflags */
+ #define LOADED_HIGH	(1<<0)
+ #define KASLR_FLAG	(1<<1)
++#define SLAUNCH_FLAG	(1<<2)
+ #define QUIET_FLAG	(1<<5)
+ #define KEEP_SEGMENTS	(1<<6)
+ #define CAN_USE_HEAP	(1<<7)
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index 47a32f583930..7e247064b7d0 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -89,6 +89,7 @@ obj-y			+= resource.o
+ obj-y			+= irqflags.o
+ obj-y			+= static_call.o
+ 
++obj-$(CONFIG_SECURE_LAUNCH)	+= sl_stub.o
+ obj-y				+= process.o
+ obj-y				+= fpu/
+ obj-y				+= ptrace.o
+diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
+index 081816888f7a..684e6552d973 100644
+--- a/arch/x86/kernel/asm-offsets.c
++++ b/arch/x86/kernel/asm-offsets.c
+@@ -13,6 +13,9 @@
+ #include <linux/hardirq.h>
+ #include <linux/suspend.h>
+ #include <linux/kbuild.h>
++#include <linux/efi.h>
++#include <linux/slr_table.h>
++#include <linux/slaunch.h>
+ #include <asm/processor.h>
+ #include <asm/thread_info.h>
+ #include <asm/sigframe.h>
+@@ -133,4 +136,23 @@ static void __used common(void)
+ 	BLANK();
+ 	DEFINE(ALT_INSTR_SIZE,	sizeof(struct alt_instr));
+ 	DEFINE(EXTABLE_SIZE,	sizeof(struct exception_table_entry));
++
++#ifdef CONFIG_SECURE_LAUNCH
++	BLANK();
++	OFFSET(SL_txt_info, txt_os_mle_data, txt_info);
++	OFFSET(SL_mle_scratch, txt_os_mle_data, mle_scratch);
++	OFFSET(SL_ap_wake_block, txt_os_mle_data, ap_wake_block);
++	OFFSET(SL_ap_wake_block_size, txt_os_mle_data, ap_wake_block_size);
++	OFFSET(SL_boot_params_addr, slr_entry_intel_info, boot_params_addr);
++	OFFSET(SL_saved_misc_enable_msr, slr_entry_intel_info, saved_misc_enable_msr);
++	OFFSET(SL_saved_bsp_mtrrs, slr_entry_intel_info, saved_bsp_mtrrs);
++	OFFSET(SL_num_logical_procs, txt_bios_data, num_logical_procs);
++	OFFSET(SL_capabilities, txt_os_sinit_data, capabilities);
++	OFFSET(SL_mle_size, txt_os_sinit_data, mle_size);
++	OFFSET(SL_vtd_pmr_lo_base, txt_os_sinit_data, vtd_pmr_lo_base);
++	OFFSET(SL_vtd_pmr_lo_size, txt_os_sinit_data, vtd_pmr_lo_size);
++	OFFSET(SL_rlp_wakeup_addr, txt_sinit_mle_data, rlp_wakeup_addr);
++	OFFSET(SL_rlp_gdt_base, smx_rlp_mle_join, rlp_gdt_base);
++	OFFSET(SL_rlp_entry_point, smx_rlp_mle_join, rlp_entry_point);
++#endif
+ }
+diff --git a/arch/x86/kernel/sl_stub.S b/arch/x86/kernel/sl_stub.S
+new file mode 100644
+index 000000000000..5121de563310
+--- /dev/null
++++ b/arch/x86/kernel/sl_stub.S
+@@ -0,0 +1,847 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
 +/*
-+ * Single threaded environment only running on BSP. Use a single shared
-+ * page for all TPM extend operations.
++ * Secure Launch protected mode entry point.
++ *
++ * Copyright (c) 2026, Oracle and/or its affiliates.
++ * Copyright (c) 2026 Assured Information Security, Inc.
 + */
-+static inline struct tpm_buf *tpm_buf_alloc_page(void)
-+{
-+	memset(tpm_buf_page, 0, PAGE_SIZE);
-+	return (struct tpm_buf *)tpm_buf_page;
-+}
 +
-+static inline void tpm_buf_free_page(void)
-+{
-+	memset(tpm_buf_page, 0, PAGE_SIZE);
-+}
++#include <linux/linkage.h>
++#include <linux/init.h>
++#include <asm/segment.h>
++#include <asm/msr.h>
++#include <asm/apicdef.h>
++#include <asm/trapnr.h>
++#include <asm/pgtable_types.h>
++#include <asm/processor-flags.h>
++#include <asm/asm-offsets.h>
++#include <asm/bootparam.h>
++#include <asm/page_types.h>
++#include <asm/irq_vectors.h>
++#include <asm/unwind_hints.h>
++#include <linux/slr_table.h>
++#include <linux/slaunch.h>
 +
-+/* Pull in TPM buffer management support */
-+#include "../../../../drivers/char/tpm/tpm-buf.c"
++/* CPUID: leaf 1, ECX, SMX feature bit */
++#define X86_FEATURE_BIT_SMX	(1 << 6)
 +
-+static u32 __init tpm_get_alg_size(u16 alg_id)
-+{
-+	switch (alg_id) {
-+	case TPM_ALG_SHA1:
-+		return TPM_DIGEST_SIZE;
-+	case TPM_ALG_SHA256:
-+	case TPM_ALG_SM3_256:
-+		return SHA256_DIGEST_SIZE;
-+	case TPM_ALG_SHA384:
-+		return SHA384_DIGEST_SIZE;
-+	case TPM_ALG_SHA512:
-+	default:
-+		return SHA512_DIGEST_SIZE;
-+	};
-+}
-+
-+static inline u8 tpm_read8(struct tpm_chip *chip, u32 field)
-+{
-+	return readb((void *)(chip->baseaddr | field));
-+}
-+
-+static inline void tpm_write8(struct tpm_chip *chip, u32 field, u8 val)
-+{
-+	writeb(val, (void *)(chip->baseaddr | field));
-+}
-+
-+static inline u32 tpm_read32(struct tpm_chip *chip, u32 field)
-+{
-+	return readl((void *)(chip->baseaddr | field));
-+}
-+
-+static inline void tpm_write32(struct tpm_chip *chip, u32 field, u32 val)
-+{
-+	writel(val, (void *)(chip->baseaddr | field));
-+}
++#define IDT_VECTOR_LO_BITS	0
++#define IDT_VECTOR_HI_BITS	6
 +
 +/*
-+ * In the setup kernel environment, it is far too early to calibrate time.
-+ * Assume a 5GHz processor (the upper end of the Fam19h range), allowing
-+ * reasonable timeouts on slower systems.
++ * See the comment in head_64.S for detailed information on what this macro
++ * and others like it are used for. The comment appears right at the top of
++ * the file.
 + */
-+static unsigned long ticks_per_ms = (5UL * 1000 * 1000 /* CPU in KHz */);
++#define rva(X) ((X) - sl_stub_entry)
 +
-+static inline ktime_t tpm_now_ms(void)
-+{
-+	return rdtsc()/ticks_per_ms;
-+}
-+
-+static inline void tpm_mdelay(unsigned int msecs)
-+{
-+	unsigned long ticks = msecs * ticks_per_ms;
-+	unsigned long s, e;
-+
-+	s = rdtsc();
-+	do {
-+		cpu_relax();
-+		e = rdtsc();
-+	} while ((e - s) < ticks);
-+}
-+
-+static inline u8 __tis_status(struct tpm_chip *chip)
-+{
-+	return tpm_read8(chip, TPM_STS(chip->locality));
-+}
-+
-+static inline void __tis_cancel(struct tpm_chip *chip)
-+{
-+	/* This causes the current command to be aborted */
-+	tpm_write8(chip, TPM_STS(chip->locality), TPM_STS_COMMAND_READY);
-+}
-+
-+static int __init __tis_get_burstcount(struct tpm_chip *chip)
-+{
-+	ktime_t stop;
-+	int burstcnt;
-+
-+	stop = tpm_now_ms() + chip->timeout_d;
-+	do {
-+		burstcnt = tpm_read8(chip, (TPM_STS(chip->locality) + 1));
-+		burstcnt += tpm_read8(chip, TPM_STS(chip->locality) + 2) << 8;
-+
-+		if (burstcnt)
-+			return burstcnt;
-+
-+		tpm_mdelay(TPM_TIMEOUT);
-+	} while (tpm_now_ms() < stop);
-+
-+	return -EBUSY;
-+}
-+
-+static int __init __tis_wait_for_stat(struct tpm_chip *chip, u8 mask, ktime_t timeout)
-+{
-+	ktime_t stop;
-+	u8 status;
-+
-+	if ((__tis_status(chip) & mask) == mask)
-+		return 0;
-+
-+	stop = tpm_now_ms() + timeout;
-+	do {
-+		tpm_mdelay(TPM_TIMEOUT);
-+
-+		status = __tis_status(chip);
-+		if ((status & mask) == mask)
-+			return 0;
-+	} while (tpm_now_ms() < stop);
-+
-+	return -ETIME;
-+}
-+
-+static int __init __tis_recv_data(struct tpm_chip *chip, u8 *buf, int count)
-+{
-+	int size = 0;
-+	int burstcnt;
-+
-+	while (size < count &&
-+	       __tis_wait_for_stat(chip,
-+				   TPM_STS_DATA_AVAIL | TPM_STS_VALID,
-+				   chip->timeout_c) == 0) {
-+		burstcnt = __tis_get_burstcount(chip);
-+
-+		for ( ; burstcnt > 0 && size < count; --burstcnt)
-+			buf[size++] = tpm_read8(chip, TPM_DATA_FIFO(chip->locality));
-+	}
-+
-+	return size;
-+}
-+
-+/**
-+ * tpm_tis_check_locality - Check if the given locality is the active one
-+ * @chip:	The TPM chip instance
-+ * @loc:	The locality to check
-+ *
-+ * Return: true - locality active, false - not active
++/*
++ * The GETSEC op code is open coded because older versions of
++ * GCC do not support the getsec mnemonic.
 + */
-+bool __init tpm_tis_check_locality(struct tpm_chip *chip, int loc)
-+{
-+	u8 res = tpm_read8(chip, TPM_ACCESS(loc));
-+
-+	if ((res & (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID)) ==
-+		   (TPM_ACCESS_ACTIVE_LOCALITY | TPM_ACCESS_VALID)) {
-+		chip->locality = loc;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+/**
-+ * tpm_tis_release_locality - Release the active locality
-+ * @chip:	The TPM chip instance
-+ */
-+void __init tpm_tis_release_locality(struct tpm_chip *chip)
-+{
-+	u8 res = tpm_read8(chip, TPM_ACCESS(chip->locality));
-+
-+	if ((res & (TPM_ACCESS_REQUEST_PENDING | TPM_ACCESS_VALID)) ==
-+		   (TPM_ACCESS_REQUEST_PENDING | TPM_ACCESS_VALID))
-+		tpm_write8(chip, TPM_ACCESS(chip->locality), TPM_ACCESS_RELINQUISH_LOCALITY);
-+
-+	chip->locality = 0;
-+}
-+
-+/**
-+ * tpm_tis_request_locality - Request to make the given locality the active one
-+ * @chip:	The TPM chip instance
-+ * @loc:	The locality to make active/set as current
-+ *
-+ * Return:
-+ *  >= 0 - Success, new active locality returned or locality already active
-+ *  < 0  - Error occurred
-+ */
-+int __init tpm_tis_request_locality(struct tpm_chip *chip, int loc)
-+{
-+	ktime_t stop;
-+
-+	if (tpm_tis_check_locality(chip, loc))
-+		return loc;
-+
-+	/* Set the new locality */
-+	tpm_write8(chip, TPM_ACCESS(loc), TPM_ACCESS_REQUEST_USE);
-+
-+	stop = tpm_now_ms() + chip->timeout_b;
-+	do {
-+		if (tpm_tis_check_locality(chip, loc))
-+			return loc;
-+
-+		tpm_mdelay(TPM_TIMEOUT);
-+	} while (tpm_now_ms() < stop);
-+
-+	return -1;
-+}
-+
-+/**
-+ * tpm_tis_disable_interrupts - Disable interrupts for the TPM, use polling mode only
-+ * @chip:	The TPM chip instance
-+ */
-+void __init tpm_tis_disable_interrupts(struct tpm_chip *chip)
-+{
-+	u32 intmask;
-+
-+	intmask = tpm_read32(chip, TPM_INT_ENABLE(chip->locality));
-+	/* Disable everything to make sure it is in a consistent state */
-+	intmask &= ~(TPM_GLOBAL_INT_ENABLE | TPM_INTF_CMD_READY_INT |
-+		     TPM_INTF_LOCALITY_CHANGE_INT | TPM_INTF_STS_VALID_INT |
-+		     TPM_INTF_DATA_AVAIL_INT);
-+	tpm_write32(chip, TPM_INT_ENABLE(chip->locality), intmask);
-+}
-+
-+/**
-+ * tpm_tis_recv - Receive response data from TPM via TIS FIFO
-+ * @chip:	The TPM chip instance
-+ * @buf:	The response buffer
-+ * @count:	Length of the response buffer
-+ *
-+ * Return:
-+ *  = 0 - Success, no response data
-+ *  > 0 - Success, value is the response data length
-+ *  < 0 - Error occurred
-+ */
-+static int __init tpm_tis_recv(struct tpm_chip *chip, u8 *buf, int count)
-+{
-+	int expected, status, size = 0, rc = -EIO;
-+
-+	if (count < TPM_HEADER_SIZE)
-+		goto out;
-+
-+	/* Read first 10 bytes, including tag, paramsize, and result */
-+	size = __tis_recv_data(chip, buf, TPM_HEADER_SIZE);
-+	if (size < TPM_HEADER_SIZE)
-+		goto out;
-+
-+	expected = be32_to_cpu(*((u32 *)(buf + 2)));
-+	if (expected > count)
-+		goto out;
-+
-+	size += __tis_recv_data(chip, &buf[TPM_HEADER_SIZE], expected - TPM_HEADER_SIZE);
-+	if (size < expected) {
-+		rc = -ETIME;
-+		goto out;
-+	}
-+
-+	__tis_wait_for_stat(chip, TPM_STS_VALID, chip->timeout_c);
-+
-+	status = __tis_status(chip);
-+	if (status & TPM_STS_DATA_AVAIL) {
-+		rc = -EIO;
-+		goto out;
-+	}
-+
-+	/* Done with receive, move to Command Ready state */
-+	__tis_cancel(chip);
-+
-+	return size;
-+out:
-+	__tis_cancel(chip);
-+	tpm_tis_release_locality(chip);
-+	return rc;
-+}
-+
-+/**
-+ * tpm_tis_send - Send command to TPM via TIS FIFO
-+ * @chip:	The TPM chip instance
-+ * @buf:	The command buffer
-+ * @len:	Length of the command buffer to send
-+ *
-+ * Return:
-+ *  = len - Success, all data sent
-+ *  < 0	  - Error occurred
-+ */
-+static int __init tpm_tis_send(struct tpm_chip *chip, u8 *buf, int len)
-+{
-+	int status, burstcnt = 0;
-+	int count = 0;
-+	int rc = 0;
-+
-+	status = __tis_status(chip);
-+	if ((status & TPM_STS_COMMAND_READY) == 0) {
-+		__tis_cancel(chip);
-+		if (__tis_wait_for_stat(chip, TPM_STS_COMMAND_READY, chip->timeout_b) < 0) {
-+			rc = -ETIME;
-+			goto out_err;
-+		}
-+	}
-+
-+	while (count < len - 1) {
-+		burstcnt = __tis_get_burstcount(chip);
-+		for ( ; burstcnt > 0 && count < len - 1; --burstcnt)
-+			tpm_write8(chip, TPM_DATA_FIFO(chip->locality), buf[count++]);
-+
-+		__tis_wait_for_stat(chip, TPM_STS_VALID, chip->timeout_c);
-+		status = __tis_status(chip);
-+		if ((status & TPM_STS_DATA_EXPECT) == 0) {
-+			rc = -EIO;
-+			goto out_err;
-+		}
-+	}
-+
-+	/* Write last byte */
-+	tpm_write8(chip, TPM_DATA_FIFO(chip->locality), buf[count]);
-+	__tis_wait_for_stat(chip, TPM_STS_VALID, chip->timeout_c);
-+	status = __tis_status(chip);
-+	if ((status & TPM_STS_DATA_EXPECT) != 0) {
-+		rc = -EIO;
-+		goto out_err;
-+	}
-+
-+	/* Go and do it */
-+	tpm_write8(chip, TPM_STS(chip->locality), TPM_STS_GO);
-+
-+	return len;
-+
-+out_err:
-+	__tis_cancel(chip);
-+	tpm_tis_release_locality(chip);
-+	return rc;
-+}
-+
-+/**
-+ * tpm_tis_transmit - Transmit a TPM FIFO command
-+ * @chip:	The TPM chip instance
-+ * @buf:	The request and response buffer object
-+ * @bufsize:	Entire size available in buffer
-+ *
-+ * Return:
-+ *  = 0 - Success, no returned data
-+ *  > 0 - Success, value is the return data length
-+ *  < 0 - Error occurred
-+ */
-+static int __init tpm_tis_transmit(struct tpm_chip *chip, u8 *buf, u32 bufsize)
-+{
-+	ktime_t stop;
-+	u32 count;
-+	u8 status;
-+	int rc;
-+
-+	count = be32_to_cpu(*((u32 *) (buf + 2)));
-+	if (count == 0)
-+		return -ENODATA;
-+
-+	if (count > bufsize)
-+		return -E2BIG;
-+
-+	rc = tpm_tis_send(chip, buf, count);
-+	if (rc < 0)
-+		goto out;
-+
-+	stop = tpm_now_ms() + TIS_DURATION;
-+	do {
-+		status = __tis_status(chip);
-+		if ((status & (TPM_STS_DATA_AVAIL | TPM_STS_VALID)) ==
-+			      (TPM_STS_DATA_AVAIL | TPM_STS_VALID))
-+			goto out_recv;
-+
-+		if (status == TPM_STS_COMMAND_READY) {
-+			rc = -ECANCELED;
-+			goto out;
-+		}
-+
-+		tpm_mdelay(TPM_TIMEOUT);
-+		rmb();
-+	} while (tpm_now_ms() < stop);
-+
-+	/* Cancel the command */
-+	__tis_cancel(chip);
-+	rc = -ETIME;
-+	goto out;
-+
-+out_recv:
-+	rc = tpm_tis_recv(chip, buf, bufsize);
-+	if (rc >= 0) {
-+		if (rc > 0 && rc < TPM_HEADER_SIZE)
-+			return -EFAULT;
-+		return rc;
-+	}
-+	/* Else return was an error, nothing to receive */
-+
-+out:
-+	return rc;
-+}
-+
-+/**
-+ * tpm_find_interface_and_family - interface FIFO/CRB, family 2.0 or 1.2
-+ * @chip:	The TPM chip instance
-+ *
-+ * Return: TPM family ID enum
-+ */
-+static enum tpm_family __init tpm_find_interface_and_family(struct tpm_chip *chip)
-+{
-+	struct tpm_intf_capability intf_cap;
-+	struct tpm_interface_id intf_id;
-+
-+	/* Sort out whether it is 1.x */
-+	intf_cap.val = tpm_read32(chip, TPM_INTF_CAPS(0));
-+	if ((intf_cap.interface_version == TPM_TIS_INTF_12) ||
-+	    (intf_cap.interface_version == TPM_TIS_INTF_13))
-+		return TPM_FAMILY_12; /* Always TIS */
-+
-+	/* Assume that it is 2.0 but check if the interface is CRB */
-+	intf_id.val = tpm_read32(chip, TPM_INTF_ID(0));
-+	if (intf_id.interface_type == TPM_CRB_INTF_ACTIVE)
-+		return TPM_FAMILY_INVALID;
-+
-+	/* Else TPM 2.0 with TIS interface */
-+	return TPM_FAMILY_20;
-+}
-+
-+/**
-+ * tpm1_pcr_extend - send a TPM1 extend command to the device
-+ * @chip:	a TPM chip to use
-+ * @pcr_idx:	the PCR index to extend for the current locality
-+ * @hash:	the SHA1 hash digest to extend
-+ *
-+ * Return:
-+ * * 0		- OK
-+ * * -errno	- A system error
-+ * * TPM_RC	- A TPM error
-+ */
-+int __init tpm1_pcr_extend(struct tpm_chip *chip, u32 pcr_idx, const u8 *hash)
-+{
-+	struct tpm_buf *buf = tpm_buf_alloc_page();
-+	int rc = 0;
-+
-+	tpm_buf_init(buf, TPM_BUFSIZE);
-+	tpm_buf_reset(buf, TPM_TAG_RQU_COMMAND, TPM_ORD_PCR_EXTEND);
-+
-+	tpm_buf_append_u32(buf, pcr_idx);
-+	tpm_buf_append(buf, hash, TPM_DIGEST_SIZE);
-+
-+	rc = tpm_tis_transmit(chip, buf->data, PAGE_SIZE);
-+
-+	/* Ignoring output */
-+	if (rc > 0)
-+		rc = 0;
-+
-+	tpm_buf_free_page();
-+
-+	return rc;
-+}
-+
-+/**
-+ * tpm2_pcr_extend() - send a TPM2 extend command to the device
-+ *
-+ * @chip:		TPM chip to use.
-+ * @pcr_idx:		index of the PCR.
-+ * @digests:		list of PCR banks and corresponding digest values to extend.
-+ * @digest_count:	count of digests to extend
-+ *
-+ * Return:
-+ * * 0		- OK
-+ * * -errno	- A system error
-+ * * TPM_RC	- A TPM error
-+ */
-+int __init tpm2_pcr_extend(struct tpm_chip *chip, u32 pcr_idx,
-+			   struct tpm_digest *digests, u32 digest_count)
-+{
-+	struct tpm_buf *buf = tpm_buf_alloc_page();
-+	int rc = 0, i;
-+
-+	tpm_buf_init(buf, TPM_BUFSIZE);
-+	tpm_buf_reset(buf, TPM2_ST_SESSIONS, TPM2_CC_PCR_EXTEND);
-+
-+	tpm_buf_append_u32(buf, pcr_idx);
-+
-+	/* Setup a NULL auth session for the command */
-+	tpm_buf_append_u32(buf, 9);
-+	/* auth handle */
-+	tpm_buf_append_u32(buf, TPM2_RS_PW);
-+	/* nonce */
-+	tpm_buf_append_u16(buf, 0);
-+	/* attributes */
-+	tpm_buf_append_u8(buf, 0);
-+	/* passphrase */
-+	tpm_buf_append_u16(buf, 0);
-+
-+	tpm_buf_append_u32(buf, digest_count);
-+
-+	for (i = 0; i < digest_count; i++) {
-+		tpm_buf_append_u16(buf, digests[i].alg_id);
-+		tpm_buf_append(buf, (const unsigned char *)&digests[i].digest,
-+			       tpm_get_alg_size(digests[i].alg_id));
-+	}
-+
-+	rc = tpm_tis_transmit(chip, buf->data, PAGE_SIZE);
-+
-+	/* Ignoring output */
-+	if (rc > 0)
-+		rc = 0;
-+
-+	tpm_buf_free_page();
-+
-+	return rc;
-+}
-+
-+int __init early_tpm_init(struct tpm_chip *chip, u64 baseaddr)
-+{
-+	u32 didvid;
-+
-+	memset(chip, 0, sizeof(*chip));
-+	chip->baseaddr = baseaddr;
-+
-+	chip->family = tpm_find_interface_and_family(chip);
-+	if (chip->family == TPM_FAMILY_INVALID)
-+		return TPM_ERR_INVALID_FAMILY;
-+
-+	/* Set default timeouts */
-+	chip->timeout_a = TIS_SHORT_TIMEOUT;
-+	chip->timeout_b = TIS_LONG_TIMEOUT;
-+	chip->timeout_c = TIS_SHORT_TIMEOUT;
-+	chip->timeout_d = TIS_SHORT_TIMEOUT;
-+
-+	/* Get the vendor and device ids */
-+	didvid = tpm_read32(chip, TPM_DID_VID(0));
-+	chip->did = didvid >> 16;
-+	chip->vid = didvid & 0xFFFF;
-+
-+	return TPM_SUCCESS;
-+}
-+
-+int __init early_tpm_fini(struct tpm_chip *chip)
-+{
-+	tpm_tis_release_locality(chip);
-+	memset(chip, 0, sizeof(*chip));
-+
-+	return TPM_SUCCESS;
-+}
++.macro GETSEC leaf
++	pushl	%ebx
++	xorl	%ebx, %ebx	/* Must be zero for SMCTRL */
++	movl	\leaf, %eax	/* Leaf function */
++	.byte 	0x0f, 0x37	/* GETSEC opcode */
++	popl	%ebx
++.endm
++
++.macro TXT_RESET error
++	/*
++	 * Set a sticky error value and reset. Note the movs to %eax act as
++	 * TXT register barriers.
++	 */
++	movl	\error, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_ERRORCODE)
++	movl	(TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_E2STS), %eax
++	movl	$1, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_CMD_NO_SECRETS)
++	movl	(TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_E2STS), %eax
++	movl	$1, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_CMD_UNLOCK_MEM_CONFIG)
++	movl	(TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_E2STS), %eax
++	movl	$1, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_CMD_RESET)
++1:
++	hlt
++	jmp	1b
++.endm
++
++	.code32
++	__INIT
++SYM_CODE_START(sl_stub_entry)
++	UNWIND_HINT_END_OF_STACK
++	/*
++	 * On entry, %ebx has the entry absolute offset to sl_stub_entry. The rva()
++	 * macro is used to generate relative references using %ebx as a base, as
++	 * to avoid absolute relocations, which would require fixups at runtime.
++	 * Only %cs and %ds segments are known good after a TXT launch and can be
++	 * used to establish a new GDT and segments.
++	 */
++
++	/* Load GDT, set segment regs and lret to __SL32_CS */
++	leal	rva(sl_gdt_desc)(%ebx), %eax
++	addl	%eax, 2(%eax)
++	lgdt	(%eax)
++
++	movl	$(__SL32_DS), %eax
++	movw	%ax, %ds
++	movw	%ax, %es
++	movw	%ax, %fs
++	movw	%ax, %gs
++	movw	%ax, %ss
++
++	/*
++	 * Now that %ss is known good, take the first stack for the BSP. The
++	 * AP stacks are only used on Intel.
++	 */
++	leal	rva(sl_stacks_end)(%ebx), %esp
++
++	leal	rva(.Lsl_cs)(%ebx), %eax
++	pushl	$(__SL32_CS)
++	pushl	%eax
++	lret
++
++.Lsl_cs:
++	UNWIND_HINT_END_OF_STACK
++	/* Save our base pointer reg and page table for MLE */
++	pushl	%ebx
++	movl	%ecx, %ebp
++
++	/* See if SMX feature is supported. */
++	movl	$1, %eax
++	cpuid
++	testl	$(X86_FEATURE_BIT_SMX), %ecx
++	jz	.Ldo_unknown_cpu
++
++	popl	%ebx
++
++	/* Know it is Intel */
++	movl	$(SL_CPU_INTEL), rva(__pi_sl_cpu_type)(%ebx)
++
++	/* Locate the base of the MLE using the page tables in %ecx */
++	call	sl_find_mle_base
++
++	/* Increment CPU count for BSP */
++	incl	rva(sl_txt_cpu_count)(%ebx)
++
++	/*
++	 * On the BSP, enable SMI with GETSEC[SMCTRL] which were disabled by SENTER.
++	 * NMIs were also disabled by SENTER. Since there is no IDT for the BSP,
++	 * allow the mainline kernel to re-enable them in the normal course of
++	 * booting.
++	 */
++	GETSEC	$(SMX_X86_GETSEC_SMCTRL)
++
++	/* Clear the TXT error registers for a clean start of day */
++	movl	$0, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_ERRORCODE)
++	movl	$0xffffffff, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_ESTS)
++
++	/* Read physical base of the TXT heap into %eax */
++	movl	(TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_HEAP_BASE), %eax
++	/* Read the size of the BIOS data into ECX (first 8 bytes) */
++	movl	(%eax), %ecx
++	/* Skip over BIOS data and size of OS to MLE data section */
++	leal	8(%eax, %ecx), %eax
++
++	/* Need to verify the values in the OS-MLE struct passed in */
++	call	sl_txt_verify_os_mle_struct
++
++	/*
++	 * Get the boot params address from the TXT info table in the SLRT.
++	 * Note %esi and %ebx MUST be preserved across calls and operations.
++	 */
++	movl	SL_txt_info(%eax), %edi
++	movl	SL_boot_params_addr(%edi), %esi
++
++	/* Save %ebx so the APs can find their way home */
++	movl	%ebx, (SL_mle_scratch + SL_SCRATCH_AP_EBX)(%eax)
++
++	/* Fetch the AP wake code block address from the heap */
++	movl	SL_ap_wake_block(%eax), %edi
++	movl	%edi, rva(sl_txt_ap_wake_block)(%ebx)
++
++	/* Store the offset in the AP wake block to the jmp address */
++	movl	$(sl_ap_jmp_offset - sl_txt_ap_wake_begin), \
++		(SL_mle_scratch + SL_SCRATCH_AP_JMP_OFFSET)(%eax)
++
++	/* Store the offset in the AP wake block to the AP stacks block */
++	movl	$(sl_stacks - sl_txt_ap_wake_begin), \
++		(SL_mle_scratch + SL_SCRATCH_AP_STACKS_OFFSET)(%eax)
++
++	/* %eax still is the base of the OS-MLE block, save it */
++	pushl	%eax
++
++	/* Relocate the AP wake code to the safe block */
++	call	sl_txt_reloc_ap_wake
++
++	/*
++	 * Wake up all APs that are blocked in the ACM and wait for them to
++	 * halt. This should be done before restoring the MTRRs so the ACM is
++	 * still properly in WB memory.
++	 */
++	call	sl_txt_wake_aps
++
++	/* Restore OS-MLE in %eax */
++	popl	%eax
++
++	/*
++	 * %edi is used by this routine to find the MTRRs which are in the SLRT
++	 * in the Intel info.
++	 */
++	movl	SL_txt_info(%eax), %edi
++	call	sl_txt_load_regs
++
++	jmp	.Lcpu_setup_done
++
++.Ldo_unknown_cpu:
++	/* Non-Intel CPUs are not yet supported */
++	ud2
++
++.Lcpu_setup_done:
++	/*
++	 * Don't enable MCE at this point. The kernel will enable
++	 * it on the BSP later when it is ready.
++	 */
++
++	/* Set up 1:1 mapping using 1G mappings in the page tables in %EBP */
++	xorl	%ecx, %ecx
++	movl	$128, %edx
++1:	leal	(,%ecx,4), %eax
++	.irpc	l, 0123
++	movl	$(\l * PUD_SIZE) | _PAGE_PRESENT | _PAGE_RW | _PAGE_PSE, (\l * 8)(%ebp,%eax,8)
++	movl	%ecx, (\l * 8 + 4)(%ebp,%eax,8)
++	.endr
++	incl	%ecx
++	cmpl	%edx, %ecx
++	jc	1b
++
++	leal	(_PAGE_PRESENT | _PAGE_RW)(%ebp), %edx
++	addl	$PAGE_SIZE, %ebp
++
++	xorl	%eax, %eax
++	movl	%ebp, %edi
++	movl	$PAGE_SIZE / 4, %ecx
++	rep	stosl
++
++	movl	%edx, (%ebp)
++	movl	%ebp, %cr3
++
++	/* Enable PAE */
++	movl	%cr4, %eax
++	btsl	$X86_CR4_PAE_BIT, %eax
++	movl	%eax, %cr4
++
++	/* Enable long mode */
++	movl	$MSR_EFER, %ecx
++	rdmsr
++	btsl	$_EFER_LME, %eax
++	wrmsr
++
++	/* Set up long return to 64-bit mode */
++	leal	rva(2f)(%ebx), %eax
++	pushl	$__SL64_CS
++	pushl	%eax
++
++	/* Enable paging */
++	movl	$CR0_STATE, %eax
++	movl	%eax, %cr0
++	lretl
++
++	.code64
++	UNWIND_HINT_END_OF_STACK
++2:	andq	$~0xf, %rsp
++	movq	%rsi, %r15
++	movq	%rsi, %rdi
++	callq	__pi_sl_main
++	movq	%r15, %rsi
++	jmp	startup_64
++SYM_CODE_END(sl_stub_entry)
++
++	.code32
++SYM_FUNC_START_LOCAL(sl_find_mle_base)
++	/* %ecx has PDPT, get first PD */
++	movl	(%ebp), %eax
++	andl	$(PAGE_MASK), %eax
++	/* Get first PT from first PDE */
++	movl	(%eax), %eax
++	andl	$(PAGE_MASK), %eax
++	/* Get MLE base from first PTE */
++	movl	(%eax), %eax
++	andl	$(PAGE_MASK), %eax
++
++	movl	%eax, rva(__pi_sl_mle_start)(%ebx)
++	RET
++SYM_FUNC_END(sl_find_mle_base)
++
++SYM_FUNC_START_LOCAL(sl_check_buffer_mle_overlap)
++	/* %ecx: buffer begin %edx: buffer end */
++	/* %ebx: MLE begin %edi: MLE end */
++	/* %eax: region may be inside MLE */
++
++	cmpl	%edi, %ecx
++	jb	.Lnext_check
++	cmpl	%edi, %edx
++	jbe	.Lnext_check
++	jmp	.Lvalid /* Buffer above MLE */
++
++.Lnext_check:
++	cmpl	%ebx, %edx
++	ja	.Linside_check
++	cmpl	%ebx, %ecx
++	jae	.Linside_check
++	jmp	.Lvalid /* Buffer below MLE */
++
++.Linside_check:
++	cmpl	$0, %eax
++	jz	.Linvalid
++	cmpl	%ebx, %ecx
++	jb	.Linvalid
++	cmpl	%edi, %edx
++	ja	.Linvalid
++	jmp	.Lvalid /* Buffer in MLE */
++
++.Linvalid:
++	TXT_RESET $(SL_ERROR_MLE_BUFFER_OVERLAP)
++
++.Lvalid:
++	RET
++SYM_FUNC_END(sl_check_buffer_mle_overlap)
++
++SYM_FUNC_START_LOCAL(sl_txt_verify_os_mle_struct)
++	pushl	%ebx
++	/*
++	 * %eax points to the base of the OS-MLE struct. Need to also
++	 * read some values from the OS-SINIT struct too.
++	 */
++	movl	-8(%eax), %ecx
++	/* Skip over OS to MLE data section and size of OS-SINIT structure */
++	leal	(%eax, %ecx), %edx
++
++	/* Load MLE image base absolute offset */
++	movl	rva(__pi_sl_mle_start)(%ebx), %ebx
++
++	/* Verify the value of the low PMR base. It should always be 0. */
++	movl	SL_vtd_pmr_lo_base(%edx), %esi
++	cmpl	$0, %esi
++	jz	.Lvalid_pmr_base
++	TXT_RESET $(SL_ERROR_LO_PMR_BASE)
++
++.Lvalid_pmr_base:
++	/* Grab some values from OS-SINIT structure */
++	movl	SL_mle_size(%edx), %edi
++	addl	%ebx, %edi
++	jc	.Loverflow_detected
++	movl	SL_vtd_pmr_lo_size(%edx), %esi
++
++	/* Check the AP wake block */
++	movl	SL_ap_wake_block(%eax), %ecx
++	movl	SL_ap_wake_block_size(%eax), %edx
++	addl	%ecx, %edx
++	jc	.Loverflow_detected
++	pushl	%eax
++	xorl	%eax, %eax
++	call	sl_check_buffer_mle_overlap
++	popl	%eax
++	cmpl	%esi, %edx
++	ja	.Lbuffer_beyond_pmr
++
++	/*
++	 * Check the boot params. Note during a UEFI boot, the boot
++	 * params will be inside the MLE image. Test for this case
++	 * in the overlap case.
++	 */
++	movl	SL_boot_params_addr(%eax), %ecx
++	movl	$(PAGE_SIZE), %edx
++	addl	%ecx, %edx
++	jc	.Loverflow_detected
++	pushl	%eax
++	movl	$1, %eax
++	call	sl_check_buffer_mle_overlap
++	popl	%eax
++	cmpl	%esi, %edx
++	ja	.Lbuffer_beyond_pmr
++
++	/* Check that the AP wake block is big enough */
++	cmpl	$(sl_txt_ap_wake_end - sl_txt_ap_wake_begin), \
++		SL_ap_wake_block_size(%eax)
++	jae	.Lwake_block_ok
++	TXT_RESET $(SL_ERROR_WAKE_BLOCK_TOO_SMALL)
++
++.Lwake_block_ok:
++	popl	%ebx
++	RET
++
++.Loverflow_detected:
++	TXT_RESET $(SL_ERROR_INTEGER_OVERFLOW)
++
++.Lbuffer_beyond_pmr:
++	TXT_RESET $(SL_ERROR_BUFFER_BEYOND_PMR)
++SYM_FUNC_END(sl_txt_verify_os_mle_struct)
++
++SYM_CODE_START_LOCAL(sl_txt_ap_entry)
++	UNWIND_HINT_END_OF_STACK
++	/*
++	 * AP entry point, first order of business is to find where we are and
++	 * save it in %ebx.
++	 */
++
++	/* Read physical base of heap into EAX */
++	movl	(TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_HEAP_BASE), %eax
++	/* Read the size of the BIOS data into ECX (first 8 bytes) */
++	movl	(%eax), %ecx
++	/* Skip over BIOS data and size of OS to MLE data section */
++	leal	8(%eax, %ecx), %eax
++
++	/* Saved %ebx from the BSP and stash OS-MLE pointer */
++	movl	(SL_mle_scratch + SL_SCRATCH_AP_EBX)(%eax), %ebx
++
++	/* Save TXT info ptr in %edi for call to sl_txt_load_regs */
++	movl	SL_txt_info(%eax), %edi
++
++	/*
++	 * Only the %cs and %ds segments are known good after waking the AP,
++	 * as with entry on the BSP. First locate a stack to use then establish
++	 * a new GDT and segments.
++	 */
++
++	/* Lock and get our stack index */
++	movl	$1, %ecx
++.Lspin:
++	xorl	%eax, %eax
++	lock cmpxchgl	%ecx, rva(sl_txt_spin_lock)(%ebx)
++	pause
++	jnz	.Lspin
++
++	/* Increment the stack index and use the next value inside lock */
++	incl	rva(sl_txt_stack_index)(%ebx)
++	movl	rva(sl_txt_stack_index)(%ebx), %eax
++
++	/* Unlock */
++	movl	$0, rva(sl_txt_spin_lock)(%ebx)
++
++	/* Location of the relocated AP wake block */
++	movl	rva(sl_txt_ap_wake_block)(%ebx), %ecx
++
++	/* Load reloc GDT, set segment regs and lret to __SL32_CS */
++	lgdt	(sl_ap_gdt_desc - sl_txt_ap_wake_begin)(%ecx)
++
++	movl	$(__SL32_DS), %edx
++	movw	%dx, %ds
++	movw	%dx, %es
++	movw	%dx, %fs
++	movw	%dx, %gs
++	movw	%dx, %ss
++
++	/* Load our reloc AP stack */
++	movl	$(SL_BOOT_STACK_SIZE), %edx
++	mull	%edx
++	leal	(sl_stacks_end - sl_txt_ap_wake_begin)(%ecx), %esp
++	subl	%eax, %esp
++
++	/* Switch to AP code segment */
++	leal	rva(.Lsl_ap_cs)(%ebx), %eax
++	pushl	$(__SL32_CS)
++	pushl	%eax
++	lret
++
++.Lsl_ap_cs:
++	UNWIND_HINT_END_OF_STACK
++	/* Load the relocated AP IDT */
++	lidt	(sl_ap_idt_desc - sl_txt_ap_wake_begin)(%ecx)
++
++	/* Fixup MTRRs and misc enable MSR on APs too */
++	call	sl_txt_load_regs
++
++	/* Enable SMI with GETSEC[SMCTRL] */
++	GETSEC $(SMX_X86_GETSEC_SMCTRL)
++
++	/* IRET-to-self can be used to enable NMIs which SENTER disabled */
++	leal	rva(.Lnmi_enabled_ap)(%ebx), %eax
++	pushfl
++	pushl	$(__SL32_CS)
++	pushl	%eax
++	iret
++
++.Lnmi_enabled_ap:
++	UNWIND_HINT_END_OF_STACK
++	/* Put APs in X2APIC mode like the BSP */
++	movl	$(MSR_IA32_APICBASE), %ecx
++	rdmsr
++	orl	$(XAPIC_ENABLE | X2APIC_ENABLE), %eax
++	wrmsr
++
++	/*
++	 * Basically done, increment the CPU count and jump off to the AP
++	 * wake block to wait.
++	 */
++	lock incl	rva(sl_txt_cpu_count)(%ebx)
++
++	/*
++	 * Final jump to the AP wake block (see comment below). Here the APs
++	 * will idle until the Secure Launch SMP MONITOR/MWAIT framework
++	 * releases them to mainline kernel control.
++	 */
++	movl	rva(sl_txt_ap_wake_block)(%ebx), %eax
++	jmp	*%eax
++	int3
++SYM_CODE_END(sl_txt_ap_entry)
++
++SYM_FUNC_START_LOCAL(sl_txt_reloc_ap_wake)
++	/*
++	 * What is called the "AP wake block" is simply a chunk of protected
++	 * memory that the bootloader handed the MLE. The MLE implementation will
++	 * shuffle the AP entry point code from here in the setup kernel into this wake
++	 * block where it cannot be overwritten by kernel decompression, relocation, etc.
++	 */
++
++	/* Save boot params register */
++	pushl	%esi
++
++	movl	rva(sl_txt_ap_wake_block)(%ebx), %edi
++
++	/* Fixup AP IDT and GDT descriptor before relocating */
++	leal	rva(sl_ap_idt_desc)(%ebx), %eax
++	addl	%edi, 2(%eax)
++	leal	rva(sl_ap_gdt_desc)(%ebx), %eax
++	addl	%edi, 2(%eax)
++
++	/*
++	 * Copy the AP wake code and AP GDT/IDT to the protected wake block
++	 * provided by the loader. Destination already in %edi.
++	 */
++	movl	$(sl_txt_ap_wake_end - sl_txt_ap_wake_begin), %ecx
++	leal	rva(sl_txt_ap_wake_begin)(%ebx), %esi
++	rep movsb
++
++	/* Setup the IDT for the APs to use in the relocation block */
++	movl	rva(sl_txt_ap_wake_block)(%ebx), %ecx
++	addl	$(sl_ap_idt - sl_txt_ap_wake_begin), %ecx
++	xorl	%edx, %edx
++
++	/* Form the default reset vector relocation address */
++	movl	rva(sl_txt_ap_wake_block)(%ebx), %esi
++	addl	$(sl_txt_int_reset - sl_txt_ap_wake_begin), %esi
++
++1:
++	cmpw	$(NR_VECTORS), %dx
++	jz	.Lap_idt_done
++
++	cmpw	$(X86_TRAP_NMI), %dx
++	jz	2f
++
++	/* Load all other fixed vectors with reset handler */
++	movl	%esi, %eax
++	movw	%ax, (IDT_VECTOR_LO_BITS)(%ecx)
++	shrl	$16, %eax
++	movw	%ax, (IDT_VECTOR_HI_BITS)(%ecx)
++	jmp	3f
++
++2:
++	/* Load single wake NMI IPI vector at the relocation address */
++	movl	rva(sl_txt_ap_wake_block)(%ebx), %eax
++	addl	$(sl_txt_int_nmi - sl_txt_ap_wake_begin), %eax
++	movw	%ax, (IDT_VECTOR_LO_BITS)(%ecx)
++	shrl	$16, %eax
++	movw	%ax, (IDT_VECTOR_HI_BITS)(%ecx)
++
++3:
++	incw	%dx
++	addl	$8, %ecx
++	jmp	1b
++
++.Lap_idt_done:
++	popl	%esi
++	RET
++SYM_FUNC_END(sl_txt_reloc_ap_wake)
++
++SYM_FUNC_START_LOCAL(sl_txt_load_regs)
++	/* Save base pointer register */
++	pushl	%ebx
++
++	/*
++	 * On Intel, the original variable MTRRs and Misc Enable MSR are
++	 * restored on the BSP at early boot. Each AP will also restore
++	 * its MTRRs and Misc Enable MSR.
++	 */
++	pushl	%edi
++	addl	$(SL_saved_bsp_mtrrs), %edi
++	movl	(%edi), %ebx
++	pushl	%ebx /* default_mem_type lo */
++	addl	$4, %edi
++	movl	(%edi), %ebx
++	pushl	%ebx /* default_mem_type hi */
++	addl	$4, %edi
++	movl	(%edi), %ebx /* mtrr_vcnt lo, don't care about hi part */
++	addl	$8, %edi /* now at MTRR pair array */
++	/* Write the variable MTRRs */
++	movl	$(MSR_MTRRphysBase0), %ecx
++1:
++	cmpl	$0, %ebx
++	jz	2f
++
++	movl	(%edi), %eax /* MTRRphysBaseX lo */
++	addl	$4, %edi
++	movl	(%edi), %edx /* MTRRphysBaseX hi */
++	wrmsr
++	addl	$4, %edi
++	incl	%ecx
++	movl	(%edi), %eax /* MTRRphysMaskX lo */
++	addl	$4, %edi
++	movl	(%edi), %edx /* MTRRphysMaskX hi */
++	wrmsr
++	addl	$4, %edi
++	incl	%ecx
++
++	decl	%ebx
++	jmp	1b
++2:
++	/* Write the default MTRR register */
++	popl	%edx
++	popl	%eax
++	movl	$(MSR_MTRRdefType), %ecx
++	wrmsr
++
++	/* Return to beginning and write the misc enable msr */
++	popl	%edi
++	addl	$(SL_saved_misc_enable_msr), %edi
++	movl	(%edi), %eax /* saved_misc_enable_msr lo */
++	addl	$4, %edi
++	movl	(%edi), %edx /* saved_misc_enable_msr hi */
++	movl	$(MSR_IA32_MISC_ENABLE), %ecx
++	wrmsr
++
++	popl	%ebx
++	RET
++SYM_FUNC_END(sl_txt_load_regs)
++
++SYM_FUNC_START_LOCAL(sl_txt_wake_aps)
++	/* Save boot params register */
++	pushl	%esi
++
++	/*
++	 * First setup the MLE join structure and load it into the TXT register.
++	 * This structure defines the information needed to wake the APs and
++	 * safely be joined with the DRTM.
++	 */
++	leal	rva(sl_gdt)(%ebx), %eax
++	leal	rva(sl_txt_ap_entry)(%ebx), %ecx
++	leal	rva(sl_smx_rlp_mle_join)(%ebx), %edx
++	movl	%eax, SL_rlp_gdt_base(%edx)
++	movl	%ecx, SL_rlp_entry_point(%edx)
++	movl	%edx, (TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_MLE_JOIN)
++
++	/* Another TXT heap walk to find various values needed to wake APs */
++	movl	(TXT_PRIV_CONFIG_REGS_BASE + TXT_CR_HEAP_BASE), %eax
++	/* At BIOS data size, find the number of logical processors */
++	movl	(SL_num_logical_procs + 8)(%eax), %edx
++	/* Skip over BIOS data */
++	movl	(%eax), %ecx
++	addl	%ecx, %eax
++	/* Skip over OS to MLE */
++	movl	(%eax), %ecx
++	addl	%ecx, %eax
++	/* At OS-SNIT size, get capabilities to know how to wake up the APs */
++	movl	(SL_capabilities + 8)(%eax), %esi
++	/* Skip over OS to SNIT */
++	movl	(%eax), %ecx
++	addl	%ecx, %eax
++	/* At SINIT-MLE size, get the AP wake MONITOR address */
++	movl	(SL_rlp_wakeup_addr + 8)(%eax), %edi
++
++	/* Determine how to wake up the APs */
++	testl	$(1 << TXT_SINIT_MLE_CAP_RLP_WAKE_MONITOR), %esi
++	jz	.Lwake_getsec
++
++	/* Wake using MWAIT MONITOR */
++	movl	$1, (%edi)
++	jmp	.Laps_awake
++
++.Lwake_getsec:
++	/* Wake using GETSEC(WAKEUP) */
++	GETSEC	$(SMX_X86_GETSEC_WAKEUP)
++
++.Laps_awake:
++	/*
++	 * All of the APs are woken up and rendezvous in the relocated wake
++	 * block starting at sl_txt_ap_wake_begin. Wait for all of them to
++	 * halt.
++	 */
++	pause
++	cmpl	rva(sl_txt_cpu_count)(%ebx), %edx
++	jne	.Laps_awake
++
++	popl	%esi
++	RET
++SYM_FUNC_END(sl_txt_wake_aps)
++
++	__INITDATA
++/* This is the beginning of the relocated AP wake code block */
++sl_txt_ap_wake_begin:
++	/*
++	 * Note on the stack layout for the APs. The individual 128 byte stacks
++	 * fully occupy 2 cache lines. The first is for the MONITOR address
++	 * and the second contains the APICID written to it. Note the whole
++	 * cache line is unused other than the monitor field; nothing else should
++	 * write the cache line and wake the monitor.
++	 *
++	 * esp -> +-----------+
++	 *        |  APIC ID  |
++	 *        |-----------|
++	 *        |  PAD[15]  |
++	 *        |-----------|
++	 *        |  PAD[15]  |
++	 *        |-----------|
++	 *        |  MONITOR  |
++	 *        +-----------+
++	 */
++
++	/* Get the LAPIC ID for each AP and stash it on the stack */
++	movl	$(MSR_IA32_X2APIC_APICID), %ecx
++	rdmsr
++	pushl	%eax
++
++	/*
++	 * Get a pointer to the monitor location on this APs stack to test below
++	 * after mwait returns. Currently %esp points to just past the pushed APIC
++	 * ID value.
++	 */
++	movl	%esp, %edi
++	subl	$(SL_BOOT_STACK_SIZE - 4), %edi
++	movl	$0, (%edi)
++
++1:
++	/* Load eax and clear ecx/edx so no invalid extensions or hints are passed to monitor */
++	movl	%edi, %eax
++	xorl	%ecx, %ecx
++	xorl	%edx, %edx
++
++	/*
++	 * Arm the monitor and wait for it to be triggered by the SMP bringup code. The mwait
++	 * instruction can return for a number of reasons. Test to see if it returned
++	 * because the monitor was written to.
++	 */
++	monitor
++
++	cmpl	$0, (%eax)
++	jnz	2f
++
++	/* Clear eax since there are no hints sent to mwait */
++	xorl	%eax, %eax
++
++	mwait
++	jmp	1b
++
++2:
++	/*
++	 * This is the long absolute jump to the 32b Secure Launch protected mode stub
++	 * code in sl_trampoline_start32() in the rmpiggy. The jump address will be
++	 * fixed in the SMP boot code when the first AP is brought up. This whole area
++	 * is provided and protected in the memory map by the prelaunch code.
++	 */
++	.byte	0xea
++sl_ap_jmp_offset:
++	.long	0x00000000
++	.word	__SL32_CS
++
++SYM_CODE_START_LOCAL(sl_txt_int_nmi)
++	/* NMI context, just IRET */
++	iret
++SYM_CODE_END(sl_txt_int_nmi)
++
++SYM_FUNC_START_LOCAL(sl_txt_int_reset)
++	TXT_RESET $(SL_ERROR_INV_AP_INTERRUPT)
++SYM_FUNC_END(sl_txt_int_reset)
++
++	.balign 8
++SYM_DATA_START_LOCAL(sl_ap_idt_desc)
++	.word	sl_ap_idt_end - sl_ap_idt - 1		/* Limit */
++	.long	sl_ap_idt - sl_txt_ap_wake_begin	/* Base */
++SYM_DATA_END_LABEL(sl_ap_idt_desc, SYM_L_LOCAL, sl_ap_idt_desc_end)
++
++	.balign 8
++SYM_DATA_START_LOCAL(sl_ap_idt)
++	.rept	NR_VECTORS
++	.word	0x0000		/* Offset 15 to 0 */
++	.word	__SL32_CS	/* Segment selector */
++	.word	0x8e00		/* Present, DPL=0, 32b Vector, Interrupt */
++	.word	0x0000		/* Offset 31 to 16 */
++	.endr
++SYM_DATA_END_LABEL(sl_ap_idt, SYM_L_LOCAL, sl_ap_idt_end)
++
++	.balign 8
++SYM_DATA_START_LOCAL(sl_ap_gdt_desc)
++	.word	sl_ap_gdt_end - sl_ap_gdt - 1
++	.long	sl_ap_gdt - sl_txt_ap_wake_begin
++SYM_DATA_END_LABEL(sl_ap_gdt_desc, SYM_L_LOCAL, sl_ap_gdt_desc_end)
++
++	.balign	8
++SYM_DATA_START_LOCAL(sl_ap_gdt)
++	.quad	0x0000000000000000	/* NULL */
++	.quad	0x00cf9a000000ffff	/* __SL32_CS */
++	.quad	0x00cf92000000ffff	/* __SL32_DS */
++SYM_DATA_END_LABEL(sl_ap_gdt, SYM_L_LOCAL, sl_ap_gdt_end)
++
++	/* Small stacks for BSP and APs to work with */
++	.balign 64
++SYM_DATA_START_LOCAL(sl_stacks)
++	.fill (SL_MAX_CPUS * SL_BOOT_STACK_SIZE), 1, 0
++SYM_DATA_END_LABEL(sl_stacks, SYM_L_LOCAL, sl_stacks_end)
++
++/* This is the end of the relocated AP wake code block */
++sl_txt_ap_wake_end:
++
++	.balign 8
++SYM_DATA_START_LOCAL(sl_gdt_desc)
++	.word	sl_gdt_end - sl_gdt - 1
++	.long	sl_gdt - sl_gdt_desc
++SYM_DATA_END_LABEL(sl_gdt_desc, SYM_L_LOCAL, sl_gdt_desc_end)
++
++	.balign	8
++SYM_DATA_START_LOCAL(sl_gdt)
++	.quad	0x0000000000000000	/* NULL */
++	.quad	0x00cf9a000000ffff	/* __SL32_CS */
++	.quad	0x00cf92000000ffff	/* __SL32_DS */
++	.quad	0x00af9a000000ffff	/* __SL64_CS */
++SYM_DATA_END_LABEL(sl_gdt, SYM_L_LOCAL, sl_gdt_end)
++
++	.balign 8
++SYM_DATA_START_LOCAL(sl_smx_rlp_mle_join)
++	.long	sl_gdt_end - sl_gdt - 1	/* GDT limit */
++	.long	0x00000000		/* GDT base */
++	.long	__SL32_CS	/* Seg Sel - CS (DS, ES, SS = seg_sel+8) */
++	.long	0x00000000	/* Entry point physical address */
++SYM_DATA_END(sl_smx_rlp_mle_join)
++
++SYM_DATA_LOCAL(sl_txt_spin_lock, .long 0x00000000)
++
++SYM_DATA_LOCAL(sl_txt_stack_index, .long 0x00000000)
++
++SYM_DATA_LOCAL(sl_txt_cpu_count, .long 0x00000000)
++
++SYM_DATA_LOCAL(sl_txt_ap_wake_block, .long 0x00000000)
++
++	__INITRODATA
++	.balign 8
++	/*
++	 * The MLE Header per the TXT Specification, section 2.1
++	 * MLE capabilities, see table 4. Capabilities set:
++	 * bit 0: Support for GETSEC[WAKEUP] for RLP wakeup
++	 * bit 1: Support for RLP wakeup using MONITOR address
++	 * bit 2: The ECX register will contain the pointer to the MLE page table
++	 * bit 5: TPM 1.2 family: Details/authorities PCR usage support
++	 * bit 9: Supported format of TPM 2.0 event log - TCG compliant
++	 */
++SYM_DATA_START(mle_header)
++0:	.long	0x9082ac5a			/* UUID0 */
++	.long	0x74a7476f			/* UUID1 */
++	.long	0xa2555c0f			/* UUID2 */
++	.long	0x42b651cb			/* UUID3 */
++	.long	0x00000034			/* MLE header size */
++	.long	0x00020002			/* MLE version 2.2 */
++	.long	__sl_stub_entry_offset - 0b	/* Linear entry point of MLE (virt. address) */
++	.long	0x00000000			/* First valid page of MLE */
++	.long	0x00000000			/* Offset within binary of first byte of MLE */
++	.long	__sl_mle_end_offset - 0b	/* Offset within binary of last byte + 1 of MLE */
++	.long	0x00000227			/* Bit vector of MLE-supported capabilities */
++	.long	0x00000000			/* Starting linear address of command line (unused) */
++	.long	0x00000000			/* Ending linear address of command line (unused) */
++SYM_DATA_END(mle_header)
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 4711a35e706c..fc22a2b9c7d1 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -537,4 +537,9 @@ xen_elfnote_phys32_entry_value =
+ 	ABSOLUTE(xen_elfnote_phys32_entry) + ABSOLUTE(pvh_start_xen - LOAD_OFFSET);
+ #endif
+ 
++#ifdef CONFIG_SECURE_LAUNCH
++__sl_stub_entry_offset = ABSOLUTE(mle_header) + ABSOLUTE(sl_stub_entry - _text);
++__sl_mle_end_offset    = ABSOLUTE(mle_header) + ABSOLUTE(__bss_start - _text);
++#endif
++
+ #include "../boot/startup/exports.h"
+diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
+index e5a2b9a912d1..d4a5fc607c54 100644
+--- a/arch/x86/tools/relocs.c
++++ b/arch/x86/tools/relocs.c
+@@ -88,6 +88,7 @@ static const char * const	sym_regex_kernel[S_NSYMTYPES] = {
+ 	"__end_rodata|"
+ 	"__end_rodata_aligned|"
+ 	"__initramfs_start|"
++	"__sl_.+offset|"
+ 	"(jiffies|jiffies_64)|"
+ #if ELF_BITS == 64
+ 	"__end_rodata_hpage_align|"
 -- 
 2.47.3
 
