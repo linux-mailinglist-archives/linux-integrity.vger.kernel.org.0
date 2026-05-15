@@ -1,55 +1,68 @@
-Return-Path: <linux-integrity+bounces-9574-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9575-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4G/OCfiXB2r/9wIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9574-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sat, 16 May 2026 00:02:32 +0200
+	id QI8VKoafB2rP/QIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9575-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 16 May 2026 00:34:46 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A54EE5588C0
-	for <lists+linux-integrity@lfdr.de>; Sat, 16 May 2026 00:02:31 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CBF4558EFE
+	for <lists+linux-integrity@lfdr.de>; Sat, 16 May 2026 00:34:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0EA3C300989F
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 22:02:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8CD08301C3FA
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 22:32:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3003E9F71;
-	Fri, 15 May 2026 22:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8183EDABA;
+	Fri, 15 May 2026 22:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cHvfDJ7E"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mn+Cywo+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2184405C4C;
-	Fri, 15 May 2026 22:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD19370D72;
+	Fri, 15 May 2026 22:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778882549; cv=none; b=e0574ey6M7x/joJUmP5u9BFEuQZES1SHKCQLTPZph2zvHO4SMz+R7t0n053GPc7NbVSr/AB4LV0fXoai7PXDfTjJLfYBaKKqNrps8L3q1vJneYQekZ9d6/xZfNMbJq9vjd8KanTJ/csYzF0vc/Aeh9cqxx4eHa5zByZQ4iHqCRc=
+	t=1778884335; cv=none; b=ZdATrrj2TLbh1saEOMP9b+rbB40E7XTpnNzBYld4UvFiC9JTEzyIuuKMUt1BqDCe56QZot3mZmuaoVgYtyo0FwiLIOFzVrwCcdziVHLKdFJeoasszkqhMJdwUrL3/ME1WGljBXpL2O8wkQ7geZiRmanH71fBRRZv4rmED3g/tDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778882549; c=relaxed/simple;
-	bh=9shdINYCeu/iCM4bhRdVfwFzaqlkrXm1jjxi4asaJNg=;
+	s=arc-20240116; t=1778884335; c=relaxed/simple;
+	bh=KK/lONyvJSJbPPBHqDhaBOi5QdetZIyeHwLoQjZfWgk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JDVJbo8mKwbvHOFosPRAv32iD4y3Czj4RRHj+Duqe7tQotDJMl7mSTovjbmxcQ46qTTBfIJ7PSq+gt3pA962JK3qOf9R/v60Ek1O0S9okixxW1Q9/qsEKTNB1HbTcU+OUL+Zp+gi3sCudXyIva9Y0oUsK8PP9cnZtcmFnhTQw9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cHvfDJ7E; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=0GGVXnEvwyvUGTIvy68sh7LB/BlAa3dzEnbAfye67mM=; b=cHvfDJ7E6qzMMKhGfRDHuDYPRd
-	DNBcxSlblWFVG4meivRiU7ZII/xT8S3xdDUnwsStSTUsMFeP1s7dXFBz4PV/DTBEaRywErY3RO7sJ
-	z+JaS96pC2S48Aa0fdnfESTeUWw6usyq3G2wSvmyWQTA8IUMKiaQwfbxtvz2dTYsQtP1qdXLKa2BN
-	YlwuGckZaltz0KZrPoNezs6I4xOreJASX5YcnZgR8CnYC7WxSo5JTMKlXCtWLDRyldbJ4u5Lf6oM5
-	lqD5QeKdfPp47etbSY6tatu5mYddIBsHEvC/wyyH4m4jEAG0gAsQ3yzwpnCQ5OU4E2mlDO31m7qMP
-	ZYBasHrA==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wO0bp-00000009af0-2lX8;
-	Fri, 15 May 2026 22:02:17 +0000
-Message-ID: <130c4cfa-7388-462f-9b0f-7939680a90ed@infradead.org>
-Date: Fri, 15 May 2026 15:02:16 -0700
+	 In-Reply-To:Content-Type; b=XQbSObmd2+BzewIlCyI2BzowEc0jaix2CkET5edvQ6xFkDVHlUHqqaVueC9ECISGcW+l7e1iCe/KY8fuKfnmb9k2R3Z3D72lHKQvHOSd6ftTvLUMpjlnB9MCjGxfoLwe2afUd01zQWOstZh8PaIw59h2lopKyz0mJ4Ef6WRdbJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mn+Cywo+; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1778884334; x=1810420334;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KK/lONyvJSJbPPBHqDhaBOi5QdetZIyeHwLoQjZfWgk=;
+  b=Mn+Cywo+ZW4M6UgLL7Wp27PfCuZeZN00VvKhq8p88lOzsqwQXeuFyBgj
+   EL2mlADnru29A/PjApL+X0ndNSbNZFmlY5s8+MaGQoaM8USC2R5IUugiO
+   XrRChfCJCLgK5T87myvU52PYpt+nJl/iXXboRcP2aw1uYWIdn7koH/rUl
+   Fo300P7izknKk8a5Qp9+j9y0EUb9qW6zIO80bJwCjjDs5zSOfSvjx5xPV
+   mS/7ifSW7zNvyStRyvMsC5b/iw04PIXBi2tS93Ln/VADG3qP3zgcbEith
+   Bl/PuQm3wOnQx7Tz3msc2f24XE99R5SEidpBjz+aagPaWE5I1aZ6+uwzL
+   Q==;
+X-CSE-ConnectionGUID: J4lmdRfwS5GQmKSjWX4z5A==
+X-CSE-MsgGUID: GM7mEorzTmG/v/LVlUL0jw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11787"; a="79874934"
+X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
+   d="scan'208";a="79874934"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 15:32:13 -0700
+X-CSE-ConnectionGUID: 7h4qy8WhRj6hnoV9za4Bow==
+X-CSE-MsgGUID: alnpl2zvRBelMjEHn3O9uA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.23,237,1770624000"; 
+   d="scan'208";a="276911894"
+Received: from gabaabhi-mobl2.amr.corp.intel.com (HELO [10.125.108.201]) ([10.125.108.201])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2026 15:32:13 -0700
+Message-ID: <7648b5f3-2810-4bae-99ab-21c93ea36f25@intel.com>
+Date: Fri, 15 May 2026 15:32:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -57,8 +70,7 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 15/38] Documentation/security: Secure Launch kernel
- documentation
+Subject: Re: [PATCH v16 29/38] x86/tpm: Early startup TPM PCR extending driver
 To: Ross Philipson <ross.philipson@gmail.com>, linux-kernel@vger.kernel.org,
  x86@kernel.org, linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-crypto@vger.kernel.org, kexec@lists.infradead.org,
@@ -73,172 +85,123 @@ Cc: dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
  daniel.kiper@oracle.com, andrew.cooper3@citrix.com,
  trenchboot-devel@googlegroups.com
 References: <20260515211410.31440-1-ross.philipson@gmail.com>
- <20260515211410.31440-16-ross.philipson@gmail.com>
+ <20260515211410.31440-30-ross.philipson@gmail.com>
+From: Dave Hansen <dave.hansen@intel.com>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20260515211410.31440-16-ross.philipson@gmail.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20260515211410.31440-30-ross.philipson@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: A54EE5588C0
+X-Rspamd-Queue-Id: 4CBF4558EFE
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[infradead.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[infradead.org:s=bombadil.20210309];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9574-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9575-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org,kernel.org,lists.infradead.org,lists.linux.dev];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	RCPT_COUNT_TWELVE(0.00)[33];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_CC(0.00)[apertussolutions.com,linutronix.de,redhat.com,alien8.de,zytor.com,linux.intel.com,kernel.org,srcf.ucam.org,hansenpartnership.com,gmx.de,ziepe.ca,amacapital.net,alum.mit.edu,gondor.apana.org.au,davemloft.net,lwn.net,xmission.com,infradead.org,oracle.com,citrix.com,googlegroups.com];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rdunlap@infradead.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[infradead.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dave.hansen@intel.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	HAS_WP_URI(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:url,infradead.org:mid,infradead.org:dkim,apertussolutions.com:email,trenchboot.org:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sashiko.dev:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:mid,intel.com:dkim]
 X-Rspamd-Action: no action
 
+On 5/15/26 14:14, Ross Philipson wrote:
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Based of the original tpm_tis.c implementation as found in the
+> + * Linux 2.6 code base.
+> + *
+> + * Copyright (C) 2005, 2006 IBM Corporation
+> + *
+> + * Authors:
+> + * Leendert van Doorn <leendert@watson.ibm.com>
+> + * Kylene Hall <kjhall@us.ibm.com>
+> + */
 
+Hey guys,
 
-On 5/15/26 2:13 PM, Ross Philipson wrote:
-> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
-> 
-> Introduce documentation for the Linux Secure Launch feature.
-> 
-> Co-developed-by: Ross Philipson <ross.philipson@gmail.com>
-> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
-> Signed-off-by: Ross Philipson <ross.philipson@gmail.com>
-> ---
->  Documentation/arch/x86/boot.rst               |   8 +
->  Documentation/security/index.rst              |   1 +
->  .../security/launch-integrity/index.rst       |   9 +
->  .../launch-integrity/secure_launch.rst        | 681 ++++++++++++++++++
->  4 files changed, 699 insertions(+)
->  create mode 100644 Documentation/security/launch-integrity/index.rst
->  create mode 100644 Documentation/security/launch-integrity/secure_launch.rst
-> 
+Last time:
 
+> https://lore.kernel.org/lkml/56929e8b-a7cf-4390-b4ec-0b4c2c32b311@intel.com/
 
-> diff --git a/Documentation/security/launch-integrity/secure_launch.rst b/Documentation/security/launch-integrity/secure_launch.rst
-> new file mode 100644
-> index 000000000000..b4c61fdceaf0
-> --- /dev/null
-> +++ b/Documentation/security/launch-integrity/secure_launch.rst
-> @@ -0,0 +1,681 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +.. Copyright (c) 2019-2026 Daniel P. Smith <dpsmith@apertussolutions.com>
-> +
-> +======================
-> +Secure Launch Overview
-> +======================
-> +
-> +:Author: Daniel P. Smith
-> +:Date: February 2026
+So, fast forward another version and six months ... the "fishy" bits
+ripped out of it, license changed and ... crickets in the changelogs and
+cover letter from what I can see.
 
-maybe update?
+Second, the cadence on these is rather slow. I don't know what the delta
+from the last one is, but it doesn't _look_ like a six month project.
+It's really hard for reviewers to page stuff back in after that long.
 
-> +
-> +Overview
-> +========
+Also, new since the last post, you got Sashiko'd:
 
-[snip]
+> https://sashiko.dev/#/patchset/20260515211410.31440-1-ross.philipson%40gmail.com
 
-> +Error Codes
-> +===========
-> +
-> +The TXT specification defines the layout for TXT 32 bit error code values.
+I'd suggest working through those first before the maintainers take
+another crack at this. There are a *LOT* of comments in there.
 
-                                                    32-bit
-
-> +The bit encodings indicate where the error originated (e.g. with the CPU,
-> +in the SINIT ACM, in software). The error is written to a sticky TXT
-> +register that persists across resets called TXT.ERRORCODE (see the TXT
-> +MLE Development Guide). The errors defined by the Secure Launch feature are
-> +those generated in the MLE software. They have the format::
-> +
-> +  0xc0008XXX
-> +
-> +The low 12 bits are free for defining the following Secure Launch specific
-> +error codes.
-
-[snip]
-
-> +Resources
-> +=========
-> +
-> +The TrenchBoot project:
-> +
-> +https://trenchboot.org
-> +
-> +Secure Launch Specification:
-> +
-> +https://trenchboot.org/specifications/Secure_Launch/
-> +
-> +Trusted Computing Group's D-RTM Architecture:
-> +
-> +https://trustedcomputinggroup.org/wp-content/uploads/TCG_D-RTM_Architecture_v1-0_Published_06172013.pdf
-> +
-> +TXT documentation in the Intel TXT MLE Development Guide:
-> +
-> +https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf
-> +
-> +TXT instructions documentation in the Intel SDM Instruction Set volume:
-> +
-> +https://software.intel.com/en-us/articles/intel-sdm
-> +
-> +AMD SKINIT documentation in the System Programming manual:
-> +
-> +https://www.amd.com/system/files/TechDocs/24593.pdf
-> +
-> +GRUB Secure Launch support:
-> +
-> +https://github.com/TrenchBoot/grub/tree/grub-sl-fc-38-dlstub
-> +
-> +FOSDEM 2021: Secure Upgrades with DRTM
-> +
-> +https://archive.fosdem.org/2021/schedule/event/firmware_suwd/
-> +
-> +.. [1]
-> +    MLE: Measured Launch Environment is the binary runtime that is measured and
-> +    then run by the TXT SINIT ACM. The TXT MLE Development Guide describes the
-> +    requirements for the MLE in detail.
-> +
-> +.. [2]
-> +    PMR: Intel VTd has a feature in the IOMMU called Protected Memory Registers.
-> +    There are two of these registers and they allow all DMA to be blocked
-> +    to large areas of memory. The low PMR can cover all memory below 4Gb on 2Mb
-> +    boundaries. The high PMR can cover all RAM on the system, again on 2Mb
-> +    boundaries. This feature is used during a Secure Launch by TXT.
-> +
-> +.. [3]
-> +    Secure Launch Specification: https://trenchboot.org/specifications/Secure_Launch/
-> +
-> +.. [4]
-> +    ACM: Intel's Authenticated Code Module. This is the 32b bit binary blob that
-
-Does "32b" mean something or should that be 32-bit?
-
-> +    is run securely by the GETSEC[SENTER] during a measured launch. It is described
-> +    in the Intel documentation on TXT and versions for various chipsets are
-> +    signed and distributed by Intel.
-
--- 
-~Randy
-
+I'd appreciate if you'd go back through the v15 comments and make sure
+you got all of them. I certainly felt like you didn't address at least
+on of my questions (the licensing stuff).
 
