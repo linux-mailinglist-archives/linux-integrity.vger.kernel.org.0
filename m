@@ -1,81 +1,81 @@
-Return-Path: <linux-integrity+bounces-9554-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9555-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YOOjJ1mQB2rQ8wIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9554-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:30:01 +0200
+	id 8MTeDJSPB2rF8gIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9555-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:26:44 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 058045581FD
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:30:00 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 650505580FB
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 23:26:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 16C74303CEA1
-	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 21:16:38 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id BCA593047AA3
+	for <lists+linux-integrity@lfdr.de>; Fri, 15 May 2026 21:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 822973EDE7C;
-	Fri, 15 May 2026 21:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB476494A05;
+	Fri, 15 May 2026 21:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q8RTMCDB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PsjuM1C+"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840CA402BA3
-	for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 21:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9174C48A2D9
+	for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 21:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778879709; cv=none; b=KouStUXUR5dKPn/t5LkX4st2vCrxWLd8DrTdYOW6zSg0V359IeehVvom9ZTllgsUeMwIL4SIrCQb0Ifqn96gWpd3d6cOGxtG5yz2QAbFBu8FAD378PcxHP5sRjauj/FqdzchaqWKroxi0Edb+VUMSFCJxrpq7i5Y35702XK9Dtc=
+	t=1778879712; cv=none; b=DoaVrtK8Vl41q6q+20oAicqCfN+KApmvfMN97ygwUlkIxngkdU/GrkI6PMRHm4c2Vjzh2rr+eDstQWlymB86dBJgOTt1jS8iv0MYWC3+t6ON9b3JX0hThF9dRof7H4KqoA0noot2JAANBGJObW1QlfTTIcet44Ad6ziZNql7JWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778879709; c=relaxed/simple;
-	bh=Tu9t8Jkh6fC+t56oYQneuDB8ZEA9SNOFnZ6DDoMFzQY=;
+	s=arc-20240116; t=1778879712; c=relaxed/simple;
+	bh=pAXY0cHMIh7GVzLL6RPpIUoU+IBO2kv57N0YT/cgq+I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BzGf/EANTo1syxFTFFzQISy7BjydoxjpInQCRQlTsE9SUQD9z8+1QUd1Xtu3ZRHARzOc1Ocp+5iKfFmd0L8AyfKLjz1Fa0fDxFiHMkjxDjgPM94dZWsTusK/peWnN1ob6kZ7Akp5GuGh/UV6ZW6Ovb+CvJPvyhZVUYIPQ+hl+oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q8RTMCDB; arc=none smtp.client-ip=74.125.82.170
+	 MIME-Version; b=VaGBJbxbl1ZEzXsbRfUoPeCJWYLfRPfMSPZ5yzQ+4nSsKENUKtXb/lekjgCPVd5Ko0yN/zWiit3t8bzwsdiJIy60Y6RCZWfsSU5xZbK4oJnzi00kwOSyH3STNhXEqbgvYGCG5HSMJHN7HgakCs+pfK88KGp/Bu2DavIzuqPDusc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PsjuM1C+; arc=none smtp.client-ip=74.125.82.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-30246cfd41aso1511955eec.1
-        for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 14:15:07 -0700 (PDT)
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-2f30a4601bbso285048eec.1
+        for <linux-integrity@vger.kernel.org>; Fri, 15 May 2026 14:15:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778879707; x=1779484507; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1778879710; x=1779484510; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=riwrj5pQHn0ODreltS6IigjzckrdFiF16wrIV559GfE=;
-        b=q8RTMCDBQNNpp+1B7uaytrz6bOhnFKw6mChy6QThpgUaMWY1wt6/G0aq4fmg1Z6w+N
-         G9jsVnr6GYZvuTDjaQL7ES/cYyQ85ywKrNVJneolqmkLPYrDiEYWlaso2k1bQsb+1pqk
-         F5wNhOU9xpBLmYHuGVk5baepwXbZByjWxp8AcqIEyz4z/VFqsxsYFYlWzhKfZJKurvSG
-         GWh3HbqCJJoIFKTbH88tVNGVwLHaCh+kXTAtwSIGkNCwt1c4o/5uD61gn8mw7Fgad1Qy
-         2KUyCFh0Mfb65sG6B9GJj+RZLE44kIpBOlpLnjJirFpjA5J8OIAws76GMve/NAfNq7dF
-         WxBQ==
+        bh=f4K56Y7dB3RpP0PwvxsPRXyN2MFU4pj7XmWxeU528To=;
+        b=PsjuM1C+3PP+EwtxvdqhNFen+oroC06LSGkrGwne3yeDnRGRb4iFQtAT58MezegbLH
+         8shvobNMQWh4Zqy8Io2xabmmL/5c+3ovwLcMUX28diBB3TbJeR491XZdeUaHdHF/cJE8
+         l+JmHuWFRP9ZEfuZUb4rKUKzmJvWh4dPc0+5d9u2DD8xfKqrDR5Q/OV+2LOVpFN5QHz5
+         2xm7JZ5/Nc1nMg39yXkQxi25BQpf6pMCXnp0cKRfTnRXv/asnEEYt0g3fTAZDOjOUsg7
+         J221wgFR20YPig4oGaELWXfbI2ZX1Fyr6gO+QAqi1FpuvU0Ek9rBgEZw/o44k6ki1w7g
+         6hRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778879707; x=1779484507;
+        d=1e100.net; s=20251104; t=1778879710; x=1779484510;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=riwrj5pQHn0ODreltS6IigjzckrdFiF16wrIV559GfE=;
-        b=JnKiY6YCWF7aW4rODM8awJg5Inmj3JOCWqNGv+t80yngzhOaUvUGvpYzgFkoan9ZdD
-         Ab9zmErIWnq/h2n5VrFnEq1Pt6flc/HgtPjv59s5CQSq5raIkipTf6Jbkv3m0/obvm6H
-         p/qIT0uCQ75pDefFhyyiF0kakFf0iiQwm7FM3aHPKJEZCu3slhUZ6z4fkAYHAMyho/Qp
-         r7PFICB4rsTT6usGZIfFDc4AWHqem+kAW+JCL8rMlEZ+aUtBQhYK4BgRtnuK+gP/TKQc
-         3S7DioER6zePLGUEGzBV0BG9MHIVvxyRVTMLk8jehW9xxuDbkzsYocAbMO99Pdk+3sWO
-         ahuQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9Q6WRbxH6f3Za/Oxs6F588PEJciIJHe4gss9XU0mfbw0P6QYUyziTYlWcgASHbm0Cv7apoibbugwfYbDn3kag=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ51ioj9ohSQC+EAjGQlZFv9gODywHO+ZcwwcV9X4B/lrXM/ub
-	zP9UKcD7NFbOuy3GYgRjQRfnf7ZNWdmbXCggrievOHK3XpbUayRc/Ed+
-X-Gm-Gg: Acq92OELUnl4raUHz2KYg+T/DO4mYYk0GQ710jhGKI0n/5EhOMMrvrKTrpy0Uuw9Ce7
-	/UVkpU9g27r6Vn1CjgTucE+4hzv8yCc2sgZji6qKfmIjK9yrR6xGWNmco6MaYQ3GQLNEAEh/Jp7
-	enSoQVCo3YICrcNpTaaPaF4S9pVMxEl/52rNfkSluiDyaVh+c0vHrtBBsHJcwkg09haw9R/KdKX
-	RQU1yY4UNP/jW9Kp4XJ8XRLHhQy27v3EF3PamlnQl/nueg+f3MWQ9FSEpXVdaQd6iXNqArFS/qj
-	l28NhDp/zwhNFfmVarflbBXh/m5iGulqS3ea/Uh7j2vTYMcjqFwGKbYWot1cyYSaTTeHSG1kGEd
-	3qaSi/80qYqd9O0FqXgV9I7TZmhNHbOERLd5Sv+gYWlEDpjOGRo/7VMqJZsc6qGV0HhC+i3CT1s
-	mLDA6DgdpgMa3NZviLLpE1U+t5KJQ1874=
-X-Received: by 2002:a05:7022:1e11:b0:12d:de3f:d843 with SMTP id a92af1059eb24-1350494e25cmr2535293c88.38.1778879706757;
-        Fri, 15 May 2026 14:15:06 -0700 (PDT)
+        bh=f4K56Y7dB3RpP0PwvxsPRXyN2MFU4pj7XmWxeU528To=;
+        b=Yd/7T/SkkxueMkeUnCf2Pw9DQwvoplLWXLpml02dbOS6lV83WHbRZQpHAlwxD+YVVH
+         P5fUlSZAwOgPc5vw5jCSZzFVEaJibTFoQTa3tsvcJu2LTIXa5guU5KTCDaVmdoJxw0BC
+         AzgsqbPT5MZgBdU03Zc7Cg0SVw5dGQlSZ5bEM9tKTsi8lbJ6Ir8yK6Prqhp6kogFw62o
+         dop37lixFHOQmNZEnwzsVQhMuEptqaGFDqzf+WPEfQVmeRAzCw4g1r5C3Y3JoGS1AKi7
+         Mg6a1WCD+iGGVauyepWYHkfafPf/CyDqBVidqD+n0Gu1OW8wyrYBEIKh65Jj7dM4LlSZ
+         aWcA==
+X-Forwarded-Encrypted: i=1; AFNElJ/xNJiYQRcZLNIyfrUsRImQRwOnP+XLigvnYfJIgorrSJrhGoEPfUhnbPOrPGkXAVn7sDXXVUrC/lTEfqgK/Wo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1X57pBZ3/kK1y5hS8yzpO/AfiQYD+ptrnqSFIlTbR9kqb//Zg
+	vlxgTyNHp8Ht+qjRa4rMx+Mqs4MUBIUzCuof3S+7TaYt4s3ORyjRVwme
+X-Gm-Gg: Acq92OHf521zfLTrOw9Cbx5QPbMvIkkK6FJg/QRrV+rR9QGYZeARPFPFEI91EzTj4yk
+	KPU3+yldAWoYzyT1Bj7UcrqwEqCzPAtQ2nnV8JEiuYotfuOufcv0uEoUGmT9ijp7Dabc0uq5jnT
+	7IBSHadgsQYwpg40F6VhTsNIxJzUz83s0HLnsd1cmeU40RbYwF8IoQHDHzEZZrsrGH+RM+229Ml
+	vma29dph6j1QoFSiXNMcHR7WEDpuJ5L7251Vo2XdkFfUw6E4DkoMzZOe8ebsDPlYfRgYhYyfxRC
+	Jv4eaQkBV7bt7Fl7SCKYKYSvloS8PzHb1akJs+RX127OTHmGrsAlnYXkw4Ug5ApK2ol3M2d/bWA
+	IBW1+K64IOsdUWbcUDetGCTs9dBMotFHtJu2JkuAKSAKhTqDKXqQAsVThcE64liXgV7bPenDza3
+	mgFS/WTvBTPBoj5SlcgY9K0fgyEdCIvqs=
+X-Received: by 2002:a05:7301:688:b0:2e2:5bc5:f8eb with SMTP id 5a478bee46e88-303982c04demr2937773eec.9.1778879709562;
+        Fri, 15 May 2026 14:15:09 -0700 (PDT)
 Received: from mimas.lan ([2603:8000:df01:38f7:a6bb:6dff:fecf:e71a])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-134cc3490bcsm9740744c88.15.2026.05.15.14.15.05
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-302973bbd50sm7962080eec.20.2026.05.15.14.15.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 14:15:06 -0700 (PDT)
+        Fri, 15 May 2026 14:15:09 -0700 (PDT)
 From: Ross Philipson <ross.philipson@gmail.com>
 To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
@@ -110,9 +110,9 @@ Cc: ross.philipson@gmail.com,
 	daniel.kiper@oracle.com,
 	andrew.cooper3@citrix.com,
 	trenchboot-devel@googlegroups.com
-Subject: [PATCH v16 19/38] x86: Secure Launch main header file
-Date: Fri, 15 May 2026 14:13:51 -0700
-Message-ID: <20260515211410.31440-20-ross.philipson@gmail.com>
+Subject: [PATCH v16 20/38] x86/txt: Intel Trusted eXecution Technology (TXT) definitions
+Date: Fri, 15 May 2026 14:13:52 -0700
+Message-ID: <20260515211410.31440-21-ross.philipson@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260515211410.31440-1-ross.philipson@gmail.com>
 References: <20260515211410.31440-1-ross.philipson@gmail.com>
@@ -123,20 +123,20 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 058045581FD
+X-Rspamd-Queue-Id: 650505580FB
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9554-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9555-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -153,290 +153,308 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,intel.com:url]
 X-Rspamd-Action: no action
 
-Introduce the main Secure Launch header file. This header file
-contains the platform neutral feature definitions:
- - Secure Launch error codes
- - DRTM TPM event logging definitions and helper functions
- - Other feature specific structures and definitions
+Intel TXT architectural specific definitions. See the specification
+for detailed information:
+
+https://www.intel.com/content/dam/www/public/us/en/documents/guides/intel-txt-software-development-guide.pdf
 
 Signed-off-by: Ross Philipson <ross.philipson@gmail.com>
 ---
- include/linux/slaunch.h | 262 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 262 insertions(+)
- create mode 100644 include/linux/slaunch.h
+ arch/x86/include/asm/txt.h | 281 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 281 insertions(+)
+ create mode 100644 arch/x86/include/asm/txt.h
 
-diff --git a/include/linux/slaunch.h b/include/linux/slaunch.h
+diff --git a/arch/x86/include/asm/txt.h b/arch/x86/include/asm/txt.h
 new file mode 100644
-index 000000000000..7874a49c27b5
+index 000000000000..eaec915d4878
 --- /dev/null
-+++ b/include/linux/slaunch.h
-@@ -0,0 +1,262 @@
++++ b/arch/x86/include/asm/txt.h
+@@ -0,0 +1,281 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Main Secure Launch header file.
++ * Intel Trusted eXecution Technology (TXT) Definitions
 + *
 + * Copyright (c) 2026 Apertus Solutions, LLC
 + * Copyright (c) 2026, Oracle and/or its affiliates.
 + */
 +
-+#ifndef _LINUX_SLAUNCH_H
-+#define _LINUX_SLAUNCH_H
-+
-+#include <asm/txt.h>
++#ifndef _ASM_X86_TXT_H
++#define _ASM_X86_TXT_H
 +
 +/*
-+ * Secure Launch Defined State Flags
-+ */
-+#define SL_FLAG_ACTIVE		0x00000001
-+#define SL_FLAG_ARCH_TXT	0x00000002
-+
-+/*
-+ * Secure Launch CPU Type
-+ */
-+#define SL_CPU_INTEL	1
-+
-+#define __SL32_CS	0x0008
-+#define __SL32_DS	0x0010
-+#define __SL64_CS	0x0018
-+
-+/*
-+ * Secure Launch Defined Error Codes used in MLE-initiated TXT resets.
++ * Intel Safer Mode Extensions (SMX)
 + *
-+ * Intel Trusted Execution Technology (TXT) Software Development Guide
-+ * Appendix I - ACM Error Codes
-+ */
-+#define SL_ERROR_GENERIC		0xc0008001
-+#define SL_ERROR_TPM_INIT		0xc0008002
-+#define SL_ERROR_TPM_INVALID_LOG20	0xc0008003
-+#define SL_ERROR_TPM_LOGGING_FAILED	0xc0008004
-+#define SL_ERROR_REGION_STRADDLE_4GB	0xc0008005
-+#define SL_ERROR_TPM_EXTEND		0xc0008006
-+#define SL_ERROR_MTRR_INV_VCNT		0xc0008007
-+#define SL_ERROR_MTRR_INV_DEF_TYPE	0xc0008008
-+#define SL_ERROR_MTRR_INV_BASE		0xc0008009
-+#define SL_ERROR_MTRR_INV_MASK		0xc000800a
-+#define SL_ERROR_MSR_INV_MISC_EN	0xc000800b
-+#define SL_ERROR_INV_AP_INTERRUPT	0xc000800c
-+#define SL_ERROR_INTEGER_OVERFLOW	0xc000800d
-+#define SL_ERROR_HEAP_WALK		0xc000800e
-+#define SL_ERROR_HEAP_MAP		0xc000800f
-+#define SL_ERROR_REGION_ABOVE_4GB	0xc0008010
-+#define SL_ERROR_HEAP_INVALID_DMAR	0xc0008011
-+#define SL_ERROR_HEAP_DMAR_SIZE		0xc0008012
-+#define SL_ERROR_HEAP_DMAR_MAP		0xc0008013
-+#define SL_ERROR_HI_PMR_BASE		0xc0008014
-+#define SL_ERROR_HI_PMR_SIZE		0xc0008015
-+#define SL_ERROR_LO_PMR_BASE		0xc0008016
-+#define SL_ERROR_LO_PMR_MLE		0xc0008017
-+#define SL_ERROR_INITRD_TOO_BIG		0xc0008018
-+#define SL_ERROR_HEAP_ZERO_OFFSET	0xc0008019
-+#define SL_ERROR_WAKE_BLOCK_TOO_SMALL	0xc000801a
-+#define SL_ERROR_MLE_BUFFER_OVERLAP	0xc000801b
-+#define SL_ERROR_BUFFER_BEYOND_PMR	0xc000801c
-+#define SL_ERROR_OS_SINIT_BAD_VERSION	0xc000801d
-+#define SL_ERROR_EVENTLOG_MAP		0xc000801e
-+#define SL_ERROR_TPM_INVALID_ALGS	0xc000801f
-+#define SL_ERROR_TPM_EVENT_COUNT	0xc0008020
-+#define SL_ERROR_TPM_INVALID_EVENT	0xc0008021
-+#define SL_ERROR_INVALID_SLRT		0xc0008022
-+#define SL_ERROR_SLRT_MISSING_ENTRY	0xc0008023
-+#define SL_ERROR_SLRT_MAP		0xc0008024
-+
-+/*
-+ * Secure Launch Defined Limits
-+ */
-+#define SL_MAX_CPUS		512
-+#define SL_BOOT_STACK_SIZE	128
-+
-+/*
-+ * Secure Launch event log entry type. The TXT specification defines the
-+ * base event value as 0x400 for DRTM values.
++ * Intel SMX provides a programming interface to establish a Measured Launched
++ * Environment (MLE). The measurement and protection mechanisms are supported by the
++ * capabilities of an Intel Trusted Execution Technology (TXT) platform. SMX is
++ * the processor's programming interface in an Intel TXT platform.
 + *
-+ * Intel Trusted Execution Technology (TXT) Software Development Guide
-+ * Appendix F - TPM Event Log
++ * See:
++ *   Intel SDM Volume 2 - 6.1 "Safer Mode Extensions Reference"
++ *   Intel Trusted Execution Technology - Measured Launch Environment Developer's Guide
 + */
-+#define SL_EVTYPE_BASE			0x400
-+#define SL_EVTYPE_SECURE_LAUNCH		(SL_EVTYPE_BASE + 0x102)
 +
 +/*
-+ * MLE scratch area offsets within TXT OS-MLE SL defined portion of the heap.
++ * SMX GETSEC Leaf Functions
 + */
-+#define SL_SCRATCH_AP_EBX		0
-+#define SL_SCRATCH_AP_JMP_OFFSET	4
-+#define SL_SCRATCH_AP_STACKS_OFFSET	8
++#define SMX_X86_GETSEC_SEXIT	5
++#define SMX_X86_GETSEC_SMCTRL	7
++#define SMX_X86_GETSEC_WAKEUP	8
++
++/*
++ * Intel Trusted Execution Technology MMIO Registers Banks
++ */
++#define TXT_PUB_CONFIG_REGS_BASE	0xfed30000
++#define TXT_PRIV_CONFIG_REGS_BASE	0xfed20000
++#define TXT_NR_CONFIG_PAGES     ((TXT_PUB_CONFIG_REGS_BASE - \
++				  TXT_PRIV_CONFIG_REGS_BASE) >> PAGE_SHIFT)
++
++/*
++ * Intel Trusted Execution Technology (TXT) Registers
++ */
++#define TXT_CR_STS			0x0000
++#define TXT_CR_ESTS			0x0008
++#define TXT_CR_ERRORCODE		0x0030
++#define TXT_CR_CMD_RESET		0x0038
++#define TXT_CR_CMD_CLOSE_PRIVATE	0x0048
++#define TXT_CR_DIDVID			0x0110
++#define TXT_CR_VER_EMIF			0x0200
++#define TXT_CR_CMD_UNLOCK_MEM_CONFIG	0x0218
++#define TXT_CR_SINIT_BASE		0x0270
++#define TXT_CR_SINIT_SIZE		0x0278
++#define TXT_CR_MLE_JOIN			0x0290
++#define TXT_CR_HEAP_BASE		0x0300
++#define TXT_CR_HEAP_SIZE		0x0308
++#define TXT_CR_SCRATCHPAD		0x0378
++#define TXT_CR_CMD_OPEN_LOCALITY1	0x0380
++#define TXT_CR_CMD_CLOSE_LOCALITY1	0x0388
++#define TXT_CR_CMD_OPEN_LOCALITY2	0x0390
++#define TXT_CR_CMD_CLOSE_LOCALITY2	0x0398
++#define TXT_CR_CMD_SECRETS		0x08e0
++#define TXT_CR_CMD_NO_SECRETS		0x08e8
++#define TXT_CR_E2STS			0x08f0
++
++/* TXT default register value */
++#define TXT_REGVALUE_ONE		0x1ULL
++
++/* TXTCR_STS status bits */
++#define TXT_SENTER_DONE_STS		BIT(0)
++#define TXT_SEXIT_DONE_STS		BIT(1)
++
++/*
++ * SINIT/MLE Capabilities Field Bit Definitions
++ */
++#define TXT_SINIT_MLE_CAP_RLP_WAKE_GETSEC	0
++#define TXT_SINIT_MLE_CAP_RLP_WAKE_MONITOR	1
++
++/*
++ * OS/MLE Secure Launch Specific Definitions
++ */
++#define TXT_OS_MLE_STRUCT_VERSION	1
++#define TXT_OS_MLE_MAX_VARIABLE_MTRRS	32
 +
 +#ifndef __ASSEMBLER__
 +
-+#include <linux/io.h>
-+#include <linux/tpm_eventlog.h>
-+
 +/*
-+ * Secure Launch AP stack and monitor block
++ * TXT Heap extended data elements.
 + */
-+struct sl_ap_stack_and_monitor {
-+	u32 monitor;
-+	u32 cache_pad[15];
-+	u32 stack_pad[15];
-+	u32 apicid;
++struct txt_heap_ext_data_element {
++	u32 type;
++	u32 size;
++	/* Data */
++} __packed;
++
++#define TXT_HEAP_EXTDATA_TYPE_END			0
++
++struct txt_heap_end_element {
++	u32 type;
++	u32 size;
++} __packed;
++
++#define TXT_HEAP_EXTDATA_TYPE_TPM_EVENT_LOG_PTR		5
++
++struct txt_heap_event_log_element {
++	u64 event_log_phys_addr;
++} __packed;
++
++#define TXT_HEAP_EXTDATA_TYPE_EVENT_LOG_POINTER2_1	8
++
++struct txt_heap_event_log_pointer2_1_element {
++	u64 phys_addr;
++	u32 allocated_event_container_size;
++	u32 first_record_offset;
++	u32 next_record_offset;
 +} __packed;
 +
 +/*
-+ * Secure Launch AP wakeup information fetched in SMP boot code.
++ * TXT specification defined BIOS data TXT Heap table
 + */
-+struct sl_ap_wake_info {
-+	u32 ap_wake_block;
-+	u32 ap_wake_block_size;
-+	u32 ap_jmp_offset;
-+	u32 ap_stacks_offset;
-+};
++struct txt_bios_data {
++	u32 version; /* Currently 5 for TPM 1.2 and 6 for TPM 2.0 */
++	u32 bios_sinit_size;
++	u64 reserved1;
++	u64 reserved2;
++	u32 num_logical_procs;
++	u32 sinit_flags;
++	u32 mle_flags;
++	/* Versions >= 5 with updates in version 6 */
++	/* Ext Data Elements */
++} __packed;
 +
 +/*
-+ * TXT Heap Map structure
++ * TXT specification defined OS/SINIT TXT Heap table
 + */
-+struct sl_txt_heap_info {
-+	u64 size;
-+	u64 offset;
-+};
++struct txt_os_sinit_data {
++	u32 version; /* Currently 6 for TPM 1.2 and 7 for TPM 2.0 */
++	u32 flags;
++	u64 mle_ptab;
++	u64 mle_size;
++	u64 mle_hdr_base;
++	u64 vtd_pmr_lo_base;
++	u64 vtd_pmr_lo_size;
++	u64 vtd_pmr_hi_base;
++	u64 vtd_pmr_hi_size;
++	u64 lcp_po_base;
++	u64 lcp_po_size;
++	u32 capabilities;
++	/* Version = 5 */
++	u64 efi_rsdt_ptr;
++	/* Versions >= 6 */
++	/* Ext Data Elements */
++} __packed;
 +
 +/*
-+ * Secure Launch defined OS/MLE TXT Heap table
-+ *
-+ * This table is defined at the top level by the TXT specification
-+ * but the format of this structure is implementation specific.
-+ *
-+ * Intel Trusted Execution Technology (TXT) Software Development Guide
-+ * Appendix C - Intel TXT Heap Memory
++ * TXT specification defined SINIT/MLE TXT Heap table
 + */
-+struct txt_os_mle_data {
-+	u32 version;
++struct txt_sinit_mle_data {
++	u32 version;             /* Current values are 6 through 9 */
++	/* Versions <= 8 */
++	u8 bios_acm_id[20];
++	u32 edx_senter_flags;
++	u64 mseg_valid;
++	u8 sinit_hash[20];
++	u8 mle_hash[20];
++	u8 stm_hash[20];
++	u8 lcp_policy_hash[20];
++	u32 lcp_policy_control;
++	/* Versions >= 7 */
++	u32 rlp_wakeup_addr;
 +	u32 reserved;
-+	u64 slrt;
-+	u64 txt_info;
-+	u32 ap_wake_block;
-+	u32 ap_wake_block_size;
-+	u8 mle_scratch[64];
++	u32 num_of_sinit_mdrs;
++	u32 sinit_mdrs_table_offset;
++	u32 sinit_vtd_dmar_table_size;
++	u32 sinit_vtd_dmar_table_offset;
++	/* Versions >= 8 */
++	u32 processor_scrtm_status;
++	/* Versions >= 9 */
++	/* Ext Data Elements */
 +} __packed;
 +
-+#ifdef CONFIG_SECURE_LAUNCH
++/*
++ * TXT data reporting structure for memory types
++ */
++struct txt_sinit_memory_descriptor_record {
++	u64 address;
++	u64 length;
++	u8 type;
++	u8 reserved[7];
++} __packed;
 +
 +/*
-+ * TPM event logging functions.
++ * TXT data structure used by a responsive local processor (RLP) to start
++ * execution in response to a GETSEC[WAKEUP].
 + */
++struct smx_rlp_mle_join {
++	u32 rlp_gdt_limit;
++	u32 rlp_gdt_base;
++	u32 rlp_seg_sel;     /* cs (ds, es, ss are seg_sel+8) */
++	u32 rlp_entry_point; /* phys addr */
++} __packed;
 +
 +/*
-+ * Log a TPM v1 formatted event to the given DRTM event log.
++ * TPM event log structures defined in both the TXT specification and
++ * the TCG documentation.
 + */
-+static inline int tpm_log_event(void *evtlog_base, u32 evtlog_size,
-+				u32 event_size, void *event)
-+{
-+	struct tpm_event_log_header *evtlog =
-+		(struct tpm_event_log_header *)evtlog_base;
++#define TPM_EVTLOG_SIGNATURE "TXT Event Container"
 +
-+	if (memcmp(evtlog->signature, TPM_EVTLOG_SIGNATURE,
-+		   sizeof(TPM_EVTLOG_SIGNATURE)))
-+		return -EINVAL;
-+
-+	if (evtlog->container_size > evtlog_size)
-+		return -EINVAL;
-+
-+	if (evtlog->next_event_offset + event_size > evtlog->container_size)
-+		return -E2BIG;
-+
-+	memcpy(evtlog_base + evtlog->next_event_offset, event, event_size);
-+	evtlog->next_event_offset += event_size;
-+
-+	return 0;
-+}
++struct tpm_event_log_header {
++	char signature[20];
++	char reserved[12];
++	u8 container_ver_major;
++	u8 container_ver_minor;
++	u8 pcr_event_ver_major;
++	u8 pcr_event_ver_minor;
++	u32 container_size;
++	u32 pcr_events_offset;
++	u32 next_event_offset;
++	/* PCREvents[] */
++} __packed;
 +
 +/*
-+ * Log a TPM v2 formatted event to the given DRTM event log.
++ * Functions to extract data from the Intel TXT Heap Memory. The layout
++ * of the heap is as follows:
++ *  +----------------------------+
++ *  | Size Bios Data table (u64) |
++ *  +----------------------------+
++ *  | Bios Data table            |
++ *  +----------------------------+
++ *  | Size OS MLE table (u64)    |
++ *  +----------------------------+
++ *  | OS MLE table               |
++ *  +--------------------------- +
++ *  | Size OS SINIT table (u64)  |
++ *  +----------------------------+
++ *  | OS SINIT table             |
++ *  +----------------------------+
++ *  | Size SINIT MLE table (u64) |
++ *  +----------------------------+
++ *  | SINIT MLE table            |
++ *  +----------------------------+
++ *
++ *  NOTE: the table size fields include the 8 byte size field itself.
 + */
-+static inline int tpm2_log_event(struct txt_heap_event_log_pointer2_1_element *elem,
-+				 void *evtlog_base, u32 evtlog_size,
-+				 u32 event_size, void *event)
-+{
-+	struct tcg_pcr_event *header =
-+		(struct tcg_pcr_event *)evtlog_base;
-+
-+	/* Has to be at least big enough for the signature */
-+	if (header->event_size < sizeof(TCG_SPECID_SIG))
-+		return -EINVAL;
-+
-+	if (memcmp((u8 *)header + sizeof(struct tcg_pcr_event),
-+		   TCG_SPECID_SIG, sizeof(TCG_SPECID_SIG)))
-+		return -EINVAL;
-+
-+	if (elem->allocated_event_container_size > evtlog_size)
-+		return -EINVAL;
-+
-+	if (elem->next_record_offset + event_size >
-+	    elem->allocated_event_container_size)
-+		return -E2BIG;
-+
-+	memcpy(evtlog_base + elem->next_record_offset, event, event_size);
-+	elem->next_record_offset += event_size;
-+
-+	return 0;
-+}
++enum {
++	TXT_BIOS_DATA_TABLE,
++	TXT_OS_MLE_DATA_TABLE,
++	TXT_OS_SINIT_DATA_TABLE,
++	TXT_SINIT_MLE_DATA_TABLE,
++	TXT_SINIT_TABLE_MAX,
++};
 +
 +/*
-+ * External functions available in mainline kernel.
++ * Find the TPM v2 event log element in the TXT heap. This element contains
++ * the information about the size and location of the DRTM event log. Note
++ * this is a TXT specific structure.
++ *
++ * See:
++ *   Intel Trusted Execution Technology -
++ *     Measured Launch Environment Developer's Guide - Appendix C.
 + */
-+void slaunch_setup(void);
-+void slaunch_fixup_ap_wake_vector(void);
-+u32 slaunch_get_flags(void);
-+struct sl_txt_heap_info *slaunch_txt_get_heap_map(void);
-+void *slaunch_txt_get_heap_table(void *heap, u8 index);
-+struct sl_ap_wake_info *slaunch_get_ap_wake_info(void);
-+struct acpi_table_header *slaunch_get_dmar_table(struct acpi_table_header *dmar);
-+void __noreturn slaunch_reset(void *ctx, const char *msg, u64 error);
-+void slaunch_finalize(int do_sexit);
-+
-+static inline bool slaunch_is_txt_launch(void)
++static inline struct txt_heap_event_log_pointer2_1_element*
++txt_find_log2_1_element(struct txt_os_sinit_data *os_sinit_data)
 +{
-+	u32 mask = SL_FLAG_ACTIVE | SL_FLAG_ARCH_TXT;
++#define ptr_after(p)     ((void *)p + sizeof(*p))
++#define next_ext_elem(e) ((void *)e + e->size)
++	/* The extended element array is at the end of this table */
++	struct txt_heap_ext_data_element *ext_elem = ptr_after(os_sinit_data);
 +
-+	return (slaunch_get_flags() & mask) == mask;
++	while (ext_elem->type != TXT_HEAP_EXTDATA_TYPE_END) {
++		if (ext_elem->type == TXT_HEAP_EXTDATA_TYPE_EVENT_LOG_POINTER2_1)
++			return ptr_after(ext_elem);
++
++		ext_elem = next_ext_elem(ext_elem);
++	}
++
++	return NULL;
 +}
-+
-+#else
-+
-+static inline void slaunch_setup(void)
-+{
-+}
-+
-+static inline void slaunch_fixup_ap_wake_vector(void)
-+{
-+}
-+
-+static inline u32 slaunch_get_flags(void)
-+{
-+	return 0;
-+}
-+
-+static inline struct acpi_table_header *slaunch_get_dmar_table(struct acpi_table_header *dmar)
-+{
-+	return dmar;
-+}
-+
-+static inline void slaunch_finalize(int do_sexit)
-+{
-+}
-+
-+static inline bool slaunch_is_txt_launch(void)
-+{
-+	return false;
-+}
-+
-+#endif /* !CONFIG_SECURE_LAUNCH */
 +
 +#endif /* !__ASSEMBLER__ */
 +
-+#endif /* _LINUX_SLAUNCH_H */
++#endif /* _ASM_X86_TXT_H */
 -- 
 2.47.3
 
