@@ -1,186 +1,285 @@
-Return-Path: <linux-integrity+bounces-9622-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9623-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ceovJlk5D2otIAYAu9opvQ
-	(envelope-from <linux-integrity+bounces-9622-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 18:56:57 +0200
+	id wJrNLIN8D2rLMgYAu9opvQ
+	(envelope-from <linux-integrity+bounces-9623-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 23:43:31 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E5A5A9B64
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 18:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 178CE5AC29D
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 23:43:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB9853052B5D
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 16:06:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AF92B302571C
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 21:43:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA85368D7A;
-	Thu, 21 May 2026 16:06:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35AC6399D0C;
+	Thu, 21 May 2026 21:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fEDWx77C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g6NMsldu"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C12236C0AC;
-	Thu, 21 May 2026 16:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF3536CDE3;
+	Thu, 21 May 2026 21:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779379612; cv=none; b=b3hyMM8bD3LnCLZiRblIZWFYbEqjF/ZJ60cqVgOeo/YLsuu1Ro7qChHoo8NVlORxHIy4zRXy6rAPoOEwgtgRR2YSvvGemPiTiozC27w0me38vlm728IdLU8rvclF6SHG56fJiS5lYIabfiTjYR2v3M06uYoDwvVr0nkPcirusDA=
+	t=1779399809; cv=none; b=UfOmjlYCEXejebS7KvNHGjPg7G3x0g4MGsO1ntBJSoRmqR6jiQZdpmF8fj49xsC1VqG36sR9qO1yfygoeBKlcdPYgGtZ4tIWd0BxiRrdlonnPr8MsLNIl97H4db74GT3EXH8OFi/ZdaOtoULgft7sjH33lQ933ylCwClCfZ0Siw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779379612; c=relaxed/simple;
-	bh=F+h9A4DIYpq1O/RX6QOqxkjZmifyrZ3T+wElt+iDwoE=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=RkMKlKsVccvW+UZ3ssiOuBtoOD9e2x4Lei+jL68WZpeYGg1Qi2eh9t11EXjf7RTO78Z1iLLrKQV9Q/eDVo9LwboKVliYXf+XhV3lqRBaejQhZWtcB8Ucd71VMsFfOM9xbaxfY5x0TtUDW7Smc3Xr++d1Okf/gWTOZQd9J64XHfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fEDWx77C; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64LA6Nap764296;
-	Thu, 21 May 2026 16:06:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=qTaNXW
-	TikQqOePAqk42SMJotrFg8rUHuYpCOrc6eva8=; b=fEDWx77CCDQjYPM9hiTTnR
-	nuCUpeXCoGDSG5qIWuZHb2HEWFy3H3xF5a5R/Pwdj7+IN+MuY6CUfoH63iP35tFA
-	dIST1ssE80m8hXQkv0NkoJoI81n1YawGt2BqrgojvMUwoT16XinpD0AbjIAKcoLT
-	5MANpd5cACERs4SzW0mAToLgOug0WftBT+5dbphjBURmmy7wpcERMNmfo5iawjYD
-	Auz6pdeKt06P7RUXbtRuugO99AYoGnpy5O24dmHJf06fy4o9wiGxk7NiQILtsavy
-	yQxiIqN/+u8Lx9l2RKSqHkX8ArAtVt+tdFZTqmPWXozfEOY5EOqE+mFG4kN7xqug
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4e6hawesr6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 16:06:26 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64LFs60A012857;
-	Thu, 21 May 2026 16:06:25 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4e72wqda41-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 May 2026 16:06:25 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64LG5tDR27656772
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 21 May 2026 16:05:55 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7B43C58052;
-	Thu, 21 May 2026 16:06:24 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DB52A58045;
-	Thu, 21 May 2026 16:06:22 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.146.128])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 21 May 2026 16:06:22 +0000 (GMT)
-Message-ID: <51b452d09199374a74d713ff8e8cd44150a59867.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 10/13] ima: Add support for flushing the hash table
- when staging measurements
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
-        skhan@linuxfoundation.org, dmitry.kasatkin@gmail.com,
-        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com,
-        nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
-In-Reply-To: <20260429160319.4162918-11-roberto.sassu@huaweicloud.com>
-References: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
-	 <20260429160319.4162918-11-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 May 2026 12:06:22 -0400
+	s=arc-20240116; t=1779399809; c=relaxed/simple;
+	bh=Zw1IrQoeEZq0rHz/dyK7SWUBW7w1v3hBpjgtUh4WrZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IdWYK/9bwzsx0bxOv9xdDg3vla2BGOiaBciGh1qvAnBFQVZtB0aa8NB4wgAn1p/rXjFv2omWgfASD95GWPmfnGrWkSG1AeFC7AfJKJ/uka6TirF10R3e23yxI02xnYML78EHpSkHiYDk7b0n4KYzj0/EJRXq4VY2KzyIKSokbpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g6NMsldu; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 067291F000E9;
+	Thu, 21 May 2026 21:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779399807;
+	bh=sAcHpEMzFo+L/3yU5vscq+A1ZKs5ukOn3xu+qJdsdQM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=g6NMsldub9EByQIUUeeDNudrk4bi6Lv7OOIi9FNI8OkH5GKT6o9diB2+fEZk2BOJa
+	 fC4tlKrhMJ8Zq7Vj2eSXhzfVWdNhUNithCzy5avbpwnvMhD2+nPDImgx4w4+0yF7uq
+	 PXp1dh4Cnj+Dxs7EHpsvLBVFUw2V0LEZ9z3ZZHI4PSx44jIrcMWkwlgoyMVQYSzzZp
+	 Z+fxpdKjfN5ckwzIylO+9Vedp2rBN1yXPnWi3ZxmX2E7fbUcO+S8vPwIE9CqPgkpXI
+	 FZf7/89bDKjyhBup9b2j375mBXZCSrUWA34JrzGahF31fv0rfAhS/h2IGnSduCo9Nm
+	 W1BCoMx7GNJpQ==
+Date: Fri, 22 May 2026 00:43:23 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: Use named initializers for arrays of i2c_device_data
+Message-ID: <ag98e88678TSfwxG@kernel.org>
+References: <20260518134035.644762-2-u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIxMDE2MiBTYWx0ZWRfX7Wrra6AWT7c0
- 9O7K3x9cqFyeJ1gbRAdz1XZMMbWjgQ6jCQvatmF3KxjrT/QkIIXwKrsFM2SLqjIS5Jfgw8v6Z3H
- 5rEjtBjAH6/Wfki9bbFEgd+zHGUEULAN/2ndsyPaVhhK1DbngwTSqmq6Wsvy5wVA6XSlsE3nZro
- 2S6KUiPwjOO5XJLwX8OK4yO6ISCvDOvHqzB2U65CsLagBLrnfH6BupRSV/bZyK3gJKKU3ihVyQQ
- mIW7XZyC/2tLKSjk6z1Bq6PA7w2DrPjEiBMNX6t7oOopwqhnVIrnXJtHlBBAZmF7tr+Q/LctLZs
- ku0lMDBlVRF0PqSCDtSyJgVN7Co7uRms+EGgk7FfiiDr/NLGNgMQURH1ILl2AMltAvyob3s/n3f
- dV0loCj8F4pulM055iuXfEEj7AQyce7qnXw67ffZ9G2IIpXYvNfdyDMuDokBEJX0o1uvKVcKueq
- g72F9PxHbMp/C5d+E/Q==
-X-Authority-Analysis: v=2.4 cv=Np/htcdJ c=1 sm=1 tr=0 ts=6a0f2d82 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=NEAV23lmAAAA:8
- a=i0EeH86SAAAA:8 a=jVX5zv5zQ3_5VHjuTu4A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: rLNEtsnc1riP4Js2UoSFzkYXbat_2Ili
-X-Proofpoint-GUID: CVW9GPJ-laOE7SM3E5PwCd_-sze2Yl-Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-05-21_03,2026-05-18_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605210162
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260518134035.644762-2-u.kleine-koenig@baylibre.com>
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9622-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,microchip.com,bootlin.com,tuxon.dev,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-9623-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[huaweicloud.com,lwn.net,linuxfoundation.org,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 78E5A5A9B64
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,baylibre.com:email,cheri-alliance.org:url]
+X-Rspamd-Queue-Id: 178CE5AC29D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, 2026-04-29 at 18:03 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->=20
-> Introduce the new kernel option ima_flush_htable to decide whether or not
-> the digests of staged measurement entries are flushed from the hash table=
-,
-> when they are deleted.
+On Mon, May 18, 2026 at 03:40:35PM +0200, Uwe Kleine-König (The Capable Hub) wrote:
+> While being less compact, using named initializers allows to more easily
+> see which members of the structs are assigned which value without having
+> to lookup the declaration of the struct. And it's also more robust
+> against changes to the struct definition.
+> 
+> The mentioned robustness is relevant for a planned change to struct
+> i2c_device_id that replaces .driver_data by an anonymous union.
+> 
+> While touching all these arrays, unify usage of whitespace in the list
+> terminator.
+> 
+> This patch doesn't modify the compiled arrays, only their representation
+> in source form benefits. The former was confirmed with x86 and arm64
+> builds.
+> 
+> Signed-off-by: Uwe Kleine-König (The Capable Hub) <u.kleine-koenig@baylibre.com>
+> ---
+> Hello,
+> 
+> the mentioned change to i2c_device_id is the following:
+> 
+> 	diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
+> 	index 23ff24080dfd..aebd3a5e90af 100644
+> 	--- a/include/linux/mod_devicetable.h
+> 	+++ b/include/linux/mod_devicetable.h
+> 	@@ -477,7 +477,11 @@ struct rpmsg_device_id {
+> 
+> 	 struct i2c_device_id {
+> 		char name[I2C_NAME_SIZE];
+> 	-	kernel_ulong_t driver_data;	/* Data private to the driver */
+> 	+	union {
+> 	+		/* Data private to the driver */
+> 	+		kernel_ulong_t driver_data;
+> 	+		const void *driver_data_ptr;
+> 	+	};
+> 	 };
+> 
+> 	 /* pci_epf */
+> 
+> and this requires that .driver_data is assigned via a named initializer
+> for static data. This requirement isn't a bad one because named
+> initializers are also much better readable than list initializers.
+> 
+> The union added to struct i2c_device_id enables further cleanups like:
+> 
+> 	diff --git a/drivers/regulator/ad5398.c b/drivers/regulator/ad5398.c
+> 	index 0123ca8157a8..dfb0b07500a7 100644
+> 	--- a/drivers/regulator/ad5398.c
+> 	+++ b/drivers/regulator/ad5398.c
+> 	@@ -207,8 +207,8 @@ struct ad5398_current_data_format {
+> 	 static const struct ad5398_current_data_format df_10_4_120 = {10, 4, 0, 120000};
+> 
+> 	 static const struct i2c_device_id ad5398_id[] = {
+> 	-	{ .name = "ad5398", .driver_data = (kernel_ulong_t)&df_10_4_120 },
+> 	-	{ .name = "ad5821", .driver_data = (kernel_ulong_t)&df_10_4_120 },
+> 	+	{ .name = "ad5398", .driver_data_ptr = &df_10_4_120 },
+> 	+	{ .name = "ad5821", .driver_data_ptr = &df_10_4_120 },
+> 	 	{ }
+> 	 };
+> 	 MODULE_DEVICE_TABLE(i2c, ad5398_id);
+> 	@@ -219,8 +219,7 @@ static int ad5398_probe(struct i2c_client *client)
+> 	 	struct regulator_init_data *init_data = dev_get_platdata(&client->dev);
+> 	 	struct regulator_config config = { };
+> 	 	struct ad5398_chip_info *chip;
+> 	-	const struct ad5398_current_data_format *df =
+> 	-	                (struct ad5398_current_data_format *)id->driver_data;
+> 	+	const struct ad5398_current_data_format *df = id->driver_data;
+> 
+> 	 	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+> 	 	if (!chip)
+> 
+> that are an improvement for readability (again!) and it keeps some
+> properties of the pointers (here: being const) without having to pay
+> attention for that. (I didn't find a tpm driver that benefits, so this
+> is "only" a regulator driver example.)
+> 
+> My additional motivation for this effort is CHERI[1]. This is a hardware
+> extension that uses 128 bit pointers but unsigned long is still 64 bit.
+> So with CHERI you cannot store pointers in unsigned long variables.
 
-Unless explicitly requested, the existing hash table is not cleared after
-exporting the measurement list. Why is clearing the hash table configurable=
-? =C2=A0
-The boot command line option does not provide enough information to decide =
-why
-you would or wouldn't want to clear the hash table.  Please update the patc=
-h
-description and the boot command line option.
+I don't understand why any of this should be merged to be honest, and
+why I should care about CHERI when reviewing mainline patches.
 
-thanks,
+Clean up can be side-effect but not a purpose.
 
-Mimi
+> 
+> Best regards
+> Uwe
+> 
+> [1] https://cheri-alliance.org/discover-cheri/
+>     https://lwn.net/Articles/1037974/
+> ---
+>  drivers/char/tpm/st33zp24/i2c.c     | 4 ++--
+>  drivers/char/tpm/tpm_i2c_atmel.c    | 4 ++--
+>  drivers/char/tpm/tpm_i2c_infineon.c | 8 ++++----
+>  drivers/char/tpm/tpm_i2c_nuvoton.c  | 6 +++---
+>  drivers/char/tpm/tpm_tis_i2c.c      | 4 ++--
+>  5 files changed, 13 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+> index 81348487c125..74b25af5ce79 100644
+> --- a/drivers/char/tpm/st33zp24/i2c.c
+> +++ b/drivers/char/tpm/st33zp24/i2c.c
+> @@ -133,8 +133,8 @@ static void st33zp24_i2c_remove(struct i2c_client *client)
+>  }
+>  
+>  static const struct i2c_device_id st33zp24_i2c_id[] = {
+> -	{ TPM_ST33_I2C },
+> -	{}
+> +	{ .name = TPM_ST33_I2C },
+> +	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, st33zp24_i2c_id);
+>  
+> diff --git a/drivers/char/tpm/tpm_i2c_atmel.c b/drivers/char/tpm/tpm_i2c_atmel.c
+> index 9fd73049821f..6891642a7f51 100644
+> --- a/drivers/char/tpm/tpm_i2c_atmel.c
+> +++ b/drivers/char/tpm/tpm_i2c_atmel.c
+> @@ -199,8 +199,8 @@ static void i2c_atmel_remove(struct i2c_client *client)
+>  }
+>  
+>  static const struct i2c_device_id i2c_atmel_id[] = {
+> -	{ I2C_DRIVER_NAME },
+> -	{}
+> +	{ .name = I2C_DRIVER_NAME },
+> +	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, i2c_atmel_id);
+>  
+> diff --git a/drivers/char/tpm/tpm_i2c_infineon.c b/drivers/char/tpm/tpm_i2c_infineon.c
+> index 8b7d32de0b2e..29cf2f998405 100644
+> --- a/drivers/char/tpm/tpm_i2c_infineon.c
+> +++ b/drivers/char/tpm/tpm_i2c_infineon.c
+> @@ -664,10 +664,10 @@ static int tpm_tis_i2c_init(struct device *dev)
+>  }
+>  
+>  static const struct i2c_device_id tpm_tis_i2c_table[] = {
+> -	{"tpm_i2c_infineon"},
+> -	{"slb9635tt"},
+> -	{"slb9645tt"},
+> -	{},
+> +	{ .name = "tpm_i2c_infineon" },
+> +	{ .name = "slb9635tt" },
+> +	{ .name = "slb9645tt" },
+> +	{ }
+>  };
+>  
+>  MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_table);
+> diff --git a/drivers/char/tpm/tpm_i2c_nuvoton.c b/drivers/char/tpm/tpm_i2c_nuvoton.c
+> index d44903b29929..71c59eeaccab 100644
+> --- a/drivers/char/tpm/tpm_i2c_nuvoton.c
+> +++ b/drivers/char/tpm/tpm_i2c_nuvoton.c
+> @@ -624,9 +624,9 @@ static void i2c_nuvoton_remove(struct i2c_client *client)
+>  }
+>  
+>  static const struct i2c_device_id i2c_nuvoton_id[] = {
+> -	{"tpm_i2c_nuvoton"},
+> -	{"tpm2_i2c_nuvoton", .driver_data = I2C_IS_TPM2},
+> -	{}
+> +	{ .name = "tpm_i2c_nuvoton" },
+> +	{ .name = "tpm2_i2c_nuvoton", .driver_data = I2C_IS_TPM2},
+> +	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, i2c_nuvoton_id);
+>  
+> diff --git a/drivers/char/tpm/tpm_tis_i2c.c b/drivers/char/tpm/tpm_tis_i2c.c
+> index 6cd07dd34507..21d66bfba6a8 100644
+> --- a/drivers/char/tpm/tpm_tis_i2c.c
+> +++ b/drivers/char/tpm/tpm_tis_i2c.c
+> @@ -375,8 +375,8 @@ static void tpm_tis_i2c_remove(struct i2c_client *client)
+>  }
+>  
+>  static const struct i2c_device_id tpm_tis_i2c_id[] = {
+> -	{ "tpm_tis_i2c" },
+> -	{}
+> +	{ .name = "tpm_tis_i2c" },
+> +	{ }
+>  };
+>  MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
+>  
+> -- 
+> 2.47.3
+> 
 
->=20
-> When the option is enabled, replace the old hash table with a new one,
-> by calling ima_alloc_replace_htable(), and completely delete the
-> measurements entries.
->=20
-> Note: This code derives from the Alt-IMA Huawei project, whose license is
->       GPL-2.0 OR MIT.
->=20
-> Link: https://github.com/linux-integrity/linux/issues/1
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+BR, Jarkko
 
