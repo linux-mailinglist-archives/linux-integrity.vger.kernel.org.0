@@ -1,59 +1,58 @@
-Return-Path: <linux-integrity+bounces-9625-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9626-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yBDnEgqLD2qnNAYAu9opvQ
-	(envelope-from <linux-integrity+bounces-9625-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 May 2026 00:45:30 +0200
+	id eIZ6GESUD2o1NgYAu9opvQ
+	(envelope-from <linux-integrity+bounces-9626-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 May 2026 01:24:52 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C23CB5AC730
-	for <lists+linux-integrity@lfdr.de>; Fri, 22 May 2026 00:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D10755ACA8C
+	for <lists+linux-integrity@lfdr.de>; Fri, 22 May 2026 01:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1C99303DAA3
-	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 22:43:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6354B30D1A0E
+	for <lists+linux-integrity@lfdr.de>; Thu, 21 May 2026 23:20:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F265367B8A;
-	Thu, 21 May 2026 22:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B103911C3;
+	Thu, 21 May 2026 23:17:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iKjorfmZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U+x03od/"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F423644C2;
-	Thu, 21 May 2026 22:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5EF382F26;
+	Thu, 21 May 2026 23:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779403406; cv=none; b=Wz4pXgEPl9JRD/QYQPJ4rw1Rx/Ac0WFdxlShto/s7/krHfdyU1ZLKGxIy93yDrvOdgXmEm/8dUEs+pNO/mIC/2yqTmcyApLKhWApW/keJUMJx98ztO5gqwRS1T/J5b77DwEGjVU5yjbIesXPR2Otw+9v48NMl1FLwva5nJKnsUo=
+	t=1779405464; cv=none; b=fGUkz0UsSKc7+hdqYoS46GHKfoC5lPZKK5x8dA6jDez8L/AQEUlAUnN/gK1OFbHqf9macbuz+4ehtGUhr3g1Wm0oX4vCPB46xBMS2jgJ3oYgRm2HssB89ROTDDKUIF2Flhv0e4VS4iFE8kbeA8LKRdySLQZJKeIlx212vSLNCEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779403406; c=relaxed/simple;
-	bh=B+QDWSA168uws4wKIxFAj3031nZSzVn8O5jOZRFPVSQ=;
+	s=arc-20240116; t=1779405464; c=relaxed/simple;
+	bh=X8B+AIJOFTlyCPnhSpIhzs9v0o8K4b9MKRWy9DoWIhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y3HoHrRn6vI94FbUbJ1fuko7NxyzvsWkLAw3KQB6MJyrpgI8S3Uo7G+NdnKx3JWAmfHMOVets5YmdN5nXMAhmXZu3V/FAzG6dt8TBYVTyC3ycB+3QLeF0H7tiWGHPZ22mH2IlIdMFjAYKboh4+g8ulEikhINiFzJButFVjfrUt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iKjorfmZ; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 331D81F000E9;
-	Thu, 21 May 2026 22:43:24 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XRsTzrZd2HUtbv2Pm1MUOO8MLj9D0K7Rg6n5gW2TnIcvNFiJLdH2M2znkPrCShn8ICCe5G3XV/o1FD6FCR+8D4pzFRYy7PKeJZp8yM/RKX+CQ5MhDRqfU0Q+43MyC3TsIseg9avGyHla5gbPviMfeHEU54aUXuAQPaoV10N60lE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U+x03od/; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 9D3721F00A3B;
+	Thu, 21 May 2026 23:17:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779403404;
-	bh=QsXPgt+ZJarn05n24TBsl5Aqg5RYhmxHCY7O+p8Qfyo=;
+	s=k20260515; t=1779405460;
+	bh=NY7sgpyWwX6rlPhDxGscLPxrqmLhhQD+LGw026ZvCVg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iKjorfmZSwWWDPomD8gUInrU3I3tSEF+ig6d7EP/2sAWJXCoXKfs/+EfGGbmsXwpE
-	 bBnfTc0CYWB1fszJVzKOJ/xoeSQaOTdZl5yRQUBQe/AyEtbssYbaKviIwbl+7L0vYp
-	 iSvBLPp6U4ifxIh1SJvCQtD2M/ZDOIEC8fSnemRT+Y23q34adPnVaucodCq98fbJ4l
-	 Cm2WjbeiLFpqJ0meC0AomRJcHI2KklWXwxvHEV8/C4+jdG0IUak6R8X+gj7pGcNkHO
-	 OFHABJjFFi/XfYqXhH/0s6i4h8gAII59rGqM2M6ntvUqUTCZ/dMd0ELEHd29qCvLDf
-	 gMCh+8abMfciw==
-Date: Fri, 22 May 2026 01:43:12 +0300
+	b=U+x03od/KEYQY40i9/IAV080PGKpCh0DptJVytfKAPNCyYF41kUphnGJvagMd0y9x
+	 CFMCGwMN+8amdOOIHhU7N1CF6liiTOAObsPxuO7kmPQJ/DmKqEPyNZgFQYNSv8IRQB
+	 s7w2dtLJ/SVSC45vijRheIZRLZNkXKihw9yx6ryd98Qwc7z+TkBSND/5K6d1/LIwYx
+	 I2HNk85HWZTL0dEwsl7WGCwTvYBeGy9MYt/yYHOQ9zynOY4PtbzI43EOKqKMPqosEs
+	 45Vvct6bajlscfIV27Mgn/MLR91yJ9oYiyfEy8mQIsg6ctseL9sYikgrNzk3QDm89N
+	 lgJtVZMUB2Puw==
+Date: Fri, 22 May 2026 02:17:35 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Arun Menon <armenon@redhat.com>
 Cc: linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
 	Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v3 3/6] tpm_crb: Add start_cmd parameter to tpm_crb_start
- wrapper
-Message-ID: <ag-KgDtvbDUdCxWP@kernel.org>
+Subject: Re: [PATCH v3 2/6] tpm_crb: Split start method into a separate header
+Message-ID: <ag-Sj3sUfkBXP4Eu@kernel.org>
 References: <20260518151724.730443-1-armenon@redhat.com>
- <20260518151724.730443-4-armenon@redhat.com>
+ <20260518151724.730443-3-armenon@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -62,7 +61,7 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260518151724.730443-4-armenon@redhat.com>
+In-Reply-To: <20260518151724.730443-3-armenon@redhat.com>
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
@@ -71,7 +70,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9625-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9626-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -90,71 +89,95 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	RCPT_COUNT_FIVE(0.00)[5];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: C23CB5AC730
+X-Rspamd-Queue-Id: D10755ACA8C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, May 18, 2026 at 08:47:21PM +0530, Arun Menon wrote:
+On Mon, May 18, 2026 at 08:47:20PM +0530, Arun Menon wrote:
 > From: Arun Menon <armenon@redhat.com>
 > 
-> The current implementation of tpm_crb_start() is limited to triggering
-> the CRB_START_INVOKE bit. To support command and response chunking, the
-> driver must be able to send other control bits, like
-> CRB_START_NEXT_CHUNK, using the same platform-specific paths.
-> 
-> This commit adds the start_cmd parameter to tpm_crb_start() so the
-> caller can specify which command to send.
+> The current implementation handles different platform start methods
+> (ACPI, ARM SMC, and ARM FFA) directly within crb_send().
+> Move this logic into a new helper function, tpm_crb_start(). This is a
+> pure refactor with no functional changes intended.
 > 
 > Signed-off-by: Arun Menon <armenon@redhat.com>
 > ---
->  drivers/char/tpm/tpm_crb.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  drivers/char/tpm/tpm_crb.c | 50 ++++++++++++++++++++------------------
+>  1 file changed, 27 insertions(+), 23 deletions(-)
 > 
 > diff --git a/drivers/char/tpm/tpm_crb.c b/drivers/char/tpm/tpm_crb.c
-> index 9a2f512b4ae3..31f530744e90 100644
+> index d76f9e30f036..9a2f512b4ae3 100644
 > --- a/drivers/char/tpm/tpm_crb.c
 > +++ b/drivers/char/tpm/tpm_crb.c
-> @@ -446,7 +446,7 @@ static int tpm_crb_smc_start(struct device *dev, unsigned long func_id)
+> @@ -446,6 +446,32 @@ static int tpm_crb_smc_start(struct device *dev, unsigned long func_id)
 >  }
 >  #endif
 >  
-> -static int tpm_crb_start(struct tpm_chip *chip)
-> +static int tpm_crb_start(struct tpm_chip *chip, u32 start_cmd)
+> +static int tpm_crb_start(struct tpm_chip *chip)
+> +{
+> +	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
+> +	int rc = 0;
+> +	/* The reason for the extra quirk is that the PTT in 4th Gen Core CPUs
+> +	 * report only ACPI start but in practice seems to require both
+> +	 * CRB start, hence invoking CRB start method if hid == MSFT0101.
+> +	 */
+> +	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER ||
+> +	    priv->sm == ACPI_TPM2_MEMORY_MAPPED ||
+> +	    !strcmp(priv->hid, "MSFT0101"))
+> +		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
+> +	if (priv->sm == ACPI_TPM2_START_METHOD ||
+> +	    priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD)
+> +		rc = crb_do_acpi_start(chip);
+> +	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC) {
+> +		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
+> +		rc = tpm_crb_smc_start(&chip->dev, priv->smc_func_id);
+> +	}
+> +	if (priv->sm == ACPI_TPM2_CRB_WITH_ARM_FFA) {
+> +		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
+> +		rc = tpm_crb_ffa_start(CRB_FFA_START_TYPE_COMMAND, chip->locality);
+> +	}
+> +	return rc;
+> +}
+> +
+>  static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
 >  {
 >  	struct crb_priv *priv = dev_get_drvdata(&chip->dev);
->  	int rc = 0;
-> @@ -457,16 +457,16 @@ static int tpm_crb_start(struct tpm_chip *chip)
->  	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER ||
->  	    priv->sm == ACPI_TPM2_MEMORY_MAPPED ||
->  	    !strcmp(priv->hid, "MSFT0101"))
-> -		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
-> +		iowrite32(start_cmd, &priv->regs_t->ctrl_start);
->  	if (priv->sm == ACPI_TPM2_START_METHOD ||
->  	    priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD)
->  		rc = crb_do_acpi_start(chip);
->  	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC) {
-> -		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
-> +		iowrite32(start_cmd, &priv->regs_t->ctrl_start);
->  		rc = tpm_crb_smc_start(&chip->dev, priv->smc_func_id);
->  	}
->  	if (priv->sm == ACPI_TPM2_CRB_WITH_ARM_FFA) {
-> -		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
-> +		iowrite32(start_cmd, &priv->regs_t->ctrl_start);
->  		rc = tpm_crb_ffa_start(CRB_FFA_START_TYPE_COMMAND, chip->locality);
->  	}
->  	return rc;
-> @@ -497,7 +497,7 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
+> @@ -471,29 +497,7 @@ static int crb_send(struct tpm_chip *chip, u8 *buf, size_t bufsiz, size_t len)
 >  	/* Make sure that cmd is populated before issuing start. */
 >  	wmb();
 >  
-> -	rc = tpm_crb_start(chip);
-> +	rc = tpm_crb_start(chip, CRB_START_INVOKE);
+> -	/* The reason for the extra quirk is that the PTT in 4th Gen Core CPUs
+> -	 * report only ACPI start but in practice seems to require both
+> -	 * CRB start, hence invoking CRB start method if hid == MSFT0101.
+> -	 */
+> -	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER ||
+> -	    priv->sm == ACPI_TPM2_MEMORY_MAPPED ||
+> -	    !strcmp(priv->hid, "MSFT0101"))
+> -		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
+> -
+> -	if (priv->sm == ACPI_TPM2_START_METHOD ||
+> -	    priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_START_METHOD)
+> -		rc = crb_do_acpi_start(chip);
+> -
+> -	if (priv->sm == ACPI_TPM2_COMMAND_BUFFER_WITH_ARM_SMC) {
+> -		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
+> -		rc = tpm_crb_smc_start(&chip->dev, priv->smc_func_id);
+> -	}
+> -
+> -	if (priv->sm == ACPI_TPM2_CRB_WITH_ARM_FFA) {
+> -		iowrite32(CRB_START_INVOKE, &priv->regs_t->ctrl_start);
+> -		rc = tpm_crb_ffa_start(CRB_FFA_START_TYPE_COMMAND, chip->locality);
+> -	}
+> -
+> +	rc = tpm_crb_start(chip);
 >  	if (rc)
 >  		return rc;
 >  
 > -- 
 > 2.54.0
 > 
+
 
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
