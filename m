@@ -1,168 +1,178 @@
-Return-Path: <linux-integrity+bounces-9651-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9652-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GB9bHZOKEmqr0gYAu9opvQ
-	(envelope-from <linux-integrity+bounces-9651-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 May 2026 07:20:19 +0200
+	id QPYCEr4EE2qV6AYAu9opvQ
+	(envelope-from <linux-integrity+bounces-9652-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 24 May 2026 16:01:34 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA4FD5C1700
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 May 2026 07:20:18 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6CDF5C2A3B
+	for <lists+linux-integrity@lfdr.de>; Sun, 24 May 2026 16:01:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D172A300E39D
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 May 2026 05:20:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 24FBC3009553
+	for <lists+linux-integrity@lfdr.de>; Sun, 24 May 2026 14:01:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A45E2EF653;
-	Sun, 24 May 2026 05:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8041C21257F;
+	Sun, 24 May 2026 14:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JIMeYT2t"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="A5wzsjN3"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A99299943;
-	Sun, 24 May 2026 05:20:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D183955CE;
+	Sun, 24 May 2026 14:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779600015; cv=none; b=KI+ujy79Jf70BGoreBPI7DblzTaGgkH6YCP0KJOR2uXS+ds9o+nZLPNxSoECKCC5gDTsCevf2EjDULcoMFc1PoSfGgqBqqszxD3E49983rKaHmKpFJZG3AN+zGZdvotnly+rYPlLJXyktExca/1eRCCtEiGgGLpcosAIxD23KVU=
+	t=1779631289; cv=none; b=Z2Rqv3lMzWvwGMOWtCYXqCD/T83G8AikvUim6DqbSvN73yQY7IT5abzbdN38dGlo4GPDuJKWBdmcYZwAHekV4Q1JuRUl+MwXnszGQgJX5u2oXUwTpdkXqXRJh+KZT+J6ym52NqbAfblC0RVR48W1lpPyVXqKsuVF07UNTrPUP0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779600015; c=relaxed/simple;
-	bh=nUk/or31ZcblcYRwbmyWvZEzsmOMAvxw8SC3x0CpR3w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e+z5dUPblxeY6wukGjT1q5jeV9SbvUHKRNKYqdwzHZqj80zOrZA6NmKjdo4Ihh1Ib6aHQOeiaUiT14ePZ200OOWD577K4uvMJIENcETWS/z8MfVTgrtEyG+U1Tuj4K8jVwfrUNmr6cr0c/1Jp+SlbFsTPpnjb033HU++DoEHw5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JIMeYT2t; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 1A28C1F000E9;
-	Sun, 24 May 2026 05:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779600013;
-	bh=YcuWooOWqE1a2Oivr+lPqrNpS1vi6j7CJ0wzXBRkecc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JIMeYT2tFZ7SD2DMmH3HrRFpzYagXdYGswGtNnbkROo1dLSmY5oM5uQXYlbQAUpAT
-	 CgJZ4Aj+iS5vMSd+pKUXLP9ElmpUmD00zGFVOKoZWbfRDBF8peltrjUbgXxm1FzV58
-	 q463qJkh57SF1T6I3M0zO9RH3yvzV7s5ABtm61dgb+hIMBIhwD3teUMIbKDNrUesQ9
-	 CPDa6sYvPCTh6Ds/CcGktSQVjNiQuNTBi+zhlkX+nZpnSgbsItMWaVq71ZYIXYlAmh
-	 z72AC8P098XI9enzzXt5Bmx+m/MxnaASSGhJWRyeKs5OysIQXnJgjLxmf4qwccvb9z
-	 cFhhEaYJ2fwZA==
-Date: Sun, 24 May 2026 08:20:10 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: keyrings@vger.kernel.org
-Cc: David Howells <dhowells@redhat.com>, linux-crypto@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	David Woodhouse <dwmw2@infradead.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 0/3]
-Message-ID: <ahKKikSt249xjoqK@kernel.org>
-References: <20260524051519.3708075-1-jarkko@kernel.org>
+	s=arc-20240116; t=1779631289; c=relaxed/simple;
+	bh=5+8M/ANW5WBp18ewmaKD/w/S85f+NDpC2CroWYpXGLw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=t/izXMqaq3s4kJki1iFEg2l/V5E0SUSV6/3VO86QSz7U5Bes39Kc8oInz1GUQY1mvuDH52LRJckjadTswFh4HZddzzeO59ut1o1e3368kKviGDbEe0aLBnQ+XVixNq6kvRtu2mY5KQp1zpStH1TCLNt2ttZawVyKB5fn1JtSX78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=A5wzsjN3; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
+	Reply-To:Content-ID:Content-Description:In-Reply-To:References;
+	bh=YAKAHo/3pBwB7ppBKv2Ddkdi5L5KsPDILCOyndfzWdE=; b=A5wzsjN3Mcj13XwprOhrO4ms4f
+	iDpTTEE2GXAfLLhg1yFBJWGQbbmsQK5+o8NWm5kTfF8NnIhT9rz4TqLdWW9wWYHY0uIBSNgyBgK5t
+	TlRs0F2RFBq/Tgc04Q5IowyFV2z9zN7OELjm2DTOSnxowy2le7HyXmfSHsqKMCiKISRmF4NGEEVqT
+	W7FrVOkuhGR5kF0xf26onCSM9GQq+AZesWqzrQRnq+RXNuIkPb4xJ0Z8FlCvRkurzzBYj3lvWfg2t
+	YnLdYKSA8qruLtTp2JOdPv4b8qYpBpVEA1wHd/d7MHNex7jXuT0RWIfVC7Jp8lxAp775L6lSffT1+
+	AlCUS+6g==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wR9OM-000qfY-1k;
+	Sun, 24 May 2026 14:01:22 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Sun, 24 May 2026 10:01:17 -0400
+Subject: [PATCH] tpm: cap tpm_buf_append() at TPM_BUFSIZE, not PAGE_SIZE
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260524051519.3708075-1-jarkko@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260524-tpm-v1-1-2420a5977da6@debian.org>
+X-B4-Tracking: v=1; b=H4sIAKwEE2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDUyMT3ZKCXF0TA6MkCxNzi7TUZEsloMqCotS0zAqwKdGxEH5xaVJWanI
+ JSKtSbS0AKfMCA2cAAAA=
+X-Change-ID: 20260524-tpm-402b8478fec9
+To: Peter Huewe <peterhuewe@gmx.de>, Jarkko Sakkinen <jarkko@kernel.org>, 
+ Jason Gunthorpe <jgg@ziepe.ca>
+Cc: linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ noodles@fb.com, James.Bottomley@HansenPartnership.com, kernel-team@meta.com, 
+ Breno Leitao <leitao@debian.org>
+X-Mailer: b4 0.16-dev-d5d98
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1929; i=leitao@debian.org;
+ h=from:subject:message-id; bh=5+8M/ANW5WBp18ewmaKD/w/S85f+NDpC2CroWYpXGLw=;
+ b=owEBbQKS/ZANAwAKATWjk5/8eHdtAcsmYgBqEwSweEPM1eS7dspK1daq6K+W2t5dCp37vMlyR
+ J3EDVj/Hx+JAjMEAAEKAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCahMEsAAKCRA1o5Of/Hh3
+ bYDkD/9gxShOeqmhEcFeWos7XlFlxElNl4+Kei7TJyzjMyOFeUAdqR+MEB6m17VoLmqIcssxBX7
+ tNiVnanoLAoBZ3H3x1R1GUzmWmLrhDndDbWOwT8BIzDFg7fhdmSsQ/KtkzC6dfuGL8dEjptuNX/
+ cbSK77NbQyGIs5zcZH8y6qD62Vf/eupiPX4fw3nrkrd5gt8EM7seB98lAD4HGcwqhCy5CBY+EWG
+ e0zgGlC2FbUDzvAzxQk3aonmnHTqkqXZIi+zR7fXYlG4C9uqw4hx7pOWCvu/m+3quVKHkOO8c0k
+ N6tEqncd5vQbPScRwIGARni/2gYPJUYHZKcyt/Lni/Ey7zYP6Ig6n/IcOBQZNYUMzrspZCwdT4V
+ 5kZ5SvOf+ltu39eyxqXiWiGl/NsouGVhyPQcQpTdcg1St19u4HyfuUSyngwPDkK8bZVF3o3nSdH
+ oB1C2gApdBisYBnAodbf8/JqmY4h/k8ULtxhxefWLKMjAnQ3/4MLlW4BynBIasLMAIeecpJbuGh
+ UA8D97rkjncIxGspRGx5u3xjCbCkOn4DLvjwX+CUMXIJh13AVSrKIJR0j84zB7S8PTViuVBXjgk
+ r/GtfgO2U6/lq+eHCe8pPD6TLv8IZab8aLw78mafn55awgTuDCPWa0sr/0k++s/Q+k1AjcxZTZJ
+ Vs6+XtPfG3oIL0w==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[debian.org,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[debian.org:s=smtpauto.stravinsky];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-9652-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9651-lists,linux-integrity=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmx.de,kernel.org,ziepe.ca];
+	DKIM_TRACE(0.00)[debian.org:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[leitao@debian.org,linux-integrity@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: CA4FD5C1700
+	TAGGED_RCPT(0.00)[linux-integrity];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: B6CDF5C2A3B
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, May 24, 2026 at 08:15:11AM +0300, Jarkko Sakkinen wrote:
-> This series introduces key type for operating with asymmetric keys using
-> a TPM2 chip.
-> 
-> Change Log
-> ==========
-> 
-> v8:
-> - Reset patch change logs given the overhaul of the code and patches.
-> - Have only single new subkey type.
-> - Make key type only use TPM operations.
-> - Use TPM2_Sign for both ECC and RSA keys.
-> - Align key descriptions with other key types.
-> 
-> Previous versions
-> =================
-> 
-> * v7: https://lore.kernel.org/linux-integrity/20240528210823.28798-1-jarkko@kernel.org/
-> * v6: https://lore.kernel.org/linux-integrity/20240528035136.11464-1-jarkko@kernel.org/
-> * v5: https://lore.kernel.org/linux-integrity/20240523212515.4875-1-jarkko@kernel.org/
-> * v4: https://lore.kernel.org/linux-integrity/20240522005252.17841-1-jarkko@kernel.org/
-> * v3: https://lore.kernel.org/linux-integrity/20240521152659.26438-1-jarkko@kernel.org/
-> * v2: https://lore.kernel.org/linux-integrity/336755.1716327854@warthog.procyon.org.uk/
-> * v1: https://lore.kernel.org/linux-integrity/20240520184727.22038-1-jarkko@kernel.org/
-> * Derived from https://lore.kernel.org/all/20200518172704.29608-1-prestwoj@gmail.com/
-> 
-> 
-> Jarkko Sakkinen (3):
->   lib/asn1_encoder: Add asn1_encode_integer_bytes()
->   crypto: Migrate TPMKey ASN.1 objects from trusted-keys
->   keys: asymmetric: tpm2_asymmetric
-> 
->  crypto/Kconfig                            |    7 +
->  crypto/Makefile                           |    6 +
->  crypto/asymmetric_keys/Kconfig            |   17 +
->  crypto/asymmetric_keys/Makefile           |    1 +
->  crypto/asymmetric_keys/tpm2_asymmetric.c  | 1096 +++++++++++++++++++++
->  crypto/tpm2_key.asn1                      |   11 +
->  crypto/tpm2_key.c                         |  150 +++
->  include/crypto/tpm2_key.h                 |   46 +
->  include/linux/asn1_encoder.h              |    3 +
->  include/linux/tpm.h                       |   10 +
->  lib/asn1_encoder.c                        |   62 ++
->  security/keys/trusted-keys/Kconfig        |    2 +-
->  security/keys/trusted-keys/Makefile       |    2 -
->  security/keys/trusted-keys/tpm2key.asn1   |   11 -
->  security/keys/trusted-keys/trusted_tpm2.c |  119 +--
->  15 files changed, 1421 insertions(+), 122 deletions(-)
->  create mode 100644 crypto/asymmetric_keys/tpm2_asymmetric.c
->  create mode 100644 crypto/tpm2_key.asn1
->  create mode 100644 crypto/tpm2_key.c
->  create mode 100644 include/crypto/tpm2_key.h
->  delete mode 100644 security/keys/trusted-keys/tpm2key.asn1
-> 
-> -- 
-> 2.47.3
-> 
+tpm_buf_append() guards against overflow of the underlying buffer by
+comparing the running length against PAGE_SIZE. Every other site in the
+TPM core uses TPM_BUFSIZE (4096) as the protocol-level cap on TPM
+command and response sizes.
 
-There's some initial test code for this too:
+On 4K-page kernels PAGE_SIZE == TPM_BUFSIZE, so the two caps coincide
+and the inconsistency is invisible. On kernels with a larger base page
+size, e.g. CONFIG_ARM64_64K_PAGES=y or 16K pages, PAGE_SIZE exceeds
+TPM_BUFSIZE.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd-test.git/tree/overlay/usr/local/bin/tpmdd_tpm2_asymmetric.sh?h=main
+This is a latent bug rather than user-visible bug, given most of the
+cases PAGE_SIZE = 4096. The mismatch is still worth fixing because
+future callers (e.g. the proposed TPM_BUFSIZE increase to 8 KiB, and the
+Secure Launch tpm_buf rework) rely on the overflow flag being
+authoritative.
 
-Ugh, that's one hell of an url...
+Use TPM_BUFSIZE instead of PAGE_SIZE so the append-time check
+matches the transmit-time cap on every page size.
 
-BR, Jarkko
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Fixes: a74f8b36352e ("tpm: introduce tpm_buf")
+---
+ drivers/char/tpm/tpm-buf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/char/tpm/tpm-buf.c b/drivers/char/tpm/tpm-buf.c
+index dc882fc9fa9e..8da5de0f7159 100644
+--- a/drivers/char/tpm/tpm-buf.c
++++ b/drivers/char/tpm/tpm-buf.c
+@@ -7,6 +7,8 @@
+ #include <linux/module.h>
+ #include <linux/tpm.h>
+ 
++#include "tpm.h"
++
+ /**
+  * tpm_buf_init() - Allocate and initialize a TPM command
+  * @buf:	A &tpm_buf
+@@ -108,7 +110,7 @@ void tpm_buf_append(struct tpm_buf *buf, const u8 *new_data, u16 new_length)
+ 	if (buf->flags & TPM_BUF_OVERFLOW)
+ 		return;
+ 
+-	if ((buf->length + new_length) > PAGE_SIZE) {
++	if ((buf->length + new_length) > TPM_BUFSIZE) {
+ 		WARN(1, "tpm_buf: write overflow\n");
+ 		buf->flags |= TPM_BUF_OVERFLOW;
+ 		return;
+
+---
+base-commit: c1ecb239fa3456529a32255359fc78b69eb9d847
+change-id: 20260524-tpm-402b8478fec9
+
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
+
 
