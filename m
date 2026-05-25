@@ -1,132 +1,197 @@
-Return-Path: <linux-integrity+bounces-9656-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9657-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CGOfJyWNE2pzDQcAu9opvQ
-	(envelope-from <linux-integrity+bounces-9656-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 01:43:33 +0200
+	id qOWOOLn5E2puHwcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9657-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 09:26:49 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48FE25C4C9D
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 01:43:32 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A694C5C71CF
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 09:26:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EA889300820A
-	for <lists+linux-integrity@lfdr.de>; Sun, 24 May 2026 23:43:28 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 080F7300101B
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 07:26:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE800394789;
-	Sun, 24 May 2026 23:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9C43D1A98;
+	Mon, 25 May 2026 07:26:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyXFgO6S"
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="nBaY/qZe"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E7F2FE060;
-	Sun, 24 May 2026 23:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50FBC36E469
+	for <linux-integrity@vger.kernel.org>; Mon, 25 May 2026 07:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779666207; cv=none; b=fDltaYfi4a/m3JKeOw7uds2b6GaPeVkfRdEjWyp6DuNc3gOB1W7kB8A76EPXkAnrX+295X1UH12gp62fKouLNbNeY+VYi1Rwr3Dw7kV7a21le+Stdp9/YSSA3JSuIZlrRzdiBUbTcE6pyZ3L3KAnyKRW4QYaM7i9Hstzg6WvDA8=
+	t=1779694006; cv=none; b=KwMYBFJeTsAjR7sVCIBTRlqommYn775HLgdyR9yJw2lKptdqHfjqoJQSJieXpJtFyYU6HVZMJTb6WAvwtGdO2euEgNyoOce7hzBX2FmEvvL6VrLHYg/gs/Ro6dv/LXPY9W1CqSDgG34UBAGmOTOpsRkYTERBggp4yAhOtSrWHwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779666207; c=relaxed/simple;
-	bh=VOmEuoqj1QUiQHRcFyD2vyoILB4OVqxCbqJRFJ4a65k=;
+	s=arc-20240116; t=1779694006; c=relaxed/simple;
+	bh=VUGI187LbyURwGio3hctbiSTY5kdZTW5jVv9fi/0Ru4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VRpvVBjXHy/cLsYTbBKumpXDNfoZaonzdUNNB6Pr08povaw8iq0MAAeiiZEGpHlBUqWFkwakyABqRFAGb/JWViaoICN4f3Z8CsG0o2Tc2X81y8fI6eJAE+SmmnofSG0tQ5MVx688M6bY7BX2R0QwLKrIVw9odQDmyKwVKooaRQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyXFgO6S; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D0A3A1F000E9;
-	Sun, 24 May 2026 23:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779666206;
-	bh=4sOyiLRAJhl9sAFTpmyEnymyYch14BKVOAXeJ1tQ6aM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lyXFgO6S5Gh7biB5sBEb3niyyTwrPanLaytjF3N7j9CHWLqNYgqnO7qCshElmu/HH
-	 6Y5auQUrL9F6KptUoX2A+Nkrznnn7uUxVy3mfbDitJaYnYUW2TbqptuszhQ2dTObHm
-	 LmQcEk4OkwRU54MkO/jPf+XWSqt5yXU0p0uMG1jjx5T4r6vYf8r8gMqm54EecypArW
-	 6eUgNG7gnR4ZfKq8qXYdkkIsnZw5bYY4laxUdY/UtijvSD/cBS3hvr++5piQ7wP4PJ
-	 TEYDftW26jsmIEyO9dWHIf65CzFlXl/o9aD2A+fCrSBmeZKG1XQLW4stGMivWLWX2x
-	 hC0K56haUc9eQ==
-Date: Mon, 25 May 2026 02:43:22 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: keyrings@vger.kernel.org
-Cc: David Howells <dhowells@redhat.com>, linux-crypto@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	David Woodhouse <dwmw2@infradead.org>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Stefan Berger <stefanb@linux.ibm.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	"open list:SECURITY SUBSYSTEM" <linux-security-module@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 0/3]
-Message-ID: <ahONGtGQkrOYlunW@kernel.org>
-References: <20260524051519.3708075-1-jarkko@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pScPv7u24YrE+3oU2EZhN4eQMBDa4uHdGRqBOSO9bZzyn03fNfyYDaSMLBJzm+M/aifjcaCm6z14iQ2BE13E2OJ++6L4RuwnxwDdiqtb6VOzjTbh451yvccMZIIZS+of2hO/iW8rNh9fiRGGtPZtiJr4exvTfCOtrPUzqRZVqJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=nBaY/qZe; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-459bf19e87bso5351778f8f.1
+        for <linux-integrity@vger.kernel.org>; Mon, 25 May 2026 00:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1779694003; x=1780298803; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VUGI187LbyURwGio3hctbiSTY5kdZTW5jVv9fi/0Ru4=;
+        b=nBaY/qZexASnj4DXB71/ziGDnQUTp2oC+/nzYMVMAlK3fqQVVbzDAt4uWvudp+0znl
+         SK5gyfLB/6l2cqy45JJ40WbEPUFnsPo0w+igp5XEYAklCbbh+dAsg0YLs/17HmTeRoIy
+         2sLZl5KOV56zqrf4wqNguFjVSnqc6TwgQy0gV0/XP2sU7ekFGofJhmL3Y8f+5LEU+sh2
+         Dawd8zjt7HAAWCKYHYJbtVn5Mx4Zw80UcDlG9Q9qwpY8USmnyY5bAAzDG+/93rCOn1de
+         vr4Svi/pTl4Hp6LPgBMPbLPM14aNEHtKdSL3pEXUIFP0+UPjsVSxQhMzjjauUZe9Ee/a
+         Z5Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779694003; x=1780298803;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VUGI187LbyURwGio3hctbiSTY5kdZTW5jVv9fi/0Ru4=;
+        b=YYeD22bts7AR/ODXaP9chzqH+udnAsCFjXqdOZTnZ/arIQN5rLfHNRrgM1zn0gpl1Z
+         5GvPyooQNveF9j+D2pZrUADPTUhRiA1Wf4o5qHO6kG0JRyq9kkNvuUlrBo/BygqJkbwW
+         QsCe175UeQK2Tw+2eb/HDHj+AccNihOX28hL3A2nZW4RpCNwNAHe4V1ojpY//0ldGVxw
+         YatvXDl9KpPQzt68Ph0FoMCXkloCWO2gcUDD/k8ugFTJOcL8EdwwuLv16emLbnAWsO91
+         ax+CiiHUBlP1Ykqj5hKYo9poqLyTFmkPbHwXTlw40am4KqSjz+EiEOx+RV8d3VFkqGM9
+         zrwg==
+X-Forwarded-Encrypted: i=1; AFNElJ9SHnnLa2j0lCItHhWQly0saRaWgqMef7eUxRti0DmcLEQJ3cdumeU11IF/XE6M+blT94vkTqfqSmIPa0Lr4vo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOehyWtsjx6VaJv1HFq2Bihkd/c6aqUWeECrQmV1ZzxdtXOHa7
+	i/d7z5bG8VTyxY+p3MVzVyQTMIlvYxF6M/R2YtZx2x19MlJOgyYf2qBVv5fgmTrRNnc=
+X-Gm-Gg: Acq92OH1SC2UoE6Ertz4Cmps7jQp1HtqHPls1GDwoHQ3/6emLK/9GmnMiwyQu+1JhIY
+	Jx7c5/RQb9YScn5Wu17LmVOSeZA28j1wZgeA7YR+LOFN0HI+efUfe34uGVq1wqwaHDPW4YrGmky
+	EU8dMgzCgglk9PtYZdUM69iuwmNgC/wQNSbVcJm4zUMw/d0AdvApldLOBM5XjrJUaK0+5aP3QGc
+	CmCcYgBnf39f09TBQW21KMBHSyfav9UvSf4chqi0jKJmd05sBBMAKVDk0IidsPvDAnhjanK7wo0
+	0W5RlVf80A3kHyVnG2knWSu83vYHppYTggRrUM5k1amlHUleyJrfyGoJxpuy5R66cBXoNYNPG0G
+	SHEJLcidnS0vGDajehLx//L4YkzsNchYnzzlaj3MrXLPjzvm39Mamh21C75Ba05QIhA6nK1U4f1
+	8L0wPUo869AWl4ecS6O7FeRqDN3FKJ
+X-Received: by 2002:a05:6000:2c10:b0:43d:7a97:78b5 with SMTP id ffacd0b85a97d-45eb38d63a7mr22301124f8f.33.1779694002754;
+        Mon, 25 May 2026 00:26:42 -0700 (PDT)
+Received: from localhost ([2a02:8071:56d1:2de0:1d24:d58d:2b65:c291])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-45eb6d47b82sm24823111f8f.19.2026.05.25.00.26.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2026 00:26:41 -0700 (PDT)
+Date: Mon, 25 May 2026 09:26:40 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig_=28The_Capable_Hub=29?= <u.kleine-koenig@baylibre.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tpm: Use named initializers for arrays of i2c_device_data
+Message-ID: <ahP3V5viwMtnH9PC@monoceros>
+References: <20260518134035.644762-2-u.kleine-koenig@baylibre.com>
+ <ag98e88678TSfwxG@kernel.org>
+ <ag_vkHJjmCo_FFa5@monoceros>
+ <ahBPlW1l2RAdxpT6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5nopveidoqhxaoas"
 Content-Disposition: inline
-In-Reply-To: <20260524051519.3708075-1-jarkko@kernel.org>
-X-Spamd-Result: default: False [-2.16 / 15.00];
+In-Reply-To: <ahBPlW1l2RAdxpT6@kernel.org>
+X-Spamd-Result: default: False [-3.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	MID_RHS_NOT_FQDN(0.50)[];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[baylibre.com:s=google];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-9657-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9656-lists,linux-integrity=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DMARC_NA(0.00)[baylibre.com];
+	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,microchip.com,bootlin.com,tuxon.dev,vger.kernel.org];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	DKIM_TRACE(0.00)[baylibre.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[u.kleine-koenig@baylibre.com,linux-integrity@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,ietf.org:url]
-X-Rspamd-Queue-Id: 48FE25C4C9D
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: A694C5C71CF
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Sun, May 24, 2026 at 08:15:11AM +0300, Jarkko Sakkinen wrote:
-> This series introduces key type for operating with asymmetric keys using
-> a TPM2 chip.
 
-This would deserve more explanation but the original trait was to
-implement TPM2 parts of:
+--5nopveidoqhxaoas
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] tpm: Use named initializers for arrays of i2c_device_data
+MIME-Version: 1.0
 
-https://datatracker.ietf.org/doc/draft-woodhouse-cert-best-practice/00/
+Hello Jarkko,
 
-What motivated me to reiterate are actually these coding agents and how
-all secrets are sprayed across the home directory. So, besides iwd one
-could  use this feature to provide per-session cryptography for coding
-agents.
+On Fri, May 22, 2026 at 03:44:05PM +0300, Jarkko Sakkinen wrote:
+> On Fri, May 22, 2026 at 10:16:39AM +0200, Uwe Kleine-K=F6nig (The Capable=
+ Hub) wrote:
+> > On Fri, May 22, 2026 at 12:43:23AM +0300, Jarkko Sakkinen wrote:
+> > > Clean up can be side-effect but not a purpose.
+> >=20
+> > Oh, I disagree. Having code in a state where you can easily see what
+> > happens helps to concentrate on the parts that are more complicated. So
+> > it's a win for maintenance and lowering the entry bar for people who are
+> > not used to Linux kernel code. There are parts in the kernel that are
+> > complicated, and we won't get rid of them, because operating systems are
+> > complicated. But my POV here is that making it easier where it's
+> > possible is a good thing and a reason for itself. You might call that a
+> > paper cut only, but these add up.
+> >=20
+> > Also with the union in i2c_device_id the compiler warns you if some code
+> > is lacking a "const". So it becomes harder to make mistakes, this is
+> > also a reason that in my book is good enough for itself.
+>=20
+> Actually what I said is more important than ever before given AI agents.
+>=20
+> If I start to accept pure cleanups from humans it's like invitiation for
+> slop. This is actually an area where it would be advicable for any
+> maintainer to tighten the acceptance criteria.
 
-There's a lot to do with security and coding agents as we have literally
-moved to an era where we host indeterministically rogues software in our
-development workstations.
+I also disagree here. If a patch improves something (be it security,
+runtime behaviour or maintainability) that should be reason enough to
+accept it. If it's created by AI (or a by a newbie with the help of AI)
+that's a reason to make sure the patch has the intended effect, but
+that's essentially the same for any patch.
 
-There's other questions too that we need to eventually answer like for
-instace, how to deal with persistent agent memory stored at the
-computer's hard drive?
+I agree that AI might get problematic if it floods maintainers and
+effectively becomes a DOS attack to maintainer resources. But that
+doesn't necessarily makes the patches it proposes bad.
 
-The irony here is that LLM is really neither rogue nor a lier. It is
-just a text predictor optimizing for maximum reward and those
-descriptions are just human interpretations of the output text. It
-understand neither evil, lying nor quality for that matter ;-)
+Best regards
+Uwe
 
-BR, Jarkko
- 
+--5nopveidoqhxaoas
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmoT+aoACgkQj4D7WH0S
+/k55kAf/WirBb5saUL7Ev1pLCl0q58GbEQKdqUbGyrvbSGc8cYglVsjopgwdVjFp
+ymNsegq7ZumAxs1QumcIGgBgJTXh4eKCr9zk1FHJFQRoTQuXoEbTwXjgXsXlz43J
+P48HBaRfkRQtMIAuvnhE8pfEW7KJIABItUfU+kigDHRHTqXJ3TscK+b8MosASlKa
+Ov+7gbB4C8G68C0+TWv7gF/6rOqDERrUyC4DxbODXEN4GJubP4IXA3JyhZBAGrb8
+gNxvnxN6OilwrQdTwoBLLUy/mrVsO/yu/R3a49aAa1EBlQrHPeLCoJ0YfoCe5MY/
+Oj9A1we/OkHpCZteDY4mRxrhwhBtaw==
+=Y5x4
+-----END PGP SIGNATURE-----
+
+--5nopveidoqhxaoas--
 
