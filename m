@@ -1,48 +1,49 @@
-Return-Path: <linux-integrity+bounces-9658-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9659-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AF4GLSkAFGquIQcAu9opvQ
-	(envelope-from <linux-integrity+bounces-9658-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 09:54:17 +0200
+	id IPw8BioAFGquIQcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9659-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 09:54:18 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D4DD5C7500
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B27875C7507
 	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 09:54:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A9D36300D45B
-	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 07:54:15 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 274403004631
+	for <lists+linux-integrity@lfdr.de>; Mon, 25 May 2026 07:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB613D47CB;
-	Mon, 25 May 2026 07:54:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 597703D567A;
+	Mon, 25 May 2026 07:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="lPJAJ7Er"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="oXUUoUze"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B0A3D1706;
-	Mon, 25 May 2026 07:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC4981AAE28;
+	Mon, 25 May 2026 07:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779695654; cv=none; b=VZexVEimQpPYRtNDb4zgSAdj9jD1Q+n0HoWJ7bboHioC+4VexfvFWZIoMoMgl3rWR47wnMQ3L1lsW4ESgAfvUp1ed247P5KBvic16fraCPkEIq+lRIAP07btkv49dTL7rm4j1lkfKrM40eKO769i0mTUCm5tpu1312SfUZFgxpA=
+	t=1779695656; cv=none; b=QFnY4mml45xGhzro2oqS6jCTtd2Fc5d/tn0PyvNKwU5isYgC3SmQb+Jqcrkb/aY+hSM6hYNDOEme3q5GI40Q7a4kWFJ4vabNjE4tFHteBjxGuXwEnCm9k/8hDelwmiG0+6q/qJIX3LDzVcWT1tImJrPqy7vLGgydKWDJy9DX2Q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779695654; c=relaxed/simple;
-	bh=irMduKgaG0+E5hOjs8Hx9fmDyL4PqS4kMRNA3KBCc0c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=FyZZ8oz+KIuJzDSWF0IEG0PaPTkLv8mtQ50+jla5WCNGHhAgN9tCfJ4dH7JgC7Inp0nG8qRU2eSh5RLus1S5pExvUD9cXeciG9RIbOWMqtElMyCdspYWBjn7SOSJuS8Tl0wzpvlVIGAo3je9X4B+NXNmkAnniQ2geSfwRYO6kl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=lPJAJ7Er; arc=none smtp.client-ip=217.140.110.172
+	s=arc-20240116; t=1779695656; c=relaxed/simple;
+	bh=GLjR0pOZvKp6t4lRJ9X/m4e9jLFN4QEWM1Bm7UejT0s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Qi3VC1UFoODUbhSRx9YBsDU2Ir6n2d3+jNRq8/YsMFOSYo85MYqq/QqSKd7e7Kc5Wr3Y6vwcv9r5r+ccjQVR5hgSq/9xW+23KAdg1ceT4G5x9pehRKiGLN03lIZfrRRFfMeRBhhQ+5G3EUSC+I4bbUo5Rnn+7ocqwLOoPLoWfgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=oXUUoUze; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0BAB1A9A;
-	Mon, 25 May 2026 00:54:06 -0700 (PDT)
-Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CC9503F7D8;
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5BEBC2696;
 	Mon, 25 May 2026 00:54:09 -0700 (PDT)
+Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 49A233F7D8;
+	Mon, 25 May 2026 00:54:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1779695651; bh=irMduKgaG0+E5hOjs8Hx9fmDyL4PqS4kMRNA3KBCc0c=;
-	h=From:To:Cc:Subject:Date:From;
-	b=lPJAJ7ErdWWWjyEScpiAg9zLqg9pKYp/zd2lXLTbjvQ3zPQTqUjlA02vuQogq2394
-	 CA5crt1OgdR0rwtNGpd/OSUU5c+sM/YLLC/esTHkejhBBbDR/myAxay89rZEEd+TRq
-	 Nfy0Jbz6r/9db63lB6a/7ek/XYUbWW7Vy1zLiC28=
+	t=1779695654; bh=GLjR0pOZvKp6t4lRJ9X/m4e9jLFN4QEWM1Bm7UejT0s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=oXUUoUze3gRaoy5rs1I9qYbVpyax3KUTAbJsTV4KhfqThaacdhq5QUSnkOSCWIaHr
+	 WzWC3kQGmbn0DNhWmsmUfOroeCnim69N1eWFGKzp8qZ2CvmvL4bXB+xHVJBdsNSGFC
+	 2c/lVO06jz8HBaQVscj1aH0ONrl18lA5wC2aPPVI=
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: linux-security-module@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
@@ -59,133 +60,115 @@ Cc: paul@paul-moore.com,
 	eric.snowberg@oracle.com,
 	jgg@ziepe.ca,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH v4 0/3] introduce IMA_INIT_LATE_SYNC option
-Date: Mon, 25 May 2026 08:54:01 +0100
-Message-Id: <20260525075404.3480282-1-yeoreum.yun@arm.com>
+Subject: [PATCH v4 1/3] security: lsm: Allow LSMs to register for late_initcall_sync init
+Date: Mon, 25 May 2026 08:54:02 +0100
+Message-Id: <20260525075404.3480282-2-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260525075404.3480282-1-yeoreum.yun@arm.com>
+References: <20260525075404.3480282-1-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
 	FREEMAIL_CC(0.00)[paul-moore.com,linux.ibm.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca,arm.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9658-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9659-lists,linux-integrity=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[arm.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,arm.com:mid,arm.com:dkim]
-X-Rspamd-Queue-Id: 0D4DD5C7500
+	NEURAL_HAM(-0.00)[-0.998];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,arm.com:email,arm.com:mid,arm.com:dkim]
+X-Rspamd-Queue-Id: B27875C7507
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-To generate the boot_aggregate log in the IMA subsystem with TPM PCR values,
-the TPM driver must be built as built-in and
-must be probed before the IMA subsystem is initialized.
+There are situations where LSMs have dependencies that might mean they
+want to be initialised later in the boot process, to ensure those
+dependencies are available. In particular there are some TPM setups (Arm
+FF-A devices, SPI attached TPMs) required by IMA which are not
+guaranteed to be initialised for regular initcall_late.
 
-However, when the TPM device operates over the FF-A protocol using
-the CRB interface, probing fails and returns -EPROBE_DEFER if
-the tpm_crb_ffa device — an FF-A device that provides the communication
-interface to the tpm_crb driver — has not yet been probed.
+Add an initcall_late_sync option that can be used in these situations.
 
-To ensure the TPM device operating over the FF-A protocol with
-the CRB interface is probed before IMA initialization,
-the following conditions must be met:
+Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+---
+ include/linux/lsm_hooks.h |  2 ++
+ security/lsm_init.c       | 13 +++++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
-1. The corresponding ffa_device must be registered,
-   which is done via ffa_init().
-
-2. The tpm_crb_driver must successfully probe this device via
-   tpm_crb_ffa_init().
-
-3. The tpm_crb driver using CRB over FF-A can then
-   be probed successfully. (See crb_acpi_add() and
-   tpm_crb_ffa_init() for reference.)
-
-Unfortunately, ffa_init(), tpm_crb_ffa_init(), and crb_acpi_driver_init() are
-all registered with device_initcall, which means crb_acpi_driver_init() may
-be invoked before ffa_init() and tpm_crb_ffa_init() are completed.
-
-When this occurs, probing the TPM device is deferred.
-However, the deferred probe can happen after the IMA subsystem
-has already been initialized, since IMA initialization is performed
-during late_initcall, and deferred_probe_initcall() is performed
-at the same level.
-
-And the similar situation is reported on TPM devices attached on SPI
-bus[0].
-
-To resolve this, introduce IMA_INIT_LATE_SYNC option to initialise
-IMA at late_inicall_sync so that IMA is initialized with the TPM
-device probed defered.
-
-When this option is enabled, modules that access files in the
-initramfs through usermode helper calls such as request_module()
-during initcall must not be built-in. Otherwise, IMA may miss
-measuring those files since they're the file accesses before the
-initialisation of IMA [1].
-
-Link: https://lore.kernel.org/all/aYXEepLhUouN5f99@earth.li/ [0]
-Link: https://lore.kernel.org/all/2b3782398cc17ce9d355490a0c42ebce9120a9ae.camel@linux.ibm.com/ [1]
-
-Patch history
-=============
-from v3 to v4:
-  - rebase on v7.1-rc5
-  - introduce IMA_INIT_LATE_SYNC option to control IMA initailisation.
-  - https://lore.kernel.org/all/cover.1777036497.git.noodles@meta.com/
-
-from v2 to v3:
-  - Drop ff-a/pKVM diff (this seems to have a separate set of
-    discussion)
-  - Rework IMA delayed initialisation to avoid delaying when unnecessary
-  - Ensure IMA log clearly indicates when we've initialised late
-  - https://lore.kernel.org/all/20260422162449.1814615-1-yeoreum.yun@arm.com/
-
-from v1 to v2:
-  - add notifier to make ffa-driver pkvm initialised.
-  - modify to try initailisation again when IMA coudln't find proper TPM device.
-  - https://lore.kernel.org/all/20260417175759.3191279-1-yeoreum.yun@arm.com/#t
-
-
-Yeoreum Yun (3):
-  security: lsm: Allow LSMs to register for late_initcall_sync init
-  security: ima: introduce IMA_INIT_LATE_SYNC option
-  tpm: tpm_crb_ffa: revert defered_probed when tpm_crb_ffa is built-in
-
- drivers/char/tpm/tpm_crb_ffa.c    | 18 +++---------------
- include/linux/lsm_hooks.h         |  2 ++
- security/integrity/ima/Kconfig    | 10 ++++++++++
- security/integrity/ima/ima_main.c |  4 ++++
- security/lsm_init.c               | 13 +++++++++++--
- 5 files changed, 30 insertions(+), 17 deletions(-)
-
-
-base-commit: e7ae89a0c97ce2b68b0983cd01eda67cf373517d
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index b4f8cad53ddb..c4488c4a6d8a 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -167,6 +167,7 @@ enum lsm_order {
+  * @initcall_fs: LSM callback for fs_initcall setup, optional
+  * @initcall_device: LSM callback for device_initcall() setup, optional
+  * @initcall_late: LSM callback for late_initcall() setup, optional
++ * @initcall_late_sync: LSM callback for late_initcall_sync() setup, optional
+  */
+ struct lsm_info {
+ 	const struct lsm_id *id;
+@@ -182,6 +183,7 @@ struct lsm_info {
+ 	int (*initcall_fs)(void);
+ 	int (*initcall_device)(void);
+ 	int (*initcall_late)(void);
++	int (*initcall_late_sync)(void);
+ };
+ 
+ #define DEFINE_LSM(lsm)							\
+diff --git a/security/lsm_init.c b/security/lsm_init.c
+index 7c0fd17f1601..a1ad641811de 100644
+--- a/security/lsm_init.c
++++ b/security/lsm_init.c
+@@ -556,13 +556,22 @@ device_initcall(security_initcall_device);
+  * security_initcall_late - Run the LSM late initcalls
+  */
+ static int __init security_initcall_late(void)
++{
++	return lsm_initcall(late);
++}
++late_initcall(security_initcall_late);
++
++/**
++ * security_initcall_late_sync - Run the LSM late initcalls sync
++ */
++static int __init security_initcall_late_sync(void)
+ {
+ 	int rc;
+ 
+-	rc = lsm_initcall(late);
++	rc = lsm_initcall(late_sync);
+ 	lsm_pr_dbg("all enabled LSMs fully activated\n");
+ 	call_blocking_lsm_notifier(LSM_STARTED_ALL, NULL);
+ 
+ 	return rc;
+ }
+-late_initcall(security_initcall_late);
++late_initcall_sync(security_initcall_late_sync);
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
