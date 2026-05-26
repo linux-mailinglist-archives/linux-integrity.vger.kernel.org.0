@@ -1,168 +1,157 @@
-Return-Path: <linux-integrity+bounces-9683-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9684-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OAmEEojkFWrdeAcAu9opvQ
-	(envelope-from <linux-integrity+bounces-9683-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 20:20:56 +0200
+	id KMMIFhj2FWqzfwcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9684-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 21:35:52 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F2235DB457
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 20:20:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A50AF5DC08C
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 21:35:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9E3733010F25
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 18:20:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B91593036434
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 19:35:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DFC4218BA;
-	Tue, 26 May 2026 18:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3583AA4E1;
+	Tue, 26 May 2026 19:35:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NI2hQmpE"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE764218A5
-	for <linux-integrity@vger.kernel.org>; Tue, 26 May 2026 18:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF52D3A4F47;
+	Tue, 26 May 2026 19:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779819638; cv=none; b=gq9LMct+nhA3NkVruFDerw6sj6mzigReCEXCI2RimR9ChK2jMutCXb7UNxQYqAoOr5//+Zsutmec/IeEgKGe45ZWrfFHw8TaEYdsfUszKhbzTThpGFaKx1kWpBIbcSnAz1c4T11al+ZFjJTbVG7Po8G5HCrjymOfSd4j8QQONEc=
+	t=1779824148; cv=none; b=SXWIlyYJGemedllNnpIPr/gHsFz45wzokntt2tfU2DCwmopZSUYeReQeLx50iRsL6UWljuvmzZwseC4luX+fRtVz4ZDtu7YuwjPXRtE5TEgEvWjg31u3y5xJgBAd/wdp9/bIY+IzoqqabedbcFfxHifioVZ1Mi4z3yvO1geJOe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779819638; c=relaxed/simple;
-	bh=I4ytr2AWirUEzmeLuOnc/4U0/hxql28G8RhQSyhu0CI=;
+	s=arc-20240116; t=1779824148; c=relaxed/simple;
+	bh=fCt0NNLafq5Ulnhjmcnr3WsqilugN8RDFSIfiWZgBQc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tqr7hRW60tkY2VMr/wTPjyqB89ggGzGlVAK716vfhh+Bl7hfTYHleBm60/VOpj300Cw14tvFFZh2nvoUr5K+dGHLlMjgjFax5dKgEA2k1S5V7+Y09JJtjhh9iFSg9yc6utDBqiClQ97D4MpjARgfzHk6DcXCA9uW7Q5Kxstmgxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4891d7164ddso52523095e9.3
-        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2026 11:20:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779819633; x=1780424433;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MHH3yPE1r4W1hBBuLJyFdGXQJe8rCYCaC0Nwz7rJsCs=;
-        b=bmxxapsYledc+2RaMHLCL36ipnUKmDGb+tYhHZ9QqOkRHOvb3EHLpU28m0Z5coirw8
-         XBk1Rp5lqk6uIipYF7WkdeWRHVKIssaG4s3ApimZFO3rWDu4TaolwTX2V7hbGHF8MdjB
-         TRlS6DK9HkapHXWp8pdexIzwThaVE8N79eTMjJeS8ZP49dh09EdYtBaRn/gE7ge8nvJ5
-         L8amcJQaxijVfu2m2UbbkXBPtGcIODVopyW1HnMln9Ih6OdaDcjVWdB7PkAfQwRvW7dB
-         JylEAsQFf5EEG1c/X5YLsWtiEs2ojQ9lKPrM61OAED/S9U2WN1EIttIb0AteLQo7Ibbr
-         9yGg==
-X-Forwarded-Encrypted: i=1; AFNElJ9KP9pPp06hhcM6UFVRHJCLUrXywexft+kjbmmsq49jRdAU/gLTUqtXdLe1T0OqMGWywiPb2kGR7Axb0IH+PXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZL0dAvb5MPI4/nE3AdioCsommkYEeQQWFCXO8s/S9xgH9bRUa
-	TjDjOlQtHue5XvT6PKBbK5LYfDLrOZ2P0y8gPHwtKHmImY8Czs2JaPCJ
-X-Gm-Gg: Acq92OGWgx4PsiliAu3B5Adc7obToqnC3YOqZrj8uA8sxTsyAty/p9H88Bl02mppe9c
-	8Jsww38KfbDclwScDeNAJtjWclAbZj1l9DdUDSiVvG1ttQ8vhkcNXB/gcI60O1DXcb+8wh9pRB8
-	iq8/dLm2jLeW1FRgdZ2c3rtM6Hwd3xf8BwKGAy9iaHqD4RheAk8ssY1ERiigBxhudlohoEqo4Ie
-	3/puHVPEPC7lrjstjSbQ4TnvYmjzzL4XCTiJ9uUwl/x6nsvAXc8hqR4kSYlPIh20mAwj5wJcnVR
-	rP+3k5T437BJXbBcclHCzOsuJB9VM8BMqppxarqxxTWr+4ubWgsLdZJpcmt+BJR4N9QfzzHPFLx
-	+kGyTvbhhh/1/FsyGw6VZUAoMLLLUHTzpcyV/Avyck0p0jNBYcKZox5OSZ6SJLK5wcXxqBIMJmR
-	oEgwgRJhuoZdseX7Ar2sIdBfUm1pFxPITiEmCKfnQnm52VfaA=
-X-Received: by 2002:a05:600c:444b:b0:490:b07:5fd1 with SMTP id 5b1f17b1804b1-490424aa00fmr304755965e9.11.1779819633114;
-        Tue, 26 May 2026 11:20:33 -0700 (PDT)
-Received: from gmail.com ([62.197.47.167])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6d5cb9asm40641882f8f.27.2026.05.26.11.20.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2026 11:20:32 -0700 (PDT)
-Date: Tue, 26 May 2026 19:20:31 +0100
-From: Breno Leitao <leitao@debian.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org, noodles@fb.com, 
-	James.Bottomley@hansenpartnership.com, kernel-team@meta.com
-Subject: Re: [PATCH] tpm: cap tpm_buf_append() at TPM_BUFSIZE, not PAGE_SIZE
-Message-ID: <ahXijb7wF6BKrT9d@gmail.com>
-References: <20260524-tpm-v1-1-2420a5977da6@debian.org>
- <ahOItgfj4k-NLAPa@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NtUy0eytFPgt93WYTQm6Xr+X6N0WJ/j1hbSrbPxb/Ubms3Y+75qF44yOH1u9EixH5HzBlXD5dt8V+ktDwvmZcnzMd5Z7C864r/kG35N4EN5DZo2imF45W/CMxnUp8GOJ73xiDXLugv4sR6hzuzTcwHwkwJONA66T/e/C2gE/qc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NI2hQmpE; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2820A1F000E9;
+	Tue, 26 May 2026 19:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779824147;
+	bh=UqsXzG3EIwp1sqqf8YZYAAjA95+BZS9vLPguSQeo5Yk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NI2hQmpEQE/z2Z+7tSge10ATcMoE1mRlOv0DhD0ugjyRU8c2YkeTcET/dsexrEUuI
+	 NxWxcN5OYV/eg8o9PKGj8IlOs6gyc+Thd8rGvEeP032p2tY+eC/tzPoned/ulilAO/
+	 X2S+PGlRRo8VZASpofRBcHQTuJQPIqzh561oweaoJJ4Hi0nOEvLsLGSZBKcJaiF3Z6
+	 CxEu+yj+o1BSaHDOci5WbBZn+7dp79waI68V8PVkUWse7BCiYkUbEFOa+huLp5dQ0H
+	 /45bVYFa1BKQu1uvIiqFiSFstTPw2GPObKEIkixs/hj1fbmRAT3VOtlTschOIxgRw3
+	 CeOXypizc93Sg==
+Date: Tue, 26 May 2026 12:35:43 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Sudeep Holla <sudeep.holla@kernel.org>
+Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: Re: [PATCH] firmware: arm_ffa: Treat missing FF-A feature on a
+ platform as a probe miss
+Message-ID: <20260526193543.GB2851089@ax162>
+References: <20260526103649.5684-1-sudeep.holla@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ahOItgfj4k-NLAPa@kernel.org>
-X-Spamd-Result: default: False [-1.36 / 15.00];
+In-Reply-To: <20260526103649.5684-1-sudeep.holla@kernel.org>
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[debian.org : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,vger.kernel.org,fb.com,hansenpartnership.com,meta.com];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9684-lists,linux-integrity=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9683-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[leitao@debian.org,linux-integrity@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 4F2235DB457
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: A50AF5DC08C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hello Jarkko,
-
-On Mon, May 25, 2026 at 02:24:38AM +0000, Jarkko Sakkinen wrote:
-> On Sun, May 24, 2026 at 10:01:17AM -0400, Breno Leitao wrote:
-> > tpm_buf_append() guards against overflow of the underlying buffer by
-> > comparing the running length against PAGE_SIZE. Every other site in the
-> > TPM core uses TPM_BUFSIZE (4096) as the protocol-level cap on TPM
-> > command and response sizes.
-> > 
-> > On 4K-page kernels PAGE_SIZE == TPM_BUFSIZE, so the two caps coincide
-> > and the inconsistency is invisible. On kernels with a larger base page
-> > size, e.g. CONFIG_ARM64_64K_PAGES=y or 16K pages, PAGE_SIZE exceeds
-> > TPM_BUFSIZE.
-> > 
-> > This is a latent bug rather than user-visible bug, given most of the
-> > cases PAGE_SIZE = 4096. The mismatch is still worth fixing because
-> > future callers (e.g. the proposed TPM_BUFSIZE increase to 8 KiB, and the
-> > Secure Launch tpm_buf rework) rely on the overflow flag being
-> > authoritative.
-> > 
-> > Use TPM_BUFSIZE instead of PAGE_SIZE so the append-time check
-> > matches the transmit-time cap on every page size.
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > Fixes: a74f8b36352e ("tpm: introduce tpm_buf")
-> > ---
+On Tue, May 26, 2026 at 11:36:49AM +0100, Sudeep Holla wrote:
+> When FF-A initialisation is driven from a platform device probe, systems
+> that do not implement FF-A can return -EOPNOTSUPP from the early transport
+> or version discovery paths. Driver core treats that as a matched probe
+> failure and prints:
 > 
-> There is no bug w/o a sympton of some sort. Not sure what the problem is here.
+>   |  arm-ffa arm-ffa: probe with driver arm-ffa failed with error -95
+> 
+> That is noisy for a firmware interface that can be absent on otherwise
+> valid systems. Driver core already treats -ENODEV and -ENXIO as quiet
+> rejected matches, so translate only the early unsupported discovery cases
+> to -ENODEV. Keep later setup failures unchanged so real FF-A
+> initialisation problems are still reported as probe failures.
+> 
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Closes: https://lore.kernel.org/all/20260523001148.GA1319283@ax162
+> Signed-off-by: Sudeep Holla <sudeep.holla@kernel.org>
 
-Sorry, there is no current problem in here, but there is inconsistency.
+Appears to work for me.
 
-There isn't a real problem today, just an inconsistency and what I
-called a latent bug, let me justify myself.
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Everywhere else in the TPM core uses TPM_BUFSIZE as the protocol cap,
-but this particular site uses PAGE_SIZE instead. Since PAGE_SIZE >=
-TPM_BUFSIZE, it doesn't cause any issue at the moment.
+> ---
+>  drivers/firmware/arm_ffa/driver.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> index 54984e1b9741..0f468362c288 100644
+> --- a/drivers/firmware/arm_ffa/driver.c
+> +++ b/drivers/firmware/arm_ffa/driver.c
+> @@ -2109,7 +2109,7 @@ static int ffa_probe(struct platform_device *pdev)
+>  
+>  	ret = ffa_transport_init(&invoke_ffa_fn);
+>  	if (ret)
+> -		return ret;
+> +		return ret == -EOPNOTSUPP ? -ENODEV : ret;
+>  
+>  	drv_info = kzalloc_obj(*drv_info);
+>  	if (!drv_info)
+> @@ -2117,8 +2117,11 @@ static int ffa_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, drv_info);
+>  
+>  	ret = ffa_version_check(&drv_info->version);
+> -	if (ret)
+> +	if (ret) {
+> +		if (ret == -EOPNOTSUPP)
+> +			ret = -ENODEV;
+>  		goto free_drv_info;
+> +	}
+>  
+>  	if (ffa_id_get(&drv_info->vm_id)) {
+>  		pr_err("failed to obtain VM id for self\n");
+> -- 
+> 2.43.0
+> 
 
-That said, I still think the change is worthwhile for two reasons:
-
-1. Consistency with the rest of the TPM core.
-2. Decoupling TPM_BUFSIZE from PAGE_SIZE, so that if TPM_BUFSIZE ever
-   grows beyond PAGE_SIZE[1], this code won't silently break. That's what I
-   was referring to as a "latent bug" — though admittedly that phrasing
-   was probably too strong.
-
-Link: https://lore.kernel.org/all/20260518151724.730443-6-armenon@redhat.com/ [1]
-
-Thanks for the review,
---breno
-
-
-
+-- 
+Cheers,
+Nathan
 
