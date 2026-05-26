@@ -1,198 +1,223 @@
-Return-Path: <linux-integrity+bounces-9669-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9670-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yHs8L617FWpEVwcAu9opvQ
-	(envelope-from <linux-integrity+bounces-9669-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 12:53:33 +0200
+	id IH9rE0R/FWqtWAcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9670-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 13:08:52 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C25F05D46DA
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 12:53:32 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC8505D4ACA
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 13:08:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C17DC300A278
-	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 10:53:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8CF90300BD8E
+	for <lists+linux-integrity@lfdr.de>; Tue, 26 May 2026 11:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B895A3DE432;
-	Tue, 26 May 2026 10:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E95FB3CAA5E;
+	Tue, 26 May 2026 11:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="P9vj4BDJ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="cqPiXxJ9"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D943DD87B
-	for <linux-integrity@vger.kernel.org>; Tue, 26 May 2026 10:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926E933C52E;
+	Tue, 26 May 2026 11:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779792807; cv=none; b=VZ+bECqjTdpxtM3WdDPT1YtQCNAeDNinup77/D75HCZ8tB/ZTxJZ8Wja1rS30gPYv/00p5FcMnWoAeFc9qTpfOhzVaNDy1PX0CIQ9u24kkYtB3o3VkRPDv/5U8HX2qeHijV84TN91YuM7+dZ2z5OPej5ua0vJgwCROBtO9GJ9dg=
+	t=1779793728; cv=none; b=X9lGaj05Kq8iETPX5JY9iaN9IX3XF0/HQMTVFMkHMJ+gAj8UNsLc2hM7grwJ9JpUgaoThbt0ydYzzhucBEBG25VlmlhCFSzPXYiSkL0AxqrNdTgtKE6v0HmBLkN5Egafj9GmfFe0eHpwPmRxJjgQbUlVIwSgLJytWD92mJb2Gh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779792807; c=relaxed/simple;
-	bh=2IkIxZNvBAu13Ws4fKNVPeBXSlEtFgUgVx7YLgf7FqE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aWnbVAbZSlZ2rBSQf5nWzho9B2GqwqvBiZAh8AF7LPEFBrha5GUL4Mfs6pQ3VZjNQyAj4xVQ7iCGtEEgKd7qwEc8jbUor+Y9Xyp2o38w4cEcCZjgEZcyUPSaIk3h/LOUnERV2OmZu8412eVhx5s66wMKfOQINrm0sS8hg885V24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=P9vj4BDJ; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-459bf19e87bso6132331f8f.1
-        for <linux-integrity@vger.kernel.org>; Tue, 26 May 2026 03:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1779792804; x=1780397604; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ankQ6/0PQUNDJRsfxZkkDwmN1Szk45mZhdmBSOH36Gk=;
-        b=P9vj4BDJ738bEySM3lt0h10n0hFn2Ykf0bT4a2Ll2krlRcxNrmJeB0syyRYI6qsWiL
-         KcemkmekriERSdv9CZwdKcd8B4MLcfYU20brkmsELktEXxiUuOhni82tA4J9/a3JhPyX
-         FYbvNfo52NRmuEbOOlML/hghFkxL9ghyvu/UG2Xe9wkOpuHhZkDThcZdSacQlbHMohwl
-         VClNx+443LrxM+VJrbHTQ2vd8eKuItYd12wD9sQBySuyelP0e5ZeJVW5RIpSqQZo1hQF
-         Hp82oIo3QlZwwIKSWGmjzXT52yIKF+m9a9s34CXrRp1Fneg5HFHq/gtmu41dpQl54wUR
-         WSFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1779792804; x=1780397604;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ankQ6/0PQUNDJRsfxZkkDwmN1Szk45mZhdmBSOH36Gk=;
-        b=mNW920p2GYOkVQRAID9ASiD7xczaRPkITdR+eHzBfeEkAY0DzxOJlKvOsWaeyWUPsY
-         gIyoLZKfaumyjvMRXJpTRaLb8VTOvB5ITp9vRbn43OlLC4d5ZZmqVZkFD+VahtgmUtcy
-         m2jdr80uEweIinK1k7FEwgXyLXzhLTS4pJR3aQd67vWVWaXMSzVHFyejW2EbsuDuADAE
-         bEZIq/xtreGHD6tTgUrQ48oV2j0LXc9d8FQz55BNgKBkHHpWyAxOIauK35mJ7CzbD2uf
-         tEFLqrKH9+XaTjmXpM8P/LS4afxiMB7pFTcCurMc6Q1QOkchzra4/B4ElUgzVS6Varqh
-         jpMw==
-X-Forwarded-Encrypted: i=1; AFNElJ+FgVy+ny2877DmtGIVwUGfNJDIxFyJAlFWh9Nxj7tbTd8HwQDnvGba8h76RdRe1eVhSf0MsGmtV0Y8+6+uxLA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrO7NllG8qvUFYn7S0UbqZXMsw6yZhVGCvGx2IIaz27fuATD/7
-	I698ME8+p8iCrCuMYE2gKoYhuIZPg6y+6YDV/kajkzWcbT68y266ICNpAOLKr3XP1KU=
-X-Gm-Gg: Acq92OFHjxy4gOOUMnxDtQ+uLo5o81WOnNOw1Vyn8igpzxR61fiSoWJOAyJg89Mdu5u
-	zZ66wqp+Ddnu/AhCWDbS9fu4xsozCrO2gtzShc1evOeVqGlYemclTePp0HMcaoNgmC5t8cxXckC
-	VJRrwEyhfrCwLi/f3g3n7lRnTN7FjXx+T6ypa91aH90RDCPRGq9eX9FT2C4/ySbQONbGGrzlB6G
-	bn/JVONbaYa50xkw2LXZLN+rPWcHrAQsfv/AKjT7tgTjJzvJaWvIadzwjSwMKn5X2zCB3srW0/r
-	/w/RBY01ZXsIamNQz8dbKNnXkFnCVWhM7r/dJ5H9DCt80sSP+yz1gvDDRrHOETuxZ8d/DqOJYn/
-	mCi6Iv0kTd5y94EqyjXY7j8NuhV6Tp0nS5L1N0evZvIZXLZkk/PLPKsVU1RRMwy0s8g61FSNq01
-	GcBUAvuLMAgU03fBRSmu7Vl3jTP/fT+JibxkQBr/aE6ggKgx4u57R4Vqa4eL+Jul+It/bUJwjBw
-	aZOme51mj8SI/P7wbBWz8bDeJB6+WiCTkhAWOL9BZWyZWpj7pmPYhC4S7Yi7gEzBHhN9g==
-X-Received: by 2002:a05:6000:2889:b0:43c:fdd:ea96 with SMTP id ffacd0b85a97d-45eb38c5259mr30630897f8f.26.1779792804025;
-        Tue, 26 May 2026 03:53:24 -0700 (PDT)
-Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-45eb6bc5479sm36850849f8f.0.2026.05.26.03.53.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2026 03:53:23 -0700 (PDT)
-Message-ID: <0a0736a4-2cdd-49f2-9062-e2f18d769fc0@suse.com>
-Date: Tue, 26 May 2026 12:53:22 +0200
+	s=arc-20240116; t=1779793728; c=relaxed/simple;
+	bh=dqddeWlw96vcPwqnH1MFYNx6lWkzP6atdgtYZoDeP9E=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=SBwHTLPulDPlQKsmJI9PtZ76ge82ml5PcMYCnFUcuODt3YHtH7wFr6VIlMwSdZEY/cK3neEeasshrSMj8pArZFz8PP32mJpMy3d6SWqKvAgPh8REUU2Kxo1ari6STPcUfC/kIoJEnZZwEmZD55UYiZ0K3QSi19JkRN5uhJ4hLKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=cqPiXxJ9; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64Q45UJt955810;
+	Tue, 26 May 2026 11:08:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=4IJRm5
+	jVB3krHAAk9FRxTjMQzBs4+dOPFkyoCcixxRw=; b=cqPiXxJ9W8XaZTvnmeVboH
+	Sf9NP6wooHEExBxc+dD8R3LPMH911AXPUQakt16vuKSZ/xpvF0+ply8EU6d8Qrcg
+	GRrT5TClymnHR8HYe+N95LqhubXlmVXXlBSk7KYvQRkiCVlElwhDYxehyXWz0woL
+	4LVTDG6ydEMcVTyF8+RLydoUq4Rvpec7VD0glITHxe3WS1/ANDdrgeFKCwzVncEO
+	/p39uzwJ31RUr0Y5Sl4IbVMVJe4sw3E60fEUqoYthlwoHMjhN/0PdVR18ty+xBKd
+	dl+9++iUKDVKObVeLQNWOmtj1SrsLYi7n3e7zFqG31DVT1RNxCaMrcXpley+rLOQ
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4eb4nuks4u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 May 2026 11:08:04 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64QAs7uh015085;
+	Tue, 26 May 2026 11:08:03 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ebrsg8tn5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 May 2026 11:08:03 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64QB7XnZ31261312
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 26 May 2026 11:07:33 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C769158064;
+	Tue, 26 May 2026 11:08:02 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4AE675806E;
+	Tue, 26 May 2026 11:08:01 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.143.56])
+	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 26 May 2026 11:08:01 +0000 (GMT)
+Message-ID: <f00aabe05aeee7f6fd0426fd992839758d810da7.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 11/13] ima: Support staging and deleting N
+ measurements entries
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
+        skhan@linuxfoundation.org, dmitry.kasatkin@gmail.com,
+        eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
+        gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com,
+        nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
+In-Reply-To: <20260429160319.4162918-12-roberto.sassu@huaweicloud.com>
+References: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
+	 <20260429160319.4162918-12-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 May 2026 07:08:00 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 07/14] module: Make module authentication usable
- without MODULE_SIG
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Luis Chamberlain <mcgrof@kernel.org>,
- Sami Tolvanen <samitolvanen@google.com>, Daniel Gomez
- <da.gomez@samsung.com>, Paul Moore <paul@paul-moore.com>,
- James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>,
- Roberto Sassu <roberto.sassu@huawei.com>,
- Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
- Eric Snowberg <eric.snowberg@oracle.com>,
- Nicolas Schier <nicolas.schier@linux.dev>, Daniel Gomez
- <da.gomez@kernel.org>, Aaron Tomlin <atomlin@atomlin.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Nicolas Bouchinet <nicolas.bouchinet@oss.cyber.gouv.fr>,
- Xiu Jianfeng <xiujianfeng@huawei.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- bpf@vger.kernel.org, =?UTF-8?Q?Fabian_Gr=C3=BCnbichler?=
- <f.gruenbichler@proxmox.com>, Arnout Engelen <arnout@bzzt.net>,
- Mattia Rizzolo <mattia@mapreri.org>, kpcyrd <kpcyrd@archlinux.org>,
- Christian Heusel <christian@heusel.eu>, =?UTF-8?Q?C=C3=A2ju_Mihai-Drosi?=
- <mcaju95@gmail.com>, Eric Biggers <ebiggers@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-modules@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-integrity@vger.kernel.org,
- debian-kernel@lists.debian.org
-References: <20260505-module-hashes-v5-0-e174a5a49fce@weissschuh.net>
- <20260505-module-hashes-v5-7-e174a5a49fce@weissschuh.net>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260505-module-hashes-v5-7-e174a5a49fce@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI2MDA5NyBTYWx0ZWRfX1BHYFOSSUhbv
+ JroqqYjmzNlnHVcP9DesTsIpfEea4Eqr1ZLa3w5hl7EpoWohIqDaKcL9NNyRj90iW00al4aR2Eb
+ AK/ZA3vIt3hLhBSUXwWesn5vDEKObKK5aC7dYgjyJk1UePaDbq4Gv8VWFF61GHgksurJyUkimEd
+ ng6By1OOLD4rPfvbDObhAfprqhGZQ4eITYUOb0kJ2gajjamMRlfdLGp1686PV0Zbj/WwNi1XZPz
+ 4xRCQBvJwQYoRCB0sQAy6ex1zd2ZssWgabf6Gv0daI1f4D1HdZtCr/cNjTf4D3lY8aYo2x2lX0F
+ aiUszFh5Jsrwywmnf7pHxtLxPTRxW36cOS3J6b7Y8WRnovpv95ZYRVEIjEuWNssKcFys5COkc1T
+ TMhm9IBZVxUCqpLI5p9VoP+R44DgiKG7MaHVjo5OFvDADUv2KqTaRMC7Y8rAZKRxjxNlbaDEC/x
+ 3ibwTXIpEVos7yKTGTQ==
+X-Authority-Analysis: v=2.4 cv=UtJT8ewB c=1 sm=1 tr=0 ts=6a157f15 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=NEAV23lmAAAA:8
+ a=i0EeH86SAAAA:8 a=yMhMjlubAAAA:8 a=VnNF1IyMAAAA:8 a=Q4I1xE8-wxmIWu5A6OUA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: zd6N8FEPg0-gyZxI2iCIB0GJksVXBj1S
+X-Proofpoint-GUID: fjZLvl1KxX-DfFGl7kXm4CKkxkASDtJF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-05-26_02,2026-05-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 suspectscore=0 adultscore=0 clxscore=1015 bulkscore=0
+ phishscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605260097
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9670-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,iogearbox.net,gmail.com,arndb.de,google.com,samsung.com,paul-moore.com,namei.org,hallyn.com,lwn.net,linux.ibm.com,ellerman.id.au,huawei.com,oracle.com,linux.dev,atomlin.com,oss.cyber.gouv.fr,vger.kernel.org,proxmox.com,bzzt.net,mapreri.org,archlinux.org,heusel.eu,linutronix.de,lists.ozlabs.org,lists.debian.org];
-	DKIM_TRACE(0.00)[suse.com:+];
-	TAGGED_FROM(0.00)[bounces-9669-lists,linux-integrity=lfdr.de];
+	FREEMAIL_TO(0.00)[huaweicloud.com,lwn.net,linuxfoundation.org,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,huawei.com:email];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[petr.pavlu@suse.com,linux-integrity@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCPT_COUNT_GT_50(0.00)[52];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: C25F05D46DA
+	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[11]
+X-Rspamd-Queue-Id: EC8505D4ACA
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 5/5/26 11:05 AM, Thomas Weißschuh wrote:
-> The module authentication functionality will also be used by the
-> hash-based module authentication. Split it out from CONFIG_MODULE_SIG
-> so it is usable by both.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> [...]
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index f535181e0d98..84297da666ff 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -271,9 +271,12 @@ config MODULE_SIG
->  	  debuginfo strip done by some packagers (such as rpmbuild) and
->  	  inclusion into an initramfs that wants the module size reduced.
->  
-> +config MODULE_AUTH
-> +	def_bool MODULE_SIG
-> +
->  config MODULE_SIG_FORCE
->  	bool "Require modules to be validly signed"
-> -	depends on MODULE_SIG
-> +	depends on MODULE_AUTH
->  	help
->  	  Reject unsigned modules or signed modules for which we don't have a
->  	  key.  Without this, such modules will simply taint the kernel.
+On Wed, 2026-04-29 at 18:03 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>=20
+> Add support for sending a value N between 1 and ULONG_MAX to the IMA
+> original measurement interface. This value represents the number of
+> measurements that should be deleted from the current measurements list. I=
+n
+> this case, measurements are staged in an internal non-user visible list,
+> and immediately deleted.
+>=20
+> This staging method allows the remote attestation agents to easily separa=
+te
+> the measurements that were verified (staged and deleted) from those that
+> weren't due to the race between taking a TPM quote and reading the
+> measurements list.
 
-Should MODULE_SIG_FORCE be renamed to MODULE_AUTH_FORCE, along with
-renaming the sig_enforce functionality in kernel/module/auth.c to
-auth_enforce?
+The reason for removing records from the IMA measurement list is to free ke=
+rnel
+memory.  However, the level of precision in removing only those measurement=
+s
+needed for the quote seems necessary only if the measurement records are no=
+t
+being saved.=C2=A0 Upstreaming a feature to remove measurement records from=
+ the IMA
+measurement list is to address the kernel memory issue =E2=80=94 clearly no=
+t to drop
+measurement records and break attestation.
 
--- 
-Thanks,
-Petr
+>=20
+> In order to minimize the locking time of ima_extend_list_mutex, deleting
+> N entries is realized by doing a lockless walk in the current measurement=
+s
+> list to determine the N-th entry to cut, to cut the current measurements
+> list under the lock, and by deleting the excess entries after releasing t=
+he
+> lock.
+>=20
+> Flushing the hash table is not supported for N entries, since it would
+> require removing the N entries one by one from the hash table under the
+> ima_extend_list_mutex lock, which would increase the locking time.
+>=20
+> The ima_extend_list_mutex lock is necessary in ima_dump_measurement_list(=
+)
+> because ima_queue_delete_partial() uses __list_cut_position() to modify
+> ima_measurements, for which no RCU-safe variant exists. For the staging
+> with prompt flavor alone, list_replace_rcu() could have been used instead=
+,
+> but since both flavors share the same kexec serialization path, the mutex
+> is required regardless.
+
+Thank you for the clear explanation for the changes and limitations require=
+d to
+support this feature.
+
+The changes needed for supporting "stage and delete N" measurement records
+should be limited to this patch.  Patch 9/13 should have used
+list_replace_rcu(), without the mutex_lock.
+
+>=20
+> Link: https://github.com/linux-integrity/linux/issues/1
+> Suggested-by: Steven Chen <chenste@linux.microsoft.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Otherwise,
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 
