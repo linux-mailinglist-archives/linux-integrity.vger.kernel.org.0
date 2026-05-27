@@ -1,181 +1,279 @@
-Return-Path: <linux-integrity+bounces-9692-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9693-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4BD5ARQEF2qz0wcAu9opvQ
-	(envelope-from <linux-integrity+bounces-9692-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 16:47:48 +0200
+	id qOLVDYE8F2qg9wcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9693-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 20:48:33 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A87045E6294
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 16:47:47 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99D7E5E933D
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 20:48:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 223953084926
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 14:45:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 051AE304C7F5
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 18:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CE964266AE;
-	Wed, 27 May 2026 14:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864212472AA;
+	Wed, 27 May 2026 18:47:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="H2IlUOI1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jzCsJ/07"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD1B410D32;
-	Wed, 27 May 2026 14:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9FE330E83F
+	for <linux-integrity@vger.kernel.org>; Wed, 27 May 2026 18:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779893059; cv=none; b=UOLUnSxanim+Do/uCHiieKMij+faIxWSV0dGKYYEOS/JaeioVWTpHhQR02QfGBcJuP0SQh/iLA3Q8E84tl2wjUyHfJDBHFE7QL0Z3efeKoJ6zAkRB+ay5K1FtekJE5mPtjsmzWc1WqtMmNjDXFmbwHHLW5Do/CHo8aLDvHt3a1k=
+	t=1779907624; cv=none; b=qHdjKtx9RbAIj43RPrJpXsWh/2voRwF14FfsxwLf+FS1aLN1QK+yVMwD/zjDmUsXzCNm67GRT+b5w9i8LXuVKHKgD6hj3xTDBpjv8NtjJrn7k/p3DPumn/PFdKqiU2wId89lRDZMX54Hc+KYRiWHGlFvA+LaAqDt8joQnHD6te8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779893059; c=relaxed/simple;
-	bh=ANflYJ9pJdsWVS0W8lRHDLlWe0UmLSP1cit/EuPE1A4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XhW4EyEkKb1GVgENhrbM79EDYO2TBHatHCPbAaNnPyN6VXW/UBsTtkuF4OpI04c9661A1OjI7GdLlGbW8uETqt4adR1qCIKdLBbH34YA3m4dOt+33e+wHlyzdtPv9pkPjbqP8FqNRPHdB53ytL88ND9ceBNQwB8K+YPtuUZ28MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=H2IlUOI1; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 999192E96;
-	Wed, 27 May 2026 07:44:11 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E7A833F905;
-	Wed, 27 May 2026 07:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1779893056; bh=ANflYJ9pJdsWVS0W8lRHDLlWe0UmLSP1cit/EuPE1A4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H2IlUOI1Hu0HSpL2m47BJ/BKA188zABpBa0IlM0SgmfuJn1Hg3uGi7F842JPtnatB
-	 BKDuTMA3Z/OISjqD11aqnUkankz29zRD+BzEXTGQrElCcr2skrdJKAOcQR9P6WkDVE
-	 1qstspGHwpkLEpSPhB4kqxxj37JMou4zgLoQa2CE=
-Date: Wed, 27 May 2026 15:44:12 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-integrity@vger.kernel.org, paul@paul-moore.com,
-	roberto.sassu@huaweicloud.com, noodles@earth.li, jarkko@kernel.org,
-	sudeep.holla@kernel.org, jmorris@namei.org, serge@hallyn.com,
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jgg@ziepe.ca
-Subject: Re: [PATCH v4 2/3] security: ima: introduce IMA_INIT_LATE_SYNC option
-Message-ID: <ahcDPDJbILZM028u@e129823.arm.com>
-References: <20260525075404.3480282-1-yeoreum.yun@arm.com>
- <20260525075404.3480282-3-yeoreum.yun@arm.com>
- <e017ff8eb8bee4540e8877a594774508e8a79311.camel@linux.ibm.com>
+	s=arc-20240116; t=1779907624; c=relaxed/simple;
+	bh=E3gc4ZRJKcVussyClDrp+FgO+UjnTznkNqO4Lm7JwrA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZbEDibm3sltXvtGS8R4y/8JstUrMW6+HME2Mj7wQkg5lRNv03MbEfWZHwPZ7rxAV2nWa+GpMsQAtLZ4HKFmuxBPjc5p8jUQL3POG7CBSVTfQ5MQthQd69qtAReT4JhUaV4258shMPASKkuuxoAgvCa+RWp+zThtgAGtHmZxHP5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jzCsJ/07; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-914b03e42b2so719348085a.0
+        for <linux-integrity@vger.kernel.org>; Wed, 27 May 2026 11:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779907622; x=1780512422; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DnnO6Up2KIBP1TWTFBhRQUg/zlMghDxRrcKQAM6nb0U=;
+        b=jzCsJ/07XK8rrTte69szxmOcm2btT+/L2W5+oyXFyB0EIdUFzRvNMV59eHcomsjjKJ
+         ZFbGJeOxPSGtsFk5lTf2KIvLNT54Gx4giGGfV94CWIvwbHZQ02NYHHitE9fV2IRyShv8
+         crLAl4hz11CrBH9itcYK/Vk/UtvnO4wiS+5o47Q5Cl2gQNv5qAFpGbNHk4Bwr1Q406Lv
+         4CHKBW7eee7/8iWkerq8lGwXgBQk1FUZgBrSfXb2UiI+y8oK7HcxagapufivtJHvvAGW
+         TEwf0WEFNWoKsv/c5jYmpzWwCU4C3JZGd5zJSaGXNeAEOYlvrGe+cCoiGqvK27wo8XEK
+         s9Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779907622; x=1780512422;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DnnO6Up2KIBP1TWTFBhRQUg/zlMghDxRrcKQAM6nb0U=;
+        b=cxlcjyY0VjTeCr2oq0yzzTn6a7DHRx+CkPMoVOdlugMAxO0ezeZjBH3q58uugxgdvo
+         I0qjj/+ZXf6ZQ2bnMbBuQs4XI+BAqG2S9tmFS90YsTdAzjVT1oZ/y71UvpwvTw8z5dtp
+         m4XsKh0PUOmqD77W0rl4+kGGarW7nn6MMcQry/kzslc6NoMCS7fTsSMPrL7rZmBfJwhi
+         GBB2k8fGdy9SbKtzB5racqZRyJHJYnXhalpWO6qKEzZtL96G7vUOFtxy4RWyRCHnS5yR
+         93sna/9bfed3HV1ffD2RBXrARPeTT90Hhe5Hy7zaYdTy0rKTiXwcSK3m7n8LFRVr9enT
+         99QA==
+X-Forwarded-Encrypted: i=1; AFNElJ+v1BB9gice+LcieY5s+/rcJw+qTutaAkT4rQ10ubu3ymsGG31uFaBAlTeI9qgpAfFC/mSlqj+DKaZlM8NemZk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznyuHjjgbs/veZBtZ31IWOXQ89z3HLTJ28ygAhGdCUhi2FVlx3
+	wUQy0ykydRaU9D9VwCCdUnk7uOBbNOAWsmCakBMgB9OPsTiHXo5fXRFp
+X-Gm-Gg: Acq92OFoCo4c8WxtKmFFUZrUvyA3lcTPhOWnlQD2g1HWEZeylG/5xtAAGxGOFFmCW6H
+	3U20B+kZp2NcbRZgRwt2dhxBOn9gfPys970QEtSbLUPWHZtX0TlCCiq6jKhOy+HHEIeCN8uW7+T
+	ly2w3nVOF5HSDuuAE8tgBVNlsV/3yExDq7WA7Z5LtIAQZwSJpi5asM67x02RpW14cYcmTptG4d6
+	GVu9oV3B0R641anExuysEbs0lNJEYyTtrF4Gb+xRNOGbTAbcPdFi6ZmJbhZi847otzep1v5U3xN
+	1nFPppl/Qe/JOwCs2co6ow85luvmJkr5Af60n6cgbwT+Qfr5qWYlNaiNCg5k31MreQSTNuNMlys
+	urGpDDreKl4/XODcWycXCFmLM1sV3/s7YMV+cryc/IXQ83RX/fy+fi08al5VR2Dnhwv0uY/6/xV
+	RcLedhKatR0WqXOHUBqkKjYXGNHbaeJM4ByE4KdV934j92TDr9pJkFd2k4bsDhRkEJT36LzwDgg
+	Ya48fKqzt79kBzrlI0em0ArdWxYuC8uZtqJz6S84a25XgY9/Ufi3A==
+X-Received: by 2002:a05:620a:1b83:b0:914:b104:91e with SMTP id af79cd13be357-914b48ea7e8mr3726390385a.18.1779907621780;
+        Wed, 27 May 2026 11:47:01 -0700 (PDT)
+Received: from server0.tail6e7dd.ts.net (c-68-48-65-54.hsd1.mi.comcast.net. [68.48.65.54])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-914f87d1a9bsm548554485a.30.2026.05.27.11.47.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 May 2026 11:47:01 -0700 (PDT)
+From: Michael Bommarito <michael.bommarito@gmail.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] tpm: tpm2-sessions: wait for async KPP completion in tpm_buf_append_salt
+Date: Wed, 27 May 2026 14:46:55 -0400
+Message-ID: <20260527184655.1919993-1-michael.bommarito@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e017ff8eb8bee4540e8877a594774508e8a79311.camel@linux.ibm.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,paul-moore.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
-	TAGGED_FROM(0.00)[bounces-9692-lists,linux-integrity=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9693-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[arm.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[michaelbommarito@gmail.com,linux-integrity@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,arm.com:email,arm.com:dkim,e129823.arm.com:mid]
-X-Rspamd-Queue-Id: A87045E6294
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 99D7E5E933D
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Hi Mimi,
+tpm_buf_append_salt() in drivers/char/tpm/tpm2-sessions.c calls
+crypto_kpp_generate_public_key() and crypto_kpp_compute_shared_secret()
+without installing a completion callback, discards both return values,
+and immediately frees the kpp_request via kpp_request_free(). When the
+resolved ecdh-nist-p256 KPP backend is asynchronous (atmel-ecc, HPRE,
+keembay-ocs), either operation returns -EINPROGRESS and the deferred
+completion worker dereferences the freed request.
 
-> On Mon, 2026-05-25 at 08:54 +0100, Yeoreum Yun wrote:
-> > To generate the boot_aggregate log in the IMA subsystem with TPM PCR values,
-> > the TPM driver must be built as built-in and
-> > must be probed before the IMA subsystem is initialized.
-> > 
-> > However, when the TPM device operates over the FF-A protocol using
-> > the CRB interface, probing fails and returns -EPROBE_DEFER if
-> > the tpm_crb_ffa device — an FF-A device that provides the communication
-> > interface to the tpm_crb driver — has not yet been probed.
-> > 
-> > To ensure the TPM device operating over the FF-A protocol with
-> > the CRB interface is probed before IMA initialization,
-> > the following conditions must be met:
-> > 
-> > 1. The corresponding ffa_device must be registered,
-> >    which is done via ffa_init().
-> > 
-> > 2. The tpm_crb_driver must successfully probe this device via
-> >    tpm_crb_ffa_init().
-> > 
-> > 3. The tpm_crb driver using CRB over FF-A can then
-> >    be probed successfully. (See crb_acpi_add() and
-> >    tpm_crb_ffa_init() for reference.)
-> > 
-> > Unfortunately, ffa_init(), tpm_crb_ffa_init(), and crb_acpi_driver_init() are
-> > all registered with device_initcall, which means crb_acpi_driver_init() may
-> > be invoked before ffa_init() and tpm_crb_ffa_init() are completed.
-> > 
-> > When this occurs, probing the TPM device is deferred.
-> > However, the deferred probe can happen after the IMA subsystem
-> > has already been initialized, since IMA initialization is performed
-> > during late_initcall, and deferred_probe_initcall() is performed
-> > at the same level.
-> > 
-> > And the similar situation is reported on TPM devices attached on SPI
-> > bus[0].
-> > 
-> > To resolve this, introduce IMA_INIT_LATE_SYNC option to initialise
-> > IMA at late_inicall_sync so that IMA is initialized with the TPM
-> > device probed deffered.
-> 
-> -> deferred
+The path fires automatically from the hwrng_fillfn kernel thread via
+tpm_get_random -> tpm2_get_random -> tpm2_start_auth_session ->
+tpm_buf_append_salt on every entropy poll, without any userland action.
 
-Thanks. I'll fix this typo.
+Install crypto_req_done as the completion callback, wrap both KPP
+operations in crypto_wait_req(), and propagate errors to the caller.
+The wait is a no-op for synchronous backends.
 
-> 
-> > 
-> > When this option is enabled, modules that access files in the
-> > initramfs through usermode helper calls such as request_module()
-> > during initcall must not be built-in. Otherwise, IMA may miss
-> > measuring those files since they're the file accesses before the
-> 
-> Reword or remove phrase starting with "since".
+Fixes: 1085b8276bb4 ("tpm: Add the rest of the session HMAC API")
+Cc: stable@vger.kernel.org
+Signed-off-by: Michael Bommarito <michael.bommarito@gmail.com>
+Assisted-by: Claude:claude-opus-4-7
+---
 
-Okay. I'll remove this phrase starting with "since".
+Impact: on a kernel with an async ECDH KPP provider, any local user
+can reclaim the freed kpp_request slab slot and control the indirect
+call through req->base.complete. A reproducer is available on request.
+Filing publicly per security-bugs.rst guidance.
 
-> 
-> > initialisation of IMA [1].
-> > 
-> > Link: https://lore.kernel.org/all/aYXEepLhUouN5f99@earth.li/ [0]
-> > Link: https://lore.kernel.org/all/2b3782398cc17ce9d355490a0c42ebce9120a9ae.camel@linux.ibm.com/ [1]
-> > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> 
-> This version of the patch drops differentiating the boot_aggregate record based
-> on initcall as was posted in "[RFC PATCH v3 1/4] lsm: Allow LSMs to register for
-> late_initcall_sync init".  Being able to differentiate the initcalls is need by
-> the remote attestation services.
+Notes:
 
-Thanks ;) I overlooked for the remote attestation.
-Then For the IMA_INIT_LATE_SYNC option, As the former patch did,
-Let IMA use the name "boot_aggregate_late" for boot_aggregate record.
+    Validation (QEMU x86_64, swtpm, async ecdh-nist-p256 stub backend):
+    
+    Stock kernel: the freed kpp_request is reclaimed by an unprivileged
+    heap spray; the deferred completion worker jumps to a controlled
+    address (RIP=0x41414141) via the overwritten req->base.complete
+    callback pointer. Reproduces on production-hardened allocator
+    configs (MEMCG, RANDOM_KMALLOC_CACHES, SLAB_FREELIST_HARDENED,
+    SLAB_FREELIST_RANDOM, INIT_ON_FREE).
+    
+    Patched kernel: crypto_wait_req() blocks until the async backend
+    completes; the worker observes a live request with the correct
+    crypto_req_done callback installed; kpp_request_free() runs only
+    after both operations finish. KASAN-clean across 50 entropy polls.
 
+ drivers/char/tpm/tpm2-sessions.c | 36 ++++++++++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm2-sessions.c b/drivers/char/tpm/tpm2-sessions.c
+index c4da6fde748f4..a23cc3a540c55 100644
+--- a/drivers/char/tpm/tpm2-sessions.c
++++ b/drivers/char/tpm/tpm2-sessions.c
+@@ -489,15 +489,17 @@ static void tpm2_KDFe(u8 z[EC_PT_SZ], const char *str, u8 *pt_u, u8 *pt_v,
+ 	sha256_final(&sctx, out);
+ }
+ 
+-static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
+-				struct tpm2_auth *auth)
++static int tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
++			       struct tpm2_auth *auth)
+ {
+ 	struct crypto_kpp *kpp;
+ 	struct kpp_request *req;
++	DECLARE_CRYPTO_WAIT(wait);
+ 	struct scatterlist s[2], d[1];
+ 	struct ecdh p = {0};
+ 	u8 encoded_key[EC_PT_SZ], *x, *y;
+ 	unsigned int buf_len;
++	int rc;
+ 
+ 	/* secret is two sized points */
+ 	tpm_buf_append_u16(buf, (EC_PT_SZ + 2)*2);
+@@ -520,13 +522,14 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
+ 	kpp = crypto_alloc_kpp("ecdh-nist-p256", CRYPTO_ALG_INTERNAL, 0);
+ 	if (IS_ERR(kpp)) {
+ 		dev_err(&chip->dev, "crypto ecdh allocation failed\n");
+-		return;
++		return PTR_ERR(kpp);
+ 	}
+ 
+ 	buf_len = crypto_ecdh_key_len(&p);
+ 	if (sizeof(encoded_key) < buf_len) {
+ 		dev_err(&chip->dev, "salt buffer too small needs %d\n",
+ 			buf_len);
++		rc = -EINVAL;
+ 		goto out;
+ 	}
+ 	crypto_ecdh_encode_key(encoded_key, buf_len, &p);
+@@ -535,11 +538,17 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
+ 
+ 	/* salt is now the public point of this private key */
+ 	req = kpp_request_alloc(kpp, GFP_KERNEL);
+-	if (!req)
++	if (!req) {
++		rc = -ENOMEM;
+ 		goto out;
++	}
++	kpp_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
++				 crypto_req_done, &wait);
+ 	kpp_request_set_input(req, NULL, 0);
+ 	kpp_request_set_output(req, s, EC_PT_SZ*2);
+-	crypto_kpp_generate_public_key(req);
++	rc = crypto_wait_req(crypto_kpp_generate_public_key(req), &wait);
++	if (rc)
++		goto out_free_req;
+ 	/*
+ 	 * we're not done: now we have to compute the shared secret
+ 	 * which is our private key multiplied by the tpm_key public
+@@ -551,8 +560,9 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
+ 	kpp_request_set_input(req, s, EC_PT_SZ*2);
+ 	sg_init_one(d, auth->salt, EC_PT_SZ);
+ 	kpp_request_set_output(req, d, EC_PT_SZ);
+-	crypto_kpp_compute_shared_secret(req);
+-	kpp_request_free(req);
++	rc = crypto_wait_req(crypto_kpp_compute_shared_secret(req), &wait);
++	if (rc)
++		goto out_free_req;
+ 
+ 	/*
+ 	 * pass the shared secret through KDFe for salt. Note salt
+@@ -562,8 +572,11 @@ static void tpm_buf_append_salt(struct tpm_buf *buf, struct tpm_chip *chip,
+ 	 */
+ 	tpm2_KDFe(auth->salt, "SECRET", x, chip->null_ec_key_x, auth->salt);
+ 
+- out:
++out_free_req:
++	kpp_request_free(req);
++out:
+ 	crypto_free_kpp(kpp);
++	return rc;
+ }
+ 
+ /**
+@@ -1018,7 +1031,12 @@ int tpm2_start_auth_session(struct tpm_chip *chip)
+ 	tpm_buf_append(&buf, auth->our_nonce, sizeof(auth->our_nonce));
+ 
+ 	/* append encrypted salt and squirrel away unencrypted in auth */
+-	tpm_buf_append_salt(&buf, chip, auth);
++	rc = tpm_buf_append_salt(&buf, chip, auth);
++	if (rc) {
++		tpm2_flush_context(chip, null_key);
++		tpm_buf_destroy(&buf);
++		goto out;
++	}
+ 	/* session type (HMAC, audit or policy) */
+ 	tpm_buf_append_u8(&buf, TPM2_SE_HMAC);
+ 
 -- 
-Sincerely,
-Yeoreum Yun
+2.53.0
+
+
 
