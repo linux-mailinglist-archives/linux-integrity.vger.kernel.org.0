@@ -1,194 +1,226 @@
-Return-Path: <linux-integrity+bounces-9690-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9691-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yEsEEGX4FmrUywcAu9opvQ
-	(envelope-from <linux-integrity+bounces-9690-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 15:57:57 +0200
+	id iNMPDa4AF2o70wcAu9opvQ
+	(envelope-from <linux-integrity+bounces-9691-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 16:33:18 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D90D35E56E6
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 15:57:56 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0D005E5ED0
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 16:33:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E8FFB302F1BF
-	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 13:57:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3F156302C153
+	for <lists+linux-integrity@lfdr.de>; Wed, 27 May 2026 14:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 129C03DC4CB;
-	Wed, 27 May 2026 13:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4D6366557;
+	Wed, 27 May 2026 14:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EQHtVPcI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Mj3U3bbx"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6DAA3148D3;
-	Wed, 27 May 2026 13:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BB0282F3A;
+	Wed, 27 May 2026 14:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779890253; cv=none; b=UUcekBjDEorr2ERfemo+gdxRlZL8SmrY4S6hclqpumgTG+gKGFyjbs+edei6j5OIKwAis7/ZgT6NxYHCnQTcJea04ZM0xUxLkpwANabC728OZLPoAVGC5oSgHltmrXJRlf7yXD4rlpcuf+72vz55jWLF18kXTRTQPMlNJRw01Q8=
+	t=1779892281; cv=none; b=j55rKkpCXu3ciKO/Z7fU4o+oomrfVn0oTqaOp+y7hyiWj6Hxsd00SWVSwY68t9O52vEqGzbHZVEnaF+vjJlVkuB+DNLvLFUIas4viwivRKwli85HG92wDuavNIylni61UyssCVk6U54pmbEIw3KVlcgKuD2297hQBxZG8HQPXHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779890253; c=relaxed/simple;
-	bh=zvlOlKFO5Ea8ZWoxLGLkvjRdz6BrBzYnlRX14u+yQ3M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fKt9SQDogvpjW1n8da3UTeD3nxjqwhPEXDmbYThtvK7UlFXqGOCJlAiMjYp3wmar4PTva9YByOULwP/KX+3Fjqlt3Qww0r3DtFJFz7EyuJP+Z4WDNx6l49zc2HskwifFbFhDKi3C6L2d6Xu8oe5ideIJbtFZ0zmTb+tTjRi17zI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EQHtVPcI; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1779892281; c=relaxed/simple;
+	bh=/O4X8XttFEqtU/q5/9L0DucZnE8x2s4y53B1d9aP46A=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=i+HezyFpT9AWX9nOtwdAv6MTu7eGMJmxC45rMeEba9FTw/lDeohqWjEyFB/8rrJxAILLzIp28w9UMaPHtX1XxBe8443azxvlCp0jgRVm8QseE+2IxgC0Mh8qkxdAHXWiMzve0Xlq7/qQxIFGfxhuX6XpNV+4tYcjap4CUkdTwFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Mj3U3bbx; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64QNtAf2686076;
-	Wed, 27 May 2026 13:57:06 GMT
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64RCWOnM3811204;
+	Wed, 27 May 2026 14:30:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=XmuqR0
-	b41raTzm3aWHkmUjaUX9RCWIBNdoHdims9XLM=; b=EQHtVPcIq62ecBESz9VdAj
-	U6i0R3TLcWmeerRAxT+Akz8cgGIJsZO9yHMPTJcXvRQgC5cFfhAVsk3bfVfczqSR
-	qSfTtZu54+4YjHumGmjfk3NpGDD+lq4xOdzSFnVXTZGxCZ4/BqZ+j5cx7yYNDNVr
-	V3EZhrYeX3NmZCWfdbTRPQl5PqV8cmGazPCm/DIaehjWu3H857JCsd8htBf/3NmU
-	LoP+cz26KxteFn6irSTPYQhJX9m8+3La/GfrLF5F6ME54sqXhCjZRdf1Wa2u1mcb
-	IwJ9PJO85CXxyVmj5VTvhxmyCWHAMawFuws7NQ2z98A4t2zRJS1cgXZva+CrHXBQ
+	:message-id:mime-version:references:subject:to; s=pp1; bh=+ebLCj
+	YLh7IMim41EldDt0WxK7+GjVy9RdI6q1Bwocs=; b=Mj3U3bbxzJwjlVrOnvrpOL
+	SqqMeo/ZtGpYvvCUGF8AZUBsW/+iCt5kGnYp8TwEQa8agsX3yDsHVkBuLMn+iSB4
+	CW8FEwQkETKFWG92hvzFEmwG35gftC1OxvG+/xs/NxZFvGFu2W6mY8BuMuHb4qiK
+	l9qjHSvxIWEy9A7Fld4g3RJ7fp+YF9ehEH2tvptQx+NVa0HaX6/49isHMMqTbPFS
+	Nd3GYt7LfaW/sHbBVSA9w6SzgDlFxDJSB/sd3GsxILWSi4rhQyNyva+5VsxAWEvK
+	Nbsxx465Ia/SYeo+s3P/PYjaF9kcwkGaMXw7a0MKhcT59cq2HuOOOfhngEv5HzFQ
 	==
 Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4eb4nusqhc-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4eb4qc1s8m-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 May 2026 13:57:06 +0000 (GMT)
+	Wed, 27 May 2026 14:30:58 +0000 (GMT)
 Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64RDsHUl019929;
-	Wed, 27 May 2026 13:57:05 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4edjrb391u-1
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 64REOCKg020611;
+	Wed, 27 May 2026 14:30:58 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4edjrb3dd8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 May 2026 13:57:05 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64RDv4SK29295182
+	Wed, 27 May 2026 14:30:57 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 64REUvaM27918918
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 27 May 2026 13:57:04 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 708925804B;
-	Wed, 27 May 2026 13:57:04 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F1F3A58055;
-	Wed, 27 May 2026 13:57:02 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 27 May 2026 13:57:02 +0000 (GMT)
-Message-ID: <23a3b9bb-af97-4285-a03d-7b6e7ccb274e@linux.ibm.com>
-Date: Wed, 27 May 2026 09:57:02 -0400
+	Wed, 27 May 2026 14:30:57 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3B3AC58059;
+	Wed, 27 May 2026 14:30:57 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C84B158058;
+	Wed, 27 May 2026 14:30:55 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.130.141])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 27 May 2026 14:30:55 +0000 (GMT)
+Message-ID: <e017ff8eb8bee4540e8877a594774508e8a79311.camel@linux.ibm.com>
+Subject: Re: [PATCH v4 2/3] security: ima: introduce IMA_INIT_LATE_SYNC
+ option
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Yeoreum Yun <yeoreum.yun@arm.com>, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc: paul@paul-moore.com, roberto.sassu@huaweicloud.com, noodles@earth.li,
+        jarkko@kernel.org, sudeep.holla@kernel.org, jmorris@namei.org,
+        serge@hallyn.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+        jgg@ziepe.ca
+In-Reply-To: <20260525075404.3480282-3-yeoreum.yun@arm.com>
+References: <20260525075404.3480282-1-yeoreum.yun@arm.com>
+	 <20260525075404.3480282-3-yeoreum.yun@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 27 May 2026 10:30:55 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/13] ima: Introduce staging mechanism
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
-        skhan@linuxfoundation.org, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
-        gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com,
-        nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
-References: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
-Content-Language: en-US
-From: Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI3MDEzMyBTYWx0ZWRfX5fBf/K24EuzO
- nsdv6eYPHATZbMRT5JqGcW9mfVnSbQgMnV33bmFilJ4hC0Qx03ABlxrUxBnoRtK4FMi7eHJdD23
- DS3XntGu4apmc9wMjiR9Ip2toZOoV1OGZcWC+tnleDmZEEp6HClwlCav9pCl51R+pqDcj0Weycx
- tMh82DTwRb2jIFk/Tmosd+VY1CXNQrqxkcknn1MHAqk38MUDBAd8AdAsc3t2Ku/rMoeu0o1sqfV
- mY6tn8CZhPwa/lrR4fcy0C6Bpaiubtpq6/g4sy4VDZOv2VzuFbOnKHHHM+Iy3VWJUENY+lI5sUD
- exVajXD669sqWHoqpGL3/8/ypKn7n0Me9B2sOwZ/RmGaQkZ20mGWFc4k4ULdqJd4vXmQuVIP8sT
- LVbLzSeJdbE+v7WVIfp+gS17M7UlwbLOh/NrHGuw7E3PSAGwPCzI+QfcRkuppOvFmBSPCfpiKuC
- HHYM681UH4uzBrOlzzA==
-X-Authority-Analysis: v=2.4 cv=UtJT8ewB c=1 sm=1 tr=0 ts=6a16f832 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTI3MDEzOCBTYWx0ZWRfX5rqMimvjJ+8O
+ MXcc30tj2YLxNOysf6dydiVh4cb8AtV+TxVITu7nNoanFtM30RVUSfu72sjAWaaaC6sgaoJG/Zg
+ xENuMNQPuO7G0iDjHay/c7fciANJkRlXcipb2fRDwfgFq/IIfxKiSHYsiTsPd7O6+YQfsVXIRDt
+ RHMgaBbAJVPcR09Kog/HL0oYDWxPYfmZOnuH9WmRouTwjpH6KNfq5r+a0LQhda4p8Dge76yMu9w
+ CNhfCHsbhu8Nn7KaVD38dCKcd5O5T7imcomH80jQPulqAHSFblYU7G18fqnK5Fe+JiYxDeFJ65w
+ EUxlG0SdJJx74sGnmLAre8nDd6d1PC8ATnd1spgyN8/v+INmwt7hu7Y7/ukU5/cEkiRQN5pggzX
+ 1duXSgfMezAZXz8ZL7tjiY6+zPJkPVe5dKt/pQKFXAYgt5WS6Z7zB92pSVsJtjQqjyNxI/sSkEV
+ HamsitVb4jchW1A0LUA==
+X-Authority-Analysis: v=2.4 cv=KItqylFo c=1 sm=1 tr=0 ts=6a170023 cx=c_pps
  a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
  a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=i0EeH86SAAAA:8
- a=VnNF1IyMAAAA:8 a=0HL81np-4nXxjsgZigQA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: _8K7wRkzeIx9ZU8S6Hmi0OD4GBlx-QKK
-X-Proofpoint-GUID: RBiMu1fVFZe6KM06mXCyXsRsp6HhymSv
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=7CQSdrXTAAAA:8 a=UcpHEPep0OYEHb0RgzgA:9 a=QEXdDO2ut3YA:10
+ a=a-qgeE7W1pNrGK8U0ZQC:22
+X-Proofpoint-ORIG-GUID: UBimQHyf8YaVJBDIqd5V8dmem3IIgSY7
+X-Proofpoint-GUID: Ds-Smd86gvxxCuSKhbfuMPwMo8RWAwLS
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
  definitions=2026-05-27_02,2026-05-26_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 suspectscore=0 adultscore=0 clxscore=1011 bulkscore=0
- phishscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
- definitions=main-2605270133
+ phishscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
+ clxscore=1015 adultscore=0 suspectscore=0 bulkscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2605130000 definitions=main-2605270138
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9690-lists,linux-integrity=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[huaweicloud.com,lwn.net,linuxfoundation.org,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,linux.ibm.com:mid,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-9691-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[paul-moore.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,arm.com:email];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[stefanb@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[ibm.com:+];
-	NEURAL_HAM(-0.00)[-0.998];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: D90D35E56E6
+X-Rspamd-Queue-Id: B0D005E5ED0
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
+On Mon, 2026-05-25 at 08:54 +0100, Yeoreum Yun wrote:
+> To generate the boot_aggregate log in the IMA subsystem with TPM PCR valu=
+es,
+> the TPM driver must be built as built-in and
+> must be probed before the IMA subsystem is initialized.
+>=20
+> However, when the TPM device operates over the FF-A protocol using
+> the CRB interface, probing fails and returns -EPROBE_DEFER if
+> the tpm_crb_ffa device =E2=80=94 an FF-A device that provides the communi=
+cation
+> interface to the tpm_crb driver =E2=80=94 has not yet been probed.
+>=20
+> To ensure the TPM device operating over the FF-A protocol with
+> the CRB interface is probed before IMA initialization,
+> the following conditions must be met:
+>=20
+> 1. The corresponding ffa_device must be registered,
+>    which is done via ffa_init().
+>=20
+> 2. The tpm_crb_driver must successfully probe this device via
+>    tpm_crb_ffa_init().
+>=20
+> 3. The tpm_crb driver using CRB over FF-A can then
+>    be probed successfully. (See crb_acpi_add() and
+>    tpm_crb_ffa_init() for reference.)
+>=20
+> Unfortunately, ffa_init(), tpm_crb_ffa_init(), and crb_acpi_driver_init()=
+ are
+> all registered with device_initcall, which means crb_acpi_driver_init() m=
+ay
+> be invoked before ffa_init() and tpm_crb_ffa_init() are completed.
+>=20
+> When this occurs, probing the TPM device is deferred.
+> However, the deferred probe can happen after the IMA subsystem
+> has already been initialized, since IMA initialization is performed
+> during late_initcall, and deferred_probe_initcall() is performed
+> at the same level.
+>=20
+> And the similar situation is reported on TPM devices attached on SPI
+> bus[0].
+>=20
+> To resolve this, introduce IMA_INIT_LATE_SYNC option to initialise
+> IMA at late_inicall_sync so that IMA is initialized with the TPM
+> device probed deffered.
 
+-> deferred
 
-On 4/29/26 12:03 PM, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
+>=20
+> When this option is enabled, modules that access files in the
+> initramfs through usermode helper calls such as request_module()
+> during initcall must not be built-in. Otherwise, IMA may miss
+> measuring those files since they're the file accesses before the
 
-> Usage
-> =====
-> 
-> The IMA staging mechanism can be enabled from the kernel configuration
-> with the CONFIG_IMA_STAGING option.
-> 
-> If it is enabled, IMA duplicates the current measurements interfaces
-> (both binary and ASCII), by adding the _staged file suffix. Both the
-> original and the staging interfaces gain the write permission for the
-> root user and group, but require the process to have CAP_SYS_ADMIN set.
-> 
-> The staging mechanism supports two flavors.
-> 
-> Staging with prompt
-> ~~~~~~~~~~~~~~~~~~~
-> 
-> The current measurements list is moved to a temporary staging area, and
-> staged measurements are deleted upon confirmation.
-> 
-> This staging process is achieved with the following steps.
-> 
->    1.  echo A > <original interface>: the user requests IMA to stage the
->        entire measurements list;
->    2.  cat <_staged interface>: the user reads the staged measurements;
->    3.  echo D > <_staged interface>: the user requests IMA to delete
->        staged measurements.
-> 
+Reword or remove phrase starting with "since".
 
-I have a IMA log sharder (based on FUSE; does more 'copying' than 
-'sharding') that successfully uses this method.
+> initialisation of IMA [1].
+>=20
+> Link: https://lore.kernel.org/all/aYXEepLhUouN5f99@earth.li/ [0]
+> Link: https://lore.kernel.org/all/2b3782398cc17ce9d355490a0c42ebce9120a9a=
+e.camel@linux.ibm.com/ [1]
+> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 
-Tested-by: Stefan Berger <stefanb@linux.ibm.com>
+This version of the patch drops differentiating the boot_aggregate record b=
+ased
+on initcall as was posted in "[RFC PATCH v3 1/4] lsm: Allow LSMs to registe=
+r for
+late_initcall_sync init".  Being able to differentiate the initcalls is nee=
+d by
+the remote attestation services.
 
+Mimi
 
