@@ -1,155 +1,210 @@
-Return-Path: <linux-integrity+bounces-9695-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9696-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6Dt9NiCtGWpEyQgAu9opvQ
-	(envelope-from <linux-integrity+bounces-9695-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2026 17:13:36 +0200
+	id 4LGrDa0UGmrj1AgAu9opvQ
+	(envelope-from <linux-integrity+bounces-9696-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 30 May 2026 00:35:25 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C95C0604627
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2026 17:13:35 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC11E609624
+	for <lists+linux-integrity@lfdr.de>; Sat, 30 May 2026 00:35:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BB4DA31BBD2F
-	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2026 15:04:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C75C2303B522
+	for <lists+linux-integrity@lfdr.de>; Fri, 29 May 2026 22:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AAA3D16EF;
-	Fri, 29 May 2026 15:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 842C73B4EA2;
+	Fri, 29 May 2026 22:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NgMsLZB7"
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4232E8B67;
-	Fri, 29 May 2026 14:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8C23630BF;
+	Fri, 29 May 2026 22:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780066800; cv=none; b=TQfJ0QJr5gMToiRQYqee6FMdohzx2tIDI9QuwHbBOJiD/lMuBkLiLnuYUv6sS5TEtzhq3IJ089AdHC42rZh8QZ9lDJHhp67w1+05s1yFqychSnA+HV3yq5JrHrFozRWRySLdYT8X3fQGlS0t7JbomfPTtc0SpHbKF+TpXLnfrSE=
+	t=1780093991; cv=none; b=e6M/MCMJjMvosnKCwK4ZUL515HUD3YKCBcZ4CD/k9KO+qmww2Pb6srD1FT0KFhzrlLLrIvMlajX0Ubc5ntd3dCTuPOPsL64avaQ2CUEcTfAYMbmM66j8CvvrtJfM4gpWhOO7wuxRwNFvk6HkKIiAhycfYYy1f64wKdB2QkaYxHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780066800; c=relaxed/simple;
-	bh=Yb5xZh+ixyrbfIrO8NYmZ70+SmcD6/eyVzBO631EP9Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jyNrkMMPS8dtBFuhBXlymp9PxyxIJZPSMyK8l1O6lkeKL05w41H/TnqLR0QgFY9nmD23Dd1AEQv25IfvyWz7dqP7CyL7dUH18XOmEXieNrPnHvQQi96HjYVon2Kme9qQtrNswUX1nzDrU4AD+1X3Bv7cxfnvQ2inbwAcplg010c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gRmbf29SMz1HChr;
-	Fri, 29 May 2026 22:54:38 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id DB0C84056C;
-	Fri, 29 May 2026 22:59:47 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBXTmrYqRlq4kwMAg--.36081S2;
-	Fri, 29 May 2026 15:59:47 +0100 (CET)
-Message-ID: <8a0c965e1c2f3eee1006c4941206d70a71e7d0f0.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 12/13] ima: Return error on deleting measurements
- already copied during kexec
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, corbet@lwn.net,
- skhan@linuxfoundation.org,  dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com, paul@paul-moore.com,  jmorris@namei.org,
- serge@hallyn.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	gregorylumen@linux.microsoft.com, chenste@linux.microsoft.com, 
-	nramas@linux.microsoft.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date: Fri, 29 May 2026 16:59:33 +0200
-In-Reply-To: <ea886419ef3047ede1885504fad8f865cdcc5ce3.camel@linux.ibm.com>
-References: <20260429160319.4162918-1-roberto.sassu@huaweicloud.com>
-	 <20260429160319.4162918-13-roberto.sassu@huaweicloud.com>
-	 <ea886419ef3047ede1885504fad8f865cdcc5ce3.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1780093991; c=relaxed/simple;
+	bh=BMJTQbmjtk56nbc5+Uf9UPPM8WVufIXj5mJ052tqzM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OlJPqYeNRO7sxPxjEPU6a6hB7jYxuPkskmLAy6SdnkkjVumUK15jrQASiisNxrNfIoI1Ls85UU9yzmICGgNO7b/vwN3eKHQ7AGaCm4OtcCVqmXqOvMjr9Jhfdzjcx7iQvkXsKxDiSBidpXqkBbNgm0X+ZjJXQ+KTgzgsb5gXVeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NgMsLZB7; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 808CF1F00893;
+	Fri, 29 May 2026 22:33:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780093990;
+	bh=kjpDzPjEODq7Ts9oiQp8TP0Hsn5YrdFOZnqRGmiIHrI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NgMsLZB7khjmOWa3syHZ2cVMOcLaJ9WoyuzMvt3jYpS6BOfWpPUB4egVbL73lexFP
+	 3z3lx4++4XB+6IlFj9tDXaDI9IIpHNOpS/Xyos+RnPXQHQMyE9r8yEiUozgAkxOWml
+	 qDwRiLGwT8PrtGPVpzhHB0apfuIIFEdypXQVWNfPL+5PhlzpNKQlD48JttJH2cSu37
+	 rdsgtfbjTUZC2qBd9AKiMKaVe1rOnDnmvpEvPkf8YtwFHEjmbnJOTSAVi9xbJZ02rE
+	 NcP5vWi+/NLtMoiGJwD2sruzGn30Q42+Z7nWTWm43jQtv5GqShYURH/Oxo9mWQhT5l
+	 jaeXmOUJIc2Ug==
+Date: Sat, 30 May 2026 01:33:06 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: linux-integrity@vger.kernel.org,
+	Jarkko Sakkinen <jarkko.sakkinen@opinsys.com>,
+	Arun Menon <armenon@redhat.com>,
+	"Daniel P. Smith" <dpsmith@apertussolutions.com>,
+	Alec Brown <alec.r.brown@oracle.com>,
+	Ross Philipson <ross.philipson@gmail.com>,
+	Stefan Berger <stefanb@linux.ibm.com>,
+	Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-kernel@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] tpm-buf: memory-safe allocations
+Message-ID: <ahoUItv3BMEYT0oM@kernel.org>
+References: <20260522013555.1063716-1-jarkko@kernel.org>
+ <33b4a34ceea0934e238c08e0256b975511ef99c8.camel@HansenPartnership.com>
+ <ahVRefyT4BTKOu0m@kernel.org>
+ <27db53d88a44e057c2f0ed5a637f65e4e18c8c3d.camel@HansenPartnership.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:GxC2BwBXTmrYqRlq4kwMAg--.36081S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF4kJrW8Ar1UZw13ZFWkJFb_yoW8GF1fpa
-	yfW3WFkr4kG34fCry0gw4DAr4Fv3yfta1DGa4kJw43A3Z5WFyvkr4Fkr1F9FWDKrZ3ta4Y
-	yw4Utry5C3WqvaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFk
-	u4UUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBGoZdzUCKgAAsX
-X-Spamd-Result: default: False [0.04 / 15.00];
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <27db53d88a44e057c2f0ed5a637f65e4e18c8c3d.camel@HansenPartnership.com>
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9695-lists,linux-integrity=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[huaweicloud.com];
-	FREEMAIL_TO(0.00)[linux.ibm.com,lwn.net,linuxfoundation.org,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
+	TAGGED_FROM(0.00)[bounces-9696-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,opinsys.com,redhat.com,apertussolutions.com,oracle.com,gmail.com,linux.ibm.com,gmx.de,ziepe.ca,paul-moore.com,namei.org,hallyn.com];
+	RCPT_COUNT_TWELVE(0.00)[18];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	NEURAL_HAM(-0.00)[-0.996];
+	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,huawei.com:email]
-X-Rspamd-Queue-Id: C95C0604627
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,ozlabs.org:url]
+X-Rspamd-Queue-Id: BC11E609624
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, 2026-05-26 at 10:02 -0400, Mimi Zohar wrote:
-> On Wed, 2026-04-29 at 18:03 +0200, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > Refuse to delete staged or active list measurements, if a kexec racing =
-with
-> > the deletion already copied those measurements in the kexec buffer. In =
-this
-> > way, user space becomes aware that those measurements are going to appe=
-ar
-> > in the secondary kernel, and thus they don't have to be saved twice.
->=20
-> There are two reboot notifiers: one to prevent additional measurements ex=
-tending
-> the TPM, while the other copies the measurements for kexec.  This patch p=
-revents
-> deleting the staged measurements after the latter notifier.
->=20
-> Instead of introducing a specific method for detecting whether the measur=
-ement
-> list has been copied, rely on one of the two existing reboot notifiers. T=
-he
-> simplest method would test "ima_measurements_suspended", which would prev=
-ent
-> deleting the staged measurements a bit earlier.
+On Fri, May 29, 2026 at 10:08:52AM -0400, James Bottomley wrote:
+> On Tue, 2026-05-26 at 10:53 +0300, Jarkko Sakkinen wrote:
+> > On Mon, May 25, 2026 at 01:50:51PM -0400, James Bottomley wrote:
+> > > On Fri, 2026-05-22 at 04:35 +0300, Jarkko Sakkinen wrote:
+> > > > Decouple kzalloc from buffer creation, so that a managed
+> > > > allocation
+> > > > can be
+> > > > used:
+> > > > 
+> > > > 	struct tpm_buf *buf __free(kfree) buf =
+> > > > kzalloc(TPM_BUFSIZE,
+> > > > 						GFP_KERNEL);
+> > > > 	if (!buf)
+> > > > 		return -ENOMEM;
+> > > > 
+> > > > 	tpm_buf_init(buf, TPM_BUFSIZE);
+> > > > 
+> > > > Alternatively, stack allocations are also possible:
+> > > > 
+> > > > 	u8 buf_data[512];
+> > > > 	struct tpm_buf *buf = (struct tpm_buf *)buf_data;
+> > > > 	tpm_buf_init(buf, sizeof(buf_data));
+> > > 
+> > > This isn't really a good idea from a security point of view.
+> > >  Remember the buffer has to be big enough for both the sent and the
+> > > received data.  Today we simply set TPM_BUFSIZE to the maximum
+> > > amount a TPM requires and all the send and receives just work.  If
+> > > we let callers set this size, we're asking for them to get it wrong
+> > > (or at least forget about the receive part) and for us to get a DMA
+> > > overrun from the TPM ... which might be potentially exploitable
+> > > depending on how it occurs (think of an unseal of user chosen data
+> > > overrunning).
+> > 
+> > It's one patch so you're free to remark the call sites where this
+> > happens. This is not a majorn concern at all.
+> 
+> Nearly twenty years ago, when the kernel was a lot smaller, a then
+> kernel luminary called Rusty Russell realized we needed to pay much
+> more attention to how we design APIs inside the kernel if we wanted it
+> to grow successfully.  He published his initial thoughts and gave talks
+> at both the kernel summit and OLS on it:
+> 
+> https://ozlabs.org/~rusty/index.cgi/tech/2008-03-18.html
+> 
+> The key point that's always stuck with me is "hard to misuse beats easy
+> to use". Later he came up with a rating scale (now known as the Rusty
+> API classification):
+> 
+> https://ozlabs.org/~rusty/index.cgi/tech/2008-03-30.html
+> 
+> and for chuckles and grins on April fools day he came up with a
+> negative rating ridiculing some of our dafter API choices:
+> 
+> https://ozlabs.org/~rusty/index.cgi/tech/2008-04-01.html
+> 
+> The point for this patch set is that the sizing of the original tpm_buf
+> interface scores 10/10 on the Rusty scale (it's impossible to get
+> wrong).  Simply threading size through the whole API, as this patch
+> does, may look like the right answer, but it causes a massive reduction
+> in API score.  In fact, since the buffer has to be sized not only
+> according to what goes in, but also what gets returned and this is
+> nowhere mentioned in the new documentation it scores -3 (read the
+> documentation and you can still get it wrong).  Now by mentioning the
+> sizing problems in the doc, you can probably get it up to +3 (read the
+> documentation and you'll get it right) but my question was not if you
+> got it wrong somewhere in the patch but whether we couldn't do a whole
+> lot better in terms of API score by designing a better API.
+> 
+> A key point about the 185 version of the TPM spec is that it's really
+> only a few commands that need larger buffers (the Post Quantum ML-KEM
+> keys) which doesn't apply to most of the in-kernel TPM callsites. 
+> Since tpm_buf_init takes the ordinal, we can actually tell at runtime
+> (or compile time if the ordinal is a constant) if the command would
+> need a larger buffer.  We can also tell from the TPM properties whether
+> the TPM itself can take a larger buffer, so for every current TPM we
+> could retain the original score 10/10 API and warn at runtime if there
+> might be a problem.  Then the larger keys seem to fit into 8k, so we
+> could still retain most of the original API properties of being
+> difficult to misuse simply by having an 8k size flag (which we could
+> ignore if the TPM doesn't support it) and warn at runtime if
+> tpm_buf_init sends an ordinal which might need a larger buffer.  At
+> worst we should be able to get to an API which scores 5/10 (do it right
+> or it will break at runtime).
+> 
+> Regards,
+> 
+> James
 
-Testing that the reboot notifier fired (with the
-ima_measurements_suspended variable) is not enough to know whether the
-measurements dump took place or not.
+This patch has pre-existed long before any of this post-quantum stuff,
+and there are good reasons so to have buffers managed given e.g., 
+complexity of tpm2-sessions code. It prevents any major risk for
+memory leaks.
 
-We need a flag (one is enough) protected by ima_extend_list_mutex, so
-that we know reliably which event occurred first, or the dump or the
-staging/delete (which are also protected by ima_extend_list_mutex).
+Trenchboot extends the use buffers to early boot and we want a robust
+structure. I'm not going to spend my time reading about philosophical
+aspects of API design. There are quantitative reasons to decrease
+the risk of memory leaks.
 
-
-Roberto
-
+BR, Jarkko
 
