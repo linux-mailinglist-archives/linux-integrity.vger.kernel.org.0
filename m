@@ -1,46 +1,46 @@
-Return-Path: <linux-integrity+bounces-9728-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9729-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WGR9OX68HmrZJgAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9728-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 13:20:30 +0200
+	id EBRZCky9HmrZJgAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9729-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 13:23:56 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5350762D551
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 13:20:29 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D875C62D655
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 13:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7CC5A3025262
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 11:15:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0F565307F4CA
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 11:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 325C03D9DCD;
-	Tue,  2 Jun 2026 11:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E863D1705;
+	Tue,  2 Jun 2026 11:15:43 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AED83CFF4B;
-	Tue,  2 Jun 2026 11:15:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E794F3CFF4B;
+	Tue,  2 Jun 2026 11:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780398936; cv=none; b=hdaqMYPIiOjXhX8KMyiuTWPCUpaWP4JOqtG5DvjpSuGt3ZL7h4gKnUepq2xKOnhsT/8zj9/JUMW5TgVgE0trZO0Uy7dXmSr8RxPqARA/bgCmfW395GWzgQtBUblUBhuGHX8APdyr+xD8y2t0oDIOS60J4V1mGHPWUyM0Yn/B5YY=
+	t=1780398943; cv=none; b=OPqUKmBpDMRrC7YY/bVRA+iDhQ5D25I/p4wKTn1RbcpHHN+CQfVtV9PA/9Fl2IIslmtbPkxDh2vwXFBdQ/pgUATxHPI1a5xcQ+4oA6QM/ihBphwuMbz86QThTzxBoTHinIYb9/6rnGzRaxhvtkFwXkYCCKEDXYFvqhLzQrlpdOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780398936; c=relaxed/simple;
-	bh=81Fy2Hamon6xk/NX9iZdii4c1suCb4zLtovhOcjB9lc=;
+	s=arc-20240116; t=1780398943; c=relaxed/simple;
+	bh=kwWFz/mirnCJD2wMiUROXV7CE+zEUlUkVnOSOLUeIso=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mGeo0u48J2BEYntLThIELyRqW+xtN2bNbFkD3lqvcUa9WvF5oePdMJeN1L6PJq4Y85AeWgCTxSkeJuvIE5InZ4yDBxGSIHVqz3XvGrOe0dbUmS0bRMPDjam9lR+JLlXwgwAOVZ/UE93UTiFj2b3kvwvn7kytudGSkLk0EPIo5IE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+	 MIME-Version; b=l+G2hPmOsn2Y57l/ULQATACJksPBFX91uwrONzZeF4H1rmL/rsarf0V4D6aM9s6kKz9H9Zpl2YBhthoyMBOiXqX+hLmSRM1RICtpQLxjAs/zmQ7OV8+Z3JCBxgl/z5JcXiTBMs5UB+VfV7Q6kT+fLw9D53sj1hwAprCExGLkLXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gV7Qx3jv5z1HCYh;
-	Tue,  2 Jun 2026 19:10:17 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4gV7R84GsbzpTwg;
+	Tue,  2 Jun 2026 19:10:28 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 2172C4056C;
-	Tue,  2 Jun 2026 19:15:32 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 5E0DA40560;
+	Tue,  2 Jun 2026 19:15:40 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwA3o84fux5qKBozAA--.30704S7;
-	Tue, 02 Jun 2026 12:15:31 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwA3o84fux5qKBozAA--.30704S8;
+	Tue, 02 Jun 2026 12:15:39 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	skhan@linuxfoundation.org,
@@ -58,9 +58,9 @@ Cc: linux-doc@vger.kernel.org,
 	chenste@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v6 05/12] ima: Introduce _ima_measurements_start() and _ima_measurements_next()
-Date: Tue,  2 Jun 2026 13:13:54 +0200
-Message-ID: <20260602111401.1706052-6-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v6 06/12] ima: Mediate open/release method of the measurements list
+Date: Tue,  2 Jun 2026 13:13:55 +0200
+Message-ID: <20260602111401.1706052-7-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260602111401.1706052-1-roberto.sassu@huaweicloud.com>
 References: <20260602111401.1706052-1-roberto.sassu@huaweicloud.com>
@@ -71,44 +71,44 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwA3o84fux5qKBozAA--.30704S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF17Jw1kKr18WF43XF1kZrb_yoW5GF17pa
-	sxua4rCF4kJ3yxWr1xGrWDur4ru39aq3WDWrWUJ34vvF1UJr1v9r43Aw12vrn0y3y8Jr1v
-	vr90gr45Ww4FyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:LxC2BwA3o84fux5qKBozAA--.30704S8
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw4kuF1ruFy3WF13XF4fKrg_yoW7WFWDpa
+	9ak3y8Cr18tr4xWFn7G3W7Zr4F9ayrGa13Wr1DJa4fZF1rAr9F9F4Yyry2krs8tryrGr1I
+	qw4qqrW5Was0yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
 	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-	0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
-	U1aLvJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAMBGoeRrcEegABsw
-X-Rspamd-Queue-Id: 5350762D551
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+	C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+	7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262
+	kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s02
+	6c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GF
+	v_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvE
+	c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
+	AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
+	pf9x07UZTmfUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAMBGoeRsQEeQAAsC
+X-Rspamd-Queue-Id: D875C62D655
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9728-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9729-lists,linux-integrity=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_TLS_LAST(0.00)[];
 	DMARC_NA(0.00)[huaweicloud.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_TO(0.00)[lwn.net,linuxfoundation.org,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -117,78 +117,183 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	R_DKIM_NA(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,huawei.com:email,huaweicloud.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,huaweicloud.com:mid,huawei.com:email]
 X-Rspamd-Action: no action
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce _ima_measurements_start() and _ima_measurements_next(), renamed
-from ima_measurements_start() and ima_measurements_next(), to include the
-list head as an additional parameter, so that iteration on different lists
-can be implemented by calling those functions.
+Introduce the ima_measure_users counter, to implement a semaphore-like
+locking scheme where the binary and ASCII measurements list interfaces can
+be concurrently opened by multiple readers, or alternatively by a single
+writer. In addition, allow the same writer to open the other interfaces for
+write or read/write, so that it can see the same measurement state across
+all the interfaces.
 
-No functional change: ima_measurements_start() and ima_measurements_next()
-pass the ima_measurements list head, used before. They become wrappers for
-the new functions.
+A semaphore cannot be used because the kernel cannot return to user space
+with a lock held.
+
+Introduce the ima_measure_lock() and ima_measure_unlock() primitives, to
+respectively lock/unlock the interfaces (safely with the ima_measure_users
+counter, without holding a lock).
+
+Finally, introduce _ima_measurements_open() to lock the interface before
+seq_open(), and call it from ima_measurements_open() and
+ima_ascii_measurements_open(). And, introduce ima_measurements_release(),
+to unlock the interface.
+
+Require CAP_SYS_ADMIN if the interface is opened for write (not possible
+for the current measurements interfaces, since they only have read
+permission).
+
+No functional changes: multiple readers are allowed as before.
 
 Link: https://github.com/linux-integrity/linux/issues/1
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- security/integrity/ima/ima_fs.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ security/integrity/ima/ima_fs.c | 102 ++++++++++++++++++++++++++++++--
+ 1 file changed, 98 insertions(+), 4 deletions(-)
 
 diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index fcfcf7b6eae2..dcdc4cb8fa0f 100644
+index dcdc4cb8fa0f..91bd831d070f 100644
 --- a/security/integrity/ima/ima_fs.c
 +++ b/security/integrity/ima/ima_fs.c
-@@ -72,14 +72,15 @@ static const struct file_operations ima_measurements_count_ops = {
+@@ -25,6 +25,10 @@
+ #include "ima.h"
+ 
+ static DEFINE_MUTEX(ima_write_mutex);
++static DEFINE_MUTEX(ima_measure_mutex);
++static long ima_measure_users;
++static struct task_struct *measure_writer;
++static long measure_writer_extra_writes;
+ 
+ bool ima_canonical_fmt;
+ static int __init default_canonical_fmt_setup(char *str)
+@@ -209,16 +213,105 @@ static const struct seq_operations ima_measurments_seqops = {
+ 	.show = ima_measurements_show
  };
  
- /* returns pointer to hlist_node */
--static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
-+static void *_ima_measurements_start(struct seq_file *m, loff_t *pos,
-+				     struct list_head *head)
- {
- 	loff_t l = *pos;
- 	struct ima_queue_entry *qe;
- 
- 	/* we need a lock since pos could point beyond last element */
- 	rcu_read_lock();
--	list_for_each_entry_rcu(qe, &ima_measurements, later) {
-+	list_for_each_entry_rcu(qe, head, later) {
- 		if (!l--) {
- 			rcu_read_unlock();
- 			return qe;
-@@ -89,7 +90,13 @@ static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
- 	return NULL;
- }
- 
--static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
-+static void *ima_measurements_start(struct seq_file *m, loff_t *pos)
++static int ima_measure_lock(bool write)
 +{
-+	return _ima_measurements_start(m, pos, &ima_measurements);
++	mutex_lock(&ima_measure_mutex);
++	/* Overflow check. */
++	if (!write && ima_measure_users == LONG_MAX) {
++		mutex_unlock(&ima_measure_mutex);
++		return -ENFILE;
++	}
++
++	/* Same writer can do additional writes or read/writes. */
++	if (write && current == measure_writer) {
++		measure_writer_extra_writes++;
++		mutex_unlock(&ima_measure_mutex);
++		return 0;
++	}
++
++	/*
++	 * ima_measure_users: > 0 open readers
++	 * ima_measure_users: == -1 open writer
++	 */
++	if ((write && ima_measure_users != 0) ||
++	    (!write && ima_measure_users < 0)) {
++		mutex_unlock(&ima_measure_mutex);
++		return -EBUSY;
++	}
++
++	if (write) {
++		ima_measure_users--;
++		/* Pointer valid, no reuse while the file descriptor is open. */
++		measure_writer = current;
++	} else {
++		ima_measure_users++;
++	}
++	mutex_unlock(&ima_measure_mutex);
++	return 0;
 +}
 +
-+static void *_ima_measurements_next(struct seq_file *m, void *v, loff_t *pos,
-+				    struct list_head *head)
- {
- 	struct ima_queue_entry *qe = v;
- 
-@@ -101,7 +108,12 @@ static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
- 	rcu_read_unlock();
- 	(*pos)++;
- 
--	return (&qe->later == &ima_measurements) ? NULL : qe;
-+	return (&qe->later == head) ? NULL : qe;
++static void ima_measure_unlock(bool write)
++{
++	mutex_lock(&ima_measure_mutex);
++	/* Decrement additional writes or read/writes. */
++	if (write && current == measure_writer &&
++	    measure_writer_extra_writes != 0) {
++		measure_writer_extra_writes--;
++		mutex_unlock(&ima_measure_mutex);
++		return;
++	}
++	if (write) {
++		ima_measure_users++;
++		measure_writer = NULL;
++	} else {
++		ima_measure_users--;
++	}
++	mutex_unlock(&ima_measure_mutex);
 +}
 +
-+static void *ima_measurements_next(struct seq_file *m, void *v, loff_t *pos)
++static int _ima_measurements_open(struct inode *inode, struct file *file,
++				  const struct seq_operations *seq_ops)
 +{
-+	return _ima_measurements_next(m, v, pos, &ima_measurements);
++	bool write = (file->f_mode & FMODE_WRITE);
++	int ret;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	ret = ima_measure_lock(write);
++	if (ret < 0)
++		return ret;
++
++	ret = seq_open(file, seq_ops);
++	if (ret < 0)
++		ima_measure_unlock(write);
++
++	return ret;
++}
++
+ static int ima_measurements_open(struct inode *inode, struct file *file)
+ {
+-	return seq_open(file, &ima_measurments_seqops);
++	return _ima_measurements_open(inode, file, &ima_measurments_seqops);
++}
++
++static int ima_measurements_release(struct inode *inode, struct file *file)
++{
++	bool write = (file->f_mode & FMODE_WRITE);
++	int ret;
++
++	/* seq_release() always returns zero. */
++	ret = seq_release(inode, file);
++
++	ima_measure_unlock(write);
++
++	return ret;
  }
  
- static void ima_measurements_stop(struct seq_file *m, void *v)
+ static const struct file_operations ima_measurements_ops = {
+ 	.open = ima_measurements_open,
+ 	.read = seq_read,
+ 	.llseek = seq_lseek,
+-	.release = seq_release,
++	.release = ima_measurements_release,
+ };
+ 
+ void ima_print_digest(struct seq_file *m, u8 *digest, u32 size)
+@@ -283,14 +376,15 @@ static const struct seq_operations ima_ascii_measurements_seqops = {
+ 
+ static int ima_ascii_measurements_open(struct inode *inode, struct file *file)
+ {
+-	return seq_open(file, &ima_ascii_measurements_seqops);
++	return _ima_measurements_open(inode, file,
++				      &ima_ascii_measurements_seqops);
+ }
+ 
+ static const struct file_operations ima_ascii_measurements_ops = {
+ 	.open = ima_ascii_measurements_open,
+ 	.read = seq_read,
+ 	.llseek = seq_lseek,
+-	.release = seq_release,
++	.release = ima_measurements_release,
+ };
+ 
+ static ssize_t ima_read_policy(char *path)
 -- 
 2.43.0
 
