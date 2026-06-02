@@ -1,63 +1,68 @@
-Return-Path: <linux-integrity+bounces-9721-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9722-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kB3aMRlAHmraiAkAu9opvQ
-	(envelope-from <linux-integrity+bounces-9721-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 04:29:45 +0200
+	id aKN5OQ2pHmq3IwAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9722-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 11:57:33 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFC8E6273AE
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 04:29:44 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DA6A62BFF9
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 11:57:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 955283001A7F
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 02:29:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6F6AF30157C9
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 09:57:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED8A360ECE;
-	Tue,  2 Jun 2026 02:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B42CC367286;
+	Tue,  2 Jun 2026 09:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHDepwWR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bQ4HSQir"
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D75B2E06E4;
-	Tue,  2 Jun 2026 02:29:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99746286D5E;
+	Tue,  2 Jun 2026 09:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780367380; cv=none; b=fWge6qwgrtqmWfXN4ocT2RcLomNN5t0RoLbsYgIE0ZFBLXcpIe/k2r9bW8fzRLnXZCPUo73oKlN8v7e5sbn4B7lwm2KBoqb2b0LhNfvulGDe7v3tKjAkx9Lv1e6w9j7qkPstecomsN6W5P2FcQlau3lDCiHseXifgW+3RnsPR+4=
+	t=1780394251; cv=none; b=josCSqgsUuHLpzbDNwoaaEDlAvKL2EwSJTYtpDWGcOaQdeSblO/w1B2XwsokxOJ1HIk/HZiIZvJenlpIPIITyOxvq5371zc0n/Lu0t/njDlEcGWptohCQ9V0vIfYZpu3XZ9AwhwpCvDkhqtoPc/A/A70oSwZl50hptfmJNyKfuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780367380; c=relaxed/simple;
-	bh=2bYOjmMnM1KJCF+54LeR9e6MEQXh2776Q/3uxsWYPn0=;
+	s=arc-20240116; t=1780394251; c=relaxed/simple;
+	bh=wMKlGVx2MnyptDjsVMHQ+hlIQD9/WeC/bmFF/ihPQls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ufQb1euRHLxkg7wqRhSOfDj3eO9Wcaxq3j6DARr542tjX1T7UqkTJUVkEpFuEKqexr4Lbe6pdTGlBmp5LPwHCL65Jo7tcogjGeuIbO4NwJpjgDUzyXa0Nq/PtmzPwWG0NED6/1QdAdSZLmV3jqRQetCASnd0axb3woTzK7zZr+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHDepwWR; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 3C63D1F00893;
-	Tue,  2 Jun 2026 02:29:38 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=f1lQE6cmmOBjdw6IuXPWsFoKsled/DaerTK+6kKbVldts95+RFSaRa6bpzCeXHVqeN/g2L9G3UGYOdWYDPUIV8KW4wnLYo81evmhAk0BLJTy7qduSJtceIKm5Ge+Kp6niyr56znQXAHhBX5WCrrBgkLqCdIqusVbubbGPuwxu9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bQ4HSQir; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06821F00893;
+	Tue,  2 Jun 2026 09:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780367378;
-	bh=/WGDfTGTOMOX+M3x1B0dBF/gAft7vbHy9l3PRqdaEGc=;
+	s=k20260515; t=1780394250;
+	bh=lJValK5+2Z0irO1NxpbHzVkGyPU3KW03yPIO5crgh6o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PHDepwWRn0mGz6fYTluWxOs0GRHHhT0CFFNYkwIje3KXE+Q1CZl/e8G299J/8LRVK
-	 AEYgcE1VmNSBO9EXRzAqE5CHCHAWXR1SO5DdU0FqKk8NznDb3v/8H0L/LHacd8/yxM
-	 cGxqdZr/YeFAN0hkv1BuncUU8/Z+0JFTbtzW8tfRq+VneWcUGire67FQJj9U7s7wri
-	 pHyL92Oyiaawa7pz9aiv4bGwYvnxFzb5g9bN3kbP8fWWKDgR8kaJBtJjF5E1EofwBl
-	 k3AUak19MVj4hKnPHO6CMLXxEp3vUbO682MwPatq8ywmYfvWfZiSX7xgjaJp0SM8Yc
-	 rRduzCGcWYR9Q==
-Date: Tue, 2 Jun 2026 05:29:35 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	b=bQ4HSQirP4TEA6BQpNPg8Ekem7iWsEKWgec5Vppj+TeoVi4BVIKwzIvLgvXMtPnWL
+	 7KChEMIEN51A/EtZY4RhRBChzYZea3UwIt0vRWB9Q0cDssDLoyLgzZ9bUwZ1C893Ix
+	 OkuDWMWX/dLtBTv3e9LUx5RRForgUSXJyPyoYUjm/gNWSv01GmJWEP/7GI8+yIO9EL
+	 bguhRRGwzBHOaI4+RWJxd/5MlsCAuYOnz0RWvAyP+esMtAmEP9ayYqocGpGlVy6duX
+	 fc3PYoSA6yhXmChXdHmBja7LH9dsHXi+v6esAXOSqaCjnrBjfoM8BOc6YTrGCKfgXE
+	 LUrIzdkndO4fA==
+Date: Tue, 2 Jun 2026 10:57:25 +0100
+From: Sudeep Holla <sudeep.holla@kernel.org>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
+	Sudeep Holla <sudeep.holla@kernel.org>,
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-integrity@vger.kernel.org, paul@paul-moore.com,
 	zohar@linux.ibm.com, roberto.sassu@huaweicloud.com,
-	noodles@earth.li, sudeep.holla@kernel.org, jmorris@namei.org,
-	serge@hallyn.com, dmitry.kasatkin@gmail.com,
-	eric.snowberg@oracle.com, jgg@ziepe.ca
-Subject: Re: [PATCH v5 4/4] tpm: tpm_crb_ffa: revert defered_probed when
+	noodles@earth.li, jmorris@namei.org, serge@hallyn.com,
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jgg@ziepe.ca
+Subject: Re: [PATCH v4 3/3] tpm: tpm_crb_ffa: revert defered_probed when
  tpm_crb_ffa is built-in
-Message-ID: <ah5AD69RNBdE1BvO@kernel.org>
-References: <20260601142749.3379697-1-yeoreum.yun@arm.com>
- <20260601142749.3379697-5-yeoreum.yun@arm.com>
+Message-ID: <20260602-vague-proficient-gibbon-b005c0@sudeepholla>
+References: <20260525075404.3480282-1-yeoreum.yun@arm.com>
+ <20260525075404.3480282-4-yeoreum.yun@arm.com>
+ <ahoXUjbsPmKxfV_R@kernel.org>
+ <ah0x+YDypYFzpFqt@e129823.arm.com>
+ <20260601-shiny-steel-jellyfish-b38b6e@sudeepholla>
+ <ah428rLnpoIersnQ@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -66,98 +71,135 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260601142749.3379697-5-yeoreum.yun@arm.com>
-X-Spamd-Result: default: False [-0.66 / 15.00];
+In-Reply-To: <ah428rLnpoIersnQ@kernel.org>
+X-Rspamd-Queue-Id: 5DA6A62BFF9
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	MID_RHS_NOT_FQDN(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9722-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,paul-moore.com,linux.ibm.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
-	TAGGED_FROM(0.00)[bounces-9721-lists,linux-integrity=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: BFC8E6273AE
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sudeep.holla@kernel.org,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[arm.com,kernel.org,vger.kernel.org,paul-moore.com,linux.ibm.com,huaweicloud.com,earth.li,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
-X-Rspamd-Server: lfdr
 
-On Mon, Jun 01, 2026 at 03:27:49PM +0100, Yeoreum Yun wrote:
-> commit 746d9e9f62a6 ("tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when it's build_in")
-> probe tpm_crb_ffa forcefully when it's built-in to integrate with IMA.
+On Tue, Jun 02, 2026 at 04:50:42AM +0300, Jarkko Sakkinen wrote:
+> On Mon, Jun 01, 2026 at 09:54:08AM +0100, Sudeep Holla wrote:
+> > On Mon, Jun 01, 2026 at 08:17:13AM +0100, Yeoreum Yun wrote:
+> > > Hi Jarkko,
+> > > 
+> > > Sorry for late answer.
+> > > 
+> > > > On Mon, May 25, 2026 at 08:54:04AM +0100, Yeoreum Yun wrote:
+> > > > > commit 746d9e9f62a6 ("tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when it's build_in")
+> > > > > probe tpm_crb_ffa forcefully when it's built-in to integrate with IMA.
+> > > > > 
+> > > > > However, IMA now provides the IMA_INIT_LATE_SYNC build option, which
+> > > > > initialises IMA at the late_initcall_sync level, so this change is no
+> > > > > longer required.
+> > > > > 
+> > > > > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > > > > ---
+> > > > >  drivers/char/tpm/tpm_crb_ffa.c | 18 +++---------------
+> > > > >  1 file changed, 3 insertions(+), 15 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+> > > > > index 99f1c1e5644b..025c4d4b17ca 100644
+> > > > > --- a/drivers/char/tpm/tpm_crb_ffa.c
+> > > > > +++ b/drivers/char/tpm/tpm_crb_ffa.c
+> > > > > @@ -177,23 +177,13 @@ static int tpm_crb_ffa_to_linux_errno(int errno)
+> > > > >   */
+> > > > >  int tpm_crb_ffa_init(void)
+> > > > >  {
+> > > > > -	int ret = 0;
+> > > > > -
+> > > > > -	if (!IS_MODULE(CONFIG_TCG_ARM_CRB_FFA)) {
+> > > > > -		ret = ffa_register(&tpm_crb_ffa_driver);
+> > > > > -		if (ret) {
+> > > > > -			tpm_crb_ffa = ERR_PTR(-ENODEV);
+> > > > > -			return ret;
+> > > > > -		}
+> > > > > -	}
+> > > > > -
+> > > > >  	if (!tpm_crb_ffa)
+> > > > > -		ret = -ENOENT;
+> > > > > +		return -ENOENT;
+> > > > >  
+> > > > >  	if (IS_ERR_VALUE(tpm_crb_ffa))
+> > > > > -		ret = -ENODEV;
+> > > > > +		return -ENODEV;
+> > > > >  
+> > > > > -	return ret;
+> > > > > +	return 0;
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
+> > > > >  
+> > > > > @@ -405,9 +395,7 @@ static struct ffa_driver tpm_crb_ffa_driver = {
+> > > > >  	.id_table = tpm_crb_ffa_device_id,
+> > > > >  };
+> > > > >  
+> > > > > -#ifdef MODULE
+> > > > >  module_ffa_driver(tpm_crb_ffa_driver);
+> > > > > -#endif
+> > > > >  
+> > > > >  MODULE_AUTHOR("Arm");
+> > > > >  MODULE_DESCRIPTION("TPM CRB FFA driver");
+> > > > > -- 
+> > > > > LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+> > > > > 
+> > > > 
+> > > > How we would sync up this patch? Through which tree etc.
+> > > 
+> > > IMHO, the IMA relevant thing would be into IMA tree,
+> > > However I think this patch would be much easier to sync into Sudeep's
+> > > FF-A tree where ff-a initilisation is reverted to device_initcall
+> > > unless you're uncomfortable.
+> > > 
+> > > For this, It might be better to split this patch from this series
+> > > since by above and defer probe of ff-a would make a register failure
+> > > of registering tpm_crb_ffa driver which is built-in.
+> > > 
+> > > @Sudeep what do you think?
+> > > 
+> > 
+> > IIRC, there is/was no dependency between these and FF-A patches that are
+> > queued in terms of build. I agree there may be dependency to get all the
+> > functionality but we can resort to linux-next for that. FF-A is not enabled
+> > in the defconfig, so anyone working on FF-A + TPM must enable then and can
+> > rely on -next IMHO.
+> > 
+> > That said, I have already sent PR for FF-A to SoC team and it is already
+> > queued for v7.2. I don't have any other plans unless they are fixes.
 > 
-> However, IMA now provides the IMA_INIT_LATE_SYNC build option, which
-> initialises IMA at the late_initcall_sync level, so this change is no
-> longer required.
+> Works for me.
 > 
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+Sorry if I was not clear. I haven't included any TPM patches in this series
+as part of my FF-A pull request queued for v7.2. So I was asking to route this
+via your tree.
 
-> ---
->  drivers/char/tpm/tpm_crb_ffa.c | 18 +++---------------
->  1 file changed, 3 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
-> index 99f1c1e5644b..025c4d4b17ca 100644
-> --- a/drivers/char/tpm/tpm_crb_ffa.c
-> +++ b/drivers/char/tpm/tpm_crb_ffa.c
-> @@ -177,23 +177,13 @@ static int tpm_crb_ffa_to_linux_errno(int errno)
->   */
->  int tpm_crb_ffa_init(void)
->  {
-> -	int ret = 0;
-> -
-> -	if (!IS_MODULE(CONFIG_TCG_ARM_CRB_FFA)) {
-> -		ret = ffa_register(&tpm_crb_ffa_driver);
-> -		if (ret) {
-> -			tpm_crb_ffa = ERR_PTR(-ENODEV);
-> -			return ret;
-> -		}
-> -	}
-> -
->  	if (!tpm_crb_ffa)
-> -		ret = -ENOENT;
-> +		return -ENOENT;
->  
->  	if (IS_ERR_VALUE(tpm_crb_ffa))
-> -		ret = -ENODEV;
-> +		return -ENODEV;
->  
-> -	return ret;
-> +	return 0;
->  }
->  EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
->  
-> @@ -405,9 +395,7 @@ static struct ffa_driver tpm_crb_ffa_driver = {
->  	.id_table = tpm_crb_ffa_device_id,
->  };
->  
-> -#ifdef MODULE
->  module_ffa_driver(tpm_crb_ffa_driver);
-> -#endif
->  
->  MODULE_AUTHOR("Arm");
->  MODULE_DESCRIPTION("TPM CRB FFA driver");
-> -- 
-> LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
-> 
-
-BR, Jarkko
+-- 
+Regards,
+Sudeep
 
