@@ -1,50 +1,50 @@
-Return-Path: <linux-integrity+bounces-9739-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9740-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id zBlCATLTHmoZVgAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9739-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 14:57:22 +0200
+	id pcbDMYnTHmolVgAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9740-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 14:58:49 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5788462E35C
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 14:57:21 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 399AF62E390
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 14:58:49 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=htxJfVbJ;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9739-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9739-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=ZSVY8Snw;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9740-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9740-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 083503020FD2
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 12:56:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9B94F30515A8
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 12:58:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E5B3C5536;
-	Tue,  2 Jun 2026 12:56:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34693C76A1;
+	Tue,  2 Jun 2026 12:58:05 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798831DF261;
-	Tue,  2 Jun 2026 12:56:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6F83E0730;
+	Tue,  2 Jun 2026 12:58:03 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780405002; cv=none; b=B7lJSkNXHnWDfVgpgYPbVCooP3V9a1cAFdPtgFLV2JjnFGATU6InawTG8gWElErBbiEQnzN22rKelp7OS622iADLg1nkhMg7qZTFpvDbS61Q01fUmMzFocpA9wUhlfGRdgB8m/ZaQKmic8boBaJaWey2B7X57uLg2Acu6WZucfE=
+	t=1780405085; cv=none; b=pFMYiHOHPq8AO/mTutJ2RVAt1HqM0vozg9IXvtaVsaCj9PYdLgy4/IUQ/Q0+++a+bxcyt4tnnil5cj7s78Y7Dxq+GBMS/gIneLmDQjD9Lcpkr9zshXJCeQyzWbAikeqxXVUWy1yIZxSu6HiJUxbpllIaMW6rhQUKclPClBdUd+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780405002; c=relaxed/simple;
-	bh=7wsYf/7D0u8ESNWFSm2ElY1xmc2anZep4nrGURpBEUU=;
+	s=arc-20240116; t=1780405085; c=relaxed/simple;
+	bh=wmUI05SuEatnASqnxtix94L6uiWkYkABIkEJIXEuLM8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JLRyrq30agr0Xumb55cTighbEUPibFqrUjMehmTBPRcQL+l4TU2GyRtgNTq++HFX6fLzZVW4AJOkYyvoQISvksDMobfIa2DszO9g7kvUgyYAKFYB9NM2vcH+OSeL+f198R2lxCUATg+CexrmQr9jmf2tSFVMetYURsdcyd+N3Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=htxJfVbJ; arc=none smtp.client-ip=217.140.110.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=oWRMAb67am021gLFiPnRUENlFIN8/wuTxVB850GEkpxHXWrokflKt4j0e3KM1nds9JklsmfmfxN8Ka84W4+hk+IOxpFW6oFIb1hE9dn9ohWNoe1VRidLuPZzlEPkOvJn/lF/N7O4JGq/EZWW6TYd+T3fasGn/WcesdgZAmI5Ags=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ZSVY8Snw; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B00DC22EA;
-	Tue,  2 Jun 2026 05:56:33 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E03E169C;
+	Tue,  2 Jun 2026 05:57:58 -0700 (PDT)
 Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED8A83F632;
-	Tue,  2 Jun 2026 05:56:36 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CC053F632;
+	Tue,  2 Jun 2026 05:58:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780404998; bh=7wsYf/7D0u8ESNWFSm2ElY1xmc2anZep4nrGURpBEUU=;
+	t=1780405083; bh=wmUI05SuEatnASqnxtix94L6uiWkYkABIkEJIXEuLM8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=htxJfVbJ7vzwG2Tsi7weAl+dU96bkd/rUkHnIGsVplMEo+ak+SDa4OzYNmKbxyw72
-	 oa84ZU9QzXVjKLR1wHMnXeEuleGZHDefl0UYtA10NnHzCPb0KJ1BJo7WpLegDN6LS0
-	 vnYNeXtCe1EyDgrMr08gXz+BX8/SOXq31kzoBOGI=
-Date: Tue, 2 Jun 2026 13:56:34 +0100
+	b=ZSVY8Snw31mpBs4DyX+jZeNKdQv31TO9VvqfhaZTiBMdJe7ikibAhFM0Qj1E4RbsA
+	 fHwdSv5qyibjdsSj/2yKW2o/hx7E1ha7Xx9at6FYSS2bKumAF0bLwt9V4pjqPPUcWX
+	 g/DGmsoMw2/po5srN1w/PUTwqelpG99x24QZbCq4=
+Date: Tue, 2 Jun 2026 13:57:59 +0100
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: Jarkko Sakkinen <jarkko@kernel.org>
 Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -55,10 +55,11 @@ Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
 	eric.snowberg@oracle.com, jgg@ziepe.ca
 Subject: Re: [PATCH v5 4/4] tpm: tpm_crb_ffa: revert defered_probed when
  tpm_crb_ffa is built-in
-Message-ID: <ah7TAk3iItltddzT@e129823.arm.com>
+Message-ID: <ah7TVybtYa46Df5c@e129823.arm.com>
 References: <20260601142749.3379697-1-yeoreum.yun@arm.com>
  <20260601142749.3379697-5-yeoreum.yun@arm.com>
  <ah5AD69RNBdE1BvO@kernel.org>
+ <ah7TAk3iItltddzT@e129823.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -67,18 +68,18 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ah5AD69RNBdE1BvO@kernel.org>
+In-Reply-To: <ah7TAk3iItltddzT@e129823.arm.com>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9739-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9740-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FREEMAIL_CC(0.00)[vger.kernel.org,paul-moore.com,linux.ibm.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
 	FROM_HAS_DN(0.00)[];
@@ -100,25 +101,27 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,arm.com:dkim,arm.com:from_mime,arm.com:email,vger.kernel.org:from_smtp,e129823.arm.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[e129823.arm.com:mid,arm.com:dkim,arm.com:from_mime,arm.com:email,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5788462E35C
+X-Rspamd-Queue-Id: 399AF62E390
 
-> On Mon, Jun 01, 2026 at 03:27:49PM +0100, Yeoreum Yun wrote:
-> > commit 746d9e9f62a6 ("tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when it's build_in")
-> > probe tpm_crb_ffa forcefully when it's built-in to integrate with IMA.
+> > On Mon, Jun 01, 2026 at 03:27:49PM +0100, Yeoreum Yun wrote:
+> > > commit 746d9e9f62a6 ("tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when it's build_in")
+> > > probe tpm_crb_ffa forcefully when it's built-in to integrate with IMA.
+> > > 
+> > > However, IMA now provides the IMA_INIT_LATE_SYNC build option, which
+> > > initialises IMA at the late_initcall_sync level, so this change is no
+> > > longer required.
+> > > 
+> > > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > > 
-> > However, IMA now provides the IMA_INIT_LATE_SYNC build option, which
-> > initialises IMA at the late_initcall_sync level, so this change is no
-> > longer required.
-> > 
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
 > 
-> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Might be rb tag?. Thanks!
 
-Might be rb tag?. Thanks!
+Ah Sorry. SOB is right thanks!
 
 -- 
 Sincerely,
