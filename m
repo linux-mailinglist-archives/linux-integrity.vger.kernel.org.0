@@ -1,64 +1,62 @@
-Return-Path: <linux-integrity+bounces-9741-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9742-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id gfIWNZvTHmooVgAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9741-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 14:59:07 +0200
+	id IkFZOhvVHmpyVgAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9742-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 15:05:31 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E15662E3A0
-	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 14:59:07 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4764362E457
+	for <lists+linux-integrity@lfdr.de>; Tue, 02 Jun 2026 15:05:31 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=arm.com header.s=foss header.b=Nj4MlWI4;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9741-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9741-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=arm.com header.s=foss header.b=iZROQl4o;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9742-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9742-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EAC6A302866F
-	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 12:58:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0B18E3046FC2
+	for <lists+linux-integrity@lfdr.de>; Tue,  2 Jun 2026 12:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3ED93D6480;
-	Tue,  2 Jun 2026 12:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B09F3E00A9;
+	Tue,  2 Jun 2026 12:59:00 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C214D3BE17D;
-	Tue,  2 Jun 2026 12:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2893C2799;
+	Tue,  2 Jun 2026 12:58:58 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780405120; cv=none; b=V3uJRclyMZybqDDobmfTh+dMxEp5WDkNr4+Vfy+IZnvxvvVzEhMRC8aR6qT9uSOYUgrcPUGKMDxHHGH4oONGhKAGiPYTpuq7vgywIq4c84RHv5y7GUDv4z02AFqA/mCn1HhwHib8OI04EActnCj5WXQHLsv5lBgQH5xVqspOPyE=
+	t=1780405140; cv=none; b=iZ8Bi/AuQCEBuxVTOHbjS0Sp5iFmWRJLhr5LBahWByYEPevwkmwT+50JBp6ZcqnTURWpayYak1s0uWk25h7DNLeTF7IcGF+gOoGcREoY8dbbWaU7GncE43/rn5eyPtFre/it/6Ni0nIAKn9r7Qj09m7EhDgM00biGA0ElZOoWXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780405120; c=relaxed/simple;
-	bh=F7p8ao5jE718R9vbROoxBsUPw1FnHZPPqSTle3h2Xe4=;
+	s=arc-20240116; t=1780405140; c=relaxed/simple;
+	bh=Y0GQNFYOedy21MCKtWpt6MqIuBGco1GIXaca2/Mu3ck=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AGh+v1pr7TjNkDoSn0O+6e17himTNhDTSbqGGhbSJvHKRSb7oWUYh94khRoHDVk5WrUZJ+vKX7QPdAw5H1ew1VxRVahjxZL2vqF5UKl5wLdicFTxhftlRFCEtt5SB9R4lmqEasvBvkEzRlHeVXdYUFbNlcHhbBPPEGPyWYGRqZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Nj4MlWI4; arc=none smtp.client-ip=217.140.110.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=JJKPify1myJ/v+CKuUDf6IJhI5lKuhmmHXtZS6RPiXgNckzncunGQXVlSlQJNHJJxnPS7dmUkdHrgmrYWLo0ogYCr5IWezEVoVFD/flsFbU358t4ED9W7u772Yqf6GYaXhVxnX8E4IfHY+HGn958ta0UX/mmXVKjHRv5M6yu7pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=iZROQl4o; arc=none smtp.client-ip=217.140.110.172
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4917B169C;
-	Tue,  2 Jun 2026 05:58:33 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F70E169C;
+	Tue,  2 Jun 2026 05:58:53 -0700 (PDT)
 Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 195FF3F632;
-	Tue,  2 Jun 2026 05:58:35 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C4B63F632;
+	Tue,  2 Jun 2026 05:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1780405118; bh=F7p8ao5jE718R9vbROoxBsUPw1FnHZPPqSTle3h2Xe4=;
+	t=1780405138; bh=Y0GQNFYOedy21MCKtWpt6MqIuBGco1GIXaca2/Mu3ck=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nj4MlWI4zxpNAxzHR7HBAooeXlxIzszd1q8+O0FmqTcuCbLcI2R2fbDId+a6OTokb
-	 CFwzlF/Tf3TaEqAhzkCnFrEOD4h7wFj8F5csOSP/nNwRDVQYUsm26QiUI+8/m/Gzra
-	 2+5w5pBEqU033LwtVz0cqO1tu1f6Th3Ihzle+iNk=
-Date: Tue, 2 Jun 2026 13:58:33 +0100
+	b=iZROQl4oHi6gzkkEuq55AQvvdOHbqENrH+Qw3bvvQzXLUMV+7VsxLvhYDVhVYbZWE
+	 0gPKw3iS0CzIco0por6kzUw3AEJLV6f+lIZl5PpzIysMRqx703HhdLr23FFFuEqSVr
+	 u/wTUHk2R7ZyZ0e1TXQ+dNk+USY8mwdSJf93VgS4=
+Date: Tue, 2 Jun 2026 13:58:53 +0100
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: Mimi Zohar <zohar@linux.ibm.com>
 Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-integrity@vger.kernel.org, paul@paul-moore.com,
 	roberto.sassu@huaweicloud.com, noodles@earth.li, jarkko@kernel.org,
 	sudeep.holla@kernel.org, jmorris@namei.org, serge@hallyn.com,
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jgg@ziepe.ca,
-	Jonathan McDowell <noodles@meta.com>
-Subject: Re: [PATCH v5 3/4] security: ima: rename boot_aggregate when ima is
- initialised at late_sync
-Message-ID: <ah7TeV7kSP8I2/hQ@e129823.arm.com>
+	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jgg@ziepe.ca
+Subject: Re: [PATCH v5 2/4] security: ima: introduce IMA_INIT_LATE_SYNC option
+Message-ID: <ah7Tjcm4CBEoDzIu@e129823.arm.com>
 References: <20260601142749.3379697-1-yeoreum.yun@arm.com>
- <20260601142749.3379697-4-yeoreum.yun@arm.com>
- <5c52effb1b4723c025f478c1c902bf83a9a4d0ed.camel@linux.ibm.com>
+ <20260601142749.3379697-3-yeoreum.yun@arm.com>
+ <1cb6e74f1d63bd256d70e5c026234d4535acb662.camel@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -68,24 +66,24 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5c52effb1b4723c025f478c1c902bf83a9a4d0ed.camel@linux.ibm.com>
+In-Reply-To: <1cb6e74f1d63bd256d70e5c026234d4535acb662.camel@linux.ibm.com>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
 	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9741-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9742-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,paul-moore.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca,meta.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,paul-moore.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:zohar@linux.ibm.com,m:linux-security-module@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:paul@paul-moore.com,m:roberto.sassu@huaweicloud.com,m:noodles@earth.li,m:jarkko@kernel.org,m:sudeep.holla@kernel.org,m:jmorris@namei.org,m:serge@hallyn.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:jgg@ziepe.ca,m:noodles@meta.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:zohar@linux.ibm.com,m:linux-security-module@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:paul@paul-moore.com,m:roberto.sassu@huaweicloud.com,m:noodles@earth.li,m:jarkko@kernel.org,m:sudeep.holla@kernel.org,m:jmorris@namei.org,m:serge@hallyn.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:jgg@ziepe.ca,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -101,61 +99,67 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	MISSING_XM_UA(0.00)[];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:dkim,arm.com:from_mime,arm.com:email,e129823.arm.com:mid,meta.com:email,vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:dkim,arm.com:from_mime,arm.com:email,e129823.arm.com:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 3E15662E3A0
+X-Rspamd-Queue-Id: 4764362E457
 
-Hi Mimi,
-
+On Tue, Jun 02, 2026 at 08:35:52AM -0400, Mimi Zohar wrote:
 > On Mon, 2026-06-01 at 15:27 +0100, Yeoreum Yun wrote:
-> > From: Jonathan McDowell <noodles@meta.com>
+> > To generate the boot_aggregate log in the IMA subsystem with TPM PCR values,
+> > the TPM driver must be built as built-in and
+> > must be probed before the IMA subsystem is initialized.
 > > 
-> > The Linux IMA (Integrity Measurement Architecture) subsystem used for
-> > secure boot, file integrity, or remote attestation cannot be a loadable
-> > module for few reasons listed below:
+> > However, when the TPM device operates over the FF-A protocol using
+> > the CRB interface, probing fails and returns -EPROBE_DEFER if
+> > the tpm_crb_ffa device — an FF-A device that provides the communication
+> > interface to the tpm_crb driver — has not yet been probed.
 > > 
-> >  o Boot-Time Integrity: IMA’s main role is to measure and appraise files
-> >    before they are used. This includes measuring critical system files
-> >    during early boot (e.g., init, init scripts, login binaries). If IMA
-> >    were a module, it would be loaded too late to cover those.
+> > To ensure the TPM device operating over the FF-A protocol with
+> > the CRB interface is probed before IMA initialization,
+> > the following conditions must be met:
 > > 
-> >  o TPM Dependency: IMA integrates tightly with the TPM to record
-> >    measurements into PCRs. The TPM must be initialized early (ideally
-> >    before init_ima()), which aligns with IMA being built-in.
+> > 1. The corresponding ffa_device must be registered,
+> >    which is done via ffa_init().
 > > 
-> >  o Security Model: IMA is part of a Trusted Computing Base (TCB). Making
-> >    it a module would weaken the security model, as a potentially
-> >    compromised system could delay or tamper with its initialization.
+> > 2. The tpm_crb_driver must successfully probe this device via
+> >    tpm_crb_ffa_init().
 > > 
-> > IMA must be built-in to ensure it starts measuring from the earliest
-> > possible point in boot which inturn implies TPM must be initialised and
-> > ready to use before IMA.
+> > 3. The tpm_crb driver using CRB over FF-A can then
+> >    be probed successfully. (See crb_acpi_add() and
+> >    tpm_crb_ffa_init() for reference.)
 > > 
-> > Unfortunately some TPM drivers (such as Arm FF-A, or SPI attached TPM
-> > devices) are not reliably available during the initcall_late stage,
-> > resulting in a log error:
+> > Unfortunately, ffa_init(), tpm_crb_ffa_init(), and crb_acpi_driver_init() are
+> > all registered with device_initcall, which means crb_acpi_driver_init() may
+> > be invoked before ffa_init() and tpm_crb_ffa_init() are completed.
 > > 
-> >   ima: No TPM chip found, activating TPM-bypass!
+> > When this occurs, probing the TPM device is deferred.
+> > However, the deferred probe can happen after the IMA subsystem
+> > has already been initialized, since IMA initialization is performed
+> > during late_initcall, and deferred_probe_initcall() is performed
+> > at the same level.
 > > 
-> > To address this issue, IMA_INIT_LATE_SYNC is introduced.
-> > However, a remote attestation service cannot determine when IMA has been
-> > initialized because the boot_aggregate measurement name remains unchanged,
-> > even though IMA is initialized later at late_initcall_sync when
-> > IMA_INIT_LATE_SYNC is enabled.
+> > And the similar situation is reported on TPM devices attached on SPI
+> > bus[0].
 > > 
-> > Therefore, use a distinct boot_aggregate name when IMA_INIT_LATE_SYNC
-> > is enabled, allowing the remote attestation service to identify
-> > when IMA has been initialized.
+> > To resolve this, introduce IMA_INIT_LATE_SYNC option to initialise
+> > IMA at late_inicall_sync so that IMA is initialized with the TPM
+> > device probed deferred.
 > > 
-> > Signed-off-by: Jonathan McDowell <noodles@meta.com>
-> > [yeoreum.yun@arm.com: modified to align with the IMA_INIT_LATE_SYNC change]
+> > When this option is enabled, modules that access files in the
+> > initramfs through usermode helper calls such as request_module()
+> > during initcall must not be built-in. Otherwise, IMA may miss
+> > measuring those files [1].
+> > 
+> > Link: https://lore.kernel.org/all/aYXEepLhUouN5f99@earth.li/ [0]
+> > Link: https://lore.kernel.org/all/2b3782398cc17ce9d355490a0c42ebce9120a9ae.camel@linux.ibm.com/ [1]
+> > Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > 
-> Thanks, Yeoreum. This version requires your Signed-off-by tag as well as
-> Jonathan's.  Otherwise the patch looks good.
+> Reviewed-by:  Mimi Zohar <zohar@linux.ibm.com>
 
-Thanks! I'll resend with my SOB again!
+Thanks!
 
 -- 
 Sincerely,
