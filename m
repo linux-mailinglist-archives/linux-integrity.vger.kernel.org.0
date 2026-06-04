@@ -1,341 +1,202 @@
-Return-Path: <linux-integrity+bounces-9743-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9744-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 7cdEBBvGIGov7wAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9743-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 04 Jun 2026 02:26:03 +0200
+	id AeFdI7DpIGqo9QAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9744-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 04 Jun 2026 04:57:52 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E78B63C0C2
-	for <lists+linux-integrity@lfdr.de>; Thu, 04 Jun 2026 02:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DEDD663C9DA
+	for <lists+linux-integrity@lfdr.de>; Thu, 04 Jun 2026 04:57:51 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=linux.microsoft.com header.s=default header.b=TOkxpyDI;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9743-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9743-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=linux.microsoft.com;
+	dkim=pass header.d=linux.alibaba.com header.s=default header.b="YvapC/JJ";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9744-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9744-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=linux.alibaba.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3905930182BE
-	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jun 2026 00:26:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 94CE730238ED
+	for <lists+linux-integrity@lfdr.de>; Thu,  4 Jun 2026 02:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA83175A81;
-	Thu,  4 Jun 2026 00:26:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1283AC0C2;
+	Thu,  4 Jun 2026 02:54:06 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78FF199D8;
-	Thu,  4 Jun 2026 00:25:58 +0000 (UTC)
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0663823D7F0;
+	Thu,  4 Jun 2026 02:54:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780532760; cv=none; b=u3KIZ8JEDXUsG8A5jFi/eiaY5uzxWa4SL7/UYlGz/5oOmegYBnU+SieJv2SOz33quHLlkE1rAq40PQmgEjTtajt9u5vSAMFCflW9omD0kEq/GY2drpsk4bzUvFPEuBvGzUCj5Mp8UQYPcZkWrrVZte2ukcPqIGYYC5Ox23CbZ3Q=
+	t=1780541645; cv=none; b=rmpcOn4pbY7hx3sk6Ys5XfUD0gxa8mUjwxB/0huEetpPaJ7ku9NSereY5zehTGw+FVoOD5YJHxecBXShqYTSXkHHcPw49Mn679SlhYt+2vhqYrFu1r1Tu644IfyihlqefwqEACZHQjdlJbgJQlyBa2GsB3CdSttFJcRRqD9nI78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780532760; c=relaxed/simple;
-	bh=kQplzmUkmr5e23A2MPsZ+2RVvXH5iEjjuq60aSGEbso=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CZ62UN9Q0HDzajVJMzzzwhs/lzJ+DqDFzzgGMeqEwTSQ0YKIw4ugN5A8ixA2UN4NYGJvMqHlwsDUVsBzDvZk7Ib33373l4EVLaJWhSupofqwvXCNuSd7rA19V8Zm2UR48oECrVX0SZIK8TjNvTzBXSk7rpxTDdR8f8KKWFPJpwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=TOkxpyDI; arc=none smtp.client-ip=13.77.154.182
-Received: from [100.65.233.38] (unknown [20.236.10.163])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 9F59020B7168;
-	Wed,  3 Jun 2026 17:25:42 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9F59020B7168
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1780532743;
-	bh=KSBysOBtgIjCR6JuPwdx2qXhRPAwOLWIc0hEopuQHGQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TOkxpyDIuucbmb6HPl9pwW4OpNTtGtBlb9u+5PYbiNLarmuHNJTYKU8C7CE2ZkdKZ
-	 Xz5AfPnyBm/nkAZ+DiNeVIiOwtCMJog8wRIR0JY7oz4sXG016wOHyZW3R0QKMXCUmb
-	 qusCP1dMewNqAcYZuDRLLxUVTqRrBudWh/sH2U5s=
-Message-ID: <880b0541-71e3-4676-9036-0597eacf45a6@linux.microsoft.com>
-Date: Wed, 3 Jun 2026 17:25:54 -0700
+	s=arc-20240116; t=1780541645; c=relaxed/simple;
+	bh=7+C6Nw6iMQL+90/+XKxfgRLwMLCaC5fM1Y3EGM8tlMg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oGNPqadGU2BrwGYPir4W8CHsC2FCsODd4NVd64fmGl8ihMFslt/ZTFJgzNUqKZL7/+FhXNLgdR92zolwt8br2DprFYN+2H5t/sALZB3De9gb5HTFjKZW/I7aZZjOuikTHF06LKiTdCDoh/GZKTNwfk64vDRdIwxYT9f44GTgVDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=YvapC/JJ; arc=none smtp.client-ip=115.124.30.110
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1780541640; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=aQaB2ZmZl+E8FocwraYwhjlJEmmAKUy+YTGT5D/wOTI=;
+	b=YvapC/JJHqcyAul/EE4tPh/Tu0KPT+t+sb4Ab9qMemSO7jr2hd1D6rS3ctCTz77xxSmmxmIunvfTO8pJgomiOu0o/vq2hr6PUqluDVyciKTBxHaTYulwDM43guwd3/5CckOjAjFcIAoAmEpF1eeUSXkDcXmTJeTH/cofPsqcfXw=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=zongyao.chen@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0X48rcwu_1780541638;
+Received: from localhost(mailfrom:ZongYao.Chen@linux.alibaba.com fp:SMTPD_---0X48rcwu_1780541638 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 04 Jun 2026 10:53:59 +0800
+From: ZongYao.Chen@linux.alibaba.com
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>,
+	Nayna Jain <nayna@linux.vnet.ibm.com>,
+	Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
+	Zongyao Chen <ZongYao.Chen@linux.alibaba.com>,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: eventlog: tpm2: allow event log entries ending at the log boundary
+Date: Thu,  4 Jun 2026 10:53:47 +0800
+Message-ID: <20260604025356.3436943-1-ZongYao.Chen@linux.alibaba.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 11/12] ima: Support staging and deleting N measurements
- records
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, corbet@lwn.net,
- skhan@linuxfoundation.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
- eric.snowberg@oracle.com, paul@paul-moore.com, jmorris@namei.org,
- serge@hallyn.com
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-integrity@vger.kernel.org, linux-security-module@vger.kernel.org,
- gregorylumen@linux.microsoft.com, nramas@linux.microsoft.com,
- Roberto Sassu <roberto.sassu@huawei.com>,
- steven chen <chenste@linux.microsoft.com>
-References: <20260602111401.1706052-1-roberto.sassu@huaweicloud.com>
- <20260602111401.1706052-12-roberto.sassu@huaweicloud.com>
-Content-Language: en-US
-From: steven chen <chenste@linux.microsoft.com>
-In-Reply-To: <20260602111401.1706052-12-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-7.66 / 15.00];
+	WHITELIST_DMARC(-7.00)[alibaba.com:D:+];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linux.microsoft.com,none];
-	R_DKIM_ALLOW(-0.20)[linux.microsoft.com:s=default];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[linux.alibaba.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	R_DKIM_ALLOW(-0.20)[linux.alibaba.com:s=default];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-9743-lists,linux-integrity=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[huaweicloud.com,lwn.net,linuxfoundation.org,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
-	FORGED_SENDER(0.00)[chenste@linux.microsoft.com,linux-integrity@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FORGED_RECIPIENTS(0.00)[m:roberto.sassu@huaweicloud.com,m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:zohar@linux.ibm.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:linux-doc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:gregorylumen@linux.microsoft.com,m:nramas@linux.microsoft.com,m:roberto.sassu@huawei.com,m:chenste@linux.microsoft.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-9744-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[ZongYao.Chen@linux.alibaba.com,linux-integrity@vger.kernel.org];
+	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:peterhuewe@gmx.de,m:jarkko@kernel.org,m:jgg@ziepe.ca,m:nayna@linux.vnet.ibm.com,m:tianjia.zhang@linux.alibaba.com,m:ZongYao.Chen@linux.alibaba.com,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[chenste@linux.microsoft.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[linux.microsoft.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_TRACE(0.00)[linux.alibaba.com:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FROM_NO_DN(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp,linux.microsoft.com:mid,linux.microsoft.com:from_mime,linux.microsoft.com:dkim]
+	FROM_NEQ_ENVFROM(0.00)[ZongYao.Chen@linux.alibaba.com,linux-integrity@vger.kernel.org]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7E78B63C0C2
+X-Rspamd-Queue-Id: DEDD663C9DA
 
-On 6/2/2026 4:14 AM, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> Add support for sending a value N between 1 and ULONG_MAX to the IMA
-> original measurement interface. This value represents the number of
-> measurements that should be deleted from the current measurements list. In
-> this case, measurements are staged in an internal non-user visible list,
-> and immediately deleted.
->
-> This staging method allows the remote attestation agents to easily separate
-> the measurements that were verified (staged and deleted) from those that
-> weren't due to the race between taking a TPM quote and reading the
-> measurements list.
->
-> In order to minimize the locking time of ima_extend_list_mutex, deleting
-> N records is realized by doing a lockless walk in the current measurements
-> list to determine the N-th entry to cut, to cut the current measurements
-> list under the lock, and by deleting the excess records after releasing the
-> lock.
->
-> Flushing the hash table is not supported for N records, since it would
-> require removing the N records one by one from the hash table under the
-> ima_extend_list_mutex lock, which would increase the locking time.
->
-> Link: https://github.com/linux-integrity/linux/issues/1
-> Co-developed-by: Steven Chen <chenste@linux.microsoft.com>
+From: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
 
-Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
+The TPM2 firmware event log buffer is a half-open range:
+[bios_event_log, bios_event_log_end). An entry ending exactly at
+bios_event_log_end is still inside the buffer; only an entry extending
+past that address is malformed.
 
-> Co-developed-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   security/integrity/ima/Kconfig     |  3 ++
->   security/integrity/ima/ima.h       |  1 +
->   security/integrity/ima/ima_fs.c    | 32 +++++++++++++--
->   security/integrity/ima/ima_queue.c | 63 ++++++++++++++++++++++++++++++
->   4 files changed, 96 insertions(+), 3 deletions(-)
->
-> diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-> index 02436670f746..f4d25e045808 100644
-> --- a/security/integrity/ima/Kconfig
-> +++ b/security/integrity/ima/Kconfig
-> @@ -341,6 +341,9 @@ config IMA_STAGING
->   	  It allows user space to stage the measurements list for deletion and
->   	  to delete the staged measurements after confirmation.
->   
-> +	  Or, alternatively, it allows user space to specify N measurements
-> +	  records to stage internally, so that they can be immediately deleted.
-> +
->   	  On kexec, staging is aborted and any staged measurement records are
->   	  copied to the secondary kernel.
->   
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index d2e740c8ff75..7a1b2d6a8b59 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -320,6 +320,7 @@ struct ima_template_desc *lookup_template_desc(const char *name);
->   bool ima_template_has_modsig(const struct ima_template_desc *ima_template);
->   int ima_queue_stage(void);
->   int ima_queue_staged_delete_all(void);
-> +int ima_queue_delete_partial(unsigned long req_value);
->   int ima_restore_measurement_entry(struct ima_template_entry *entry);
->   int ima_restore_measurement_list(loff_t bufsize, void *buf);
->   int ima_measurements_show(struct seq_file *m, void *v);
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-> index 96d7503a605b..174a94740da1 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -28,6 +28,7 @@
->    * Requests:
->    * 'A\n': stage the entire measurements list
->    * 'D\n': delete all staged measurements
-> + * '[1, ULONG_MAX]\n' delete N measurements records
->    */
->   #define STAGED_REQ_LENGTH 21
->   
-> @@ -343,6 +344,7 @@ static ssize_t _ima_measurements_write(struct file *file,
->   				       loff_t *ppos, bool staged_interface)
->   {
->   	char req[STAGED_REQ_LENGTH];
-> +	unsigned long req_value;
->   	int ret;
->   
->   	if (datalen < 2 || datalen > STAGED_REQ_LENGTH)
-> @@ -370,7 +372,24 @@ static ssize_t _ima_measurements_write(struct file *file,
->   		ret = ima_queue_staged_delete_all();
->   		break;
->   	default:
-> -		ret = -EINVAL;
-> +		if (staged_interface)
-> +			return -EINVAL;
-> +
-> +		if (ima_flush_htable) {
-> +			pr_debug("Deleting staged N measurements not supported when flushing the hash table is requested\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		ret = kstrtoul(req, 10, &req_value);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if (req_value == 0) {
-> +			pr_debug("Must delete at least one entry\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		ret = ima_queue_delete_partial(req_value);
->   	}
->   
->   	if (ret < 0)
-> @@ -379,6 +398,12 @@ static ssize_t _ima_measurements_write(struct file *file,
->   	return datalen;
->   }
->   
-> +static ssize_t ima_measurements_write(struct file *file, const char __user *buf,
-> +				      size_t datalen, loff_t *ppos)
-> +{
-> +	return _ima_measurements_write(file, buf, datalen, ppos, false);
-> +}
-> +
->   static ssize_t ima_measurements_staged_write(struct file *file,
->   					     const char __user *buf,
->   					     size_t datalen, loff_t *ppos)
-> @@ -389,6 +414,7 @@ static ssize_t ima_measurements_staged_write(struct file *file,
->   static const struct file_operations ima_measurements_ops = {
->   	.open = ima_measurements_open,
->   	.read = seq_read,
-> +	.write = ima_measurements_write,
->   	.llseek = seq_lseek,
->   	.release = ima_measurements_release,
->   };
-> @@ -470,6 +496,7 @@ static int ima_ascii_measurements_open(struct inode *inode, struct file *file)
->   static const struct file_operations ima_ascii_measurements_ops = {
->   	.open = ima_ascii_measurements_open,
->   	.read = seq_read,
-> +	.write = ima_measurements_write,
->   	.llseek = seq_lseek,
->   	.release = ima_measurements_release,
->   };
-> @@ -603,14 +630,13 @@ static int __init create_securityfs_measurement_lists(bool staging)
->   {
->   	const struct file_operations *ascii_ops = &ima_ascii_measurements_ops;
->   	const struct file_operations *binary_ops = &ima_measurements_ops;
-> -	umode_t permissions = (S_IRUSR | S_IRGRP);
-> +	umode_t permissions = (S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP);
->   	const char *file_suffix = "";
->   	int count = NR_BANKS(ima_tpm_chip);
->   
->   	if (staging) {
->   		ascii_ops = &ima_ascii_measurements_staged_ops;
->   		binary_ops = &ima_measurements_staged_ops;
-> -		permissions |= (S_IWUSR | S_IWGRP);
->   		file_suffix = "_staged";
->   	}
->   
-> diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-> index af0502f27d57..718991ba8bcd 100644
-> --- a/security/integrity/ima/ima_queue.c
-> +++ b/security/integrity/ima/ima_queue.c
-> @@ -405,6 +405,69 @@ int ima_queue_staged_delete_all(void)
->   	return 0;
->   }
->   
-> +/**
-> + * ima_queue_delete_partial - Delete current measurements
-> + * @req_value: Number of measurements to delete
-> + *
-> + * Delete the requested number of measurements from the current measurements
-> + * list, and update the number of records and the binary run-time size
-> + * accordingly.
-> + *
-> + * Refuse to delete current measurements if measurement is suspended, so that
-> + * dump can be done in a lockless way and user space is notified about current
-> + * measurements being carried over to the secondary kernel, so that it does not
-> + * save them twice.
-> + *
-> + * Return: Zero on success, a negative value otherwise.
-> + */
-> +int ima_queue_delete_partial(unsigned long req_value)
-> +{
-> +	unsigned long req_value_copy = req_value;
-> +	unsigned long size_to_remove = 0, num_to_remove = 0;
-> +	LIST_HEAD(ima_measurements_trim);
-> +	struct ima_queue_entry *qe;
-> +	int ret = 0;
-> +
-> +	/*
-> +	 * list_for_each_entry_rcu() without rcu_read_lock() is fine because
-> +	 * only list append can happen concurrently. No list replace due to the
-> +	 * staging/delete writers mutual exclusion.
-> +	 */
-> +	list_for_each_entry_rcu(qe, &ima_measurements, later, true) {
-> +		size_to_remove += get_binary_runtime_size(qe->entry);
-> +		num_to_remove++;
-> +
-> +		if (--req_value_copy == 0)
-> +			break;
-> +	}
-> +
-> +	/* Not enough records to delete. */
-> +	if (req_value_copy > 0)
-> +		return -ENOENT;
-> +
-> +	mutex_lock(&ima_extend_list_mutex);
-> +	if (ima_measurements_suspended) {
-> +		mutex_unlock(&ima_extend_list_mutex);
-> +		return -ESTALE;
-> +	}
-> +
-> +	/*
-> +	 * qe remains valid because ima_fs.c enforces single-writer exclusion.
-> +	 */
-> +	__list_cut_position(&ima_measurements_trim, &ima_measurements,
-> +			    &qe->later);
-> +
-> +	atomic_long_sub(num_to_remove, &ima_num_records[BINARY]);
-> +
-> +	if (IS_ENABLED(CONFIG_IMA_KEXEC))
-> +		binary_runtime_size[BINARY] -= size_to_remove;
-> +
-> +	mutex_unlock(&ima_extend_list_mutex);
-> +
-> +	ima_queue_delete(&ima_measurements_trim, false);
-> +	return ret;
-> +}
-> +
->   /**
->    * ima_queue_delete - Delete measurements
->    * @head: List head measurements are deleted from
+The TPM2 seq_file iterator did not handle this boundary consistently.
+The TCG_EfiSpecIdEvent header had to satisfy "addr + size < limit".
+Later events were rejected when "addr + size >= limit". Firmware that
+packs the final measurement tightly at the end of the log can therefore
+lose that measurement. If it is the first measurement after the spec ID
+header, binary_bios_measurements shows only the header.
 
+This has been observed on bare-metal systems whose UEFI enables the SM3
+PCR bank, but the bug is not SM3-specific. Any tightly packed TPM2 log
+whose final event ends at bios_event_log_end can hit it.
+
+Accept entries that end exactly at the log boundary by rejecting only
+"addr + size > limit". An accepted boundary entry has its last byte at
+limit - 1, so this does not allow reading past the buffer. Keep
+zero-length entries rejected.
+
+Also treat addr >= limit as EOF in tpm2_bios_measurements_start().
+After seq_file restarts from a later position, start() can scan past a
+valid final entry and leave addr equal to bios_event_log_end. That
+address is the end marker, not another event header.
+
+Leave the "marker >= limit" check in tpm2_bios_measurements_next()
+unchanged. There, marker is already the start of the next event, so
+"marker == limit" means EOF.
+
+Fixes: 4d23cc323cdb ("tpm: add securityfs support for TPM 2.0 firmware event log")
+Signed-off-by: Zongyao Chen <ZongYao.Chen@linux.alibaba.com>
+---
+ drivers/char/tpm/eventlog/tpm2.c | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/char/tpm/eventlog/tpm2.c b/drivers/char/tpm/eventlog/tpm2.c
+index 37a05800980c..6b65d872e43a 100644
+--- a/drivers/char/tpm/eventlog/tpm2.c
++++ b/drivers/char/tpm/eventlog/tpm2.c
+@@ -54,31 +54,38 @@ static void *tpm2_bios_measurements_start(struct seq_file *m, loff_t *pos)
+ 	size = struct_size(event_header, event, event_header->event_size);
+ 
+ 	if (*pos == 0) {
+-		if (addr + size < limit) {
+-			if ((event_header->event_type == 0) &&
+-			    (event_header->event_size == 0))
+-				return NULL;
+-			return SEQ_START_TOKEN;
+-		}
++		if (addr + size > limit)
++			return NULL;
++		if (event_header->event_type == 0 &&
++		    event_header->event_size == 0)
++			return NULL;
++		return SEQ_START_TOKEN;
+ 	}
+ 
+ 	if (*pos > 0) {
+ 		addr += size;
++		if (addr >= limit)
++			return NULL;
+ 		event = addr;
+ 		size = calc_tpm2_event_size(event, event_header);
+-		if ((addr + size >=  limit) || (size == 0))
++		if ((addr + size > limit) || size == 0)
+ 			return NULL;
+ 	}
+ 
+ 	for (i = 0; i < (*pos - 1); i++) {
++		if (addr >= limit)
++			return NULL;
+ 		event = addr;
+ 		size = calc_tpm2_event_size(event, event_header);
+ 
+-		if ((addr + size >= limit) || (size == 0))
++		if ((addr + size > limit) || size == 0)
+ 			return NULL;
+ 		addr += size;
+ 	}
+ 
++	if (addr >= limit)
++		return NULL;
++
+ 	return addr;
+ }
+ 
+@@ -115,7 +122,7 @@ static void *tpm2_bios_measurements_next(struct seq_file *m, void *v,
+ 	event = v;
+ 
+ 	event_size = calc_tpm2_event_size(event, event_header);
+-	if (((v + event_size) >= limit) || (event_size == 0))
++	if (((v + event_size) > limit) || event_size == 0)
+ 		return NULL;
+ 
+ 	return v;
+-- 
+2.47.3
 
 
