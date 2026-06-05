@@ -1,48 +1,48 @@
-Return-Path: <linux-integrity+bounces-9759-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9760-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id l9OxKgMNI2q+hAEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9759-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:53:07 +0200
+	id V21zF08JI2qZgwEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9760-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:37:19 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1756864A553
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8B7164A39F
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:37:18 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9759-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9759-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9760-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9760-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8F883306F4A8
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2026 17:24:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 10725307511E
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2026 17:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978603815DC;
-	Fri,  5 Jun 2026 17:23:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E253A7828;
+	Fri,  5 Jun 2026 17:24:01 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C162494F0;
-	Fri,  5 Jun 2026 17:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5E33A3821;
+	Fri,  5 Jun 2026 17:23:59 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780680234; cv=none; b=pttp5v6etGrlpfoHLhXp23Zdvh0xn6UtVmfh3hxaANwPpAdUU9AsTx90BMz/aZQdQksCvVxSNr/zYOqctOUKmWrPWQuO92/OM+oVaaquPDQNZf37S9Svo8MjmXqpDudpSK4xwqWJ9DsYL2Re9TFhtxMhhUo5qIa+7ei7erkgPaA=
+	t=1780680241; cv=none; b=NzzcumxfcIZqWD0o7a76hqOfXDYB4gCqh/y3YCOZUFqHqKM/3HdFjUMVWTNkcQqQtKWAcQJbt6P710rQCzR4nSz+Qw7hQXTyw6lIS4XxA+nu6WrDv2sN1XAfW/bKIV9SwdCdZgy+4ZXKGSAB+PKZS7buKmYohGmwxf6Nk2Ii/s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780680234; c=relaxed/simple;
-	bh=kwWFz/mirnCJD2wMiUROXV7CE+zEUlUkVnOSOLUeIso=;
+	s=arc-20240116; t=1780680241; c=relaxed/simple;
+	bh=/SCGNTUkpB83gHDuC15wfO0maemVG7K75L/GjQ49T3A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cLZxVGuAROIOLlaKeNxu4N4nFoITeKtmw44/p7HowckR8sHGppUCcYWZCXq9QgQqpbszaWF8/vXjERPOaCgM3kBjYI8Pjniga+5cfrulc2FpKysRWrYLqu9Lx6mVJ/5emvCj0nO0xP7yZFO/eiLSgG4ugZxCgG9wdj1qAUGHORc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4gX7SV0bNSzpV2C;
-	Sat,  6 Jun 2026 01:18:34 +0800 (CST)
+	 MIME-Version; b=olv0kUSfj17UIcVQXU73og3XVlemZxDxZ+18pAvpnZOfz8YJsDSmDnZExaGQjqpkJw2jEPb424Iu4P4U20am9UJVJfbmDYASWLnc0F2fyjiORGTnLBxI1TgtINeOAqXQYdUR4ot9Hpbz1wodn71NZDAogn9Hg3H+DPM/qDXv//g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gX7Sb1YvZz1HCnM;
+	Sat,  6 Jun 2026 01:18:39 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id D86D24056F;
-	Sat,  6 Jun 2026 01:23:49 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 16B114056F;
+	Sat,  6 Jun 2026 01:23:58 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBHV43pBSNqZAhlAA--.46721S8;
-	Fri, 05 Jun 2026 18:23:49 +0100 (CET)
+	by APP2 (Coremail) with SMTP id GxC2BwBHV43pBSNqZAhlAA--.46721S9;
+	Fri, 05 Jun 2026 18:23:57 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	skhan@linuxfoundation.org,
@@ -60,9 +60,9 @@ Cc: linux-doc@vger.kernel.org,
 	chenste@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v7 06/12] ima: Mediate open/release method of the measurements list
-Date: Fri,  5 Jun 2026 19:22:30 +0200
-Message-ID: <20260605172236.2042045-7-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v7 07/12] ima: Use snprintf() in create_securityfs_measurement_lists
+Date: Fri,  5 Jun 2026 19:22:31 +0200
+Message-ID: <20260605172236.2042045-8-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260605172236.2042045-1-roberto.sassu@huaweicloud.com>
 References: <20260605172236.2042045-1-roberto.sassu@huaweicloud.com>
@@ -73,10 +73,10 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwBHV43pBSNqZAhlAA--.46721S8
-X-Coremail-Antispam: 1UD129KBjvJXoW3Jw4kuF1ruFy3WF13XF4fKrg_yoW7WFWDpa
-	9ak3y8Cr18tr4xWFn7G3W7Zr4F9ayrGa13Wr1DJa4fZF1rAr9F9F4Yyry2krs8tryrGr1I
-	qw4qqrW5Was0yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:GxC2BwBHV43pBSNqZAhlAA--.46721S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7tFy5XFWDWw1rtF1kCF43Awb_yoW8tw4rpa
+	ySgF18Crs5J3yxtF93K3Z3uFWS93yagF1UW3ykK3WkAFn5XrZ5KF4vkr12kr95Kr1rtFy8
+	XwsFqF43C3Z0yaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -91,7 +91,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3Jw4kuF1ruFy3WF13XF4fKrg_yoW7WFWDpa
 	c7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
 	AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZF
 	pf9x07UZTmfUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAPBGoiO0QKbQACsY
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBGoiOzcKkQAAsW
 X-Rspamd-Action: add header
 X-Spamd-Result: default: False [6.34 / 15.00];
 	SEM_URIBL(3.50)[huaweicloud.com:from_mime,huaweicloud.com:mid];
@@ -105,7 +105,7 @@ X-Spamd-Result: default: False [6.34 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[16];
-	TAGGED_FROM(0.00)[bounces-9759-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9760-lists,linux-integrity=lfdr.de];
 	DMARC_NA(0.00)[huaweicloud.com];
 	FORGED_RECIPIENTS(0.00)[m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:zohar@linux.ibm.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:linux-doc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:gregorylumen@linux.microsoft.com,m:chenste@linux.microsoft.com,m:nramas@linux.microsoft.com,m:roberto.sassu@huawei.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
@@ -127,185 +127,65 @@ X-Spamd-Result: default: False [6.34 / 15.00];
 	R_DKIM_NA(0.00)[];
 	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huaweicloud.com:from_mime,huaweicloud.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huaweicloud.com:from_mime,huaweicloud.com:mid,huawei.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1756864A553
+X-Rspamd-Queue-Id: B8B7164A39F
 X-Spam: Yes
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Introduce the ima_measure_users counter, to implement a semaphore-like
-locking scheme where the binary and ASCII measurements list interfaces can
-be concurrently opened by multiple readers, or alternatively by a single
-writer. In addition, allow the same writer to open the other interfaces for
-write or read/write, so that it can see the same measurement state across
-all the interfaces.
+Use the more secure snprintf() function (accepting the buffer size) in
+create_securityfs_measurement_lists().
 
-A semaphore cannot be used because the kernel cannot return to user space
-with a lock held.
-
-Introduce the ima_measure_lock() and ima_measure_unlock() primitives, to
-respectively lock/unlock the interfaces (safely with the ima_measure_users
-counter, without holding a lock).
-
-Finally, introduce _ima_measurements_open() to lock the interface before
-seq_open(), and call it from ima_measurements_open() and
-ima_ascii_measurements_open(). And, introduce ima_measurements_release(),
-to unlock the interface.
-
-Require CAP_SYS_ADMIN if the interface is opened for write (not possible
-for the current measurements interfaces, since they only have read
-permission).
-
-No functional changes: multiple readers are allowed as before.
+No functional change: sprintf() and snprintf() have the same behavior.
 
 Link: https://github.com/linux-integrity/linux/issues/1
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- security/integrity/ima/ima_fs.c | 102 ++++++++++++++++++++++++++++++--
- 1 file changed, 98 insertions(+), 4 deletions(-)
+ security/integrity/ima/ima_fs.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
 diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index dcdc4cb8fa0f..91bd831d070f 100644
+index 91bd831d070f..f6ecee2d7699 100644
 --- a/security/integrity/ima/ima_fs.c
 +++ b/security/integrity/ima/ima_fs.c
-@@ -25,6 +25,10 @@
- #include "ima.h"
+@@ -503,11 +503,13 @@ static int __init create_securityfs_measurement_lists(void)
+ 		struct dentry *dentry;
  
- static DEFINE_MUTEX(ima_write_mutex);
-+static DEFINE_MUTEX(ima_measure_mutex);
-+static long ima_measure_users;
-+static struct task_struct *measure_writer;
-+static long measure_writer_extra_writes;
+ 		if (algo == HASH_ALGO__LAST)
+-			sprintf(file_name, "ascii_runtime_measurements_tpm_alg_%x",
+-				ima_tpm_chip->allocated_banks[i].alg_id);
++			snprintf(file_name, sizeof(file_name),
++				 "ascii_runtime_measurements_tpm_alg_%x",
++				 ima_tpm_chip->allocated_banks[i].alg_id);
+ 		else
+-			sprintf(file_name, "ascii_runtime_measurements_%s",
+-				hash_algo_name[algo]);
++			snprintf(file_name, sizeof(file_name),
++				 "ascii_runtime_measurements_%s",
++				 hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_ascii_measurements_ops);
+@@ -515,11 +517,13 @@ static int __init create_securityfs_measurement_lists(void)
+ 			return PTR_ERR(dentry);
  
- bool ima_canonical_fmt;
- static int __init default_canonical_fmt_setup(char *str)
-@@ -209,16 +213,105 @@ static const struct seq_operations ima_measurments_seqops = {
- 	.show = ima_measurements_show
- };
- 
-+static int ima_measure_lock(bool write)
-+{
-+	mutex_lock(&ima_measure_mutex);
-+	/* Overflow check. */
-+	if (!write && ima_measure_users == LONG_MAX) {
-+		mutex_unlock(&ima_measure_mutex);
-+		return -ENFILE;
-+	}
-+
-+	/* Same writer can do additional writes or read/writes. */
-+	if (write && current == measure_writer) {
-+		measure_writer_extra_writes++;
-+		mutex_unlock(&ima_measure_mutex);
-+		return 0;
-+	}
-+
-+	/*
-+	 * ima_measure_users: > 0 open readers
-+	 * ima_measure_users: == -1 open writer
-+	 */
-+	if ((write && ima_measure_users != 0) ||
-+	    (!write && ima_measure_users < 0)) {
-+		mutex_unlock(&ima_measure_mutex);
-+		return -EBUSY;
-+	}
-+
-+	if (write) {
-+		ima_measure_users--;
-+		/* Pointer valid, no reuse while the file descriptor is open. */
-+		measure_writer = current;
-+	} else {
-+		ima_measure_users++;
-+	}
-+	mutex_unlock(&ima_measure_mutex);
-+	return 0;
-+}
-+
-+static void ima_measure_unlock(bool write)
-+{
-+	mutex_lock(&ima_measure_mutex);
-+	/* Decrement additional writes or read/writes. */
-+	if (write && current == measure_writer &&
-+	    measure_writer_extra_writes != 0) {
-+		measure_writer_extra_writes--;
-+		mutex_unlock(&ima_measure_mutex);
-+		return;
-+	}
-+	if (write) {
-+		ima_measure_users++;
-+		measure_writer = NULL;
-+	} else {
-+		ima_measure_users--;
-+	}
-+	mutex_unlock(&ima_measure_mutex);
-+}
-+
-+static int _ima_measurements_open(struct inode *inode, struct file *file,
-+				  const struct seq_operations *seq_ops)
-+{
-+	bool write = (file->f_mode & FMODE_WRITE);
-+	int ret;
-+
-+	if (write && !capable(CAP_SYS_ADMIN))
-+		return -EPERM;
-+
-+	ret = ima_measure_lock(write);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = seq_open(file, seq_ops);
-+	if (ret < 0)
-+		ima_measure_unlock(write);
-+
-+	return ret;
-+}
-+
- static int ima_measurements_open(struct inode *inode, struct file *file)
- {
--	return seq_open(file, &ima_measurments_seqops);
-+	return _ima_measurements_open(inode, file, &ima_measurments_seqops);
-+}
-+
-+static int ima_measurements_release(struct inode *inode, struct file *file)
-+{
-+	bool write = (file->f_mode & FMODE_WRITE);
-+	int ret;
-+
-+	/* seq_release() always returns zero. */
-+	ret = seq_release(inode, file);
-+
-+	ima_measure_unlock(write);
-+
-+	return ret;
- }
- 
- static const struct file_operations ima_measurements_ops = {
- 	.open = ima_measurements_open,
- 	.read = seq_read,
- 	.llseek = seq_lseek,
--	.release = seq_release,
-+	.release = ima_measurements_release,
- };
- 
- void ima_print_digest(struct seq_file *m, u8 *digest, u32 size)
-@@ -283,14 +376,15 @@ static const struct seq_operations ima_ascii_measurements_seqops = {
- 
- static int ima_ascii_measurements_open(struct inode *inode, struct file *file)
- {
--	return seq_open(file, &ima_ascii_measurements_seqops);
-+	return _ima_measurements_open(inode, file,
-+				      &ima_ascii_measurements_seqops);
- }
- 
- static const struct file_operations ima_ascii_measurements_ops = {
- 	.open = ima_ascii_measurements_open,
- 	.read = seq_read,
- 	.llseek = seq_lseek,
--	.release = seq_release,
-+	.release = ima_measurements_release,
- };
- 
- static ssize_t ima_read_policy(char *path)
+ 		if (algo == HASH_ALGO__LAST)
+-			sprintf(file_name, "binary_runtime_measurements_tpm_alg_%x",
+-				ima_tpm_chip->allocated_banks[i].alg_id);
++			snprintf(file_name, sizeof(file_name),
++				 "binary_runtime_measurements_tpm_alg_%x",
++				 ima_tpm_chip->allocated_banks[i].alg_id);
+ 		else
+-			sprintf(file_name, "binary_runtime_measurements_%s",
+-				hash_algo_name[algo]);
++			snprintf(file_name, sizeof(file_name),
++				 "binary_runtime_measurements_%s",
++				 hash_algo_name[algo]);
+ 		dentry = securityfs_create_file(file_name, S_IRUSR | S_IRGRP,
+ 						ima_dir, (void *)(uintptr_t)i,
+ 						&ima_measurements_ops);
 -- 
 2.43.0
 
