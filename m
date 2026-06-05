@@ -1,48 +1,48 @@
-Return-Path: <linux-integrity+bounces-9764-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9765-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id vA43Mg4NI2rLhAEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9764-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:53:18 +0200
+	id ePIuG/UOI2p9hQEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9765-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 20:01:25 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B07064A568
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:53:18 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A7AD64A653
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 20:01:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9764-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9764-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9765-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9765-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DB63A3096B67
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2026 17:25:49 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B9B7A308B9F2
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2026 17:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7E1368D69;
-	Fri,  5 Jun 2026 17:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EA42E1C4E;
+	Fri,  5 Jun 2026 17:25:55 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F19433893D;
-	Fri,  5 Jun 2026 17:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C092F7EE1;
+	Fri,  5 Jun 2026 17:25:52 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780680340; cv=none; b=k05uj8dp3T082RNG+UxZPBjbnJe3hfMuO/Isj6kTDTg7TbVSuWvV+e3Ic6TX7mHWLxLP26jrPSpSNqYPsT26hUXwOIsHHKcqJmOKNGXsQb3dDOsYXETxOnnJ56kuw87rbKSNLZSLzOmiRZK+WG3UAZoShQNEe5kOoGFXpdfusMM=
+	t=1780680355; cv=none; b=kRzgDWwo52p816CCBg+MlZLjG6xJ7zhFO6yyDWyboO4QCNewjtH8kP5mLKJttwOqeK9S3KBdviOsEuWLDD9f7htmGuYbPKsc+5UhgP7hS5iOopeiuoLNd5At4ovLIsAldpgykbGcMZsDIo10Xt7bpfGCAHYFblPPJjn0cRgxwbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780680340; c=relaxed/simple;
-	bh=FDGfuAGYylimIGqrbY7iUdj5DzPRO9Yhk1c3hXVf35c=;
+	s=arc-20240116; t=1780680355; c=relaxed/simple;
+	bh=L0gUMkOe3CEUdn9+ggxOpmkji8Fi1cuMFRNBlHHMXgs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qVwKr4QW2TpjV2nOha43RJxybJVOlSYCK5t6itFzkSiepNz/9g5rjulOUBwYYdheNObBXGyWva+2r17egMJGx5WHfDX+gt5AKoRJHUMKI1bmN8cIM+AH8OYE0BNxrhXJXJJGqJSq3D8DpcOtv8/+Op/EZWqginZS+d1StnV+Q2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Received: from mail.maildlp.com (unknown [172.18.224.196])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gX7VT6qJ3z1HCnS;
-	Sat,  6 Jun 2026 01:20:17 +0800 (CST)
+	 MIME-Version; b=Kx7KxEIAxNJK56YQoBL+u4/c205v8nU80K19n5Hdy1UyvsKdXncuPkNXO1nXmCAbS7HamViQQsPY9crgGBxyVhBWt0vytmGOafz9rENvmIyCj3p0MbIQUVmeYelblS+tHq+0RATTh1InFsJJQxzkkMC7e7o8e0bnXBKXsAB+bJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
+Received: from mail.maildlp.com (unknown [172.18.224.235])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gX7W20GvKzsT0g;
+	Sat,  6 Jun 2026 01:20:46 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id CBD424056C;
-	Sat,  6 Jun 2026 01:25:36 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 35BFA40572;
+	Sat,  6 Jun 2026 01:25:45 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwCXWY9+BiNqCg9lAA--.44013S3;
-	Fri, 05 Jun 2026 18:25:36 +0100 (CET)
+	by APP2 (Coremail) with SMTP id GxC2BwCXWY9+BiNqCg9lAA--.44013S4;
+	Fri, 05 Jun 2026 18:25:44 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	skhan@linuxfoundation.org,
@@ -60,9 +60,9 @@ Cc: linux-doc@vger.kernel.org,
 	chenste@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v7 11/12] ima: Support staging and deleting N measurements records
-Date: Fri,  5 Jun 2026 19:22:35 +0200
-Message-ID: <20260605172236.2042045-12-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v7 12/12] doc: security: Add documentation of exporting and deleting IMA measurements
+Date: Fri,  5 Jun 2026 19:22:36 +0200
+Message-ID: <20260605172236.2042045-13-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260605172236.2042045-1-roberto.sassu@huaweicloud.com>
 References: <20260605172236.2042045-1-roberto.sassu@huaweicloud.com>
@@ -73,13 +73,13 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwCXWY9+BiNqCg9lAA--.44013S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxKFykWFyrKr15JFW3ZFy7Wrg_yoWfXw1xpa
-	9aga4rGr18J34fKrn7Ga1Dur4ru3ykKF4UWr45Ga42yF1rXryj9r45Cry2yFs8KryrJr18
-	twsIqr45Can8taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:GxC2BwCXWY9+BiNqCg9lAA--.44013S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3Cr48GrW7JFWrJF4UJFW8JFb_yoWDKw1rpa
+	9aga4Ikwn5Ja4fAw1kJw1xJr4rZ3yrKa1UGrn3Jw1xAFn8Wryvyr4akrWY9FZxKr1vvryj
+	v3ZFvr45Aa1qqaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
 	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
@@ -90,8 +90,8 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxKFykWFyrKr15JFW3ZFy7Wrg_yoWfXw1xpa
 	ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
 	xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
 	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-	07jjuWdUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAPBGoiO0QKbwAAsY
+	07Ud5rcUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBGoiOzcKlQAAsS
 X-Rspamd-Action: add header
 X-Spamd-Result: default: False [6.34 / 15.00];
 	SEM_URIBL(3.50)[huaweicloud.com:from_mime,huaweicloud.com:mid];
@@ -105,7 +105,7 @@ X-Spamd-Result: default: False [6.34 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[16];
-	TAGGED_FROM(0.00)[bounces-9764-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9765-lists,linux-integrity=lfdr.de];
 	DMARC_NA(0.00)[huaweicloud.com];
 	FORGED_RECIPIENTS(0.00)[m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:zohar@linux.ibm.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:linux-doc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:gregorylumen@linux.microsoft.com,m:chenste@linux.microsoft.com,m:nramas@linux.microsoft.com,m:roberto.sassu@huawei.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
@@ -123,257 +123,266 @@ X-Spamd-Result: default: False [6.34 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	R_DKIM_NA(0.00)[];
 	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(0.00)[+ip4:172.234.253.10:c];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huaweicloud.com:from_mime,huaweicloud.com:mid]
+	R_SPF_ALLOW(0.00)[+ip4:172.232.135.74:c];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,huawei.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4B07064A568
+X-Rspamd-Queue-Id: 0A7AD64A653
 X-Spam: Yes
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add support for sending a value N between 1 and ULONG_MAX to the IMA
-original measurement interface. This value represents the number of
-measurements that should be deleted from the current measurements list. In
-this case, measurements are staged in an internal non-user visible list,
-and immediately deleted.
+Add the documentation of exporting and deleting IMA measurements in
+Documentation/security/IMA-export-delete.rst.
 
-This staging method allows the remote attestation agents to easily separate
-the measurements that were verified (staged and deleted) from those that
-weren't due to the race between taking a TPM quote and reading the
-measurements list.
-
-In order to minimize the locking time of ima_extend_list_mutex, deleting
-N records is realized by doing a lockless walk in the current measurements
-list to determine the N-th entry to cut, to cut the current measurements
-list under the lock, and by deleting the excess records after releasing the
-lock.
-
-Flushing the hash table is not supported for N records, since it would
-require removing the N records one by one from the hash table under the
-ima_extend_list_mutex lock, which would increase the locking time.
+Also add the missing Documentation/security/IMA-templates.rst file in
+MAINTAINERS.
 
 Link: https://github.com/linux-integrity/linux/issues/1
-Co-developed-by: Steven Chen <chenste@linux.microsoft.com>
-Signed-off-by: Steven Chen <chenste@linux.microsoft.com>
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/integrity/ima/Kconfig     |  3 ++
- security/integrity/ima/ima.h       |  2 +
- security/integrity/ima/ima_fs.c    | 32 +++++++++++++--
- security/integrity/ima/ima_queue.c | 65 +++++++++++++++++++++++++++++-
- 4 files changed, 98 insertions(+), 4 deletions(-)
+ Documentation/security/IMA-export-delete.rst | 203 +++++++++++++++++++
+ Documentation/security/index.rst             |   1 +
+ MAINTAINERS                                  |   2 +
+ 3 files changed, 206 insertions(+)
+ create mode 100644 Documentation/security/IMA-export-delete.rst
 
-diff --git a/security/integrity/ima/Kconfig b/security/integrity/ima/Kconfig
-index 02436670f746..f4d25e045808 100644
---- a/security/integrity/ima/Kconfig
-+++ b/security/integrity/ima/Kconfig
-@@ -341,6 +341,9 @@ config IMA_STAGING
- 	  It allows user space to stage the measurements list for deletion and
- 	  to delete the staged measurements after confirmation.
- 
-+	  Or, alternatively, it allows user space to specify N measurements
-+	  records to stage internally, so that they can be immediately deleted.
+diff --git a/Documentation/security/IMA-export-delete.rst b/Documentation/security/IMA-export-delete.rst
+new file mode 100644
+index 000000000000..1600ead03b03
+--- /dev/null
++++ b/Documentation/security/IMA-export-delete.rst
+@@ -0,0 +1,203 @@
++.. SPDX-License-Identifier: GPL-2.0
 +
- 	  On kexec, staging is aborted and any staged measurement records are
- 	  copied to the secondary kernel.
- 
-diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 3892d2a6c2e2..caaedd4b58fd 100644
---- a/security/integrity/ima/ima.h
-+++ b/security/integrity/ima/ima.h
-@@ -320,6 +320,7 @@ struct ima_template_desc *lookup_template_desc(const char *name);
- bool ima_template_has_modsig(const struct ima_template_desc *ima_template);
- int ima_queue_stage(void);
- int ima_queue_staged_delete_all(void);
-+int ima_queue_delete_partial(unsigned long req_value);
- int ima_restore_measurement_entry(struct ima_template_entry *entry);
- int ima_restore_measurement_list(loff_t bufsize, void *buf);
- int ima_measurements_show(struct seq_file *m, void *v);
-@@ -342,6 +343,7 @@ extern atomic_long_t ima_num_records[BINARY__LAST];
- /* Total number of violations since hard boot. */
- extern atomic_long_t ima_num_violations;
- extern struct hlist_head __rcu *ima_htable;
-+extern bool ima_flush_htable;
- 
- static inline unsigned int ima_hash_key(u8 *digest)
- {
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index 96d7503a605b..174a94740da1 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -28,6 +28,7 @@
-  * Requests:
-  * 'A\n': stage the entire measurements list
-  * 'D\n': delete all staged measurements
-+ * '[1, ULONG_MAX]\n' delete N measurements records
-  */
- #define STAGED_REQ_LENGTH 21
- 
-@@ -343,6 +344,7 @@ static ssize_t _ima_measurements_write(struct file *file,
- 				       loff_t *ppos, bool staged_interface)
- {
- 	char req[STAGED_REQ_LENGTH];
-+	unsigned long req_value;
- 	int ret;
- 
- 	if (datalen < 2 || datalen > STAGED_REQ_LENGTH)
-@@ -370,7 +372,24 @@ static ssize_t _ima_measurements_write(struct file *file,
- 		ret = ima_queue_staged_delete_all();
- 		break;
- 	default:
--		ret = -EINVAL;
-+		if (staged_interface)
-+			return -EINVAL;
++==================================
++IMA Measurements Export and Delete
++==================================
 +
-+		if (ima_flush_htable) {
-+			pr_debug("Deleting staged N measurements not supported when flushing the hash table is requested\n");
-+			return -EINVAL;
-+		}
 +
-+		ret = kstrtoul(req, 10, &req_value);
-+		if (ret < 0)
-+			return ret;
++Introduction
++============
 +
-+		if (req_value == 0) {
-+			pr_debug("Must delete at least one entry\n");
-+			return -EINVAL;
-+		}
++The IMA measurements list is currently stored in the kernel memory. Memory
++occupation grows linearly with the number of records, and can become a
++problem especially in environments with reduced resources.
 +
-+		ret = ima_queue_delete_partial(req_value);
- 	}
- 
- 	if (ret < 0)
-@@ -379,6 +398,12 @@ static ssize_t _ima_measurements_write(struct file *file,
- 	return datalen;
- }
- 
-+static ssize_t ima_measurements_write(struct file *file, const char __user *buf,
-+				      size_t datalen, loff_t *ppos)
-+{
-+	return _ima_measurements_write(file, buf, datalen, ppos, false);
-+}
++While there is an advantage in keeping the IMA measurements list in kernel
++memory, so that it is always available for reading from the securityfs
++interfaces, storing it elsewhere would make it possible to free precious
++memory for other kernel usage.
 +
- static ssize_t ima_measurements_staged_write(struct file *file,
- 					     const char __user *buf,
- 					     size_t datalen, loff_t *ppos)
-@@ -389,6 +414,7 @@ static ssize_t ima_measurements_staged_write(struct file *file,
- static const struct file_operations ima_measurements_ops = {
- 	.open = ima_measurements_open,
- 	.read = seq_read,
-+	.write = ima_measurements_write,
- 	.llseek = seq_lseek,
- 	.release = ima_measurements_release,
- };
-@@ -470,6 +496,7 @@ static int ima_ascii_measurements_open(struct inode *inode, struct file *file)
- static const struct file_operations ima_ascii_measurements_ops = {
- 	.open = ima_ascii_measurements_open,
- 	.read = seq_read,
-+	.write = ima_measurements_write,
- 	.llseek = seq_lseek,
- 	.release = ima_measurements_release,
- };
-@@ -603,14 +630,13 @@ static int __init create_securityfs_measurement_lists(bool staging)
- {
- 	const struct file_operations *ascii_ops = &ima_ascii_measurements_ops;
- 	const struct file_operations *binary_ops = &ima_measurements_ops;
--	umode_t permissions = (S_IRUSR | S_IRGRP);
-+	umode_t permissions = (S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP);
- 	const char *file_suffix = "";
- 	int count = NR_BANKS(ima_tpm_chip);
- 
- 	if (staging) {
- 		ascii_ops = &ima_ascii_measurements_staged_ops;
- 		binary_ops = &ima_measurements_staged_ops;
--		permissions |= (S_IWUSR | S_IWGRP);
- 		file_suffix = "_staged";
- 	}
- 
-diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index df1e81ea7a36..f89f0ca3d4ed 100644
---- a/security/integrity/ima/ima_queue.c
-+++ b/security/integrity/ima/ima_queue.c
-@@ -22,7 +22,7 @@
- 
- #define AUDIT_CAUSE_LEN_MAX 32
- 
--static bool ima_flush_htable;
-+bool ima_flush_htable;
- 
- static int __init ima_flush_htable_setup(char *str)
- {
-@@ -405,6 +405,69 @@ int ima_queue_staged_delete_all(void)
- 	return 0;
- }
- 
-+/**
-+ * ima_queue_delete_partial - Delete current measurements
-+ * @req_value: Number of measurements to delete
-+ *
-+ * Delete the requested number of measurements from the current measurements
-+ * list, and update the number of records and the binary run-time size
-+ * accordingly.
-+ *
-+ * Refuse to delete current measurements if measurement is suspended, so that
-+ * dump can be done in a lockless way and user space is notified about current
-+ * measurements being carried over to the secondary kernel, so that it does not
-+ * save them twice.
-+ *
-+ * Return: Zero on success, a negative value otherwise.
-+ */
-+int ima_queue_delete_partial(unsigned long req_value)
-+{
-+	unsigned long req_value_copy = req_value;
-+	unsigned long size_to_remove = 0, num_to_remove = 0;
-+	LIST_HEAD(ima_measurements_trim);
-+	struct ima_queue_entry *qe;
-+	int ret = 0;
++The IMA measurements list needs to be retained and safely stored for new
++attestation servers to validate it. Assuming the IMA measurements list is
++properly saved, storing it outside the kernel does not introduce security
++issues, since its integrity is anyway protected by the TPM.
 +
-+	/*
-+	 * list_for_each_entry_rcu() without rcu_read_lock() is fine because
-+	 * only list append can happen concurrently. No list replace due to the
-+	 * staging/delete writers mutual exclusion.
-+	 */
-+	list_for_each_entry_rcu(qe, &ima_measurements, later, true) {
-+		size_to_remove += get_binary_runtime_size(qe->entry);
-+		num_to_remove++;
++Hence, the new IMA staging mechanism is introduced to export IMA
++measurements to user space and delete them from kernel space.
 +
-+		if (--req_value_copy == 0)
-+			break;
-+	}
++Staging consists in atomically moving the current measurements list to a
++temporary list, so that measurements can be deleted afterwards. The staging
++operation locks the hot path (racing with addition of new measurements) for
++a very short time, only for swapping the list pointers. Deletion of the
++measurements instead is done locklessly, away from the hot path.
 +
-+	/* Not enough records to delete. */
-+	if (req_value_copy > 0)
-+		return -ENOENT;
++There are two flavors of the staging mechanism. In the staging with prompt,
++all current measurements are staged, read and deleted upon confirmation. In
++the staging and deleting flavor, N measurements are staged from the
++beginning of the current measurements list and immediately deleted without
++confirmation.
 +
-+	mutex_lock(&ima_extend_list_mutex);
-+	if (ima_measurements_suspended) {
-+		mutex_unlock(&ima_extend_list_mutex);
-+		return -ESTALE;
-+	}
 +
-+	/*
-+	 * qe remains valid because ima_fs.c enforces single-writer exclusion.
-+	 */
-+	__list_cut_position(&ima_measurements_trim, &ima_measurements,
-+			    &qe->later);
++Management of Staged Measurements
++=================================
 +
-+	atomic_long_sub(num_to_remove, &ima_num_records[BINARY]);
++Since with the staging mechanism measurement records are removed from the
++kernel, the staged measurements need to be saved in a storage and
++concatenated together, so that they can be presented during remote
++attestation as if staging was never done. This task can be accomplished by
++a remote attestation agent modified to support staging, or a system
++service.
 +
-+	if (IS_ENABLED(CONFIG_IMA_KEXEC))
-+		binary_runtime_size[BINARY] -= size_to_remove;
++Coordination is necessary in the case where there are multiple actors
++requesting measurements to be staged.
 +
-+	mutex_unlock(&ima_extend_list_mutex);
++In the staging with prompt case, the measurement interfaces can be accessed
++only by one actor (writer) at a time, so the others will get an error until
++the former closes it. Since the actors don't care about N, when they gain
++access to the interface, they will get all the staged measurements at the
++time of their request.
 +
-+	ima_queue_delete(&ima_measurements_trim, false);
-+	return ret;
-+}
++In the case of staging and deleting, coordination is more important, since
++there is the risk that two actors unaware of each other compute the value N
++on the current measurements list and request IMA to stage N twice.
 +
- /**
-  * ima_queue_delete - Delete measurements
-  * @head: List head measurements are deleted from
++
++Remote Attestation Agent Workflow
++=================================
++
++Remote attestation agents can be configured to always present all the
++measurements to the remote verifiers or, alternatively, to only provide the
++measurements that have not been verified yet by the remote verifiers.
++
++In the latter case, determining which measurements need to be sent and
++verified must solely depend on the remote verifier. The remote attestation
++agent can proactively send partial measurements, at the condition that they
++are the ones that the remote verifier needs.
++
++An agent can rely on one of the supported staging methods to proactively
++send to a remote verifier the measurements since the previous request up
++to the ones that verify the TPM quote obtained in the current request.
++The workflow with each staging method is the following.
++
++With staging with prompt, the agent stages the current measurements list,
++reads and stores the measurements in a storage and immediately requests
++IMA to delete the staged measurements from kernel memory. Afterwards, it
++calculates N by replaying the PCR extend on the stored measurements until
++the calculated PCRs match the quoted PCRs. It then keeps the measurements
++in excess for the next attestation request.
++
++At the next attestation request, the agent performs the same steps above,
++and concatenates the new measurements to the ones in excess from the
++previous request. Also in this case, the agent replays the PCR extend until
++it matches the currently quoted PCRs, keeps the measurements in excess and
++presents the new N measurement records to the remote attestation server.
++
++With the staging and deleting method, the agent reads the current
++measurements list, calculates N and requests IMA to delete only those. The
++measurements in excess are kept in the IMA measurements list and can be
++retrieved at the next remote attestation request.
++
++While keeping only the excess measurements in the storage could be
++sufficient to serve the requests of a remote verifier, it is advised to
++keep all the obtained measurements locally, as they might be needed for the
++attestation with a different remote verifier.
++
++
++Usage
++=====
++
++The IMA staging mechanism can be enabled from the kernel configuration with
++the CONFIG_IMA_STAGING option. This option prevents inadvertently removing
++the IMA measurement list on systems which do not properly save it.
++
++If the option is enabled, IMA duplicates the current securityfs
++measurements interfaces (both binary and ASCII), by adding the ``_staged``
++file suffix. Both the original and the staging interfaces gain the write
++permission for the root user and group, but require the process to have
++CAP_SYS_ADMIN set.
++
++The staging mechanism supports two flavors.
++
++
++Staging with prompt
++~~~~~~~~~~~~~~~~~~~
++
++The current measurements list is moved to a temporary staging area,
++allowing it to be saved to external storage, before being deleted upon
++confirmation.
++
++This staging process is achieved with the following steps.
++
++ 1. ``echo A > <_staged interface>``: the user requests IMA to stage the
++    entire measurements list;
++ 2. ``cat <_staged interface>``: the user reads the staged measurements;
++ 3. ``echo D > <_staged interface>``: the user requests IMA to delete
++    staged measurements.
++
++
++Staging and deleting
++~~~~~~~~~~~~~~~~~~~~
++
++N measurements are staged to a temporary staging area, and immediately
++deleted without further confirmation.
++
++This staging process is achieved with the following steps.
++
++ 1. ``cat <original interface>``: the user reads the current measurements
++    list and determines what the value N for staging should be;
++ 2. ``echo N > <original interface>``: the user requests IMA to delete N
++    measurements from the current measurements list.
++
++
++Interface Access
++================
++
++In order to avoid the IMA measurements list being suddenly truncated by the
++staging mechanism during a read, or having multiple concurrent staging, a
++semaphore-like locking scheme has been implemented on all the measurements
++list interfaces.
++
++Multiple readers can access concurrently the original and staged
++interfaces, and they can be in mutual exclusion with one writer. In order
++to see the same state across all the measurement interfaces, the same
++writer is allowed to open multiple interfaces for write or read/write.
++
++If an illegal access occurs, the open to the measurements list interface is
++denied.
++
++
++Kexec
++=====
++
++In the event a kexec() system call occurs between staging and deleting, the
++staged measurement records are marshalled before the current measurements
++list, so that they are both available when the secondary kernel starts.
++
++If measurement is suspended before requesting to delete staged or current
++measurements, IMA returns an error to user space to let it know that
++marshalling is already in progress, so that it does not save the
++measurements twice.
++
++IMA also disallows staging when suspending measurement, to avoid the
++situation where neither measurements are carried over to the secondary
++kernel, nor they are saved by user space to the storage.
++
++
++Hash table
++==========
++
++By default, the template digest of staged measurement records are kept in
++kernel memory (only template data are freed), to be able to detect
++duplicate records independently of staging.
++
++The new kernel option ``ima_flush_htable`` has been introduced to
++explicitly request a complete deletion of the staged measurements, for
++maximum kernel memory saving. If the option has been specified, duplicate
++records are still avoided on records of the current measurements list,
++but there can be duplicates between different groups of staged
++measurements.
++
++Flushing the hash table is supported only for the staging with prompt
++flavor. For the staging and deleting flavor, it would have been necessary
++to lock the hot path adding new measurements for the time needed to remove
++each selected measurement individually.
+diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
+index 3e0a7114a862..00650dcf38cb 100644
+--- a/Documentation/security/index.rst
++++ b/Documentation/security/index.rst
+@@ -8,6 +8,7 @@ Security Documentation
+    credentials
+    snp-tdx-threat-model
+    IMA-templates
++   IMA-export-delete
+    keys/index
+    lsm
+    lsm-development
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 461a3eed6129..70ff6bae3493 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12752,6 +12752,8 @@ R:	Eric Snowberg <eric.snowberg@oracle.com>
+ L:	linux-integrity@vger.kernel.org
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git
++F:	Documentation/security/IMA-export-delete.rst
++F:	Documentation/security/IMA-templates.rst
+ F:	include/linux/secure_boot.h
+ F:	security/integrity/
+ F:	security/integrity/ima/
 -- 
 2.43.0
 
