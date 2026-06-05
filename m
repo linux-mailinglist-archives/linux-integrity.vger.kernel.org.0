@@ -1,48 +1,48 @@
-Return-Path: <linux-integrity+bounces-9754-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9755-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id OzKdHAMJI2qAgwEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9754-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:36:03 +0200
+	id FbeQJQcNI2rBhAEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9755-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:53:11 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 124D564A371
-	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:36:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1270064A55C
+	for <lists+linux-integrity@lfdr.de>; Fri, 05 Jun 2026 19:53:11 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
 	dkim=none;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9754-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9754-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9755-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9755-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	dmarc=none;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2CF52305420C
-	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2026 17:23:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A727E305129C
+	for <lists+linux-integrity@lfdr.de>; Fri,  5 Jun 2026 17:23:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC55C378D88;
-	Fri,  5 Jun 2026 17:23:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DFA382F26;
+	Fri,  5 Jun 2026 17:23:27 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB39D78F29;
-	Fri,  5 Jun 2026 17:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E69390616;
+	Fri,  5 Jun 2026 17:23:18 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780680204; cv=none; b=YhyoZ/eYxTIRNPZ6TK8pWRdPRVGJKcRqZR4qUYgQ6XuzlfuZRPVLd3yEuqCDbvWbLxTtlQbF4QbHwkNI8YwA0l0DLwiee+zguEtWWOFWu02lijz4wF1vfJVQTeUXzgj9ptHsKpFD4vvZCOojYI2EsOkzqwy5C+hkJUNE9GkbZHM=
+	t=1780680207; cv=none; b=IQbtSMNDN8/FZKQsP/gZEeq+cpFIFYQWkxVQ7fMgsOJ0BCF0nKU9T1lcX5/fYZeh/kdV+MHH2SKiSVhiErHWfdkOvenKLuV3xnlo+RhUp9MMpRUAG5LGIfVUL5B6GkcVWd5WkbL3IBG8VZk3aummztZkOKp6IswDpCUANLaL8SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780680204; c=relaxed/simple;
-	bh=O2Ywtg/iC5HpxfxvXsplMBAu+/q1IeA3KymXxVsqSM0=;
+	s=arc-20240116; t=1780680207; c=relaxed/simple;
+	bh=BNA2CUESf+yHW0POrSULtI1TMqwIbV68I0AGqtEn3fU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NUuPz00/JK8zTlA+XL84Qr/RyN8qtKsr17cfS7gLqLrkF+B5BK6/zvmimx+3CeitUbmNDEqxtKtBqa3+0RLgRHPajQhKaCA/nEGKQ5qoKvL8tnYDEwBzW40Q3QTbzvZfSedFJ9+aHhbLnzxIaneWxgn+LpHadcSZeMS4Wh2qFBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
-Received: from mail.maildlp.com (unknown [172.18.224.235])
-	by frasgout13.his.huawei.com (SkyGuard) with ESMTPS id 4gX7Rj09RLzpVNV;
-	Sat,  6 Jun 2026 01:17:53 +0800 (CST)
+	 MIME-Version; b=Zw2J9jp8/vPm2IGJ2vU1xoL1Fa0nm3EpLMUY8mpQq82oBoR6KIhH1C+E1eH1IBZb/+z8i4tEyJxRDjuixe4d0DDgVoDt3BFIz6ncYYyM05KlOp9NxMuNAI08rvwW6iMj5jvuXsTharUUfvbwwEXGFtJIRxlY8J5fcaUFvgvw7Tc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+Received: from mail.maildlp.com (unknown [172.18.224.196])
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gX7Rp0xdnz1HCnD;
+	Sat,  6 Jun 2026 01:17:58 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id C9C674056F;
-	Sat,  6 Jun 2026 01:23:08 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 01ADC4056C;
+	Sat,  6 Jun 2026 01:23:17 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwBHV43pBSNqZAhlAA--.46721S3;
-	Fri, 05 Jun 2026 18:23:08 +0100 (CET)
+	by APP2 (Coremail) with SMTP id GxC2BwBHV43pBSNqZAhlAA--.46721S4;
+	Fri, 05 Jun 2026 18:23:16 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: corbet@lwn.net,
 	skhan@linuxfoundation.org,
@@ -60,9 +60,9 @@ Cc: linux-doc@vger.kernel.org,
 	chenste@linux.microsoft.com,
 	nramas@linux.microsoft.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v7 01/12] ima: Remove ima_h_table structure
-Date: Fri,  5 Jun 2026 19:22:25 +0200
-Message-ID: <20260605172236.2042045-2-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v7 02/12] ima: Replace static htable queue with dynamically allocated array
+Date: Fri,  5 Jun 2026 19:22:26 +0200
+Message-ID: <20260605172236.2042045-3-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260605172236.2042045-1-roberto.sassu@huaweicloud.com>
 References: <20260605172236.2042045-1-roberto.sassu@huaweicloud.com>
@@ -73,13 +73,13 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwBHV43pBSNqZAhlAA--.46721S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3GF4UWr1DCr1rGF15Kr1kAFb_yoW3Jry3pa
-	nFga42kF4rXFy09ryDAa4qk3yrW3yUKr1UWws8Gw1Fk3WDXr12gF15AFy29FyfGFZ5tF1I
-	qrs0qr1YkwsYyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:GxC2BwBHV43pBSNqZAhlAA--.46721S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xw1fuw45Kr1fCr4rKryxGrg_yoWxAF18pa
+	9rWFy7Kr48AFWxKr97JaySkr4fursYgryUG398G3sYk3W3Ar1Igr1fGFy2vF98ArZ5J3WS
+	qr4jq3Z8CwsYyFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
 	JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
@@ -89,9 +89,9 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3GF4UWr1DCr1rGF15Kr1kAFb_yoW3Jry3pa
 	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
 	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
 	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnpnQU
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UCZXrU
 	UUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBGoiOzcKjwAAsI
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAPBGoiOzcKjwABsJ
 X-Rspamd-Action: add header
 X-Spamd-Result: default: False [6.34 / 15.00];
 	SEM_URIBL(3.50)[huaweicloud.com:from_mime,huaweicloud.com:mid];
@@ -105,7 +105,7 @@ X-Spamd-Result: default: False [6.34 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[16];
-	TAGGED_FROM(0.00)[bounces-9754-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9755-lists,linux-integrity=lfdr.de];
 	DMARC_NA(0.00)[huaweicloud.com];
 	FORGED_RECIPIENTS(0.00)[m:corbet@lwn.net,m:skhan@linuxfoundation.org,m:zohar@linux.ibm.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:linux-doc@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:gregorylumen@linux.microsoft.com,m:chenste@linux.microsoft.com,m:nramas@linux.microsoft.com,m:roberto.sassu@huawei.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
@@ -123,184 +123,181 @@ X-Spamd-Result: default: False [6.34 / 15.00];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	R_DKIM_NA(0.00)[];
 	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(0.00)[+ip4:172.232.135.74];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,huawei.com:email,vger.kernel.org:from_smtp,huaweicloud.com:from_mime,huaweicloud.com:mid]
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huaweicloud.com:from_mime,huaweicloud.com:mid]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 124D564A371
+X-Rspamd-Queue-Id: 1270064A55C
 X-Spam: Yes
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-The ima_h_table structure is a collection of IMA measurement list
-metadata - number of records in the IMA measurement list, number of
-integrity violations, and a hash table containing the IMA template data
-hash, needed to prevent measurement list record duplication.
+The IMA hash table is a fixed-size array of hlist_head buckets:
 
-Removing records from the measurement list needs to be reflected in the
-hash table. As a pre-req to removing records from the measurement list,
-separate those counters from the hash table, remove the ima_h_table
-structure, and just replace the hash table pointer.
+    struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE];
 
-Finally, rename ima_show_htable_value(), ima_show_htable_violations()
-and ima_htable_violations_ops respectively to ima_show_counter(),
-ima_show_num_violations() and ima_num_violations_ops.
+IMA_MEASURE_HTABLE_SIZE is (1 << IMA_HASH_BITS) = 1024 buckets, each a
+struct hlist_head (one pointer, 8 bytes on 64-bit). That is 8 KiB allocated
+in BSS for every kernel, regardless of whether IMA is ever used, and
+regardless of how many measurements are actually made.
+
+Replace the fixed-size array with a RCU-protected pointer to a dynamically
+allocated array that is initialized in ima_init_htable(), which is called
+from ima_init() during early boot. ima_init_htable() calls the static
+function ima_alloc_replace_htable() which, other than initializing the hash
+table the first time, can also hot-swap the existing hash table with a
+blank one.
+
+The allocation in ima_alloc_replace_htable() uses kcalloc() so the buckets
+are zero-initialised (equivalent to HLIST_HEAD_INIT { .first = NULL }).
+Callers of ima_alloc_replace_htable() must call synchronize_rcu() and free
+the returned hash table.
+
+Finally, access the hash table with rcu_dereference() in
+ima_lookup_digest_entry() (reader side) and with
+rcu_dereference_protected() in ima_add_digest_entry() (writer side).
+
+No functional change: bucket count, hash function, and all locking remain
+identical.
 
 Link: https://github.com/linux-integrity/linux/issues/1
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
 ---
- security/integrity/ima/ima.h       | 11 +++++------
- security/integrity/ima/ima_api.c   |  2 +-
- security/integrity/ima/ima_fs.c    | 20 +++++++++-----------
- security/integrity/ima/ima_kexec.c |  2 +-
- security/integrity/ima/ima_queue.c | 15 ++++++++-------
- 5 files changed, 24 insertions(+), 26 deletions(-)
+ security/integrity/ima/ima.h       |  3 +-
+ security/integrity/ima/ima_init.c  |  5 ++++
+ security/integrity/ima/ima_queue.c | 48 ++++++++++++++++++++++++++----
+ 3 files changed, 50 insertions(+), 6 deletions(-)
 
 diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-index 69e9bf0b82c6..b3ad7eac6a1e 100644
+index b3ad7eac6a1e..0e41c2113efd 100644
 --- a/security/integrity/ima/ima.h
 +++ b/security/integrity/ima/ima.h
-@@ -324,12 +324,11 @@ int ima_lsm_policy_change(struct notifier_block *nb, unsigned long event,
-  */
- extern spinlock_t ima_queue_lock;
- 
--struct ima_h_table {
--	atomic_long_t len;	/* number of stored measurements in the list */
--	atomic_long_t violations;
--	struct hlist_head queue[IMA_MEASURE_HTABLE_SIZE];
--};
--extern struct ima_h_table ima_htable;
-+/* Total number of measurement list records since hard boot. */
-+extern atomic_long_t ima_num_records;
-+/* Total number of violations since hard boot. */
-+extern atomic_long_t ima_num_violations;
-+extern struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE];
+@@ -311,6 +311,7 @@ bool ima_template_has_modsig(const struct ima_template_desc *ima_template);
+ int ima_restore_measurement_entry(struct ima_template_entry *entry);
+ int ima_restore_measurement_list(loff_t bufsize, void *buf);
+ int ima_measurements_show(struct seq_file *m, void *v);
++int __init ima_init_htable(void);
+ unsigned long ima_get_binary_runtime_size(void);
+ int ima_init_template(void);
+ void ima_init_template_list(void);
+@@ -328,7 +329,7 @@ extern spinlock_t ima_queue_lock;
+ extern atomic_long_t ima_num_records;
+ /* Total number of violations since hard boot. */
+ extern atomic_long_t ima_num_violations;
+-extern struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE];
++extern struct hlist_head __rcu *ima_htable;
  
  static inline unsigned int ima_hash_key(u8 *digest)
  {
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 0916f24f005f..122d127e108d 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -146,7 +146,7 @@ void ima_add_violation(struct file *file, const unsigned char *filename,
- 	int result;
- 
- 	/* can overflow, only indicator */
--	atomic_long_inc(&ima_htable.violations);
-+	atomic_long_inc(&ima_num_violations);
- 
- 	result = ima_alloc_init_template(&event_data, &entry, NULL);
- 	if (result < 0) {
-diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima_fs.c
-index ca4931a95098..523d3e81f631 100644
---- a/security/integrity/ima/ima_fs.c
-+++ b/security/integrity/ima/ima_fs.c
-@@ -38,8 +38,8 @@ __setup("ima_canonical_fmt", default_canonical_fmt_setup);
- 
- static int valid_policy = 1;
- 
--static ssize_t ima_show_htable_value(char __user *buf, size_t count,
--				     loff_t *ppos, atomic_long_t *val)
-+static ssize_t ima_show_counter(char __user *buf, size_t count, loff_t *ppos,
-+				atomic_long_t *val)
- {
- 	char tmpbuf[32];	/* greater than largest 'long' string value */
- 	ssize_t len;
-@@ -48,15 +48,14 @@ static ssize_t ima_show_htable_value(char __user *buf, size_t count,
- 	return simple_read_from_buffer(buf, count, ppos, tmpbuf, len);
- }
- 
--static ssize_t ima_show_htable_violations(struct file *filp,
--					  char __user *buf,
--					  size_t count, loff_t *ppos)
-+static ssize_t ima_show_num_violations(struct file *filp, char __user *buf,
-+				       size_t count, loff_t *ppos)
- {
--	return ima_show_htable_value(buf, count, ppos, &ima_htable.violations);
-+	return ima_show_counter(buf, count, ppos, &ima_num_violations);
- }
- 
--static const struct file_operations ima_htable_violations_ops = {
--	.read = ima_show_htable_violations,
-+static const struct file_operations ima_num_violations_ops = {
-+	.read = ima_show_num_violations,
- 	.llseek = generic_file_llseek,
- };
- 
-@@ -64,8 +63,7 @@ static ssize_t ima_show_measurements_count(struct file *filp,
- 					   char __user *buf,
- 					   size_t count, loff_t *ppos)
- {
--	return ima_show_htable_value(buf, count, ppos, &ima_htable.len);
--
-+	return ima_show_counter(buf, count, ppos, &ima_num_records);
- }
- 
- static const struct file_operations ima_measurements_count_ops = {
-@@ -545,7 +543,7 @@ int __init ima_fs_init(void)
- 	}
- 
- 	dentry = securityfs_create_file("violations", S_IRUSR | S_IRGRP,
--				   ima_dir, NULL, &ima_htable_violations_ops);
-+				   ima_dir, NULL, &ima_num_violations_ops);
- 	if (IS_ERR(dentry)) {
- 		ret = PTR_ERR(dentry);
- 		goto out;
-diff --git a/security/integrity/ima/ima_kexec.c b/security/integrity/ima/ima_kexec.c
-index 36a34c54de58..77ad370dbc37 100644
---- a/security/integrity/ima/ima_kexec.c
-+++ b/security/integrity/ima/ima_kexec.c
-@@ -43,7 +43,7 @@ void ima_measure_kexec_event(const char *event_name)
- 	int n;
- 
- 	buf_size = ima_get_binary_runtime_size();
--	len = atomic_long_read(&ima_htable.len);
-+	len = atomic_long_read(&ima_num_records);
- 
- 	n = scnprintf(ima_kexec_event, IMA_KEXEC_EVENT_LEN,
- 		      "kexec_segment_size=%lu;ima_binary_runtime_size=%lu;"
+diff --git a/security/integrity/ima/ima_init.c b/security/integrity/ima/ima_init.c
+index a2f34f2d8ad7..7e0aa09a12e6 100644
+--- a/security/integrity/ima/ima_init.c
++++ b/security/integrity/ima/ima_init.c
+@@ -140,6 +140,11 @@ int __init ima_init(void)
+ 	rc = ima_init_digests();
+ 	if (rc != 0)
+ 		return rc;
++
++	rc = ima_init_htable();
++	if (rc != 0)
++		return rc;
++
+ 	rc = ima_add_boot_aggregate();	/* boot aggregate must be first entry */
+ 	if (rc != 0)
+ 		return rc;
 diff --git a/security/integrity/ima/ima_queue.c b/security/integrity/ima/ima_queue.c
-index 319522450854..6bdaefc790c3 100644
+index 6bdaefc790c3..a31b75d9302b 100644
 --- a/security/integrity/ima/ima_queue.c
 +++ b/security/integrity/ima/ima_queue.c
-@@ -32,11 +32,12 @@ static unsigned long binary_runtime_size;
- static unsigned long binary_runtime_size = ULONG_MAX;
- #endif
+@@ -36,9 +36,7 @@ atomic_long_t ima_num_records = ATOMIC_LONG_INIT(0);
+ atomic_long_t ima_num_violations = ATOMIC_LONG_INIT(0);
  
-+atomic_long_t ima_num_records = ATOMIC_LONG_INIT(0);
-+atomic_long_t ima_num_violations = ATOMIC_LONG_INIT(0);
-+
  /* key: inode (before secure-hashing a file) */
--struct ima_h_table ima_htable = {
--	.len = ATOMIC_LONG_INIT(0),
--	.violations = ATOMIC_LONG_INIT(0),
--	.queue[0 ... IMA_MEASURE_HTABLE_SIZE - 1] = HLIST_HEAD_INIT
-+struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE] = {
-+	[0 ... IMA_MEASURE_HTABLE_SIZE - 1] = HLIST_HEAD_INIT
- };
+-struct hlist_head ima_htable[IMA_MEASURE_HTABLE_SIZE] = {
+-	[0 ... IMA_MEASURE_HTABLE_SIZE - 1] = HLIST_HEAD_INIT
+-};
++struct hlist_head __rcu *ima_htable;
  
  /* mutex protects atomicity of extending measurement list
-@@ -61,7 +62,7 @@ static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
+  * and extending the TPM PCR aggregate. Since tpm_extend can take
+@@ -52,17 +50,53 @@ static DEFINE_MUTEX(ima_extend_list_mutex);
+  */
+ static bool ima_measurements_suspended;
+ 
++/* Callers must call synchronize_rcu() and free the hash table. */
++static struct hlist_head *ima_alloc_replace_htable(void)
++{
++	struct hlist_head *old_htable, *new_htable;
++
++	/* Initializing to zeros is equivalent to call HLIST_HEAD_INIT. */
++	new_htable = kcalloc(IMA_MEASURE_HTABLE_SIZE, sizeof(struct hlist_head),
++			     GFP_KERNEL);
++	if (!new_htable)
++		return ERR_PTR(-ENOMEM);
++
++	old_htable = rcu_replace_pointer(ima_htable, new_htable,
++				lockdep_is_held(&ima_extend_list_mutex));
++
++	return old_htable;
++}
++
++int __init ima_init_htable(void)
++{
++	struct hlist_head *old_htable;
++
++	mutex_lock(&ima_extend_list_mutex);
++	old_htable = ima_alloc_replace_htable();
++	mutex_unlock(&ima_extend_list_mutex);
++
++	if (IS_ERR(old_htable))
++		return PTR_ERR(old_htable);
++
++	/* Synchronize_rcu() and kfree() not necessary, only for robustness. */
++	synchronize_rcu();
++	kfree(old_htable);
++	return 0;
++}
++
+ /* lookup up the digest value in the hash table, and return the entry */
+ static struct ima_queue_entry *ima_lookup_digest_entry(u8 *digest_value,
+ 						       int pcr)
+ {
+ 	struct ima_queue_entry *qe, *ret = NULL;
++	struct hlist_head *htable;
+ 	unsigned int key;
+ 	int rc;
  
  	key = ima_hash_key(digest_value);
  	rcu_read_lock();
--	hlist_for_each_entry_rcu(qe, &ima_htable.queue[key], hnext) {
-+	hlist_for_each_entry_rcu(qe, &ima_htable[key], hnext) {
+-	hlist_for_each_entry_rcu(qe, &ima_htable[key], hnext) {
++	htable = rcu_dereference(ima_htable);
++	hlist_for_each_entry_rcu(qe, &htable[key], hnext) {
  		rc = memcmp(qe->entry->digests[ima_hash_algo_idx].digest,
  			    digest_value, hash_digest_size[ima_hash_algo]);
  		if ((rc == 0) && (qe->entry->pcr == pcr)) {
-@@ -113,10 +114,10 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
+@@ -102,6 +136,7 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
+ 				bool update_htable)
+ {
+ 	struct ima_queue_entry *qe;
++	struct hlist_head *htable;
+ 	unsigned int key;
+ 
+ 	qe = kmalloc_obj(*qe);
+@@ -114,10 +149,13 @@ static int ima_add_digest_entry(struct ima_template_entry *entry,
  	INIT_LIST_HEAD(&qe->later);
  	list_add_tail_rcu(&qe->later, &ima_measurements);
  
--	atomic_long_inc(&ima_htable.len);
-+	atomic_long_inc(&ima_num_records);
++	htable = rcu_dereference_protected(ima_htable,
++				lockdep_is_held(&ima_extend_list_mutex));
++
+ 	atomic_long_inc(&ima_num_records);
  	if (update_htable) {
  		key = ima_hash_key(entry->digests[ima_hash_algo_idx].digest);
--		hlist_add_head_rcu(&qe->hnext, &ima_htable.queue[key]);
-+		hlist_add_head_rcu(&qe->hnext, &ima_htable[key]);
+-		hlist_add_head_rcu(&qe->hnext, &ima_htable[key]);
++		hlist_add_head_rcu(&qe->hnext, &htable[key]);
  	}
  
  	if (binary_runtime_size != ULONG_MAX) {
