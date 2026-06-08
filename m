@@ -1,66 +1,64 @@
-Return-Path: <linux-integrity+bounces-9771-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9772-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 4qaGKkpJJmqaUQIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9771-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 06:47:06 +0200
+	id 0LVSMARsJmoXWQIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9772-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 09:15:16 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CB0C652A24
-	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 06:47:06 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 115FB6536F8
+	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 09:15:16 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=IS6uXbf2;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9771-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9771-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=arm.com header.s=foss header.b=Cju8cs99;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9772-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9772-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=arm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C065A3003D0A
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2026 04:47:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A82DB30073E9
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2026 07:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9421D3161BA;
-	Mon,  8 Jun 2026 04:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B683A31F993;
+	Mon,  8 Jun 2026 07:15:12 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878CD2771B;
-	Mon,  8 Jun 2026 04:47:03 +0000 (UTC)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D412F1A08AF;
+	Mon,  8 Jun 2026 07:15:09 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780894024; cv=none; b=AtjzLU4onZWAn4la7f+zVbotcTVcEfdyL1XjsbVrschvB3EEgAeyYC//bFJLH6oKSM4wQmFWg4hO5Cf92RvAtPd5k1+v+Q3iVzfLOiI0GtoN/TekkOZ5+i/H7fLh4wilaf4iUCnD7NpezIBjlODUSqmp0p2S+rUMSaFNE8Y0J0g=
+	t=1780902912; cv=none; b=dXE0e7pTqzjsNPQA/JzJv8uxr1TooJRtsiDuEhX776oH04EocHSYcgrMaF6uz8Md1Oozfq/nFbZh2tYVKRYGhy8ykJMGQW8qE13zsYzD9N4kMLBOB64KTDg3szAm8UUg41CdV4pHHWHCYRDf7mo8YV6IHoVesebaWIvW/PM3jPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780894024; c=relaxed/simple;
-	bh=HzhYmRX2nopKAccHM1GYw7/eum7CLQA7DD37+lke6xw=;
+	s=arc-20240116; t=1780902912; c=relaxed/simple;
+	bh=5gc16I+Zlxa1Mu3A3sEKwJZ9PzG4qKIAiQ4/ymUJTqM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OobJh1b5KS1Ivlj3o7faP6dQrJM2LzYJH5Oso8P0dnfwQZZ0YbFFn+L8Fk2desfqw5++yT/9rCVbWVmyx4C/6isX/vvDIIdx/J3xlmtFXd5Bf59ul1dxtQsFJm6gZhDJikZhIbgdwFDnxSrzFlclAyHhjxVqYToGlodDkkEzn8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IS6uXbf2; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D703E1F00893;
-	Mon,  8 Jun 2026 04:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1780894023;
-	bh=AiC6IPztEYJ/u86CgpttLslDsUBS7Wl8BsHG5skCcSg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=IS6uXbf2oJsprQtKgtX7Mkv4xqoLTi9uAQBokpcM8YDBfmVAdwSPBn1qW6bYu6G1o
-	 V4SEyxju5kl593oG5Fg8/kHWjrn129nU7rlcuzV1zo1FCDn1h2Rzu8lwGy+ljYOjB3
-	 5DKfrcdJT+j5UUUtys7Jk0AbxN4gfTqrD/FQlzLZEEd3LpZytGt4neBwDmJNHeHJGv
-	 saR6bQA13dda+ZJVTrmwLaAp+Dc4OGf6P7kQrXffx6Q+Ig8XYMgGqSG8lDCBvCKvgV
-	 TnxGPkQtNu/MxVJN0BTAUMIbaG6IRZ1XJ25zg9E2nu54/HbU/X8nDQVoHnjmtBcvPl
-	 SKy+299c4THmw==
-Date: Mon, 8 Jun 2026 07:46:59 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: david.laight.linux@gmail.com
-Cc: Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org,
-	Arnd Bergmann <arnd@kernel.org>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	David Howells <dhowells@redhat.com>,
-	James Morris <jmorris@namei.org>, Mimi Zohar <zohar@linux.ibm.com>,
-	Paul Moore <paul@paul-moore.com>,
-	"Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: [PATCH next] keys: Replace strcpy(derived_buf, "AUTH_KEY") with
- strscpy(..., HASH_SIZE)
-Message-ID: <aiZJQ71se4x4d9Bh@kernel.org>
-References: <20260606202633.5018-9-david.laight.linux@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oBXtxMtvZgrDtLRsuh2rKpq6Z8sDY/QZyql0XVK293uYOmO6lveL6aqXOp32+IWNYSTn9vEfOIFC3zxb077iA4NgqYlbeIghEOdxYsCfvE4alGV9EolWF312ryBY09qtZNtNdAadhF6s62UwzNP4MxqncKFbvU0JsDTDw64RM9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Cju8cs99; arc=none smtp.client-ip=217.140.110.172
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5D79307A;
+	Mon,  8 Jun 2026 00:15:03 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCF773F86F;
+	Mon,  8 Jun 2026 00:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1780902908; bh=5gc16I+Zlxa1Mu3A3sEKwJZ9PzG4qKIAiQ4/ymUJTqM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cju8cs99JJqFxpnt2SJfylZbYR/fjTG0j/vl3UwYXkWWIOMr+Vnvlm1TRxdPhIUbr
+	 NSlzl7AoNiJgRH93ceNBoDj89N/uHZd6GvoG/OqoIL68m7KJ2gTIk9lchYY4OOa6nW
+	 rbqE48XGdAIgRWbF3MBv/PhOVumYLWVUWbH3z6+Q=
+Date: Mon, 8 Jun 2026 08:15:04 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-integrity@vger.kernel.org, paul@paul-moore.com,
+	zohar@linux.ibm.com, roberto.sassu@huaweicloud.com,
+	noodles@earth.li, sudeep.holla@kernel.org, jmorris@namei.org,
+	serge@hallyn.com, dmitry.kasatkin@gmail.com,
+	eric.snowberg@oracle.com, jgg@ziepe.ca
+Subject: Re: [PATCH v6 4/4] tpm: tpm_crb_ffa: revert defered_probed when
+ tpm_crb_ffa is built-in
+Message-ID: <aiZr+E4M+gl6sWsy@e129823.arm.com>
+References: <20260605144325.434436-1-yeoreum.yun@arm.com>
+ <20260605144325.434436-5-yeoreum.yun@arm.com>
+ <aiZJAR3-JACaDcwR@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -69,101 +67,112 @@ List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260606202633.5018-9-david.laight.linux@gmail.com>
+In-Reply-To: <aiZJAR3-JACaDcwR@kernel.org>
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	DMARC_POLICY_ALLOW(-0.50)[arm.com,none];
+	R_DKIM_ALLOW(-0.20)[arm.com:s=foss];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:david.laight.linux@gmail.com,m:kees@kernel.org,m:linux-hardening@vger.kernel.org,m:arnd@kernel.org,m:keyrings@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:dhowells@redhat.com,m:jmorris@namei.org,m:zohar@linux.ibm.com,m:paul@paul-moore.com,m:serge@hallyn.com,m:davidlaightlinux@gmail.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-9771-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9772-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,paul-moore.com,linux.ibm.com,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:jarkko@kernel.org,m:linux-security-module@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:paul@paul-moore.com,m:zohar@linux.ibm.com,m:roberto.sassu@huaweicloud.com,m:noodles@earth.li,m:sudeep.holla@kernel.org,m:jmorris@namei.org,m:serge@hallyn.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:jgg@ziepe.ca,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FORGED_SENDER(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	DKIM_TRACE(0.00)[arm.com:+];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yeoreum.yun@arm.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4CB0C652A24
+X-Rspamd-Queue-Id: 115FB6536F8
 
-On Sat, Jun 06, 2026 at 09:26:03PM +0100, david.laight.linux@gmail.com wrote:
-> From: David Laight <david.laight.linux@gmail.com>
+On Mon, Jun 08, 2026 at 07:45:53AM +0300, Jarkko Sakkinen wrote:
+> On Fri, Jun 05, 2026 at 03:43:25PM +0100, Yeoreum Yun wrote:
+> > commit 746d9e9f62a6 ("tpm: tpm_crb_ffa: try to probe tpm_crb_ffa when it's built-in")
+> > probe tpm_crb_ffa forcefully when it's built-in to integrate with IMA.
+> > 
+> > However, IMA now provides the IMA_INIT_LATE_SYNC build option, which
+> > initialises IMA at the late_initcall_sync level, so this change is no
+> > longer required.
+> > 
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > ---
+> >  drivers/char/tpm/tpm_crb_ffa.c | 18 +++---------------
+> >  1 file changed, 3 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+> > index 99f1c1e5644b..025c4d4b17ca 100644
+> > --- a/drivers/char/tpm/tpm_crb_ffa.c
+> > +++ b/drivers/char/tpm/tpm_crb_ffa.c
+> > @@ -177,23 +177,13 @@ static int tpm_crb_ffa_to_linux_errno(int errno)
+> >   */
+> >  int tpm_crb_ffa_init(void)
+> >  {
+> > -	int ret = 0;
+> > -
+> > -	if (!IS_MODULE(CONFIG_TCG_ARM_CRB_FFA)) {
+> > -		ret = ffa_register(&tpm_crb_ffa_driver);
+> > -		if (ret) {
+> > -			tpm_crb_ffa = ERR_PTR(-ENODEV);
+> > -			return ret;
+> > -		}
+> > -	}
+> > -
+> >  	if (!tpm_crb_ffa)
+> > -		ret = -ENOENT;
+> > +		return -ENOENT;
+> >  
+> >  	if (IS_ERR_VALUE(tpm_crb_ffa))
+> > -		ret = -ENODEV;
+> > +		return -ENODEV;
+> >  
+> > -	return ret;
+> > +	return 0;
+> >  }
+> >  EXPORT_SYMBOL_GPL(tpm_crb_ffa_init);
+> >  
+> > @@ -405,9 +395,7 @@ static struct ffa_driver tpm_crb_ffa_driver = {
+> >  	.id_table = tpm_crb_ffa_device_id,
+> >  };
+> >  
+> > -#ifdef MODULE
+> >  module_ffa_driver(tpm_crb_ffa_driver);
+> > -#endif
+> >  
+> >  MODULE_AUTHOR("Arm");
+> >  MODULE_DESCRIPTION("TPM CRB FFA driver");
+> > -- 
+> > LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+> > 
 > 
-> derived_buf is guaranteed to be HASH_SIZE - and it is more than enough.
-> The strscpy() degenerates into an memcpy() (as did the strcpy()).
-> Do the same for the associated "ENC_KEY" copy.
+> Is this different I applied?
 > 
-> Removes a possibly unbounded strcpy().
-> 
-> Signed-off-by: David Laight <david.laight.linux@gmail.com>
-> ---
-> This is one of a group of patches that remove potentially unbounded
-> strcpy() calls.
-> 
-> They are mostly replaced by strscpy() or, when strlen() has just been
-> called, with memcpy() (usually including the '\0').
-> 
-> Calls with copy string literals into arrays are left unchanged.
-> They are safe and easily detected as such.
-> 
-> The changes were made by getting the compiler to detect the calls and
-> then fixing the code by hand.
-> 
-> Note that all the changes are only compile tested.
-> 
-> Some Makefiles were changed to allow files to contain strcpy().
-> As well as 'difficult to fix' files, this included 'show' functions
-> as they really need to use sysfs_emit() or seq_printf().
-> 
-> All the patches are being sent individually to avoid very long cc lists.
-> Apologies for the terse commit messages and likely unexpected tags.
-> (There are about 100 patches in total.)
-> 
->  security/keys/encrypted-keys/encrypted.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/security/keys/encrypted-keys/encrypted.c b/security/keys/encrypted-keys/encrypted.c
-> index 56b531587a1e..59cb77b237b3 100644
-> --- a/security/keys/encrypted-keys/encrypted.c
-> +++ b/security/keys/encrypted-keys/encrypted.c
-> @@ -343,9 +343,9 @@ static int get_derived_key(u8 *derived_key, enum derived_key_type key_type,
->  		return -ENOMEM;
->  
->  	if (key_type)
-> -		strcpy(derived_buf, "AUTH_KEY");
-> +		strscpy(derived_buf, "AUTH_KEY", HASH_SIZE);
->  	else
-> -		strcpy(derived_buf, "ENC_KEY");
-> +		strscpy(derived_buf, "ENC_KEY", HASH_SIZE);
->  
->  	memcpy(derived_buf + strlen(derived_buf) + 1, master_key,
->  	       master_keylen);
-> -- 
-> 2.39.5
-> 
+> If yes, I'll swap (if mandatory).
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+No difference. Thanks! ;)
 
-BR, Jarkko
+-- 
+Sincerely,
+Yeoreum Yun
 
