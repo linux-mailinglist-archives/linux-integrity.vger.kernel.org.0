@@ -1,179 +1,180 @@
-Return-Path: <linux-integrity+bounces-9777-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9778-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id YUKJKDn7JmqYpAIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9777-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 19:26:17 +0200
+	id H4KxLQX+JmpPpQIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9778-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 19:38:13 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A1BF659378
-	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 19:26:17 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFC7F659520
+	for <lists+linux-integrity@lfdr.de>; Mon, 08 Jun 2026 19:38:12 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=paul-moore.com header.s=google header.b=UjdtuYRP;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9777-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c09:e001:a7::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9777-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=paul-moore.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=TrXt9bfr;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9778-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9778-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2C9E53045B4E
-	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2026 17:24:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5EAA3300E17F
+	for <lists+linux-integrity@lfdr.de>; Mon,  8 Jun 2026 17:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F414C34104B;
-	Mon,  8 Jun 2026 17:24:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40AB63546C3;
+	Mon,  8 Jun 2026 17:35:42 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0473D8107
-	for <linux-integrity@vger.kernel.org>; Mon,  8 Jun 2026 17:24:53 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780939494; cv=pass; b=mGprgnJP31pVnWb2VkVmTsa8ed+nJqRloBzmqatEn9bYf833SQyhc3vU7Kq7ga86HzYuaVUEduoCuqsOWqOyelKXFCTcSfLw6HyQJh3Qh8eiH89UYTSvhq2VBvEoUalYh33znog/gilbg1DT2DLaByYFIAGh4ykzZS5NetfVmK4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780939494; c=relaxed/simple;
-	bh=7Kdsfq3M6NlEdFS2bnCUaBu5hUrHR4J7G1t7KNXfpvA=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF637367B6A
+	for <linux-integrity@vger.kernel.org>; Mon,  8 Jun 2026 17:35:39 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1780940142; cv=none; b=g1CyB9FYuajdKt1QlTA7zapRUfSFWy5KYSlr5OkKlhw3qIl9YiGXPG7H5w0RQzdCRfVV0qltyhHGK3Qw4E7le59qsnlG5wv05kOKptRU2JRge+z8g8UKgDNnuK15WSUCT6bCBx59WjczoiOKfC6BpUAKyH7I+cRtjm7WlibfDRo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1780940142; c=relaxed/simple;
+	bh=1daNk5q97HSwa0tb1eBdGNzq9g+BPBCGIHlCqWVWhyM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R9b5UQaCoeQ7OTcJFe7sQzRLssmYXkk/EziaTK/iPeb1sIHvZenhaTWgcoPESNtCdVbzkuM3qYbQXpqHGYjr/Hza04v1kmh1TOjfhdjGnyDI3YBQ2jwJlDobL/ykuTxWY1VKyBXkrhv9NLO0y4Bb6kxeGXvP/gZJbb81UjBar4Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=UjdtuYRP; arc=pass smtp.client-ip=209.85.214.170
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c0c2a68d01so31347675ad.1
-        for <linux-integrity@vger.kernel.org>; Mon, 08 Jun 2026 10:24:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1780939493; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BpuSQ0AKJh0drNZPO2497GWwSKMmoNbU3PYSWidNWQRUiXUHB2m6l4SGgc/8imFvnk
-         EnFQvgYqSUDoG0jmyrR1cSeIGVvn/ATrJDXJI5z7fcIGM08YlCIQWWknzGg9uEX3tt8V
-         MKbzGZoMVWLUHxmAIhcOeWiwn0BGXcQd4bxUB1KR6RR8ux2XwYt67HcSZBFK21+6x7an
-         IXYdzr96wM4yBf0vNIHfVpjltksasZsjr7JKR0NH9+q5Bcl9nEhFifcTrzp92BTUHjCN
-         0/oVCdvm4SFoRHQGikY4hqtcMVedv8RoegGks1ZQhn3J37FELdOTsNZeqlC+TQAgLHX/
-         ET6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=w8JBElMQXP5d/TECdOlZtQLDN+V90z369cEJsD7o/qY=;
-        fh=zMHkuDWfRmnE2/wiPY7InwCVFMvXw66G+ACxbO6InKw=;
-        b=MbL4Eeg6ylpcGSzEkUbR9RC6PI5IsGNxPXZrr4riBlDEq03vy0P+SEiPfWpHUelbGO
-         kPbSdEav7ahjWpxA5b+Qfm+oG3zdsd+zrM1CP9V7hzGKCxQr4tRtHmLOQTbdaaW5+B41
-         zPe+SdE9os0xKxcBNbh70fwCsCkFeEkZVKB34kXXi02QQlfI31zm0L+aCnAStVy1UlAv
-         bKYfjLmDpW4lbxKZKx1eST0mAoqWhjdDOBTYO1y6+rhpnHT3gowaBwJxH3+Lihu3ULl5
-         rPWhOqHNFlVzieXzMTB6wvJImNVhbJYVoFnoq1992faHaZjs+nNvWHmOeKLPU5lW93yT
-         Wa/g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1780939493; x=1781544293; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w8JBElMQXP5d/TECdOlZtQLDN+V90z369cEJsD7o/qY=;
-        b=UjdtuYRPGjEVXBKOpyPMtogry1A7fN8YZtfbTK0gMFZyn052WbGsC1pBoKedD7hRXy
-         WQe1hi3y2V+lYX/brFW3Q3036PAvrM8VGaWqWeYNhedRyX2JaHVm/iBlrNX4vCrDDo1J
-         A298VqNwayOkk/IyTcOW4e8D0szLstksa3Qwhx4Q1AJ0nBGr4V0E4ZOOTSfMmckA7fiS
-         bOJ8CDik94EWq6aaUjjcR2i8vToW4eEIN/sCP6fHLH1/3JKJh0b792s26XjVgFyLvLrn
-         nNbjYXCVkGOQesztAdcYDYUF5f+DjDs1hPghtp8F9ZEbSxTq8Csez3nIGfKhO/2etamo
-         Vd/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780939493; x=1781544293;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=w8JBElMQXP5d/TECdOlZtQLDN+V90z369cEJsD7o/qY=;
-        b=LTpGNoiMGAtwLS65+IXUtL6596REeTqD6GU2UEWPbaePcfQisyAT/TZtJ7d9vqBBl5
-         2ccYc48ZnZintyyGciAMj9e96KMtCX5btNdB2+24YjFufTZiiIIgiOrdEnsM7cmabOMd
-         COBtsDpDVRKjoJ8WfSPYOge+xn1/cacVe+CCSWhG5SW/QzsodKeXwnWpSUHnUxMVErWG
-         Uhex1KS/zK6gUYHX+gg+0OzRQYINPyUqjjldogyp5LFrTW+FdBzK6EJiazu6sdwAecRm
-         /2nuCtIZBHfMBRr0mtl6R5EshA4jsUur1Ea0khgw42p4RvEgJS/3fcPf/3DCKiXMySVJ
-         lAIg==
-X-Forwarded-Encrypted: i=1; AFNElJ/C1vEYUE0D6yitKt37YpxTFXPiBbMMwwcLXS6rZ9v47No3frOtEzSbt6voc76NBmPPfFitrC8vSBpChYnHnH8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdmFHKt0TIyxp/LsZK/5K3RAxbQKwSu1kOt6bS+ZfAUly1fHRa
-	rTZUl0mBCPEmm8LhIqtHmXsZ5p3bONwVs39orFlnhiXsG0KAcwlmZXAQ/ZNnPfX9IqVdS/hHWJ3
-	GqQ00T6CkcHfYo4/14cwCnspipFRaQmPxVsoEy7u8
-X-Gm-Gg: Acq92OFt8lnFgtLHP/G+7Osp+1zOyUQLB5JtK76cHxygpQnFfBHBSFyhKDBQGRydDi2
-	/9oP9AOUbTjCbB2DomaLIlJuylSyTgVIdrk+YC0VJcyvC8B01qYCx49dHmAJUUDVix1+vXDqZjv
-	4j5a+tq/RHHW5HLjlsFaJFaF+uPimH8HbvX3rd9pnJeJ98iRzzONhOxIEggyut2olf25KSzoUHz
-	RfRCJzLtzJ+8AM4qXmcF8F4UfR+HCGU4NKf3ItrPmeR4cKg/eGMsgMV96PlnFs1vmPegO0elVYq
-	4J7QZ8pHPqfGSAqFezqqb5teTNVC
-X-Received: by 2002:a17:902:e88f:b0:2b0:b016:773f with SMTP id
- d9443c01a7336-2c1e7d3dba7mr185086165ad.11.1780939492837; Mon, 08 Jun 2026
- 10:24:52 -0700 (PDT)
+	 To:Cc:Content-Type; b=ZPpZBEXG4F4JdAB0EEgZwPgmj9jY4/RazMmXruv8REmIPamznSv2nEnGuB/fmvvO9+51tIUSKFGnvTayYaLjo6ILiAJhuDjP+xEGvlTg4JOvbd9PnjnnPdtoiUDJT/mCPg27QpJ3aVswBM9fKmvZvIh8MYX93G5f2bjcbfeUzDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TrXt9bfr; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8461F00898
+	for <linux-integrity@vger.kernel.org>; Mon,  8 Jun 2026 17:35:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1780940139;
+	bh=u10T0nD1NN9n3AXGG2trN5i3eQsRrI+TOcRfuwZgmKQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=TrXt9bfrPHFgv/TM8y+6Lkz8YsS8pUkPqxY2HB42q/XNCaWkxcXe/CpI9l4iXnrix
+	 adcMkZMZvbuTgtFPy3m02UQ1ubtKA9uBg5Ng1LTPLrWsGzKLFfYx2MkWV1JlJQpHW1
+	 nB5fs39XpplGBaThJLPxIqDeenwOE4I7CuNGa0NAnU58y1vAwHy18rTsYdIjMCYrIh
+	 6Tekejp6Fv8X6CQ92/cF8JmE9CwggB4bM+n5RNmAY5pemr4Z9gvd8LuvIBVvN1IUK7
+	 n0SEmwSlsshgGBq4OghNk/mU2tJWkcuUj5PeY56dMa/hXegEWADywmjS6fSG/tmHxQ
+	 BOc80YrnHWMkg==
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-3965adfd75fso41402371fa.1
+        for <linux-integrity@vger.kernel.org>; Mon, 08 Jun 2026 10:35:39 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AFNElJ9Kf+EUqbl1XFgKvdYVgAHL+o2fsAFwiU0WdFfoTMOMpqDKeGL/hM/ZCteH27tKwMwX6YBt5LadlO+GJ+m6250=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjYwNuI1u/DJjhSiXrjsMY+Mi2cYDUEXR60uWYQLtFRK6LyTCI
+	85DNToWvLH1owqvbtLNqJCpMH2Wj6Suqx4R5aYt+M2uxJpbPVg9R0k3ZlxKoOQ+6g2O+0scXLTU
+	MSB/Dsr8R8mlpIkXlQsb/JqTHk6tyE5I=
+X-Received: by 2002:a05:6512:138b:b0:5aa:6b09:2ac3 with SMTP id
+ 2adb3069b0e04-5aa87b80a79mr5423518e87.24.1780940138110; Mon, 08 Jun 2026
+ 10:35:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260605144325.434436-1-yeoreum.yun@arm.com> <20260605144325.434436-2-yeoreum.yun@arm.com>
- <9b499a2a3101cadcfdcd6fc32289f54df10fea80.camel@linux.ibm.com>
-In-Reply-To: <9b499a2a3101cadcfdcd6fc32289f54df10fea80.camel@linux.ibm.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 8 Jun 2026 13:24:40 -0400
-X-Gm-Features: AVVi8Cc6U7pcPpqOawvLTIEb90w3WN1G1z-dXh4nwGP7pqUP53pA_Sp10Oyc5n4
-Message-ID: <CAHC9VhTN5xwBb6QFKeon-X1Px3AWesvPeyBEbebVQt1FLbtCdQ@mail.gmail.com>
-Subject: Re: [PATCH v6 1/4] security: lsm: allow LSMs to register for
- late_initcall_sync init
-To: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org, 
-	roberto.sassu@huaweicloud.com, noodles@earth.li, jarkko@kernel.org, 
-	sudeep.holla@kernel.org, jmorris@namei.org, serge@hallyn.com, 
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jgg@ziepe.ca
+References: <2848144.mvXUDI8C0e@rafael.j.wysocki> <agfFERWn-5b-0H24@kernel.org>
+ <CAJZ5v0jQUQ85MpyPZNbLmxqaGGvsTBKsdf8gdPNmFFSpZkj4eQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jQUQ85MpyPZNbLmxqaGGvsTBKsdf8gdPNmFFSpZkj4eQ@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 8 Jun 2026 19:35:26 +0200
+X-Gmail-Original-Message-ID: <CAJZ5v0iQO_ozXQpzj4qKLegRzMURPDjJV47ynfL6OAUUg_8f4w@mail.gmail.com>
+X-Gm-Features: AVVi8CfAsmPELV8FvWVvQLiemflysSn_64WMNTO18O0ofD1QNhP95Vleo2mm8ic
+Message-ID: <CAJZ5v0iQO_ozXQpzj4qKLegRzMURPDjJV47ynfL6OAUUg_8f4w@mail.gmail.com>
+Subject: Re: [PATCH v1] tpm_crb: Check ACPI_COMPANION() against NULL during probe
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
-	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:zohar@linux.ibm.com,m:yeoreum.yun@arm.com,m:linux-security-module@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:roberto.sassu@huaweicloud.com,m:noodles@earth.li,m:jarkko@kernel.org,m:sudeep.holla@kernel.org,m:jmorris@namei.org,m:serge@hallyn.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:jgg@ziepe.ca,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-9777-lists,linux-integrity=lfdr.de];
+	FREEMAIL_CC(0.00)[gmx.de,ziepe.ca,vger.kernel.org,linux.intel.com];
+	TAGGED_FROM(0.00)[bounces-9778-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER(0.00)[paul@paul-moore.com,linux-integrity@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORWARDED(0.00)[lists@lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[paul-moore.com:+];
+	FORGED_RECIPIENTS(0.00)[m:jarkko@kernel.org,m:peterhuewe@gmx.de,m:jgg@ziepe.ca,m:linux-integrity@vger.kernel.org,m:andriy.shevchenko@linux.intel.com,m:linux-kernel@vger.kernel.org,m:linux-acpi@vger.kernel.org,s:lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[rafael@kernel.org,linux-integrity@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-integrity@vger.kernel.org];
-	FREEMAIL_CC(0.00)[arm.com,vger.kernel.org,huaweicloud.com,earth.li,kernel.org,namei.org,hallyn.com,gmail.com,oracle.com,ziepe.ca];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-integrity@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,arm.com:email,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,paul-moore.com:dkim,paul-moore.com:email,paul-moore.com:url,paul-moore.com:from_mime,vger.kernel.org:from_smtp]
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp,intel.com:email]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 1A1BF659378
+X-Rspamd-Queue-Id: BFC7F659520
 
-On Mon, Jun 8, 2026 at 12:52=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Fri, 2026-06-05 at 15:43 +0100, Yeoreum Yun wrote:
-> > There are situations where LSMs have dependencies that might mean they
-> > want to be initialised later in the boot process, to ensure those
-> > dependencies are available. In particular there are some TPM setups (Ar=
-m
-> > FF-A devices, SPI attached TPMs) required by IMA which are not
-> > guaranteed to be initialised for regular initcall_late.
-> >
-> > Add an initcall_late_sync option that can be used in these situations.
-> >
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+On Tue, May 19, 2026 at 11:01=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
 >
-> Cc: Paul Moore <paul@paul-moore.com>
+> On Sat, May 16, 2026 at 3:15=E2=80=AFAM Jarkko Sakkinen <jarkko@kernel.or=
+g> wrote:
+> >
+> > On Tue, May 12, 2026 at 06:16:23PM +0200, Rafael J. Wysocki wrote:
+> > > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> > >
+> > > Every platform driver can be forced to match a device that doesn't ma=
+tch
+> > > its list of device IDs because of device_match_driver_override(), so
+> > > platform drivers that rely on the existence of a device's ACPI compan=
+ion
+> > > object need to verify its presence.
+> > >
+> > > Accordingly, add a requisite ACPI_COMPANION() check against NULL to t=
+he
+> > > tpm_crb driver.
+> > >
+> > > Fixes: 48fe2cddc85c ("tpm_crb: Convert ACPI driver to a platform one"=
+)
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >  drivers/char/tpm/tpm_crb.c |    6 +++++-
+> > >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > >
+> > > --- a/drivers/char/tpm/tpm_crb.c
+> > > +++ b/drivers/char/tpm/tpm_crb.c
+> > > @@ -786,8 +786,8 @@ static int crb_map_pluton(struct device
+> > >  static int crb_acpi_probe(struct platform_device *pdev)
+> > >  {
+> > >       struct device *dev =3D &pdev->dev;
+> > > -     struct acpi_device *device =3D ACPI_COMPANION(dev);
+> > >       struct acpi_table_tpm2 *buf;
+> > > +     struct acpi_device *device;
+> > >       struct crb_priv *priv;
+> > >       struct tpm_chip *chip;
+> > >       struct tpm2_crb_smc *crb_smc;
+> > > @@ -797,6 +797,10 @@ static int crb_acpi_probe(struct platfor
+> > >       u32 sm;
+> > >       int rc;
+> > >
+> > > +     device =3D ACPI_COMPANION(dev);
+> > > +     if (!device)
+> > > +             return -ENODEV;
+> > > +
+> > >       status =3D acpi_get_table(ACPI_SIG_TPM2, 1,
+> > >                               (struct acpi_table_header **) &buf);
+> > >       if (ACPI_FAILURE(status) || buf->header.length < sizeof(*buf)) =
+{
+> > >
+> > >
+> > >
+> >
+> > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 >
-> Jarkko has already queued 4/4.  Paul, can we get an Ack from you?
+> Thanks!
+>
+> So do you want me to pick up this one?
 
-It's in my queue, but with the merge window opening next week, this is
-definitely not suitable for the upcoming merge window, so it's not
-near the top of my review list.
+I took the silence as consent and picked it up.  If you'd rather route
+it differently, please let me know.
 
---=20
-paul-moore.com
+Thanks!
 
