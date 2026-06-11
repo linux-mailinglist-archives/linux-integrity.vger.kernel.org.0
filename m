@@ -1,257 +1,281 @@
-Return-Path: <linux-integrity+bounces-9790-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9791-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id FPmqJG2+KmpIwAMAu9opvQ
-	(envelope-from <linux-integrity+bounces-9790-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2026 15:55:57 +0200
+	id EcVEIMDGKmprwwMAu9opvQ
+	(envelope-from <linux-integrity+bounces-9791-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2026 16:31:28 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2AA06727E1
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2026 15:55:56 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2B90672B9A
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2026 16:31:22 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9790-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9790-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=ibm.com header.s=pp1 header.b=dT6BsrEP;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9791-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9791-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=ibm.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3DF4331CDAA1
-	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2026 13:42:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 11A113197FAF
+	for <lists+linux-integrity@lfdr.de>; Thu, 11 Jun 2026 14:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0F4E403B16;
-	Thu, 11 Jun 2026 13:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911CF405F7;
+	Thu, 11 Jun 2026 14:30:59 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CEB407CFF
-	for <linux-integrity@vger.kernel.org>; Thu, 11 Jun 2026 13:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D4227AC31
+	for <linux-integrity@vger.kernel.org>; Thu, 11 Jun 2026 14:30:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781185340; cv=none; b=aePejpUbF9ZbK5DCoLlHR4bHv2aAATa0j+uxz/k7jVxIs8luc+hAuL6OJDTdIraaR8biSz/dHG3gyMsyv6mGin22kES5Z0OVlp/HrxzpWdSWsQqI1rQpV7DzXzu3nhg3HVbC0vIZFqTqb4ADezCpaTcqMxaJ+9cixfrZDR6LZqc=
+	t=1781188259; cv=none; b=GgnsaV8rNCxyalXTx/BjqNXcd6acq6ofXhqJQAWdzv77fcdxMUxxuyh9bYgvmrC85r5bqqXAUaEuObbrnSLnnIY+xUfP6vuv5/cDc6oWObFSsCgl798sRDqXAu/uYDV7JZYYghBJgohiw3R98X2yC301FTOdt1rjgpjTdREOpLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781185340; c=relaxed/simple;
-	bh=O3/L3AsA/gicjQVzh9UNHuz7oGnQ2OcSyoYvie9cO0o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HwcdjgmYp/mmhXkoHoTgJkMNCNPgwUxa/rL0z0MG8DQsQqNjVq3fozCunWXtNqYfvXSF25be0964BKx+IBjOZgHyeqjA05YgL1gpLn/5HkKNel0EgPQofD7mJCSbwdBuUDJKqImZ7XfT7L20UFgRJ5MCPlwg3K5c5E79wMEV2ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
-Received: from mail.maildlp.com (unknown [172.18.224.235])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gbkFk32dCz1HCqn
-	for <linux-integrity@vger.kernel.org>; Thu, 11 Jun 2026 21:36:42 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id DC1C64056F
-	for <linux-integrity@vger.kernel.org>; Thu, 11 Jun 2026 21:42:08 +0800 (CST)
-Received: from [10.204.63.22] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwCXUc0puypq7eXAAA--.2142S2;
-	Thu, 11 Jun 2026 14:42:08 +0100 (CET)
-Message-ID: <84fd6676148d01505fb56e9253211707e57150f0.camel@huaweicloud.com>
-Subject: Re: [RFC][PATCH v3 2/2] ima: measure buffer sent to securityfs
- policy file
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Mimi Zohar <zohar@linux.ibm.com>, Enrico Bravi <enrico.bravi@polito.it>,
-  linux-integrity@vger.kernel.org, dmitry.kasatkin@gmail.com, 
- roberto.sassu@huawei.com
-Cc: eric.snowberg@oracle.com
-Date: Thu, 11 Jun 2026 15:41:58 +0200
-In-Reply-To: <2658c55c9d6a97ee8edca682d27369138aab67f5.camel@linux.ibm.com>
+	s=arc-20240116; t=1781188259; c=relaxed/simple;
+	bh=P5DcPQcRovV4Sr2tpVOuRxUa2dUkWwFFwQEDdTDgP6U=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=gLxBmvC7j2e1rVLzkuaAod5xNmYhQprR0TnH5FKOolRruitwAWVh6H7RWYkR/eHrjutqgYllHqGsjFY98mwf3mF9hG8T+RZ+E4smMrTPheAs3OKNSvO58DcNV5M9Up5Pnh3Nc0sUCuvZD4qN7m6deXd+MHd176OcKa7kx1nHzA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=dT6BsrEP; arc=none smtp.client-ip=148.163.158.5
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65BBhArH677384;
+	Thu, 11 Jun 2026 14:30:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=u37Ucs
+	DXP+BBsqksXDaR7f6c09tTKgY8OlcJ5u/JvTQ=; b=dT6BsrEPHvhg6a8ShYcHmQ
+	1cICtlPB4MLNpYW3/QorYwnInFxJDzYI48c6BPGDOlEAO8lCuk8TmrkChva4A3t6
+	O82XrScNIL5/6JpTeSqsDl+d0FuiMoIbOkOh/YITTQndJNxecTQQnu045mcK/7WB
+	GRIJ447ygeQ1I16D9KvFuEHyTs8CZMk1jpfyc3J0TpwBuIXJSEEwKkYNYWiI92Et
+	UKl96tt4HSMUTg0H3BnG7M02kuReZnXjPj9E14cS+EGSJJBd7Cy56kBOYRqU0HtH
+	92D+f2lhKQ6hediiLdzP/rbLOt4KexEzDZ2PbG5CS5FQg6yuiwwdVuFt7WciGYLQ
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4eqe8am2rn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jun 2026 14:30:41 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65BEJcjb020643;
+	Thu, 11 Jun 2026 14:30:41 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4eqe09kj3g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 11 Jun 2026 14:30:41 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65BEUex923921216
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 11 Jun 2026 14:30:40 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 70DEF5803F;
+	Thu, 11 Jun 2026 14:30:40 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D2B6058055;
+	Thu, 11 Jun 2026 14:30:39 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.141.118])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 11 Jun 2026 14:30:39 +0000 (GMT)
+Message-ID: <5703152fed864a39eb54cfccb571e9781a493760.camel@linux.ibm.com>
+Subject: Re: [RFC][PATCH v3 1/2] ima: measure loaded policy after write on
+ securityfs policy file
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Enrico Bravi <enrico.bravi@polito.it>,
+        "roberto.sassu@huawei.com"
+	 <roberto.sassu@huawei.com>,
+        "linux-integrity@vger.kernel.org"
+	 <linux-integrity@vger.kernel.org>,
+        "dmitry.kasatkin@gmail.com"
+	 <dmitry.kasatkin@gmail.com>
+Cc: "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>
+In-Reply-To: <7149d8e873fe59fedffd23a06c9c647d42660328.camel@polito.it>
 References: <20260526135118.289633-1-enrico.bravi@polito.it>
-	 <20260526135118.289633-3-enrico.bravi@polito.it>
-	 <2658c55c9d6a97ee8edca682d27369138aab67f5.camel@linux.ibm.com>
+			 <20260526135118.289633-2-enrico.bravi@polito.it>
+		 <f48148da72e9111235cb06d9c4d6c959d5c67035.camel@linux.ibm.com>
+	 <7149d8e873fe59fedffd23a06c9c647d42660328.camel@polito.it>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+Date: Thu, 11 Jun 2026 10:30:39 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwCXUc0puypq7eXAAA--.2142S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWr1UKr1kKr1xWrW7ZFWkJFb_yoWrZr1Dpa
-	90gay7Cr1DXry7Cr1xG3W7uw4Fg3yUKa1UW398GF1jy3Z8Zr1q9w15Ar1j9rySyryYyry0
-	yrs0vrZ8C3Z0yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyvb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Jr0_Gr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-	kEbVWUJVW8JwACjcxG0xvEwIxGrwCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
-	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1veHDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBGoqJEUPpQAAsP
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: CL3WvLx_LJIeRmALdNQIsZYQurOTb3EF
+X-Authority-Analysis: v=2.4 cv=TdKmcxQh c=1 sm=1 tr=0 ts=6a2ac692 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=bYbbU_mBg596tDSxjskA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjExMDE0MiBTYWx0ZWRfX8Yix+4eqlU3j
+ JPYk1aiVaBShEI/+1l/FsV0UlAXB/KmvLccbRU8HOs3bNk3l5vYskdwCj9aAnLt2obBYCXrpz9A
+ MixxzqF6dQVselnqaGPph+4RLmqq4lgvQJUW1vdo0vMvSc13vjuM55aaxHvlX5AXx513CkgZSNe
+ 7yScciAtXPLEJDxqzwhR+tnp/l2rYG9Jt1vraA2d4ILKszM4Aw4QldzWWSuGyTo1ZrNbmRJkL6v
+ hKSCS0tvnhZ59iFvtAUS4fAUU+wMYIRhnXSp30A5rM5IUHILTarG3I3Jl4ALKx5uLJbfz/Xiin8
+ lyvyJd/odMSuv9ntlqXAvFuSG0DyIeFro18TQvI9sLXmH6yZ6BRPw0dyOlJhLUCy7wwsgyhJ4nH
+ FC05JAq8FcqxeskB3ZqTkwnK4H/7nSP6Zt6QaKtdCEqE6+M1kFiTtl57gb69lu14fVzOui3XWYu
+ Hm+IeTOetXfWXB/6zmw==
+X-Proofpoint-GUID: ET5ZfiKbOpafTcKQZDG3-C50tz2E5O9W
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNjExMDE0MiBTYWx0ZWRfXyAR9LJ1YN2JV
+ jHcvg0ULELio2bq4WTYDnjnbiq6eniaVxJqL3v3ROlsC9EGDLGoMydO3UgHrTeRhe2uSzAp4y8O
+ GnrV1Yk/CnMZ0EHUP4Q3NHoPWUNdQEQ=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
+ definitions=2026-06-11_02,2026-06-11_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 malwarescore=0 clxscore=1015 impostorscore=0 adultscore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606040000 definitions=main-2606110142
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [4.84 / 15.00];
-	SEM_URIBL(3.50)[huaweicloud.com:mid,huaweicloud.com:from_mime];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:zohar@linux.ibm.com,m:enrico.bravi@polito.it,m:linux-integrity@vger.kernel.org,m:dmitry.kasatkin@gmail.com,m:roberto.sassu@huawei.com,m:eric.snowberg@oracle.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-9790-lists,linux-integrity=lfdr.de];
-	DMARC_NA(0.00)[huaweicloud.com];
-	GREYLIST(0.00)[pass,body];
-	FORGED_SENDER(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[linux.ibm.com,polito.it,vger.kernel.org,gmail.com,huawei.com];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9791-lists,linux-integrity=lfdr.de];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[polito.it,huawei.com,vger.kernel.org,gmail.com];
+	FORGED_RECIPIENTS(0.00)[m:enrico.bravi@polito.it,m:roberto.sassu@huawei.com,m:linux-integrity@vger.kernel.org,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
-	ALIAS_RESOLVED(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[roberto.sassu@huaweicloud.com,linux-integrity@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	MAILSPIKE_FAIL(0.00)[2600:3c0a:e001:db::12fc:5321:query timed out];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(0.00)[+ip4:172.234.253.10:c];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,huawei.com:email,polito.it:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,huaweicloud.com:mid,huaweicloud.com:from_mime]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: A2AA06727E1
+X-Rspamd-Queue-Id: D2B90672B9A
 
-On Wed, 2026-06-10 at 14:59 -0400, Mimi Zohar wrote:
-> On Tue, 2026-05-26 at 15:51 +0200, Enrico Bravi wrote:
-> > When a signed policy is not mandatory, it is possible to write the IMA
-> > policy directly on the corresponding securityfs file:
+On Thu, 2026-06-11 at 12:51 +0000, Enrico  Bravi wrote:
+>=20
+> > > diff --git a/security/integrity/ima/ima_efi.c
+> > > b/security/integrity/ima/ima_efi.c
+> > > index 138029bfcce1..8e9f85ec9a86 100644
+> > > --- a/security/integrity/ima/ima_efi.c
+> > > +++ b/security/integrity/ima/ima_efi.c
+> > > @@ -60,6 +60,8 @@ static const char * const sb_arch_rules[] =3D {
+> > > =C2=A0#endif
+> > > =C2=A0#if IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) &&
+> > > IS_ENABLED(CONFIG_IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY)
+> > > =C2=A0	"appraise func=3DPOLICY_CHECK appraise_type=3Dimasig",
+> > > +#else
+> > > +	"measure func=3DCRITICAL_DATA label=3Dima_policy",
+> > > =C2=A0#endif
 > >=20
-> > echo -e "measure func=3DBPRM_CHECK mask=3DMAY_EXEC\n" \
-> >         "audit func=3DBPRM_CHECK mask=3DMAY_EXEC\n" \
-> >      > /sys/kernel/security/ima/policy
+> > =C2=A0None of the other arch "measure" policy rules are conditional.=C2=
+=A0 Should the
+> > new
+> > "measure" rule be limited?
 >=20
-> Or by cat'ing the entire IMA custom policy file.
+> This condition aims to avoid measuring the policy loaded even if a signed=
+ policy
+> is required. In that case, it would not be possible to directly write the=
+ policy
+> in the securityfs file.
+
+Good point. Since it is different than the other rules, could you add a com=
+ment
+here or in the patch description.
+
 >=20
+> > > =C2=A0	"measure func=3DMODULE_CHECK",
+> > > =C2=A0	NULL
+> > > diff --git a/security/integrity/ima/ima_fs.c
+> > > b/security/integrity/ima/ima_fs.c
+> > > index 012a58959ff0..75cb308cf01f 100644
+> > > --- a/security/integrity/ima/ima_fs.c
+> > > +++ b/security/integrity/ima/ima_fs.c
+> > >=20
+> > > @@ -2381,3 +2380,55 @@ bool ima_appraise_signature(enum kernel_read_f=
+ile_id
+> > > id)
+> > > =C2=A0	return found;
+> > > =C2=A0}
+> > > =C2=A0#endif /* CONFIG_IMA_APPRAISE && CONFIG_INTEGRITY_TRUSTED_KEYRI=
+NG */
+> > > +
 > >=20
-> > Add input buffer measurement, regardless of whether the new policy
-> > will be accepted or not, that can be caught when
-> > 'measure func=3DPOLICY_CHECK' is enabled (e.g., ima_policy=3Dtcb).
->=20
-> Enrco, Roberto, a reason for measuring invalid or malformed IMA policy ru=
-les
-> needs to be provided here.
-
-One reason would be to be able to detect attempts to corrupt IMA by
-loading malformed data, since the measurement is performed before the
-policy is parsed.
-
-> In addition to the "ima_policy" critical data, why is this mechanism need=
-ed?
-
-POLICY_CHECK already measures partial policy load by file. This patch
-would just complete the POLICY_CHECK hook by measuring policy load
-by=C2=A0buffer.
-
-I believe they can both cohexist, both would allow to know which policy
-is loaded at any time. With the critical data, the existing policy is
-included in every entry, but it is easier to derive the current policy
-loaded. It would be up to the remote attestation solution to determine
-which solution is more suitable.
-
-Roberto
-
-> > The
-> > measurement template is forced to ima-buf.
->=20
-> Please include directions for verifying the measurement record here in th=
-e patch
-> description.
->=20
+> > Please add kernel-doc here, something like:
 > >=20
-> > Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > Signed-off-by: Enrico Bravi <enrico.bravi@polito.it>
-> > ---
-> >  security/integrity/ima/ima.h        |  1 +
-> >  security/integrity/ima/ima_fs.c     |  1 +
-> >  security/integrity/ima/ima_main.c   | 19 +++++++++++++++++++
-> >  security/integrity/ima/ima_policy.c |  3 +++
-> >  4 files changed, 24 insertions(+)
-> >=20
-> > diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.=
-h
-> > index a223d3f30d88..320c80a1a847 100644
-> > --- a/security/integrity/ima/ima.h
-> > +++ b/security/integrity/ima/ima.h
-> > @@ -426,6 +426,7 @@ void *ima_policy_next(struct seq_file *m, void *v, =
-loff_t *pos);
-> >  void ima_policy_stop(struct seq_file *m, void *v);
-> >  int ima_policy_show(struct seq_file *m, void *v);
-> >  void ima_measure_loaded_policy(void);
-> > +int ima_measure_policy_buf(const char *buf, size_t buf_len);
-> > =20
-> >  /* Appraise integrity measurements */
-> >  #define IMA_APPRAISE_ENFORCE	0x01
-> > diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/i=
-ma_fs.c
-> > index 75cb308cf01f..601718e02429 100644
-> > --- a/security/integrity/ima/ima_fs.c
-> > +++ b/security/integrity/ima/ima_fs.c
-> > @@ -362,6 +362,7 @@ static ssize_t ima_write_policy(struct file *file, =
-const char __user *buf,
-> >  				    1, 0);
-> >  		result =3D -EACCES;
-> >  	} else {
-> > +		ima_measure_policy_buf(data, datalen);
-> >  		result =3D ima_parse_add_rule(data);
-> >  	}
-> >  	mutex_unlock(&ima_write_mutex);
-> > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima=
-/ima_main.c
-> > index 1d6229b156fb..174110da0030 100644
-> > --- a/security/integrity/ima/ima_main.c
-> > +++ b/security/integrity/ima/ima_main.c
-> > @@ -1204,6 +1204,25 @@ int ima_measure_critical_data(const char *event_=
-label,
-> >  }
-> >  EXPORT_SYMBOL_GPL(ima_measure_critical_data);
-> > =20
-> > +/**
-> > + * ima_measure_policy_buf - Measure the policy write buffer
-> > + * @buf: pointer to the buffer containing the policy write data
-> > + * @buf_len: size of the buffer
-> > + *
-> > + * Measure the buffer sent to the IMA policy securityfs file.
-> > + *
-> > + * Return 0 on success, a negative value otherwise.
-> > + */
-> > +int ima_measure_policy_buf(const char *buf, size_t buf_len)
-> > +{
-> > +	if (!buf || !buf_len)
-> > +		return -ENOPARAM;
+> > /**
+> > =C2=A0* ima_measure_loaded_policy - measure the active IMA policy rules=
+et
+> > =C2=A0*
+> > =C2=A0* Must be called with ima_write_mutex held, as it performs two
+> > =C2=A0* separate RCU read passes over ima_rules and relies on the mutex
+> > =C2=A0* to prevent concurrent policy updates between them.
+> > =C2=A0*/
 >=20
-> Please return -EINVAL.
->=20
->=20
-> > +
-> > +	return process_buffer_measurement(&nop_mnt_idmap, NULL, buf, buf_len,
-> > +					 "ima_write_policy_buf", POLICY_CHECK,
-> > +					 0, NULL, false, NULL, 0);
->=20
-> Parallel to "ima_policy_loaded" consider naming the record as
-> "ima_policy_written".
->=20
-> The indentation is off by a character.
->=20
-> > +}
-> > +
-> >  #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
-> > =20
-> >  /**
->=20
-> [...]
->=20
-> thanks,
->=20
-> Mimi
->=20
+> Sure, thank you. If it is ok for you I can directly add what you suggeste=
+d.
 
+This was suggested by Claude, so it should be acceptable to use.
+
+>=20
+> > > +void ima_measure_loaded_policy(void)
+> > > +{
+> > > +	const char *event_name =3D "ima_policy_loaded";
+> > > +	const char *op =3D "measure_loaded_ima_policy";
+> > > +	const char *audit_cause =3D "ENOMEM";
+> > > +	struct ima_rule_entry *rule_entry;
+> > > +	struct list_head *ima_rules_tmp;
+> > > +	struct seq_file file;
+> > > +	int result =3D -ENOMEM;
+> > > +	size_t file_len;
+> > > +	char rule[255];
+> >=20
+> > The 255-byte buffer may be insufficient for custom policy rules that in=
+clude
+> > additional fields such as LSM labels and other file metadata, unlike th=
+e
+> > simpler
+> > built-in and architecture-specific rules. Please increase the buffer si=
+ze to
+> > accommodate the worst-case serialized rule length.
+>=20
+> Yes, I wrongly took as reference the arch policy rules case. I don't know=
+ if the
+> worst-case can be precisely estimated. I could increase the buffer size a=
+nd
+> check in any case if seq_has_overflowed(). Could it be an idea?
+
+Sounds good.
+
+>=20
+> > > +
+> > > +	/* calculate IMA policy rules memory size */
+> > > +	file.buf =3D rule;
+> > > +	file.read_pos =3D 0;
+> > > +	file.size =3D 255;
+> > > +	file.count =3D 0;
+> > > +
+> >=20
+> > Please add "lockdep_assert_held(&ima_write_mutex);"=C2=A0 here.
+>=20
+> Yes, and this would actually fail because I'm not acquiring ima_write_mut=
+ex in
+> ima_release_policy().
+
+Thanks.
+
+Mimi
+> >=20
 
