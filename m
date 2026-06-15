@@ -1,59 +1,59 @@
-Return-Path: <linux-integrity+bounces-9796-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9797-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id HM0HLr3tL2rcJAUAu9opvQ
-	(envelope-from <linux-integrity+bounces-9796-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2026 14:19:09 +0200
+	id darVK2/tL2rMJAUAu9opvQ
+	(envelope-from <linux-integrity+bounces-9797-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2026 14:17:51 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 168576861E9
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2026 14:19:09 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CABF6861B4
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2026 14:17:51 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=BDYTmmxp;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9796-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9796-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=VkKpD52b;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9797-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9797-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D285E30427D8
-	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2026 12:15:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 15258300F153
+	for <lists+linux-integrity@lfdr.de>; Mon, 15 Jun 2026 12:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4518F3E7BC2;
-	Mon, 15 Jun 2026 12:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 503953B0ADC;
+	Mon, 15 Jun 2026 12:17:48 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412DA3E832A;
-	Mon, 15 Jun 2026 12:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F0630F92D;
+	Mon, 15 Jun 2026 12:17:46 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781525720; cv=none; b=BJgBP/wCkkduyadjasbD1ucXMtX+Su//RUUcxL42czRZcixkosEIjsQxB4hu9Ef32G2Dk1xiHF/mj9xDwT0487ejziLI0gwB/AuMkAq6Nij4+y/chvx+eXuTSRERBNDxsBDCx2cjfu0L4m3cZwv/5B1M5k0R/ulsgU3WLIlb6TA=
+	t=1781525868; cv=none; b=T4/Odkns0sGNbRPcfbQ52DXd+mt5AhtC+tWx+cRZ+YRFFYQlVGctyGHaShekOvscmRLLPPobIwsho+QDRsCn3gfBUloMvQc2FhSdXfC2VSiGg8f41cK3d1U0rNtViJNy9auA1B9lmm96H+4Mf95oLm6ycyYkIpOcyGMwpynB6Uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781525720; c=relaxed/simple;
-	bh=PwJZZ1o5H5JoUnR1ARzxJGygHZ4qCA/wRX0Bz9gk6oA=;
+	s=arc-20240116; t=1781525868; c=relaxed/simple;
+	bh=fLIGOXgAZtsSKBEYYodyCYn2FgEOA2Fme6i2MBSLr9c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pZVRkbhNnhvJ81KXDD7bvRAxyeNh7Z06CD+2zQoqxNUyXfdTCNbviDbxM/zcNiB+kTt+hRhQGe4u3iG+QpapbP/w+4zHFzzaPC6e0eaoMBt4N69biHW5GckryKeZm3D4pCM18F0TT2Z4nbUunm5AbwbhuPC6nAa9QepW+Y6XjQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BDYTmmxp; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 5A90B1F000E9;
-	Mon, 15 Jun 2026 12:15:18 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=V4la+XPfoADszT74wCebR47U7lVZdf1sJkFTjGiozAV3P+UMQOvO7dJGmxVe3ru8LLXy1uRMACo0aNBIM+kXg/+XcxBmGtq8Zc3T+SiL9IvqFzp7TyeYbot+BEX8Eqgz7IpobN2LgOuSsL1OKHoJxBmGSy533iB9Ab9la1+hWCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VkKpD52b; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 0A2291F000E9;
+	Mon, 15 Jun 2026 12:17:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781525718;
-	bh=2jFG9QGRkDCh+2v0jpBIwm2x6kEARffuzaNPE7q2LyY=;
+	s=k20260515; t=1781525866;
+	bh=KsX+Beu6boU4Mdxu5+HSbWrO8RbfbRLaAx1VTbiHGk8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BDYTmmxpKLnAW9t2CqaleTU1tFrPT20oj1kz7dTnxvdVojWHsA/1TVHt2d+GMHb7S
-	 ID0lnzWXAZrlMGc6t8fas3UnggJJMTu883oQKX5Q3Qf6txUQNE2QqnIPk0hqE2B28Q
-	 w8rwdPKz4rfMvAcFlVqkS8QlmfycQMonaaRZCcz7FsfYS/b8kMKP6plr/nNdqWOumA
-	 zxN4aVw8MUK4sW19f5BVjEJjRvcysMNzUitc6Fsvbv+w0+lR8+P/28T0mmGwN03mEU
-	 CkAngNQcJSNh/ZQh9oFnSU/HSpJexPol2rf15j84VEAObo98rVWv0og1poxfWeg9n4
-	 ukAUZXM907fVg==
-Date: Mon, 15 Jun 2026 15:15:15 +0300
+	b=VkKpD52bCO8oeSI1lsueit/Wm+dI6Idw9gXOnZIZzHR+hVSsrqk1RqbY5O8I/2jxK
+	 Ecg9LREPFnJdWbsiAjqFLgqDGUbMgaC5wV0iF3gNcdDaOWVNehLPiNYo2rzO4a4SZQ
+	 pPM2M4L+CasdBSa/rNvCYkvI8DKhvqU/hPbRl2P3dzNuZcUwnTKHUVOwKZR1as7rx5
+	 iJl6OQJw1/c8fQcvc7h2Su3yM+wjIoS9lVSVby0V0Y2o+p+A7huT23YAd817UvZEAZ
+	 LJJ8RE/ILREK218iXLAJIK4l0ofE2FmD5SuGZxvPrhmKxbuvQL20rAet6zzrJhzUHS
+	 lX7KkJddZltyQ==
+Date: Mon, 15 Jun 2026 15:17:43 +0300
 From: Jarkko Sakkinen <jarkko@kernel.org>
 To: Daniel Golle <daniel@makrotopia.org>
 Cc: Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
 	Chen Jun <chenjun102@huawei.com>, linux-integrity@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] tpm: tpm_tis: add settle delay after releasing locality
-Message-ID: <ai_s0-hSMomu1mOy@kernel.org>
+Message-ID: <ai_tZ0VM9PDCRMfl@kernel.org>
 References: <086949bcf2c10bead892b0b4befd98da370cd3ee.1781498837.git.daniel@makrotopia.org>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
@@ -70,17 +70,17 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:daniel@makrotopia.org,m:peterhuewe@gmx.de,m:jgg@ziepe.ca,m:chenjun102@huawei.com,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-9796-lists,linux-integrity=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-9797-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:daniel@makrotopia.org,m:peterhuewe@gmx.de,m:jgg@ziepe.ca,m:chenjun102@huawei.com,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
@@ -96,10 +96,10 @@ X-Spamd-Result: default: False [-5.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 168576861E9
+X-Rspamd-Queue-Id: 0CABF6861B4
 
 On Mon, Jun 15, 2026 at 05:48:43AM +0100, Daniel Golle wrote:
 > tpm_tis_core_init() releases locality 0 then immediately reclaims it via
@@ -135,9 +135,7 @@ On Mon, Jun 15, 2026 at 05:48:43AM +0100, Daniel Golle wrote:
 > 2.54.0
 > 
 
-I think this is totally fine.
-
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Can rebase to my for-next-tpm and resend v2?
 
 BR, Jarkko
 
