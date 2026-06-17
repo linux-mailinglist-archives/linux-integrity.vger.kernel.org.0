@@ -1,215 +1,241 @@
-Return-Path: <linux-integrity+bounces-9799-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9800-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id P+5hJxzIMGpUXQUAu9opvQ
-	(envelope-from <linux-integrity+bounces-9799-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2026 05:50:52 +0200
+	id 57r3DKHIMmrZ5QUAu9opvQ
+	(envelope-from <linux-integrity+bounces-9800-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2026 18:17:37 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26EDB68BC30
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2026 05:50:51 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86C6B69B523
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2026 18:17:36 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=none;
-	dmarc=none;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9799-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9799-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
+	dkim=pass header.d=polito.it header.s=selector1 header.b=XhXN7UNJ;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9800-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9800-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=polito.it;
+	arc=reject ("cv is fail on i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 794793006935
-	for <lists+linux-integrity@lfdr.de>; Tue, 16 Jun 2026 03:50:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2060E3392151
+	for <lists+linux-integrity@lfdr.de>; Wed, 17 Jun 2026 16:07:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE3129E0F6;
-	Tue, 16 Jun 2026 03:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D26147F2FB;
+	Wed, 17 Jun 2026 16:07:12 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11020127.outbound.protection.outlook.com [52.101.69.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2791B23C512
-	for <linux-integrity@vger.kernel.org>; Tue, 16 Jun 2026 03:50:42 +0000 (UTC)
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781581844; cv=none; b=TejHV9D46HCUdzNQUgfMok1oQ+vc3Es+pq69+E3n0ltCgCLPXVH4Xg1oiYu21w21jDcZTU4IFLE4dLqSHccjdvHpGf2e/zPF+v5B6574MPGNGGSJOvLYONlBJPq7n8rGqlpoy4Qvu49Mv3ZIDoOeecv74NdDKSrF7acOpHnAZ3U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781581844; c=relaxed/simple;
-	bh=WFC+DTioYOg8/H09XiC4k5I1G5gXqW4Q7CxAp6NEC3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FfPLF5mSnETNUzQE7aPfaqdOQ8M5jwbiEli1iZfQyauGsh1rXLfbx0+zNq2rfTELU+Rm20ydu6ZoZnl3jq/PxM9fPsR4ZpAJQFU1uol/GvD/Ee5QbjjNPqJGeVeXGNlW32Akv13LqInzMOc7PsDlmifZY2w3gb8arALXfujBEDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
-Received: from local
-	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-	 (Exim 4.99)
-	(envelope-from <daniel@makrotopia.org>)
-	id 1wZKoy-000000007fo-0aR5;
-	Tue, 16 Jun 2026 03:50:40 +0000
-Date: Tue, 16 Jun 2026 04:50:37 +0100
-From: Daniel Golle <daniel@makrotopia.org>
-To: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Christoph Anton Mitterer <calestyo@scientia.org>,
-	linux-integrity@vger.kernel.org
-Subject: inherit null-key across hibernate (was: Re: regression: kernel log
- "flooded" with tpm tpm0: A TPM error (2306) occurred attempting to create
- NULL primary)
-Message-ID: <ajDIDcW_EzgLB0qX@makrotopia.org>
-References: <693caa85c3ee1b3117a562894971de60b6842d00.camel@scientia.org>
- <8fe12e2eb9beb159d2af8462fa0b9b1f946deacb.camel@HansenPartnership.com>
- <89542959611252d64572ffad438f48b4f54131f0.camel@HansenPartnership.com>
- <D5LEQGJ9X3NF.3K3YVPNE6KQJK@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECF0466B5D
+	for <linux-integrity@vger.kernel.org>; Wed, 17 Jun 2026 16:06:59 +0000 (UTC)
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781712431; cv=fail; b=uRUBzUOqZkOwc9RaQwb/RH0U3/mK96fuI2cFl81sgZVY/v5i4y0i+CBOt/cUtxzh8+L/gJ0VgR+ACtfh25uDmGTE5GFcRd92DZI2OZQeoptnWyDP9V17ggaY5ngpo9wxCu60KFkGZvx+0a0GV8QFPLugQcdQXot87Ckm8z9weJ0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781712431; c=relaxed/simple;
+	bh=eikSITp7fpQDhQ6wRP1oMQBYzJ7iYNvOamEdX4rg+WY=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=oLzM28BS+sjqb956oYCKfquPXAdrY2D8MnVOXpW/3s/u84kjv/yL6+rzUPFhw8/O0IptKuUu3kEYdyfWyMhHkO8Xkx2w3VeV9sBGsPdOUIITHO5QJV7Qr7TCQTHX6YMQRaQ4aLw/xcdI2kRsynxeWEr8YBoFf+N3ySyrJx7h1LA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=polito.it; spf=pass smtp.mailfrom=polito.it; dkim=pass (1024-bit key) header.d=polito.it header.i=@polito.it header.b=XhXN7UNJ; arc=fail smtp.client-ip=52.101.69.127
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=M2kf/ZN0Ub9vruCBzBGv3XcxF8vlPfghKVUxeofnBTsYMx4OniK/cf48GAYt3FFiPmicKgkpdjJUDJCEHV8wkJZCiMBy6p1GLoP4RY5FQ+Cz2Mz8OYtRL0qJdfUuxhsVjPJ1MGTHFrRPIQWUclBHVuHjsfPdhOnVJc29J/SiWhnXV4bJGel3xmQ6yVDZKAnGT0VqTb6nt0OIAH2pUD2/+QLQRkyHXI+DEIh0MJRi4pZwZHa3rOYCCPEdWoYcBHoQStmzV64CFJrRjX3ZsM+A/Lero82plxxtleYPzqXddAgVRJbbkfgk+rkYIjfBcu2y/fVEjhKGYyA+UEUlD3QprA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xlcZ/0KTTtm9fqfhOqS9isWyYJpuulqRYFo/V8KmxJo=;
+ b=NuhOrgnDLaKlfbt6iXx6RkbD/NYXx/qa03ZIf+LoerN0tWfn4778D7r5UlQbvaUJv3afSSgLyyViE4eS9XFVMIoHBQztX9IgKzdrxnV9Kgjb9Moy8kELcmB2LkD0OwvNtDyiCfjQ2EhQ2bkc+647zlElBJVgi9VXIg9IhTLu0wUkXey+Mq/Sl+VHdMUV2vqW6BSXLSRw3FvyEI3UwZI1AymoxAj1JJSIPeUnAk+mctrW6CymNdZivkFuGfJcmDQmAd/o5aIDoF5l6dAfJdg8pYmHMx0YK7Fls2fawlC9VGDxy39olhp17wU+N/i4UWVHmyZ7jUivTs6516bs8pyDpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=polito.it; dmarc=pass action=none header.from=polito.it;
+ dkim=pass header.d=polito.it; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=polito.it;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xlcZ/0KTTtm9fqfhOqS9isWyYJpuulqRYFo/V8KmxJo=;
+ b=XhXN7UNJBM4NzpX1TwJpI/1/p12FoXYlDucr3AmR98xsKDlu4Wv6MThuYImDUr67RTcdlLZb8GpoxUH8x6dAGFC1hAVDy6SqHoNHMKnWP/n7nUwWOcyOtEemTdQPtM7q3NPge3WaKTegbFB2Sj61bxR7cMBM1yOwlDGhPNi5/LM=
+Received: from AS8PR05MB7880.eurprd05.prod.outlook.com (2603:10a6:20b:253::20)
+ by DB9PR05MB8219.eurprd05.prod.outlook.com (2603:10a6:10:23f::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.139.11; Wed, 17 Jun
+ 2026 16:06:53 +0000
+Received: from AS8PR05MB7880.eurprd05.prod.outlook.com
+ ([fe80::b739:4a27:cccc:cd64]) by AS8PR05MB7880.eurprd05.prod.outlook.com
+ ([fe80::b739:4a27:cccc:cd64%5]) with mapi id 15.21.0139.009; Wed, 17 Jun 2026
+ 16:06:53 +0000
+From: Enrico Bravi <enrico.bravi@polito.it>
+To: linux-integrity@vger.kernel.org,
+	zohar@linux.ibm.com,
+	dmitry.kasatkin@gmail.com,
+	roberto.sassu@huawei.com
+Cc: eric.snowberg@oracle.com,
+	Enrico Bravi <enrico.bravi@polito.it>
+Subject: [PATCH v4 0/2] ima: measure write on securityfs policy file
+Date: Wed, 17 Jun 2026 17:58:31 +0200
+Message-Id: <20260617155832.434517-1-enrico.bravi@polito.it>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MI3PEPF00004E9D.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:298:1::454) To AS8PR05MB7880.eurprd05.prod.outlook.com
+ (2603:10a6:20b:253::20)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D5LEQGJ9X3NF.3K3YVPNE6KQJK@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR05MB7880:EE_|DB9PR05MB8219:EE_
+X-MS-Office365-Filtering-Correlation-Id: 432b4dbc-da9f-45cd-9f54-08decc8a729a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|786006|376014|23010399003|3023799007|18002099003|56012099006|11063799006;
+X-Microsoft-Antispam-Message-Info:
+	7VflKrpeCvnT2s1SrCj2YuIXpwcesvsLOTePNVYH6eF12bicM4Tw/5iGKq1y+KPgA3BYfI+x5gOMBNzFot4wnB74uTp6RsbSK7aBXstwhVET3sSYmiX3p7CupTdvN3Bue9B8Nx01YsOD2ZmqD836hiDAHAq+zJfGGARJKPqVfJx/8DGVLsZLnyrbYqcBFzLIl/PzSqL+5bVCiQJ0WNx0RR7ww7MfzeI8iEEj3gEnrKt+cA9WK+3AKgpZdWrESoZhqlm2RMAes77Urephpv2khcCrv1IMM6955Bwy5zyiHhO/n/rp0dYYCWbJxuUhHse6kINjD/DptKhpYx63SGrilOgb7nrT1gkkZ5jO1OETrm4DQqLi/75CXlXLLHMl84QmeWDlIZDs32eI16LGHUCRwNtRucWlo4d9N3KwpwjMsB8v98iKZfroT7fsZfNlsgESWO7HinYTUwRasRqOP8YFgutIgX+A2vkZaOdbx219eNpfyM4yM5nffraSK/te2IlXfd1j9I+83z81PjZEbvmpdcc7iMefynNhoy3gUZz8hyYItQ2RdSgaDMJAzAj2yWlqCJha5/CDOt2rVekCCYLYY0aUO0Hi02RRon19MHvN3XyezNQVYg91knuzijcY9IgB/o9vtLX7np7pn1MELlLmQCL4tvPI65iGYGSZzc3IG+SwVs5xNI5iSGHIqGFMxF/f
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR05MB7880.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(786006)(376014)(23010399003)(3023799007)(18002099003)(56012099006)(11063799006);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?4Cf8vmwwD9CmwYrkR5dP3ydawxYYaKFNw+9G0i/xlqqGRSkZbF4Xa8Wpk7R+?=
+ =?us-ascii?Q?XPLcz/pUNPVENN24hXnwoV+SnfCsi05JDsFacYW28XG7JVaY5zjaSaLcytI7?=
+ =?us-ascii?Q?B0lnbUP/c/H3/AAzZLYjy4vy+/wfGvlXafOwO+ArCAj06sZ0+yzCGuvYGE3N?=
+ =?us-ascii?Q?ffqqK0/cXGWLSf5y5lJrnks4m+hn9GCjHVIN+dIuK9xsogUBog3JFs/byGWU?=
+ =?us-ascii?Q?2SaQn2DAi7fAMSB0nGe3EUCeoZHrJaYqtaHtXVUro3zdD4DDGAY0ag54vwcZ?=
+ =?us-ascii?Q?sZNvvIONGEBMTPo2Fy/Y6vJ40Dm3hv5mijIdvKbYUm80yDvPnfraNorFMpqk?=
+ =?us-ascii?Q?ko10jyU0u4qC2xOwXCXckOKsKnFoXH+Of6XWy7WkVglBU01xgoKBw4LLrH7v?=
+ =?us-ascii?Q?slaxeEyeaG4rEK9taMHaeaMWnrkJ1UQ5RQXayEn6jNvnnZsD4jlQUtFu/sC8?=
+ =?us-ascii?Q?DVKWGheSNdf9qYy2hj4RdtcfQU3b4H1z3i52IRZRPWuNfSYni3eXG0Yreg+r?=
+ =?us-ascii?Q?zN5kyqwSlK4lqb3KmqseHySJ3L7yP2udJTi5h6JqJr6z55wDyrXulmcvTJ6J?=
+ =?us-ascii?Q?AH4i+v6PGliwz1F2GnUfH0UJ8QfXTBSSak9Y5dK7XtVWnVU0CVPS0W80Sw/U?=
+ =?us-ascii?Q?ftnfS0cngwjsyr6xI1tjnGcfCkYaRv621BtHY490Sw1OosCQJJTIKXciNHvO?=
+ =?us-ascii?Q?F9zpBdtP79RK7iX2hwYZMQjj+6XvoikI5VBuh8xSlt2O9+mmaX4dyFLZhlbZ?=
+ =?us-ascii?Q?bdw/sy7iG0scOKLssKcntv7GUviVKpxVt5ZOfm5WTVWJRF/9ocm6ZV1klknF?=
+ =?us-ascii?Q?Hy9a9UgGH7inEOj2EvP0Wdv7ehSdUSeHTP/UzcXYBeWZ7NPXCZZG8CZZFhm0?=
+ =?us-ascii?Q?A02T117kJZ0YtWA875SLJ6h++Ji++4J+Ha0jI8Tes6x8VdBR5PzkhAdoaUiS?=
+ =?us-ascii?Q?CFWaeduU4hqKa5gQCqXkFsuCdQGNaAGQY/yNaGnX3Z0Pmt4iIn6vHTRdDGE4?=
+ =?us-ascii?Q?hMZMk0kS5sSKnbr0G+3UzwQmRR9unDFhhqpHcc04d0qAVSBiwvbs+NKjJ/7Y?=
+ =?us-ascii?Q?HsJP0t0kfZK+YgKFwCTbi2mQrfGRBrTe4KgOnWAeTF7X7A+yZCvSOadGhAVK?=
+ =?us-ascii?Q?ytiq0CHVkz3X9yjqLcCe2gnYwYr9VQvtFTIyDnVRYKjy7mhvRmdjXX0/Zle8?=
+ =?us-ascii?Q?PkRBBPJOdzj34C4lZmeRN1pgRQoqIgOqKIwjo9H5gI7qNigtNBZzNy1EQpIJ?=
+ =?us-ascii?Q?2sFQa7mQIg+ekgW+k5fYawRpz7nESZ4gS9/Gpey7+rUqcBIXmLe9FUH4CT97?=
+ =?us-ascii?Q?zUIdmFSg8T7x3ULnvbYAJPGsChz8ZDh78CSW9CcYMenOLS0wbXckpZ5IVGYd?=
+ =?us-ascii?Q?cd5h7KGmkkePXNN6gt8NGJTbSfduqg1u3anGk50/KfRIro2WnBPaxLKTNvbC?=
+ =?us-ascii?Q?10GlP1KB5+q7Mw2ih3YqMaK0fb6QwIm5dkxr+YnKgOGKuphk21iHKXoVs8wX?=
+ =?us-ascii?Q?AOdqO4H5FOVlb7KkcrLCnW4rjBtD5XuXliqmIC2NqVVriSj9s3PinB41QTS/?=
+ =?us-ascii?Q?EkcHGdGOXqLUHT2fFxTLIGFDHs/koVTY+9eDeVrZ1624Ys+PxzgntPftPjie?=
+ =?us-ascii?Q?r1muBqzL2AoLTSp9ZLhiEV6y29zmso51B6G7IsxcPyu7GiL6dQOraKzCB8sZ?=
+ =?us-ascii?Q?TNyS4ZnDuFfvoN/4Rpm5L4RjcoyaMqDcWvO5syv/IsvqIRN83UzMft0fYfiJ?=
+ =?us-ascii?Q?884FXwDs2w=3D=3D?=
+X-OriginatorOrg: polito.it
+X-MS-Exchange-CrossTenant-Network-Message-Id: 432b4dbc-da9f-45cd-9f54-08decc8a729a
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR05MB7880.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2026 16:06:53.5010
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 2a05ac92-2049-4a26-9b34-897763efc8e2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4x3foj84lNWYbeEo5j7sf0d1hLa7676mylBMBOnYa6bzJtGsKSH1AY3vwsrKByEkj6rgHruKyVPsaNK7d7xFAg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR05MB8219
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-1.46 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+X-Spamd-Result: default: False [2.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[polito.it,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[polito.it:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	DMARC_NA(0.00)[makrotopia.org];
-	TAGGED_FROM(0.00)[bounces-9799-lists,linux-integrity=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:jarkko@kernel.org,m:James.Bottomley@hansenpartnership.com,m:calestyo@scientia.org,m:linux-integrity@vger.kernel.org,s:lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-9800-lists,linux-integrity=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[daniel@makrotopia.org,linux-integrity@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel@makrotopia.org,linux-integrity@vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp]
+	FREEMAIL_TO(0.00)[vger.kernel.org,linux.ibm.com,gmail.com,huawei.com];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS(0.00)[m:linux-integrity@vger.kernel.org,m:zohar@linux.ibm.com,m:dmitry.kasatkin@gmail.com,m:roberto.sassu@huawei.com,m:eric.snowberg@oracle.com,m:enrico.bravi@polito.it,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_SENDER(0.00)[enrico.bravi@polito.it,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[polito.it:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enrico.bravi@polito.it,linux-integrity@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	ALIAS_RESOLVED(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,vger.kernel.org:from_smtp,polito.it:dkim,polito.it:mid,polito.it:from_mime]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 26EDB68BC30
+X-Rspamd-Queue-Id: 86C6B69B523
 
-Hi Jarkko,
-Hi James,
+This series aims to introduce integrity measurements when the IMA policy is
+written on the securityfs file.
+In particular, when a signed policy is not mandatory, it can be written
+directly on the securityfs file. This allows to override the boot policy
+at the first write, and append new policy rules at the subsequent writes (if
+CONFIG_IMA_WRITE_POLICY=y). In this case new policy can be loaded
+without being measured.
 
-first of all, sorry for hijacking a thread from 2 years ago.
+The patch #1 introduces a new critical-data record for the newly loaded
+policy. The measurement is performed over the textual representation of the
+new policy once it becomes effective (after ima_update_policy()). As
+suggested by Mimi, the new critical-data rule is added to the arch
+specific policy rules (only when a signed policy is not mandatory).
 
-On Thu, Nov 14, 2024 at 12:34:30AM +0200, Jarkko Sakkinen wrote:
-> On Wed Nov 13, 2024 at 8:12 PM EET, James Bottomley wrote:
-> > > I think we might have to expect the NULL name to change on actual
-> > > hibernation because unlike suspend to ram it does power off the TPM.
-> >
-> > I checked the code: we're coming in on the correct path to renew the
-> > null seed after hibernation, so it should all work.  The problem seems
-> > to be that your TPM itself is doing something invalid because the name
-> > we calculate for the primary key doesn't match what your TPM says it
-> > should be.  Absent some form of attack or bus integrity problem, that
-> > shouldn't ever happen, so I'm even more curious to know why it worked
-> > in 6.11.5 and before and whether current upstream works.
-> >
-> > I haven't found it yet, but I think the every 10s signature is because
-> > the hibernation path is trying to restart the TPM device and won't take
-> > no for an answer.
-> 
-> My fix returned the behavior how it was before my earlier fix in this
-> corner case (i.e. disable TPM). The issue has gone unnoticed before
-> since it has emitted only a single klog entry.
-> 
-> On suspend this has not happened to me so obvious deduction is that
-> hibernate resets the null seed.
-> 
-> Hibernate needs an addition a fix to disable bus encryption from kernel
-> command-line completely, i.e. tpm.disable_integrity following the
-> convention from my earlier fix [1].
+The patch #2, following what was suggested by Roberto, measures the input
+buffer sent to the securityfs policy file, regardless of whether the new
+policy will be accepted or not. This is done by calling
+process_buffer_measurement(), enabling POLICY_CHECK in ima_match_rules() and
+ima_match_rule_data() in order to catch it when 'measure func=POLICY_CHECK'
+is defined (e.g., ima_policy=tcb).
 
-I'd like to offer a way it might be resolvable with the null key after
-all, without provisioning a persistent NV key -- by changing the
-question from "re-derive the null primary and compare" to "inherit the
-trust the resume has already established".
+Changes in v4:
+ - Added kernel-doc for the new ima_measure_loaded_policy() function as
+   suggested by Mimi.
+ - Increased the rule buffer size in ima_measure_loaded_policy() (suggested
+   by Mimi) checking if seq_has_overflowed() calculating the policy length.
+ - Acquire ima_write_mutex in before calling ima_measure_loaded_policy()
+   and verify lockdep_assert_held(&ima_write_mutex) as suggested by Mimi.
+ - Initialize file_len to zero in ima_measure_loaded_policy() as
+   suggested by Mimi.
+ - Changed ima_measure_policy_buf() returned error from -ENOPARAM to
+   -EINVAL as suggested by Mimi.
+ - Changed event name from "ima_write_policy_buf" to "ima_policy_written"
+   as suggested by Mimi.
+ - Updated patches description.
 
-Resume-from-hibernation is a TPM Restart (Shutdown(STATE) ->
-Startup(CLEAR)), i.e. a firmware cold-init of the (f)TPM, after which
-the boot/initramfs kernel establishes a fresh, genuine null primary.
-In the common configuration (FDE with the resume/swap device inside
-a TPM-sealed LUKS2 container) that same TPM has, moments earlier and
-*before* the hibernation image is restored, cryptographically attested
-itself by unsealing the resume device. A substituted or interposed TPM
-cannot produce that unseal.
+Changes in v3:
+ - Include the newly defined critical-data rule only if a signed policy is
+   not mandatory as suggested by Mimi.
+ - Removed the ima_policy_text_len() function as suggested by Mimi.
+ - Moved policy input buffer measurement from process_measurement() to
+   process_buffer_measurement() as suggested by Mimi.
+ - Changed ima_measure_policy_write() function name to ima_measure_policy_buf()
+   as suggested by Mimi.
+ - Updated patches description.
 
-So rather than letting the resumed kernel re-derive the null name,
-find a mismatch and disable the chip, the boot kernel's
-freshly-established and unseal-validated null primary could be
-inherited by the resumed image. The existing null-seed TOFU model is
-preserved; nothing new is provisioned.
+Changes in v2:
+ - Set a new critical-data rule for measuring the loaded IMA policy.
+ - Add the new critical-data rule to the specific arch policy rules.
+ - Add patch #2 for measuring the input buffer sent to the securityfs
+   policy file.
 
-The gate is the unseal, and the adversary case shows why it is the
-right gate:
+Enrico Bravi (2):
+  ima: measure loaded policy after write on securityfs policy file
+  ima: measure buffer sent to securityfs policy file
 
-  Malice swaps (or interposes on) the TPM while the machine is
-  hibernated, then leaves. Alice powers on. The initramfs attempts the
-  TPM unseal of the resume device; with a foreign TPM it fails, so
-  systemd-cryptsetup falls back to the passphrase, which Alice --
-  seeing a prompt -- types. The disk opens and the system resumes.
-
-If trust were re-established here, Alice would have personally vouched
-for Malice's TPM. But the unseal *failed*, so under this scheme
-nothing is inherited and the chip stays fail-closed exactly as today.
-The passphrase proves a human is present; it never proves the TPM is
-the genuine one.
-Hence: unseal succeeded -> inherit the validated null primary;
-passphrase fallback -> trust is lost, stay disabled.
-
-This keeps the property the null-seed design wants -- an in-session
-reset is not on the hibernate-restore path and is still caught --
-while removing the false positive only where the platform has already
-re-attested the TPM.
-
-The hard parts, and where I'd value direction:
-
- - systemd-cryptsetup would need to signal "the resume device was
-   unsealed by the TPM this boot" (vs. the passphrase fallback).
-   This is per-resume runtime state; a static command-line parameter
-   (and obviously build-time config as well) cannot represent it.
-
- - the validated null primary has to cross the boot -> resumed memory
-   discontinuity (the initramfs kernel's state is overwritten by the
-   restored image). Boot and image kernel are the same binary, so
-   patching chip->null_key_name in the restored image is mechanically
-   possible; a small reserved/nosave hand-off area may be cleaner.
-   I don't know the hibernate path well enough to say which is right.
-
-It is admittedly cross-subsystem (tpm + pm/hibernate +
-systemd/cryptsetup), which is presumably why it hasn't been done.
-Compared with the persistent NV-key route
-(tpm.integrity_key=<handle>): that avoids the carry-across but needs
-the key provisioned and managed, and a persistent key's name no longer
-changes on a genuine reset, so the implicit reset detection has to be
-reconstructed. The null-key-inherit approach keeps the existing model
-and defers "is this the same TPM?" to the unseal that has already
-happened.
-
-Does this seem viable, or is there a reason the unseal-as-attestation
-gate does not hold that I'm missing?
-
-(For motivation: on a firmware TPM -- Intel PTT here -- there is no
-external bus to interpose, so the protection has no benefit on this
-class of hardware at all, yet the legitimate hibernation power-cycle
-still trips the disable. For fTPMs specifically, not enabling the
-feature is arguably the better answer; but for discrete TPMs that
-hibernate, a real solution seems a good idea if doable.)
+ security/integrity/ima/ima.h        |  4 ++
+ security/integrity/ima/ima_efi.c    |  2 +
+ security/integrity/ima/ima_fs.c     |  7 ++-
+ security/integrity/ima/ima_main.c   | 19 ++++++++
+ security/integrity/ima/ima_policy.c | 73 ++++++++++++++++++++++++++++-
+ 5 files changed, 102 insertions(+), 3 deletions(-)
 
 
-Cheers
+base-commit: 8cd9520d35a6c38db6567e97dd93b1f11f185dc6
+-- 
+2.52.0
 
-
-Daniel
 
