@@ -1,168 +1,149 @@
-Return-Path: <linux-integrity+bounces-9813-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9814-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id 0YN/E42SNGoVbwYAu9opvQ
-	(envelope-from <linux-integrity+bounces-9813-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2026 02:51:25 +0200
+	id HYL3DI4ZNWr/mwYAu9opvQ
+	(envelope-from <linux-integrity+bounces-9814-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2026 12:27:26 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 078636A371A
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2026 02:51:25 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8706D6A5373
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2026 12:27:25 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=NWmsILKW;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9813-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9813-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=kernel.org header.s=k20260515 header.b=W+fv5BuS;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9814-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9814-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	dmarc=pass (policy=quarantine) header.from=kernel.org;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 135483078B24
-	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2026 00:51:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5CFD5303B710
+	for <lists+linux-integrity@lfdr.de>; Fri, 19 Jun 2026 10:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF39D18027;
-	Fri, 19 Jun 2026 00:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC183373BFE;
+	Fri, 19 Jun 2026 10:25:57 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93AC1E5B63;
-	Fri, 19 Jun 2026 00:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3089373C00;
+	Fri, 19 Jun 2026 10:25:47 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781830280; cv=none; b=kVMjc8o0z0e777zAHEinWmyZEB+AoZjnKXQiS53eNYyHjqJgShaFXUKbqGehdAOaNJQD7j8nPKXd2S8LAcLbff8E6j9EHweWEUdz8KZvhi+SxCQ6CT6MMQ2z49lt0G9P8dkGO7kERDVM3cTvdC37FxX4crraQLYDw92kJFOUdYg=
+	t=1781864757; cv=none; b=rpTqrPAaf+wl8AKlzyJXmqN74ioIcCjyLwGQ2LGKmUiKqSG0IUPPW+1VQEWJXmFAL+1Uezx3U79V4StHGY74l5SQByWHRA65r5AAEpnsZ7CH88cJfCTE77cLx58Ld0ZL73ZkRj2GSo6YRI7DEE/wCaLJQ7CMRdtnWmYdqi5JqWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781830280; c=relaxed/simple;
-	bh=NeFx5npBmhRT9Vdu+nU7sYxLq1t6c5XJlhYnkS/lgPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sa6TZvuEaXcBS27RTcYfPsdJPsomRrFlsZJu31lZiFU0IVlhO8DcsfDmtw6nJ/L76sXTdsRE9fqY1vdYrxfAG4cc8o3FCKFZyVu3cDiawhpctu8LOEfjWm8v2WaPt2CslhdxVPOybPiK4agUbj9qJ0mBt7VM+5axOjDGpLz+Nuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NWmsILKW; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D31D51F000E9;
-	Fri, 19 Jun 2026 00:51:18 +0000 (UTC)
+	s=arc-20240116; t=1781864757; c=relaxed/simple;
+	bh=M0cKw+2AtZvbRJUPHpnp3czl/esm/nBakKOwdRLyPlE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q2hMLQkjHrzuVl1B78HX4AmwZ1xVJi4REITjnAghBBitkf/wrsnHykqWu/4oPOKdDLDdk7r0Yr/V4aaRNKb98cF0z5ExT93twkg9SsJvlOSPcfD0eYZj6ENN4hEK8Fke6V2fh28BauBqG0o1TvQs+UlV4xuzaP2FGBDkHHQEdM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W+fv5BuS; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0141A1F000E9;
+	Fri, 19 Jun 2026 10:25:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781830279;
-	bh=YAXAN8Iw3D25D1i5OAyMnbpjtCM2E0piWZ+9jYkZjiE=;
-	h=Date:From:To:Cc:Subject;
-	b=NWmsILKW0igSu9J4ABbP/fqsHW04BVRZW2+IwWVPZSSIB3kZNvTRsp3FSmQkqWjF4
-	 nFiMOXtT3xGc1ztXMgXEmVLNximvna38zjfwb4Iaab200KiCfVMzc+OEyPaqkAyllC
-	 QbekzAU2I3BGrsPin2Hhj4yVQyLp+RMwnvOcLEu+A1A3SEbo+oYyZZFkPjdEszntg4
-	 22aHu/1FzccuejIQmXyTWdUBY/+jO0RqyYMjyoOKBWMYOYWXaYgbCrBvdsYquHnzQS
-	 cakZ36zFpJSm8O36uf7c20E9xGmoGYWnDIBlsa3Qh7Sr1Kz3SXCVFxOazKKLvqNadQ
-	 CHrLTCZg3pPKA==
-Date: Fri, 19 Jun 2026 03:51:15 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: David Howells <dhowells@redhat.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>, keyrings@vger.kernel.org,
-	linux-integrity@vger.kernel.org
-Subject: [GIT PULL] KEYS: for-next-keys-7.2-rc1-2
-Message-ID: <ajSSgzpmg9LoIDCE@kernel.org>
+	s=k20260515; t=1781864747;
+	bh=51JmzhDApRWTAppcWz2i3ZcbrdqeXCGrp5pih003jZs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=W+fv5BuSgc8AKNGlfXJ1ZwxSTCAWiq1lA1EfiNtxl54Nq9LwOaIGWgTXyJ1M1WPBD
+	 NxI1hx7uiXCmH/3RpWxZoQvOfap62HbQjGhxEFxBGrhkY4r7UmqSfXOBQ/Cd8em84Z
+	 Vmz5uOsM6IxJHtXUwwc2y74fe+cnVMJgg3aLNBlPcKYGrY5wGum4JPOD+oW5VIZSPc
+	 LIdn+0jS2O4zwAcldUhJAp/vIBiq5DDONIBx3uutnMRBcxfGFh7ILSQIHH6g79Mwk8
+	 P2azC24W+otdCwdfRriXNvTS8MebPfHJeBVgJdTteBkrl4rYnsAS1N+UJP+5iWrk9H
+	 3C9rp5BmDfc+g==
+Date: Fri, 19 Jun 2026 12:25:37 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: David Windsor <dwindsor@gmail.com>
+Cc: viro@zeniv.linux.org.uk, jack@suse.cz, ast@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, kpsingh@kernel.org, 
+	mattbobrowski@google.com, paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com, 
+	zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, stephen.smalley.work@gmail.com, omosnace@redhat.com, 
+	casey@schaufler-ca.com, shuah@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: add bpf_init_inode_xattr kfunc for
+ atomic inode labeling
+Message-ID: <20260619-vordem-schloss-kuppe-b0ec679f4665@brauner>
+References: <20260618203411.73917-1-dwindsor@gmail.com>
+ <20260618203411.73917-2-dwindsor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Mailer: aerc
+In-Reply-To: <20260618203411.73917-2-dwindsor@gmail.com>
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.15 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
+	FORGED_RECIPIENTS(0.00)[m:dwindsor@gmail.com,m:viro@zeniv.linux.org.uk,m:jack@suse.cz,m:ast@kernel.org,m:daniel@iogearbox.net,m:john.fastabend@gmail.com,m:andrii@kernel.org,m:eddyz87@gmail.com,m:memxor@gmail.com,m:martin.lau@linux.dev,m:song@kernel.org,m:yonghong.song@linux.dev,m:jolsa@kernel.org,m:emil@etsalapatis.com,m:kpsingh@kernel.org,m:mattbobrowski@google.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:stephen.smalley.work@gmail.com,m:omosnace@redhat.com,m:casey@schaufler-ca.com,m:shuah@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:bpf@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:selinux@vger.kernel.org,m:linux-kselftest@vger.kernel.org,m:johnfastabend@gmail.com,m:dmitrykasatkin@gmail.com,m:stephensmalleywork@gmail.com,s:lists@lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:torvalds@linux-foundation.org,m:dhowells@redhat.com,m:herbert@gondor.apana.org.au,m:davem@davemloft.net,m:keyrings@vger.kernel.org,m:linux-integrity@vger.kernel.org,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[brauner@kernel.org,linux-integrity@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[34];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9814-lists,linux-integrity=lfdr.de];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_FIVE(0.00)[6];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	ALIAS_RESOLVED(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-9813-lists,linux-integrity=lfdr.de];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	FROM_NEQ_ENVFROM(0.00)[brauner@kernel.org,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[zeniv.linux.org.uk,suse.cz,kernel.org,iogearbox.net,gmail.com,linux.dev,etsalapatis.com,google.com,paul-moore.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,oracle.com,redhat.com,schaufler-ca.com,vger.kernel.org];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,vger.kernel.org:from_smtp]
+	TAGGED_RCPT(0.00)[linux-integrity];
+	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,brauner:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 078636A371A
+X-Rspamd-Queue-Id: 8706D6A5373
 
-The following changes since commit 0e0611827f3349d0a2ac121c023a6d3260dcecdb:
+On Thu, Jun 18, 2026 at 04:34:10PM -0400, David Windsor wrote:
+> Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomically set
+> xattrs via the inode_init_security hook using lsm_get_xattr_slot().
+> 
+> The inode_init_security hook previously took the xattr array and count
+> as two separate output parameters (struct xattr *xattrs, int
+> *xattr_count), which BPF programs cannot write to. Pass the xattr state
+> as a single context object (struct xattr_ctx) instead, and have
+> bpf_init_inode_xattr() take that context directly. Update the existing
+> in-tree callers of inode_init_security to take and forward the new
+> xattr_ctx.
+> 
+> A previous attempt [1] required a kmalloc string output protocol for
+> the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all LSMs to
+> provide xattrs for inode_init_security hook") [2], the xattr name is no
+> longer allocated; it is a static constant.
+> 
+> Because we rely on the hook-specific ctx layout, the kfunc is
+> restricted to lsm/inode_init_security. Restrict the xattr names that
+> may be set via this kfunc to the bpf.* namespace.
+> 
+> Link: https://kernsec.org/pipermail/linux-security-module-archive/2022-October/034878.html [1]
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6bcdfd2cac55 [2]
+> Suggested-by: Song Liu <song@kernel.org>
+> Signed-off-by: David Windsor <dwindsor@gmail.com>
+> ---
+>  fs/bpf_fs_kfuncs.c                | 106 +++++++++++++++++++++++++++++-
 
-  Merge tag 'pull-fixes' of gitolite.kernel.org:pub/scm/linux/kernel/git/viro/vfs (2026-06-15 15:53:57 +0530)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/for-next-keys-7.2-rc1-2
-
-for you to fetch changes up to 1b9524250996b1f2f49833a1b2ae21c34e486f85:
-
-  keys: keyctl_pkey: replace BUG with return -EOPNOTSUPP (2026-06-15 15:19:13 +0300)
-
-----------------------------------------------------------------
-Hi,
-
-Please, pull. This pull request contains only bug fixes.
-
-BR, Jarkko
-
-----------------------------------------------------------------
-David Laight (1):
-      keys: Replace strcpy(derived_buf, "AUTH_KEY") with strscpy(..., HASH_SIZE)
-
-Eric Biggers (1):
-      KEYS: encrypted: Remove unnecessary selection of CRYPTO_RNG
-
-Gui-Dong Han (1):
-      KEYS: Use acquire when reading state in keyring search
-
-Jarkko Sakkinen (2):
-      KEYS: fix overflow in keyctl_pkey_params_get_2()
-      KEYS: trusted: Debugging as a feature
-
-Len Bao (1):
-      keys/trusted_keys: mark 'migratable' as __ro_after_init
-
-Mohammed EL Kadiri (3):
-      keys: prevent slab cache merging for key_jar
-      keys: request_key: replace BUG with return -EINVAL
-      keys: keyctl_pkey: replace BUG with return -EOPNOTSUPP
-
-Shaomin Chen (1):
-      keys: Pin request_key_auth payload in instantiate paths
-
-Thorsten Blum (1):
-      keys: use kmalloc_flex in user_preparse
-
- Documentation/admin-guide/kernel-parameters.txt | 16 +++++++++
- include/keys/request_key_auth-type.h            |  2 ++
- include/keys/trusted-type.h                     | 21 +++++++-----
- security/keys/Kconfig                           |  1 -
- security/keys/encrypted-keys/encrypted.c        |  4 +--
- security/keys/internal.h                        |  2 ++
- security/keys/key.c                             |  2 +-
- security/keys/keyctl.c                          | 24 ++++++++++----
- security/keys/keyctl_pkey.c                     | 14 ++++++--
- security/keys/keyring.c                         |  2 +-
- security/keys/request_key.c                     |  2 +-
- security/keys/request_key_auth.c                | 33 +++++++++++++++++--
- security/keys/trusted-keys/Kconfig              | 23 +++++++++++++
- security/keys/trusted-keys/trusted_caam.c       |  7 ++--
- security/keys/trusted-keys/trusted_core.c       |  8 ++++-
- security/keys/trusted-keys/trusted_tpm1.c       | 44 ++++++++++++++-----------
- security/keys/user_defined.c                    |  2 +-
- 17 files changed, 158 insertions(+), 49 deletions(-)
+Please split this into the VFS changes and lsm changes required for
+this. The api change to the lsm layer can be done independently of any
+of the actual VFS level wiring. Will also make it a lot nicer to
+review...
 
