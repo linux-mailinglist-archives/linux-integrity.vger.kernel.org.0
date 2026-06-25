@@ -1,97 +1,99 @@
-Return-Path: <linux-integrity+bounces-9836-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9837-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id lZo9BvRSPWpm1QgAu9opvQ
-	(envelope-from <linux-integrity+bounces-9836-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 18:10:28 +0200
+	id pjk4H9CIPWrI3wgAu9opvQ
+	(envelope-from <linux-integrity+bounces-9837-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 22:00:16 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61A2F6C7588
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 18:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C07446C873A
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 22:00:15 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=paul-moore.com header.s=google header.b=QvSsjVPq;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9836-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9836-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=paul-moore.com;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b="eaESUM/3";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9837-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9837-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DEFB4304F223
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 16:07:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 95EF83070A17
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 19:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C053264FF;
-	Thu, 25 Jun 2026 16:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF88B36494C;
+	Thu, 25 Jun 2026 19:58:43 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127A03A0B13
-	for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 16:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F24F34887E
+	for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 19:58:42 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782403620; cv=pass; b=cmMy9mDw6PKZbEFYTYM589UqO34F9YhgO6Gp2w3NIKzTkW72T9eTWVMDiOiSNqyc5qmx759BryvkxneLJpqeO58Dckj5/IhbOzelZZS9LtZ8ngW6urf6Bv1SVOZBMncnxOt31h9B4WsP8md2znCzO9iABGqY3QzHEOVm6PZnBJw=
+	t=1782417523; cv=pass; b=OfZ07MdOAigFlLVuBl6Azrp7tcyWZSXr9C151gBsGeToh6IrfOgGLhuAUEZIkKhNZgCe7iS0TyniiU4SNb5FpOJ6KZUQJzDMJZ/6YSFkuYV73IorB83CXNdVe+BAv+jOESNpl2fV9MzbBD2FXt5K1q3q8cY8JnoIkw1bwYbw9rc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782403620; c=relaxed/simple;
-	bh=agsr2jSOniKtJMF+X0oXwibByddxXJqtF6YncOKFIEU=;
+	s=arc-20240116; t=1782417523; c=relaxed/simple;
+	bh=t01HuVJS93Se9y/xJOr+SDSuCi2qkwkLjpWQtvIuIYY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iW0KXnqJL3PBUY4abcBDTmQAlTs+VGQUKVomdKfC5Zkn0AU6CoeGiRiYxQHP4gdPFUST6yIKwH91KyCxzr6uffBjutETpsbQekpitUpraQkLcW4mg+/MOGqmPhCp9J3fViwpgq4PtE0Oq4jFqJlk1Uh8NZXt35xC9RaQdc81yfQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=QvSsjVPq; arc=pass smtp.client-ip=209.85.210.174
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-84594492c26so2491598b3a.2
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 09:06:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782403616; cv=none;
+	 To:Cc:Content-Type; b=ksqtEwpBXnkLNRL11/q/iB9Y+4FJS9Q90vubZqG7TJElcl/bXycBJaBkIUTchmmmy0pjr/uTSFDUxyX95HVeRv8aWDvL+dCd/9tmcwvDzIiI28bpKwvNqP3pGKvWnxWVCuAYjwz7+eGGA31eE8Rgfiutnxe5yQDLkaIYvVCog3k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eaESUM/3; arc=pass smtp.client-ip=209.85.210.177
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-845b6d9bf39so118725b3a.1
+        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 12:58:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782417522; cv=none;
         d=google.com; s=arc-20260327;
-        b=L3tbV9MDydo9hcdrrKo9hCDhickpNz+XyDb1Jz9aSGglJ1kVlp2mbfwy2Wi9T83Gp7
-         QYYQxGzXJvMe3wFR1la7qMeojir5qxKZly9OE7hrK7gegE/O1SXY9xFGxNo2kMFoiv9x
-         g/spKkx/ooY2L65lNnVQsk3G2mw1GnuriVJw4ER8WsiUW3zZs378/beIwucDn8PfyHlp
-         FtyQvM7nlQpQi0BvM8JUNAH6kd+lRAtt3zYKY8ZYA2tah8oUXC0LLRDhG8boMZEiwvrK
-         uP5zAXEiIbWIaBxdGxKyzoHryhLgxaLeo0TKkl4Sec2OZVl1c2reawG5vt81gs1NVSrt
-         zdqQ==
+        b=WzWkI27ugOBRGs1US1pOjEGZWd0NToAyo8wYGYPuzocc9wP/ZpYMSJss9lMYJHN0Pd
+         tABUbP0bOAUJ2GsCycL6KcBe1iGyhNr/MA2xfdaQt0zyo/FEBQX20oEduQlgVpFMApin
+         RSJ8ja1fYfKIruecDPUHjQjtZ7zVxh9NpYCjpD3BvdLlS5Gcygq/IciVwaRa8gWXyka+
+         op+AU+GuAxhtwhQ7QHG9Drp21WwC/QV1OOotc1GbnwSJJx/r19fbhbncLbtHViXCvoXS
+         Wrno/HeoUCmq0jIQ3gCnk1lA4w2JAHhdbRoYTwqxDLevU6ZNbnokBOWxpuUmD0Whuy1g
+         KHpw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
-        fh=kDGkqBABJ6xvPqXdYBPkzveuoxm0hLndHEGroDf4IEo=;
-        b=UWcuO1fv2axcy4b7xc7JDxKGT1JEtoF7OV0aTKfzCl4kRDmgBZnE6RS/NAiHj+C5Yx
-         nFfJQhbYP2kKWvgFSSIX/rbaqY1XW4mzfOfYTd1jWK045i62mMdtIUydZvnOEvCQvTj6
-         nuGvfnBC5Fvoh8r+8pHZNk1/6oU4XOk322sOx8nU3qmkgltHFOvm2YjbJf3OlzCPjVHg
-         5It0kR0rEjWy3/ots+0UUWfs7gAMs7f01bvg0tOF7qnVABneOXfARAVjfQJcSST46lYG
-         0xvyuyki7cDNCBQGpX4tfxJaUZIBwZiMP1cAsD/pMlX+dQqnyF62tS0jdB5o5sJLk7RX
-         draQ==;
+        bh=hPszu32IdAgDeUQ2X3Ei0AlLyibH0GB2lSQN/iu5tDY=;
+        fh=Bf2by7EAinOGHIv1iQBxblH7k0LItfFiajPpym9bBi4=;
+        b=ktv32Mqj82wXvDJZtZkwfcVtlPT+BpSW8EatscJBk7ef0K3+qOtNasVBoZTZPJE3PL
+         jXT0u3Pd/OBR19McBlI2wyK9Hhzfp0oN0Hh/tDw3COgZQIs/azLMduaQMcq5dsf2rOzP
+         kr5XX/MH0nBw096FlB8QCnrTXfaY33B7hOI5FBYEkd1zprZHKCLN6tBMiMq8zTq9YAa3
+         Y9LcFINL6Razr1I77wVryu/4UD3Vr8H9I2PDKYI/z4h3dj3jdJ5PWmpA0I2wKFMGD4eX
+         QRAlLvKUCnAWR/Gao9T7Ouq8NmlKKFSe78IHZ7fMJ4CSb5mxzjC9WZhOJQS//npmYaB2
+         pPPw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782403616; x=1783008416; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1782417522; x=1783022322; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
-        b=QvSsjVPq3M1JY0gxDJT0dGWAhQEabdh6KoWw3JBpzBtI3rtnb3lWRsn8ta0q85U6l4
-         Ua9fc9jZSlTlQCTuDpP5pl3PJpzmygJREv8s5m4jjU/kpKu1yQeSbGs6Bu+QQmxV2ezi
-         e6NPDfevXKkBchG/zqVyPXc/kFOhBiI2W3jBrwdKpT5ZZaWOTSIRUKTJNjQJ0AbZcUec
-         vgdp30jAhElXeS5k7V28unI7eOz9LvmVrSUmQlBIQCVGaSXpNXiOqN/qFRoYC/XGgKOC
-         9iAuA/CZaq2dfEavbG5gNF2LFQUOsab5a9SZvIIiNeh6NvKgnQyIElT7hrMSadP+7MFu
-         n1Mg==
+        bh=hPszu32IdAgDeUQ2X3Ei0AlLyibH0GB2lSQN/iu5tDY=;
+        b=eaESUM/3qu36XTQpaqOGJRjKaAGFJhqF0lkNADskUW0FZ5YSzZqmQQpCBGhGz/9CVZ
+         3yTqnvI+Bx7woEDhrV7jxG/KIq4nb7Ybwyq8STUCdKFcVOnEBgsqaZtgwLc4IwSrvR6x
+         gAVj749Xk0LvTdnJIO6EhVs1PAhCSbSiB88EoPgFP4UYmxz7F7Zyc0hoIl6K8xltNi+P
+         VBGRGMT9JCYv6vh+8ZsfDNDU1ezEF+k52IKQtYr/p85BMLcP+bDoMyrU8nbOl44doxbK
+         VBlYIdTR0xF5O9W/ojYmiA2Okz/K4cgU5uRDbSIknQxrKRIpZC0xQEeVGhJE8uHDz+mx
+         5bCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782403616; x=1783008416;
+        d=1e100.net; s=20251104; t=1782417522; x=1783022322;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tj5Ca+YrVkSkclVchnHXzQO8ttUEujxWnJ/JyckdB0c=;
-        b=sTL/eJOz2V71oq/CFiOFBqtuqevMWYVTcAk/jI0sgi3Q/A6KmjKBB1DKlqj2zhZc0z
-         0OHcJzchBLNi/BnU/j8YMdWWPRDnFjsx6ckWdtu0ZKM4QnyS1/9io7MSF+2UTKBjNKuY
-         lxvauCQY8uoqRJwOZf3zvJhN8fKX6d1QlgzvMEOnT8FSgNEw5wzT7AScO0B1BNbZkKXA
-         mbzLupahHJNiflqqH2UyG2YkJP8ENLB8TtducG/Ux/oP9jJ6fss2E9aAzivd1+JwaX8g
-         p18xP1TdxsyLHzzoP60kO0P12KdFiou28Bl8AQC8i0w1hgriV5JPgNT9laZ/I0bd66l4
-         VCLg==
-X-Forwarded-Encrypted: i=1; AHgh+Ro7zq6loUaPGASxg4aMwAH9pph3x2T4yQozXTGV6dG7P/c29rstARRoCZi8So5nYAqF55EFqK8DQiBmtdtgaEA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5hAKhmDM6LNhvD9H7ATe5YREQ8XMZFCJsnwxqNsp5W1ggoZJf
-	Kt0VnRv7nGAjF9aQOBg/EnrV7a3f6Zsos+fLRlMOh8nPz8oX51/Yfp1QBJRdBLIWXlgrB8VDSyw
-	j7ruoBtF7h70zWUPpXb4uN7QDRKGiIgVqCTLT0Mc5
-X-Gm-Gg: AfdE7clwEFUETSBwPRrhCyDwsZIGpmrnKTzlNWaWK/OUvpho8tczhEjO/jLN7uNo9+1
-	7QlP5CdO947s4b3qZJ55sXPvcjDDiTh9sv8kCQCUYCnDge/lJi4Xw6Iq28Ff8M+Jf829135e4aR
-	KtNH2Aju+ngh4ahiZKc77ZHguMq8QW750Go7VhTx+lF1n5tEjjlw9WMlN5sh3JP8H2ccibdpa/s
-	qOcv/xmFEesRkrfGb9eF5moxoyMkKGZsGDOH1QRR2+rLbYAvkizy3jqAdG75AAW6j+Y+8CH
-X-Received: by 2002:a05:6a00:1a8e:b0:81f:5037:a317 with SMTP id
- d2e1a72fcca58-845b39d39c6mr3865503b3a.11.1782403616175; Thu, 25 Jun 2026
- 09:06:56 -0700 (PDT)
+        bh=hPszu32IdAgDeUQ2X3Ei0AlLyibH0GB2lSQN/iu5tDY=;
+        b=XbfWnuO4RT/Spmr+xl4Fsv8E4jwy+Y4QZwBMKHiicDJKTjiAPdsdI/Vq2f3HMMkIJZ
+         qj9TE3XTmm53SEHg8UIXR9fTiKLvq+I44DtmFj6Ad6KfvYGd8Sb9Ex8ea7rfG2yikiRS
+         Gl8RD0ctrZQH7g64iJ3BkYCSMXOiztFSt0BYV0g74GPCEUXjLf3U6rsYySCV2vlL4jne
+         HfNkXbm5fDv4oX89O3WZrweKB3AEcuMoyQFa29RfKpe1vwkgPj01PIwGANazXkiF4ael
+         vAKuWhw8X4bD7fgSVrcYNUJq2YBNCoF7jfvht7DraGZLRA/iVOWXqDMpef1pz38FGOlx
+         uGeQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3zE/cTH1SozbEcwm2C4omDJdgoQKDRGeximugqmA+tXPGyElS9MWa7d6G69RIC1LuqUnmMT7v7GCvkdXpSRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx858RoMNVCgg4zcbLdCZX/UbQAHNcTPo5PgL8dgJO+7+M1cqUF
+	wvaOuabtxEedjfmXDFo8ZqS2QtwxIO+xTgnKdDn6e9pr1o2vuJdHXtUpgkehzVmnoCvOLMKX81p
+	quZ4NrAGkwAr4N39pwtZOxFGFaVG+iA4=
+X-Gm-Gg: AfdE7cnSbuLBmQWOmBfEFm9Ys+0fCZdaVoWSqHqh2wEFqx6Eo4h5Z/FX07Hd6ERCUHo
+	Oy9OMnSrm9vj+TXZH6dRiJ/R0f5GyyCu+Kh3kGov1uqVTtwU7cx4miPQudY9Q0meuFQg1n5YXyK
+	xV200D4G4nYRiiwsZ0rdXNPsWW26JbWBtZr//j1wF9Z24srB2w78oh9lSz789p6xOhxCXcASPlT
+	742/YCfv3nuFxN9xAfnnDsORpFj9Tth+sEhp2hyX7GX6vOs6EjdRzZwV1AHwluxX5gHj8JQVjlY
+	dFM3cp4hLeuX6FIu6zQIPUc0WffSoJV4qCQpw1AknLmuZrV3jsrnSeOB67V2FH2cqjQkOjejEcR
+	pbkkR0ZBIZGh5
+X-Received: by 2002:a05:6a00:b44:b0:842:614b:50dc with SMTP id
+ d2e1a72fcca58-84591b767a3mr12823311b3a.13.1782417521452; Thu, 25 Jun 2026
+ 12:58:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -101,64 +103,73 @@ MIME-Version: 1.0
 References: <20260618203411.73917-2-dwindsor@gmail.com> <75d39fd9847cca915d704235264ab474@paul-moore.com>
  <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
 In-Reply-To: <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 25 Jun 2026 12:06:44 -0400
-X-Gm-Features: AVVi8CfVp_1nha_FxdKkksJCUmgb3NBLBVh62tn1q5iqee01wbI4MgNkgsJUBlQ
-Message-ID: <CAHC9VhSP54b9UZLJ5RRaWfnV5J6mD4iLCFXxwwv9pFqDrCAH3w@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 25 Jun 2026 12:58:29 -0700
+X-Gm-Features: AVVi8CcGIc2g2XVMtMkmAY3eaT2U_sbyaP0UfCx7SkpWcEZUZelhXqYLRoruYRQ
+Message-ID: <CAADnVQKKr5cCYTj8qS7tU-Aeda1iexYUp5aquTjYXMEL656cJQ@mail.gmail.com>
 Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
  inode labeling
 To: Christian Brauner <brauner@kernel.org>
-Cc: David Windsor <dwindsor@gmail.com>, viro@zeniv.linux.org.uk, jack@suse.cz, 
-	ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
-	emil@etsalapatis.com, kpsingh@kernel.org, mattbobrowski@google.com, 
-	jmorris@namei.org, serge@hallyn.com, zohar@linux.ibm.com, 
-	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
-	stephen.smalley.work@gmail.com, omosnace@redhat.com, casey@schaufler-ca.com, 
-	shuah@kernel.org, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
+Cc: Paul Moore <paul@paul-moore.com>, David Windsor <dwindsor@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
+	"Serge E . Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, dmitry.kasatkin@gmail.com, 
+	eric.snowberg@oracle.com, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, 
+	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, 
+	linux-integrity <linux-integrity@vger.kernel.org>, selinux@vger.kernel.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9836-lists,linux-integrity=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:brauner@kernel.org,m:dwindsor@gmail.com,m:viro@zeniv.linux.org.uk,m:jack@suse.cz,m:ast@kernel.org,m:daniel@iogearbox.net,m:john.fastabend@gmail.com,m:andrii@kernel.org,m:eddyz87@gmail.com,m:memxor@gmail.com,m:martin.lau@linux.dev,m:song@kernel.org,m:yonghong.song@linux.dev,m:jolsa@kernel.org,m:emil@etsalapatis.com,m:kpsingh@kernel.org,m:mattbobrowski@google.com,m:jmorris@namei.org,m:serge@hallyn.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:stephen.smalley.work@gmail.com,m:omosnace@redhat.com,m:casey@schaufler-ca.com,m:shuah@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:bpf@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:selinux@vger.kernel.org,m:linux-kselftest@vger.kernel.org,m:johnfastabend@gmail.com,m:dmitrykasatkin@gmail.com,m:stephensmalleywork@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[paul@paul-moore.com,linux-integrity@vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS(0.00)[m:brauner@kernel.org,m:paul@paul-moore.com,m:dwindsor@gmail.com,m:viro@zeniv.linux.org.uk,m:jack@suse.cz,m:ast@kernel.org,m:daniel@iogearbox.net,m:john.fastabend@gmail.com,m:andrii@kernel.org,m:eddyz87@gmail.com,m:memxor@gmail.com,m:martin.lau@linux.dev,m:song@kernel.org,m:yonghong.song@linux.dev,m:jolsa@kernel.org,m:emil@etsalapatis.com,m:kpsingh@kernel.org,m:mattbobrowski@google.com,m:jmorris@namei.org,m:serge@hallyn.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:stephen.smalley.work@gmail.com,m:omosnace@redhat.com,m:casey@schaufler-ca.com,m:shuah@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:bpf@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:selinux@vger.kernel.org,m:linux-kselftest@vger.kernel.org,m:johnfastabend@gmail.com,m:dmitrykasatkin@gmail.com,m:stephensmalleywork@gmail.com,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9837-lists,linux-integrity=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER(0.00)[alexeistarovoitov@gmail.com,linux-integrity@vger.kernel.org];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,zeniv.linux.org.uk,suse.cz,kernel.org,iogearbox.net,linux.dev,etsalapatis.com,google.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,oracle.com,redhat.com,schaufler-ca.com,vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[34];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TO_DN_SOME(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[paul-moore.com:+];
 	ALIAS_RESOLVED(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[alexeistarovoitov@gmail.com,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[paul-moore.com,gmail.com,zeniv.linux.org.uk,suse.cz,kernel.org,iogearbox.net,linux.dev,etsalapatis.com,google.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,oracle.com,redhat.com,schaufler-ca.com,vger.kernel.org];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,kernsec.org:url,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 61A2F6C7588
+X-Rspamd-Queue-Id: C07446C873A
 
-On Thu, Jun 25, 2026 at 10:23=E2=80=AFAM Christian Brauner <brauner@kernel.=
-org> wrote:
+On Thu, Jun 25, 2026 at 7:23=E2=80=AFAM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
 > On 2026-06-23 20:12:32-04:00, Paul Moore wrote:
 > > On Jun 18, 2026 David Windsor <dwindsor@gmail.com> wrote:
 > >
@@ -223,11 +234,11 @@ ed
 > We expose a bunch of VFS heavy operations for various security modules
 > and this is really not different. For xattrs we have it all centralized
 > in the VFS and in general all VFS related bpf kfuncs should continue
-> living there and be registered there.
+> living there and be registered there. Anything that's just bpf infra
+> specific can go to security/bpf/kfuncs.c instead. But anyway, it's a bpf
+> specific helper so it's the bpf maintainer's call.
 
-This is really LSM specific code dealing with more LSM bits than
-anything else, it belongs in security/bpf_lsm_kfuncs.c.
-
---=20
-paul-moore.com
+Completely agree. This is vfs related kfunc and has to be
+in fs/bpf_fs_kfuncs.c to make sure vfs maintainers review it now
+and all future changes to it.
 
