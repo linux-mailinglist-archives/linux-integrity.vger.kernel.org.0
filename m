@@ -1,275 +1,218 @@
-Return-Path: <linux-integrity+bounces-9831-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9832-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id NaYKDPF+PGr9oggAu9opvQ
-	(envelope-from <linux-integrity+bounces-9831-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 03:05:53 +0200
+	id 0NBuJ/WmPGp+qAgAu9opvQ
+	(envelope-from <linux-integrity+bounces-9832-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 05:56:37 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D1836C2112
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 03:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 111F16C2A18
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 05:56:37 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=ibm.com header.s=pp1 header.b=kZCaNNM5;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9831-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9831-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=ibm.com;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=tNwD1ur9;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9832-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9832-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2B8693012CB5
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 01:05:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 768643008E06
+	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 03:56:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D559DF59;
-	Thu, 25 Jun 2026 01:05:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B722FF65F;
+	Thu, 25 Jun 2026 03:56:08 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFCB367F26
-	for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 01:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF52D2E7397
+	for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 03:56:06 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782349549; cv=none; b=kNHNaqe6+d+9wEEDUHeGXBAN58z6NK0z3mMknmSikIyk9qLOQt1bI0ZGnTIatsUfIeA1cEd/hCn0OxCV26mkLO5mVjbB8IvxoWocmJ+LgLzUH74kQvOKElSxrcDwCRLoSWB5BQ8KyIMappszb+wX8G9KY6yqZmr9AzENQuyydi8=
+	t=1782359768; cv=none; b=fpxurjLiGyRL8qGmd7RWFmrfwu86wOOxyiPXWHskcj/Z9RehkvAz1n60FCCLNPo7rOamOr02gBF/BQP+4PRoeVc7H0LSsO3ToGG9Rj9skRBCpNPlgZQdFLr3szQ4A4DHACgucvMs7k9yOXzAPADIGGGrRyePiKVcO9XUqqbzpNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782349549; c=relaxed/simple;
-	bh=x0p1WUTVAJL78QgJilXxvYrHAmEkGbvwGLh8PkYkTZE=;
-	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
-	 Date:MIME-Version; b=HRAD+1RWmmBnyPWQPUfd9MP8qNSY/4kSZbjFeDPaQ71oLSxHD3F1k+WvddJqEloRX7hu1QJaw7vPxvXXG6qdFIUkLtm3bl/E3itGFDe8FH8FDVoh+SyqnpXhySzKDVxawINMHmjxhivXh2NCi/RYAMia8okLEk5rLWHEapWjyU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kZCaNNM5; arc=none smtp.client-ip=148.163.158.5
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 65OJnMSQ1949258;
-	Thu, 25 Jun 2026 01:05:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=0GAR1n
-	eQ84sXtY2mgW82HcWR8Y1OryN+PCfqj2hVaeU=; b=kZCaNNM5xajcRuMCQB7yCa
-	bCxIor7mQ+JsFyBHMQ8387ACNkeUj2JSGqJcqymsdMKlXr1ppGL7XvbGgDHJxN8n
-	GEl8fWIk/4PZTZwqAv3E4C6gRe4rOowgVaNQwtvqbnx50jv8/F8kFr95pmm/GXVD
-	tJ35AApZJp/5DuDaP5fFN/CAJw1vCZcnJL4DNfgbDTWB52y7jkCO42FkZEbV6bKG
-	Tla23an/TskPlLgoj8d7cA1wzdDJgMjtNi3Dll4bwyysgZ3pnoeC0gfdw2GRTRy+
-	UTg0p6pIdy7QzjkMTf6NDRC8ZYJRcdMf3arKUY68KpgjwJ3QNLH5ftyinPq7Uz1g
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ewg9hydww-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Jun 2026 01:05:36 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 65P14mkN014599;
-	Thu, 25 Jun 2026 01:05:35 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ex6phkqhu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 25 Jun 2026 01:05:35 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 65P15ZiL21103140
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 25 Jun 2026 01:05:35 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F267F58043;
-	Thu, 25 Jun 2026 01:05:34 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 83C5A5805F;
-	Thu, 25 Jun 2026 01:05:34 +0000 (GMT)
-Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.76.213])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 25 Jun 2026 01:05:34 +0000 (GMT)
-Message-ID: <997ae675fb1f987876226b3c6072c3f82a0d95cb.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 2/2] ima: measure buffer sent to securityfs policy
- file
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Enrico Bravi <enrico.bravi@polito.it>, linux-integrity@vger.kernel.org,
-        dmitry.kasatkin@gmail.com, roberto.sassu@huawei.com
-Cc: eric.snowberg@oracle.com
-In-Reply-To: <20260617155832.434517-3-enrico.bravi@polito.it>
-References: <20260617155832.434517-1-enrico.bravi@polito.it>
-	 <20260617155832.434517-3-enrico.bravi@polito.it>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 24 Jun 2026 21:05:34 -0400
+	s=arc-20240116; t=1782359768; c=relaxed/simple;
+	bh=i0aRAUFtI7aqAzKD4q0jr5L562kAcIUmoKjS1lDhZP8=;
+	h=Message-ID:Date:MIME-Version:From:Subject:Cc:To:Content-Type; b=VTZ+heRLQ7/nJs4avFsCFNrTIT6SNJSzi67ax4RkcaOPwJX6K5Iju/6XJxnfLaqCdj1GUoxLuaO8DlPD2pxf9q9RUdEh1xJSvVTFexgPjda6wEu7pAy9zWvmRjkT3KDJimy23TVdoWzVWNHIKhkt1eVSuMmQlbMqWwCa4L20iDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tNwD1ur9; arc=none smtp.client-ip=74.125.82.180
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-30bf854d5feso4346333eec.0
+        for <linux-integrity@vger.kernel.org>; Wed, 24 Jun 2026 20:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782359766; x=1782964566; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:cc:subject:from:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=srhS5i90p9Ok5lxqwOHZkSzHn+Lf7VA0N+H4FT65HJA=;
+        b=tNwD1ur9T6rnXrFI83rv1VscADTwkgnGzWd3/8cXowET8MB7CWONP9LD8A1tY0SRrY
+         0EmYh2+rrXPC+ozviEK86lZvkL1Ur9WahRbH4RzjcJgLj3LhrOFqMznBQ4vpU5QNT2jb
+         oo+qFNzdsNXY3xQot7qGYa5aBYb2iLlmD+YpHbY/ch8gWEp8rrsrx/6pC/PcVKB0Gs1/
+         E4UvohwcSm00Zugh6iQO3yBuzJWcnrI2oNbEXIA8vb+ttIucKGc2bjektnJWj1IAs7La
+         AQB+ndJ7ShypndIVKhEx1nRanzRy5+2XZupX5GjytTV7PmRkzT6PCLtvrikUWPUxCKtx
+         GNDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782359766; x=1782964566;
+        h=content-transfer-encoding:to:cc:subject:from:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=srhS5i90p9Ok5lxqwOHZkSzHn+Lf7VA0N+H4FT65HJA=;
+        b=QMHHe8jURJiRW0xT3QhA1vLdoMeQmT8PeTC5nEEu5st+lCabHLjfV8dRdTX5F9MyNu
+         5vDDwqK6KR917qDd/2PMGpjA2AyWnBRAntZS4JR1TDyChQZOrqGI9QOZTvU9IoY/UKYN
+         ZP8gf9wvQ4XAv0/zgqBr1pPC+LAuO8oCzniTMGzFFYNWYoHJykq4BHcQuUvbcTq1o57p
+         uAk1vXOkGHYmiBx2kUy0HijHoCwZMrk9vRiljTzHzfiYEUizIqDBdYPPuQY++7V9l7Wt
+         4iF2AwEeMjkevyH4v6dF35kEXVgdVHCTk/yXkcLkUY/bQ+5KA6hPgfIe3AVSriAzApZu
+         tz3g==
+X-Forwarded-Encrypted: i=1; AHgh+RpUXQf/0+LigW3dD6jF8T3QtHc/fPROunUtTRVoWKl2bdD5F8jHV9gGexJa/Gy4Rn3cIBbtAldYYJty2JymiM8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHivv5c7aGty0QczQvCCk00vAhal3uL1XYRvgIXf9NuSAO3AV2
+	hJB//NYj++BDjkvrDFIySWU74KCeNtOY8MBfi/tPerDJNtV1Fw/laBmI
+X-Gm-Gg: AfdE7cmB1Tn/Z4GyOt/SF1EQlos9lHQ/fkW4NpjYfHlsy5Sh0TmIWQExFQENtHIEBAB
+	PyfVfXKXpu+YIovvTe/JcfYhbz1AXc7DU8NdCJZJmlS+rIxhfCaUOmDXhqtG4US78tfRd+Yrviz
+	FSjMIae9PJbSPYY17eMLdqmYMhywPt6RG4IXUX4LH0xiCGjFIqcjSet9z9vc42zpmuNhHUVJBXD
+	xIxjRxwxcOV/vhzMti1xDawrM8FyRaBlI3FjDCEiKiKZyRZJ+q8G4ODIsINiSKh5UXRmGvm+YOO
+	QVi/1ZVzNIbTINcRp3120zxIjuZD7jQqQ6WpaF3wHbuRWICSdjupSI1HAIKNCqGnUuKXe/DAnxL
+	TkcMawqFyXCplCx9cPoB0bR/tQdnpecklB2sSjoCUtFA2bCbSSAEkzHQC0Aa4T6uAkBFe23y9vW
+	nfhFlNG6Au/hw+ySn2S9KEL3jYCA==
+X-Received: by 2002:a05:7300:23cb:b0:2c5:b23e:48a6 with SMTP id 5a478bee46e88-30c84dfad18mr1166720eec.23.1782359765690;
+        Wed, 24 Jun 2026 20:56:05 -0700 (PDT)
+Received: from [192.168.0.142] ([49.207.145.141])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7c52c664sm3867938eec.8.2026.06.24.20.56.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Jun 2026 20:56:05 -0700 (PDT)
+Message-ID: <7959ba0b-c39d-4cb3-8269-482d1d593257@gmail.com>
+Date: Thu, 25 Jun 2026 09:25:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: QCpNKUJzZPn9f-xf2FW2smj6-Ww_T8Q_
-X-Proofpoint-GUID: qgLll-gLQTbb6UdG14B6ZMBeeGKvYFiK
-X-Authority-Analysis: v=2.4 cv=Y4XIdBeN c=1 sm=1 tr=0 ts=6a3c7ee0 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=i0EeH86SAAAA:8
- a=7uy6fJ_G-s78BpoCXhsA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNjI1MDAwNCBTYWx0ZWRfX1aopuGxhIq/n
- napmZgpbzWhbK4VyI6YCAVwu/TCAseQPpAlBFZx0EfBMszC3fY2as/Hyd7WU9xRkZ7XN7470Cdz
- m9wqGinMfaiV86oEd5wT9U+gndefM9jgoJc7gJxm5QeZOKaLJt/J2/olKC8KbVEaGa9d82vhBRd
- +R4n+kLNf0tW3jKj90xt9mhjaKxfCIXJ5InAZuNKZwOVwVstMd0ZAoaIl3FkiuzMp8LV0m9Pe0M
- F9eRgGfyyFqGNWOVLUIUD8G+GcGsPCQPiTUtRr8fQ6LdU/CxTFPR+kG4JpmcdV/QWjktAyVqo1c
- tMgS8QTqv/+/Xwwng4c5rzPtraW/GW876AzsN4bLqTzoK+Ls//4MqWUXteu+h+34jlzmY2md04A
- goqa3/k2IBcRLgGpNzjjikIVevzLqXWrjvD1u+8X4nCEFkjZYb6oqM9s2rUu0fd3JPgEMkBqWIQ
- scThO/X32df3s5zfpJg==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNjI1MDAwNCBTYWx0ZWRfXywh0LSplqPHQ
- 7WIZFi7pqwFA3EI0SiCKOpqTkdeqdtrZdqCdow79R/3517YeQWvoqkDOWHZX7yExfeqbnqOK1jp
- b7N24vytA9etcJKgIebzdjX9oqummyo=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.125,FMLib:17.12.100.49
- definitions=2026-06-24_04,2026-06-24_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0 spamscore=0
- clxscore=1015 suspectscore=0 impostorscore=0 phishscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2606250004
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Kamalesh Babulal <kamalesh.babulal@gmail.com>
+Subject: [ANNOUNCE/CFP] Linux Plumbers 2026 Containers and Checkpoint/Restore
+ Microconference
+Cc: =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@stgraber.org>,
+ Mike Rapoport <mike.rapoport@gmail.com>,
+ Christian Brauner <christian@brauner.io>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Adrian Reber <adrian@lisas.de>,
+ Kamalesh Babulal <kamalesh.babulal@oracle.com>
+To: cgroups@vger.kernel.org, containers@lists.linux.dev, bpf@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-integrity@vger.kernel.org, criu@lists.linux.dev,
+ lxc-devel@lists.linuxcontainers.org, fuse-devel@lists.linux.dev
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-9831-lists,linux-integrity=lfdr.de];
-	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-9832-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FREEMAIL_TO(0.00)[polito.it,vger.kernel.org,gmail.com,huawei.com];
-	FORGED_RECIPIENTS(0.00)[m:enrico.bravi@polito.it,m:linux-integrity@vger.kernel.org,m:dmitry.kasatkin@gmail.com,m:roberto.sassu@huawei.com,m:eric.snowberg@oracle.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
-	FORGED_SENDER(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FORGED_RECIPIENTS(0.00)[m:stgraber@stgraber.org,m:mike.rapoport@gmail.com,m:christian@brauner.io,m:mkoutny@suse.com,m:adrian@lisas.de,m:kamalesh.babulal@oracle.com,m:cgroups@vger.kernel.org,m:containers@lists.linux.dev,m:bpf@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:linux-api@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:criu@lists.linux.dev,m:lxc-devel@lists.linuxcontainers.org,m:fuse-devel@lists.linux.dev,m:mikerapoport@gmail.com,s:lists@lfdr.de];
+	FORGED_SENDER(0.00)[kamaleshbabulal@gmail.com,linux-integrity@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,huawei.com:email];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[stgraber.org,gmail.com,brauner.io,suse.com,lisas.de,oracle.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FORWARDED(0.00)[lists@lfdr.de];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ibm.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[kamaleshbabulal@gmail.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	ALIAS_RESOLVED(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	RCVD_COUNT_SEVEN(0.00)[11]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,lpc.events:url]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 8D1836C2112
+X-Rspamd-Queue-Id: 111F16C2A18
 
-The Subject line describes "how", not "what". Consider renaming it to "ima:
-measure userspace policy writes before parsing".
+Hello,
 
-On Wed, 2026-06-17 at 17:58 +0200, Enrico Bravi wrote:
-> When a signed policy is not mandatory, it is possible to write the IMA
-> policy directly on the corresponding securityfs file:
+We are pleased to announce the Call for Proposals for the Containers and
+Checkpoint/Restore Microconference[0] at Linux Plumbers Conference 2026,
+taking place in Prague, Czechia, from October 5 to 7, 2026.
 
-When a signed policy is not mandatory, userspace can write IMA policy rules
-directly to the securityfs policy file:
->=20
-> echo -e "measure func=3DBPRM_CHECK mask=3DMAY_EXEC\n" \
->         "audit func=3DBPRM_CHECK mask=3DMAY_EXEC\n" \
->      > /sys/kernel/security/ima/policy
->=20
-> or by cat'ing the entire IMA custom policy file:
->=20
-> cat ima-policy-file > /sys/kernel/security/ima/policy
+This microconference will focus on current work and open problems in
+containers, checkpoint/restore, kernel interfaces, and related userspace
+tooling. We hope to bring together people working on container
+runtimes, CRIU, init systems, distributions, orchestration systems, and
+the kernel interfaces that make these pieces work together.
 
-Because these rules originate from userspace and cross the userspace/kernel
-trust boundary, measure the raw write buffer before parsing.
+Topics of interest include, but are not limited to:
 
->=20
-> Add input buffer measurement, regardless of whether the new policy
-> will be accepted or not, that can be caught when
-> 'measure func=3DPOLICY_CHECK' is enabled (e.g., ima_policy=3Dtcb). The
-> measurement template is forced to ima-buf.
+  - New VFS and syscall interfaces relevant to containers, including
+    work around idmapped mounts
 
-> This follows the "measure & load" paradigm, exposing potential bugs in
-> the policy code and detecting attempts to corrupt IMA. It also completes
-> the POLICY_CHECK hook, which already measures partial policy load by file=
-.
+  - Closing remaining gaps between cgroup v1 and cgroup v2, and making
+    migration easier
 
->=20
-> To verify the template data hash value, convert the buffer policy data
-> to binary:
-> grep "ima_policy_written" \
-> 	/sys/kernel/security/integrity/ima/ascii_runtime_measurements | \
-> 	tail -1 | cut -d' ' -f 6 | xxd -r -p | sha256sum
->=20
-> Suggested-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Signed-off-by: Enrico Bravi <enrico.bravi@polito.it>
-> ---
->  security/integrity/ima/ima.h        |  1 +
->  security/integrity/ima/ima_fs.c     |  1 +
->  security/integrity/ima/ima_main.c   | 19 +++++++++++++++++++
->  security/integrity/ima/ima_policy.c |  3 +++
->  4 files changed, 24 insertions(+)
->=20
-> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
-> index befa221716e5..d477fc06821f 100644
-> --- a/security/integrity/ima/ima.h
-> +++ b/security/integrity/ima/ima.h
-> @@ -455,6 +455,7 @@ void *ima_policy_next(struct seq_file *m, void *v, lo=
-ff_t *pos);
->  void ima_policy_stop(struct seq_file *m, void *v);
->  int ima_policy_show(struct seq_file *m, void *v);
->  void ima_measure_loaded_policy(void);
-> +int ima_measure_policy_buf(const char *buf, size_t buf_len);
-> =20
->  /* Appraise integrity measurements */
->  #define IMA_APPRAISE_ENFORCE	0x01
-> diff --git a/security/integrity/ima/ima_fs.c b/security/integrity/ima/ima=
-_fs.c
-> index 65e7812c702f..a277c9135944 100644
-> --- a/security/integrity/ima/ima_fs.c
-> +++ b/security/integrity/ima/ima_fs.c
-> @@ -356,6 +356,7 @@ static ssize_t ima_write_policy(struct file *file, co=
-nst char __user *buf,
->  				    1, 0);
->  		result =3D -EACCES;
->  	} else {
-> +		ima_measure_policy_buf(data, datalen);
+  - The growing role of eBPF in container runtimes, observability,
+    policy enforcement, and checkpoint/restore
 
-Should failure to measure the input policy rules be audited?
+  - Mechanisms for mediating and intercepting increasingly complex
+    system calls
 
->  		result =3D ima_parse_add_rule(data);
->  	}
->  	mutex_unlock(&ima_write_mutex);
-> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/i=
-ma_main.c
-> index 5cea53fc36df..599495304712 100644
-> --- a/security/integrity/ima/ima_main.c
-> +++ b/security/integrity/ima/ima_main.c
-> @@ -1221,6 +1221,25 @@ int ima_measure_critical_data(const char *event_la=
-bel,
->  }
->  EXPORT_SYMBOL_GPL(ima_measure_critical_data);
-> =20
-> +/**
-> + * ima_measure_policy_buf - Measure the policy write buffer
+  - Lowering the barriers to practical use of user namespaces
 
-Consider renaming this function to ima_measure_policy_input(), which parall=
-els
-the function ima_measure_loaded_policy() in the first patch.
+  - Attestation, measurement, and other approaches to establishing
+    container integrity
 
-Mimi
+  - Better resource-control interfaces and limits for containerized
+    workloads
 
-> + * @buf: pointer to the buffer containing the policy write data
-> + * @buf_len: size of the buffer
-> + *
-> + * Measure the buffer sent to the IMA policy securityfs file.
-> + *
-> + * Return 0 on success, a negative value otherwise.
-> + */
-> +int ima_measure_policy_buf(const char *buf, size_t buf_len)
-> +{
-> +	if (!buf || !buf_len)
-> +		return -EINVAL;
-> +
-> +	return process_buffer_measurement(&nop_mnt_idmap, NULL, buf, buf_len,
-> +					  "ima_policy_written", POLICY_CHECK, 0,
-> +					  NULL, false, NULL, 0);
-> +}
-> +
->  #ifdef CONFIG_INTEGRITY_ASYMMETRIC_KEYS
-> =20
->  /**
+  - Keeping CRIU working smoothly on modern Linux distributions
+
+  - Checkpoint/restore support for GPUs and similar accelerators
+
+  - Restoring FUSE daemons and related userspace services
+
+  - Handling restartable sequences correctly during checkpoint and
+    restore
+
+  - Support for newly added kernel features and interfaces
+
+  - Shadow stack support on x86 and arm64
+
+  - Support for madvise(MADV_GUARD_INSTALL) and mseal()
+
+  - pidfd-based checkpoint/restore, including process-exit information
+
+We are also interested in additional topics that may emerge as work
+evolves over the coming months. Ongoing development work, operational
+experience, unresolved kernel API questions, and cross-project
+coordination topics are all welcome.
+
+We encourage you to bring open questions, unresolved issues, or problems
+that would benefit from input from others. In your proposal, please
+include a short description of the topic, what you would like to
+discuss, and what kind of feedback or collaboration would help move the
+work forward.
+
+Allocated time per session is expected to be between 15 and 30 minutes.
+
+Please submit proposals through the LPC 2026 abstracts page by August 7:
+
+        https://lpc.events/event/20/abstracts/
+
+Linux Plumbers Conference 2026 will be a hybrid event. While in-person
+presentation is preferred to help keep the sessions smooth and
+interactive, remote presentation will also be available.
+
+We are looking forward to your proposals and to seeing you in Prague.
+
+[0] https://lpc.events/event/20/contributions/2332/
+
+Thanks,
+Containers & Checkpoint/Restart Microconference Team
 
