@@ -1,279 +1,172 @@
-Return-Path: <linux-integrity+bounces-9840-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9841-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id cYj4KT2UPWog4QgAu9opvQ
-	(envelope-from <linux-integrity+bounces-9840-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 22:49:01 +0200
+	id 8ot3G5RDPmonCQkAu9opvQ
+	(envelope-from <linux-integrity+bounces-9841-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2026 11:17:08 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D4A36C89C9
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 22:49:01 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DFA16CBA13
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2026 11:17:08 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=paul-moore.com header.s=google header.b=fGKpDWF+;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9840-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9840-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=none) header.from=paul-moore.com;
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=bi6ZWTt7;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9841-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9841-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=none) header.from=gmail.com;
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8E92E3041A6E
-	for <lists+linux-integrity@lfdr.de>; Thu, 25 Jun 2026 20:48:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 7EFDF3008D55
+	for <lists+linux-integrity@lfdr.de>; Fri, 26 Jun 2026 09:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1667436EA8E;
-	Thu, 25 Jun 2026 20:48:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE9E202963;
+	Fri, 26 Jun 2026 09:17:05 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
 Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA5136A036
-	for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 20:48:04 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782420486; cv=pass; b=euOe4RYTMEGNLjmRxhlr0PMxf+ZYUA/ik0jcnNu2B/3X52XqAHNlh86cFJqIMI7Ejj6/p3HqvgeRx+cxLJCwWna/EWnvvGGf7Qkhn1btgkV9IXbxSSxlr0ELm7kQx7JV0WvLC5FRSgSFU5QJ0Ysy4jZWpVG7LoXro851erQ+m0o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782420486; c=relaxed/simple;
-	bh=f0Ceifmdtd+icWZEIGznyRsCS3GvzZoATmFU82jVusM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HUNenowjZVUJMpIILM9+6OwnvEBdLJa7jjBIrJnw3n3/juAsxL2pcRDFCffjE6gxFnWkbIAVQteSbWJWFPXlIOfk5C5jrMX8or9NOKWsEAOR/quCc1weh8xNJVfB01nLPpdYS2+9CkOoNpnIiu5jVMIk3ibZpZXJV7RFZfT4Z+c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=fGKpDWF+; arc=pass smtp.client-ip=209.85.214.179
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2c80810247dso3362995ad.1
-        for <linux-integrity@vger.kernel.org>; Thu, 25 Jun 2026 13:48:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782420483; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NE6yLaiD7cxvM43i5yoRV+LYHtmTVtsPjsnx+g40kuupfrmbY5KnA2Dx2Zcl4SE4QB
-         KD/rFxuvj33YfQTe9+g5pqjwzsiU8SrYW0n3OB5lgQdSm8KePkpz8Q9Dop8dydmd0lmS
-         IisTPHbh1FpaTs57ULB3Yz4yzi9thVgzigXmkTyi5+4DogbS5t5KXG4hfvEfQtQILHLd
-         U4FrLcjQb4EAkts0xRP6KHil27JinJX+L3QUI1jesAh0Dp1C6UMJcR1vnEoc1AjMJLgG
-         XwNgbKDVW7ZOJfve4LVrDRuxMNPzhwCDmOireGzL9wM5vFJ7/tRcjl3/ngmcdIGp2nfh
-         igkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=azFpD8w+2tmcQpqU30ws2iQaaMKt3MV7jEBsuDhiaTo=;
-        fh=IBTJY3NhKO/9gZ8shidct1qzRuW7XHWDweixV2XuTbs=;
-        b=BBIuTCq7yf8OsJRScA5mKXInLEc0EADJq2z0K0Eknc2o6bQ3Tf5a6+MqFZdQm02NL/
-         wqJN28WcJnXod2yCEo/CH372TpJFNOS2qPa25CbzTS7+qyeVRVUVQLmq38M6siYEQNzE
-         Qno9XZFj5hFeIFZnzr0OlUrnKJVje0mjq6BsBF/C51Y3RilK4ZhDQWtrQyhJelWVMzYk
-         0DR3hNwpvQ0GQ6dsMrDL7Bnm5fTCgKw/wM6DVxoIOYP5KLgTAQG8f82t2VyboVCkx78R
-         HyAOCKfYwwvgygjPEx4jQxmil7zaRAnGD8zfkZbbGeYqJgJfiKePqpdRL79/Qu43kPY8
-         czGw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFE93E6DF7
+	for <linux-integrity@vger.kernel.org>; Fri, 26 Jun 2026 09:17:03 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782465425; cv=none; b=swGso/kkQcROGHlNM65RZGTKupAGDHCigaqnqsZSV/8Hru8/j39LtWsl0kTTHUQV3qXzLY9h90sZcEAgFbmTn+puBgPlrvuFOggEe3tlwmc+uEbKpbhKoZFzQ/o84RmYjsIwyJvBuo3JRxXnR9Zh8I0AOy+LMUoEaddcpaICmzw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782465425; c=relaxed/simple;
+	bh=eI8Zz9/DvFlFMyuY5M2n3vkEU8ORZ0dhS33SWMoTOsU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pyespBCIfIj57+RoSAyi8vTOa/A3v9MGKyMjQDGDydE6Ks71GF0cUccMsXdiIIzQmK0NjsZXZL+hMdJ9HPITRuz1OCzXBPoVQhx3dRfCBCMbNTW3uQqmtHBqTOmnU3aA3xK1aKUT3aOtb2vzElHJZqVHRUZ+NJ+z7NChqrIBsmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bi6ZWTt7; arc=none smtp.client-ip=209.85.214.179
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2c825c88744so934815ad.1
+        for <linux-integrity@vger.kernel.org>; Fri, 26 Jun 2026 02:17:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1782420483; x=1783025283; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=azFpD8w+2tmcQpqU30ws2iQaaMKt3MV7jEBsuDhiaTo=;
-        b=fGKpDWF+vWPIG/vytG8etsjCv8EuM35t5u73k2ZExHfdTKfjs0WH9aQUC+5SHQsTXU
-         7XKkjqAFI+No2YeGYhxhXEpWdy+tkgGTMtrHEVo/P7M1ItNdX75HD6ENzdFCPDenV0mu
-         sNYTvX1XnP6xn4Kg8p4s1pxGT/G7wJtrroM7U9UQTbckWpT0IgzCLsGEfFfuWLIAtaru
-         NrCMb0Fk8COwaKcl6t7hrzjxdR0/6klXEduISzHACggR1j9s/V+bFEtowjy2qh6wMXJD
-         WcpTH+TrEiEiseu7pBceKl7/cy/MCNUvK11lmrdpupjfNRr9LKd3wXEY57fXp2XVzWGb
-         xUDA==
+        d=gmail.com; s=20251104; t=1782465423; x=1783070223; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LxAYIQj9s5X+fT9D5TWK/p2lDh+fqIxSGOdW7cp4vPo=;
+        b=bi6ZWTt7yqVJqEldKhaJaSsGWGZ1Mq7Fg7PPAIxaJ8vqjWCSWVrulm9QADFmqsjfFR
+         VukDWZPxLhN3e3J4H69jB7xnP0Kilo2S12OYH20sJv/GDDET/TGEEVfJeuljFlTmI0yV
+         7OwEpxwReLZAMIujoddu9povTtoyDOGe2IFwkO9pyatjvwb0OGqJdUE2c4HP7CE3q6aC
+         dDm4e1aZlROlBhIM5dTcAHoOdjV9d2dPe+DWG1mAcvzF1ozAQhipXNzBSpXKk+cX6HIB
+         SPGNB449Aebd4953B+0qcymV4tPIS+uDUqJ3st2S1mFibMhv/eLwIKOLJI83Ws747fvL
+         slhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782420483; x=1783025283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=azFpD8w+2tmcQpqU30ws2iQaaMKt3MV7jEBsuDhiaTo=;
-        b=tQvauY3O7ooRB+GxrzCFnGS3xShpOY49JRWcrTalZgEpT6Ady5AJkNKDgp3wam9jhD
-         1H7MJUrcVukKGqcqQxqXh/eHxctlpZjDD1kHoKyitGxZGDxfhvtHXVlo/rZ5ONRBh4RV
-         JlHCmN13IdYkZ4anW1OwKmV/GwgcMYyQEiim6yrxRkOc+kGHlCUUiOFLx27fu8+UCLAz
-         mY14TNus7oheRcxQRLC/8HUnw6BZcWw0GVgKL59x+ohDtjpHCO1hxlZcBtiiXawk+q46
-         vZEB6oAiwKufYJI4vzEzEzFbJfv3vNGsd95z98yVTCU0X0DSqwmrbwkV2Sd8Z9m/nKfh
-         wFTA==
-X-Forwarded-Encrypted: i=1; AFNElJ+GDlThClQkxc5adrXbD+xbSPkOo3a2f9O+lLnFqWa8J4orL5vqaHb59k9U3RLnR3FmSFO4HreqFxpqbCMwoFY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTvzISTBFgiHFxtNfy1hTZuqYEaT5IPVm2FeRlLOs6SNo9fsx3
-	1285iqTO/ttjse1NU8bD7HwOfm/xsBpjyZ2nyMdD4Iivh0/0ej78W045UNhwLddzv7KfUo9uzjg
-	yhtvMQ7a4D23UP3RC5ppcx1M5ZrNKk+T4Bqz613d2
-X-Gm-Gg: AfdE7cmzRaG9V/J+aY3uwshmycpgfMJHSTl9seiAbkVayjS14Stls3T6sdoFK3RCZAA
-	rPOtfOJM5klTJk01J5xWGNA3J4kBL+H8tIMoMzDmRAgFww79fGlg7NDfx2lR/wMfTfDlb3PLVzH
-	hx+HSGp8HF+8CvWAd/hVx1pkJMrZIEYUnQugeivmegIxNUpvGcCG/0pqPr7v1kVrji1KdZ3k5n/
-	EJmcheYhRNZtzT3HAwPhyvwkJTzhWY3yAqteounGexeGiRjfM559NCNqEK5Xqv6MjFatuph
-X-Received: by 2002:a05:6a20:258f:b0:398:bda8:d8cd with SMTP id
- adf61e73a8af0-3bd4ac850b6mr4962108637.7.1782420483450; Thu, 25 Jun 2026
- 13:48:03 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1782465423; x=1783070223;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LxAYIQj9s5X+fT9D5TWK/p2lDh+fqIxSGOdW7cp4vPo=;
+        b=mT4CQxeRSWfG0uE3ClinJzpSttHVFXz4JGMEDgaTw1KtVurCdkxYmBgrtKKRWIYJ4c
+         Y/HoxgmhU39zmi+YEskMM4trDSM6GCtvlTXTUiViBIbUMRR2Dzu4NeJg9jYNA9UEhg6b
+         uz5w7p6cgGSIg5qjBU6r9megi+YDue0/shkxziwuP71KdjTyRBGfQjESy/dev6GGFTKI
+         PmA4GZSmBXYgTHIxkiEh/C7R7QSsZlYFY27AMQunrNTyFX0mRfSi1eBOy/+il9Le9oEv
+         5Pe5HPKkPeI7EVNM5AHicjmCfRevCbYvtprAO3PzY/OwMTUMk5RamEWD5BkXXVMBHUVz
+         YFMw==
+X-Forwarded-Encrypted: i=1; AHgh+RrRvJFzjCRGbem1QJ3BrKkzSQZhEaiRh4UHHv4mOBsCj2mAkdcKxUb98cPT6smKpGhoTDPqWKIt1EROwyoolcw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCqAFAPeFIF7WOeH3maEtctOYU96N0dTFlhhMT7vDtM6rkj5Oe
+	bZ2IdySMBN/4u1t93jKoYQcIV+lr7AR28ayswVfkeU344GO0nzaaw+Q=
+X-Gm-Gg: AfdE7clK08p6ba+CbOX96ewI52AQOOxTX1kBE5JxQ8d+ITRfj0aMqtT/JqlS69asi+W
+	VirqThffPH6r4CmGFY1FKR9zxBqwkF/FPLk9GK0sgaJJ/azzvhsuF8+29RLaVhWYd2ESeOb7RYh
+	WLA3OLs0h+NTIrtJ7LCsNvESoXs1pPZjeY4klwEkvV6a9QP0ldz0zBelygTSw/HAryglNkYHzRk
+	s4fniDWwbrJHoySIdMgfl4r5VvP6VJ5fbUWY2fwrS4KGSxumr7TgMUQEHVV6V13/ArpaPoKan4+
+	YjBHp3jjbuXMtohiTCfQ9KBdysi2V0Nn2AtxO+wluxQaAzjfe08cpbugAlzjsLoNAeN0Z0VbbVU
+	dTjdyRXLjlJu1K67gKOkd5brMA8HbQnUvJW+yIX64tB0oqax3LXxV+i636xGfBQLno78HX20TUa
+	k1EmYj76d+yzOK7I8PdKovQ1qWCsLcOzMNPJBHuo9SHm31d58YZ5IEdydTKugUNfQaiU3FABF7U
+	vZT243zWZWnaOnaiy4LqgqLbi84xqU7Sr81WRYOxuTCSLTkRA==
+X-Received: by 2002:a17:903:196b:b0:2c7:9e67:c5c6 with SMTP id d9443c01a7336-2c7fc75cbf8mr67096205ad.19.1782465423385;
+        Fri, 26 Jun 2026 02:17:03 -0700 (PDT)
+Received: from localhost.localdomain ([14.5.152.27])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f63b26e6sm35750355ad.52.2026.06.26.02.17.00
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Fri, 26 Jun 2026 02:17:02 -0700 (PDT)
+From: Myeonghun Pak <mhun512@gmail.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Myeonghun Pak <mhun512@gmail.com>,
+	Ijae Kim <ae878000@gmail.com>
+Subject: [PATCH] tpm: tpm_i2c_nuvoton: disable IRQ on wait timeout
+Date: Fri, 26 Jun 2026 18:16:53 +0900
+Message-Id: <20260626091653.54929-1-mhun512@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260618203411.73917-2-dwindsor@gmail.com> <75d39fd9847cca915d704235264ab474@paul-moore.com>
- <20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner>
- <CAADnVQKKr5cCYTj8qS7tU-Aeda1iexYUp5aquTjYXMEL656cJQ@mail.gmail.com>
- <CAHC9VhSXXHGRUmJ4YjQ6uEh6dbq7+h_0TwWiV+W5dUWXCTFcfg@mail.gmail.com> <CAADnVQJM15E0PwomdTiz8zvVMGkqs9mTSjYRdPBF6fgE=tsPCQ@mail.gmail.com>
-In-Reply-To: <CAADnVQJM15E0PwomdTiz8zvVMGkqs9mTSjYRdPBF6fgE=tsPCQ@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 25 Jun 2026 16:47:51 -0400
-X-Gm-Features: AVVi8CeSCq01YuOttlTLlYK8mdjCXHKn7_tsxEH2h9SOetfWd3DVlVdhg7KLIyU
-Message-ID: <CAHC9VhSm_yC7f1FRHJn0NE1-UwCOx7Nhc9dxVJXs8DFzzxNKQw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] bpf: add bpf_init_inode_xattr kfunc for atomic
- inode labeling
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Christian Brauner <brauner@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
-	Roberto Sassu <roberto.sassu@huawei.com>, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, 
-	linux-integrity <linux-integrity@vger.kernel.org>, selinux@vger.kernel.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[paul-moore.com,none];
-	R_DKIM_ALLOW(-0.20)[paul-moore.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS(0.00)[m:alexei.starovoitov@gmail.com,m:dwindsor@gmail.com,m:brauner@kernel.org,m:viro@zeniv.linux.org.uk,m:jack@suse.cz,m:ast@kernel.org,m:daniel@iogearbox.net,m:john.fastabend@gmail.com,m:andrii@kernel.org,m:eddyz87@gmail.com,m:memxor@gmail.com,m:martin.lau@linux.dev,m:song@kernel.org,m:yonghong.song@linux.dev,m:jolsa@kernel.org,m:emil@etsalapatis.com,m:kpsingh@kernel.org,m:mattbobrowski@google.com,m:jmorris@namei.org,m:serge@hallyn.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:stephen.smalley.work@gmail.com,m:omosnace@redhat.com,m:casey@schaufler-ca.com,m:shuah@kernel.org,m:linux-kernel@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:bpf@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:selinux@vger.kernel.org,m:linux-kselftest@vger.kernel.org,m:alexeistarovoitov@gmail.com,m:johnfastabend@gmail.com,m:dmitrykasatkin@gmail.com,m:stephensmalleywork@gmail.com,s
- :lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER(0.00)[mhun512@gmail.com,linux-integrity@vger.kernel.org];
+	FREEMAIL_CC(0.00)[ziepe.ca,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-9841-lists,linux-integrity=lfdr.de];
+	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FORGED_SENDER(0.00)[paul@paul-moore.com,linux-integrity@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	TAGGED_FROM(0.00)[bounces-9840-lists,linux-integrity=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:peterhuewe@gmx.de,m:jarkko@kernel.org,m:jgg@ziepe.ca,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:mhun512@gmail.com,m:ae878000@gmail.com,s:lists@lfdr.de];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[paul-moore.com:+];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[paul@paul-moore.com,linux-integrity@vger.kernel.org];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,zeniv.linux.org.uk,suse.cz,iogearbox.net,linux.dev,etsalapatis.com,google.com,namei.org,hallyn.com,linux.ibm.com,huawei.com,oracle.com,redhat.com,schaufler-ca.com,vger.kernel.org];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[paul-moore.com:dkim,paul-moore.com:email,paul-moore.com:url,paul-moore.com:from_mime,vger.kernel.org:from_smtp,mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,kernsec.org:url]
+	FORGED_SENDER_FORWARDING(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mhun512@gmail.com,linux-integrity@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ALIAS_RESOLVED(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 4D4A36C89C9
+X-Rspamd-Queue-Id: 0DFA16CBA13
 
-On Thu, Jun 25, 2026 at 4:44=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> On Thu, Jun 25, 2026 at 1:40=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > On Thu, Jun 25, 2026 at 3:58=E2=80=AFPM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > > On Thu, Jun 25, 2026 at 7:23=E2=80=AFAM Christian Brauner <brauner@ke=
-rnel.org> wrote:
-> > > > On 2026-06-23 20:12:32-04:00, Paul Moore wrote:
-> > > > > On Jun 18, 2026 David Windsor <dwindsor@gmail.com> wrote:
-> > > > >
-> > > > > > Add bpf_init_inode_xattr() kfunc for BPF LSM programs to atomic=
-ally set
-> > > > > > xattrs via the inode_init_security hook using lsm_get_xattr_slo=
-t().
-> > > > > >
-> > > > > > The inode_init_security hook previously took the xattr array an=
-d count
-> > > > > > as two separate output parameters (struct xattr *xattrs, int
-> > > > > > *xattr_count), which BPF programs cannot write to. Pass the xat=
-tr state
-> > > > > > as a single context object (struct xattr_ctx) instead, and have
-> > > > > > bpf_init_inode_xattr() take that context directly. Update the e=
-xisting
-> > > > > > in-tree callers of inode_init_security to take and forward the =
-new
-> > > > > > xattr_ctx.
-> > > > > >
-> > > > > > A previous attempt [1] required a kmalloc string output protoco=
-l for
-> > > > > > the xattr name. Since commit 6bcdfd2cac55 ("security: Allow all=
- LSMs to
-> > > > > > provide xattrs for inode_init_security hook") [2], the xattr na=
-me is no
-> > > > > > longer allocated; it is a static constant.
-> > > > > >
-> > > > > > Because we rely on the hook-specific ctx layout, the kfunc is
-> > > > > > restricted to lsm/inode_init_security. Restrict the xattr names=
- that
-> > > > > > may be set via this kfunc to the bpf.* namespace.
-> > > > > >
-> > > > > > Link: https://kernsec.org/pipermail/linux-security-module-archi=
-ve/2022-October/034878.html [1]
-> > > > > > Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/=
-linux.git/commit/?id=3D6bcdfd2cac55 [2]
-> > > > > > Suggested-by: Song Liu <song@kernel.org>
-> > > > > > Signed-off-by: David Windsor <dwindsor@gmail.com>
-> > > > > > ---
-> > > > > >  fs/bpf_fs_kfuncs.c                | 106 ++++++++++++++++++++++=
-+++++++-
-> > > > > >  include/linux/bpf.h               |   1 +
-> > > > > >  include/linux/bpf_lsm.h           |   3 +
-> > > > > >  include/linux/evm.h               |   9 +--
-> > > > > >  include/linux/lsm_hook_defs.h     |   4 +-
-> > > > > >  include/linux/lsm_hooks.h         |  16 ++---
-> > > > > >  include/linux/security.h          |   5 ++
-> > > > > >  kernel/bpf/bpf_lsm.c              |  10 +++
-> > > > > >  kernel/bpf/trampoline.c           |   3 +
-> > > > > >  security/bpf/hooks.c              |   1 +
-> > > > > >  security/integrity/evm/evm_main.c |   8 ++-
-> > > > > >  security/security.c               |   7 +-
-> > > > > >  security/selinux/hooks.c          |   4 +-
-> > > > > >  security/smack/smack_lsm.c        |  27 ++++----
-> > > > > >  14 files changed, 166 insertions(+), 38 deletions(-)
-> > > > >
-> > > > > I have a few specific comments below, inline with the patch, but =
-I wanted
-> > > > > to make some general comments too.
-> > > > >
-> > > > > The kfunc additions really don't belong in the VFS kfunc file, pl=
-ease
-> > > > > create a LSM kfunc file (call it security/bpf_lsm_kfuncs.c) and a=
-dd the
-> > > > > kfunc code to this new file.
-> > > >
-> > > > We expose a bunch of VFS heavy operations for various security modu=
-les
-> > > > and this is really not different. For xattrs we have it all central=
-ized
-> > > > in the VFS and in general all VFS related bpf kfuncs should continu=
-e
-> > > > living there and be registered there. Anything that's just bpf infr=
-a
-> > > > specific can go to security/bpf/kfuncs.c instead. But anyway, it's =
-a bpf
-> > > > specific helper so it's the bpf maintainer's call.
-> > >
-> > > Completely agree. This is vfs related kfunc and has to be
-> > > in fs/bpf_fs_kfuncs.c to make sure vfs maintainers review it now
-> > > and all future changes to it.
-> >
-> > *laughs*
-> >
-> > Okay, then split out the LSM specific stuff into
-> > security/bpf_lsm_kfuncs.c; all the LSM macros/defines/calls should be
-> > in the LSM kfuncs file.
->
-> Paul,
->
-> I'm sorry, but you didn't demonstrate the level of understanding
-> of bpf to be trusted to maintain any piece of it.
+i2c_nuvoton_wait_for_stat() enables the IRQ before waiting for the
+interrupt handler to report a status change. If the wait times out, or is
+interrupted before the handler runs, the function returns without
+balancing the enable_irq() call.
 
-Alexei,
+Disable the IRQ before leaving the failed wait path. Also preserve an
+interrupted wait's original error code instead of converting it to
+-ETIMEDOUT inside the helper.
 
-You haven't demonstrated the understanding or decorum necessary to be
-entrusted with any part of the LSM framework.
+Fixes: 4c336e4b1556 ("tpm: Add support for the Nuvoton NPCT501 I2C TPM")
+Co-developed-by: Ijae Kim <ae878000@gmail.com>
+Signed-off-by: Ijae Kim <ae878000@gmail.com>
+Signed-off-by: Myeonghun Pak <mhun512@gmail.com>
+---
+ drivers/char/tpm/tpm_i2c_nuvoton.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---=20
-paul-moore.com
+diff --git a/drivers/char/tpm/tpm_i2c_nuvoton.c b/drivers/char/tpm/tpm_i2c_nuvoton.c
+index d44903b..aa36730 100644
+--- a/drivers/char/tpm/tpm_i2c_nuvoton.c
++++ b/drivers/char/tpm/tpm_i2c_nuvoton.c
+@@ -182,8 +182,10 @@ static int i2c_nuvoton_wait_for_stat(struct tpm_chip *chip, u8 mask, u8 value,
+ 						      timeout);
+ 		if (rc > 0)
+ 			return 0;
+-		/* At this point we know that the SINT pin is asserted, so we
+-		 * do not need to do i2c_nuvoton_check_status */
++
++		disable_irq(priv->irq);
++		if (rc < 0)
++			return rc;
+ 	} else {
+ 		unsigned long ten_msec, stop;
+ 		bool status_valid;
+-- 
+2.47.1
 
