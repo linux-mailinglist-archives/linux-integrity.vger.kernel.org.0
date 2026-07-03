@@ -1,116 +1,116 @@
-Return-Path: <linux-integrity+bounces-9878-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9879-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id SiMkOLKXR2ocbwAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9878-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Fri, 03 Jul 2026 13:06:26 +0200
+	id q8qNOIuZR2q4bwAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9879-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 03 Jul 2026 13:14:19 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F56A7019B5
-	for <lists+linux-integrity@lfdr.de>; Fri, 03 Jul 2026 13:06:26 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59CFF701B1B
+	for <lists+linux-integrity@lfdr.de>; Fri, 03 Jul 2026 13:14:19 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=DGeyS26W;
-	dkim=pass header.d=redhat.com header.s=google header.b=bVeDA70K;
+	dkim=pass header.d=redhat.com header.s=mimecast20190719 header.b=aenZx4wq;
+	dkim=pass header.d=redhat.com header.s=google header.b=bxaXsMQG;
 	dmarc=pass (policy=quarantine) header.from=redhat.com;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9878-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9878-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9879-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9879-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C4E6B3002326
-	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2026 10:59:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3C53E300F9EC
+	for <lists+linux-integrity@lfdr.de>; Fri,  3 Jul 2026 11:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A571C3B71A6;
-	Fri,  3 Jul 2026 10:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C756B3B6347;
+	Fri,  3 Jul 2026 11:09:17 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8BB3BADB1
-	for <linux-integrity@vger.kernel.org>; Fri,  3 Jul 2026 10:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06065364926
+	for <linux-integrity@vger.kernel.org>; Fri,  3 Jul 2026 11:09:15 +0000 (UTC)
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783076397; cv=pass; b=GR0L2Ol64SmKHGUHBi5HRSjDfH0HFAGMjayoci9i0FrwHNEBaRTr6LDwsmPz2WzWzFWhM5Saws/1kzXuLRiy1K5xsqkV5mFW5mBhcNoBQQJNBSIfBrmubghVvlaA4qn67oKuV3ejmJ6pWjVHl1YPiTV59ER10cEprBf3RJsD5z0=
+	t=1783076957; cv=pass; b=uz6QbkvvWBAFkIVUM4A2VwN+f+SmuHNeO1ThdPsbXcQg0h6myQ98rp8+ZKaHV1P+r/PGu2H0Q+yz1xFS25kKi4OZ0/ls21HF9ZG5t/pMuVN/Uv3IjqxsBmjm44Ud/TtC64MYTw0j9AfHeMmbDs0Kd6XhCzj3lm75UVHb/tCewLg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783076397; c=relaxed/simple;
-	bh=Kdp2PH2HMMYY6AaCbfMKyegYJNpecovxW46S2fuHfAc=;
+	s=arc-20240116; t=1783076957; c=relaxed/simple;
+	bh=ky6LfkgCQQeUzwvB4OpjP0MRqV9I5n463ukg4Hx0N0s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ei1j/T/+2FOt3vcdaXMLCZuoTx9HgUNQG9aZLeBU6hhStBbuHqfh5aL5UenCb6NQ1lfWiE2ZwxSE7tdGmRc9p/swYgoldS5NzBtrfj8a7nJME3+91eGMhWHhQogahAh2xx09KVeJQUHu6eeHjpARxtwyowouz8zyMONi/gvl/v8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DGeyS26W; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=bVeDA70K; arc=pass smtp.client-ip=170.10.133.124
+	 To:Cc:Content-Type; b=DD6/74GZR1UH1EjkoyisNB8CYRUTRA/ztlXBj6/5F4JZY+4xFbjhdrHCrb04GSm6lBz+PDxhAoZ4GbvAt1paA51KP5EtSW54Q2C7k/4txSj7oCSDf/zO2ODhWxcjKg44nWxB5S3t0OEVG1uoJpdRuY6DPk2f0vBzm8/WiMW7u5o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aenZx4wq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=bxaXsMQG; arc=pass smtp.client-ip=170.10.129.124
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783076394;
+	s=mimecast20190719; t=1783076955;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=90otGYM9YNogT3/612Z38WIGOFh0NDbrJXj/gkAcc4M=;
-	b=DGeyS26W8f/vEx9OpUibRjZev8iFzkTX9I0Jv7vcrq5J2aebsbcsc+beNxgH0pm7LEF87E
-	8M1Nr9/aR2o3cdB0iOz7/EdqhmCNDK0BnoaeuKEVnjGADDjXxHx0PAOlYw6wHg2GpbbZRZ
-	K3ErhCBTa1tpcn/qC6A4Z+9EKJs0j7c=
+	bh=Uh7HGlG5BHoSUsvlsYaBrF++hCjSyZH34tmkueyHFBM=;
+	b=aenZx4wq18Qu+HQG3r2Zu1xEl0SqOCuCzLU62fubE8S3MiX8XJsPJh2rOxuIB+c0rLKHjr
+	hhPFnFCDzE//KpkTkISYOCjpohOVbFUwdpXaxZGiHUEyJn2Z7EbhJAFue07fMFkWzYTcsI
+	J6g0cAwKMZLo8WO/0yqDJu41TgC2zqs=
 Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
  [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-652-HCea8npmPrCzDOeS2huxTA-1; Fri, 03 Jul 2026 06:59:53 -0400
-X-MC-Unique: HCea8npmPrCzDOeS2huxTA-1
-X-Mimecast-MFC-AGG-ID: HCea8npmPrCzDOeS2huxTA_1783076393
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-92e5e38fbc5so37223085a.2
-        for <linux-integrity@vger.kernel.org>; Fri, 03 Jul 2026 03:59:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783076393; cv=none;
+ us-mta-577-nDPyTIX6NqmIT7Uhnk3MVw-1; Fri, 03 Jul 2026 07:09:14 -0400
+X-MC-Unique: nDPyTIX6NqmIT7Uhnk3MVw-1
+X-Mimecast-MFC-AGG-ID: nDPyTIX6NqmIT7Uhnk3MVw_1783076954
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-92e820609d9so31285285a.2
+        for <linux-integrity@vger.kernel.org>; Fri, 03 Jul 2026 04:09:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783076954; cv=none;
         d=google.com; s=arc-20260327;
-        b=J0TkxP45M20F1R6us0cczm0NZh5pbyoMr6SHqRYdbX/K4VoWbsoErGaxd9vT95LxsW
-         TpiIj1zO+7LREYDlEwxAmpihKEpnhDyldiBBu/q+M2d7xVzkpmgncc3JRLNwOQKR8CxL
-         adPXn/BUx3tvcuZfPkq0SAx+R3cO7unVrysXZhRH8IkwpnlEkKRD3WGbg2PkfZXJDUEK
-         +baEVAY+YadFoZNenyzG537k8YoqQgWmkZYsnVPXwz9hmwVKdxAuIKa52xmIYM6iySev
-         4heF7JxPmiyKC3CHzBCqn9iPF/eu5QP3au6fAPBn1fBOFecnP/swEC7IgJbxaF5SEt/5
-         u5wQ==
+        b=NTCc/mebOR/p0n5iDfqw91d3uD6HnB1qOArlSCmq9aIvnwt5pso1rE+GKVjsnDC0IO
+         GzkiEaX4VbcyBGt53CZ+PjbMvFsj/G3QgelSgUGUThBi6gvEoFw6GhZ53uAMFELl48k4
+         sGh0MhHS4xsUaZYkj6ZffM5znfT2xguVJdEr3lYYL6/UbfBq7vsch0MuZJXB9VcWlWFs
+         UVVS+FXJzFkFJt9DHl/Kiv17ygXt7B8LMpcsq8s2HvAvRRYVqT1+wN6tWTXwlE3IkPcx
+         Pf0Q6ARqNfbu8K8NJisJBhrIxLHHLad+g2N4l3NRmsru0KEO0ZIPIO2X3IqtQcPK9Czm
+         2nPQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=90otGYM9YNogT3/612Z38WIGOFh0NDbrJXj/gkAcc4M=;
-        fh=PkXd10AIW/zHhOSLb211/jURt3wStFJYXVmA3ulF1Lk=;
-        b=sUf6IcNaTiBgGfSzhKeiTHODQDeEHxSGO68OsikDQ9wVOZjSKF5BTLUEh37ve+JRm7
-         C0Nj1zVb1MJcyQxAT6DNfks6pzi3x3wMuDBlX5AMzp941iH0lgvjlF4ISlJdy3v951pI
-         j7ZjujkiuHl5jN//CDegkM1sWBY7EjrczFDllSI8LXEsJXidn4MS5xUrVSx8g3MMV6HM
-         IVuU6i4uWAzt0tDRRzngbkIM5BRJjgF2Nge6efoVoVvEUlXR7R4Ug5FcaLEIgqAk+SwS
-         +dZZhusCKZpPc+xOjGDo+n1WkwRbhxxVqVUsTGUJH2fsKEEQ2R0Xvhfllgca2E22AYtx
-         eUXQ==;
+        bh=Uh7HGlG5BHoSUsvlsYaBrF++hCjSyZH34tmkueyHFBM=;
+        fh=SW6FeIeMf49NRkjk/bdqYGdq6fFgTHnOGtoymqwIiDs=;
+        b=nGaLwVekEwZzIPgXa+EFyrqFb+pARP7nVxyvrMzmprg5ifTJc9NX3YBw3Pr3GeCS7O
+         6rE/cWKntLD38zFMxGgJ3NxVPV/P9ZgDPaTNwuPTrKRoVxy553LyJqLBEiLRXy24o12K
+         B/SMIPll7ZQ1I2EdtuSzdF7CQjV3FiqSiQwlSr7XSf68g/0XL0v4oGc9k1V3OnhHRdM5
+         Sjbqnyd/V60EpmuENFIhCrzNNfvxd5TLN9IAF9tIcu97B81ScChAZU0H2r5eJ3T/5xNr
+         WzdPSiFS2n41QNq0VDZRkHX946CCEMWr+KcM/+UfXulNrjoU3yy64NvICN9mH7c/icdS
+         eW0w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1783076393; x=1783681193; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1783076954; x=1783681754; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=90otGYM9YNogT3/612Z38WIGOFh0NDbrJXj/gkAcc4M=;
-        b=bVeDA70K4ksaazHQYpA4UhYenAC8HV7yk4Klli93b3vflFTJ6anQYho56kSrGKUjfp
-         HnfNKpSb9KK92mHt4YS8KGQP1kHs5nT07oQ5Dli2GpkTIRHvsMNr4/BsC2l2d0b7rOyi
-         ujXHDmKA1w8MZnorBPyDSiiZKlfGtL3TyVf8I7t/EwWWxyaro60F9Z0+AZWXMeTRWj2X
-         /lzm/nT0OtY9MsivKvy9apty16/AWkOlFBefkjmTQ75vQEYXAt1xsPpHIg7C488p5u9W
-         qr+sGD0nz+ENmnbqSkQgGXFnqBCAje/4mQnSlkuu/ST/kM2Ryg+JOO09uoH1mMqysMQt
-         7xBw==
+        bh=Uh7HGlG5BHoSUsvlsYaBrF++hCjSyZH34tmkueyHFBM=;
+        b=bxaXsMQGXkI/tTwDwDZjWwQYeiKCf3M0BUJsbzefxriGgrzkiCAVhgfKX8/maGV6kw
+         yj9OZbusx64gE0icE2tFL0No/Csfl9dZt5q7bC4RbBhc3g4drS59hWDyqkyrFXSyQAO0
+         yXIpIoKZct2MSQbYphEHxicfvA25rxm0wpjiBKrl6no64c431xUAmtywWVHcke20DpgE
+         8BSVPmJ8xRyymDDgztlC1lGUpVdnqqowP+INwpFZzlqJ6+/5ejtWEYzTPh4zx7PZX4Fm
+         z3jCOidw4XM+j+gTfNYyTUIpW9g0ZCI1o5Rng92V1y4M6x3L80samGDufmO7Fj5MClSz
+         XVIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783076393; x=1783681193;
+        d=1e100.net; s=20251104; t=1783076954; x=1783681754;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=90otGYM9YNogT3/612Z38WIGOFh0NDbrJXj/gkAcc4M=;
-        b=CfyP6mpPllP2IEvPFk0Ph5NmKiWM7WiUDOSI1b2M4Kef28F2/L7RgET2zyvHc/Sdqb
-         a/Ey4XaNUpBiXRq76A0R/hC/I772QLdmMMhEtE7f5SXNvm3K+O5XMI8R9ehzSz940UI/
-         iD3Zxeou049jn/aUAtxy/TwW+Qt19Pz+0tUJlRmcFxwtZQqvTgHm1pM7bRz8+ukynHWl
-         q1Dh1Qd4u6D4wLD3aMf7FZHj3pVl8qDpKbCpZHq4rTHwK0XGi3D5YqQ19rIodH0RrUSf
-         K3bRAhGXv8IY9hTdy7u+/UJyCsrKGh+f5zHs2r8krIg1tzaueBjQfJj1CnAMW861HvYs
-         /Ztw==
-X-Forwarded-Encrypted: i=1; AFNElJ+WSPhg3o/nXg+suCdS1sD+qHAIClYoiYQBLZmDB1O3vqXPq89HIk+IQZBhZHS8JvTuq2zSRw8WKaqh/3WQ86g=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1uCTMeink3IP3XJZhMmm/jP+DPI8+q1NIWgKnnSer7LI/Mc4i
-	8mA2y828oydyUfp2WCH35s+S7p1pzOMi608vvkXoxHff8NjGHeoZUJiJ9MLIf5F3olAOFKwD8ei
-	97qJKXwOSzJEqa0Vh3O7mDDa5X4i91adPVVbPCognk1NvJbwUoHYb3QnC5q/Gin+lIkT3yoBh70
-	/sg8LXEzqUHr4BNF+wNArqH2xyawDw1NIGsxR6jhIZS8EF
-X-Gm-Gg: AfdE7cnsKruKY7542zBPfIuQwW664BaGbhNv1XgYjeJt4+VXOYZVC5u+o28uMX9Gig7
-	FTvRyLswcsaAx9rgTKQOSawaSoCaGH6PI6k3IrensJ/yxZlFSGaEWmFLUVcy35t7O6sT1Hu/7Zj
-	TN70wdNfYTr/GbFQtsVIM3R2VYgcBFZnm25mvAYX/BOwJY/lENAkbj8EG7gKzbGtFEAg==
-X-Received: by 2002:a05:620a:4016:b0:92e:6a43:4768 with SMTP id af79cd13be357-92e781cde5emr1264294485a.11.1783076392679;
-        Fri, 03 Jul 2026 03:59:52 -0700 (PDT)
-X-Received: by 2002:a05:620a:4016:b0:92e:6a43:4768 with SMTP id
- af79cd13be357-92e781cde5emr1264290485a.11.1783076392257; Fri, 03 Jul 2026
- 03:59:52 -0700 (PDT)
+        bh=Uh7HGlG5BHoSUsvlsYaBrF++hCjSyZH34tmkueyHFBM=;
+        b=agtzspoBAv8u1QF/KKj+cnXR7DN9CkxMVQ+3HO+PhhWqRtIfZWOJ3GWXRbc5Gmmyb0
+         CiKMHffRI5bxoTCwXralcQKvjNHmA3L3OZTMuIh9wJzclV9K/LshPKxDnO0kO+Afj5hC
+         oMKkHhqq7s0JlXydhHUMa7jzotKEeBRnSb7Jx2w0ij3zoFi/vQrMntLOjCIBN9brVnq7
+         vRSF3d/X/OLev+wZNjg8xnUhIh3wIXH5lZLILodoCDpJCM9zYnQ/LKko64xV8l4ginFP
+         hHUubGUnHJMauo7YQf4ebOavz4eRv2+snJ5eCyXdLzeQNQk3BftOCZRQbhjBlE/y5mn4
+         o2Pw==
+X-Forwarded-Encrypted: i=1; AFNElJ8hdrXUxaI1Pmdb5gyT2CvMNAhpoiuqU46GqE/HhdjzidkW5MzSlkv6oLv3gliTz7+qr1P8NTpo1gigoOa+XSI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxO3Dc3wQlW3WPSLOezZM0rGXaxYjKyYKGaY7AZ2y0Qu/pyHfhD
+	YllPh3FwotORFfDBqA1as3fOExVmDei7aTwi+A1FUtGjgWifNg8NwkIZVVlWs+Hrcwl8XcUJUp+
+	bWIk4bYse8sEYM82Gd2YED249Z9h431zD5vc4LtMg2pDZaoAFFp/Q54aADkIdk1XFcEIWmDBNAs
+	Ks3io5ITM9S2/KiGRYfmq44ypLcYJzKt6+GaN2ab7H6xbB
+X-Gm-Gg: AfdE7cmA+Im1t2PeJwBCUBKAh+fNxSgKM4+Ic8SUMscaBNPHKCd5zIw68jv6oJaCPB8
+	x6vA4pXhJNZXRdxbK5Qc3vlbhJ+SuudTclJzGlv/pfWqqGMOJ3WFEeE5Gs3BmUBASq64b1r7yul
+	g3C78uHUFi+QIOGbNg6RrEV2HlgZAYhLr7/f8QSE+ohxLyaVhr7l0pxCQbCXFFjn1sPw==
+X-Received: by 2002:a05:622a:44:b0:51c:24c:59de with SMTP id d75a77b69052e-51c26b629eamr143143311cf.72.1783076953389;
+        Fri, 03 Jul 2026 04:09:13 -0700 (PDT)
+X-Received: by 2002:a05:622a:44:b0:51c:24c:59de with SMTP id
+ d75a77b69052e-51c26b629eamr143142551cf.72.1783076952684; Fri, 03 Jul 2026
+ 04:09:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -118,20 +118,20 @@ List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260701025732.66330-2-ltao@redhat.com> <akSOb1_1tcJvFyda@kernel.org>
- <CAO7dBbVftLUhd2qrh7hmijTB3PEPfZAhykCGqEfrPoOcSrrj-w@mail.gmail.com> <2vxz33y2j4mi.fsf@kernel.org>
-In-Reply-To: <2vxz33y2j4mi.fsf@kernel.org>
+ <CAO7dBbVftLUhd2qrh7hmijTB3PEPfZAhykCGqEfrPoOcSrrj-w@mail.gmail.com> <akTsE_jYq-GtXcpF@kernel.org>
+In-Reply-To: <akTsE_jYq-GtXcpF@kernel.org>
 From: Tao Liu <ltao@redhat.com>
-Date: Fri, 3 Jul 2026 22:59:15 +1200
-X-Gm-Features: AVVi8Cezbo0yX7OHAq34QhJe08uT7CxY47RNCIsfCYAyC3SXHTFCS-ZJgPFpSss
-Message-ID: <CAO7dBbXBc4kvE2J09EhBs+MYpcJOV1UdNnSG=5RqcUUqimU5Qg@mail.gmail.com>
+Date: Fri, 3 Jul 2026 23:08:35 +1200
+X-Gm-Features: AVVi8Cclc4CZSlkWyFCrDTmGWrXtXO513XB-yjh4k4HPtk_zt3VKjRYaC6ARqq0
+Message-ID: <CAO7dBbVoppy-1AY8paE8KBb93UubhBHBhvsgjOm0Hnbxiq4byQ@mail.gmail.com>
 Subject: Re: [PATCH v3] riscv: Fix a NULL pointer dereference in machine_kexec_prepare
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, pjw@kernel.org, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, alex@ghiti.fr, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, kexec@lists.infradead.org, bhe@redhat.com, 
-	zohar@linux.ibm.com, roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, 
-	eric.snowberg@oracle.com, linux-integrity@vger.kernel.org, 
-	Markus.Elfring@web.de, kernel-janitors@vger.kernel.org
+To: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	kexec@lists.infradead.org, bhe@redhat.com, zohar@linux.ibm.com, 
+	roberto.sassu@huawei.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, 
+	linux-integrity@vger.kernel.org, pratyush@kernel.org, Markus.Elfring@web.de, 
+	kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Action: no action
@@ -139,7 +139,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
@@ -147,9 +147,9 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9878-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9879-lists,linux-integrity=lfdr.de];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_RECIPIENTS(0.00)[m:pratyush@kernel.org,m:jarkko@kernel.org,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:linux-riscv@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:kexec@lists.infradead.org,m:bhe@redhat.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:linux-integrity@vger.kernel.org,m:Markus.Elfring@web.de,m:kernel-janitors@vger.kernel.org,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:jarkko@kernel.org,m:pjw@kernel.org,m:palmer@dabbelt.com,m:aou@eecs.berkeley.edu,m:alex@ghiti.fr,m:linux-riscv@lists.infradead.org,m:linux-kernel@vger.kernel.org,m:kexec@lists.infradead.org,m:bhe@redhat.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:linux-integrity@vger.kernel.org,m:pratyush@kernel.org,m:Markus.Elfring@web.de,m:kernel-janitors@vger.kernel.org,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_SENDER(0.00)[ltao@redhat.com,linux-integrity@vger.kernel.org];
 	FREEMAIL_CC(0.00)[kernel.org,dabbelt.com,eecs.berkeley.edu,ghiti.fr,lists.infradead.org,vger.kernel.org,redhat.com,linux.ibm.com,huawei.com,gmail.com,oracle.com,web.de];
@@ -165,34 +165,33 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 7F56A7019B5
+X-Rspamd-Queue-Id: 59CFF701B1B
 
-Hi Pratyush,
+Hi Jarkko,
 
-On Thu, Jul 2, 2026 at 12:06=E2=80=AFAM Pratyush Yadav <pratyush@kernel.org=
-> wrote:
+On Wed, Jul 1, 2026 at 10:34=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
+ wrote:
 >
-> On Wed, Jul 01 2026, Tao Liu wrote:
->
+> On Wed, Jul 01, 2026 at 04:58:09PM +1200, Tao Liu wrote:
 > > Hi Jarkko,
 > >
 > > On Wed, Jul 1, 2026 at 3:50=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.o=
 rg> wrote:
-> >>
-> >> On Wed, Jul 01, 2026 at 02:57:33PM +1200, Tao Liu wrote:
-> >> > A NULL pointer dereference issue is noticed in riscv's machine_kexec=
-_prepare,
-> >> > where image->segment[i].buf might be NULL and copied unchecked.
-> >> >
-> >> > The NULL buf comes from security/integrity/ima/ima_kexec.c:
-> >> > ima_add_kexec_buffer(), where kbuf is added by kexec_add_buffer(),
-> >> > but kbuf.buffer is NULL
-> >>
-> >> This should have a proper call sequence. Now the root cause is
-> >> obfuscated.
+> > >
+> > > On Wed, Jul 01, 2026 at 02:57:33PM +1200, Tao Liu wrote:
+> > > > A NULL pointer dereference issue is noticed in riscv's machine_kexe=
+c_prepare,
+> > > > where image->segment[i].buf might be NULL and copied unchecked.
+> > > >
+> > > > The NULL buf comes from security/integrity/ima/ima_kexec.c:
+> > > > ima_add_kexec_buffer(), where kbuf is added by kexec_add_buffer(),
+> > > > but kbuf.buffer is NULL
+> > >
+> > > This should have a proper call sequence. Now the root cause is
+> > > obfuscated.
 > >
 > > Sure, I will attach the stack trace in v4. Here is the one:
 > >
@@ -259,39 +258,105 @@ ght
 > > I'm not sure why it added a NULL segment, but it is no harm to add a
 > > NULL checker here in case any other scenarios similar as IMA.
 >
-> From my reading of the IMA code, I think they do so because they don't
-> want to add a buffer to the kimage just yet. This is because there can
-> be IMA measurements between kexec load and kexec reboot. So they use
-> kexec_add_buffer() to reserve the physical address space, then they vmap
-> the destination pages in ima_kexec_post_load(), and then update the
-> destination pages directly via a reboot notifier. So they do not have a
-> buffer copied to the destination pages at the time of
-> kexec_add_buffer().
+> The mission oriented purpose of kernel's git log is to be a quick
+> checklist for bisecting bugs for instance. You have a dump of details
+> there for a transcript. Now you should do rationalize that because how
+> can you otherwise trust your own code?
 >
-> Now all that is fairly convoluted and not very obvious, but I am not
-> sure if there is a better way of doing this off the top of my head.
+> Here's one recent example from me:
+>
+> https://lore.kernel.org/linux-integrity/20260509185108.2681198-1-jarkko@k=
+ernel.org/
+>
+> This is IMHO way more important part for a bug fix like this than the
+> code change itself.
+>
+> It's the "engineering part" of the  equation.
+>
+> >
+> > >
+> > > >
+> > > > Fix this by simply adding a check before copy.
+> > > >
+> > > > Fixes: b7fb4d78a6ad ("RISC-V: use memcpy for kexec_file mode")
+> > > > Acked-by: Baoquan He <bhe@redhat.com>
+> > > > Acked-by: Pratyush Yadav <pratyush@kernel.org>
+> > > > Signed-off-by: Tao Liu <ltao@redhat.com>
+> > > > ---
+> > > >
+> > > > v3 -> v2: Add fixes tag; Replace "reference" to "dereference".
+> > > > link to v2: https://lore.kernel.org/linux-riscv/20260627222602.2359=
+4-2-ltao@redhat.com/
+> > > > link to v1: https://lore.kernel.org/linux-riscv/20260529032739.1326=
+4-2-ltao@redhat.com/
+> > > >
+> > > > ---
+> > > >  arch/riscv/kernel/machine_kexec.c | 7 +++++++
+> > > >  1 file changed, 7 insertions(+)
+> > > >
+> > > > diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/=
+machine_kexec.c
+> > > > index 2306ce3e5f22..afc68f6a4aa1 100644
+> > > > --- a/arch/riscv/kernel/machine_kexec.c
+> > > > +++ b/arch/riscv/kernel/machine_kexec.c
+> > > > @@ -41,6 +41,13 @@ machine_kexec_prepare(struct kimage *image)
+> > > >               if (image->segment[i].memsz <=3D sizeof(fdt))
+> > > >                       continue;
+> > > >
+> > > > +             /*
+> > > > +              * Some segments (e.g. IMA) reserve space but have no=
+ buffer
+> > > > +              * loaded yet. Skip them as they cannot contain an FD=
+T.
+> > > > +              */
+> > >
+> > > This is destined to rot over time. It also adds up also potentially t=
+o
+> > > the backporting effort while backporting to stable kernes. And most
+> > > importantly. Please, don't document every other null check.
+> >
+> > OK, will get rid of it.
+>
+> general rules of thumb i personally follow usually:
+>
+> 1. features/improvements: can be a bit more eager with comments
+> 2. bugs: you really have to have rationale for having a commnet. E.g.,
+>    mandatory SAFETY comment in linux-rust would obviously qualify.
+> 3. both: if you add a comment are you sure it won't rot over time?
+>
 
-Thank you very much for resolving my confusion! Now I understand it
-much better...
+Thank you very much for providing detailed guidance on code commenting
+and commit log drafting. I really appreciate your help with those!
 
 Thanks,
 Tao Liu
 
->
 > >
-> >>
-> >> >
-> >> > Fix this by simply adding a check before copy.
-> >> >
-> >> > Fixes: b7fb4d78a6ad ("RISC-V: use memcpy for kexec_file mode")
-> >> > Acked-by: Baoquan He <bhe@redhat.com>
-> >> > Acked-by: Pratyush Yadav <pratyush@kernel.org>
-> >> > Signed-off-by: Tao Liu <ltao@redhat.com>
-> [...]
+> > Thanks,
+> > Tao Liu
+> >
+> > >
+> > > > +             if (image->segment[i].buf =3D=3D NULL)
+> > >
+> > > if (!image->segments[i].buf)
+> > >
+> > > > +                     continue;
+> > > > +
+> > > >               if (image->file_mode)
+> > > >                       memcpy(&fdt, image->segment[i].buf, sizeof(fd=
+t));
+> > > >               else if (copy_from_user(&fdt, image->segment[i].buf, =
+sizeof(fdt)))
+> > > > --
+> > > > 2.54.0
+> > > >
+> > > >
+> > >
+> > > BR, Jarkko
+> > >
+> >
 >
-> --
-> Regards,
-> Pratyush Yadav
+> BR, Jarkko
 >
 
 
