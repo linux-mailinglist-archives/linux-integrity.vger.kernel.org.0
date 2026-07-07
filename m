@@ -1,203 +1,200 @@
-Return-Path: <linux-integrity+bounces-9896-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9897-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id bGMWDrseTWrRvQEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9896-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 17:43:55 +0200
+	id Mc+wE25cTWqdywEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9897-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 22:07:10 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BA1871D744
-	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 17:43:54 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9712671F79E
+	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 22:07:09 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.com header.s=google header.b=alxOoBbm;
-	dmarc=pass (policy=quarantine) header.from=suse.com;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9896-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9896-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dkim=pass header.d=ibm.com header.s=pp1 header.b="MpGf1Qe/";
+	dmarc=pass (policy=none) header.from=ibm.com;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9897-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9897-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 931A430A7AE8
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2026 15:39:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 44AAD30134AC
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2026 20:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C4E433BA7;
-	Tue,  7 Jul 2026 15:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D8323B27FE;
+	Tue,  7 Jul 2026 20:07:04 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAE342F6F2
-	for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2026 15:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9F63DC850
+	for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2026 20:07:02 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783438740; cv=none; b=ofLU+UpZ399iy9S8DspPDzMXz7PTyXBz3dceSIn63GaBj5QTM8zcrjJq64JgRWYDgS5CGhV1fA0Ak1Zqq1bzvbKvg6A1jbZpS5+YFZ8hODZMukWwRV/1xhDhGnlczsftSqgZcbWHHWj/bpkvn1M3Iv8S72tZzxAa0gQpWNodi9k=
+	t=1783454824; cv=none; b=A68DLFiwY86JgRtG6q8JSZ1m3MRG3QHPhlZZJzf65wniKJZHOiuaqAzx6lLjgE8gajLpgFUYBnYgUksdPFk4VnTEhHBvZsbB5zqbsMhQgfW0Yj61MXut1S0tqbTZA0HOEX/B/xouOm/tPmocZSwhdVH2lrSkbE3s5iUOi7ghklM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783438740; c=relaxed/simple;
-	bh=WlxI6D6l0R5RgwB+XCAILtOwfVKifVrQwkT3eMDmrR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mIBw5B6KZ8yxERzyRzuReQaVRcJsM6sEcQvLUP7rxeb1ek5hiPrW+/rBRpLt+cu1eBLCt60S3RIlE4cM7EJdWKF2LWEECufALWNhybGcZGnew4EIYuWh+CXhNL5DOhUNYY9rm9aRcI/C3UuXM5InkvKa6y8PfgOJJYlVf9ALzMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=alxOoBbm; arc=none smtp.client-ip=209.85.128.51
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-493b27c7451so9552285e9.0
-        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2026 08:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783438737; x=1784043537; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zo+1xXtjNgJHcWwxARuTM18XLwUMS607PmqY6oQlf94=;
-        b=alxOoBbm3yE7v/C/+wdfPXGx59/B9HpE2+KogRvtm514wDoSe3RvFCnpneguOgfbUy
-         NOeXPe+mbwoczw8AjVGyHEeLqxeCO8pH3whmpl6Ej2kqPiH3/DoS1OKRyhxoreFsx1FJ
-         ODOuzyvk0JKaT1RvQRvVeo5WB2Prc4+xxOhhvNQMCSJWKW91efoShT7RgAR97blhsn9V
-         +qNTHbMl7C2b4/kUeWkGYl5RINC8oz08P+q82I6CVEF+jKUd9WIKQz1PPKUhzZ9uAYgR
-         MHQNMHrvUcjZOj+xPXu4qP6j0gs2vf3d9L4IEx+XlqNJBftEp9z77m/D6ekKuGuSIPJ0
-         ef3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783438737; x=1784043537;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zo+1xXtjNgJHcWwxARuTM18XLwUMS607PmqY6oQlf94=;
-        b=Keuh8ebSXz2AmJ27JKraaFXCWtTBFy203ceqrhK52et1yD2Pg/a8SoAcWJQCicMPKM
-         H5unLx0lLZ9xcCZ9FRxjhdxHlfkgUm4rybx7mP4U1HkZyvaq92BjBGMmGY2kgfn9ux+W
-         5TGrcbqlwaDjymo7/KLd+v/90KK9MesrgnKxFYqnE6QlyTQR1Xud9p8OjWNINI427Vss
-         tkxHl5vDIi97+WhMbzZ7GqjHQxXbmjVnEY2cu9EWyc09y1RHm/iU+dbkoQh7kLvW9mAu
-         Vyf0hCHEW+1JvZqslMy1scgidsjLPtoOxfsVhR6k9iZaG4vr9Tql0xMFcjkUHDIOgv2h
-         1Vmg==
-X-Forwarded-Encrypted: i=1; AHgh+RpkVOyDjGaUseHW4Q9CN3TWs+PaEb6YArYCMdOq5+wCo9DR3aiXCwcUm3FOd/F+usBcLO3Xj6wPUklmYxvv8WY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAscshci8mDIakcXMlmKseigVPIHlaBXnVJXhnJ9QRtOC0FAqR
-	AOOpK+v3jIQPtVao2EYRRVurhDSvm3HeLQEpF9Ef6o+vsTx0uT04ziFdnX5sCSWyR6A=
-X-Gm-Gg: AfdE7ckYHoxGkhQdBuLrRcPviLCG6Vq8tPJdF05+nRv9ApKy0Q/+CWGQeA6pzoPkhgv
-	yL1EtBhv/LiUBcFJ/pmFrZ0Rl6+IKJve5M+sFgc6aRrEcfGrigthUeAzsPySB+Y23jiizhrL7Tx
-	PUVnFmsrv8p+8kQuHPwew1/jJxkMx/Z5+C9ogsUNhxIPOASm6S1zZqrINMZI2UL22ysk1RkbVDe
-	XPSKK9lbjzKoDBK2eUKPOWTMz9oY/WBlo1LCdb7uvdQbBdjBsqJ6hRyo/QNrsWz5mIfPxhCkOYA
-	FsRlwUHrLCTMHMEpJVWjXZ6aji4vmQjLxbx1HicYx9S3bTDd8DXsaqfCqcG5AxVDbJDOkEUgFd4
-	+vAmtqpIueenpNHKmNnnuYvMcB+J5rm/wnSeeRckZxB/HS2fC4jPz+3C2ia0PIjN0pVpulgJHdB
-	VBWXBc9myPtqOJj3iLERSBDh50h2hK6R+vhZAeZ+4vbxyw122bev8BKh72ecoPzqxlxw2gvax3s
-	KjBg9qaF6km9g==
-X-Received: by 2002:a05:600c:8010:b0:493:d117:18a8 with SMTP id 5b1f17b1804b1-493e1011e8bmr32534765e9.9.1783438731805;
-        Tue, 07 Jul 2026 08:38:51 -0700 (PDT)
-Received: from zovi.suse.cz (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0f5b811sm101111785e9.13.2026.07.07.08.38.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 08:38:51 -0700 (PDT)
-From: Petr Pavlu <petr.pavlu@suse.com>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Petr Pavlu <petr.pavlu@suse.com>,
-	Daniel Gomez <da.gomez@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>
-Cc: Xin Li <xin@zytor.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	David Hildenbrand <david@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Aaron Tomlin <atomlin@atomlin.com>,
-	linux-s390@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] module: Limit ELF includes in linux/module.h to uapi/linux/elf.h
-Date: Tue,  7 Jul 2026 17:37:07 +0200
-Message-ID: <20260707153819.4172541-5-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260707153819.4172541-1-petr.pavlu@suse.com>
-References: <20260707153819.4172541-1-petr.pavlu@suse.com>
+	s=arc-20240116; t=1783454824; c=relaxed/simple;
+	bh=8vx93YVi0+k1SN6fODmMcSf5lbT0wUFlJUEHZaC/7C8=;
+	h=Message-ID:Subject:From:To:Cc:In-Reply-To:References:Content-Type:
+	 Date:MIME-Version; b=ate1qLmzuoWvS1F5K1hW2ZM4dF6hENcXdEk9fyM4iH7pmMy4a5xL2E872TSb9xvystWrYKUnz2ZizLMKknUTIPD7rD4KSrx0uwMIDLOxa2boSbSBY5ySkLXYTI2UZAeJ8RlAR/PihzmdQt02rp8P1+OGmG49gfbtvsSBEpJloec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MpGf1Qe/; arc=none smtp.client-ip=148.163.158.5
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 667JIwAd1146627;
+	Tue, 7 Jul 2026 20:06:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=NeTLIX
+	XOExg5bXyjRxJWYHfyKrDekqs8cb3hCttfR58=; b=MpGf1Qe/WufhbCdfm3Vz01
+	IgJvWzNfctg0kUrJEcBqKOD2+IC9U6uAE4J8mHxSdnpA/eeNiTwoo+nq07TAQVei
+	PSMP9YqeIBequzdR0A920JSgA2yrNbjSB/zTKbg6pe9j5jynJzV1dpBY780IIWXr
+	n44oK9KMaqwJBH32sIM4jBfJH0NYUocEnFCj1FlmEUOEXcX9FjnFOgEeL3Gk5Wtp
+	nmeTQeK8LKAir1F6INb/g4BBzMQxf5v5GwRrya1R/8O+Gesk1xJI6I5ydOehPDyX
+	GfqZAxufJB8qO+DIML3/mMhdq08dNHrgrW4Bt6+bxD1a4TB29KXc3Im91id/j1Qw
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4f6qknguv8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jul 2026 20:06:51 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 667K4gYm031893;
+	Tue, 7 Jul 2026 20:06:50 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4f7f6y46hj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Jul 2026 20:06:50 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 667K6nGC36700816
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 7 Jul 2026 20:06:50 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D25F95805D;
+	Tue,  7 Jul 2026 20:06:49 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 38B1858059;
+	Tue,  7 Jul 2026 20:06:49 +0000 (GMT)
+Received: from li-43857255-d5e6-4659-90f1-fc5cee4750ad.ibm.com (unknown [9.61.134.9])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  7 Jul 2026 20:06:49 +0000 (GMT)
+Message-ID: <80faa6f4928ab77604e1ce76ef625a5885e08c82.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 2/2] ima: measure userspace policy writes before
+ parsing
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Enrico Bravi <enrico.bravi@polito.it>,
+        "roberto.sassu@huawei.com"
+	 <roberto.sassu@huawei.com>,
+        "linux-integrity@vger.kernel.org"
+	 <linux-integrity@vger.kernel.org>,
+        "dmitry.kasatkin@gmail.com"
+	 <dmitry.kasatkin@gmail.com>
+Cc: "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>
+In-Reply-To: <801419f4424e106dd2fe66d8291a2343708245ba.camel@polito.it>
+References: <20260702190403.5844-1-enrico.bravi@polito.it>
+			 <20260702190403.5844-3-enrico.bravi@polito.it>
+		 <002330a72cdec8eaa554fddd5b8d428245ed83e4.camel@linux.ibm.com>
+	 <801419f4424e106dd2fe66d8291a2343708245ba.camel@polito.it>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 07 Jul 2026 16:06:48 -0400
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Evolution 3.58.3 (3.58.3-1.fc43) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=Q/XiJY2a c=1 sm=1 tr=0 ts=6a4d5c5b cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=Y2kxHp48a9q4ObHHh6gA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: _7-Yg2nVJfywxyUd0Plr6QQvQdUG9iEQ
+X-Proofpoint-ORIG-GUID: 3mvKLQdsNl6AGh5qXvh1hDDfZWY2fQcb
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzA3MDE5NCBTYWx0ZWRfX/W1cIX12+k9x
+ 2qdzUmvpNwGJbMNas333/LX7o6eimyeFsEnEVnWC1McbwYzD8RMjOOpI/m8e5zhhfcLiumxpTC2
+ AGnbiHac9zjxfdBuP77fjNHmP00U0go=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzA3MDE5NCBTYWx0ZWRfX68t/9OmpbvCJ
+ e2TzwoxDrEY60BY9fuM3tm3wcsuMj2hjQV6/wDhch2fjjtqkuqZfr7IAAyAz80ZvLRoXOHsIzBM
+ Is9MrgqR+Cdgh7YMdqghWqCJOFIDkuWJl9n2dBqch9X2CudUsLrnDqbGKMbm9rVndUY63l0ajWc
+ p7nMaIQ1Yy3kzGmIMzYM9MUD2dNXGzK/d1+XbMcVMf3rPPD15wW05ZIxtEWItb/pyx0ziJMGYZK
+ PvynKT7R98unPn8mQqWZAnBrdRKIRFnBJ+qNuM2ucZgwD5p2Dish/Ou90reUW/ZAY+Q/uUzaTU1
+ 8fYzMnrp9Cy0cNTI2QUaS43nJEtU0O+3GcdwR8wb67t6qbw868JOMTu5BiWCHjPoswQWE9OxmYy
+ iKTrYRgguepbnPSb82a28soUi9wCEttGoa/8VnxP8MY0jdBjB4QetVQcDIsMLfg6/srBHqc3DeE
+ xD+xy4mAVvWDGKeketg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-07-07_05,2026-07-06_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 impostorscore=0 spamscore=0 phishscore=0 priorityscore=1501
+ bulkscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607070194
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
+	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-9897-lists,linux-integrity=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[29];
-	TAGGED_FROM(0.00)[bounces-9896-lists,linux-integrity=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:enrico.bravi@polito.it,m:roberto.sassu@huawei.com,m:linux-integrity@vger.kernel.org,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FORGED_SENDER(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:peterhuewe@gmx.de,m:jarkko@kernel.org,m:mcgrof@kernel.org,m:petr.pavlu@suse.com,m:da.gomez@kernel.org,m:samitolvanen@google.com,m:xin@zytor.com,m:hpa@zytor.com,m:luto@kernel.org,m:borntraeger@linux.ibm.com,m:svens@linux.ibm.com,m:frankja@linux.ibm.com,m:imbrenda@linux.ibm.com,m:david@kernel.org,m:jgg@ziepe.ca,m:atomlin@atomlin.com,m:linux-s390@vger.kernel.org,m:kvm@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-modules@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[polito.it,huawei.com,vger.kernel.org,gmail.com];
+	TO_DN_SOME(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
-	FORGED_SENDER(0.00)[petr.pavlu@suse.com,linux-integrity@vger.kernel.org];
-	FREEMAIL_TO(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,linux.ibm.com,gmx.de,suse.com,google.com];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linux.ibm.com:mid,linux.ibm.com:from_mime];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[petr.pavlu@suse.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[zohar@linux.ibm.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.com:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[ibm.com:+];
 	ALIAS_RESOLVED(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_FORWARDING(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:from_mime,suse.com:email,suse.com:mid,suse.com:dkim,vger.kernel.org:from_smtp]
+	RCVD_COUNT_SEVEN(0.00)[11]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 9BA1871D744
+X-Rspamd-Queue-Id: 9712671F79E
 
-The linux/module.h header is included by every *.mod.c file to provide
-`struct module` and other related definitions. This makes it a "hot"
-header, so it should avoid pulling in unnecessary definitions.
+On Tue, 2026-07-07 at 15:25 +0000, Enrico  Bravi wrote:
+> On Mon, 2026-07-06 at 23:03 -0400, Mimi Zohar wrote
 
-The header currently includes linux/elf.h but this is largely unnecessary
-because it requires only the base ELF structures, such as Elf_Ehdr and
-Elf_Sym, which are declared in uapi/linux/elf.h.
 
-Replace the linux/elf.h include with uapi/linux/elf.h. On x86_64_defconfig,
-including linux/module.h alone results in 2.2 MB of preprocessed data. This
-change reduces that to 1.5 MB.
+> > ima_match_rule_data() should only be called for buffer measurements, wh=
+en
+> > there
+> > is no inode.=20
+> >=20
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 return ((rule->func =3D=3D func) && !inode &&
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ima_m=
+atch_rule_data(rule, func_data, cred));
+>=20
+> I was thinking that in this way, it would not trigger the measurement whe=
+n
+> loading the policy from a file. If inode is not NULL, it directly returns=
+ false
+> instead of continuing. What do you thing of something like this:
+>=20
+>         switch (func) {
+> +       case POLICY_CHECK:
+> +               if (inode)
+> +                       break;
+> +               fallthrough;
+>         case KEY_CHECK:
+>         case CRITICAL_DATA:
+>                 return ((rule->func =3D=3D func) &&
+>                         ima_match_rule_data(rule, func_data, cred));
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- include/linux/module.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Yes, your version is clearer.
 
-diff --git a/include/linux/module.h b/include/linux/module.h
-index 7566815fabbe..7661faadbedd 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -17,7 +17,6 @@
- #include <linux/cleanup.h>
- #include <linux/kmod.h>
- #include <linux/init.h>
--#include <linux/elf.h>
- #include <linux/stringify.h>
- #include <linux/kobject.h>
- #include <linux/moduleparam.h>
-@@ -29,8 +28,9 @@
- #include <linux/srcu.h>
- #include <linux/static_call_types.h>
- #include <linux/dynamic_debug.h>
--
- #include <linux/percpu.h>
-+
-+#include <uapi/linux/elf.h>
- #include <asm/module.h>
- 
- #define MODULE_NAME_LEN __MODULE_NAME_LEN
--- 
-2.54.0
-
+Mimi
 
