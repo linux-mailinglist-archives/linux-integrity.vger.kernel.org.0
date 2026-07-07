@@ -1,82 +1,82 @@
-Return-Path: <linux-integrity+bounces-9894-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9895-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id lpFmAjEeTWpzvQEAu9opvQ
-	(envelope-from <linux-integrity+bounces-9894-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 17:41:37 +0200
+	id ALTMOkoeTWp8vQEAu9opvQ
+	(envelope-from <linux-integrity+bounces-9895-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 17:42:02 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 802C171D627
-	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 17:41:36 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DA3E71D63F
+	for <lists+linux-integrity@lfdr.de>; Tue, 07 Jul 2026 17:42:02 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=suse.com header.s=google header.b=G1JrFb+o;
+	dkim=pass header.d=suse.com header.s=google header.b=R86JuE7i;
 	dmarc=pass (policy=quarantine) header.from=suse.com;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9894-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.105.105.114 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9894-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9895-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c04:e001:36c::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9895-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 30F763005175
-	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2026 15:39:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DC243307AF21
+	for <lists+linux-integrity@lfdr.de>; Tue,  7 Jul 2026 15:39:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E914430CE2;
-	Tue,  7 Jul 2026 15:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E90BB431496;
+	Tue,  7 Jul 2026 15:38:53 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221D342F6F2
-	for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2026 15:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBA2430CCC
+	for <linux-integrity@vger.kernel.org>; Tue,  7 Jul 2026 15:38:51 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783438732; cv=none; b=CXTeS0Md//rdRkdR6n7C08cvlCEKvK6OmBu0hE1nkXvFnJ02VgRPZSHuSd+MeWDtU2xouw5HFc0SQdNZnN9hnPgKtwiz56abX92ksWxpDrBwWkobvanvQIbDgIAXVs0jFGO5hUjzLOUTNArW50FOSQWzvd3vW22lznLvGGatXqA=
+	t=1783438733; cv=none; b=F5esWyqQP1WJ8FNjPhlMRU0XCLz+MfyxNOC3MnCA7AbuQMHcWBgf5UQiME1bmAloL0nuaHC67F2+j/qnQ+/MKXTYm6OgaHI2xpdtXwXdJelUOd7a4HPPnkKszFDrl4ZE7H5BARJrCxCXOO1ktPzhsofpJ/rDPgPRYsSJmgo3ojc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783438732; c=relaxed/simple;
-	bh=Oe/4C5CNRzZ9YU+v00jSZhbg5LdWqb5vYdjw2GlJdww=;
+	s=arc-20240116; t=1783438733; c=relaxed/simple;
+	bh=gkAPXKFXbOoLtNAqBKO7qS549Qi1Dzx+1+ovFhoFLtQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PMOxiD1biRsg6Q95MFo1uD/qHH60r3FO8VZ47reEFLWdkdJxv7ZG6sUJ3sFw9kUWwZWaVfogs7lrmdBVIzWbl4wReRkzeHlRZvL2/FwmBEUWh5uw0qcD5TTivRz313apTgvb6rGaK3keTEFjr35nSie4vJGDTuVnC7iDUY4XYkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=G1JrFb+o; arc=none smtp.client-ip=209.85.128.43
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-493b61b52b6so32040735e9.1
-        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2026 08:38:49 -0700 (PDT)
+	 MIME-Version; b=K2fOfbOavb9mUMJPHks3nRl3Nc+9XNyAplpl1x7ojeKeuMAwiVz4RHsWm1yxT3s93dTE8RhqO/3AbqTHpL3fuwJry82k1Y8wdL7R7jSFYTI14LR/wtp5rdW43gyX7mITHFRmAdbZvwqJWPezZMMX3IsPYPcJvVed4u1KoTchaUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=R86JuE7i; arc=none smtp.client-ip=209.85.128.49
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-493b61b52b6so32041145e9.1
+        for <linux-integrity@vger.kernel.org>; Tue, 07 Jul 2026 08:38:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1783438728; x=1784043528; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1783438730; x=1784043530; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xdAECnz6XOdm9gtF7oage0nDpTFZQgV5yfQL0q5n2lk=;
-        b=G1JrFb+o6K3b2DQ4aApygcAtsuTlbZ//RZ8NQgCFFEcdCbT3ldUHbRDBV7BnPtt9uV
-         amIGFzJ1n8vaPDUHwrkKlGGk3WEStRjCPWHRTq6wfCvdZFSnw4xyGXQZQlwt4UCjkbYo
-         EG+3T8n8+zp/EfAutVDqG4s/AO2nYEo9NLn+YiLXvVYvIpBe2uLJ/26V2Pgyjo20CcTv
-         Mg9TJbQTw8ga8Zop/C2M29xCiS8IehfpVnqoLu9vg66W+EC21tcwqSwcj+hggHGkAytT
-         Kyr97wP0u8mno9kY4/+1zBtiDLFIRQ6u+ZlCLo13wedVnp3TpP0TQlpuK/OzEVxZZ+F/
-         TFag==
+        bh=vOu1MKmEYCbchrybWpjcqmihonsI67IBicqKFbwWsc8=;
+        b=R86JuE7iMp+pe9TRfWpgbxlD+2LwCFrwojttgNNChu371QHvC0r/Ris1eMX0yk5G9d
+         8ViWxkM/wi4+4u6C+FYfT1TZCvknxYI+CtOOo49uvkSQVX7vu12y9DBTTDr3OvCvHwuQ
+         ZVBscPOurQ+zEDFWjggRpHPtpUNAqpByr6DM4FRPwmMJVPrq02VGHdJMBC7i6q1xEXY+
+         Z2mh7UMr4DpgSo+H0n66sqmIZyVzUnOml1k4BW9ym7RL+Yzunw+DvbFXsWDW3Idd29Hi
+         pj9RsiFeVxs2T1B2fvCfcswPXg2tg0BSIyVhLiiJ1WvqBD1rM+oecl1Jj08l/s2S1GDd
+         +wmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783438728; x=1784043528;
+        d=1e100.net; s=20251104; t=1783438730; x=1784043530;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=xdAECnz6XOdm9gtF7oage0nDpTFZQgV5yfQL0q5n2lk=;
-        b=YLMhSLK6FVNqIs/dnUPRGl0uv2SMxTKwf25UUI+60vqIy8ehkgY7CAZF7IbP8qzY9x
-         08NavD8LxFATv8TnibGYg/ku6jHYCFfOuV2eiJhdKT7bTDduSKo1qPHET9F7i4AMSJot
-         H8c+D68HE+iL+wFS99ZpeG3Zw3kVLkT1rvZjrlGI0HCAwfy4pFajBZFLDvt+hCjwrMlH
-         HnjeSQGb7dJ0LdZwiROZHI0q9nhBybIPy4MOIluxv/8NxFav0ftJtsdt3/B/oQ9QT4cb
-         gyMWIuMHT2sWilVUtTvbXi/nVYZXbROEo3gArwm2g7lCMMV688pfm3ow5Ae8hhPzujkm
-         mPwA==
-X-Forwarded-Encrypted: i=1; AHgh+RrBzcMKjheXpTSQObdR3bFAvdZwjWe/Tb/7kRhjf6xJu9KDvS7v2mPpNnjfkWUcrkgY3GTYv+t9p3uU1LVQMK0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxm5tpjq34cREGXDG49GSFi/ynEJAbh+PhspKmR8uXwWpqiBBIL
-	Ob9PmdsrzEzwUVGXPUyd2tLDP4I9fJwzJz7uZ2n9OM6Vmml6Rp62HG57c1PybFOW0+U=
-X-Gm-Gg: AfdE7cmM3w7JQG3J6YANarQ/ciRfhp+VItsIBcnh+UweYkzy8UVDqCDIKFz7IaS2qXl
-	bAzv0Nhbd1yNlPfgNmes/IUF1zzmwCXfhriW2g+SFsFMQvf8Mf2fQmb0hnlIhrMai+Y3GHdqQLm
-	qc/HT9rd4uKObsFbybijBC1AL+suBzLTRxR81cyCZNWHgxL9l0VEUbIfp3dwdqqRjhwekKqivUm
-	t73MhpsUsgOamwrdqvBXG2mobYLspEyG0cfmoVx+UTtk9Gz/9jEk3GlIMdP6KgNMgIPWG/nKh1o
-	w+isGwcxvB74zHWCiyUE9ahVgUbz2+8xe4D+bV6LskgN+v7wCya/VHAEUhItgNtc6Yt7zqUDXFX
-	wPxLwuixQu9Wp/gLUUJQmeenoXh74JdketZFoMoLIWFxEdCxscbDnOcAqNqJMgRc0KMELBAb6vH
-	4Hp0aNSf1jV48F5tzb9Xkhm9p85UzIJcOCoJ11Vangv4IfmrL/vMpzVSSYtLKuaL0AbV88h0Qoq
-	NqBE2XjgrKbHw==
-X-Received: by 2002:a05:600c:3514:b0:493:b7cb:c5f with SMTP id 5b1f17b1804b1-493df05f8d4mr59362085e9.11.1783438728542;
-        Tue, 07 Jul 2026 08:38:48 -0700 (PDT)
+        bh=vOu1MKmEYCbchrybWpjcqmihonsI67IBicqKFbwWsc8=;
+        b=Ued/6/HDo7GOpWFm7BAgCtKLd0GOE3v3eXbUF+SUQJTMChNWjlciO0FZZReRdlYxjr
+         OmDWlrhK0tWYGL5GJ3P4zbVMXw/qMhE47n5SGunyDAYgBz0XTGWu32YsBgJRyFCoOGc6
+         COTSFAIwVmFCQLEFiJI7YRvlxGrCLnlu+3OPMIZfD7iQHqLDW6jjUR5iBmK7Ybyxq8YH
+         jlVrs1e7WPqxeyMM+ZwyRo6yJg0vLNucrYU/f/Y2zWBCP9PKVQxx9aTf5aHSfNEm8Vzm
+         8BC82LWmajMZODsiTMHnyq//3OhvSlKuF1quc7iAhcX1Nps9zte3xTc4G6VjSou+ZnjB
+         POmg==
+X-Forwarded-Encrypted: i=1; AHgh+RqSO7bXA7iVmEiLt3UC0P2aNs8DtgNaa28KD9/1d+h/TMevj4R4jYKuq8UrxTdowTjpjUzy/eGGMfH8RLw1P8o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3Wrq93wZM3P0Ng0HPKIphKHdlIM6ahYT9Ewd+RfU6JOVIblC8
+	JF5LBYmuEqBTRSbtoTvAcUpzjoxAiQLLdPAmgzVVm5cEVHt6FFwNDuw3jozzKk3bYHs=
+X-Gm-Gg: AfdE7cmBuAJ6cRVMhBlQm9I5dJsK9TdCgrxWtESVzjKZD8DPn2z15sFmSHGkI1scVr+
+	73UQcd2oi7umbYHZfJTLfskijugK91ZSYjPXnDDpE+tAME0p6ObnaZSjhNtbtXXCIRCZC4cZNhY
+	qO8AZhEL+JF4jleMSMnIrl1Muc+4Eg/DqMqbp/YiwaANaobl7EEslHyS883ugh61d4STqwusduQ
+	QE/5G5I2J/22MYouEPC6+DuVdIYGBNe3M8MmL3b1UgXFGefltqqulom2EqwjZdt9Dj821v9UanY
+	JgVoht5/j6OA7G+o0I6KLxF71sQVQpaPL8uYcso9bFkTCN0frXIq92Jp6qjhYjm6E7zYv7aClUU
+	z9Y3HPj5CpwLWgfJlhOHYzuvNHRZLKZlu9AcbI2GOZfjno2ZcwgI0MQwgmNeV5FS/mELanty7+V
+	R1j7tKjVObR+S6RItamNAvfPPnA76tAfqebNGorSfy5VhM5sENYLZG74n1CjS73BWht+PDf1goJ
+	BmSuN9Ipc7aNQ==
+X-Received: by 2002:a05:600c:a293:b0:490:b7e6:bd1d with SMTP id 5b1f17b1804b1-493df064c39mr42510935e9.16.1783438730221;
+        Tue, 07 Jul 2026 08:38:50 -0700 (PDT)
 Received: from zovi.suse.cz (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0f5b811sm101111785e9.13.2026.07.07.08.38.47
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493e0f5b811sm101111785e9.13.2026.07.07.08.38.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 08:38:47 -0700 (PDT)
+        Tue, 07 Jul 2026 08:38:49 -0700 (PDT)
 From: Petr Pavlu <petr.pavlu@suse.com>
 To: Thomas Gleixner <tglx@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>,
@@ -107,9 +107,9 @@ Cc: Xin Li <xin@zytor.com>,
 	linux-integrity@vger.kernel.org,
 	linux-modules@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] s390: Avoid indirect includes through linux/module.h -> linux/elf.h
-Date: Tue,  7 Jul 2026 17:37:05 +0200
-Message-ID: <20260707153819.4172541-3-petr.pavlu@suse.com>
+Subject: [PATCH 3/4] tpm_crb_ffa: Include linux/slab.h for kzalloc_obj() and kfree()
+Date: Tue,  7 Jul 2026 17:37:06 +0200
+Message-ID: <20260707153819.4172541-4-petr.pavlu@suse.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260707153819.4172541-1-petr.pavlu@suse.com>
 References: <20260707153819.4172541-1-petr.pavlu@suse.com>
@@ -126,21 +126,21 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[suse.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[suse.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[29];
-	TAGGED_FROM(0.00)[bounces-9894-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9895-lists,linux-integrity=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS(0.00)[m:tglx@kernel.org,m:mingo@redhat.com,m:bp@alien8.de,m:dave.hansen@linux.intel.com,m:x86@kernel.org,m:hca@linux.ibm.com,m:gor@linux.ibm.com,m:agordeev@linux.ibm.com,m:peterhuewe@gmx.de,m:jarkko@kernel.org,m:mcgrof@kernel.org,m:petr.pavlu@suse.com,m:da.gomez@kernel.org,m:samitolvanen@google.com,m:xin@zytor.com,m:hpa@zytor.com,m:luto@kernel.org,m:borntraeger@linux.ibm.com,m:svens@linux.ibm.com,m:frankja@linux.ibm.com,m:imbrenda@linux.ibm.com,m:david@kernel.org,m:jgg@ziepe.ca,m:atomlin@atomlin.com,m:linux-s390@vger.kernel.org,m:kvm@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-modules@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORWARDED(0.00)[lists@lfdr.de];
 	FORGED_SENDER(0.00)[petr.pavlu@suse.com,linux-integrity@vger.kernel.org];
 	FREEMAIL_TO(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,linux.ibm.com,gmx.de,suse.com,google.com];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
@@ -153,51 +153,33 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ALIAS_RESOLVED(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,suse.com:from_mime,suse.com:email,suse.com:mid,suse.com:dkim,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:from_mime,suse.com:email,suse.com:mid,suse.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 802C171D627
+X-Rspamd-Queue-Id: 5DA3E71D63F
 
-Several s390 files use declarations that are provided indirectly through
-linux/module.h -> linux/elf.h:
-
-* arch/s390/kernel/nospec-branch.c: s390_kernel_write() -> linux/uaccess.h,
-* drivers/s390/char/uvdevice.c: copy_to_user(), copy_from_user(),
-  put_user(), get_user() -> linux/uaccess.h; file_operations -> linux/fs.h.
-
-Add the missing includes to these files in preparation for removing the
-linux/elf.h include from linux/module.h.
+The drivers/char/tpm/tpm_crb_ffa.c file uses kzalloc_obj() and kfree(),
+which are declared in linux/slab.h. It currently relies on this header
+being included indirectly through linux/module.h -> linux/elf.h. Add the
+missing include in preparation for removing the linux/elf.h include from
+linux/module.h.
 
 Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- arch/s390/kernel/nospec-branch.c | 1 +
- drivers/s390/char/uvdevice.c     | 2 ++
- 2 files changed, 3 insertions(+)
+ drivers/char/tpm/tpm_crb_ffa.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/s390/kernel/nospec-branch.c b/arch/s390/kernel/nospec-branch.c
-index e11ec15960a1..b62da9e81e79 100644
---- a/arch/s390/kernel/nospec-branch.c
-+++ b/arch/s390/kernel/nospec-branch.c
-@@ -2,6 +2,7 @@
- #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/cpu.h>
-+#include <linux/uaccess.h>
- #include <asm/nospec-branch.h>
+diff --git a/drivers/char/tpm/tpm_crb_ffa.c b/drivers/char/tpm/tpm_crb_ffa.c
+index 025c4d4b17ca..af4466cdc297 100644
+--- a/drivers/char/tpm/tpm_crb_ffa.c
++++ b/drivers/char/tpm/tpm_crb_ffa.c
+@@ -12,6 +12,7 @@
+ #include <linux/arm_ffa.h>
+ #include <linux/delay.h>
+ #include <linux/moduleparam.h>
++#include <linux/slab.h>
+ #include "tpm_crb_ffa.h"
  
- int nobp = IS_ENABLED(CONFIG_KERNEL_NOBP);
-diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
-index e6a264c996ce..4fe3ead4a091 100644
---- a/drivers/s390/char/uvdevice.c
-+++ b/drivers/s390/char/uvdevice.c
-@@ -28,6 +28,8 @@
- #include <linux/vmalloc.h>
- #include <linux/slab.h>
- #include <linux/cpufeature.h>
-+#include <linux/fs.h>
-+#include <linux/uaccess.h>
- 
- #include <asm/uvdevice.h>
- #include <asm/uv.h>
+ static unsigned int busy_timeout_ms = 2000;
 -- 
 2.54.0
 
