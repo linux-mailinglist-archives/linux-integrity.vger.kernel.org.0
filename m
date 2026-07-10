@@ -1,220 +1,205 @@
-Return-Path: <linux-integrity+bounces-9904-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9905-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id nurwAm1ITmqBKAIAu9opvQ
-	(envelope-from <linux-integrity+bounces-9904-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Wed, 08 Jul 2026 14:54:05 +0200
+	id 55e9E7i5UGo84AIAu9opvQ
+	(envelope-from <linux-integrity+bounces-9905-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2026 11:22:00 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 791CD7267BA
-	for <lists+linux-integrity@lfdr.de>; Wed, 08 Jul 2026 14:54:03 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A49CF738FBB
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2026 11:21:59 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=cJ8YmyNG;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=R2dW+uTP;
 	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9904-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9904-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	arc=pass ("subspace.kernel.org:s=arc-20240116:i=2")
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9905-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9905-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 993B73021879
-	for <lists+linux-integrity@lfdr.de>; Wed,  8 Jul 2026 12:52:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9C52B30459E8
+	for <lists+linux-integrity@lfdr.de>; Fri, 10 Jul 2026 09:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3840F466B6C;
-	Wed,  8 Jul 2026 12:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FD4B3BE165;
+	Fri, 10 Jul 2026 09:02:40 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882524611C2
-	for <linux-integrity@vger.kernel.org>; Wed,  8 Jul 2026 12:52:04 +0000 (UTC)
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783515127; cv=pass; b=R/09wiVuHtHMX569st2xn9rFZfACa8HQvO78HAL3axyaz8HiQKXtJJqLf2nBQWvVT1Am8v9dxLtvUtYKHykVGLeA0jFxCIgmspv1kQW3w9O7Sb8c/L5ZeYyD2FrjaqstRRUL8AH/mysT9g+0ooP0ByF63f2zKpfB8qQ53VKGAC0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783515127; c=relaxed/simple;
-	bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tyTHcbL+bkBxIkc9Er3Loaoe0ziSgi3rpiLbzXCLTwDM8Lt43iKdY2LVCfOdILPs6C10GJl7AFGIATHgDbHsO1M7x5jjLnHlmowv+zGJfMazYSd4uikxQM7t+0NKKylg945+r4Ktp+zVtFzZvteKmkdVydDLkOXRRzkz0JcWyXM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cJ8YmyNG; arc=pass smtp.client-ip=209.85.219.48
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8f1a8e914a9so4950656d6.1
-        for <linux-integrity@vger.kernel.org>; Wed, 08 Jul 2026 05:52:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783515123; cv=none;
-        d=google.com; s=arc-20260327;
-        b=baL2mooWN2Zbd94JEexkNKrBf+SmTdhvp2eR6xCLqGPfmVbqiGQ+s7HcIYf0ddgmMs
-         EPMj/xAKW+IJ6ZBPOkXgHLwgJ1YUIkPuTH++Rz6jRxZoPxZE0ioyuM0gdyToMMbNwI6L
-         UgYX2WJMCitudz9tHS5OkTr4NMT5DfCbcBtSgmBfTMo4FW44Dr8vLEdwygjelsNC5VtR
-         jtBMuTT5HB3p1YIErzNlNVgjZQ3bWnpUVKSw5VCo4ncmI5W/x5v/Y4IyVA7KhdYE8JU/
-         +VzMAJ9QQpwKX7qpw/ODpAZ/vUn71G0gPiThGapps8XoxNkacSyMBYfnsF5/ALCPU7NT
-         QTmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
-        fh=RfEXU/2QssbCMvTBeu/xrKC5xxPfWoz+5a42e0dSqgM=;
-        b=G4zQfVb2Dvht1o7sMEAJoTcvcheMgVKELHmqCC/jgi+mCunclFVlFu+6VunBqvSx6Q
-         wxFTT09nuTQesdHUo0rTszPilAwAb4YiYo8asNKHeGwP0eLvxMLLD8jh8qvlz5RImYNt
-         7989ppzjShzMvIfzUqbi3Yl3ywRcKrHl7fCdrM5lO6OW+AqxomnidBBGlIlFM86L7CKW
-         OPetcIEfjiF852kdA1yKhtQVWHyJ6U+erVs0GjmJvUnhG11U6ikWttyFWbRVdU0tVnXy
-         KTooIvctLesE3FomoVfbFkFL0Cv6KfoJtEttKaa5ZvOC3v8Tcc7rtW9RmM6DxMDZdDWL
-         IbIA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA852E7369
+	for <linux-integrity@vger.kernel.org>; Fri, 10 Jul 2026 09:02:39 +0000 (UTC)
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783674160; cv=none; b=R4LDazqOcgnkjwp9ImoFN2j5i87/MvYKgkj2bC0Zx9Ud5OnW5pN15lI7s0JuNx+/LkdfGC3JMc93gTmNEW1SbZkjknv0pNnStMJ/eg1RjR3z6UHmx0AsQzdAg2mn5MJle3mM/b8aZXJBjvBWEto+Qb3BH/JdyMjInwHETWSD430=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783674160; c=relaxed/simple;
+	bh=/wpKpY45DSI4HgdAk0vcydnpSfjw078lWvatlK/8ypM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SQ7eNu0vNz6tTNwCTzH6/SekegL1IuD/3xQ2avbcMGXjG231JCXOZS4AyWAfmFtiV61lQMmGrFhk0VByh5lUhCj2xeFXSQN7J5cRZfA8TSZ+PcvXVmFILuC7iZeXyrqqIKRbinFhs1ojPM7bYLVHwLu/uTBeS73MAs8ZAqZcmKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2dW+uTP; arc=none smtp.client-ip=209.85.214.172
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2c6b67d5fa1so11541525ad.2
+        for <linux-integrity@vger.kernel.org>; Fri, 10 Jul 2026 02:02:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783515123; x=1784119923; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
-        b=cJ8YmyNGzcUVkugDcbDFSV9hG1XDIYcPXiertRg0HgzcUcju9zF9S1QddQvl1IpWUU
-         4k5nyw2V0IVysz1RCrUdJrEDo/h/A2qbnGEkhOL3pMSeZq9aNdhek1gxoF3bPioxNI3d
-         ggeFj1wflW8RofhZngweDB2Ewf+1+x6kpdbS6g61gDANdxSQ8inNYw98Euig7Tflxz79
-         yJ8j6vynosLrChyjPyPwAlM/tzP8CcmxcP2N9+hHViX91g/XicWPJjt9i8qCxLFKR4ur
-         hbNv49Trj68z0qWIkUNyQKuPp7su1TchELfMq/n41YFkTwA8KS5WkUEWYHQo3mp6OZbs
-         /R0Q==
+        d=gmail.com; s=20251104; t=1783674158; x=1784278958; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=4L33oMpRIj1SI06g0mcWO4Stxr8HrpjctK5+3kxoMio=;
+        b=R2dW+uTPpofsK5q+f+0DAC8zVk7+XTqEfGXgQLhpn75zqGGhx+2pXlCDxMyxqxwOc2
+         Vbf+6NoYCJmREsu27ttMiPTQDIo3zJKPVAwSi9203qVgcWea89PdTQ8RN+2crfIT2HXe
+         wK1XdjNT3WfcaA1NhIsJvxeIMBpQ7Cg4m6texJnA82/ORrGrLQskgipoXk+U2Sfu/6NG
+         v/7vj7pv0xXJf/fRy1dCuJPPRJ+kFhqD5zcy3gFbW0idjPqGXvrG9BocZoLMnhVprp5b
+         XvzBiNsXlmoxV4Lcq4FOVTRbQBu3Rn8yJ3pl1BHFaMGGQnnjZaYq+7HVU5mGH4ANciQn
+         3PRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783515123; x=1784119923;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LMcsBp3I2AM2BUc5Uv9PZXVaMxtMYi04e37upzRhQOQ=;
-        b=eRLWHiTMpkBkJsquCxDoClKmQbhM+QkSoL5p4Aje1NCk9t2uJBtw4IEbIdeB3QjmaS
-         gkfcAY2AKGEiTPNQ4ejKmf9j2tYEkCnAj+ps++pUoG/4lWXJiL86bSct0IdzQ3YMyM2B
-         2/jtHyc5B7CWAghRZUDlte3dbO/ucgw/5coHfg29Nbv/3pQMjEXEjgoX33iBZHmZhExS
-         PzYch46iIxA25HGEPpxWadyH4SxkEbowaoel1Q4cBhYLWIL0VrYJwdBys59Nf/jvJhy9
-         zw8ijoqWX/iG+Go0o+Jej6cOGjVXX9dqePVslouumy8mIpJbTcIUCr8U8F8UfvBZfiDN
-         oDqw==
-X-Forwarded-Encrypted: i=1; AHgh+RrKueOwOY8HKNg3m9ieagETEpXa5Ony2jP9zigGEZNgdLArxga1h77velJJgKsB3jMzzUsUzm+/efj9KlU+ap0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPTZwkVeUj9sCPOuMO8/YKTX3y5aM0EaZAIexpjsMlq3wqERmz
-	+26d3s93PF6yUG8xSADfkcH3haCkNeSxN6xgL0zc3CyoJBRde6c7UGdoUtAF3AUVHP5QorR9ihf
-	4rdV1agRzJqA/QGbGA1g67YryfXaOuGY=
-X-Gm-Gg: AfdE7cnKXp4Oa//shfBoj/4ByOJ2ji+EEyZ/T5ql0gRmx1SHEq2euPLPFPyuYB2yq+D
-	leUvACrz8FNlXOZjkU+M6sr+BNsaw9BvW4QgDZtLvEstr0h6uCo0G3wbH9ZniQ+lb0ynG9lQ//v
-	n3wsJNd96xU0LPwsZvPy1GoStmQ120sMHY6w5a7rkIOgY5UCNSz2Jq2dA2g9nlsnYdPK0+QEBw/
-	PR/atDk2byaQ0omJHJPkkgDDqKdBLNT4vAoU25xH5mt8P/ik7f3pH9AVD9CQj/wePcLb4GwWTEq
-	W9k1RHv4rErhrgrR6RnQSRdqNzI=
-X-Received: by 2002:a05:6214:328c:b0:8fd:6df3:b37a with SMTP id
- 6a1803df08f44-8fec361db53mr20328306d6.62.1783515123475; Wed, 08 Jul 2026
- 05:52:03 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783674158; x=1784278958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=4L33oMpRIj1SI06g0mcWO4Stxr8HrpjctK5+3kxoMio=;
+        b=reC5G/3exFkP8zMHmB0vb5981oL6C4XAhd1reDAaTof9sLq6xvHtIby8tmH2ABSYND
+         vS1hLWZ1NRxGSFfT7M3NchD6ie05m1uDJlC4drNiGutDxF0Dh8ydMCU1g6oPyNXC0a7s
+         sD609Uj8truxjIlsH4Y+z9KXmu19C6itaq8uNZ2+XRBGuhZRiOUG75La8nL9Ok7CO5e5
+         yUDYCqVypfcdyb6Btap+JAFtAqSvnl8asLvHg0tAF78eNG2msxaOSGeCLsgm5sT8MaFX
+         IoANZewN9W+KMsro/+y26HlsJAjPvVTVvuIznPHSlEoc1BEcVgZli/wtZpcVpbdNt1y7
+         ezZg==
+X-Forwarded-Encrypted: i=1; AHgh+RoKdnjcDpyqRcfT32IbuoVW7jfFWP3K1+wcs3bhZTxjUpNKIT/f6oFmvDSfIBA8XwE2hbUbhyPTte22HF2i+aw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoQkNSZ7gx9z/4c3jl+fy2US1tp1bpxbgPtI3CXixKItbuiyBh
+	QXDuvqJOa6UmWgzISBMwms3mKSIV6Hvm0IEFGtwuTDLTw6H3gbUOPrhb
+X-Gm-Gg: AfdE7cnG1U3Xxh3c63VwqlySC/JflNfIdOe1xkxhwBHb/AYDMrDCMCkROogI+IOQ48P
+	gOHGaJOpnKgxYi61HVSxH31qdV6lZtpSfn5RjbspjmZSNCJV96kkupyYmPHVs+uSF/NuddKVJg4
+	8adVgEr8bsNJOWJS+iAiKlsFvBkTEw9obzi2BcYXVVUClLRbtKBAW8qWwEPyN8ct+1j7+AuzPVe
+	OL/Dwq3vuZIsCQNf6Di4wRInllww6Ek2gh6GuajRiyWIikdE+AUlKxlHYtxXkp7Xp4/fDBZJsJM
+	3ILAAIolK2QT26Gcv0Rfl8+Srvq8zfv059ob50KLtY9nCYWWjiKfM8ULSd1HRtwb9z3WX80RLXi
+	F8fmkC8vZh5n7c0WIzUj+TPiMNJ0yfzB7J4s45ohCm8eycYRWYedUfe9NKVQFG/VXYSjPkr08vb
+	F4Ur3XESx8zQEJw2dBWDXBWfDhxFWmCGtBZJU41UR0CTsEwPOeWELUGGB5KsHq1fKIbXuMyPTot
+	MZKFxAi06vZb800qSAPtw==
+X-Received: by 2002:a17:903:3c67:b0:2ca:9d5a:8b6c with SMTP id d9443c01a7336-2ccea37d246mr106509045ad.5.1783674158389;
+        Fri, 10 Jul 2026 02:02:38 -0700 (PDT)
+Received: from DESKTOP-UIAUP5R.localdomain ([116.37.10.184])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ce7b3755a3sm13832775ad.80.2026.07.10.02.02.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2026 02:02:37 -0700 (PDT)
+From: Jaewon Yang <yong010301@gmail.com>
+To: Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>,
+	linux-integrity@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	security@kernel.org
+Subject: [PATCH] tpm: Reject reads outside the response buffer
+Date: Fri, 10 Jul 2026 18:02:17 +0900
+Message-ID: <20260710090217.191289-1-yong010301@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260708000956.46138-1-dwindsor@gmail.com> <DJSV0P2OINKE.34OCOC34KFEEF@gmail.com>
-In-Reply-To: <DJSV0P2OINKE.34OCOC34KFEEF@gmail.com>
-From: David Windsor <dwindsor@gmail.com>
-Date: Wed, 8 Jul 2026 08:51:52 -0400
-X-Gm-Features: AVVi8CfU37Brxag2yfG62kEk96iHc-RKohKljtHAIy8Sn1Fk6Gh-XV62bqUwhO4
-Message-ID: <CAEXv5_j96aUkmSEg4brvk2q-A3SyYzXZ7jyutoXfrc-oDykZYQ@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 0/3] bpf: add bpf_init_inode_xattr kfunc for
- atomic inode labeling
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E . Hallyn" <serge@hallyn.com>, Casey Schaufler <casey@schaufler-ca.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
-	Mimi Zohar <zohar@linux.ibm.com>, Roberto Sassu <roberto.sassu@huawei.com>, 
-	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, Eric Snowberg <eric.snowberg@oracle.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_RECIPIENTS(0.00)[m:memxor@gmail.com,m:ast@kernel.org,m:daniel@iogearbox.net,m:andrii@kernel.org,m:martin.lau@linux.dev,m:eddyz87@gmail.com,m:song@kernel.org,m:yonghong.song@linux.dev,m:john.fastabend@gmail.com,m:kpsingh@kernel.org,m:jolsa@kernel.org,m:emil@etsalapatis.com,m:mattbobrowski@google.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:casey@schaufler-ca.com,m:stephen.smalley.work@gmail.com,m:omosnace@redhat.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:viro@zeniv.linux.org.uk,m:brauner@kernel.org,m:jack@suse.cz,m:shuah@kernel.org,m:bpf@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:linux-fsdevel@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:selinux@vger.kernel.org,m:linux-kselftest@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:johnfastabend@gmail.com,m:stephensmalleywork@gmail.com,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
-	TAGGED_FROM(0.00)[bounces-9904-lists,linux-integrity=lfdr.de];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	TAGGED_FROM(0.00)[bounces-9905-lists,linux-integrity=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:peterhuewe@gmx.de,m:jarkko@kernel.org,m:jgg@ziepe.ca,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:security@kernel.org,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[34];
-	FORGED_SENDER(0.00)[dwindsor@gmail.com,linux-integrity@vger.kernel.org];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[yong010301@gmail.com,linux-integrity@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
 	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_FORWARDING(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yong010301@gmail.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dwindsor@gmail.com,linux-integrity@vger.kernel.org];
-	FREEMAIL_CC(0.00)[kernel.org,iogearbox.net,linux.dev,gmail.com,etsalapatis.com,google.com,paul-moore.com,namei.org,hallyn.com,schaufler-ca.com,redhat.com,linux.ibm.com,huawei.com,oracle.com,zeniv.linux.org.uk,suse.cz,vger.kernel.org];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
+	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 791CD7267BA
+X-Rspamd-Queue-Id: A49CF738FBB
 
-On Tue, Jul 7, 2026 at 11:12=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Wed Jul 8, 2026 at 2:09 AM CEST, David Windsor wrote:
-> > Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in
-> > extended attributes. For these LSMs, atomic labeling during inode
-> > creation is critical: if the inode becomes accessible before its xattr
-> > is set, it is briefly unlabeled, which can disrupt LSMs making policy
-> > decisions based on file labels.
-> >
-> > Existing LSMs solve this by setting xattrs directly in the
-> > inode_init_security hook, which runs before the inode becomes
-> > accessible. BPF LSM programs currently lack this capability because
-> > the hook uses an output parameter (xattr_count) that BPF programs
-> > cannot write to, and existing kfuncs like bpf_set_dentry_xattr
-> > require a dentry that isn't available until after the inode is
-> > accessible.
-> >
-> > This series introduces the bpf_init_inode_xattr() kfunc, which takes
-> > the combined inode_init_security xattr context argument and claims a
-> > slot in it via the new security_lsmxattr_add() LSM helper.
-> >
->
-> There are various CI failures in newly added tests, I don't think any of =
-them
-> are passing. Please fix before respinning.
->
-> https://github.com/kernel-patches/bpf/pull/12730
->
-> E.g. both test_init_inode_xattr and test_init_inode_xattr_slot do not hav=
-e
-> expected results.
->
+tpm_common_read() clamps the transfer length to priv->response_length but
+does not validate the file offset (*off) before using it to index the
+fixed TPM_BUFSIZE-byte priv->data_buffer:
 
-This is happening because the path "/tmp" in bpf ci isn't mounted on
-tmpfs, rather on 9p:
+	ret_size = min_t(ssize_t, size, priv->response_length);
+	copy_to_user(buf, priv->data_buffer + *off, ret_size);
+	memset(priv->data_buffer + *off, 0, ret_size);
 
-[ 5.813072] VFS: Mounted root (9p filesystem) on device 0:22.
-[ 5.924390] vmtest: Mounting tmpfs at /dev/shm
-[ 5.971012] vmtest: Mounting tmpfs at /run
-[ 6.096271] vmtest: Mounting tmpfs at /mnt
+Sequential read() keeps *off in range, but the fops use the legacy .read
+callback and neither tpm_open() nor tpmrm_open() calls nonseekable_open(),
+so FMODE_PREAD stays set and pread(2) passes an arbitrary offset straight
+into *off. An out-of-range offset then accesses memory beyond data_buffer,
+causing an out-of-bounds read through copy_to_user() and, when the copy
+succeeds, an out-of-bounds zero-write through memset().
 
-... which doesn't call inode_init_security. Changing the test to
-create its file in /dev/shm, which has a real tmpfs, fixes this. We
-can update the test to skip on filesystems where the hook doesn't
-fire.
+Reject any read whose offset and length leave the response buffer.
 
-I'll wait to gather feedback from Alexei and Paul before sending v6.
+Fixes: 9488585b21be ("tpm: add support for partial reads")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jaewon Yang <yong010301@gmail.com>
+---
+Notes for reviewers (not part of the commit):
 
-> pw-bot: cr
->
-> > [...]
+Reproduced on a KASAN 6.12 build with a swtpm TPM2 device. After a command
+leaves a response pending, pread(fd, buf, 16, 0x1400) triggers two
+slab-out-of-bounds reports, one for the copy_to_user() read and one for the
+memset() write; on that x86-64 build the faulting access was 962 bytes past
+a 4344-byte struct tpmrm_priv served from kmalloc-8k. With this patch,
+out-of-range preads (offset past the buffer, at the end, or an in-range
+offset whose length crosses the end) return -EINVAL with no KASAN report,
+while sequential partial reads still return the full response and a normal
+read after a rejected pread still works.
+
+Reaching it needs a process that can open the TPM device and send a command.
+Access depends on the device-node permissions; the upstream tpm2-tss udev
+rules set tpmrm devices to mode 0660 with group tss. My reproduction ran as
+root, so I have not shown non-root reach on a specific distribution or built
+a privilege-escalation chain.
+
+I searched public archives on 2026-07-10 and found no matching report, which
+does not rule out a private, very recent, or unindexed one. Found through
+AI-assisted source review; the code path and reproduction were verified by
+hand. A reproducer and full logs are available on request.
+
+ drivers/char/tpm/tpm-dev-common.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+index f942c0c8e..dbf049028 100644
+--- a/drivers/char/tpm/tpm-dev-common.c
++++ b/drivers/char/tpm/tpm-dev-common.c
+@@ -145,6 +145,16 @@ ssize_t tpm_common_read(struct file *file, char __user *buf,
+ 			goto out;
+ 		}
+ 
++		/*
++		 * Reject reads whose offset and length fall outside the fixed
++		 * response buffer.
++		 */
++		if (*off < 0 || *off >= TPM_BUFSIZE ||
++		    ret_size > TPM_BUFSIZE - *off) {
++			ret_size = -EINVAL;
++			goto out;
++		}
++
+ 		rc = copy_to_user(buf, priv->data_buffer + *off, ret_size);
+ 		if (rc) {
+ 			memset(priv->data_buffer, 0, TPM_BUFSIZE);
+-- 
+2.43.0
+
 
