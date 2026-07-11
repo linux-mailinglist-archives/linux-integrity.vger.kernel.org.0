@@ -1,81 +1,81 @@
-Return-Path: <linux-integrity+bounces-9914-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9915-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id z6KyKCxpUmrlPQMAu9opvQ
-	(envelope-from <linux-integrity+bounces-9914-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jul 2026 18:02:52 +0200
+	id g/9IBUJpUmrvPQMAu9opvQ
+	(envelope-from <linux-integrity+bounces-9915-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jul 2026 18:03:14 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD411742164
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jul 2026 18:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A0BE74217E
+	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jul 2026 18:03:13 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=sU7lOGiY;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=g8t864WG;
 	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9914-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9914-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9915-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c15:e001:75::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9915-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 56A80300AD95
-	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jul 2026 16:01:45 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 62D3E300BEA8
+	for <lists+linux-integrity@lfdr.de>; Sat, 11 Jul 2026 16:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2280C3CC323;
-	Sat, 11 Jul 2026 16:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E013CCFB2;
+	Sat, 11 Jul 2026 16:01:36 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433803C73D9
-	for <linux-integrity@vger.kernel.org>; Sat, 11 Jul 2026 16:01:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F66E3C9EDD
+	for <linux-integrity@vger.kernel.org>; Sat, 11 Jul 2026 16:01:34 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783785693; cv=none; b=OGiy+3wW5rx+uNipk4q69lDhz12h4pNU8GDN0xIg/KYptCSQdCa6ZGvfbJPvgKg4QxJdaYffqgO6O2xquRl49g1HsPd/dqG/arVTpnksRx8yIJhO8M5PtpmlzGLkcJJF1g2EeN6Zori2gN3AiwJNYs0viu6nk7sL5o9bg7Vapg0=
+	t=1783785696; cv=none; b=E3zxWdTP66SAAsRj7DiFIAtO9al0CXj0BGxvWOWQRySHcyRtLmvcPDo9pkDMbBedwqY3pZqTu4aAsFrMJzZjART1MHRM9JPOjNju/eZxnNSviEGI5avjMe628IR1nOlSAQJLjbiLQEmONZJ1C7pP5eUCnLsosG4eulbpLnqOjNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783785693; c=relaxed/simple;
-	bh=IKmtT9Cq3h0iSyz5OU+oULBN9QjQwnAFo0SgsEd/FNw=;
+	s=arc-20240116; t=1783785696; c=relaxed/simple;
+	bh=SWTmQxbm+O3CiuFQm/Zj3X9aRzkg0EYTJlhP8g+50ZE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fAM07vSFxcRkuiuutDei2VBaC1iI75YEsvIrrJm1gLzojPlKrsayUVpPilrnmBltoktUKiGz0Ju5wKgScbr9VcV5YhicBBRzaV6fNLqtRfBqznUTrjsgI1uPxuG8zKaUiJ+YrvGWnQK8bMpMz3zCyifbN+x3PplOrmQm7pvq+jU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sU7lOGiY; arc=none smtp.client-ip=209.85.210.175
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-8485bd28dd0so1934085b3a.2
-        for <linux-integrity@vger.kernel.org>; Sat, 11 Jul 2026 09:01:31 -0700 (PDT)
+	 MIME-Version; b=Wm3W+qaQRqyTOvhW37IQw1/uW6WmLl89KpgRC8rV4KEbw3cMuTAzP2VhpRdh5Otao/ssgxukSR1IoAIDy4k1DAeHmeGyYDkBIYHFKqOs8CJMy9RhoZAGatJC5Ky5jDLJUJiWSzFEBa73RNxnJnZ4ceMXBgUeu2IKqIjKYJdgoZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g8t864WG; arc=none smtp.client-ip=209.85.214.182
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ceab75934dso3631475ad.2
+        for <linux-integrity@vger.kernel.org>; Sat, 11 Jul 2026 09:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783785691; x=1784390491; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783785694; x=1784390494; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cQmIuXUkp3rrMVH26ZTOPg/E2zd6zUa3wMeq4GmUl8U=;
-        b=sU7lOGiYCEn+vZz+m7AlLz/9PaJBqIaw39uDkYdKHj91RkHMneXRw59+r5iRGlFsPC
-         l3o1PkfuudH2Otilf3PzKW51gb7P+lrfpAVTYPqr9IcUC55rN+Gp/eWLX+X7JXosdGek
-         rHV77NuW0lCseauKaQGnniivSHYbemtpz2c+QiknMlmY4i7iIm7pFatbCl9a35tACEm+
-         rFwpxlOQ4i9qMUPDLQazWMkS+gqXwik40joCFUeP6DDxy2xgp/UzGe8mU0HqlGvzBpsv
-         e43IS2IQhcSYskhHsRDBxoOZdoNF1y2dTBcnW9V3jSSbdv2meXc7wmoxa1+ILOpXZ3Cw
-         cqqg==
+        bh=h8PdlfVA45gq99DCqpKxVhIV4ifAok/KN5VEGME0LcA=;
+        b=g8t864WGg/9SeihPvThSlxO6aPm1JKP+lZV5uqf4SxOGm5cSaLmszjo+qTr6W6Mk4i
+         i14kRKNOH832Rpk8M5BB5PtKC7VLJXcSEJRneJywRQLIH7R+XR6FXOCnazpwyzxwdZ/T
+         gnRXjR2omx7pImL8ZekUjMxErBXvDvNakGBHgedgE8h3Z7I6OZjO083vHKk4ULtAcUt5
+         kCG5ZtX94y7CNTHg+Rdj6YLPfn0RFSmlQ7bbXidPQJxboDwLUtlaijiOD12HagX4tLKe
+         njOr4SDL/GGhi9XkSB3VneKsmO+ngrX2jI9elAcoD6bzhp4TAGfNTFDyTAjci6Myf+dn
+         byUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783785691; x=1784390491;
+        d=1e100.net; s=20251104; t=1783785694; x=1784390494;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cQmIuXUkp3rrMVH26ZTOPg/E2zd6zUa3wMeq4GmUl8U=;
-        b=c4kuJUiJ+F++75wQdufNIJ/o6wpiNJQ4e+FloaTkzAQ17pbFVWrssajf+xDnjxZJJ/
-         0RcWk0R32aVQeDazHXwOQzqHVT9+7dogIs7QE+x5JghaTeT/21/L4oD4qQtgzE09scGH
-         pzyBl4a01576obrFsDXfVcDpocEjImPwWcypbsOmkz8qbxF7T7cWCOwJSZKF+54rpASE
-         SmAHw6vWf1iSpCZmFiaDIf/15TUOMyGUSGp4LsfnyoBRcVSHdqocoI7YUfil+h6XvnRx
-         1PZ7mqiOyyD6ic/+TjerarQuNjFrpVGtNNfZ8k0O/RFgsLpxsfjOKgmWvrBOvey11awr
-         3Zhw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr/uhPR81pqaS3W+3QxRHzHae5yhE98OoDQYpXanUOEytkh2D2nyz5Kr3nxV70TWES9a5BvmGP78OwoRAMkHYk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLSSKGN3OZDXiYpFHUtBH4Pt/buMq3ZM4G9oXTNf+aEbIIR557
-	bdvCroaam4EDBijqeynwKpEFhrLWAsdpc3YOsgNQRzc+iEyHkYS7w9nx
-X-Gm-Gg: AfdE7cnNhldlFWpJ/MyQbmvPpq02ntCEgQpUbB8m3ScrhDfmoYqelYYeDwZ6Aethp/G
-	fkBoq48Fa6WNCY9UllKKaCEKGULMZ7NrfpQ7aEf65UjnaxOr5P5kGG5ERAnvOKATuEwMacF4TDi
-	j27JAMVXPVhPP1CIeoFIaiYgs0zG55xnRGQ4MIZAsScmq3+sC6O8XbgI30Z+xnqZVA7QYxxSXNT
-	52GtQSptMXV9Kvj9V/3oCdGGMq6rBrZDQKvsYcdMparFAu31OWtk4L+qxps+sztnIkxGTUwCgDY
-	ylIJu0eB3kDLk+YCeiqG4dvKTDKxLtxTCTs7EtNwrYxGGR635jvIkPX7rFr2i+UyQ5qwQwnHds8
-	XrMyttLfZgBUTYYJj/iSIAg9vNDFBh7+v/UFWZcrgGWL3UFcaW3eZZd1BNA1Q9TQMdTZQ9hU9pw
-	fjqKR1/kSTiGBWoVG8RU+t
-X-Received: by 2002:a05:6a20:1f28:b0:3bf:b182:94e with SMTP id adf61e73a8af0-3c110a12782mr3463511637.5.1783785690620;
-        Sat, 11 Jul 2026 09:01:30 -0700 (PDT)
+        bh=h8PdlfVA45gq99DCqpKxVhIV4ifAok/KN5VEGME0LcA=;
+        b=iaBC/E9qquA1Sz41VPP70mxuSJ6jDDQrZllv/lh9bLp4+tqV2/e/fTJhYpPvZEflSO
+         /B3hScXIEBYqlDj88lS+ZOnInBxJAR0dnjcY2xUy5GtEWUmC13/uBS1GCPXOM48bUAiw
+         hK4LIg/Khes3WCuEkqvg+WniyIkmkwPVa1hC03ueqf8l7gopCrD6o/kF0KbMpvePHtCB
+         emqTz3R3FnA3vQ/lEC9gbMFGkRbj8x/EMuxe1Or96tmh6u/xeEwVdWBbtkHBgUTe72I0
+         JXlmgsVi1/sToCns5AD8iSsGrFCJ3oPPmH12nzsfWzST0zuYchRAZjAQ1exTAA7zo5GX
+         EfAQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqFPgoixGEgR4gBqm0KF2sWEJ6ZNpDxcQVCol6bhEywwD/ATXr96IWaHcK1ff4ZwxK7yDNw/P1aQr3oy4uexPU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAIDTjiJcKGnyJc/2Sbru4s+8jkkhAbrfDM9KVuWhAz9/q3oer
+	eNJvRwLY8DCOOmM4PTW+7RORhbwnQC35Xgm+CCJuaSBs+C6KKV8mPppl
+X-Gm-Gg: AfdE7ck5VyrBCqeX4nKgrq4MW/jrfjCtGHoLxxmGuh0QAV6Ka2IRSqysdd2BrPO9avc
+	CVh6GIss3Ygw2EvUh24ElG2becn6kiI2BaBceM4NiQ7nlPNcYN9QQC+bhmkd9sg/NA/r8jvPE+P
+	fYmoNZlgkw+7OMDuE7ta174S2UpQhQCRp2WiHaDTUq/br9VgbVLW/9CW3wvTZOKNnxvtGH6bPhe
+	fwr0o0J/bV5vbAnx5ebetGwMdN2z44MdNI2quRNO+bppuqraH00ju0Zyq3hB0/or++c4oqdikCw
+	JnXfeYC77ZOZBaG3Ux+4OUsk6HiHkQXbr+NDKC1JNAXSrS74Rn58ApNUgpCp++uoW0lYVvg+fqv
+	oGjkLoos7vI4jI3mnxGuxnRGpr0nuNnQRT88dxF8u/t/p69GXBKBDPtIrudig503yNDF3CbP0bm
+	Y3JOVvrwtRBuaxybvpBzYC
+X-Received: by 2002:a17:90a:da83:b0:384:d509:7274 with SMTP id 98e67ed59e1d1-38dc75f63bemr3176054a91.15.1783785694020;
+        Sat, 11 Jul 2026 09:01:34 -0700 (PDT)
 Received: from titan.lan ([2603:8000:df01:38f7:255c:dd03:30a6:e57b])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b8deb2a21sm7919739c88.3.2026.07.11.09.01.28
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3118ee6091dsm54498068eec.14.2026.07.11.09.01.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jul 2026 09:01:29 -0700 (PDT)
+        Sat, 11 Jul 2026 09:01:32 -0700 (PDT)
 From: Ross Philipson <ross.philipson@gmail.com>
 To: linux-kernel@vger.kernel.org,
 	x86@kernel.org,
@@ -102,9 +102,9 @@ Cc: ross.philipson@gmail.com,
 	daniel.kiper@oracle.com,
 	andrew.cooper3@citrix.com,
 	trenchboot-devel@googlegroups.com
-Subject: [PATCH v2 05/10] tpm: Move platform specific definitions to the new PTP header
-Date: Sat, 11 Jul 2026 09:01:05 -0700
-Message-ID: <20260711160110.267780-6-ross.philipson@gmail.com>
+Subject: [PATCH v2 06/10] tpm: Remove main TPM header from TPM event log header
+Date: Sat, 11 Jul 2026 09:01:06 -0700
+Message-ID: <20260711160110.267780-7-ross.philipson@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260711160110.267780-1-ross.philipson@gmail.com>
 References: <20260711160110.267780-1-ross.philipson@gmail.com>
@@ -129,7 +129,7 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9914-lists,linux-integrity=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9915-lists,linux-integrity=lfdr.de];
 	FORGED_RECIPIENTS(0.00)[m:linux-kernel@vger.kernel.org,m:x86@kernel.org,m:linux-integrity@vger.kernel.org,m:linux-crypto@vger.kernel.org,m:linux-efi@vger.kernel.org,m:ross.philipson@gmail.com,m:dpsmith@apertussolutions.com,m:tglx@linutronix.de,m:mingo@redhat.com,m:bp@alien8.de,m:hpa@zytor.com,m:dave.hansen@linux.intel.com,m:ardb@kernel.org,m:mjg59@srcf.ucam.org,m:James.Bottomley@hansenpartnership.com,m:peterhuewe@gmx.de,m:jarkko@kernel.org,m:luto@amacapital.net,m:herbert@gondor.apana.org.au,m:davem@davemloft.net,m:corbet@lwn.net,m:kanth.ghatraju@oracle.com,m:daniel.kiper@oracle.com,m:andrew.cooper3@citrix.com,m:trenchboot-devel@googlegroups.com,m:rossphilipson@gmail.com,s:lists@lfdr.de];
 	FORGED_SENDER(0.00)[rossphilipson@gmail.com,linux-integrity@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -150,251 +150,34 @@ X-Spamd-Result: default: False [-0.16 / 15.00];
 	TAGGED_RCPT(0.00)[linux-integrity];
 	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,trustedcomputinggroup.org:url,apertussolutions.com:email,vger.kernel.org:from_smtp]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: CD411742164
+X-Rspamd-Queue-Id: 5A0BE74217E
 
-These are definitions for TPM 2.0 interface and interactions with
-the platform as defined in the TCG specification:
+From: Alec Brown <alec.r.brown@oracle.com>
 
-These definitions are located here in a separate file to avoid conflicts
-with vendor specific TIS/FIFO definition (e.g. STMicroelectronics,
-Infineon Technologies, etc). This allows the TCG defined TIS/FIFO
-interface to be in a public header while the former chip specific
-implementations contain their own definitions. TPM 1.x family chips
-that adhere to the TCG specifications use the TIS/FIFO interface as
-defined here.
+Allow the TPM event log functionality to be used without including
+the main TPM driver definitions.
 
-TCG PC Client Platform TPM Profile (PTP) Specification
- - https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
-
-Co-developed-by: Daniel P. Smith <dpsmith@apertussolutions.com>
-Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
-Co-developed-by: Alec Brown <alec.r.brown@oracle.com>
 Signed-off-by: Alec Brown <alec.r.brown@oracle.com>
 Signed-off-by: Ross Philipson <ross.philipson@gmail.com>
 ---
- drivers/char/tpm/tpm_tis_core.h |  64 +--------------
- include/linux/tpm_ptp.h         | 133 ++++++++++++++++++++++++++++++++
- 2 files changed, 134 insertions(+), 63 deletions(-)
- create mode 100644 include/linux/tpm_ptp.h
+ include/linux/tpm_eventlog.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-index aa6d78898ef3..d737b3d67411 100644
---- a/drivers/char/tpm/tpm_tis_core.h
-+++ b/drivers/char/tpm/tpm_tis_core.h
-@@ -19,71 +19,9 @@
- #ifndef __TPM_TIS_CORE_H__
- #define __TPM_TIS_CORE_H__
+diff --git a/include/linux/tpm_eventlog.h b/include/linux/tpm_eventlog.h
+index aff8ea2fa98e..40fe92eb7deb 100644
+--- a/include/linux/tpm_eventlog.h
++++ b/include/linux/tpm_eventlog.h
+@@ -3,7 +3,7 @@
+ #ifndef __LINUX_TPM_EVENTLOG_H__
+ #define __LINUX_TPM_EVENTLOG_H__
  
-+#include <linux/tpm_ptp.h>
- #include "tpm.h"
+-#include <linux/tpm.h>
++#include <linux/tpm_command.h>
  
--enum tis_access {
--	TPM_ACCESS_VALID = 0x80,
--	TPM_ACCESS_ACTIVE_LOCALITY = 0x20,
--	TPM_ACCESS_REQUEST_PENDING = 0x04,
--	TPM_ACCESS_REQUEST_USE = 0x02,
--};
--
--enum tis_status {
--	TPM_STS_VALID = 0x80,
--	TPM_STS_COMMAND_READY = 0x40,
--	TPM_STS_GO = 0x20,
--	TPM_STS_DATA_AVAIL = 0x10,
--	TPM_STS_DATA_EXPECT = 0x08,
--	TPM_STS_RESPONSE_RETRY = 0x02,
--	TPM_STS_READ_ZERO = 0x23, /* bits that must be zero on read */
--};
--
--enum tis_int_flags {
--	TPM_GLOBAL_INT_ENABLE = 0x80000000,
--	TPM_INTF_BURST_COUNT_STATIC = 0x100,
--	TPM_INTF_CMD_READY_INT = 0x080,
--	TPM_INTF_INT_EDGE_FALLING = 0x040,
--	TPM_INTF_INT_EDGE_RISING = 0x020,
--	TPM_INTF_INT_LEVEL_LOW = 0x010,
--	TPM_INTF_INT_LEVEL_HIGH = 0x008,
--	TPM_INTF_LOCALITY_CHANGE_INT = 0x004,
--	TPM_INTF_STS_VALID_INT = 0x002,
--	TPM_INTF_DATA_AVAIL_INT = 0x001,
--};
--
--enum tis_defaults {
--	TIS_MEM_LEN = 0x5000,
--	TIS_SHORT_TIMEOUT = 750,	/* ms */
--	TIS_LONG_TIMEOUT = 4000,	/* 4 secs */
--	TIS_TIMEOUT_MIN_ATML = 14700,	/* usecs */
--	TIS_TIMEOUT_MAX_ATML = 15000,	/* usecs */
--};
--
--/* Some timeout values are needed before it is known whether the chip is
-- * TPM 1.0 or TPM 2.0.
-- */
--#define TIS_TIMEOUT_A_MAX	max_t(int, TIS_SHORT_TIMEOUT, TPM2_TIMEOUT_A)
--#define TIS_TIMEOUT_B_MAX	max_t(int, TIS_LONG_TIMEOUT, TPM2_TIMEOUT_B)
--#define TIS_TIMEOUT_C_MAX	max_t(int, TIS_SHORT_TIMEOUT, TPM2_TIMEOUT_C)
--#define TIS_TIMEOUT_D_MAX	max_t(int, TIS_SHORT_TIMEOUT, TPM2_TIMEOUT_D)
--
--#define	TPM_ACCESS(l)			(0x0000 | ((l) << 12))
--#define	TPM_INT_ENABLE(l)		(0x0008 | ((l) << 12))
--#define	TPM_INT_VECTOR(l)		(0x000C | ((l) << 12))
--#define	TPM_INT_STATUS(l)		(0x0010 | ((l) << 12))
--#define	TPM_INTF_CAPS(l)		(0x0014 | ((l) << 12))
--#define	TPM_STS(l)			(0x0018 | ((l) << 12))
--#define	TPM_STS3(l)			(0x001b | ((l) << 12))
--#define	TPM_DATA_FIFO(l)		(0x0024 | ((l) << 12))
--
--#define	TPM_DID_VID(l)			(0x0F00 | ((l) << 12))
--#define	TPM_RID(l)			(0x0F04 | ((l) << 12))
--
--#define LPC_CNTRL_OFFSET		0x84
--#define LPC_CLKRUN_EN			(1 << 2)
--#define INTEL_LEGACY_BLK_BASE_ADDR	0xFED08000
--#define ILB_REMAP_SIZE			0x100
--
- enum tpm_tis_flags {
- 	TPM_TIS_ITPM_WORKAROUND		= 0,
- 	TPM_TIS_INVALID_STATUS		= 1,
-diff --git a/include/linux/tpm_ptp.h b/include/linux/tpm_ptp.h
-new file mode 100644
-index 000000000000..e80ed810a269
---- /dev/null
-+++ b/include/linux/tpm_ptp.h
-@@ -0,0 +1,133 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Following copyright information was take from the original file
-+ * <drivers/char/tpm/tpm_tis_core.h> where the definitions were moved
-+ * from:
-+ *
-+ * Copyright (C) 2005, 2006 IBM Corporation
-+ * Copyright (C) 2014, 2015 Intel Corporation
-+ *
-+ * Authors:
-+ * Leendert van Doorn <leendert@watson.ibm.com>
-+ * Kylene Hall <kjhall@us.ibm.com>
-+ *
-+ * Maintained by: <tpmdd-devel@lists.sourceforge.net>
-+ *
-+ * Device driver for TCG/TCPA TPM (trusted platform module).
-+ * Specifications at www.trustedcomputinggroup.org
-+ *
-+ * This device driver implements the TPM interface as defined in
-+ * the TCG TPM Interface Spec version 1.2, revision 1.0.
-+ */
-+
-+#ifndef __LINUX_TPM_PTP_H__
-+#define __LINUX_TPM_PTP_H__
-+
-+/*
-+ * TCG PC Client Platform TPM Profile (PTP) Specification
-+ * https://trustedcomputinggroup.org/resource/pc-client-platform-tpm-profile-ptp-specification/
-+ */
-+
-+/* TIS/FIFO macros and definitions */
-+
-+enum tis_access {
-+	TPM_ACCESS_VALID		= 0x80,
-+	TPM_ACCESS_ACTIVE_LOCALITY	= 0x20,	/* (R) */
-+	TPM_ACCESS_RELINQUISH_LOCALITY	= 0x20, /* (W) */
-+	TPM_ACCESS_REQUEST_PENDING	= 0x04,	/* (W) */
-+	TPM_ACCESS_REQUEST_USE		= 0x02,	/* (W) */
-+};
-+
-+enum tis_status {
-+	TPM_STS_VALID		= 0x80, /* (R) */
-+	TPM_STS_COMMAND_READY	= 0x40, /* (R) */
-+	TPM_STS_DATA_AVAIL	= 0x10, /* (R) */
-+	TPM_STS_DATA_EXPECT	= 0x08, /* (R) */
-+	TPM_STS_GO		= 0x20, /* (W) */
-+	TPM_STS_RESPONSE_RETRY	= 0x02, /* (R) */
-+	TPM_STS_READ_ZERO	= 0x23, /* bits that must be zero on read */
-+};
-+
-+enum tis_int_flags {
-+	TPM_GLOBAL_INT_ENABLE		= 0x80000000,
-+	TPM_INTF_BURST_COUNT_STATIC	= 0x100,
-+	TPM_INTF_CMD_READY_INT		= 0x080,
-+	TPM_INTF_INT_EDGE_FALLING	= 0x040,
-+	TPM_INTF_INT_EDGE_RISING	= 0x020,
-+	TPM_INTF_INT_LEVEL_LOW		= 0x010,
-+	TPM_INTF_INT_LEVEL_HIGH		= 0x008,
-+	TPM_INTF_LOCALITY_CHANGE_INT	= 0x004,
-+	TPM_INTF_STS_VALID_INT		= 0x002,
-+	TPM_INTF_DATA_AVAIL_INT		= 0x001,
-+};
-+
-+enum tis_defaults {
-+	TIS_MEM_LEN		= 0x5000,
-+	TIS_SHORT_TIMEOUT	= 750,   /* ms */
-+	TIS_LONG_TIMEOUT	= 4000,  /* 4 secs */
-+	TIS_TIMEOUT_MIN_ATML	= 14700, /* usecs */
-+	TIS_TIMEOUT_MAX_ATML	= 15000, /* usecs */
-+};
-+
-+#define TIS_MEM_X86_LPC_BASE		0xFED40000
-+#define INTEL_LEGACY_BLK_BASE_ADDR	0xFED08000
-+
-+enum tis_x86_defaults {
-+	TIS_MEM_X86_LEN			= 0x5000,
-+	ILB_REMAP_SIZE			= 0x100,
-+	LPC_CNTRL_OFFSET		= 0x84,
-+	LPC_CLKRUN_EN			= (1 << 2),
-+};
-+
-+/*
-+ * Some timeout values are needed before it is known whether the chip is
-+ * TPM 1.0 or TPM 2.0.
-+ */
-+#define TIS_TIMEOUT_A_MAX	max_t(int, TIS_SHORT_TIMEOUT, TPM2_TIMEOUT_A)
-+#define TIS_TIMEOUT_B_MAX	max_t(int, TIS_LONG_TIMEOUT, TPM2_TIMEOUT_B)
-+#define TIS_TIMEOUT_C_MAX	max_t(int, TIS_SHORT_TIMEOUT, TPM2_TIMEOUT_C)
-+#define TIS_TIMEOUT_D_MAX	max_t(int, TIS_SHORT_TIMEOUT, TPM2_TIMEOUT_D)
-+
-+#define	TPM_ACCESS(l)			(0x0000 | ((l) << 12))
-+#define	TPM_INT_ENABLE(l)		(0x0008 | ((l) << 12))
-+#define	TPM_INT_VECTOR(l)		(0x000C | ((l) << 12))
-+#define	TPM_INT_STATUS(l)		(0x0010 | ((l) << 12))
-+#define	TPM_INTF_CAPS(l)		(0x0014 | ((l) << 12))
-+#define	TPM_STS(l)			(0x0018 | ((l) << 12))
-+#define	TPM_STS3(l)			(0x001b | ((l) << 12))
-+#define	TPM_DATA_FIFO(l)		(0x0024 | ((l) << 12))
-+#define	TPM_INTF_ID(l)			(0x0030 | ((l) << 12))
-+
-+#define	TPM_DID_VID(l)			(0x0F00 | ((l) << 12))
-+#define	TPM_RID(l)			(0x0F04 | ((l) << 12))
-+
-+/* TPM HW Interface and Capabilities */
-+#define TPM_TIS_INTF_ACTIVE		0x00
-+#define TPM_CRB_INTF_ACTIVE		0x01
-+
-+#define TPM_INTID_INTERFACE_TYPE	GENMASK(3, 0)
-+#define TPM_INTID_INTERFACE_VERSION	GENMASK(7, 4)
-+#define TPM_INTID_CAP_LOCALITY		BIT(8)
-+#define TPM_INTID_CAP_TIS		BIT(13)
-+#define TPM_INTID_CAP_CRB		BIT(14)
-+#define TPM_INTID_CAP_IF_RES		GENMASK(16, 15)
-+#define TPM_INTID_INTERFACE_SELECTOR	GENMASK(18, 17)
-+#define TPM_INTID_INTF_SEL_LOCK		BIT(19)
-+
-+#define TPM_TIS_INTF_12			0x00
-+#define TPM_TIS_INTF_13			0x02
-+#define TPM2_TIS_INTF_13		0x03
-+
-+#define TPM_INTF_DATA_AVAIL_INT_SUPPORT		BIT(0)
-+#define TPM_INTF_STS_VALID_INT_SUPPORT		BIT(1)
-+#define TPM_INTF_LOCALITY_CHANGE_INT_SUPPORT	BIT(2)
-+#define TPM_INTF_INTERRUPT_LEVEL_HIGH		BIT(3)
-+#define TPM_INTF_INTERRUPT_LEVEL_LOW		BIT(4)
-+#define TPM_INTF_INTERRUPT_EDGE_RISING		BIT(5)
-+#define TPM_INTF_INTERRUPT_EDGE_FALLING		BIT(6)
-+#define TPM_INTF_COMMAND_READY_INT_SUPPORT	BIT(7)
-+#define TPM_INTF_BURST_COUNT_STATIC		BIT(8)
-+#define TPM_INTF_DATA_TRANSFER_SIZE_SUPPORT	GENMASK(10, 9)
-+#define TPM_INTF_INTERFACE_VERSION		GENMASK(30, 28)
-+
-+#endif
+ #define TCG_EVENT_NAME_LEN_MAX	255
+ #define MAX_TEXT_EVENT		1000	/* Max event string length */
 -- 
 2.55.0
 
