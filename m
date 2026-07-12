@@ -1,96 +1,91 @@
-Return-Path: <linux-integrity+bounces-9925-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9926-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id TagvBunKU2pFfAMAu9opvQ
-	(envelope-from <linux-integrity+bounces-9925-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 Jul 2026 19:12:09 +0200
+	id Djf1Ix7eU2rcfgMAu9opvQ
+	(envelope-from <linux-integrity+bounces-9926-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Jul 2026 20:34:06 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5145574578E
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 Jul 2026 19:12:08 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76E0C745A31
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Jul 2026 20:34:05 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=gmail.com header.s=20251104 header.b=klnivRbQ;
+	dkim=pass header.d=gmail.com header.s=20251104 header.b=IX4f3KAn;
 	dmarc=pass (policy=none) header.from=gmail.com;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9925-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.234.253.10 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9925-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9926-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 104.64.211.4 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9926-lists+linux-integrity=lfdr.de@vger.kernel.org";
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E0CA330137BD
-	for <lists+linux-integrity@lfdr.de>; Sun, 12 Jul 2026 17:12:06 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4A4AF3001CC0
+	for <lists+linux-integrity@lfdr.de>; Sun, 12 Jul 2026 18:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A319342146;
-	Sun, 12 Jul 2026 17:12:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A80D367F58;
+	Sun, 12 Jul 2026 18:33:59 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE5E933F5B4
-	for <linux-integrity@vger.kernel.org>; Sun, 12 Jul 2026 17:12:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A9336654F
+	for <linux-integrity@vger.kernel.org>; Sun, 12 Jul 2026 18:33:57 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783876325; cv=none; b=VexaTckQQbdi2x9bPrtESb9zCPcFzeTAK9ZFhye6yIvObZCw5CKvohhRh+qancis/5YQL/i032bSwCN2++JuyRTksOl80XC3meaA3fk0JWXeFFhAfJVpgjpHOMZaMYPlooR3XuQme4OrHrqPu+/Eo9NjD9Jxl+P1bFKe6dcn1WI=
+	t=1783881239; cv=none; b=vCjDApZW89+esjjHErY0NHTytPCukixVvEU9O6Gw/6HmBPcGcOXHGO5lo3T8X26kAaMmTzAZC6p/GMn4OaBuXBM8XTi8z7H1coAY6nMqvyw7ZEJ6/pW5+JCP7NVJ//nUqVaWh7/Cg6Y9PiHROydbh4Y45GmbigE0zgVjw79SF1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783876325; c=relaxed/simple;
-	bh=BYuOZs3FhdP+WpUpATCq3M1/Cd7DWKOjgexkt1eckq8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AQ76gZQXpGf0EYH4sHmJykkh9bADFKxCjr3bCGJdBqMQWUDlOzjOD1v4Ys53jVLn4OmB2mLxYKzPo0nhUNbU7AF3+KFSJ8c1yn5BieVWuttBUAjeqnEVjCCxik1MYkapXMOtiIEQQJgpYsSNGbwmnf3mkSDkvbL6SeKMW0nu8Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=klnivRbQ; arc=none smtp.client-ip=209.85.214.174
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cc891373e0so23966795ad.2
-        for <linux-integrity@vger.kernel.org>; Sun, 12 Jul 2026 10:12:03 -0700 (PDT)
+	s=arc-20240116; t=1783881239; c=relaxed/simple;
+	bh=n0NdavEk8AJsJlMZam+bX1N0duCdedBEQvsT+rVIgpc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HLlrqYv+B9QBCDISZO2qBkqnVtIA/ajzaMz840Mac6/TzypJcY0q+g6LpQd+6uzpXia6v5zNAaP45qNHAZ3stLA4JRyzyISmZiaU0QBExzJhnQC/oqFqaSxEAZAIzGFmkqOBXGVp52qR00kWthO749jsEo9wb6ILjFp2PGu5n9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IX4f3KAn; arc=none smtp.client-ip=209.85.128.43
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4921eed3fa2so22359625e9.0
+        for <linux-integrity@vger.kernel.org>; Sun, 12 Jul 2026 11:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783876323; x=1784481123; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5lXEqICBIqkji+uxAJTXRS2K+JcXjR+GmTpqueIXq4s=;
-        b=klnivRbQX1y31CLPJ/kTCQLcOJm90m4ueyZA3MRzgopflHq102ozGt4uutwWYWEil2
-         wh5wPuJ6rkQPlbPxpSstfTJkJDnWWTIj0GXNg/Zd/TX3r/o+fMmFgt9zUFoV1q82dxA/
-         WgqQYkFdQ8/isuG8Zr4tKcttp77XEU174qpK7bSSQTT/nNU6KP7DPScrtxB17k+SE+qr
-         Y4S3B8TC7B1QZHwJYeSXFzlc43PyQ/WrWaRiLovdklxhz5+W615GMYM3jHPjY87ZDV4v
-         Eo9kgPZmBKMpvjc/0qsN0/3jeVjLUYaC7qKmobgHrguolhf64w+Sg7jnSjt22GCgdxbI
-         CBqw==
+        d=gmail.com; s=20251104; t=1783881236; x=1784486036; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jTESNNgw+DFxBk7ppm0MiG9qKYAv0/boV+7AJ2S4T+k=;
+        b=IX4f3KAn8QFG2F2OZkqlXKWT4AzmijNrCjQkzSab6gCT14BQZZPrpjkmZggWiyhwHd
+         wDXNf1ib3bI4WPQqft4OW1kTGcZY0X+gGY/KX0rpdnLg0tlS0oD8ytdoTtev1hXsqfU2
+         iqqW+2P008rHXPLU31V2VpxFeyhVo4pFqsG2eLCWX3XyeUWznEN6iBidX8QcyWgE93o4
+         v38x1AtTeFb+O4nxuQzbPO5vB63o7jpke9XoayPZRqaVLJ6IS1KxuDeoEd0Cy1YYciKZ
+         Ma9C9oUzUyz9P8VdaERFEJ+1jItTe+sj/a3FxTQEWJ9QgeI0Cm9AlQTk5EOcKFewlUWj
+         eL2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783876323; x=1784481123;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=5lXEqICBIqkji+uxAJTXRS2K+JcXjR+GmTpqueIXq4s=;
-        b=Bj6Ie2DyAvDTRmHfUrh3kIKFza4Xkh0c9TWIQmIOrgGGzbpX21BfI69tsd86t0jRJS
-         F+etmk15UEX2zutzNB+oUgTNCD7QlhZ9hxo4oiVSHJpSDgCi6Ee+xUyKcQKyyvQeN1qN
-         IWXOhDWTW1jAmuWpeRk6/MT7MmoVUuGGthUQC9cl2GLnTt3SRid4TePBKhi1uygOSsgu
-         4Bow0aBgjPXgYFdEmKkKpIzUj66I4es/08oYXVBqLxBuoepjEn5LzmoLsvNzijMxyjGO
-         VD/UOgFxwEOGsq8JHw+qRK6MmUYHLBV2RShHRwKx8YOefefiEnn/5lHMFmna/xGfD0iu
-         isJw==
-X-Forwarded-Encrypted: i=1; AHgh+RrefulFhI0e5LY4tvxnFhvLzPWea8AsV7D8sJoU9tUP78lsbP0rRSRESExypkmx916B2YozkglRWQFJQyZxkaI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC6KkKvg9ivcrFvSEZVrAE5l806e1ZpEX7uxr+r0K+3dtmnp9m
-	3B3SxnMrp+rooDz6gDf2d0WnAQf/EhHrLVX8idsBBe8s8oyoyXCEaKLF
-X-Gm-Gg: AfdE7ckeBo3RotJNNC+J0bEwOb0QzQ7EmJi3yyL0ok3ZIkIIH/z4CncMrXKjA+ntOkD
-	N1FLDjdAxTxmwOW3e8qoRcj0BJxJsGIarwgomEPo6ujgJqo1GpnEKfWXnZxWrNbbPX621j7SIGC
-	DditJ3v/WRgFDiM575lJp3AqlBX1j3QNV8qeqjhejupBYHkBoQjkusSIfTxFRcQlOsdkOtrVuUm
-	sXETYhBRMsSZJEVCbRC1LILukkxV2ImU3lzk+Jv2D1kCmHBLHfdE3ec4zQcD1z1zAHArUUjHMI4
-	5BKpKcWMJJmLHVkXrD2ZBYlD60T6uDNQM8v0QzSxezXJn6jNBVoVst7WHLPC18OjwYBncnhU+P/
-	3k45AqaEHqF66bmHlwc7/h07VgXOYPLdedYqRq0v5RJdg0u+C3revULA2lPgo4Bk3Mfn8IKJe34
-	s3pZ+1/TxgxFQTSFpQB2rlQb4rQFkv2GPrnw54F0fX1AVK+L92lYwuF2Kg+eNK1cimkkBZruSBW
-	xldRIRW5HoeXfgd2/GIZw==
-X-Received: by 2002:a17:902:d546:b0:2c9:cf62:6f61 with SMTP id d9443c01a7336-2ce9eac212bmr66417335ad.17.1783876323131;
-        Sun, 12 Jul 2026 10:12:03 -0700 (PDT)
-Received: from DESKTOP-UIAUP5R.localdomain ([116.37.10.184])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bfe040sm86810655ad.31.2026.07.12.10.12.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2026 10:12:02 -0700 (PDT)
-From: Jaewon Yang <yong010301@gmail.com>
-To: Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>
+        d=1e100.net; s=20251104; t=1783881236; x=1784486036;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jTESNNgw+DFxBk7ppm0MiG9qKYAv0/boV+7AJ2S4T+k=;
+        b=AYXaSQgyrs5FUim53MDt8n7IBD0YZkluZgRKE9EHOVIn5r+of7HPGsiWeRT5Ba5Sgp
+         9OE6h030UyZjmpc91o2BzONL5rz4j0q8/ogTJT0Hs2G6LlRu8fJXb9OIXndHyBS1x8xJ
+         virjfbdbxko2PzLvhkMQs9ZMwb0M1EQtr+otmxmEnQCz76wJ+sASCDi35YlVPGQvw7r6
+         DjnUGq2OiiLYozYNeTrPFaxFXNx4dJThmk9WDSfSN6KokVT0YXfXJwi5y/8n4ZmoFG45
+         CmweLV6XVdb1YqpaRf5vY8J2lnbmtd+nLWpNZrloVPr29BwfSX5aFSGbgF0ekLWYzI1N
+         wjlA==
+X-Forwarded-Encrypted: i=1; AHgh+RqS84POp90nDMkrak+jJR69UVKJrjRLnafVyJnzRFe3LjhnCx8reTK8M8w8+4X+QnuhocmFHx8Z9nBj6FMDjC0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKwIs/z41jRCvUJNEkkTNFSfriKmhFDarb0nn4rkgoAdkAsXzb
+	EQRpVBW/pGA0C4Ew8nCNhl+kxnKHUcCFBrvt2ziNXPGBsQkbf96o98qO
+X-Gm-Gg: AfdE7ck/oUGVO1+XoD3T3Lgw/+ZHLJdFNfW066BARORHtHSF9OdfpvdnpkKMPZ4Uz7j
+	Zj/fkW3qWUYojTrcViJlMSmgw/wXYLhu9jq0ui08pQyYIcyosFTyt6yTO6ot3AgkPrHEZmJN8eb
+	/FlcF/JIv5c+YjxtFcjH+TQ8qlNXnZmDP19scDtkme5JMFFFRukwxfUzRR+oiQLw+lL4oztBOZi
+	FKrAMB+O2S7EJVr1cT/ADSHrtuTgeUVNrKivJlBVuk4ZtkcFZaUjjuXutfiNmAeQsUPoiby8eZk
+	dnxdTyIgvuOzbLBBj5ZZlKjkxK4etcY6KpaNs2t2ikcHoFPQKWJVqwgCWdGIb3o+vVCaC2TmNiK
+	OnFT8m2c0UFrgAmKhlWTHhoXNdmfwKoV49RXwbqDdK13PibEbgNSAXfRqa7yBLIpUNfdBjc/Ia6
+	sWe0/agsc6f14mUGSQeQ2zzob5Rwewp28d0COH2ktXZbwX6ZPjGPu0/qlfgWJXNs+PVGwQb/lN/
+	RZl3zMXHsnN5nh9y02X+5n9ZAG4lJiM3Vk4U1ZHgLVCFYx/Ay3wWHzI
+X-Received: by 2002:a05:600c:4ed4:b0:493:d1e0:a4f1 with SMTP id 5b1f17b1804b1-493f877fe8cmr73738575e9.0.1783881236010;
+        Sun, 12 Jul 2026 11:33:56 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-095-117-112-249.95.117.pool.telefonica.de. [95.117.112.249])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493f4f09f89sm430312735e9.10.2026.07.12.11.33.54
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 12 Jul 2026 11:33:54 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Jarkko Sakkinen <jarkko@kernel.org>,
+	Peter Huewe <peterhuewe@gmx.de>
 Cc: Jason Gunthorpe <jgg@ziepe.ca>,
 	linux-integrity@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	security@kernel.org,
-	linux-api@vger.kernel.org
-Subject: [PATCH v2] tpm: Make the TPM character devices non-seekable
-Date: Mon, 13 Jul 2026 02:11:47 +0900
-Message-ID: <20260712171147.323213-1-yong010301@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAHk-=wi8aXM9=Y8othMb1oxTv-PDw4isj-FPbXu0MXsm_EPE1g@mail.gmail.com>
-References: <CAHk-=wi8aXM9=Y8othMb1oxTv-PDw4isj-FPbXu0MXsm_EPE1g@mail.gmail.com>
+	Karl Mehltretter <kmehltretter@gmail.com>
+Subject: [PATCH] tpm: atmel: depend on X86
+Date: Sun, 12 Jul 2026 20:32:34 +0200
+Message-Id: <20260712183234.23125-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
@@ -100,127 +95,76 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Action: no action
 X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORWARDED(0.00)[lists@lfdr.de];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9925-lists,linux-integrity=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:peterhuewe@gmx.de,m:jarkko@kernel.org,m:jgg@ziepe.ca,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:security@kernel.org,m:linux-api@vger.kernel.org,s:lists@lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmx.de,kernel.org];
-	FORGED_SENDER(0.00)[yong010301@gmail.com,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[ziepe.ca,vger.kernel.org,gmail.com];
+	TAGGED_FROM(0.00)[bounces-9926-lists,linux-integrity=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:jarkko@kernel.org,m:peterhuewe@gmx.de,m:jgg@ziepe.ca,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,m:kmehltretter@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[kernel.org,gmx.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER(0.00)[kmehltretter@gmail.com,linux-integrity@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FORWARDED(0.00)[lists@lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FORGED_SENDER_FORWARDING(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[yong010301@gmail.com,linux-integrity@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[kmehltretter@gmail.com,linux-integrity@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ALIAS_RESOLVED(0.00)[];
-	TAGGED_RCPT(0.00)[linux-integrity];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp]
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ALIAS_RESOLVED(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-integrity];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: 5145574578E
+X-Rspamd-Queue-Id: 76E0C745A31
 
-The TPM character devices expose a sequential command/response
-interface, but their open handlers leave FMODE_PREAD and FMODE_PWRITE
-enabled.
+tpm_atmel probes for the chip at fixed x86 Super-I/O ports (0x4e) with
+inb()/outb(), so it only works on x86. TCG_ATMEL nevertheless depends
+only on HAS_IOPORT_MAP/HAS_IOPORT, which arm and arm64 also satisfy.
+There the probe is useless, and on platforms whose unbacked I/O access
+faults it oopses in init_atmel() at boot (e.g. arm/versatile):
 
-After a command leaves a response pending, pread(fd, buf, 16, 0x1400)
-passes 0x1400 as *off to tpm_common_read(). The transfer length is
-bounded by response_length, but the offset is used unchecked when
-forming data_buffer + *off. A sufficiently large offset therefore
-causes an out-of-bounds heap read through copy_to_user() and, if the
-copy succeeds, an out-of-bounds zero-write through the following
-memset().
+  Unable to handle kernel paging request at virtual address fee0004e
+  PC is at init_atmel+0x34/0x244
 
-Positional I/O does not provide coherent semantics for this interface.
-An arbitrary pread offset cannot represent how much of a response has
-been consumed sequentially. The write callback always stores a command
-at the start of data_buffer, while pwrite() does not update file->f_pos
-and can leave the sequential read cursor stale.
+TCG_NSC and TCG_TIS already "depends on X86" (commit 2f592f2a7d74 ("TPM:
+NSC and TIS drivers X86 dependency fix")); TCG_ATMEL was missed. Add the
+same dependency.
 
-Call nonseekable_open() from both open handlers. This removes
-FMODE_PREAD and FMODE_PWRITE, causing positional reads and writes to
-fail with -ESPIPE before reaching the TPM callbacks, and explicitly
-marks the files non-seekable. Normal read() and write() continue to use
-the existing sequential f_pos cursor, leaving the response state
-machine unchanged.
-
-Tested on Linux 6.12 with KASAN and a swtpm TPM2 device:
-
-- sequential partial reads returned the complete response;
-- pread() and preadv() with offset 0x1400 returned -ESPIPE;
-- pwrite() and pwritev() with offset zero returned -ESPIPE;
-- the pending response remained intact after the rejected operations;
-- a subsequent normal command/response cycle completed normally; and
-- no KASAN report was produced.
-
-Fixes: 9488585b21be ("tpm: add support for partial reads")
-Link: https://lore.kernel.org/all/20260710090217.191289-1-yong010301@gmail.com/
-Cc: stable@vger.kernel.org
-Signed-off-by: Jaewon Yang <yong010301@gmail.com>
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
-Changes in v2:
-- replace the response-buffer bounds check with nonseekable_open();
-- reject positional read and write at open time;
-- preserve the existing sequential read/write state machine.
+ drivers/char/tpm/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-The alternative response_length rework proposed during review was tested
-and not taken: a read-until-EOF loop hangs because cleanup resets *off
-without clearing response_length. It also treats an arbitrary positional
-offset as the consumption cursor; for example,
-
-    pread(fd, &c, 1, 99)
-
-on a 100-byte response can discard bytes 0 through 98 without returning
-them.
-
- drivers/char/tpm/tpm-dev.c   | 2 +-
- drivers/char/tpm/tpmrm-dev.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/char/tpm/tpm-dev.c b/drivers/char/tpm/tpm-dev.c
-index 2779a8738..74488f0a7 100644
---- a/drivers/char/tpm/tpm-dev.c
-+++ b/drivers/char/tpm/tpm-dev.c
-@@ -36,7 +36,7 @@ static int tpm_open(struct inode *inode, struct file *file)
+diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+index 8a8f692b6088..5f672f2c01b0 100644
+--- a/drivers/char/tpm/Kconfig
++++ b/drivers/char/tpm/Kconfig
+@@ -163,8 +163,7 @@ config TCG_NSC
  
- 	tpm_common_open(file, chip, priv, NULL);
- 
--	return 0;
-+	return nonseekable_open(inode, file);
- 
-  out:
- 	clear_bit(0, &chip->is_open);
-diff --git a/drivers/char/tpm/tpmrm-dev.c b/drivers/char/tpm/tpmrm-dev.c
-index f48d4d9e1..19e8f2779 100644
---- a/drivers/char/tpm/tpmrm-dev.c
-+++ b/drivers/char/tpm/tpmrm-dev.c
-@@ -29,7 +29,7 @@ static int tpmrm_open(struct inode *inode, struct file *file)
- 
- 	tpm_common_open(file, chip, &priv->priv, &priv->space);
- 
--	return 0;
-+	return nonseekable_open(inode, file);
- }
- 
- static int tpmrm_release(struct inode *inode, struct file *file)
+ config TCG_ATMEL
+ 	tristate "Atmel TPM Interface"
+-	depends on HAS_IOPORT_MAP
+-	depends on HAS_IOPORT
++	depends on X86
+ 	help
+ 	  If you have a TPM security chip from Atmel say Yes and it 
+ 	  will be accessible from within Linux.  To compile this driver 
 -- 
-2.43.0
+2.39.5 (Apple Git-154)
 
 
