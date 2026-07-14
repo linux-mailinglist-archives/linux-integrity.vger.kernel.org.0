@@ -1,116 +1,161 @@
-Return-Path: <linux-integrity+bounces-9934-lists+linux-integrity=lfdr.de@vger.kernel.org>
+Return-Path: <linux-integrity+bounces-9935-lists+linux-integrity=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-integrity@lfdr.de
 Received: from mail.lfdr.de
 	by mail.lfdr.de with LMTP
-	id rw2NC85YVWqunAAAu9opvQ
-	(envelope-from <linux-integrity+bounces-9934-lists+linux-integrity=lfdr.de@vger.kernel.org>)
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Jul 2026 23:29:50 +0200
+	id gFwnHfn/VWrCxgAAu9opvQ
+	(envelope-from <linux-integrity+bounces-9935-lists+linux-integrity=lfdr.de@vger.kernel.org>)
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2026 11:23:05 +0200
 X-Original-To: lists+linux-integrity@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2C8574F41D
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Jul 2026 23:29:49 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D2BB752CD2
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2026 11:23:04 +0200 (CEST)
 Authentication-Results: mail.lfdr.de;
-	dkim=pass header.d=kernel.org header.s=k20260515 header.b=F8qvbRU8;
-	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9934-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 172.232.135.74 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9934-lists+linux-integrity=lfdr.de@vger.kernel.org";
-	dmarc=pass (policy=quarantine) header.from=kernel.org;
+	dkim=pass header.d=huawei.com header.s=dkim header.b=sVLUpkPD;
+	spf=pass (mail.lfdr.de: domain of "linux-integrity+bounces-9935-lists+linux-integrity=lfdr.de@vger.kernel.org" designates 2600:3c0a:e001:db::12fc:5321 as permitted sender) smtp.mailfrom="linux-integrity+bounces-9935-lists+linux-integrity=lfdr.de@vger.kernel.org";
+	dmarc=pass (policy=quarantine) header.from=huawei.com;
 	arc=pass ("subspace.kernel.org:s=arc-20240116:i=1")
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 54358300B18D
-	for <lists+linux-integrity@lfdr.de>; Mon, 13 Jul 2026 21:29:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B6F873039385
+	for <lists+linux-integrity@lfdr.de>; Tue, 14 Jul 2026 09:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA28535E1D3;
-	Mon, 13 Jul 2026 21:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490F043D4FB;
+	Tue, 14 Jul 2026 09:19:26 +0000 (UTC)
 X-Original-To: linux-integrity@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33E035E1A3;
-	Mon, 13 Jul 2026 21:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EEC353A93;
+	Tue, 14 Jul 2026 09:19:21 +0000 (UTC)
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783978187; cv=none; b=etGZzfN8eSD/P/32ON1SqhvXNL/TN385aWXGRKLcgAubadzX5CWLRmQVVJ4bzsaZGHEHllqc+i5wMRJdUqtHLNakpUpDmyXem/GEXAibl3gFXxLq635cpFspN/O1vARkRxtTKnw3r+zRuuYXhfqkyzYCxjJgjABGCGw7sY/8Q0M=
+	t=1784020766; cv=none; b=ITYeiZQtdCoTcCZKcdUdwlnFWMEjrJePFAvGEvaxBO6btoNn6m3swVaeDyK4v9n8XxOpSpYjfEoX1VW646+fU9pC9AC7pwPE7Hux11L30n/BWu0z5ZWlgP7ok6LGKYqUq630Kxsdw/NoFNUP5kelc6i1uUq3qPo7rTOCvsmH2RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783978187; c=relaxed/simple;
-	bh=riXZKB+wdpFkvAXkrUsMvOdoSkn9egwykd4ShYNkDnA=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Nzk268HqVriqT+kN3yQe8HPRUCGDbJw1k8/ZfP7Gr1BM7RJkh9pKBCvNGjlHgthBjVmkX+O9aCUpSFOoc07mMmKXBAclX73OcZX52AAxLPEqCSyM5Qc23Z/0JYCfUBkv8mV/8wbUttuKpcUlXjiY1AXkBRKeOCNQRVrcFN/uptE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F8qvbRU8; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 061411F000E9;
-	Mon, 13 Jul 2026 21:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783978186;
-	bh=riXZKB+wdpFkvAXkrUsMvOdoSkn9egwykd4ShYNkDnA=;
-	h=Date:From:To:Subject;
-	b=F8qvbRU800cl+hCTiRtIH5Bq2hqyQNuvlPb0VDu3GEoytMXxSdjupMhaNSmHdqzJ5
-	 +59jFPMuN/TNlB+8K8PC3NenyAYpC8zQru5VQWH0WfSi7cG7ZISlXnkkeC5ou/LDw3
-	 DmxBoVA76REruF0Vv3gcLMXKQX+XA+xecWwoURo8Coc7i5ucJpureyWz5YZLA7GaPa
-	 vwq5qJ5FCt2nYBOx2jpeyylomQU3P+Wy53qccJ8MetjZNHbhZtuBInBlQFTf62B/ag
-	 ciD79ZPXfITVfF44oem56s0H8PBXyYpjXYDyULM/KOA+xZXye6dNqDLgX5LlfvD2+S
-	 hkhmYUps3d5Hg==
-Date: Tue, 14 Jul 2026 00:29:42 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: keyrings@vger.kernel.org, linux-integrity@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: AI assisted patches and credits where it is due
-Message-ID: <alVYxv8esyv2SKpt@kernel.org>
+	s=arc-20240116; t=1784020766; c=relaxed/simple;
+	bh=PoZsny19t3HXLnadhIjAqcOpnMVaTXtp8camwODkiVI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FnbSuL04JdFddaQQJ6q2CfigguJbNGqZ7wNr/DYu0RQsoK1pxQmV2j/KkAKrOVh0T4imk4ysY/OSXqleRk4ecSmdWsZYOaO9pYhGpQUcsASJHZDHaq5INH3EfkEd6MRy9YMfUaa9eTC3rE62XdEFcn+EDWV7cuXr78eEyOaJzzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=sVLUpkPD; arc=none smtp.client-ip=113.46.200.220
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=MHEhbSOgQT/iKyz5tYf5hbfXc1knUbfwbScpd4zGG2s=;
+	b=sVLUpkPDv/tc0R5R4DBQzRcaB/ramhEY1AVRioARfsfZkNJdYFP9gGrLDksko8eo5QNNWsu6o
+	4KG9jbqjNK6Qg7Swq/F69rW2vuZHL8+bKhQQoMwPlDNSXrQg1NFgC9/DijJtlsnQENnWb7NanRp
+	hMb+MhcW7qeQUEzpfvAmTUA=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4gztmN4XWsz12LCc;
+	Tue, 14 Jul 2026 17:09:40 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 01BD240579;
+	Tue, 14 Jul 2026 17:19:19 +0800 (CST)
+Received: from kwepemq500013.china.huawei.com (7.202.195.103) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 14 Jul 2026 17:19:18 +0800
+Received: from dggphis33418.huawei.com (10.244.148.83) by
+ kwepemq500013.china.huawei.com (7.202.195.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 14 Jul 2026 17:19:18 +0800
+From: Gaosheng Cui <cuigaosheng1@huawei.com>
+To: <cuigaosheng1@huawei.com>, <lujialin4@huawei.com>, <zohar@linux.ibm.com>,
+	<roberto.sassu@huawei.com>, <dmitry.kasatkin@gmail.com>,
+	<eric.snowberg@oracle.com>, <paul@paul-moore.com>, <jmorris@namei.org>,
+	<serge@hallyn.com>
+CC: <linux-integrity@vger.kernel.org>, <linux-security-module@vger.kernel.org>
+Subject: [PATCH -next,v2] ima: add cond_resched() in ima_calc_file_hash_tfm loop
+Date: Tue, 14 Jul 2026 17:17:08 +0800
+Message-ID: <20260714091708.2802272-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-integrity@vger.kernel.org
 List-Id: <linux-integrity.vger.kernel.org>
 List-Subscribe: <mailto:linux-integrity+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-integrity+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemq500013.china.huawei.com (7.202.195.103)
 X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-5.16 / 15.00];
-	WHITELIST_SPF_DKIM(-3.00)[kernel.org:d:+,kernel.org:s:+];
+X-Spamd-Result: default: False [-6.16 / 15.00];
+	WHITELIST_DMARC(-7.00)[huawei.com:D:+];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-9934-lists,linux-integrity=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS(0.00)[m:keyrings@vger.kernel.org,m:linux-integrity@vger.kernel.org,m:linux-kernel@vger.kernel.org,s:lists@lfdr.de];
+	TAGGED_FROM(0.00)[bounces-9935-lists,linux-integrity=lfdr.de];
+	FORGED_RECIPIENTS(0.00)[m:cuigaosheng1@huawei.com,m:lujialin4@huawei.com,m:zohar@linux.ibm.com,m:roberto.sassu@huawei.com,m:dmitry.kasatkin@gmail.com,m:eric.snowberg@oracle.com,m:paul@paul-moore.com,m:jmorris@namei.org,m:serge@hallyn.com,m:linux-integrity@vger.kernel.org,m:linux-security-module@vger.kernel.org,m:dmitrykasatkin@gmail.com,s:lists@lfdr.de];
+	FREEMAIL_TO(0.00)[huawei.com,linux.ibm.com,gmail.com,oracle.com,paul-moore.com,namei.org,hallyn.com];
 	FORWARDED(0.00)[lists@lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[cuigaosheng1@huawei.com,linux-integrity@vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_SENDER(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_FORWARDING(0.00)[];
-	TO_DN_NONE(0.00)[];
+	FORGED_SENDER(0.00)[cuigaosheng1@huawei.com,linux-integrity@vger.kernel.org];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jarkko@kernel.org,linux-integrity@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	ALIAS_RESOLVED(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:from_mime,huawei.com:mid,huawei.com:email,huawei.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,vger.kernel.org:from_smtp];
+	TO_DN_NONE(0.00)[];
 	FORGED_RECIPIENTS_FORWARDING(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_SENDER_FORWARDING(0.00)[];
 	TAGGED_RCPT(0.00)[linux-integrity];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[vger.kernel.org:from_smtp,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_SEVEN(0.00)[7]
 X-Rspamd-Server: lfdr
-X-Rspamd-Queue-Id: C2C8574F41D
+X-Rspamd-Queue-Id: 4D2BB752CD2
 
-I sometimes get patches, which are literally just LLM output dumps.
+When hashing large files, the while loop in ima_calc_file_hash_tfm
+processes PAGE_SIZE chunks without any scheduling point, which can
+cause soft lockup warnings:
+watchdog: BUG: soft lockup - CPU#0 stuck for 50s!
+Call Trace:
+  _sha256_update+0x12d/0x1a0
+  ima_calc_file_hash_tfm+0xfb/0x150
+  ima_calc_file_hash+0x6e/0x160
+  ima_collect_measurement+0x202/0x340
+  process_measurement+0x3a9/0xb30
+  ima_file_check+0x56/0xa0
+  do_open+0x11b/0x250
+  path_openat+0x10b/0x1d0
+  do_filp_open+0xa9/0x150
+  do_sys_openat2+0x223/0x2a0
+  __x64_sys_openat+0x54/0xa0
+  do_syscall_64+0x59/0x110
+  entry_SYSCALL_64_after_hwframe+0x78/0xe2
 
-Even finding out if there is a bug symptom/bug has been delegated to
-me.
+Call cond_resched() every 4MB to yield the CPU when needed, rather
+than at every loop iteration, to reduce overhead.
 
-I'm thinking of followning process when this happens next time:
+Fixes: 3323eec921ef ("integrity: IMA as an integrity service provider")
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+v2: call cond_resched() every 4MB to yield the CPU when needed
+ security/integrity/ima/ima_crypto.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-1. Do all the real work.
-2. Retain whatever model was used as co-author.
-3. Downgrade submitted from author to reporter.
+diff --git a/security/integrity/ima/ima_crypto.c b/security/integrity/ima/ima_crypto.c
+index 0d72b48249ee..aab2349c0c33 100644
+--- a/security/integrity/ima/ima_crypto.c
++++ b/security/integrity/ima/ima_crypto.c
+@@ -233,6 +233,9 @@ static int ima_calc_file_hash_tfm(struct file *file,
+ 		rc = crypto_shash_update(shash, rbuf, rbuf_len);
+ 		if (rc)
+ 			break;
++
++		if (IS_ALIGNED(offset, SZ_4M))
++			cond_resched();
+ 	}
+ 	kfree(rbuf);
+ out:
+-- 
+2.43.0
 
-I've seen also reasonable AI assisted patches and this type of behavior
-just downplays them.
-
-Any better ideas? I'm open.
-
-BR, Jarkko
 
